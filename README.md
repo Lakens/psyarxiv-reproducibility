@@ -30,6 +30,7 @@ Done:
 
 - Publishing: `.github/workflows/pages.yml` puts on GitHub Pages only the landing page and its files, the report pages, `data/index.json` and `data/tally.json`, after every push and after each run of `update.yml`. The full results in `data/papers/` stay in the repository only: GitHub Pages publishes at most 1 GB, counted at full size, while git stores the repository's files compressed (so compressing them ourselves would hardly make the repository smaller).
 - `scripts/update.py --redo <id> ...` checks the given preprint versions again and overwrites their files.
+- A browser extension, `extension/` (7 November 2026): on a PsyArXiv preprint page it adds a button that opens the preprint's Metacheck report, when there is one. Not yet in a store; install it from the folder (see `extension/README.md`). The site's publishing step leaves this folder out.
 
 - The site: https://lakens.github.io/psyarxiv-reproducibility/ (GitHub Pages, source "GitHub Actions").
 
