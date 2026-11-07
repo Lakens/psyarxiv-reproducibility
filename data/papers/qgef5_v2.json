@@ -15,7 +15,7 @@
   "published": "2026-11-06T20:00:49.065286",
   "file": "manuscript.pdf"
  },
- "checked": "2026-11-07T17:33:41+00:00",
+ "checked": "2026-11-07T18:35:08+00:00",
  "metacheck_version": "0.4.3.8",
  "converter": "grobid",
  "run_code": true,
@@ -10790,7 +10790,7 @@
      "file_name": "behaviour_analysis.Rmd",
      "file_path": "behaviour_analysis.Rmd",
      "file_url": "https://raw.githubusercontent.com/mwoodb/specgen_behaviour/main/behaviour_analysis.Rmd",
-     "file_location": "/srv/metacheck-sandbox/9baf9897-024e-4d5e-8639-27add304f76b/tmp/RtmpMgHAGF/metacheck-repo-files/github.com_mwoodb_specgen_behaviour/behaviour_analysis.Rmd",
+     "file_location": "/srv/metacheck-sandbox/7e879df0-80e4-41c1-8670-ff2a9e209f7d/tmp/Rtmpg5ccNs/metacheck-repo-files/github.com_mwoodb_specgen_behaviour/behaviour_analysis.Rmd",
      "file_size": 45754,
      "file_type": "code",
      "archive_url": null,
@@ -10829,7 +10829,7 @@
      "file_name": "behaviour_analysis.R",
      "file_path": "./code/behaviour_analysis.R",
      "file_url": null,
-     "file_location": "/srv/metacheck-sandbox/9baf9897-024e-4d5e-8639-27add304f76b/tmp/RtmpMgHAGF/metacheck-repo-files/github.com_mwoodb_specgen_behaviour/code/behaviour_analysis.R",
+     "file_location": "/srv/metacheck-sandbox/7e879df0-80e4-41c1-8670-ff2a9e209f7d/tmp/Rtmpg5ccNs/metacheck-repo-files/github.com_mwoodb_specgen_behaviour/code/behaviour_analysis.R",
      "file_size": 40730,
      "file_type": "web",
      "archive_url": null,
@@ -11093,8 +11093,8 @@
      "not_runnable_reason": null,
      "unresolved_inputs": null,
      "outcome": "errored",
-     "error_type": "runtime",
-     "undefined_var": null,
+     "error_type": "undefined_variable",
+     "undefined_var": "training",
      "reads": [],
      "writes": [
       "training.jpeg",
@@ -11112,7 +11112,7 @@
      "not_analysis_why": null,
      "paper_link": null,
      "repo_name": "specgen_behaviour",
-     "reason": "other",
+     "reason": "undefined",
      "_row": "behaviour_analysis.R"
     }
    ],
@@ -11214,7 +11214,7 @@
      "repro_not_downloaded_n": 0,
      "repro_fail_file": 0,
      "repro_fail_package": 0,
-     "repro_fail_undefined": 0,
+     "repro_fail_undefined": 1,
      "repro_fail_syntax": 0,
      "repro_fail_environment": 0,
      "repro_fail_internet": 0,
@@ -11222,7 +11222,7 @@
      "repro_fail_interactive": 0,
      "repro_fail_time": 0,
      "repro_fail_no_message": 0,
-     "repro_fail_other": 2
+     "repro_fail_other": 1
     }
    ],
    "section": "results",
@@ -11234,18 +11234,23 @@
     "#### File paths",
     "**2 data paths in the code do not work in the repository as deposited.** We pointed them to where the file is, so the code could run: `/behaviour_data/ages.csv` to `ages.csv` (in behaviour_analysis.Rmd); `/Users/merwoodbury/Documents/UofT/BuddingMinds/Retrieval/behaviour paper/toshare` to `./` (in behaviour_analysis.Rmd). The code should be changed, because as written it does not find these files.",
     "#### Execution",
-    "**The code was run.** Each script ran in an isolated Docker container against a throwaway copy of the repository, in the run order above, with a 300-second per-script timeout. Of 2 scripts: 0 ran without error, 2 errored, 0 timed out, 0 could not run because one of its own dependencies is unavailable, 0 did not parse. Running against current package versions: a break can reflect version drift, which argues for pinning versions.",
-    "\n```{r}\n#| echo: false\n\n\n# table data --------------------------------------\ntable <- structure(list(File = c(\"behaviour_analysis.R\", \"behaviour_analysis.Rmd\"\n), Outcome = c(\"errored\", \"errored\"), Detail = c(\"runtime\", \"runtime\"\n), \"Time (s)\" = c(0, 0.1)), row.names = c(NA, -2L), class = \"data.frame\")\n\n# display table -----------------------------------\nmetacheck::report_table(table, \"auto\", 15, FALSE)\n```\n",
+    "**The code was run.** Each script ran in an isolated Docker container against a throwaway copy of the repository, in the run order above, with a 300-second per-script timeout. Of 2 scripts: 0 ran without error, 2 errored, 0 timed out, 0 could not run because one of its own dependencies is unavailable, 0 did not parse. Running against current package versions: a break can reflect version drift, which argues for pinning versions. \n\n*a script hit a `could not find function \"...\"` error; we added the `library()` calls it needs (see below), and re-ran once. The outcomes above are from that corrected run.*",
+    "\n```{r}\n#| echo: false\n\n\n# table data --------------------------------------\ntable <- structure(list(File = c(\"behaviour_analysis.R\", \"behaviour_analysis.Rmd\"\n), Outcome = c(\"errored\", \"errored\"), Detail = c(\"undefined_variable\", \n\"runtime\"), \"Time (s)\" = c(3.3, 4.9)), row.names = c(NA, -2L), class = \"data.frame\")\n\n# display table -----------------------------------\nmetacheck::report_table(table, \"auto\", 15, FALSE)\n```\n",
+    "**Undefined-variable errors**",
+    "**1 script failed on an undefined variable or function** (`object '...' not found` / `could not find function \"...\"`). This typically means the script expects a variable or function that another script defines — i.e. it is meant to be sourced into a larger session, not run on its own — or the symbol is simply never created. When another of the paper's own script files defines the same name, this is called out below as a likely sourcing/copy-paste gap. Each is counted as an error (red).",
+    "\n```{r}\n#| echo: false\n\n\n# table data --------------------------------------\ntable <- structure(list(File = \"behaviour_analysis.R\", \"Missing variable\" = \"training\", \n    \"Defined in\" = \"(not defined anywhere in the paper's code)\"), row.names = c(NA, \n-1L), class = \"data.frame\")\n\n# display table -----------------------------------\nmetacheck::report_table(table, \"auto\", 10, FALSE)\n```\n",
     "**`setwd()` in the code**",
     "**1 script calls `setwd()`.** This is bad practice: it hardcodes where the code must run (often an absolute path on the author's own machine) and breaks the moment the code is run anywhere else. To run the code we replaced these calls with a statement that does nothing. Any such script that then ran is **reproducible only after ignoring a `setwd()` that should not have been in the code and needs to be fixed**.",
     "\n```{r}\n#| echo: false\n\n\n# table data --------------------------------------\ntable <- structure(list(File = \"behaviour_analysis.Rmd\", \"setwd() removed\" = 1L, \n    \"Path(s) it set\" = \"(non-literal)\"), row.names = c(NA, -1L\n), class = \"data.frame\")\n\n# display table -----------------------------------\nmetacheck::report_table(table, \"auto\", 10, FALSE)\n```\n",
+    "**`library()` calls added**",
+    "**1 script uses functions from packages it does not load itself.** The packages are usually loaded in another script of the project, which only helps when the scripts run in one R session in the right order. To run it we added the `library()` calls below at the top. Any such script that then ran is **reproducible only after adding `library()` calls it should make itself**.",
+    "\n```{r}\n#| echo: false\n\n\n# table data --------------------------------------\ntable <- structure(list(File = \"behaviour_analysis.R\", \"library() calls added\" = \"library(tidyverse), library(dplyr), library(magrittr), library(lme4), library(lmerTest), library(emmeans), library(ggplot2), library(modelbased), library(ggeffects)\"), row.names = \"behaviour_analysis.R\", class = \"data.frame\")\n\n# display table -----------------------------------\nmetacheck::report_table(table, \"auto\", 10, FALSE)\n```\n",
     "*Expand a row below to see the output each script produced.*",
-    "::: {.callout-tip title=\"Output — behaviour_analysis.R (errored)\" collapse=\"true\"}\n\n**Messages / errors (stderr):**\n````\nmetacheck-sandbox: refused: user '499999:499999'\n````\n\n:::\n",
-    "::: {.callout-tip title=\"Output — behaviour_analysis.Rmd (errored)\" collapse=\"true\"}\n\n**Messages / errors (stderr):**\n````\nmetacheck-sandbox: refused: user '499999:499999'\n````\n\n:::\n",
-    "Dependencies were installed into a throwaway library before running: 0 succeeded, 11 failed. dplyr, emmeans, ggeffects, ggplot2, jsonlite, knitr, lme4, lmerTest, magrittr, modelbased, tidyverse were installed.",
-    "**Failed:** dplyr [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); emmeans [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); ggeffects [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); ggplot2 [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); jsonlite [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); knitr [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); lme4 [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); lmerTest [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); magrittr [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); modelbased [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999'); tidyverse [uncategorised] (docker install failed (status 125): metacheck-sandbox: refused: user '499999:499999')"
+    "::: {.callout-tip title=\"Output — behaviour_analysis.R (errored)\" collapse=\"true\"}\n\n**Output (stdout):**\n````\n> library(tidyverse)\n> library(dplyr)\n> library(magrittr)\n> library(lme4)\n> library(lmerTest)\n> library(emmeans)\n> library(ggplot2)\n> library(modelbased)\n> library(ggeffects)\n> training %>% distinct(age_group, subject, age_months) %>% group_by(age_group) %>% dplyr::summarise(mean = mean(age_months)/12, median = median(age_months)/12, min = min(age_months)/12, max= max(age_months)/12, n(), sd=sd(age_months/12))\n````\n**Messages / errors (stderr):**\n````\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n\nAttaching package: ‘magrittr’\n\nThe following object is masked from ‘package:purrr’:\n\n    set_names\n\nThe following object is masked from ‘package:tidyr’:\n\n    extract\n\nLoading required package: Matrix\n\nAttaching package: ‘Matrix’\n\nThe following objects are masked from ‘package:tidyr’:\n\n    expand, pack, unpack\n\n\nAttaching package: ‘lmerTest’\n\nThe following object is masked from ‘package:lme4’:\n\n    lmer\n\nThe following object is masked from ‘package:stats’:\n\n    step\n\nWelcome to emmeans.\nCaution: You lose important information if you filter this package's results.\nSee '? untidy'\n\nAttaching package: ‘ggeffects’\n\nThe following objects are masked from ‘package:modelbased’:\n\n    collapse_by_group, pool_predictions, residualize_over_grid\n\nError in eval(e, envir = env) : object 'training' not found\nCalls: .repro_docker_run ... eval -> eval -> %>% -> <Anonymous> -> group_by -> distinct\nExecution halted\n````\n\n:::\n",
+    "::: {.callout-tip title=\"Output — behaviour_analysis.Rmd (errored)\" collapse=\"true\"}\n\n**Output (stdout):**\n````\n> knitr::opts_chunk$set(warning=FALSE, message=FALSE)\n> library(tidyverse)\n> library(dplyr)\n> library(magrittr)\n> library(lme4)\n> library(lmerTest)\n> library(emmeans)\n> library(ggplot2)\n> library(modelbased)\n> library(ggeffects)\n> input_dir <- './'\n> output_dir <- paste0(input_dir,'/figures')\n> invisible(NULL)\n> p_files <- Sys.glob(paste0(input_dir, '/behaviour_data/*.json'))\n> bindall <- function(f) {\n>   df <- jsonlite::fromJSON(f, simplifyDataFrame = TRUE)\n>   df <- data.frame(df$subject, df$group, df$age, df$data) %>%\n>             dplyr::rename(subject = df.subject, group = df.group, age = df.age) %>%\n>             mutate(age_group = ifelse(age<18, \"Teen\", \"Adult\"))\n>   return (df)\n> }\n> p_df <- do.call(rbind, lapply(p_files,bindall))\n> high_coh <- c(\"apple\", \"shell\")\n> low_coh <- c(\"rock\", \"leaf\")\n> age_data <- read.csv(paste0(input_dir, 'ages.csv'))\n> age_data %<>% \n>   mutate(age_group = ifelse(substr(subject, 1,1)==\"T\", \"Teen\", \"Adult\"))\n> p_df %<>% merge(age_data, by = c(\"age_group\", \"subject\", \"age\"))\n````\n**Messages / errors (stderr):**\n````\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n\nAttaching package: ‘magrittr’\n\nThe following object is masked from ‘package:purrr’:\n\n    set_names\n\nThe following object is masked from ‘package:tidyr’:\n\n    extract\n\nLoading required package: Matrix\n\nAttaching package: ‘Matrix’\n\nThe following objects are masked from ‘package:tidyr’:\n\n    expand, pack, unpack\n\n\nAttaching package: ‘lmerTest’\n\nThe following object is masked from ‘package:lme4’:\n\n    lmer\n\nThe following object is masked from ‘package:stats’:\n\n    step\n\nWelcome to emmeans.\nCaution: You lose important information if you filter this package's results.\nSee '? untidy'\n\nAttaching package: ‘ggeffects’\n\nThe following objects are masked from ‘package:modelbased’:\n\n    collapse_by_group, pool_predictions, residualize_over_grid\n\nError in fix.by(by.x, x) : 'by' must specify uniquely valid columns\nCalls: .repro_docker_run ... merge.default -> merge -> merge.data.frame -> fix.by\nExecution halted\n````\n\n:::\n",
+    "Dependencies were installed into a throwaway library before running: 11 succeeded, 0 failed. dplyr, emmeans, ggeffects, ggplot2, jsonlite, knitr, lme4, lmerTest, magrittr, modelbased, tidyverse were installed."
    ],
-   "checklist_section": "We ran the paper's 2 R scripts in the order they depend on each other, each in an isolated container, for at most 5 minutes per script.\n\n**0 of 2 scripts ran to the end**: 2 stopped with an error.\n\n| Script | Result | What happened |\n|---|---|---|\n| behaviour&#95;analysis.R | Stopped with an error | The script stopped with an error (see its output below). |\n| behaviour&#95;analysis.Rmd | Stopped with an error | The script stopped with an error (see its output below). |\n\n### How to make your code run on another computer\n\nWe ran your code on a clean computer, the way a reader or reviewer would. Below is each problem we found, the scripts it affects, and how to fix it. Fix them in the order given: a problem near the top can cause the ones below it.\n\n**Metacheck can't automatically establish what caused the error, or how it should be improved.**\n\n- <code>behaviour&#95;analysis.R</code>\n- <code>behaviour&#95;analysis.Rmd</code>\n\nThe error message of each script is in the table above.\n\n### Other problems in the files\n\n- behaviour&#95;analysis.Rmd calls setwd(), which ties the script to a folder on the author's computer. We replaced the call with one that does nothing so the script could run; it should be removed from the script.\n\n### Comparison with the paper\n\nWe found no statistical tests in the paper to compare with the output of the code."
+   "checklist_section": "We ran the paper's 2 R scripts in the order they depend on each other, each in an isolated container, for at most 5 minutes per script.\n\n**0 of 2 scripts ran to the end**: 2 stopped with an error.\n\n| Script | Result | What happened |\n|---|---|---|\n| behaviour&#95;analysis.R | Stopped with an error | <code>Error in eval(e, envir = env) : object 'training' not found</code> |\n| behaviour&#95;analysis.Rmd | Stopped with an error | <code>Error in fix.by(by.x, x) : 'by' must specify uniquely valid columns</code> |\n\n### How to make your code run on another computer\n\nWe ran your code on a clean computer, the way a reader or reviewer would. Below is each problem we found, the scripts it affects, and how to fix it. Fix them in the order given: a problem near the top can cause the ones below it.\n\n**A script uses something it does not create or load itself.**\n\n- <code>behaviour&#95;analysis.R</code>: <code>training</code>\n\nUsually the object was still in your R session from earlier work, or another script made it.\n\n1. Restart R (in RStudio: Session > Restart R).\n2. Run each script from top to bottom, and fix what is missing.\n3. If a script needs results of another, save them to a file in the first script and read them in the second.\n4. Load every package with <code>library()</code> at the top.\n\n**Metacheck can't automatically establish what caused the error, or how it should be improved.**\n\n- <code>behaviour&#95;analysis.Rmd</code>\n\nThe error message of each script is in the table above.\n\n### Other problems in the files\n\n- behaviour&#95;analysis.Rmd calls setwd(), which ties the script to a folder on the author's computer. We replaced the call with one that does nothing so the script could run; it should be removed from the script.\n\n### Comparison with the paper\n\nWe found no statistical tests in the paper to compare with the output of the code."
   },
   "ref_pubpeer": {
    "module": "ref_pubpeer",
@@ -11303,9 +11308,9 @@
      "memory specificity"
     ],
     "doi": "",
-    "file_hash": "efd8af74641c0caf",
+    "file_hash": "0365786093339406",
     "input_format": "grobid 0.9.1",
-    "file_name": "/srv/metacheck-sandbox/9baf9897-024e-4d5e-8639-27add304f76b/tmp/RtmpMgHAGF/grobid2bf8b077c8fe10/input.xml",
+    "file_name": "/srv/metacheck-sandbox/7e879df0-80e4-41c1-8670-ff2a9e209f7d/tmp/Rtmpg5ccNs/grobid2c8dad83671c2/input.xml",
     "bibr_version": "10.5",
     "paper_type": "unknown",
     "paper_type_confidence": 0,
@@ -19742,7 +19747,7 @@
     "bib_id": 68,
     "service": "crossref",
     "service_id": null,
-    "score": 130.3744,
+    "score": 130.3741,
     "bib_type": "article",
     "doi": "10.3758/s13421-018-0887-4",
     "title": "Are mnemonic failures and benefits two sides of the same coin?: Investigating the real-world consequences of individual differences in memory integration",

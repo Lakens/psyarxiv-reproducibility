@@ -13161,12 +13161,14 @@ error.</p>
 <tr class="odd">
 <td>behaviour_analysis.R</td>
 <td>Stopped with an error</td>
-<td>The script stopped with an error (see its output below).</td>
+<td><code>Error in eval(e, envir = env) : object ‘training’ not
+found</code></td>
 </tr>
 <tr class="even">
 <td>behaviour_analysis.Rmd</td>
 <td>Stopped with an error</td>
-<td>The script stopped with an error (see its output below).</td>
+<td><code>Error in fix.by(by.x, x) : ‘by’ must specify uniquely valid
+columns</code></td>
 </tr>
 </tbody>
 </table>
@@ -13176,10 +13178,23 @@ code run on another computer</h3>
 would. Below is each problem we found, the scripts it affects, and how
 to fix it. Fix them in the order given: a problem near the top can cause
 the ones below it.</p>
+<p><strong>A script uses something it does not create or load
+itself.</strong></p>
+<ul>
+<li><code>behaviour_analysis.R</code>: <code>training</code></li>
+</ul>
+<p>Usually the object was still in your R session from earlier work, or
+another script made it.</p>
+<ol style="list-style-type: decimal">
+<li>Restart R (in RStudio: Session &gt; Restart R).</li>
+<li>Run each script from top to bottom, and fix what is missing.</li>
+<li>If a script needs results of another, save them to a file in the
+first script and read them in the second.</li>
+<li>Load every package with <code>library()</code> at the top.</li>
+</ol>
 <p><strong>Metacheck can’t automatically establish what caused the
 error, or how it should be improved.</strong></p>
 <ul>
-<li><code>behaviour_analysis.R</code></li>
 <li><code>behaviour_analysis.Rmd</code></li>
 </ul>
 <p>The error message of each script is in the table above.</p>
@@ -13270,6 +13285,9 @@ without error, 2 errored, 0 timed out, 0 could not run because one of
 its own dependencies is unavailable, 0 did not parse. Running against
 current package versions: a break can reflect version drift, which
 argues for pinning versions.</p>
+<p><em>a script hit a <code>could not find function &quot;...&quot;</code> error;
+we added the <code>library()</code> calls it needs (see below), and
+re-ran once. The outcomes above are from that corrected run.</em></p>
 <table class="dt-static">
 <thead>
 <tr>
@@ -13296,10 +13314,10 @@ behaviour_analysis.R
 errored
 </td>
 <td style="text-align:left;">
-runtime
+undefined_variable
 </td>
 <td style="text-align:right;">
-0.0
+3.3
 </td>
 </tr>
 <tr>
@@ -13313,7 +13331,44 @@ errored
 runtime
 </td>
 <td style="text-align:right;">
-0.1
+4.9
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Undefined-variable errors</strong></p>
+<p><strong>1 script failed on an undefined variable or function</strong>
+(<code>object &#39;...&#39; not found</code> /
+<code>could not find function &quot;...&quot;</code>). This typically means the
+script expects a variable or function that another script defines —
+i.e. it is meant to be sourced into a larger session, not run on its own
+— or the symbol is simply never created. When another of the paper’s own
+script files defines the same name, this is called out below as a likely
+sourcing/copy-paste gap. Each is counted as an error (red).</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Missing variable
+</th>
+<th style="text-align:left;">
+Defined in
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+behaviour_analysis.R
+</td>
+<td style="text-align:left;">
+training
+</td>
+<td style="text-align:left;">
+(not defined anywhere in the paper’s code)
 </td>
 </tr>
 </tbody>
@@ -13354,39 +13409,196 @@ behaviour_analysis.Rmd
 </tr>
 </tbody>
 </table>
+<p><strong><code>library()</code> calls added</strong></p>
+<p><strong>1 script uses functions from packages it does not load
+itself.</strong> The packages are usually loaded in another script of
+the project, which only helps when the scripts run in one R session in
+the right order. To run it we added the <code>library()</code> calls
+below at the top. Any such script that then ran is <strong>reproducible
+only after adding <code>library()</code> calls it should make
+itself</strong>.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+library() calls added
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+behaviour_analysis.R
+</td>
+<td style="text-align:left;">
+library(tidyverse), library(dplyr), library(magrittr), library(lme4),
+library(lmerTest), library(emmeans), library(ggplot2),
+library(modelbased), library(ggeffects)
+</td>
+</tr>
+</tbody>
+</table>
 <p><em>Expand a row below to see the output each script
 produced.</em></p>
 <div class="callout-tip" title="Output — behaviour_analysis.R (errored)" collapse="true">
+<p><strong>Output (stdout):</strong></p>
+<pre><code>&gt; library(tidyverse)
+&gt; library(dplyr)
+&gt; library(magrittr)
+&gt; library(lme4)
+&gt; library(lmerTest)
+&gt; library(emmeans)
+&gt; library(ggplot2)
+&gt; library(modelbased)
+&gt; library(ggeffects)
+&gt; training %&gt;% distinct(age_group, subject, age_months) %&gt;% group_by(age_group) %&gt;% dplyr::summarise(mean = mean(age_months)/12, median = median(age_months)/12, min = min(age_months)/12, max= max(age_months)/12, n(), sd=sd(age_months/12))</code></pre>
 <p><strong>Messages / errors (stderr):</strong></p>
-<pre><code>metacheck-sandbox: refused: user &#39;499999:499999&#39;</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+
+Attaching package: ‘magrittr’
+
+The following object is masked from ‘package:purrr’:
+
+    set_names
+
+The following object is masked from ‘package:tidyr’:
+
+    extract
+
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+Welcome to emmeans.
+Caution: You lose important information if you filter this package&#39;s results.
+See &#39;? untidy&#39;
+
+Attaching package: ‘ggeffects’
+
+The following objects are masked from ‘package:modelbased’:
+
+    collapse_by_group, pool_predictions, residualize_over_grid
+
+Error in eval(e, envir = env) : object &#39;training&#39; not found
+Calls: .repro_docker_run ... eval -&gt; eval -&gt; %&gt;% -&gt; &lt;Anonymous&gt; -&gt; group_by -&gt; distinct
+Execution halted</code></pre>
 </div>
 <div class="callout-tip" title="Output — behaviour_analysis.Rmd (errored)" collapse="true">
+<p><strong>Output (stdout):</strong></p>
+<pre><code>&gt; knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+&gt; library(tidyverse)
+&gt; library(dplyr)
+&gt; library(magrittr)
+&gt; library(lme4)
+&gt; library(lmerTest)
+&gt; library(emmeans)
+&gt; library(ggplot2)
+&gt; library(modelbased)
+&gt; library(ggeffects)
+&gt; input_dir &lt;- &#39;./&#39;
+&gt; output_dir &lt;- paste0(input_dir,&#39;/figures&#39;)
+&gt; invisible(NULL)
+&gt; p_files &lt;- Sys.glob(paste0(input_dir, &#39;/behaviour_data/*.json&#39;))
+&gt; bindall &lt;- function(f) {
+&gt;   df &lt;- jsonlite::fromJSON(f, simplifyDataFrame = TRUE)
+&gt;   df &lt;- data.frame(df$subject, df$group, df$age, df$data) %&gt;%
+&gt;             dplyr::rename(subject = df.subject, group = df.group, age = df.age) %&gt;%
+&gt;             mutate(age_group = ifelse(age&lt;18, &quot;Teen&quot;, &quot;Adult&quot;))
+&gt;   return (df)
+&gt; }
+&gt; p_df &lt;- do.call(rbind, lapply(p_files,bindall))
+&gt; high_coh &lt;- c(&quot;apple&quot;, &quot;shell&quot;)
+&gt; low_coh &lt;- c(&quot;rock&quot;, &quot;leaf&quot;)
+&gt; age_data &lt;- read.csv(paste0(input_dir, &#39;ages.csv&#39;))
+&gt; age_data %&lt;&gt;% 
+&gt;   mutate(age_group = ifelse(substr(subject, 1,1)==&quot;T&quot;, &quot;Teen&quot;, &quot;Adult&quot;))
+&gt; p_df %&lt;&gt;% merge(age_data, by = c(&quot;age_group&quot;, &quot;subject&quot;, &quot;age&quot;))</code></pre>
 <p><strong>Messages / errors (stderr):</strong></p>
-<pre><code>metacheck-sandbox: refused: user &#39;499999:499999&#39;</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+
+Attaching package: ‘magrittr’
+
+The following object is masked from ‘package:purrr’:
+
+    set_names
+
+The following object is masked from ‘package:tidyr’:
+
+    extract
+
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+Welcome to emmeans.
+Caution: You lose important information if you filter this package&#39;s results.
+See &#39;? untidy&#39;
+
+Attaching package: ‘ggeffects’
+
+The following objects are masked from ‘package:modelbased’:
+
+    collapse_by_group, pool_predictions, residualize_over_grid
+
+Error in fix.by(by.x, x) : &#39;by&#39; must specify uniquely valid columns
+Calls: .repro_docker_run ... merge.default -&gt; merge -&gt; merge.data.frame -&gt; fix.by
+Execution halted</code></pre>
 </div>
 <p>Dependencies were installed into a throwaway library before running:
-0 succeeded, 11 failed. dplyr, emmeans, ggeffects, ggplot2, jsonlite,
+11 succeeded, 0 failed. dplyr, emmeans, ggeffects, ggplot2, jsonlite,
 knitr, lme4, lmerTest, magrittr, modelbased, tidyverse were
 installed.</p>
-<p><strong>Failed:</strong> dplyr [uncategorised] (docker install failed
-(status 125): metacheck-sandbox: refused: user ‘499999:499999’); emmeans
-[uncategorised] (docker install failed (status 125): metacheck-sandbox:
-refused: user ‘499999:499999’); ggeffects [uncategorised] (docker
-install failed (status 125): metacheck-sandbox: refused: user
-‘499999:499999’); ggplot2 [uncategorised] (docker install failed (status
-125): metacheck-sandbox: refused: user ‘499999:499999’); jsonlite
-[uncategorised] (docker install failed (status 125): metacheck-sandbox:
-refused: user ‘499999:499999’); knitr [uncategorised] (docker install
-failed (status 125): metacheck-sandbox: refused: user ‘499999:499999’);
-lme4 [uncategorised] (docker install failed (status 125):
-metacheck-sandbox: refused: user ‘499999:499999’); lmerTest
-[uncategorised] (docker install failed (status 125): metacheck-sandbox:
-refused: user ‘499999:499999’); magrittr [uncategorised] (docker install
-failed (status 125): metacheck-sandbox: refused: user ‘499999:499999’);
-modelbased [uncategorised] (docker install failed (status 125):
-metacheck-sandbox: refused: user ‘499999:499999’); tidyverse
-[uncategorised] (docker install failed (status 125): metacheck-sandbox:
-refused: user ‘499999:499999’)</p>
 </div>
 </details>
 <h2 id="files">Files in the repository</h2>
