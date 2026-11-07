@@ -37,7 +37,33 @@ fetch("data/index.json")
         " · " + (p.published || "").slice(0, 10) + " · " + p.id + " · "));
       meta.appendChild(el("a", { href: p.url, target: "_blank", rel: "noopener" }, "OSF"));
       li.appendChild(meta);
+      li.setAttribute("data-search", fold([p.title, authors.join(" "), p.id].join(" ")));
       list.appendChild(li);
     });
+    search();
   })
   .catch(function () {});
+
+// Lower case, without accents (é -> e), for the search; also the letters that
+// are not a letter with an accent (ł -> l, ø -> o, ß -> ss, ...)
+var PLAIN = { "ł": "l", "ø": "o", "đ": "d", "ß": "ss", "æ": "ae", "œ": "oe" };
+function fold(s) {
+  return (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    .replace(/[łøđßæœ]/g, function (c) { return PLAIN[c]; });
+}
+
+// Shows only the preprints whose title, authors or OSF id contain every word
+// typed in the search field
+function search() {
+  var words = fold(document.getElementById("report-search").value).split(/\s+/).filter(Boolean);
+  var items = document.querySelectorAll("#report-list li");
+  var shown = 0;
+  items.forEach(function (li) {
+    var text = li.getAttribute("data-search") || "";
+    var match = words.every(function (w) { return text.indexOf(w) !== -1; });
+    li.hidden = !match;
+    if (match) shown++;
+  });
+  document.getElementById("no-match").hidden = shown > 0 || items.length === 0;
+}
+document.getElementById("report-search").addEventListener("input", search);
