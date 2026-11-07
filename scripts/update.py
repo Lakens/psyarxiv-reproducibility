@@ -190,6 +190,7 @@ def run_job(name, data, ctype):
         return None, f"the server refused the file ({e.code}): {e.read().decode(errors='replace')[:300]}"
     except (urllib.error.URLError, TimeoutError) as e:
         raise ServerDown(str(e))
+    remember_job(job["id"])
     end = time.time() + JOB_WAIT_MINUTES * 60
     while time.time() < end:
         time.sleep(15)
@@ -198,10 +199,43 @@ def run_job(name, data, ctype):
         except (urllib.error.URLError, TimeoutError) as e:
             raise ServerDown(str(e))
         if status.get("status") == "done":
-            return get(f"{SERVER}/jobs/{job['id']}/result"), None
+            result = get(f"{SERVER}/jobs/{job['id']}/result")
+            remember_job(None)
+            return result, None
         if status.get("status") == "failed":
+            remember_job(None)
             return None, status.get("error") or "the job failed"
-    return None, f"no result after {JOB_WAIT_MINUTES} minutes"
+    # still on the server: stop here rather than send a second job next to it
+    raise ServerDown(f"job {job['id']} still running after {JOB_WAIT_MINUTES} minutes")
+
+
+# One preprint at a time on the server, so that one of its two places stays
+# free for other people: the job this script has on the server is kept in
+# <data-dir>/current_job.json (committed with the data, so the next run sees
+# it, even when GitHub stopped this one), and no job is sent while it runs.
+CURRENT_JOB = os.path.join("data", "current_job.json")   # set in main()
+
+
+def remember_job(job_id):
+    save(CURRENT_JOB, {"id": job_id, "sent": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
+         if job_id else {})
+
+
+def previous_job_running():
+    job_id = load(CURRENT_JOB, {}).get("id")
+    if not job_id:
+        return False
+    try:
+        status = get(f"{SERVER}/jobs/{job_id}")
+    except urllib.error.HTTPError as e:
+        if e.code == 404:                    # finished over an hour ago: gone
+            remember_job(None)
+            return False
+        raise
+    if status.get("status") in ("done", "failed"):
+        remember_job(None)
+        return False
+    return True
 
 
 def drop_converter_note(html):
@@ -412,6 +446,15 @@ def main():
         health = {"error": str(e)}
     if health.get("status") != "ok":
         print("The server is not ready; stopping until the next run:", health)
+        return
+    global CURRENT_JOB
+    CURRENT_JOB = os.path.join(args.data_dir, "current_job.json")
+    try:
+        running = previous_job_running()
+    except (urllib.error.URLError, TimeoutError) as e:
+        running = f"could not ask the server ({e})"
+    if running:
+        print("The previous job is still on the server; stopping until the next run.", running)
         return
     stop_at = time.time() + args.minutes * 60
     sent = 0

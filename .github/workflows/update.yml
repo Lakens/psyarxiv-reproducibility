@@ -10,6 +10,10 @@ on:
   # schedule:
   #   - cron: "17 * * * *"
   workflow_dispatch:
+    inputs:
+      max:
+        description: "Check at most this many preprints (0: no limit)"
+        default: "0"
 
 permissions:
   contents: write
@@ -26,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check preprints
-        run: python3 scripts/update.py --minutes 50
+        run: python3 scripts/update.py --minutes 50 --max "${{ inputs.max || '0' }}"
 
       - name: Save the results
         if: always()
