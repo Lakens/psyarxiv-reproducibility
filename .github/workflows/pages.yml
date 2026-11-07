@@ -1,0 +1,50 @@
+# Publishes the website on GitHub Pages: the landing page and its files, the
+# report pages (<id>/index.html), and the two small data files the landing page
+# reads. The full results in data/papers/ stay in the repository only: GitHub
+# Pages publishes at most 1 GB, counted at full size, while the repository
+# stores its files compressed.
+# Runs after every push to main, and after each run of update.yml (a commit
+# pushed by a workflow does not start other workflows by itself).
+name: Publish the site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main          # after update.yml: the commit it just pushed
+
+      - name: Collect the site's files
+        run: |
+          mkdir -p _site/data
+          cp index.html site.css landing.css landing.js _site/
+          cp -r fonts images _site/
+          for f in data/index.json data/tally.json; do [ -f "$f" ] && cp "$f" _site/data/; done
+          for d in *_v*/; do
+            if [ -f "${d}index.html" ]; then mkdir -p "_site/$d" && cp "${d}index.html" "_site/$d"; fi
+          done
+          du -sh _site
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+      - id: deployment
+        uses: actions/deploy-pages@v4
