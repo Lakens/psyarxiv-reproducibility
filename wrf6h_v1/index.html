@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Persona Diversity and Error Structure in LLM
+Crowds</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Persona Diversity and Error Structure in LLM Crowds
+</p>
+<p class="meta">
+2026-11-07 · Metacheck 0.4.3.9
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to improve</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>We found 1 replication for 1 original you cited.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>An ethics approval statement was detected, based on the following
+text:</p>
+<blockquote>
+<p>This study was not reviewed by an ethics committee.</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 18 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 18 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 18 references with DOIs. We found 1 replication for 1
+original you cited.</p>
+<p>Check if you are aware of the replication studies, and cite them
+where appropriate.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Replication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Vul, E., &amp; Pashler, H. (2008). Measuring the crowd within:
+Probabilistic representations within individuals. Psychological Science,
+19(7), 645-647. <a href="doi:10.1111/j.1467-9280.2008.02136.x" class="uri">doi:10.1111/j.1467-9280.2008.02136.x</a>.
+</td>
+<td style="text-align:left;">
+Steegen, S., Dewitte, L., Tuerlinckx, F., &amp; Vanpaemel, W. (2014).
+Measuring the crowd within again: a pre-registered replication study.
+Frontiers in Psychology, 5.
+<a href="https://doi.org/10.3389/fpsyg.2014.00786" target="_blank">doi:10.3389/fpsyg.2014.00786</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
+not succeed at excluding all false positives.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Can psychologically different roles make a crowd of large language model responses more accurate? We examined demographic personas, cognitive personas, and instructions inspired by the wisdom of the inner crowd. An exploratory reanalysis used six conditions on 15 MARBLES estimation items presented as text or with photographs. We calculated error after aggregating responses and distinguished two comparisons: role-based crowds against neutral responses of the same number, and heterogeneous against homogeneous crowds reconstructed from the same response pools. For text, the 12-response stacked condition had lower mean relative absolute error than a matched hierarchical neutral control, 0.766825 versus 0.958008. The difference was -0.191183, with a 95% item-bootstrap interval of [-0.518117, 0.015682], and one item accounted for much of the mean advantage. The corresponding image difference was -0.004316 [-0.026710, 0.019478]. Within the same response pools, composition effects were generally small and depended on the comparison and error measure. Image responses frequently underestimated the true quantities, while persona error patterns were highly correlated in both presentations. A supplementary Fermi analysis documents how rounding changed an earlier condition ranking. These findings distinguish changes associated with role-based prompting from the additional value of combining different roles, and identify the error structure that each comparison can assess.</p>
+<h3>1 Introduction</h3>
+<p>A crowd can estimate a quantity more accurately than an individual judge. The familiar example is Galton&#x27;s (1907) analysis of guesses about an ox&#x27;s weight. The broader question is how to construct a useful crowd. Adding judges helps when their errors can be reduced by aggregation. It helps less when they repeatedly make the same mistake. Research on collective judgment therefore asks how the quality of individual estimates and the differences among them jointly determine collective accuracy (de Oliveira &amp; Nisbett, 2018; Keck &amp; Tang, 2020). This question also arises when the judges are responses from a large language model (LLM). If we can ask a model to adopt different roles, which differences should we introduce, and how should we assess their value? Diversity can contribute to collective performance in several ways (Kameda et al., 2022). In numerical estimation, errors can partly cancel when estimates fall on different sides of the truth. Different knowledge or reasoning strategies can also provide complementary information. In problem solving, differences can broaden the search for a useful solution (Hong &amp; Page, 2004).</p>
+<p>These processes are related, but they concern different objects. Variation among numerical answers is observable even when the information and strategies that produced them are unknown. A successful aggregate can also arise because a prompt improves the constituent answers, with little additional benefit from mixing different prompts. Separating these possibilities is necessary for understanding what a diversity intervention accomplishes.</p>
+<p>Human research provides concrete reasons to distinguish the source of diversity from its consequences for judgment. de Oliveira and Nisbett (2018) examined whether demographically diverse groups make more accurate numerical estimates than homogeneous groups. Their analyses showed that substantial gains in small groups require demographic categories to predict judgments, sufficient differences between those judgments, and group tendencies that bracket the truth. Those conditions were often weak in their empirical data. Demographic differences therefore need not supply the differences in error that an aggregate can use. The relevant issue is how a category changes estimates on a particular problem.</p>
+<p>Cognitive-process interventions target judgment more directly. Keck and Tang (2020) instructed people to make intuitive or analytical judgments and compared crowds that combined the two processes with crowds that used one process. Their results showed benefits of mixing these judgments across estimation and forecasting tasks. This approach treats cognitive diversity as a property that can be induced through instructions. Simulation work also shows why its value depends on the environment. Fujisaki et al. (2018) found that combining inference strategies can improve collective decisions when their individual performance and biases allow useful compensation. These findings motivate attention to both constituent quality and the relationship between errors.</p>
+<p>The wisdom of the inner crowd extends this question to multiple estimates from one person. Repeated judgments, structured reconsideration, and perspective taking can produce estimates whose aggregate improves prediction (Vul &amp; Pashler, 2008; Herzog &amp; Hertwig, 2009; van Dolder &amp; van den Assem, 2018; Fujisaki et al., 2023). More recently, combining five thinkingstyle instructions improved on aggregating five repeated estimates under ordinary instructions (Fujisaki et al., 2025). These methods suggest ways to introduce variation before aggregation. They also invite an item-level question. Instructions can improve some judgments and worsen others, so a similar mean error can conceal a different distribution of mistakes. Fujisaki and Yang (2026) develop this question in a reanalysis of instruction-induced diversity. This distinction between overall accuracy and the allocation of error across items is especially relevant when a few large errors dominate an average. LLMs provide a practical setting in which to examine these ideas. Cognitive methods can be used to study model behavior without assuming that a model implements the same processes as a human participant (Binz &amp; Schulz, 2023). For numerical estimation, Chuang et al. (2025) introduced wisdom of crowds decoding and showed that taking the median of sampled responses can improve guesstimation. Their MARBLES dataset contains quantity-estimation questions with measured answers. Talebirad et al. (2026) also examine how LLM crowds can be constructed for visual estimation. These studies establish a direct connection between response aggregation and the design of machine crowds. Psychological research suggests additional interventions through demographic roles, reasoning styles, and instructions for producing alternative estimates.</p>
+<p>Those interventions require two distinct comparisons. First, does a crowd generated under role-based prompts outperform a crowd with the same number of neutral responses? This comparison assesses the combined consequences of using those prompts and aggregating their outputs. Second, does combining different roles outperform combining responses from a single role, while giving each role the same overall weight? This comparison more directly concerns the composition of the crowd. A role-based crowd can outperform a neutral crowd even when most of its advantage is already present within homogeneous crowds. Conversely, useful composition may be hidden when some role prompts lower individual accuracy. A comparison with neutral responses alone does not distinguish these possibilities.</p>
+<p>We examine both comparisons in an exploratory reanalysis of saved LLM estimates. The main analyses concern the same 15 MARBLES items in text and image presentation settings. Six conditions include single and repeated neutral prompting, demographic personas, cognitive personas, three instructions inspired by inner-crowd research, and a stacked condition that combines these prompt types. We reconstruct controls from the saved response pools to match response number and, where possible, the composition of the source prompts. We then examine item differences, the direction of errors, and similarities between persona error patterns. An eight-item Fermi dataset is retained in the Supplementary Materials to document how aggregation and reference information affected its earlier results. The analysis asks what these existing responses establish about crowd construction. Explanations involving internal cognitive strategies or a causal effect of visual input remain questions for subsequent experiments.</p>
+<h3>2 Methods</h3>
+<h3>2.1 Study scope and materials</h3>
+<p>This report reanalyzes existing numerical responses. No new model responses were collected for the reanalysis. The analysis plan and subsequent amendments describe exploratory work on saved data; they are not a preregistration. The main analyses use MARBLES Text and Image. Additional collection runs are reported separately in the Supplementary Materials. We retain the condition identifiers from the saved files so that tables and code can be matched directly.</p>
+<p>MARBLES consists of 15 combinations of three contents and five containers, with measured reference counts (Chuang et al., 2025; seantw, n.d.). The contents are standard M&amp;Ms, marbles, and US quarters. For example, the first item asks how many standard M&amp;Ms fill a Starbucks iced tall cup; its reference count is 382. The audited Text and Image task files agree on all 15 item identifiers and reference values. Their question texts also agree after whitespace normalization. Each image item additionally has a reference photograph. The Supplementary Materials list all items and the image manifest.</p>
+<p>The image wrapper attached the photograph and asked the model to use it. The recovered developer instructions differ between the Text and Image wrappers. The saved data also do not establish that all conditions were collected with the same deployed model version or at the same time. We therefore describe Text and Image as presentation settings with corresponding items. Their comparison does not isolate the causal effect of adding a photograph.</p>
+<p>The supplementary Fermi data contain eight questions that match the first eight records of a local realFP test file (Kalyan et al., 2021). The saved procedure supplied each question and its context but did not supply the symbolic solution program. This small subset is not treated as a representative sample of the full benchmark. Because a rounding artifact and questionable context or reference information affected its interpretation, it is analyzed as a diagnostic supplement.</p>
+<h3>2.2 Prompts and conditions</h3>
+<p>Each request asked for a numerical estimate, confidence, and a short public explanation in JSON format. The analyses use the numerical estimate. Confidence and explanations were not used to infer cognitive processes. Requests did not receive another agent&#x27;s answer or an earlier answer from the same nominal persona. Thus, independence refers to the absence of answer sharing in the recovered procedure. It does not imply statistically uncorrelated errors.</p>
+<p>The neutral persona described an ordinary participant providing a sincere best estimate. The demographic personas described a 22-year-old woman, a 22-year-old man, a 65-year-old woman, and a 65-year-old man. They are prompt labels, not sampled human demographic groups. The cognitive personas were an analytical decomposer, a holistic approximator, a conservative estimator, and a cross-checking estimator. Their prompts respectively emphasized decomposition into container size, object size, and packing; an overall impression; avoidance of extreme values; and checking whether an initial guess was too high or too low. These instructions define the manipulation. They do not establish which computations the model performed internally.</p>
+<p>The three inner instructions were baseline, intuition, and dialectic. Baseline requested a normal best estimate. Intuition requested a quick intuitive answer without deliberate analysis. Dialectic asked the model to consider why an estimate might be wrong and provide an alternative. Each instruction was used in a separate request. In particular, the dialectic request was not shown a preceding estimate. The procedure was inspired by inner-crowd methods but did not reproduce sequential human reconsideration. The archive contains two closely related wording sets. The Supplementary Materials reproduce both and trace their references in each recovered runner.</p>
+<p>The six conditions were as follows. In neutral_1, one neutral request supplied the estimate. In neutral_4, four neutral requests were combined. In demographic_4 and cognitive_4, one request from each of the four relevant personas was combined. In inner_1, the neutral persona received each of the three inner instructions, yielding three responses. In stacked_4, four fixed demographic-cognitive pairings each received all three inner instructions, yielding 12 responses. The pairings were young woman with analytical decomposer, young man with holistic approximator, older woman with conservative estimator, and older man with cross-checking estimator. Because these pairings were fixed, the design does not independently identify demographic and cognitive contributions or their interaction.</p>
+<h3>2.3 Recovered implementation and data accounting</h3>
+<p>The recovered OpenAI Responses wrappers specify gpt-4o-mini as the default model. The Text and Image wrappers set a maximum output of 220 tokens; the Fermi wrapper sets 300. They specify store = FALSE, and the Image wrapper requests high image detail. No explicit temperature or random seed is visible in these wrappers. The main Image runner also refers to an instruction constant whose definition was not retained, leaving its exact wording unverified. The retained response tables do not contain the API response identifiers, timestamps, exact model snapshots, or complete request histories needed to verify every executed call. We report the recovered settings without treating them as a complete record of the deployed model configuration.</p>
+<p>In Text, neutral_1, neutral_4, demographic_4, and cognitive_4 each have five repetitions per item. Stacked has three. Inner uses a separately saved run with ten repetitions per item. These sources contain 1,965 responses and yield 495 observed estimates after aggregation. The main Image data contain three repetitions for all six conditions, totaling 1,260 responses and 270 observed estimates. All 3,225 main MARBLES responses have finite estimates. The repetitions per item, response numbers, and observed group counts are shown in Table 1. The original neutral-agent identifiers were absent from the main Text neutral_4 file; grouping labels were reconstructed from row order and cannot be used to track stable agent characteristics.</p>
+<p>The supplementary Fermi data contain one repetition of each condition on each item: 224 response records, including one missing numerical estimate in cognitive_4 on fermi_01. The corrected observed result retains the historical aggregation of the remaining three responses on that item. Supplementary analyses additionally match the actual response number and, in a separate sensitivity analysis, exclude the incomplete item from every condition. The full numerical archive contains 5,999 unique response records, of which 5,998 have finite estimates. It includes separate Text and Image runs that are never pooled into the main condition means. The ten-repetition inner data appear in two analysis sets but refer to the same responses.</p>
+<h3>2.4 Aggregation and error</h3>
+<p>We first formed a group estimate for each item, condition, and recorded repetition, and then computed its error. The primary aggregator was the median. Neutral_4, demographic_4, and cognitive_4 used the median of four responses; inner_1 used the median of three. Stacked first used the median of the three responses within each persona, followed by the median of the four resulting persona estimates. For an even number of values, the median was the mean of the central two. We applied no integer rounding after aggregation. Arithmetic means were used in sensitivity analyses with the same hierarchy. In stacked groups with equal numbers of responses per persona, that procedure equals the mean of all responses.</p>
+<p>The primary MARBLES measure was relative absolute error (RAE), the absolute difference between the group estimate and reference count divided by the reference count. A sensitivity measure was absolute log10 error (ALE10), the absolute value of the base-10 logarithm of the estimate-to-reference ratio. ALE10 was the primary Fermi measure. All finite estimates and reference values used in the corrected analyses were positive. No replacement of zero by a small constant was required. We used signed log10 errors to describe error direction and relative squared error for an arithmetic-mean decomposition in the Supplementary Materials.</p>
+<p>We averaged the errors of observed repetitions within each item and then gave all items equal weight. For each comparison, we subtracted the control&#x27;s item-level mean error from the target&#x27;s item-level mean error. Negative differences indicate lower target error. Intervals are the 2.5th and 97.5th percentiles of 20,000 bootstrap means obtained by resampling paired items. They are exploratory 95% item-bootstrap intervals conditional on the saved response pools. We did not adjust for multiple comparisons. Neither the number of response rows nor the number of reconstructed groups serves as the independent sample size. The 15 MARBLES items also reuse containers and object types, so these intervals do not establish uncertainty for an unrestricted population of independent stimuli.</p>
+<h3>2.5 Neutral controls with the same response number</h3>
+<p>For each item, we pooled the saved neutral_4 responses. The main Text pool contains 20 responses and the main Image pool 12. We considered all subsets sampled without replacement to construct controls with three, four, or 12 responses. The control value is the expected error of the reconstructed groups, rather than the error of their expected estimate. This distinction matters because aggregation and absolute error are nonlinear.</p>
+<p>For the primary 12-response comparison, the neutral control used the same hierarchy as stacked: four groups of three, a median within each group, and a median across groups. The calculation accounts for every eligible subset and partition into triplets through exact rank weights. A flat median of 12 responses provides a separate sensitivity analysis. The Image control uses all 12 saved neutral responses, while its groupings into triplets vary. These are finite-pool references, not newly collected neutral crowds. They match response number and aggregation structure but do not match prompt content or establish equivalence of collection conditions.</p>
+<h3>2.6 Homogeneous and heterogeneous controls from the same pools</h3>
+<p>We next reconstructed crowds within each persona family. For demographic and cognitive conditions, a heterogeneous four-response crowd took one response from each persona. A homogeneous crowd took four responses without replacement from one persona. We calculated the average error separately for each homogeneous persona and then weighted the four personaspecific averages equally. This control is an average of the errors of four-response crowds. It is not a 16-response crowd formed by aggregating the four personas again.</p>
+<p>For inner, heterogeneous crowds contained one response from each of the three instructions. Homogeneous crowds contained three responses from one instruction, with the three instruction categories weighted equally. We additionally compared mixed-instruction crowds with three responses from the baseline instruction alone. That specific baseline differs from the equally weighted homogeneous control.</p>
+<p>The primary composition analysis averaged over all eligible heterogeneous combinations and all homogeneous subsets. Under this construction, the two sides give the same marginal weight to the constituent responses and therefore have the same average individual response quality. A second analysis retained the original repetition-level heterogeneous groupings and compared them with the same homogeneous control. It shows how the observed groupings differ from the expectation over all recombinations. It does not turn the observed groupings into independent experimental replicates of a composition effect.</p>
+<p>The saved repetitions constrain which comparisons can be constructed. Main Image has only three responses per persona, so homogeneous four-response demographic and cognitive crowds are unavailable. We report three-response comparisons from those pools and four-response comparisons from a separate five-repetition Image run. Stacked has only three responses in each persona-by-instruction cell. Four homogeneous agents, each retaining all three instructions, would require four responses per cell. We therefore examine reduced stacked crowds with two or three agents and six or nine responses. Each retains the three instructions per agent. These exploratory diagnostics compare composition at those smaller sizes; they do not estimate the missing homogeneous 12-response contrast.</p>
+<h3>2.7 Error structure and presentation comparisons</h3>
+<p>We measured the fraction of individual responses below the reference, the fraction of observed groups whose responses were all strictly on the same wrong side, and the fraction that strictly bracketed the reference. Strict bracketing requires the minimum response to be below and the maximum to be above the reference. Exact answers are neither underestimates nor overestimates. These quantities are reported separately because they have different denominators and definitions. Comparisons of bracketing across group sizes are descriptive.</p>
+<p>We also formed item-level mean signed log10 error profiles for each persona or instruction. Pearson correlations between these profiles describe whether personas tend to overestimate and underestimate the same items. For stacked, profiles use the within-persona median of the three instructions before averaging repetitions. The reported mean correlation is a simple descriptive average over persona pairs. These correlations do not estimate dependence between individual calls conditional on item, and they do not identify internal reasoning strategies.</p>
+<p>The archived direct Text-minus-Image contrast compares the stacked-minus-observed-neutral_4 differences across the same 15 items. We retain that definition when reporting it. It is distinct from comparing stacked with the reconstructed hierarchical neutral_12 control. Direct composition contrasts for six-and nine-response stacked crowds are reported separately in the Supplementary Materials.</p>
+<h3>3 Results</h3>
+<h3>3.1 Observed estimates across the six conditions</h3>
+<p>Table 1 reports the observed condition means. In Text, stacked had the lowest mean RAE, 0.766825. The remaining means were 0.864743 for inner, 0.868121 for demographic, 0.922368 for cognitive, 0.969848 for neutral_4, and 0.996447 for neutral_1. Inner&#x27;s mean comes from its separate ten-repetition source. These descriptive rankings combine conditions with different response numbers and collection histories. They therefore motivate the matched comparisons that follow.</p>
+<p>In Image, mean RAE was 0.564898 for stacked, 0.566775 for neutral_1, 0.570283 for neutral_4, 0.576886 for cognitive, 0.597407 for inner, and 0.601102 for demographic. The range among Image means was smaller than in Text. Ranking stacked first in both settings does not establish that its component prompt types have additive or synergistic effects.</p>
+<h3>3.2 Comparisons with neutral responses of the same number</h3>
+<p>The Text stacked condition had mean RAE 0.766825, compared with 0.958008 for the hierarchical 12-response neutral control. The difference was -0.191183, with a 95% interval of [-0.518117, 0.015682]. Eight items improved, one was equal, and six worsened. The median item difference was only -0.006871. Figure 1 shows that a large improvement on marbles_08, the number of marbles in a standard Bicycle playing-card box, contributed strongly to the average. On this item, mean RAE fell from 6.007670 to 3.756944, accounting for approximately 78.5% of the overall mean difference. Stacked therefore reduced a large overestimate while retaining substantial error. Removing this item as an influence diagnostic reduced the mean difference to -0.044073. We retain it in the main analysis because this diagnostic did not identify an error in its question or reference count.</p>
+<p>The Image stacked mean was 0.564898, compared with 0.569214 for the hierarchical neutral control. The difference was -0.004316 [-0.026710, 0.019478]. Nine items improved, one was equal, and five worsened. Thus, the Text point estimate favored stacked more strongly, but both intervals included zero. Table 2 includes the other matched neutral comparisons. In Text, demographic and cognitive differences were -0.095806 [-0.335661, 0.059557] and -0.041559 [-0.200219, 0.078848]. Inner had a difference of -0.101077 [-0.249309, -0.002845]. In Image, demographic and inner had higher error than their corresponding neutral controls: 0.031657 [0.008690, 0.055015] and 0.025840 [0.005228, 0.047157]. The cognitive difference was 0.007441 [-0.014376, 0.030190]. The intervals that exclude zero concern these particular exploratory comparisons. They do not establish a general benefit or cost of heterogeneity.</p>
+<h3>Sensitivity analyses retained the direction of the</h3>
+<p>Text stacked point estimate while its interval continued to include zero. With a flat 12-response neutral median, the RAE difference was -0.181491 [-0.493402, 0.014588]. With arithmetic means and the matched hierarchy, it was -0.158365 [-0.397503, 0.007261]. With median aggregation and ALE10, it was -0.050206 [-0.129486, 0.013992]. In Image, the arithmetic-mean RAE difference changed direction to 0.007225 [-0.014763, 0.030169]. Full specifications and item diagnostics are provided in the Supplementary Materials.</p>
+<h3>3.3 The additional value of mixing personas or instructions</h3>
+<p>Composition effects were generally small when heterogeneous and homogeneous crowds were reconstructed from the same pools (Figure 2). In main Text, the fully recombined RAE differences were -0.006223 [-0.016596, 0.002813] for demographic, 0.013647 [-0.018506, 0.062847] for cognitive, and -0.001998 [-0.010290, 0.004627] for inner. Every interval included zero. Retaining the original heterogeneous groupings gave differences of -0.016744 [-0.042440, 0.001183], -0.009428 [-0.031878, 0.012444], and -0.034288 [-0.089544, 0.001959], respectively. These intervals also included zero. The cognitive comparison changed direction between the original and fully recombined groupings.</p>
+<p>The inner condition illustrates why the control matters. Its Text error was lower than that of the three-response neutral control. Against three baseline-instruction responses from the same inner pool, however, the original mixed-instruction groups differed by -0.011917 [-0.069825, 0.041365]. The fully recombined difference was 0.020373 [-0.018965, 0.056810]. Neither supports a stable additional benefit from mixing the three instructions in this pool.</p>
+<p>The descriptive decomposition of the Text differences gives a similar picture. For demographic prompting, the total difference from matched neutral was -0.095806. Of this, -0.006223 was the fully recombined heterogeneous-minus-homogeneous difference, -0.010521 reflected original versus recombined heterogeneous groupings, and -0.079063 was the homogeneous-minus-neutral difference. The last term includes changes in response sources and is not a causal estimate of persona content. The arithmetic decomposition nevertheless shows why the full neutral difference cannot be assigned to heterogeneous composition. Main Image does not permit the corresponding four-response homogeneous demographic or cognitive controls. At three responses, their composition differences were -0.002188 [-0.005929, 0.001547] and 0.005278 [-0.004505, 0.015228]. The inner difference was 0.004971 [-0.003396, 0.014135]. A separate five-repetition Image run permitted four-response controls. Its demographic and cognitive composition differences were small and had intervals including zero. Its fully recombined inner difference was -0.003964 [-0.007684, -0.000429]. This improvement direction did not persist against baseline-only responses. Its ALE10 comparison with the average homogeneous control remained favorable in direction, but the interval included zero. The supplementary tables retain all of these comparisons and identify the reused Text inner source.</p>
+<h3>3.4 Composition in reduced stacked crowds</h3>
+<p>The six-response stacked comparison yielded RAE differences of -0.002676 [-0.008085, 0.000389] in Text and -0.002631 [-0.007968, 0.000075] in Image. For nine responses, the differences were -0.016739 [-0.049466, 0.003981] and -0.003232 [-0.009710, 0.001963], respectively. All four intervals included zero. These estimates concern mixed versus homogeneous persona composition while retaining the three inner instructions within each agent.</p>
+<p>The secondary ALE10 measure showed small six-response improvements whose intervals excluded zero: -0.003089 [-0.006440, -0.000370] for Text and -0.001541 [-0.004028, -0.000020] for Image. Nine-response ALE10 intervals included zero. We retain the six-response findings as specification-specific evidence. They do not supply the unobserved 12-response homogeneous comparison or establish a consistent gain across error measures.</p>
+<h3>3.5 Shared direction and item patterns of error</h3>
+<p>Image responses frequently fell below the reference count. The proportions of individual underestimates were 90.0% for neutral_4, 93.3% for demographic, 88.9% for cognitive, and 90.6% for stacked. In those conditions, respectively, 97.8%, 100.0%, 91.1%, and 82.2% of observed groups had all their constituent responses strictly on the same wrong side. For stacked, 13.3% of Image groups strictly bracketed the truth, compared with 33.3% in Text. Response numbers differ across conditions, so between-condition comparisons do not isolate an effect of heterogeneity on bracketing.</p>
+<p>High correlations between persona error profiles were present in both presentation settings. Mean pairwise correlations for demographic, cognitive, inner, and stacked were 0.974, 0.972, 0.969, and 0.962 in Text. The corresponding Image correlations were 0.948, 0.956, 0.958, and 0.953. These values indicate that personas tended to make similar signed errors across items. They do not support a claim that correlated item patterns were specific to images. The Supplementary Materials provide pairwise values, leave-one-item-out diagnostics, and the within-and between-category components of output variation.</p>
+<h3>3.6 Presentation contrasts and the Fermi diagnostic</h3>
+<p>The saved direct contrast of stacked minus observed neutral_4, compared between Text and Image, was -0.197638 [-0.563051, 0.038709] in RAE. Its interval included zero. This contrast uses observed four-response neutral groups and must be distinguished from the hierarchical neutral_12 comparisons above. Direct Text-Image composition contrasts for the reduced stacked crowds also had intervals including zero. The present results therefore leave the extent of a presentation-dependent composition effect unresolved.</p>
+<p>The supplementary Fermi analysis changed an earlier descriptive ranking. Integer rounding had converted group estimates of a proportion near 0.23 to zero while leaving the single neutral estimate unrounded. Removing that step reduced the eight-item mean ALE10 of the multiresponse conditions substantially. The corrected means were 2.991304 for neutral_1, 2.951426 for neutral_4, 2.838243 for demographic, 2.633018 for cognitive, 2.947201 for inner, and 2.727578 for stacked. The earlier claim that single neutral prompting performed best is therefore unsupported by the corrected aggregation. The Supplementary Materials report the full eight-item results, missingness diagnostics, and sensitivity to two items with questionable context or reference information. They do not establish that decomposition or deliberation would improve these responses.</p>
+<h3>4 Discussion</h3>
+<p>This study examined how psychologically motivated prompts and the composition of their responses relate to collective numerical error. In the saved Text data, stacked responses had lower average error than a neutral reference matched on response number and aggregation structure. The interval included zero, and one item contributed strongly to the mean difference. The corresponding Image difference was small. When we compared heterogeneous with homogeneous crowds from the same response pools, the additional gains from mixing personas or instructions were generally much smaller and depended on the specification. These findings identify what changed at the level of recorded outputs and clarify which comparisons are needed to interpret those changes.</p>
+<h3>4.1 Role-based prompting and heterogeneous composition</h3>
+<p>A neutral comparison and a homogeneous-persona comparison answer different questions. The former asks whether a particular set of prompted responses, when aggregated, performs better than neutral responses of the same number. The latter asks how those responses should be grouped. Our Text results show why this distinction matters. Demographic, cognitive, and inner conditions had favorable point estimates relative to matched neutral. Yet their fully recombined composition effects were close to zero, and the cognitive estimate changed direction when the original groupings were replaced by all eligible combinations. The favorable neutral comparison thus contains more than the benefit of mixing different roles. This distinction connects the present analysis to psychological work on diversity. de Oliveira and Nisbett (2018) showed that demographic categories must produce useful judgment differences for small diverse crowds to gain much. Our demographic labels were interventions on model prompts. Their performance says nothing directly about the validity of demographic categories in human groups. It does show the value of measuring the output differences rather than treating a set of different labels as sufficient evidence of useful diversity. Keck and Tang (2020) demonstrated benefits from combining intuitive and analytical human judgments. Here, the prompt instructions differed from their procedures, and the constituent outputs came from a language model. The small composition effects concern these particular operationalizations.</p>
+<p>The same reasoning applies to inner and stacked prompting. The inner condition was based on separate requests, so its favorable Text comparison with neutral responses cannot be read as evidence that a model improved by revising its own answer. Against baseline-only responses from the same pool, the result was uncertain and sensitive to the grouping specification. Stacked combined fixed demographic and cognitive pairings with inner instructions. Its descriptive ranking therefore cannot identify separate main effects or synergy among the prompt types. The six-and nine-response diagnostics narrow the question, but a homogeneous 12-response comparison remains unobserved. These distinctions preserve the substantive result while locating the additional evidence needed to explain it.</p>
+<h3>4.2 Error cancellation depends on where estimates fall</h3>
+<p>The error-direction results offer a concrete account of what aggregation faced in the Image setting. Most individual responses underestimated the quantity. Many groups placed every response on the same wrong side. For a median, such a group cannot reach the reference by combining those responses: its aggregate remains within their range. Increasing variation within that one-sided range can change accuracy, but it does not create estimates on the other side of the truth. The practical question is therefore where the variation lies relative to the target.</p>
+<p>At the same time, the data do not establish a visual mechanism that suppressed cognitive diversity. Persona error patterns were highly correlated in Text as well as Image. A correlation across 15 item means can reflect common item difficulty, common information, or other itemlevel structure. It does not reveal whether two requests used the same latent reasoning procedure. Similarly, high rates of underestimation describe the Image outputs without proving that visual perception caused their common bias. Prompt wording, model configuration, collection history, and the particular stimuli remain possible contributors. This separation of observation and mechanism suggests useful hypotheses. Text descriptions may permit different approximations based on container dimensions, object size, or packing. Images may make some cues more salient while leaving other quantities difficult to recover. A subsequent experiment could vary those cues directly and measure whether persona instructions change the direction of errors. The current result is the shared direction of many Image errors and the similarity of item patterns in both settings. The proposed explanation requires its own manipulation.</p>
+<h3>4.3 Mean performance and the distribution of improvement</h3>
+<p>The Text stacked comparison also shows why mean performance should be considered together with item contributions. Its mean RAE advantage was much larger than its median item advantage. One item accounted for much of the average, and removing it greatly reduced the difference. Because RAE divides by the true count, a large absolute miss on a low-count item can receive substantial weight. This is part of the measure&#x27;s definition, not grounds for deleting the observation. Reporting the full mean, the paired item pattern, and alternative error measures makes the result interpretable.</p>
+<p>This perspective is consistent with treating instruction effects as changes in where errors occur (Fujisaki &amp; Yang, 2026). The same prompt can be useful on one item and harmful on another. A collective can gain by avoiding a few large failures even when improvement is not typical across items. In our data, the Text stacked point estimate remained favorable under arithmetic means and ALE10, while its intervals included zero. The reduced stacked comparisons showed small gains under ALE10 in a six-response specification that did not extend clearly to nine responses or to RAE. These patterns identify the particular losses and configurations for which a benefit appears. They do not yield one task-independent ranking of diversity sources.</p>
+<h3>4.4 Scope of the evidence and further tests</h3>
+<p>The inferential scope follows from the saved design. Repetitions were unequal, the main Text inner condition came from a separate source, and the exact execution history could not be recovered. Some homogeneous controls could not be formed because the necessary repetitions were absent. Finite-pool reconstruction makes the available comparisons transparent, but it does not replace newly sampled responses. The item bootstrap likewise holds those pools fixed and uses only 15 stimuli with shared contents and containers. These features limit conclusions about new model calls, other items, and changes between presentation settings. They do not prevent an exact account of the observed estimates and the expected losses of the specified reconstructions.</p>
+<p>The Fermi supplement adds a separate lesson about evaluation. Applying an integer operation to an estimate of a proportion created a very large log error and altered the condition ranking. That artifact was distinct from the model&#x27;s estimate. The context and reference concerns on other items further limit a theoretical interpretation of that small subset. Explicit decomposition has been studied as an intervention in human estimation and deliberation (Gomilsek et al., 2024; Barrera-Lemarchand et al., 2026). It remains an appropriate future manipulation, but its necessity cannot be inferred from the corrected Fermi results here.</p>
+<p>The next direct test would collect homogeneous and heterogeneous crowds at the same 12response size, with matched frequencies of personas and inner instructions. It should record exact model versions, complete settings, and item-level outcomes, and distinguish individual accuracy from the gain due to composition. Crossing presentation with identical surrounding instructions would also make the role of visual input clearer. The existing future-study plan is prospective and contributes no observations to this report. The present contribution is an empirical distinction: responses produced under different roles can improve on a neutral reference without showing a comparable gain from heterogeneous composition. Understanding that distinction requires examining both the constituents of a crowd and the errors their combination can reduce.</p>
+<h3>Funding</h3>
+<p>This research received no funding.</p>
+<h3>Data and Code Availability</h3>
+<p>The research materials contain the frozen numerical response table, dataset membership records, task definitions, persona and instruction prompts, recovered code fragments, reanalysis scripts, and numerical results. The response table supports reproduction of the numerical analyses from the saved estimates. It does not reconstruct the complete original API request history. The author plans to make the study data and analysis code publicly available on Zenodo at the time of submission to Cognitive Science. These data and code are not currently publicly available. MARBLES materials are distributed by seantw (n.d.), and realFP is described by Kalyan et al. (2021). Third-party source materials remain subject to their original terms.</p>
+<h3>Competing Interests</h3>
+<p>The author declares no competing interests.</p>
+<h3>Research and Manuscript Assistance</h3>
+<p>LLM responses are the observations analyzed in this study. Separately, OpenAI Codex assisted with extraction and reanalysis of saved data and preparation of the research handoff. ChatGPT assisted with literature verification, drafting and editing this manuscript and supplement, generating figures from the supplied tables, and checking numerical and document consistency.</p>
+<h3>Ethics Review</h3>
+<p>This study was not reviewed by an ethics committee.</p>
+<h3>License</h3>
+<p>The original content of this manuscript and its supplementary materials is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0; https://creativecommons.org/licenses/by/4.0/). Third-party materials remain subject to their original terms.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Item-level differences between stacked and neutral crowds of twelve responses. Bars show the mean RAE of the observed stacked groups minus the expected RAE of the reconstructed neutral groups on each item. Both use the four-by-three median hierarchy. Negative values indicate lower stacked error. Dashed lines show the mean paired difference across all 15 items. Panel A shows Text and panel B Image; the horizontal scales differ. The annotated Text item, marbles_08, asks about marbles in a Bicycle playing-card box. Its large reduction accounts for approximately 78.5% of the Text mean difference. The intervals printed in each panel are exploratory 95% paired item-bootstrap intervals conditional on the saved response pools.</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Heterogeneous versus homogeneous composition within the same response pools. Points show differences in mean RAE, and lines show exploratory 95% paired item-bootstrap intervals. Negative values favor heterogeneous composition. Filled circles average all eligible heterogeneous recombinations. Open squares retain the original heterogeneous groups. Both use the equally weighted average error of homogeneous crowds as the control. Panel A shows main Text. Panel B shows three-response comparisons from main Image, where four-response demographic and cognitive homogeneous controls are unavailable. Panel C shows a separate Image run with five repetitions per item. Panel D shows reduced stacked crowds with six or nine responses, retaining three instructions per agent. The number in each row label is the response count. These reduced crowds do not estimate the unavailable homogeneous twelve-response comparison.</p>
+<h3>Table 1.</h3>
+<p>Observed MARBLES performance and response accounting</p>
+<h3>Table 2.</h3>
+<p>Role-based crowds compared with neutral responses of the same number</p>
+<h3>References</h3>
+<p>Barrera-Lemarchand, F., Lescano-Charreau, V., Ruiz, J., Cáceres, N., Carrillo, F., Sigman, M., &amp; Navajas, J. (2026). Collective problem decomposition improves the wisdom of deliberative crowds. Nature Communications, 17, 9431. doi:10.1038/s41467-026-76365-y.</p>
+<p>Binz, M., &amp; Schulz, E. (2023). Using cognitive psychology to understand GPT-3. Proceedings of the National Academy of Sciences, 120(6), e2218523120. doi:10.1073/pnas.2218523120.</p>
+<p>Chuang, Y.-S., Narendran, S., Harlalka, N., Cheung, A., Gao, S., Suresh, S., Hu, J., &amp; Rogers, T. T. (2025). Probing LLM world models: Enhancing guesstimation with wisdom of crowds decoding. Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, 4699- 4713. doi:10.18653/v1/2025.emnlp-main.234.</p>
+<p>de Oliveira, S., &amp; Nisbett, R. E. (2018). Demographically diverse crowds are typically not much wiser than homogeneous crowds. Proceedings of the National Academy of Sciences, 115(9), 2066-2071. doi:10.1073/pnas.1717632115.</p>
+<p>Fujisaki, I., Honda, H., &amp; Ueda, K. (2018). Diversity of inference strategies can enhance the &#x27;wisdom-of- crowds&#x27; effect. Palgrave Communications, 4, 107. doi:10.1057/s41599-018-0161-1.</p>
+<p>Fujisaki, I., Yang, K., &amp; Ueda, K. (2023). On an effective and efficient method for exploiting the wisdom of the inner crowd. Scientific Reports, 13, 3608. doi:10.1038/s41598-023-30599-8.</p>
+<p>Fujisaki, I., Yu, L., Tsukamura, Y., Yang, K., &amp; Ueda, K. (2025). An ensemble method utilising multiple thinking styles that boosts the wisdom-of-inner-crowd effect. Scientific Reports, 15, 30727. doi:10.1038/s41598-025-14740-3.</p>
+<p>Fujisaki, I., &amp; Yang, K. (2026). From inner diversity to outer crowds: How instructions reshape error structure before aggregation. PsyArXiv [Preprint]. doi:10.31234/osf.io/rxgzc_v1.</p>
+<p>Galton, F. (1907). Vox populi. Nature, 75, 450-451. doi:10.1038/075450a0.</p>
+<p>Gomilsek, T., Hoffrage, U., &amp; Marewski, J. N. (2024). Fermian guesstimation can boost the wisdom-of- the-inner-crowd. Scientific Reports, 14, 5014. doi:10.1038/s41598-024-53639-3.</p>
+<p>Herzog, S. M., &amp; Hertwig, R. (2009). The wisdom of many in one mind: Improving individual judgments with dialectical bootstrapping. Psychological Science, 20(2), 231-237. doi:10.1111/j.1467- 9280.2009.02271.x.</p>
+<p>Hong, L., &amp; Page, S. E. (2004). Groups of diverse problem solvers can outperform groups of high-ability problem solvers. Proceedings of the National Academy of Sciences, 101(46), 16385-16389. doi:10.1073/pnas.0403723101.</p>
+<p>Kalyan, A., Kumar, A., Chandrasekaran, A., Sabharwal, A., &amp; Clark, P. (2021). How much coffee was consumed during EMNLP 2019? Fermi problems: A new reasoning challenge for AI. Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing, 7318-7328. doi:10.18653/v1/2021.emnlp-main.582.</p>
+<p>Kameda, T., Toyokawa, W., &amp; Tindale, R. S. (2022). Information aggregation and collective intelligence beyond the wisdom of crowds. Nature Reviews Psychology, 1, 345-357. doi:10.1038/s44159-022- 00054-y.</p>
+<p>Keck, S., &amp; Tang, W. (2020). Enhancing the wisdom of the crowd with cognitive-process diversity: The benefits of aggregating intuitive and analytical judgments. Psychological Science, 31(10), 1272- 1282. doi:10.1177/0956797620941840.</p>
+<p>seantw. (n.d.). MARBLES [Data set]. Hugging Face. Repository: seantw/MARBLES. Retrieved November 5, 2026.</p>
+<p>Talebirad, Y., Parsaee, A., Ohal, V., Nadiri, A., Szepesvári, C., Mouje, Y., &amp; Redman, E. (2026). Wisdom of the machines: Exploring collective intelligence in LLM crowds. Proceedings of the 25th International Conference on Autonomous Agents and Multiagent Systems, 2456-2463. doi:10.65109/MTWR9974.</p>
+<p>van Dolder, D., &amp; van den Assem, M. J. (2018). The wisdom of the inner crowd in three large natural experiments. Nature Human Behaviour, 2, 21-26. doi:10.1038/s41562-017-0247-6.</p>
+<p>Vul, E., &amp; Pashler, H. (2008). Measuring the crowd within: Probabilistic representations within individuals. Psychological Science, 19(7), 645-647. doi:10.1111/j.1467-9280.2008.02136.x.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>

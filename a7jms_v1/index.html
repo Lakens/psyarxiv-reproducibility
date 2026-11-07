@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: From Individual Gains to Collective Losses? The
+Socially Corrosive Path of Generative AI</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+From Individual Gains to Collective Losses? The Socially Corrosive Path
+of Generative AI
+</p>
+<p class="meta">
+2026-11-07 · Metacheck 0.4.3.9
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to improve</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 2 references with comments in PubPeer.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>We found 1 replication for 1 original you cited.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 69 references with DOIs. You cited 2 references with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Liang, W., Yuksekgonul, M., Mao, Y., Wu, E., &amp; Zou, J. (2023). GPT
+detectors are biased against non-native English writers. Patterns, 4(7),
+100779. <a href="https://doi.org/10.1016/j.patter.2023.100779" class="uri">https://doi.org/10.1016/j.patter.2023.100779</a>
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/AFD93AFE8DEBEE149204AAF6F03895" target="_blank">link</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lin, Y., Frey, C. B., &amp; Wu, L. (2023). Remote collaboration fuses
+fewer breakthrough ideas. Nature, 623(7989), 987-991. <a href="https://doi.org/10.1038/s41586-023-06767-1" class="uri">https://doi.org/10.1038/s41586-023-06767-1</a>
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/7DD790DB75C7B6DEEDA47125241E3C" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 69 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 69 references with DOIs. We found 1 replication for 1
+original you cited.</p>
+<p>Check if you are aware of the replication studies, and cite them
+where appropriate.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Replication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gray, K., &amp; Wegner, D. M. (2009). Moral typecasting: Divergent
+perceptions of moral agents and moral patients. Journal of Personality
+and Social Psychology, 96(3), 505-520. <a href="https://doi.org/10.1037/a0013748" class="uri">https://doi.org/10.1037/a0013748</a>
+</td>
+<td style="text-align:left;">
+Klein, R. A., Vianello, M., Hasselman, F., Adams, B. G., Adams, R. B.,
+Alper, S., Aveyard, M., Axt, J. R., Babalola, M. T., Bahník, Š., Batra,
+R., Berkics, M., Bernstein, M. J., Berry, D. R., Bialobrzeska, O.,
+Binan, E. D., Bocian, K., Brandt, M. J., Busching, R., … Nosek, B. A.
+(2018). Many Labs 2: Investigating Variation in Replicability Across
+Samples and Settings. Advances in Methods and Practices in Psychological
+Science, 1(4), 443–490.
+<a href="https://doi.org/10.1177/2515245918810225" target="_blank">doi:10.1177/2515245918810225</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
+not succeed at excluding all false positives.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>We thank members of the Wisdom and Culture Lab at the University of Waterloof for their feedback on the earlier manuscript draft.</p>
+<h3>Introduction</h3>
+<p>Generative artificial intelligencefoot_0 (genAI) can improve the quality and speed of knowledge work (Dell&#x27;Acqua et al., 2026; Grossmann et al., 2023). People also experience genAI as a personal resource: it lets them complete familiar tasks faster and take on tasks they could not have done alone, which strengthens their perceived competence and self-efficacy (Meyers et al., 2026b; Schrade et al., 2026). However, we posit that productivity benefits and individuals&#x27; positive experience are fundamentally challenged by AI&#x27;s social costs that may scale to organizational, collective, or even societal problems. People who are suspected of using genAI are judged as lazier, less competent, and less caring (Kadoma et al., 2025; Meyers et al., 2026b; Reif et al., 2025). In the fog of uncertainty about changing social norms, people choosing to disclose genAI use are in fact sometimes trusted less (Schilke &amp; Reimann, 2025). Everyday experience and research offer ample illustrations of such dynamics: colleagues annoyed by what they believe is pasted AI output in a shared document; reviewers and editors who feel that manuscripts with apparent traces of genAI are &quot;synthetic&quot; and void of meaning, wasting their time; managers who devalue reports they perceive as AI-generated (Niederhoffer et al., 2025); hiring managers who devalue applicants who report using genAI (Reif et al., 2025); and the public AI shaming of people whose work shows signs of genAI use (Sarkar, 2025).</p>
+<p>We believe that social judgments of genAI use are a starting point for what we call the socially corrosive path of genAI use, both for individual humans and especially for collectives -teams, organizations, and institutions. When people use genAI themselves, they feel more competent but may also feel guilty or ashamed; when they perceive that colleagues have used genAI, they devalue the colleagues&#x27; work and doubt their care. Followed through to their behavioral consequences, these judgments lead to a decline in beneficial relational interdependence and an erosion of interpersonal trust. Ultimately, we posit that individual productivity gains may end in conflict and loss of cohesion rather than in better organizational or societal functioning (see also Baygi &amp; Huysman, 2026). Specifically, we see two interlocking paths through which the corrosive path may unfold: i) a loss of relational interdependence, driven by substituting human team members with genAI and devaluing human work, thereby undermining collective intelligence and metaknowledge in teams and organizations; and ii) an erosion of collective trust, driven by uncertainty about the norms of genAI use that fuels concealment, suspicion, policing, and blame, thereby undermining people&#x27;s willingness to collaborate with and help one another. The two paths reinforce each other: less interdependence leaves more room for uncertainty, and less trust leads to fewer interactions.</p>
+<p>In this article, we caution that current genAI use, even if well-intentioned and objectively improving one&#x27;s individual performance, will very likely contribute to this corrosive path for teams, organizations, and institutions, unless we actively counteract it. We outline social and collective dynamics through which the path unfolds, how technology design and productivity narratives amplify it, and what could be done to put us on a different path.</p>
+<h3>Social Judgments of GenAI Use</h3>
+<p>Meyers and colleagues (2026b) organize research on social judgments of genAI users along two dimensions, competence and warmth (Fiske et al., 2007; also described as agency and communion; Abele et al., 2021) and along two perspectives, that of the user and that of the observer. From the user&#x27;s perspective, genAI use enhances perceived competence: users feel more productive, creative, motivated, and willing to explore tasks that appeared far beyond their capabilities before. This boost is not always calibrated, as people can perform better with genAI yet overestimate their performance (Fernandes et al., 2026). However, the competence gain appears to come at the cost of self-perceived warmth as users can feel inauthentic or dishonest when using genAI, up to feeling guilty or ashamed (Meyers et al., 2026b).</p>
+<p>Social judgment is often studied from the perspectives of actors and observers (Jones &amp; Nisbett, 1987; cf. Malle, 2006; see also the related distinction in moral psychology between agents and patients; Gray &amp; Wegner, 2009). From the observer&#x27;s perspective, others&#x27; genAI use lowers judgments on both competence and warmth dimensions. Leaders devalue subordinates who use genAI (Meyers et al., 2026a), and, as noted above, evaluators and audiences penalize people who use or disclose genAI (Reif et al., 2025; Schilke &amp; Reimann, 2025). Observers read genAI use as a sign that the user invested little effort in the task (competence) and little care and respect in the relationship (warmth) (Meyers et al., 2026b).</p>
+<p>As genAI increasingly moves toward agentic systems taking over even larger shares of tasks if not entire jobs, we predict even stronger attributions of low effort and little care, because fully delegated work leaves observers little reason to assume that a human remained engaged.</p>
+<p>There is emerging evidence suggesting that these attributions shape social behavior: people help colleagues less when they interpret their genAI use as slacking off (Zhou et al., 2025) and are less willing to forgive when apologies were written with AI (Glikson &amp; Asscher, 2023). Yet such downstream consequences have received little attention, and where they have been studied, research has focused on individuals and dyadic relationships. To our knowledge, little research on consequences of these judgments for groups, organizations, and societies exists. If we take the documented effects and possible downstream trajectories seriously and assume that they are linear (or even exponential), it becomes critical to spell out the downward spiral they may set in motion. We argue that the combination of competence and warmth judgments about oneself and others forms the social psychological foundation of the socially corrosive path. Technological affordances, contextual expectations, and the current uncertainty related to the absence of shared norms for genAI use, which leaves people with misaligned expectations about appropriate use, further increase the likelihood of entering this path.</p>
+<h3>The Socially Corrosive Path of Collective GenAI Use</h3>
+<p>Judgments of genAI use and their social consequences emerge in sender-receiver interactions, where both may use genAI, may anticipate judgments about others&#x27; perceptions of genAI use, and judge others for their genAI use. Integrating the self and other perspectives on competence and warmth within such interactions reveals two interlocking paths: a reduction of relational interdependence and an erosion of trust.</p>
+<h3>Reduction of Relational Interdependence</h3>
+<h3>&quot;With AI, I can do this myself.&quot; A Path to Substitution.</h3>
+<p>Higher perceived selfcompetence can be the starting point for a reduction of relational interdependence. This can have positive consequences: substitution can free people from problematic dependencies, for instance on abusive leaders (Schulz et al., 2026). It can also spare people the emotional effort of approaching difficult colleagues and the anticipated social costs of asking for help (Lee, 2002). Indeed, employees anticipate feeling more autonomous and less indebted when receiving help from AI rather than from a colleague (Zhai &amp; Qu, 2027), which may especially relieve socially anxious individuals. Yet such relief can turn into dysfunctional avoidance behavior, as socially anxious individuals may also be more prone to problematic use of conversational AI (Hu et al., 2023). Overall, we argue that the benefits of interdependence and relatedness for learning, coordination, and well-being generally outweigh the benefits of substitution (Courtright et al., 2015; Ryan &amp; Deci, 2000). GenAI substitution may also reduce help-seeking from colleagues. GenAI is a fast, always available, and socially costless source of effort and feedback. Asking colleagues takes longer, costs them time, and may signal one&#x27;s lack of competence (Schulz et al., 2026; Zhai &amp; Qu, 2027). Instead of waiting for a colleague&#x27;s input, one can refine the work in quick iterations with genAI. Colleagues&#x27; help therefore has to be markedly better to outweigh the immediate return of genAI and is in turn held to a higher (often unrealistic) standard than before. This calculus holds even when objective gains are small, as people tend to overestimate their performance with genAI (Fernandes et al., 2026) and may in general see genAI as a resource (Schrade et al., 2026). Anticipatory effects may follow: why would others need my help if they can ask genAI, and why should I take up their time? Scaled up, substitution creates challenges for individual development, collective intelligence, and cohesion. For individuals, input from genAI differs fundamentally from input from other people. First, it is more homogeneous. GenAI use lifts the weakest outputs and levels differences between individuals (Doshi &amp; Hauser, 2024), but it also makes ideas and language across people more similar and individual ideas less novel (Doshi &amp; Hauser, 2024; Meincke et al., 2025; Sourati et al., 2026; Terwiesch et al., 2026). If every team member comes to a meeting with similar ideas, collaboration adds little (Burton et al., 2024).</p>
+<p>Greater homogeneity of genAI output is especially detrimental for ill-defined tasksi.e., radically uncertain, often value-laden social problems where objectives are incommensurable, the probability distribution of outcomes is unknown, or the whole idea of a single &quot;ground truth&quot; is suspect (for reviews, see Grossmann &amp; Johnson, 2025; Grossmann &amp; Weststrate, 2026). Such tasks often require coordination of different standpoints instead of mere judgment of what is right or wrong. The out-of-distribution nature of such tasks creates a challenge for AI systems trained on fixed datasets -a challenge compounded genAI&#x27;s tendency to underweight the tails of the distribution of possible scenario (Burton et al., 2024; Terwiesch et al., 2026). Without complex metacognitive coordination common to human teams (Johnson et al., 2026), genAI systems and insular human-AI hybrids will be at a disadvantage compared with human teams, whose intersubjective insights benefit from the diverse perspectives individuals bring to the table. In short, for ill-defined problems diversity in human teams is poised to provide an advantage in generated solutions compared to agentic AI or self-referential human-AI hybrids (Oppenheimer &amp; Patterson, 2025). This advantage in turn depends on the social and metaknowledge insights of team members, and the less individuals engage in team-related exercises and the less they turn to each other for help and advice, the more difficult team-based coordination becomes.</p>
+<p>The contrast of self-referential human-AI hybrids to human teams also includes a strong motivational component. In collegial exchange, something is always at stake, such as one&#x27;s reputation or the relationship, whereas what comes from genAI can be dismissed without consequences (Lange et al., 2025). Individuals may thus only go as far as they feel comfortable, whereas exchange with another person, including social accountability effects, might have motivated them to go the extra mile, and, for instance, engage with a topic more deeply in order not to let colleagues down.</p>
+<p>For collective intelligence, the more individuals approach genAI as their primary source of competence, the fewer opportunities remain to maintain relationships and metaknowledge in teams through exchange and chance encounters (Niederhoffer et al., 2026).</p>
+<p>Insight often emerges from interactions among people who each contribute idiosyncratic knowledge and perspectives. Losing accidental exchange therefore also means losing serendipitous knowledge and the creative recombination of ideas from people with diverse backgrounds and contextual knowledge (Burton et al., 2024). Remote work offers a cautionary parallel: it puts a strain on collaboration networks (Yang et al., 2022), and remote teams are less likely to produce breakthrough ideas (Lin et al., 2023). GenAI use can further create a false sense of consensus or a majority view where none exists, reducing the perceived need to discuss controversial topics in teams and organizations (Burton et al., 2024). Furthermore, as genAI substitutes for colleagues, teams&#x27; transactive memory, that is, shared knowledge of who knows what and who is able and willing to contribute, may decay (Niederhoffer et al., 2026), hurting coordination and the scaling of individual knowledge into collective gains (DeChurch &amp; Mesmer-Magnus, 2010). Initial evidence is consistent with the path to substitution. In interviews, students reported that help-seeking is increasingly mediated by genAI: they ask genAI before asking peers or instructors, and when peers approach them with questions, they redirect them to genAI (Hou et al., 2025). Students described feeling isolated and demotivated as the social support of their learning communities eroded, which undermines not only knowledge sharing and collective competence building but also their sense of belonging (Hou et al., 2025).</p>
+<p>Similarly, conceptual work warns that unmanaged genAI adoption can undermine expertise sharing and collegiality in organizations (Baygi &amp; Huysman, 2026). The resulting &quot;democratization of expertise&quot; (Baygi &amp; Huysman, 2026, p. 378) may lead non-experts to feel that they can do many things without others&#x27; help. Not approaching others, in turn, reduces opportunities to build trust and to maintain knowledge-sharing networks. As a result, organizational metaknowledge of whom to ask for what advice may decline (Niederhoffer et al., 2026).</p>
+<p>Moreover, because genAI can be personalized explicitly and automatically, exchange with it may feel seamless and perfectly fitted to one&#x27;s own work style, whereas others&#x27; ways of working and giving feedback may increasingly seem ill-fitting, alienating individuals in the team. There is first evidence that supports this concern: in a three-week study, people interacting with sycophantic AI reported lower satisfaction with their real-world social interactions (Ibrahim et al., 2026), and conversations with sycophantic AI made people less willing to take responsibility for and repair interpersonal conflicts (Cheng et al., 2026).</p>
+<p>Finally, interacting with AI at work has been linked to loneliness (Tang et al., 2023).</p>
+<p>Loneliness can motivate people to reach out to coworkers, but it is also associated with dysfunctional outcomes and may, at scale, feed a downward spiral of collective loneliness.</p>
+<h3>&quot;With AI, I could have done this myself.&quot; A Path to Devaluation.</h3>
+<p>People who perceive themselves as more competent with genAI may hold what they receive from others to a higher bar. At the collective level, if everyone is expected to use genAI, expectations of speed and productivity rise (Ranganathan &amp; Ye, 2026). Human work is then expected to at least match what genAI can deliver and to add what it cannot, such as authenticity or an idiosyncratic perspective (we return to these collective expectations below). If others&#x27; work falls short of this bar or takes long to arrive, people may conclude that they could have produced the same output with genAI themselves (Sarkar, 2025).</p>
+<p>When this higher bar coincides with the devaluation of others&#x27; genAI use, it further undermines relational interdependence. When genAI use is suspected, observers infer little effort toward the task and little care toward them (Meyers et al., 2026b; Reif et al., 2025).</p>
+<p>First studies support the existence of this path. Leaders devalue subordinates&#x27; work when they suspect genAI use (Meyers et al., 2026a). This implies that tasks delegated to employees who then use genAI come to be seen as low-value, low-effort work that leaders could have done equally well with genAI or an orchestrated team of AI agents themselves. Coworkers who interpret genAI use as slacking off see the user as less moral and help them less (Zhou et al., 2025). Possibly, what the colleague delivered fell short of expectations, leaving little reason to help in the future. People are even willing to pay workers less when they use genAI (Kim et al., 2026). Thus, while collective genAI use has raised the bar for what counts as good work, it seems to have lowered what we are willing to pay for work when we see others use genAI.</p>
+<p>Devaluation may also lead people to reciprocate others&#x27; genAI use with their own, further contributing to the loss of relational interdependence.</p>
+<p>The perceived quality of outputs likely moderates these reactions, but suspected genAI use seems to cap evaluations. Even high-quality output is unlikely to be fully credited once genAI use is suspected, because observers may never be convinced that enough effort went into the task or enough care into the relationship. From a signaling theory perspective (Connelly et al., 2011), genAI makes formerly costly signals of effort and care, such as polished writing, cheap to produce, so that they lose their informational value. Low-quality output or visible errors combined with suspected genAI use likely meet the harshest judgments (Niederhoffer et al., 2025). And as genAI use becomes the expected norm, even work produced without genAI may be judged against it, for instance as inefficient when it takes longer than expected.</p>
+<h3>Erosion of Trust</h3>
+<h3>&quot;Will others think I did this with AI?&quot; A Path to Concealment.</h3>
+<p>If users perceive themselves as competent in their genAI use, they are likely motivated to protect this image to ensure that others see them as competent and caring. Users expect worse evaluations when they disclose genAI use, which lowers their willingness to disclose (Reif et al., 2025). This expectation seems accurate: disclosure reduces trust (Schilke &amp; Reimann, 2025), which makes concealment a rational response. Making people aware of this penalty can also induce undisclosed &quot;shadow use&quot; of genAI (Dong et al., 2025). Freelancers tend to disclose genAI use only when asked. Conversely, clients feel less able to recognize genAI use and prefer proactive disclosure (Hwang et al., 2026). When directly compared, people also find secret genAI use less acceptable than open use (Purcell et al., 2026). Guilt and shame about genAI use add to the motives for concealment (Meyers et al., 2026b). Concealment can thus extend from non-disclosure or passive disclosure to making content &quot;look human,&quot; for instance, by running genAI-generated text through &quot;humanizing&quot; tools that aim to reduce the likelihood of text being flagged as AI-generated. People may also try surface-level fixes such as avoiding em dashes or words that have become statistical markers of genAI use (Kobak et al., 2025), or deliberately insert imperfections, given that errors, particularly corrected ones, can make communicators appear more human and warm (Bluvstein et al., 2024).</p>
+<h3>&quot;Did you use AI for this?&quot; A Path to Suspicion.</h3>
+<p>People expect others to use genAI more than they do themselves and in ways they find less acceptable (Purcell et al., 2026).</p>
+<p>With this broad assumption of others&#x27; (flawed) genAI use, it is likely that one common question regarding others&#x27; work is whether the other person has used genAI. This suspicion stems from uncertainty about others&#x27; genAI use (Hwang et al., 2026) and about their current and future behavior in collaboration. Is the other person competent and invested enough that I do not waste my time checking each line of their work for errors, and do they have expertise I can rely and build on? And does the other person care enough about me and our relationship to hand me something of high quality? Suspicion likely depends on perceived evidence of genAI use, the task context, and individual differences, for instance in knowledge of typical AI signatures.</p>
+<h3>&quot;I need to know whether you did this with AI!&quot; A Path to Policing.</h3>
+<p>Suspicion invites a search for evidence, and the longer it is maintained, the more likely one is to find what looks like evidence for genAI use. People are overconfident in their ability to detect AI-generated text (Fleckenstein et al., 2024) and rely on flawed heuristics (Jakesch et al., 2023). AI detectors are unreliable and biased against non-native speakers (Liang et al., 2023). Even actual traces of genAI use say little about a person&#x27;s competence or care. Moreover, initial evidence suggests that human language may converge toward the style of large language models (Yakura et al., 2026), so that human writing may increasingly be misread as AIgenerated. Because non-native speakers rely more heavily on genAI and similar tools to correct their spelling and grammar, apparent evidence and policing of genAI use may disproportionately affect them, inviting questions about equity and discrimination.</p>
+<h3>&quot;You have used AI!&quot; A Path to Blame.</h3>
+<p>Suspicion and policing can end in covert blame, such as gossip, or overt blame, such as public allegations of genAI use (Gorichanaz, 2023; Sarkar, 2025). In this sense, every negative judgment of genAI use is a social sanction, and it is likely harsher the less transparent the other person&#x27;s genAI use appears. Indeed, genAI use exposed by a third party erodes trust more than self-disclosure does (Schilke &amp; Reimann, 2025).</p>
+<p>Importantly, trust erosion does not require that blame is ever voiced. Suspicion and policing alone increase uncertainty about the other person&#x27;s competence and care. Such uncertainty undermines the willingness to collaborate with, invest effort in responding to, and help the other person (Zhou et al., 2025). Once blame is voiced, it provokes reactions.</p>
+<p>Accused individuals may defend their genAI use as adequate and legitimate, reject the allegations as false, conceal their genAI use more carefully, or avoid collaboration for fear of further suspicion and blame. Evidence from education illustrates these dynamics. Students accused of using genAI responded by denying the allegations, escalating them to higher authorities, and documenting their writing process; they reported damaged trust in their instructors and a more defensive approach to their work (Gorichanaz, 2023). Covert and overt blame thus further erode trust and likely reinforce the reduction of relational interdependence.</p>
+<p>Reduced relational interdependence may further erode trust. Fewer interdependencies mean fewer occasions to learn why and how others use genAI. People judge themselves largely by their thoughts and intentions, but others by what they can observe (Pronin, 2008). Applied to genAI, people know their own reasons for using it but have little insight into others&#x27; reasons.</p>
+<p>With less exchange, this asymmetry may encourage unfavorable inferences about others&#x27; use, reinforcing the self-other gap in expectations described above. If people also underestimate how widely their concerns about responsible genAI use are shared, these misperceptions may give rise to pluralistic ignorance (Prentice &amp; Miller, 1996): individuals may privately favor thoughtful use while mistakenly believing that others are less concerned about responsible use than they actually are. When these concerns remain unvoiced, people lose opportunities to correct their misperceptions and establish shared expectations. Uncertainty about prevailing norms may then invite uncharitable assumptions, fueling suspicion, policing, and blame.</p>
+<h3>Amplifiers of the Socially Corrosive Path</h3>
+<p>The path we outline is only one possible trajectory of collective genAI use, perhaps even the worst-case scenario. Yet current technology design and the narratives and contextual demands surrounding genAI make entering this path considerably more likely.</p>
+<h3>Technology Design</h3>
+<p>Most genAI products are built around a dialogue between one user and the system.</p>
+<p>Their underlying models are trained to produce responses that people rate favorably, rewarding responses that keep users satisfied and engaged (Sharma et al., 2024). GenAI tools keep the dialogue going through follow-up questions and extended sessions, and agentic setups let a single user orchestrate several AI agents at once (Allmendinger et al., 2026). Little in current designs prompts users to consider that now would be a good moment to involve a colleague. Organization-wide deployments could foster interpersonal exchange, but in practice they largely replicate the individual interface (Niederhoffer et al., 2026).</p>
+<p>One consequence is that individuals produce more output, faster than they or others can verify (Bedard et al., 2026). Across contexts, output keeps growing while the systems in which individuals operate are strained by the need to review, verify, and quality-check it (Gartenberg et al., 2026). In a recent field experiment, individuals and teams working with genAI produced higher-quality solutions, which were more than twice as long as those developed by individuals without AI (Dell&#x27;Acqua et al., 2026).</p>
+<p>Volume and speed are themselves cues of genAI use and may thus feed devaluation and suspicion. Moreover, decades of research on automation bias show that overreliance becomes more likely under high workload (Parasuraman &amp; Manzey, 2010), fueled by growing AI-assisted output. The penalty for the errors that go undetected due to overreliance can be severe: recipients of AI-generated &quot;workslop,&quot; report seeing its senders as less capable, reliable, and trustworthy (Niederhoffer et al., 2025). Because verifying genAI output is seen as the sender&#x27;s responsibility, receivers who believe that someone used genAI inadequately may simply stop reviewing their work or may delegate the task to their genAI agents. We suspect that this process contributes to the current crisis of scientific peer review, where growing submission numbers (Hanson et al., 2024) meet a declining willingness to review, especially when a manuscript is suspected to be largely genAI-generated.</p>
+<h3>Productivity Narratives and Contextual Demands</h3>
+<p>One prominent narrative in public and corporate discourse portrays AI as an inevitable, disruptive force in a global competition (Bareis &amp; Katzenbach, 2022) that will raise productivity across the board (see Spencer, 2025, for a critique). Simply put, everyone can and must become more productive with genAI or will be left behind. Under this narrative, time saved with genAI is reinvested in more output: rather than reducing work, genAI use can intensify it, expanding the scope of jobs and blurring the boundaries of working time (Bedard et al., 2026; Ranganathan &amp; Ye, 2026). The resulting pressure further increases the risk of overreliance (Parasuraman &amp; Manzey, 2010).</p>
+<p>The narrative also turns the raised bar described above into an organizational norm. If genAI is assumed to replace human working hours, some tasks may soon no longer count as &quot;human work&quot; at all, and the willingness to pay for human effort declines (Demirci et al., 2025; Hui et al., 2024). Judging that a work output &quot;could have been done by AI&quot; thus becomes both an economic argument against paying for human effort and a devaluation of human competence (Sarkar, 2025). The narrative casts humans as slow and error-prone, and people may begin to ask themselves, &quot;Who am I to do anything without genAI?&quot; Even if they could improve an AI output, doing so would take time, so the AI output is deemed good enough. If everyone is expected to use genAI, the substitution calculus described above becomes the default as asking a colleague appears slow, and one&#x27;s input appears dispensable.</p>
+<p>At the same time, calls for human responsibility, verification, and oversight remain (Sterz et al., 2024), and every visible trace of genAI raises the question of whether such verification happened. Users are thus left with a dilemma: disclosure invites devaluation, and concealment invites suspicion, policing, and blame. For teams and organizations, concealment is likely the worse option. Exposure by others erodes trust more than self-disclosure does (Schilke &amp; Reimann, 2025), and concealment deprives the collective of the exchange needed to develop shared norms of genAI use.</p>
+<h3>How to Leave the Socially Corrosive Path</h3>
+<p>The elephant in the room is whether the outlined effects will level out as genAI use becomes normal and legitimate (Meyers et al., 2026b). Waiting for this comes with clear risks. First, it is unclear whether normalization will occur. The evaluation penalty persisted when genAI use was described as common (Reif et al., 2025), and people penalized others&#x27; disclosed genAI use even when they used genAI themselves (Schilke &amp; Reimann, 2025).</p>
+<p>Expectations, attributions, and behaviors around genAI use may thus endure, or even intensify, as genAI becomes integrated into everyday work. Second, even if judgments of our own and others&#x27; genAI use shift, it is unclear how fast. In the meantime, the corrosive dynamics unfold. Instrumentally, the loss of relational interdependence, including metaknowledge of others in one&#x27;s team and appreciation for their likely divergent perspectives, and the erosion of trust may offset genAI&#x27;s productivity gains, increasing individual but harming collective productivity (Niederhoffer et al., 2026). Interpersonally, they risk conflict and a loss of cohesion that is hard to rebuild, as the effects of remote work on collaboration networks suggest (Yang et al., 2022). Collectively, these tendencies may fuel interpersonal acrimony and intolerance of those who think differently, with downstream consequences for civility.</p>
+<p>Third, even if suspicion, policing, and blame stopped immediately, genAI tools would remain optimized for individual engagement rather than collective functioning. Whereas the erosion of trust might stop, the loss of relational interdependence would continue as individuals would still turn to genAI first, encounter colleagues&#x27; ideas less often, and lose the chance encounters through which teams learn collectively and generate new ideas.</p>
+<p>Thus, we think steps should be taken now by organizations, teams, and societies to leave this socially corrosive path. Below, we outline ideas for these steps, hoping to stimulate a discussion about how to reach a more beneficial collective use of genAI.</p>
+<h3>Design genAI for collective functioning.</h3>
+<p>Technology can be designed to foster relatedness within groups (Faas et al., 2025). GenAI systems could support users&#x27; metacognitive awareness of when collaboration would be valuable, for instance by prompting them at decisive moments to consider who in their team might be best placed to review a draft or contribute a different perspective. Such prompts are all the more relevant because people working with genAI tend to misjudge their own performance (Fernandes et al., 2026). Beyond individual interactions, such support could help teams and organizations detect opportunities for learning, cooperation, and network building instead of defaulting to efficiency, strengthening rather than replacing their knowledge of who knows what. In short, genAI should be designed to support collective functioning rather than remain a tool for individual productivity that comes at a collective cost. Collaboration tools could also support handovers between colleagues, where many of the problematic social judgment effects arise. We imagine tools that efficiently help make explicit which parts were AI-generated and humanverified, and where the receiver&#x27;s input, verification, and attention are especially needed.</p>
+<h3>Resist the genAI productivity trap.</h3>
+<p>We need a more realistic view of genAI&#x27;s productivity promises and a more positive view of the value of human expertise. Speed is not wisdom -the latter classically depends on the metacognitive insight into when to use which tool to address the task at hand (Grossmann &amp; Weststrate, 2026; Karlan &amp; Allen, 2024).</p>
+<p>Instead of expecting everyone to become substantially more productive, it is important to emphasize that not every minute saved must be reinvested in more output. Reinvesting every minute into more output deepens individual dependence on genAI and reduces relational interdependence without necessarily improving long-term organizational functioning or productivity.</p>
+<p>Instead, time saved should go into at least two things. First, it should go into learning and maintaining one&#x27;s competence with one key goal being to remain able to judge the quality of outputs of the AI (Hickman &amp; Langer, 2026), for instance through periodic unassisted work. GenAI itself can support rather than undermine learning when it is explicitly designed and used to do so (Bastani et al., 2025). Second, time saved should go into deepening interpersonal exchange. Remote work offers an instructive parallel given that it brought individual benefits and risks for collaboration (Yang et al., 2022). Integrating remote work effectively means deliberately protecting time for in-person collaboration (Bloom et al., 2024). In the case of genAI, teams can likewise protect specific occasions for human exchange, for instance by generating ideas before consulting genAI or by reserving feedback on junior colleagues&#x27; work for human mentors. One may also reserve ill-defined tasks for human-centric teams, facilitated via structured team exercises promoting organizational metaknowledge and tolerance of divergent viewpoints (DeChurch &amp; Mesmer-Magnus, 2010; Edmondson &amp; Bransby, 2023). Together, these shifts support an alternative narrative: highquality work with genAI requires human effort and collaboration, including time to verify outputs, to maintain the competencies needed to use genAI effectively, and to learn how to use it well collectively.</p>
+<h3>Make social norms of genAI use explicit.</h3>
+<p>Whereas building the technology and changing the narrative will take time, this countermeasure can be implemented immediately.</p>
+<p>It starts with refraining from AI shaming -of others and of ourselves -which we do not expect to have any beneficial effects, and with explicit transparency, negotiating and explicating expectations about genAI use.</p>
+<p>Within collaborations, making genAI use transparent can have immediate benefits.</p>
+<p>Transparency shows others where genAI was used, invites them to reciprocate disclosure of their own use, and thus reduces uncertainty. It also invites discussion about where genAI use is seen as helpful or problematic and strengthens human control as well as individual and collective accountability. Arguably, disclosure carries risks including evaluation penalties (Schilke &amp; Reimann, 2025). However, shared norms may address precisely this evaluation penalty and draw upon the shared individual preference for proactive disclosure (Hwang et al., 2026). Within teams, members can regularly exchange how they use genAI and agree in advance on how to hand over AI-supported work, complementing the technical design for effective handover described above: keeping outputs short instead of letting genAI&#x27;s limitless output become limitless documents, and directing others&#x27; attention to where their input is valued and matters. At the organizational level, guidelines should go beyond liability, data protection, and individual responsibility and make social norms explicit: for which tasks genAI use is valued, that genAI use is disclosed by default, and how conflicts about genAI use are resolved. Initial evidence shows that AI-use policies attenuate leaders&#x27; negative reactions to subordinates&#x27; genAI use (Meyers et al., 2026a) and that better guidelines on how to disclose can make people more comfortable disclosing (He et al., 2026).</p>
+<p>Finally, doubts about a colleague&#x27;s competence or care, or the urge to gather evidence of their genAI use, are a cue to talk to that colleague directly rather than to continue down the path of policing and blame. Such a conversation differs from policing in its aim: it seeks to understand the other person&#x27;s reasoning and to reduce shared uncertainty; it is open to being wrong about one&#x27;s doubt and motivated to search for a collective solution rather than to collect evidence for a sanction. It is therefore best framed as an inquiry (&quot;How did you approach this?&quot;) rather than an accusation (&quot;Did you use AI for this?&quot;). Such conversations can be uncomfortable, but they allow the other person to explain their reasoning and allow both to negotiate shared norms around genAI use. Without them, the erosion of trust is the likely outcome.</p>
+<h3>Conclusion</h3>
+<p>Rooted in research on social judgments of genAI use, we outline immediate and mounting risks of collective genAI use: a workplace in which people depend less on each Socially Corrosive genAI 20 other, trust each other less, and gain less collectively than genAI promises individually.</p>
+<p>Although social judgments are our starting point, these risks extend to teams and organizations and to how knowledge accumulates and is shared within collectives. These risks are highest for ill-defined problems, for which no objectively right or wrong answer exists and whose navigation benefits from teams&#x27; diverse vantage points. The available evidence points toward the socially corrosive path. Further research can help trace the exact paths, provide evidence for the reinforcing dynamics we have outlined, including the role of uncertainty about norms and the extension to agentic AI, and identify and evaluate further ways out.</p>
+<p>Scholars can benefit from looking beyond the study of judgments between individuals, toward the study of the behavioral consequences of genAI use in teams and organizations over time.</p>
+<p>Practice, however, should not wait for this research, because the first problems are already here (Meyers et al., 2026b; Niederhoffer et al., 2026). Designing genAI for collective functioning can be set in motion now and raising awareness of the AI productivity trap and making norms of genAI use explicit can start today.</p>
+<p>was supported by the DFG grant 389792660 as part of TRR 248 CPEC -Center for Perspicuous Computing and by the by the Daimler and Benz Foundation as part of the project TITAN -Technologische Intelligenz zur Transformation, Automatisierung und Nutzerorientierung des Justizsystems (grant no. 45-06/24) Igor Grossmann was supported by the Social Sciences and Humanities Research Council of Canada (Insight Grant 435-2014-0685), Natural Sciences and Engineering Research Council of Canada (Alliance Grant 618364), the Templeton World Charity Foundation Grant TWCF-2023-32568) and the Humboldt Research Award from the Alexander von Humboldt Foundation.</p>
+<p>preprint of work currently under review. Copyright Markus Langer &amp; Igor Grossmann. Cite as: Langer, M. &amp; Grossmann, I. (2026). From Individual Gains to Collective Losses? The Socially Corrosive Path of Generative AI. Manuscript submitted for publication.</p>
+<h3>Use of Generative AI</h3>
+<p>We have used Claude Opus 5.5 and ChatGPT Astra for making the paper more concise and for grammar and spell checking. We have used undermind.ai for the initial literature search.</p>
+<p>The authors assume compete accountability for the content of this paper.</p>
+<p>When referring to generative artificial intelligence, we consider both individual tools, as well as systems of automatically-operating agents -the so-called agentic AI.</p>
+<h3>References</h3>
+<p>Abele, A. E., Ellemers, N., Fiske, S. T., Koch, A., &amp; Yzerbyt, V. (2021). Navigating the social world: Toward an integrated framework for evaluating self, individuals, and groups. Psychological Review, 128(2), 290-314. https://doi.org/10.1037/rev0000262</p>
+<p>Allmendinger, S., Bonenberger, L., Endres, K., Fetzer, D., Gimpel, H., &amp; Kühl, N. (2026). Multi-agent AI. Electronic Markets, 36(1), 18. https://doi.org/10.1007/s12525-025-00862-z</p>
+<p>Bareis, J., &amp; Katzenbach, C. (2022). Talking AI into being: The narratives and imaginaries of national AI strategies and their performative politics. Science, Technology, &amp; Human Values, 47(5), 855-881. https://doi.org/10.1177/01622439211030007</p>
+<p>Bastani, H., Bastani, O., Sungu, A., Ge, H., Kabakcı, Ö., &amp; Mariman, R. (2025). Generative AI without guardrails can harm learning: Evidence from high school mathematics. Proceedings of the National Academy of Sciences, 122(26), e2422633122. https://doi.org/10.1073/pnas.2422633122</p>
+<p>Baygi, R. M., &amp; Huysman, M. (2026). Generative AI and the social fabric of organizations. Strategic Organization, 24(2), 374-387. https://doi.org/10.1177/14761270251385456</p>
+<p>Bedard, J., Kropp, M., Hsu, M., Karaman, O. T., Hawes, J., &amp; Kellerman, G. R. (2026). When using AI leads to &quot;brain fry.&quot; Harvard Business Review. https://hbr.org/2026/03/when-using-ai- leads-to-brain-fry</p>
+<p>Bloom, N., Han, R., &amp; Liang, J. (2024). Hybrid working from home improves retention without damaging performance. Nature, 630(8018), 920-925. https://doi.org/10.1038/s41586-024- 07500-2</p>
+<p>Bluvstein, S., Zhao, X., Barasch, A., &amp; Schroeder, J. (2024). Imperfectly human: The humanizing potential of (corrected) errors in text-based communication. Journal of the Association for Consumer Research, 9(3), 332-343. https://doi.org/10.1086/728412</p>
+<p>Burton, J. W., Lopez-Lopez, E., Hechtlinger, S., Rahwan, Z., Aeschbach, S., Bakker, M. A., Becker, J. A., Berditchevskaia, A., Berger, J., Brinkmann, L., Flek, L., Herzog, S. M., Huang, S., Kapoor, S., Narayanan, A., Nussberger, A.-M., Yasseri, T., Nickl, P., Almaatouq, A., … Hertwig, R. (2024). How large language models can reshape collective intelligence. Nature Human Behaviour, 8(9), 1643-1655. https://doi.org/10.1038/s41562-024-01959-9</p>
+<p>Cheng, M., Lee, C., Khadpe, P., Yu, S., Han, D., &amp; Jurafsky, D. (2026). Sycophantic AI decreases prosocial intentions and promotes dependence. Science, 391(6792), eaec8352. https://doi.org/10.1126/science.aec8352</p>
+<p>Connelly, B. L., Certo, S. T., Ireland, R. D., &amp; Reutzel, C. R. (2011). Signaling theory: A review and assessment. Journal of Management, 37(1), 39-67. https://doi.org/10.1177/0149206310388419</p>
+<p>Courtright, S. H., Thurgood, G. R., Stewart, G. L., &amp; Pierotti, A. J. (2015). Structural interdependence in teams: An integrative framework and meta-analysis. Journal of Applied Psychology, 100(6), 1825-1846. https://doi.org/10.1037/apl0000027</p>
+<p>DeChurch, L. A., &amp; Mesmer-Magnus, J. R. (2010). The cognitive underpinnings of effective teamwork: A meta-analysis. Journal of Applied Psychology, 95(1), 32-53. https://doi.org/10.1037/a0017328</p>
+<p>Dell&#x27;Acqua, F., Ayoubi, C., Lifshitz, H., Sadun, R., Mollick, E., Mollick, L., Han, Y., Goldman, J., Nair, H., Taub, S., &amp; Lakhani, K. R. (2026). The cybernetic teammate: A field experiment on generative AI and teamwork. Organization Science, 37(4), 1217-1242. https://doi.org/10.1287/orsc.2025.20702</p>
+<p>Demirci, O., Hannane, J., &amp; Zhu, X. (2025). Who Is AI replacing? The impact of generative AI on online freelancing platforms. Management Science, 71(10), 8097-8108. https://doi.org/10.1287/mnsc.2024.05420</p>
+<p>Dong, M., Yakura, H., Sherif, O., Bonnefon, J.-F., &amp; Rahwan, I. (2025). Shadow AI thrives under punitive social evaluation. SSRN preprint. https://doi.org/10.2139/ssrn.5410403</p>
+<p>Doshi, A. R., &amp; Hauser, O. P. (2024). Generative AI enhances individual creativity but reduces the collective diversity of novel content. Science Advances, 10(28), eadn5290. https://doi.org/10.1126/sciadv.adn5290</p>
+<p>Edmondson, A. C., &amp; Bransby, D. P. (2023). Psychological safety comes of age: Observed themes in an established literature. Annual Review of Organizational Psychology and Organizational Behavior, 10(1), 55-78. https://doi.org/10.1146/annurev-orgpsych-120920-055217</p>
+<p>Faas, C., Kerstan, S., Uth, R., Langer, M., &amp; Feit, A. M. (2025). Design considerations for human oversight of AI: Insights from co-design workshops and work design theory. arXiv. https://doi.org/10.48550/arXiv.2510.19512</p>
+<p>Fernandes, D., Villa, S., Nicholls, S., Haavisto, O., Buschek, D., Schmidt, A., Kosch, T., Shen, C., &amp; Welsch, R. (2026). AI makes you smarter but none the wiser: The disconnect between performance and metacognition. Computers in Human Behavior, 175, 108779. https://doi.org/10.1016/j.chb.2025.108779</p>
+<p>Fiske, S. T., Cuddy, A. J. C., &amp; Glick, P. (2007). Universal dimensions of social cognition: Warmth and competence. Trends in Cognitive Sciences, 11(2), 77-83. https://doi.org/10.1016/j.tics.2006.11.005</p>
+<p>Fleckenstein, J., Meyer, J., Jansen, T., Keller, S. D., Köller, O., &amp; Möller, J. (2024). Do teachers spot AI? Evaluating the detectability of AI-generated texts among student essays. Computers and Education: Artificial Intelligence, 6, 100209. https://doi.org/10.1016/j.caeai.2024.100209</p>
+<p>Gartenberg, C., Hasan, S., Murray, A., &amp; Pierce, L. (2026). More versus better: Artificial Intelligence, incentives, and the emerging crisis in peer review. Organization Science, 37(3), 795-812. https://doi.org/10.1287/orsc.2026.ed.v37.n3</p>
+<p>Glikson, E., &amp; Asscher, O. (2023). AI-mediated apology in a multilingual work context: Implications for perceived authenticity and willingness to forgive. Computers in Human Behavior, 140, 107592. https://doi.org/10.1016/j.chb.2022.107592</p>
+<p>Gorichanaz, T. (2023). Accused: How students respond to allegations of using ChatGPT on assessments. Learning: Research and Practice, 9(2), 183-196. https://doi.org/10.1080/23735082.2023.2254787</p>
+<p>Gray, K., &amp; Wegner, D. M. (2009). Moral typecasting: Divergent perceptions of moral agents and moral patients. Journal of Personality and Social Psychology, 96(3), 505-520. https://doi.org/10.1037/a0013748</p>
+<p>Grossmann, I., Feinberg, M., Parker, D. C., Christakis, N. A., Tetlock, P. E., &amp; Cunningham, W. A. (2023). AI and the transformation of social science research. Science, 380(6650), 1108-1109. https://doi.org/10.1126/science.adi1778</p>
+<p>Grossmann, I., &amp; Johnson, S. G. B. (2025). Cultivating wisdom through metacognition: A new frontier in decision-making under radical uncertainty. Journal of Applied Research in Memory and Cognition, 14(3), 301-318. https://doi.org/10.1037/mac0000235</p>
+<p>Grossmann, I., &amp; Weststrate, N. M. (2026). Navigating the unknown: The sociocultural and metacognitive architecture of wisdom. Annual Review of Psychology, 78. https://doi.org/10.1146/annurev-psych-020226-034154</p>
+<p>Hanson, M. A., Barreiro, P. G., Crosetto, P., &amp; Brockington, D. (2024). The strain on scientific publishing. Quantitative Science Studies, 5(4), 823-843. https://doi.org/10.1162/qss_a_00327</p>
+<p>He, J., Akella, A., Do, H. J., &amp; Weisz, J. D. (2026). Overcoming barriers to AI disclosure: The role of granularity and sociocultural enablers in reducing perceived stigmas. Proceedings of the 2026 ACM Conference on Fairness, Accountability, and Transparency, 2117-2143. https://doi.org/10.1145/3805689.3806737</p>
+<p>Hickman, L., &amp; Langer, M. (2026). Integrating generative AI into theories of job performance. In C. van Slyke &amp; K. Lukaszewski (Eds.), Research in Human Resource Management. Emerald Publishing Limited. https://www.researchgate.net/publication/397570874_Integrating_Generative_AI_into_Theori es_of_Job_Performance</p>
+<p>Hou, I., Man, O., Hamilton, K., Muthusekaran, S., Johnykutty, J., Zadeh, L., &amp; MacNeil, S. (2025). &quot;All roads lead to ChatGPT&quot;: How generative AI is eroding social interactions and student learning communities. Proceedings of the 30th ACM Conference on Innovation and Technology in Computer Science Education V. 1, 79-85. https://doi.org/10.1145/3724363.3729024</p>
+<p>Hu, B., Mao, Y., &amp; Kim, K. J. (2023). How social anxiety leads to problematic use of conversational AI: The roles of loneliness, rumination, and mind perception. Computers in Human Behavior, 145, 107760. https://doi.org/10.1016/j.chb.2023.107760</p>
+<p>Hui, X., Reshef, O., &amp; Zhou, L. (2024). The short-term effects of generative Artificial Intelligence on employment: Evidence from an online labor market. Organization Science, 35(6), 1977-1989. https://doi.org/10.1287/orsc.2023.18441</p>
+<p>Hwang, A. H.-C., Wong, S., Chen, B., He, J., &amp; Do, H. J. (2026). &quot;Better ask for forgiveness than permission&quot;: Practices and policies of AI disclosure in freelance work. Proceedings of the 2026 CHI Conference on Human Factors in Computing Systems, 1-16. https://doi.org/10.1145/3772318.3791920</p>
+<p>Ibrahim, L., Hafner, F. S., Cheng, M., Lee, C., Anselmetti, R., Willer, R., Rocher, L., &amp; Yang, D. (2026). Sycophantic AI makes human interaction feel more effortful and less satisfying over time (arXiv:2605.07912). arXiv. https://doi.org/10.48550/arXiv.2605.07912</p>
+<p>Jakesch, M., Hancock, J. T., &amp; Naaman, M. (2023). Human heuristics for AI-generated language are flawed. Proceedings of the National Academy of Sciences, 120(11), e2208839120. https://doi.org/10.1073/pnas.2208839120</p>
+<p>Johnson, S. G. B., Karimi, A.-H., Bengio, Y., Chater, N., Gerstenberg, T., Larson, K., Levine, S., Mitchell, M., Rahwan, I., Schölkopf, B., &amp; Grossmann, I. (2026). Imagining and building wise machines: The centrality of AI metacognition. Trends in Cognitive Sciences, 30(10), 854-868. https://doi.org/10.1016/j.tics.2026.01.002</p>
+<p>Jones, E. E., &amp; Nisbett, R. E. (1987). The actor and the observer: Divergent perceptions of the causes of behavior. In E. E. Jones, D. E. Kanouse, H. H. Kelley, R. E. Nisbett, S. Valins, &amp; B. Weiner (Eds.), Attribution: Perceiving the causes of behavior (pp. 79-94). Lawrence Erlbaum Associates, Inc.</p>
+<p>Kadoma, K., Metaxa, D., &amp; Naaman, M. (2025). Generative AI and perceptual harms: Who&#x27;s suspected of using LLMs? Proceedings of the 2025 CHI Conference on Human Factors in Computing Systems, 1-17. https://doi.org/10.1145/3706598.3713897</p>
+<p>Karlan, B., &amp; Allen, C. (2024). Engineered wisdom for learning machines. Journal of Experimental &amp; Theoretical Artificial Intelligence, 36(2), 257-272. https://doi.org/10.1080/0952813X.2022.2092559</p>
+<p>Kim, J., Schweitzer, S., De Cremer, D., &amp; Riedl, C. (2026). The AI penalty: People reduce compensation for workers who use AI (arXiv:2501.13228). arXiv. https://doi.org/10.48550/arXiv.2501.13228</p>
+<p>Kobak, D., González-Márquez, R., Horvát, E.-Á., &amp; Lause, J. (2025). Delving into LLM-assisted writing in biomedical publications through excess vocabulary. Science Advances, 11(27), eadt3813. https://doi.org/10.1126/sciadv.adt3813</p>
+<p>Lange, B., Keeling, G., Manzini, A., &amp; McCroskery, A. (2025). We need accountability in human-AI agent relationships. Npj Artificial Intelligence, 1(1), 38. https://doi.org/10.1038/s44387-025- 00041-7</p>
+<p>Lee, F. (2002). The social costs of seeking help. The Journal of Applied Behavioral Science, 38(1), 17-35. https://doi.org/10.1177/0021886302381002</p>
+<p>Liang, W., Yuksekgonul, M., Mao, Y., Wu, E., &amp; Zou, J. (2023). GPT detectors are biased against non-native English writers. Patterns, 4(7), 100779. https://doi.org/10.1016/j.patter.2023.100779</p>
+<p>Lin, Y., Frey, C. B., &amp; Wu, L. (2023). Remote collaboration fuses fewer breakthrough ideas. Nature, 623(7989), 987-991. https://doi.org/10.1038/s41586-023-06767-1</p>
+<p>Malle, B. F. (2006). The actor-observer asymmetry in attribution: A (surprising) meta-analysis. Psychological Bulletin, 132(6), 895-919. https://doi.org/10.1037/0033-2909.132.6.895</p>
+<p>Meincke, L., Nave, G., &amp; Terwiesch, C. (2025). ChatGPT decreases idea diversity in brainstorming. Nature Human Behaviour, 9(6), 1107-1109. https://doi.org/10.1038/s41562-025-02173-x</p>
+<p>Meyers, S., Briker, R., &amp; Bigman, Y. E. (2026a). Psychological reactions to subordinates&#x27; LLM use at work. The Leadership Quarterly, 37(6), 102004. https://doi.org/10.1016/j.leaqua.2026.102004</p>
+<p>Meyers, S., Briker, R., &amp; Bigman, Y. E. (2026b). Social judgments of generative AI users. Current Directions in Psychological Science, Advance online publication. https://doi.org/10.1177/09637214261466635</p>
+<p>Niederhoffer, K., Kellermann, G. R., Lee, A., Liebscher, A., Rapuano, K., &amp; Hancock, J. T. (2025). AI-generated &quot;Workslop&quot; is destroying productivity. Harvard Business Review. https://hbr.org/2025/09/ai-generated-workslop-is-destroying-productivity</p>
+<p>Niederhoffer, K., Rapuano, K., Liebscher, A., Robichaux, A., &amp; Hancock, J. T. (2026). Team dynamics weaken when employees turn to AI instead of colleagues. Harvard Business Review. https://hbr.org/2026/10/team-dynamics-weaken-when-employees-turn-to-ai-instead- of-colleagues</p>
+<p>Oppenheimer, D. M., &amp; Patterson, M. T. (2025). Thinking outside the box means thinking outside the search engine. Memory &amp; Cognition, 53(8), 2686-2699. https://doi.org/10.3758/s13421-025- 01732-x Parasuraman, R., &amp; Manzey, D. H. (2010). Complacency and bias in human use of automation: An attentional integration. Human Factors, 52(3), 381-410. https://doi.org/10.1177/0018720810376055</p>
+<p>Prentice, D. A., &amp; Miller, D. T. (1996). Pluralistic ignorance and the perpetuation of social norms by unwitting actors. In M. P. Zanna (Ed.), Advances in Experimental Social Psychology (Vol. 28, pp. 161-209). Elsevier. https://doi.org/10.1016/S0065-2601(08)60238-5</p>
+<p>Pronin, E. (2008). How we see ourselves and how we see others. Science, 320(5880), 1177-1180. https://doi.org/10.1126/science.1154199</p>
+<p>Purcell, Z. A., Dong, M., Nussberger, A.-M., Köbis, N., &amp; Jakesch, M. (2026). People have different expectations for their own versus others&#x27; use of AI-mediated communication tools. British Journal of Psychology, 117(2), 548-566. https://doi.org/10.1111/bjop.12727</p>
+<p>Ranganathan, A., &amp; Ye, X. M. (2026). AI doesn&#x27;t reduce work-It intensifies it. Harvard Business Review. https://hbr.org/2026/02/ai-doesnt-reduce-work-it-intensifies-it</p>
+<p>Reif, J. A., Larrick, R. P., &amp; Soll, J. B. (2025). Evidence of a social evaluation penalty for using AI. Proceedings of the National Academy of Sciences, 122(19), e2426766122. https://doi.org/10.1073/pnas.2426766122</p>
+<p>Ryan, R. M., &amp; Deci, E. L. (2000). Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being. American Psychologist, 55(1), 68-78. https://doi.org/10.1037/0003-066X.55.1.68</p>
+<p>Sarkar, A. (2025). AI could have written this: Birth of a classist slur in knowledge work. Proceedings of the Extended Abstracts of the CHI Conference on Human Factors in Computing Systems, 1-12. https://doi.org/10.1145/3706599.3716239</p>
+<p>Schilke, O., &amp; Reimann, M. (2025). The transparency dilemma: How AI disclosure erodes trust. Organizational Behavior and Human Decision Processes, 188, 104405. https://doi.org/10.1016/j.obhdp.2025.104405</p>
+<p>Schrade, F., Walczok, M., &amp; Bipp, T. (2026). Job demand or resource?: An experimental investigation of employees&#x27; appraisal of Artificial Intelligence. Zeitschrift für Arbeits-und Organisationspsychologie A&amp;O, 70(1), 18-28. https://doi.org/10.1026/0932-4089/a000456</p>
+<p>Schulz, C., Bendig, D., Bräunche, A., &amp; Kindermann, B. (2026). Curse or blessing: Investigating the influence of firms&#x27; Artificial Intelligence adoption on employee job satisfaction. Journal of Management Studies, 63(2), 561-595. https://doi.org/10.1111/joms.70004</p>
+<p>Sharma, M., Tong, M., Korbak, T., Duvenaud, D., Askell, A., Bowman, S. R., Cheng, N., Durmus, E., Hatfield-Dodds, Z., Johnston, S. R., Kravec, S., Maxwell, T., McCandlish, S., Ndousse, K., Rausch, O., Schiefer, N., Yan, D., Zhang, M., &amp; Perez, E. (2024). Towards understanding sycophancy in language models. Proceedings of the International Conference on Learning Representations. https://doi.org/10.48550/ARXIV.2310.13548</p>
+<p>Sourati, Z., Karimi-Malekabadi, F., Ozcan, M., McDaniel, C., Ziabari, A., Trager, J., Tak, A. N., Chen, M., Morstatter, F., &amp; Dehghani, M. (2026). The shrinking landscape of linguistic diversity in the age of large language models. Nature Human Behaviour, 10(10), 1925-1942. https://doi.org/10.1038/s41562-026-02550-0</p>
+<p>Spencer, D. A. (2025). AI, automation and the lightening of work. AI &amp; Society, 40(3), 1237-1247. https://doi.org/10.1007/s00146-024-01959-3</p>
+<p>Sterz, S., Baum, K., Biewer, S., Hermanns, H., Lauber-Rönsberg, A., Meinel, P., &amp; Langer, M. (2024). On the quest for effectiveness in human oversight: Interdisciplinary perspectives. Proceedings of the 2024 ACM Conference on Fairness, Accountability, and Transparency, 2495-2507. https://doi.org/10.1145/3630106.3659051</p>
+<p>Socially Corrosive genAI 29</p>
+<p>Tang, P. M., Koopman, J., Mai, K. M., De Cremer, D., Zhang, J. H., Reynders, P., Ng, C. T. S., &amp; Chen, I.-H. (2023). No person is an island: Unpacking the work and after-work consequences of interacting with artificial intelligence. Journal of Applied Psychology, 108(11), 1766-1789. https://doi.org/10.1037/apl0001103</p>
+<p>Terwiesch, C., Meincke, L., Girotra, K., Mollick, E., Nave, G., &amp; Ulrich, K. (2026). Artificial intelligence and its impact on creativity and diversity: An empirical study of large language model-generated product ideas. Production and Operations Management, Advance online publication. https://doi.org/10.1177/10591478261474243</p>
+<p>Yakura, H., Lopez-Lopez, E., Brinkmann, L., de la Serna, I., Kirfel, L., Gupta, P., Soraperra, I., Eisenmann, T. F., Wulff, D. U., &amp; Rahwan, I. (2026). Empirical evidence of large language model&#x27;s influence on human spoken communication (arXiv:2409.01754). arXiv. https://doi.org/10.48550/arXiv.2409.01754</p>
+<p>Yang, L., Holtz, D., Jaffe, S., Suri, S., Sinha, S., Weston, J., Joyce, C., Shah, N., Sherman, K., Hecht, B., &amp; Teevan, J. (2022). The effects of remote work on collaboration among information workers. Nature Human Behaviour, 6(1), 43-54. https://doi.org/10.1038/s41562-021-01196-4</p>
+<p>Zhai, J., &amp; Qu, J. G. (2027). From &quot;cost of asking&quot; to &quot;fit of asking&quot;: How seeking help with AI shapes employees&#x27; indebtedness and autonomy in different workplace helping contexts. Computers in Human Behavior, 186, 109150. https://doi.org/10.1016/j.chb.2026.109150</p>
+<p>Zhou, X., Chen, C., Li, W., Yao, Y., Cai, F., Xu, J., &amp; Qin, X. (2025). How do coworkers interpret employee AI usage: Coworkers&#x27; perceived morality and helping as responses to employee AI usage. Human Resource Management, 64(4), 1077-1097. https://doi.org/10.1002/hrm.22299</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
