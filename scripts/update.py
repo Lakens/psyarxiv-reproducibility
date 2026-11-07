@@ -222,6 +222,29 @@ def remember_job(job_id):
          if job_id else {})
 
 
+def server_idle():
+    # True when the server answers and has no job running or waiting (also
+    # not one of ours left by an earlier run, whose record is cleared once it
+    # has finished); False otherwise, also when it cannot be reached
+    try:
+        if previous_job_running():
+            return False
+        health = get(f"{SERVER}/health", tries=1)
+    except (urllib.error.URLError, TimeoutError, ValueError):
+        return False
+    return (health.get("status") == "ok" and not health.get("jobs_running")
+            and not health.get("jobs_waiting"))
+
+
+def pause(stop_at, seconds):
+    # waits `seconds`, but not past stop_at; False when the run's time is up
+    left = stop_at - time.time()
+    if left <= 0:
+        return False
+    time.sleep(min(seconds, left))
+    return time.time() < stop_at
+
+
 def previous_job_running():
     job_id = load(CURRENT_JOB, {}).get("id")
     if not job_id:
@@ -486,28 +509,15 @@ def main():
                               "queue": [], "tries": {}, "skipped": {}, "failed": {}})
     index = {p["id"]: p for p in load(os.path.join(args.data_dir, "index.json"), {"papers": []})["papers"]}
 
+    stop_at = time.time() + args.minutes * 60
     n = refresh_pages(args.site_dir, args.data_dir)
     if n:
         print(f"Brought {n} report pages up to date with this script's changes.")
-    try:
-        health = get(f"{SERVER}/health")
-    except (urllib.error.URLError, TimeoutError) as e:
-        health = {"error": str(e)}
-    if health.get("status") != "ok":
-        print("The server is not ready; stopping until the next run:", health)
-        return
     global CURRENT_JOB
     CURRENT_JOB = os.path.join(args.data_dir, "current_job.json")
-    try:
-        running = previous_job_running()
-    except (urllib.error.URLError, TimeoutError) as e:
-        running = f"could not ask the server ({e})"
-    if running:
-        print("The previous job is still on the server; stopping until the next run.", running)
-        return
-    stop_at = time.time() + args.minutes * 60
     sent = 0
     changed = False
+    said = None          # the last waiting message printed, so it is printed once
     # --redo: these go first; their index lines are set aside so they count as
     # not yet checked, and come back if their new check does not succeed
     held = {}
@@ -520,13 +530,41 @@ def main():
         state["queue"].insert(0, {"id": osf_id, "published": None, "source": "redo"})
     try:
         while time.time() < stop_at and (args.max == 0 or sent < args.max):
-            list_new(state, index)
-            if not state["queue"]:
-                if state["backfill_sent"] >= BACKFILL_LIMIT or not list_older_day(state, index):
-                    print("Nothing waiting.")
+            try:
+                list_new(state, index)
+                older = (not state["queue"] and state["backfill_sent"] < BACKFILL_LIMIT
+                         and list_older_day(state, index))
+            except (urllib.error.URLError, TimeoutError, KeyError, ValueError) as e:
+                # the OSF did not answer as expected: try again in 5 minutes
+                print("The OSF could not be read; trying again in 5 minutes:", e, flush=True)
+                if not pause(stop_at, 300):
                     break
+                continue
+            if older:
                 save(state_path, state)
                 continue
+            if not state["queue"]:
+                # nothing waiting: look for new preprints again in 10 minutes
+                # (a test run with --max stops here)
+                if args.max:
+                    print("Nothing waiting.")
+                    break
+                if said != "nothing":
+                    print("Nothing waiting; looking for new preprints every 10 minutes.", flush=True)
+                    said = "nothing"
+                if not pause(stop_at, 600):
+                    break
+                continue
+            # one preprint at a time, and only when the server is otherwise
+            # idle: nothing running or waiting there, ours or anyone's
+            if not server_idle():
+                if said != "busy":
+                    print("The server is busy or cannot be reached; waiting until it is idle.", flush=True)
+                    said = "busy"
+                if not pause(stop_at, 60):
+                    break
+                continue
+            said = None
             item = state["queue"][0]
             try:
                 outcome = check_one(item, state, index, papers_dir, args.site_dir)

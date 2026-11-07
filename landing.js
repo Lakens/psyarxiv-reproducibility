@@ -24,8 +24,12 @@ fetch("data/index.json")
     var list = document.getElementById("report-list");
     idx.papers.forEach(function (p) {
       var li = el("li");
-      // greyed out when no check applied to the paper (every module "na")
-      var lights = Object.keys(p.lights || {}).map(function (k) { return p.lights[k]; });
+      // greyed out when no check applied to the paper (every module "na").
+      // The PubPeer check's "info" (cited references with PubPeer comments)
+      // says nothing about the paper's own practices, so it does not count.
+      var lights = Object.keys(p.lights || {}).filter(function (k) {
+        return !(k === "ref_pubpeer" && p.lights[k] === "info");
+      }).map(function (k) { return p.lights[k]; });
       if (lights.length && lights.every(function (l) { return l === "na"; })) li.className = "not-applicable";
       var title = p.report_page ? el("a", { href: p.id + "/" }, p.title) : el("span", {}, p.title);
       title.className = "report-title";

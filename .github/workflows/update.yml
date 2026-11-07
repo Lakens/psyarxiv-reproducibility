@@ -2,9 +2,20 @@
 # scripts/update.py, and commits the report pages and the data/ folder. A run
 # starts no new preprint after 50 minutes; one paper's code may run for up to
 # 60 minutes on the server, hence the 180-minute limit. Runs never overlap.
-# It runs every hour, at 17 minutes past (GitHub may start it some minutes
-# later), and can also be started by hand (Actions tab, "Run workflow"). To
-# stop the hourly runs, put a # before the two schedule lines.
+#
+# The runs follow each other: at the end of a run that succeeded, the last
+# job ("next") starts the next run. So the work goes on without depending on
+# GitHub's timetable, which often starts runs late or not at all. Within a
+# run, the script sends a preprint only when the server is completely idle,
+# and waits otherwise; with nothing waiting it looks for new preprints every
+# 10 minutes. The hourly timetable is the backup: it restarts the series after
+# a run that failed (which does not start the next one).
+#
+# Started by hand (Actions tab, "Run workflow") with a number above 0, a run
+# checks at most that many preprints and does not start the next run.
+#
+# To stop: put a # before the two schedule lines, and cancel the run that is
+# going (Actions tab); or disable the workflow (Actions tab, "..." menu).
 name: Update the reports
 
 on:
@@ -55,3 +66,17 @@ jobs:
       contents: read
       pages: write
       id-token: write
+
+  next:
+    # starts the next run; it waits until this run has ended (runs never
+    # overlap). Not after a failed run, and not after a run with a limit.
+    needs: [update, publish]
+    if: always() && needs.update.result == 'success' && (inputs.max == '' || inputs.max == '0')
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Start the next run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update.yml --repo "$GITHUB_REPOSITORY" --ref main

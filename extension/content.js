@@ -43,9 +43,14 @@
     return { paper: same[0], exact: id.version === null };
   }
 
-  // No check applied to the paper: every module's light "na" (grey on the site)
+  // No check applied to the paper: every module's light "na" (grey on the
+  // site; the same rule as the site's landing.js). The PubPeer check's "info"
+  // (cited references with PubPeer comments) says nothing about the paper's
+  // own practices, so it does not count.
   function noneApplied(p) {
-    var lights = Object.keys(p.lights || {}).map(function (k) { return p.lights[k]; });
+    var lights = Object.keys(p.lights || {}).filter(function (k) {
+      return !(k === "ref_pubpeer" && p.lights[k] === "info");
+    }).map(function (k) { return p.lights[k]; });
     return lights.length > 0 && lights.every(function (l) { return l === "na"; });
   }
 
