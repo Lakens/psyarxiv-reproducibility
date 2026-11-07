@@ -15,7 +15,7 @@ Done:
   - the PsyArXiv report job is switched off (`metacheck_psyarxiv_reports: "0"`);
   - a check with `paper=true` returns the paper as converted, unchanged, as `paper` in its result (not yet committed or deployed);
   - the JSON result also keeps the authors and reference list GROBID read (`paper_info$authors`, `paper_info$references`), and each module's `checks`, `checklist_section`, `intro`, `naming_issues` and `useless_files` when it gives them: the fields metacheck's checklist report reads (commit `c7dbafa`, deployed 7 November 2026).
-- The scheduled run: `scripts/update.py`, run by `.github/workflows/update.yml`. For now the workflow starts only by hand (Actions tab, "Run workflow"); its hourly schedule is in the file, behind `#`. The first five reports were made on 7 November 2026 by running the script on Daniel's computer (`--max 5`).
+- The scheduled run: `scripts/update.py`, run by `.github/workflows/update.yml`. It runs every hour (switched on 7 November 2026, after a test run on GitHub for one preprint, `js3wm_v1`, succeeded); to stop it, put a `#` before the two schedule lines in that file. The first five reports were made on 7 November 2026 by running the script on Daniel's computer (`--max 5`).
   - It lists preprints on the OSF and downloads each one's file (PDF or Word) itself, then uploads it to the SURF server as one job that returns both the JSON result and the report page (`kind=check`, `report=true`). The server's own `psyarxiv` field cannot be used: it looks preprints up on `next.psyarxiv.org`, which does not have the newest ones yet, and it always takes the newest version.
   - Order: preprints published since the last run, newest first; when none is waiting, older ones, one day at a time going back, until 1000 older preprints have been sent.
   - A preprint is checked in the version that is its newest at that moment. When a newer version is checked later, the reports on older versions stay.
@@ -31,9 +31,7 @@ Done:
 - Publishing: `.github/workflows/pages.yml` puts on GitHub Pages only the landing page and its files, the report pages, `data/index.json` and `data/tally.json`, after every push and after each run of `update.yml`. The full results in `data/papers/` stay in the repository only: GitHub Pages publishes at most 1 GB, counted at full size, while git stores the repository's files compressed (so compressing them ourselves would hardly make the repository smaller).
 - `scripts/update.py --redo <id> ...` checks the given preprint versions again and overwrites their files.
 
-Not done yet:
-- GitHub Pages is not switched on for this repository yet (its source must be "GitHub Actions").
-- The hourly schedule is switched off.
+- The site: https://lakens.github.io/psyarxiv-reproducibility/ (GitHub Pages, source "GitHub Actions").
 
 ## Decisions so far
 
