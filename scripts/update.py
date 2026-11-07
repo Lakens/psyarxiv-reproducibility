@@ -32,6 +32,7 @@
 import argparse
 import base64
 import datetime as dt
+import glob
 from html import escape as html_escape
 import json
 import os
@@ -302,6 +303,52 @@ def add_full_text(html, paper):
     return new
 
 
+BACK_STYLE = ('<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);'
+              'border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;'
+              'text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}'
+              '.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}'
+              '@media print{.back-bar{display:none}}</style>')
+BACK_BAR = ('<p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">'
+            '← Back to the main page</a></p>')
+
+
+def add_way_back(html):
+    # a link to the site's main page above the report's title, and the
+    # Metacheck logo (the first logo in the header) as a link there too. Once only.
+    if 'id="back-to-main"' not in html:
+        html = re.sub(r"</head>", lambda m: BACK_STYLE + m.group(0), html, count=1)
+        html = re.sub(r"<body[^>]*>", lambda m: m.group(0) + BACK_BAR, html, count=1)
+    if 'class="logo-home"' not in html:
+        html = re.sub(r'(<div class="logos">\s*)(<img[^>]*>)',
+                      lambda m: m.group(1) + '<a class="logo-home" href="../" aria-label="Back to the main page">'
+                      + m.group(2) + "</a>", html, count=1)
+    return html
+
+
+def decorate_page(html, paper):
+    # this site's changes to the server's report page
+    return add_way_back(add_full_text(drop_converter_note(html), paper))
+
+
+def refresh_pages(site_dir, data_dir):
+    # gives every report page this site's changes it does not have yet (such
+    # as pages made before a change to this script); returns how many changed
+    changed = 0
+    for path in glob.glob(os.path.join(site_dir, "*_v*", "index.html")):
+        with open(path, encoding="utf-8", newline="") as f:
+            html = f.read()
+        if 'id="back-to-main"' in html and 'class="logo-home"' in html and 'id="full-text"' in html:
+            continue
+        osf_id = os.path.basename(os.path.dirname(path))
+        paper = load(os.path.join(data_dir, "papers", osf_id + ".json"), {}).get("paper")
+        new = decorate_page(html, paper)
+        if new != html:
+            with open(path, "w", encoding="utf-8", newline="") as f:
+                f.write(new)
+            changed += 1
+    return changed
+
+
 def save_page(html, site_dir, osf_id, paper=None):
     # the report page in <site_dir>/<osf_id>/index.html; a font or image it
     # carries inside it is linked to the site's copy when the two are the same
@@ -314,8 +361,7 @@ def save_page(html, site_dir, osf_id, paper=None):
                     return "../" + rel
         return m.group(0)
     html = re.sub(r"data:(font/ttf|image/png);base64,([A-Za-z0-9+/=]+)", link, html)
-    html = drop_converter_note(html)
-    html = add_full_text(html, paper)
+    html = decorate_page(html, paper)
     folder = os.path.join(site_dir, osf_id)
     os.makedirs(folder, exist_ok=True)
     with open(os.path.join(folder, "index.html"), "w", encoding="utf-8", newline="\n") as f:
@@ -440,6 +486,9 @@ def main():
                               "queue": [], "tries": {}, "skipped": {}, "failed": {}})
     index = {p["id"]: p for p in load(os.path.join(args.data_dir, "index.json"), {"papers": []})["papers"]}
 
+    n = refresh_pages(args.site_dir, args.data_dir)
+    if n:
+        print(f"Brought {n} report pages up to date with this script's changes.")
     try:
         health = get(f"{SERVER}/health")
     except (urllib.error.URLError, TimeoutError) as e:
