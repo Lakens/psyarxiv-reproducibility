@@ -32,6 +32,7 @@
 import argparse
 import base64
 import datetime as dt
+from html import escape as html_escape
 import json
 import os
 import re
@@ -203,7 +204,71 @@ def run_job(name, data, ctype):
     return None, f"no result after {JOB_WAIT_MINUTES} minutes"
 
 
-def save_page(html, site_dir, osf_id):
+def drop_converter_note(html):
+    # the line the server puts at the top of a report saying what converted
+    # the file (worker.R, .add_converter_note()); the converter is kept in the
+    # result file (`converter`)
+    return re.sub(r'<div class="metacheck-converter"[^>]*>.*?</div>', "", html, count=1, flags=re.S)
+
+
+def full_text_html(paper):
+    # the paper's text as metacheck read it (the converted paper's `text`, one
+    # row per sentence), as a folded block like the report's own: each
+    # section's heading, then its paragraphs. Headings of sections without
+    # text of their own (such as "Methods" above "Data") are kept, in order.
+    rows = (paper or {}).get("text") or []
+    if not rows:
+        return ""
+    headers = {}
+    for s in (paper.get("section") or []):
+        try:
+            headers[int(s["section_id"])] = s.get("header") or ""
+        except (KeyError, TypeError, ValueError):
+            pass
+    out, para, last_sec, last_par = [], [], None, None
+
+    def end_paragraph():
+        if para:
+            out.append("<p>" + html_escape(" ".join(para)) + "</p>")
+            para.clear()
+
+    for r in rows:
+        try:
+            sec = int(r.get("section_id"))
+        except (TypeError, ValueError):
+            sec = last_sec
+        if sec != last_sec and sec is not None:
+            end_paragraph()
+            # going forward: also the headings of the sections in between
+            first = last_sec + 1 if last_sec is not None and sec > last_sec else sec
+            for s in range(first, sec + 1):
+                if headers.get(s):
+                    out.append("<h3>" + html_escape(headers[s]) + "</h3>")
+            last_sec, last_par = sec, None
+        if r.get("paragraph_id") != last_par:
+            end_paragraph()
+            last_par = r.get("paragraph_id")
+        if r.get("text"):
+            para.append(str(r["text"]))
+    end_paragraph()
+    return ('<details id="full-text">\n<summary>\nFull text\n</summary>\n<div class="fold">\n'
+            + "\n".join(out) + "\n</div>\n</details>\n")
+
+
+def add_full_text(html, paper):
+    # the full text as the last folded block of the report's "More detail"
+    # section (before the two closing </div>s ahead of the footer); before the
+    # footer when the page is laid out differently. Once only.
+    block = full_text_html(paper)
+    if not block or 'id="full-text"' in html:
+        return html
+    new, n = re.subn(r"(</div>\s*</div>\s*<footer>)", lambda m: block + m.group(1), html, count=1)
+    if n == 0:
+        new, n = re.subn(r"(<footer>|</body>)", lambda m: block + m.group(1), html, count=1)
+    return new
+
+
+def save_page(html, site_dir, osf_id, paper=None):
     # the report page in <site_dir>/<osf_id>/index.html; a font or image it
     # carries inside it is linked to the site's copy when the two are the same
     # file, byte for byte, and kept inside the page otherwise
@@ -215,6 +280,8 @@ def save_page(html, site_dir, osf_id):
                     return "../" + rel
         return m.group(0)
     html = re.sub(r"data:(font/ttf|image/png);base64,([A-Za-z0-9+/=]+)", link, html)
+    html = drop_converter_note(html)
+    html = add_full_text(html, paper)
     folder = os.path.join(site_dir, osf_id)
     os.makedirs(folder, exist_ok=True)
     with open(os.path.join(folder, "index.html"), "w", encoding="utf-8", newline="\n") as f:
@@ -276,7 +343,7 @@ def check_one(item, state, index, papers_dir, site_dir):
     # metacheck site does, and leaves it empty when it could not render it
     html = result.pop("report_html", "") or ""
     if html:
-        save_page(html, site_dir, osf_id)
+        save_page(html, site_dir, osf_id, result.get("paper"))
     modules = result.get("modules", {})
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     preprint = {

@@ -1,17 +1,13 @@
-// Fills the tally from data/tally.json and the list of reports from
-// data/index.json, which the scheduled run (scripts/update.py) writes.
+// Fills the counter in the top right from data/tally.json and the list of
+// reports from data/index.json, which the scheduled run (scripts/update.py)
+// writes.
 fetch("data/tally.json")
   .then(function (r) { return r.json(); })
   .then(function (t) {
-    document.getElementById("tally-preprints").textContent = t.preprints.toLocaleString("en");
-    document.getElementById("tally-reports").textContent = t.reports.toLocaleString("en");
-    document.getElementById("tally-updated").textContent = t.updated;
+    document.getElementById("checked-count").textContent =
+      t.reports.toLocaleString("en") + (t.reports === 1 ? " preprint checked" : " preprints checked");
   })
-  .catch(function () {
-    document.getElementById("tally-preprints").textContent = "not yet";
-    document.getElementById("tally-reports").textContent = "not yet";
-    document.getElementById("tally-updated").textContent = "not yet";
-  });
+  .catch(function () {});
 
 function el(tag, attrs, text) {
   var e = document.createElement(tag);
@@ -28,6 +24,9 @@ fetch("data/index.json")
     var list = document.getElementById("report-list");
     idx.papers.forEach(function (p) {
       var li = el("li");
+      // greyed out when no check applied to the paper (every module "na")
+      var lights = Object.keys(p.lights || {}).map(function (k) { return p.lights[k]; });
+      if (lights.length && lights.every(function (l) { return l === "na"; })) li.className = "not-applicable";
       var title = p.report_page ? el("a", { href: p.id + "/" }, p.title) : el("span", {}, p.title);
       title.className = "report-title";
       li.appendChild(title);

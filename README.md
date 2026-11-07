@@ -5,8 +5,8 @@ A web page (GitHub Pages) that will show metacheck's reproducibility reports on 
 ## Status
 
 Done:
-- The landing page: `index.html`, with `site.css` copied from the SURF site (same colours, font and layout), `landing.css` and `landing.js`. It shows the tally (`data/tally.json`) and a list of the reports (`data/index.json`): each title links to its report page, followed by the authors, the date, the id and a link to the OSF page. The heading "Reports" and the link text "OSF" are placeholders for Daniel's wording.
-- The report pages: `<id>/index.html` at the top of the repository, one per checked preprint version (for example `jc6rp_v1/`), so a report's address ends in the id as the OSF's does (`https://osf.io/preprints/psyarxiv/jc6rp_v1`). Each is the server's checklist report, as the metacheck site shows it. The font and logo the server puts inside every page are linked to `fonts/Cabin.ttf` and `images/logo.png` instead (the script checks they are the same files, byte for byte), which makes a page about 58 KB instead of 355 KB.
+- The landing page: `index.html`, with `site.css` copied from the SURF site (same colours, font and layout), `landing.css` and `landing.js`. It shows, in the top right corner, the number of preprints checked ("5 preprints checked", from `data/tally.json`), and a list of the reports (`data/index.json`): each title links to its report page, followed by the authors, the date, the id and a link to the OSF page. A preprint none of the checks applied to (every module's traffic light "na") is greyed out, so it is clear there is little to read; its report page is still there. (The three boxes with the tally were removed on 7 November 2026, at Daniel's request.) The heading "Reports" and the link text "OSF" are placeholders for Daniel's wording.
+- The report pages: `<id>/index.html` at the top of the repository, one per checked preprint version (for example `jc6rp_v1/`), so a report's address ends in the id as the OSF's does (`https://osf.io/preprints/psyarxiv/jc6rp_v1`). Each is the server's checklist report, as the metacheck site shows it, with two changes: the line at the top saying what converted the file (GROBID, "less complete than bibr's") is left out (the converter is kept in the result file), and the paper's full text, as metacheck read it, is added as the last folded block ("Full text") under "More detail": each section's heading, then its paragraphs (tables and figure captions not yet). The font and logo the server puts inside every page are linked to `fonts/Cabin.ttf` and `images/logo.png` instead (the script checks they are the same files, byte for byte), which makes a page about 58 KB instead of 355 KB.
 - `scripts/test_surf_jobs.py`: sends three test jobs to the SURF server (a PDF preprint, a Word file, and a JSON check). It passed on the last run.
 - On the SURF server (`surf-research-cloud`, branch `main`):
   - each module's section and detailed report text is kept in the JSON result (commit `607de75`);
@@ -45,7 +45,7 @@ Not done yet:
   - Open: the reproducibility check's full console output (every line each script printed). It may be large. Measure it on the first real runs, then decide.
 - Report addresses: `<site>/<id>/`, ending in the id with its version as the OSF's address does.
 - Landing page: a running tally of preprints listed on PsyArXiv, preprints checked, and the date of the last update. Still open: whether to count PDFs (this needs one more request per preprint to read its file type).
-- The intro text and any other page wording are written by Daniel. Nothing is written for them.
+- The intro text and any other page wording are written by Daniel, or on his request. The title is his ("Metacheck reports for PsyArXiv preprints"). The intro (7 November 2026, on his request) starts with the sentences of the SURF site's landing page, adds the warning from the server's PsyArXiv reports page, and links to Metacheck's GitHub page and issues page, the manual, and the SURF server, and thanks SURF.
 
 ## The SURF server
 
@@ -79,7 +79,6 @@ Not done yet:
 
 - Measure the size of the reproducibility check's full output on the first runs, then decide whether to shorten it.
 - The tally's number of preprints is the OSF's count, which counts every version of a preprint once (66,252 on 7 November 2026). The OSF cannot list only the newest versions, so counting preprints instead of versions would need about 660 more requests per run.
-- Page title and intro text (written by Daniel).
 - Does the old PsyArXiv site give the Word file itself for Word preprints? (The new site gave a PDF version for one Word preprint, `zak2b_v2`. The old site's file is the Word file, `d-ELP Final Clean.docx`.)
 
 ## Keys
