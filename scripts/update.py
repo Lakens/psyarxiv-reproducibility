@@ -108,7 +108,7 @@ def load(path, default):
 
 def save(path, obj):
     tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:   # the same on Windows
         json.dump(obj, f, ensure_ascii=False, indent=1)
         f.write("\n")
     os.replace(tmp, path)
