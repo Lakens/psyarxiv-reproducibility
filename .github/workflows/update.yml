@@ -42,7 +42,9 @@ jobs:
           git add -A -- '*_v*/index.html'
           if git diff --cached --quiet; then echo "No changes."; exit 0; fi
           git commit -m "Update the reports"
-          git pull --rebase origin main
+          # --autostash: a file the run changed but did not commit is set aside
+          # during the pull, so the pull cannot fail on it
+          git pull --rebase --autostash origin main
           git push origin HEAD:main
 
   publish:
