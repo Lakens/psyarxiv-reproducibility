@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Bi-Factor Generalized Cognitive Diagnosis Model
+Framework</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Bi-Factor Generalized Cognitive Diagnosis Model Framework
+</p>
+<p class="meta">
+2026-11-07 · Metacheck 0.4.3.8
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>4</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>2</b><span>to
+improve</span></a><span class="count decide zero"><b>0</b><span>to
+decide by hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>10</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(4)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Exact
+P-Values</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 1 imprecise <em>p</em> value out of 1 detected <em>p</em>
+value.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Reporting <em>p</em> values imprecisely (e.g., <em>p</em> &lt; .05)
+reduces transparency, reproducibility, and re-use (e.g., in <em>p</em>
+value meta-analyses). Best practice is to report exact p-values with
+three decimal places (e.g., <em>p</em> = .032) unless <em>p</em> values
+are smaller than 0.001, in which case you can use <em>p</em> &lt;
+.001.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+P-Value
+</th>
+<th style="text-align:left;">
+Text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p &lt; .05
+</td>
+<td style="text-align:left;">
+The bootstrap comparisons indicated that 𝑅² was significantly higher for
+the BF-CDM than for the 2PL and the LCDM across all external criteria (p
+&lt; .05).
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>The APA manual states: Report exact <em>p</em> values (e.g.,
+<em>p</em> = .031) to two or three decimal places. However, report
+<em>p</em> values less than .001 as <em>p</em> &lt; .001. However, 2
+decimals is too imprecise for many use-cases (e.g., a <em>p</em> value
+meta-analysis), so report <em>p</em> values with three digits.</p>
+<p>American Psychological Association (2020). <em>Publication manual of
+the American Psychological Association</em>, 7 edition. American
+Psychological Association.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">codebook_check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>This module failed to run: Running the module ‘codebook_check’
+produced errors: Running the module ‘data_check’ produced errors: Can’t
+convert <code>x</code> <haven_labelled> to <character>.</p>
+</div>
+</div>
+</div>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">data_check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>This module failed to run: Running the module ‘data_check’ produced
+errors: Can’t convert <code>x</code> <haven_labelled> to
+<character>.</p>
+</div>
+</div>
+</div>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">reproducibility_check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>This module failed to run: Running the module ‘reproducibility_check’
+produced errors: Running the module ‘data_check’ produced errors: Can’t
+convert <code>x</code> <haven_labelled> to <character>.</p>
+</div>
+</div>
+</div>
+<h2 id="improve">To improve <span class="n">(2)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To improve</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We could not check 1 repository: <a href="https://osf.io/2jcdm" class="uri">https://osf.io/2jcdm</a> (private).</li>
+<li>We found 17 files in 3 repositories.</li>
+<li>We found 0 README files and 2 repositories without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories-that-could-not-be-checked">Repositories that could
+not be checked</h4>
+<p>These repositories are linked in the paper, but their contents could
+not be retrieved, so nothing below describes them. When the reason is
+that the platform did not answer, running the check again later may
+work.</p>
+<ul>
+<li><a href="https://osf.io/2jcdm" class="uri">https://osf.io/2jcdm</a>:
+private</li>
+</ul>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:left;">
+Error
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/ygh7p" target="_blank">osf.io/ygh7p</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm" target="_blank">osf.io/2jcdm</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+private
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="files">Files</h4>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Size
+</th>
+<th style="text-align:left;">
+Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/ygh7p" class="uri">https://osf.io/ygh7p</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/utkna/" target="_blank">gdina.R2.R</a>
+</td>
+<td style="text-align:left;">
+4.1 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/ygh7p" class="uri">https://osf.io/ygh7p</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/2pn6r/" target="_blank">mirt.R2.R</a>
+</td>
+<td style="text-align:left;">
+5.5 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/ygh7p" class="uri">https://osf.io/ygh7p</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/rbvyq/" target="_blank">ctt.R2.R</a>
+</td>
+<td style="text-align:left;">
+2.4 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/ygh7p" class="uri">https://osf.io/ygh7p</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/wa9tu/" target="_blank">CTT_guide.pdf</a>
+</td>
+<td style="text-align:left;">
+484.7 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/ygh7p" class="uri">https://osf.io/ygh7p</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/mv2nf/" target="_blank">CDM_guide.pdf</a>
+</td>
+<td style="text-align:left;">
+188.3 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/ygh7p" class="uri">https://osf.io/ygh7p</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/f4u29/" target="_blank">IRT_guide.pdf</a>
+</td>
+<td style="text-align:left;">
+477.2 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6ac7bdfe2843344d90942ea4/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">BFCDM.R</a>
+</td>
+<td style="text-align:left;">
+11.7 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6ac7be332ba9c9449b265c83/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">itemplotBFCDM.R</a>
+</td>
+<td style="text-align:left;">
+2.7 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/gxtks/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">simBFCDM.R</a>
+</td>
+<td style="text-align:left;">
+2.2 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acb55896e7e34ad47c5b20c/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">res.csv</a>
+</td>
+<td style="text-align:left;">
+687.6 kB
+</td>
+<td style="text-align:left;">
+data
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acd089780c76afeef987504/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">analysis.R</a>
+</td>
+<td style="text-align:left;">
+11.8 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/5qske/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">simulation_codes.R</a>
+</td>
+<td style="text-align:left;">
+14.1 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acb555bb1f0badf6bdcb6ed/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">PISA_UK_data.rds</a>
+</td>
+<td style="text-align:left;">
+24.8 kB
+</td>
+<td style="text-align:left;">
+data
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acb555cc524e4dcdedcb6ed/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">PISA_UK_Q.rds</a>
+</td>
+<td style="text-align:left;">
+367 B
+</td>
+<td style="text-align:left;">
+data
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acb555c3e54a4cb26679a1d/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">PISA_UK_analysis.R</a>
+</td>
+<td style="text-align:left;">
+7.8 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acb555c693526b007dcb902/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">PISA_UK_stdata.rds</a>
+</td>
+<td style="text-align:left;">
+642.5 kB
+</td>
+<td style="text-align:left;">
+data
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acb5562693526b007dcb904/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">PISA_UK_res.Rdata</a>
+</td>
+<td style="text-align:left;">
+33.6 MB
+</td>
+<td style="text-align:left;">
+data
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="readme-files">README Files</h4>
+<p>README files are a way to document the contents and structure of a
+folder, helping users locate the information they need. You can use a
+README to document changes to a repository, and explain how files are
+named. Please consider adding a README to each repository or including
+‘README’ in the name of your overview document.</p>
+<h4 id="file-classification">File Classification</h4>
+<div class="callout-note" title="See how every file was classified and grouped" collapse="true">
+<p><strong>code</strong> (9 files)</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+gdina.R2.R
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Functions/gdina.R2.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mirt.R2.R
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Functions/mirt.R2.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ctt.R2.R
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Functions/ctt.R2.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BFCDM.R
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+BFCDM.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+itemplotBFCDM.R
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+itemplotBFCDM.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+simBFCDM.R
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+simBFCDM.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+analysis.R
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Simulation Study/analysis.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+simulation_codes.R
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Simulation Study/simulation_codes.R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PISA_UK_analysis.R
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Real Data Study/PISA_UK_analysis.R
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>data</strong> (5 files)</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+res.csv
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Simulation Study/res.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PISA_UK_data.rds
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Real Data Study/PISA_UK_data.rds
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PISA_UK_Q.rds
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Real Data Study/PISA_UK_Q.rds
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PISA_UK_stdata.rds
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Real Data Study/PISA_UK_stdata.rds
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PISA_UK_res.Rdata
+</td>
+<td style="text-align:left;">
+ex2
+</td>
+<td style="text-align:left;">
+Real Data Study/PISA_UK_res.Rdata
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>documentation</strong> (3 files)</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CTT_guide.pdf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Illustrations/CTT_guide.pdf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CDM_guide.pdf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Illustrations/CDM_guide.pdf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IRT_guide.pdf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Illustrations/IRT_guide.pdf
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</details>
+</div>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To improve</span> <span class="check-title">Code Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We found 9 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</li>
+<li>All your code files had comments.</li>
+<li>All libraries/imports were loaded in one block.</li>
+<li>No pinned R/package environment (renv.lock, sessionInfo(), or
+groundhog/checkpoint) was found. Consider adding a solution to improve
+computational reproducibility.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Below, we describe some best coding practices and give the results of
+automatic evaluation of these practices in the code files below. This
+check may miss things or produce false positives if your scripts are
+less typical.</p>
+<div style="max-height:15em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File Name
+</th>
+<th style="text-align:left;">
+% Comments
+</th>
+<th style="text-align:right;">
+Missing Files
+</th>
+<th style="text-align:right;">
+Absolute Paths
+</th>
+<th style="text-align:right;">
+Code Between Libraries
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/utkna/" target="_blank">gdina.R2.R</a>
+</td>
+<td style="text-align:left;">
+22%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/2pn6r/" target="_blank">mirt.R2.R</a>
+</td>
+<td style="text-align:left;">
+17%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/rbvyq/" target="_blank">ctt.R2.R</a>
+</td>
+<td style="text-align:left;">
+35%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6ac7bdfe2843344d90942ea4/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">BFCDM.R</a>
+</td>
+<td style="text-align:left;">
+21%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6ac7be332ba9c9449b265c83/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">itemplotBFCDM.R</a>
+</td>
+<td style="text-align:left;">
+14%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/gxtks/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">simBFCDM.R</a>
+</td>
+<td style="text-align:left;">
+26%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acd089780c76afeef987504/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">analysis.R</a>
+</td>
+<td style="text-align:left;">
+11%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/5qske/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">simulation_codes.R</a>
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/6acb555c3e54a4cb26679a1d/?view_only=0fd9b15045e1420292c79d0d6333fdb5" target="_blank">PISA_UK_analysis.R</a>
+</td>
+<td style="text-align:left;">
+23%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="code-comments">Code Comments</h4>
+<p>Best programming practice is to add comments to code, to explain what
+the code does (to yourself in the future, or peers who want to re-use
+your code). All your code files had comments.</p>
+<h4 id="missing-files">Missing Files</h4>
+<p>All files loaded in the code were present in the repository.</p>
+<h4 id="absolute-paths">Absolute Paths</h4>
+<p>Best programming practice is to use relative file paths (e.g.,
+‘./files’) instead of absolute file paths (e.g.,
+‘C://Lakens/project_dir/files’) as these folder names do not exist on
+other computers. No absolute file paths were found in any of the code
+files.</p>
+<h4 id="working-directory-setwd">Working Directory (setwd)</h4>
+<p>Best programming practice is to avoid <code>setwd()</code> in
+analysis code: it hardcodes an assumption about the working directory
+(often an absolute path on the author’s own machine), so the code breaks
+when run anywhere else. Keep the working directory as the caller sets it
+and use relative paths. No <code>setwd()</code> calls were found in any
+of the code files.</p>
+<h4 id="package-installation-install.packages">Package Installation
+(install.packages)</h4>
+<p>Best programming practice is to avoid <code>install.packages()</code>
+in analysis code: it installs software on whoever runs the script
+without asking, which is at minimum disruptive (an unexpected install,
+network access, a package version the author never tested against) and
+at worst a security risk if it points at an untrusted repository.
+Document required packages instead (a README, or a list of them: an
+<code>renv.lock</code>/<code>DESCRIPTION</code> for R, a
+<code>requirements.txt</code> for Python). No
+<code>install.packages()</code> calls were found in any of the code
+files.</p>
+<h4 id="libraries-imports">Libraries / Imports</h4>
+<p>Best programming practice is to load all required libraries/imports
+in one block near the top of the code. In all code files,
+libraries/imports were loaded in one block.</p>
+<h4 id="packages-dependencies">Packages / Dependencies</h4>
+<p>The code files load 11 distinct packages/libraries: afex, doSNOW,
+effectsize, foreach, GDINA, ggplot2, mirt, mvtnorm, numDeriv, parallel,
+utils. These are the names found in the source (no version information
+is available from static analysis).</p>
+<h4 id="reproducible-environment">Reproducible Environment</h4>
+<p>No <code>renv.lock</code> file,
+<code>sessionInfo()</code>/<code>session_info()</code> record, or
+<code>groundhog</code>/<code>checkpoint</code> date-pin call was found
+anywhere in the repository. Without one of these, the exact R and
+package versions used for the analysis are not recoverable, and package
+versions may drift between when this analysis was run and any later
+reproduction attempt. Consider depositing an <code>renv.lock</code> (via
+the <code>renv</code> package), a <code>sessionInfo()</code> text dump,
+or a <code>groundhog</code>/<code>checkpoint</code> date-pin alongside
+the code.</p>
+<h4 id="parsable-code">Parsable code</h4>
+<p>All R-type code files (.R, .Rmd, .qmd) could be read in. There were
+no parsing issues.</p>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(10)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>We found 7 OSF links, but no accessible registrations. 3 registration
+links could not be accessed (private, embargoed, or withdrawn).</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="files">Files in the repository</h2>
+<p>Where the files sit within each repository. Each file is followed by
+how it was classified, which study it belongs to; junk files, hidden
+files and empty folders are marked.</p>
+<p><strong>Repository: <a href="https://osf.io/ygh7p" class="uri">https://osf.io/ygh7p</a></strong></p>
+<div style="max-height: 40em; overflow: auto;">
+<pre><code>├── Functions/
+│   ├── ctt.R2.R       💻 code          ex1
+│   ├── gdina.R2.R     💻 code          ex1
+│   └── mirt.R2.R      💻 code          ex1
+└── Illustrations/
+    ├── CDM_guide.pdf  📖 documentation ex1
+    ├── CTT_guide.pdf  📖 documentation ex1
+    └── IRT_guide.pdf  📖 documentation ex1</code></pre>
+</div>
+<p><strong>Repository: <a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a></strong></p>
+<div style="max-height: 40em; overflow: auto;">
+<pre><code>├── Real Data Study/
+│   ├── PISA_UK_analysis.R  💻 code ex2
+│   ├── PISA_UK_data.rds    📊 data ex2
+│   ├── PISA_UK_Q.rds       📊 data ex2
+│   ├── PISA_UK_res.Rdata   📊 data ex2
+│   └── PISA_UK_stdata.rds  📊 data ex2
+├── Simulation Study/
+│   ├── analysis.R          💻 code ex2
+│   ├── res.csv             📊 data ex2
+│   └── simulation_codes.R  💻 code ex2
+├── BFCDM.R                 💻 code ex2
+├── itemplotBFCDM.R         💻 code ex2
+└── simBFCDM.R              💻 code ex2</code></pre>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+Preregistration Check
+</summary>
+<div class="fold">
+<p>The following registration links could not be accessed and may be
+private, embargoed, or withdrawn: <a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>,
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>,
+<a href="https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5" class="uri">https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 35 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 35 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 35 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
+not succeed at excluding all false positives.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How codebook_check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How data_check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How reproducibility_check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Cognitive diagnosis models (CDMs) are often applied to constructs that are largely unidimensional in nature (e.g., mathematics, reading, mental health status) where a set of discrete attributes coexists with a dominant general proficiency dimension. This article presents the bi-factor CDM model (BF-CDM), which partitions item responses into a direct effect of continuous general proficiency and a discrete attribute-mastery tier, allowing mastery classifications to be made beyond what is attributable to general ability. By modeling both tiers explicitly, the BF-CDM makes it possible to evaluate the contribution of the discrete tier itself. Specifically, it can show whether the hypothesized attributes carry diagnostic information beyond general proficiency, both through model comparison with the nested unidimensional model and through the reliability of the attribute-specific component. A simulation study manipulating sample size, test length, number of attributes, and attribute-tier discrimination shows accurate recovery of item and person parameters, and of the modelimplied response functions. An application to reading comprehension data from PISA illustrates the practical value of the model: reliability of attribute-mastery classifications drops substantially once variance attributable to general proficiency is partialled out, indicating that much of the apparent diagnostic precision obtained under a saturated attribute structure reflects a single dominant general factor.</p>
+<h3>Introduction</h3>
+<p>In educational and psychological measurement, practical assessment increasingly demands the diagnosis of narrow, actionable attributes nested within broader proficiency domains. For instance, one may aim at identifying whether a student masters finding common denominators or simplifying fractions within the broader domain of fraction subtraction ability (Tatsuoka, 1984). Cognitive diagnosis models (CDMs) were developed precisely for providing fine-grained, criterion-referenced profiles of attribute mastery rather than a single continuous ability estimate (e.g., de la Torre &amp; Minchen, 2014). However, most CDMs accommodate the influence of overall proficiency only indirectly. In higher-order CDMs, a higher-order continuous ability influences attribute mastery, which in turn determines item responses (de la Torre &amp; Douglas, 2004). In CDMs with a saturated attribute structure, dependence among attributes is instead represented directly through their joint latent-class distribution, without defining a higher-order ability (e.g., de la Torre, 2011; Henson et al., 2009; Junker &amp; Sijtsma, 2001). In neither formulation is a separate general proficiency dimension included directly in the item response function.</p>
+<p>The main consequence of this modeling decision is that attribute mastery cannot be cleanly distinguished from general proficiency. Because the model only specifies the influence of narrow attributes on item responses, any variance attributable to general proficiency is projected onto the attributes themselves. The estimated mastery of an attribute therefore reflects a mixture of attribute-specific mastery and the proficiency level shared across the entire set of items. The extreme case is strictly unidimensional data, in which attributes have no true influence on responses. Fitting a CDM to such data will still yield diagnostic profiles, and these profiles may show substantial reliability even when little attribute-specific variation is present, because part of their apparent precision can be driven by true variance in the unmodeled general proficiency dimension (e.g., see Liu et al., 2018, for an application of CDMs to essentially unidimensional data). This projection of general ability into attributes has theoretical and practical consequences. At the theoretical level, a researcher may specify diagnostic categories on conceptual grounds that instead largely recover ordinal levels of a single underlying ability, rather than genuinely distinct competencies. In this scenario, the estimated attributes may be highly intercorrelated (e.g., see Sessoms &amp; Henson, 2018), with mastery profiles concentrated at the extremes (complete nonmastery or complete mastery), and little ability to distinguish which specific attributes are mastered among respondents sharing the same total number of mastered attributes. In effect, the number of attributes mastered may become a function of the ordinal ranking of respondents on general ability. At the practical level, this invites interpretation errors: a student may be directed to remediate a specific competency when the classification actually reflects overall proficiency. Furthermore, the reliability of a mastery classification mixes attribute-specific information with shared variance from general proficiency, so an attribute may appear to be classified with high precision when that precision mostly reflects how well general ability alone predicts the response pattern. Finally, at the statistical level, fitting an overparameterized model can reduce estimation efficiency, increase capitalization on chance, and limit classification accuracy (Ma et al., 2016).</p>
+<p>These issues point to two unmet needs. First, practitioners need attribute classifications whose meaning is not confounded with overall proficiency. Second, researchers need a way to evaluate whether a hypothesized attribute structure carries diagnostic information beyond a single general dimension.</p>
+<p>A way to reconcile general ability and discrete attribute mastery is a two-tier (bi-factor) structure, in which a continuous general proficiency dimension and a set of discrete attributes act as parallel, simultaneously operating tiers rather than a hierarchy of dependence. In the bifactor CDM, the general dimension has a direct and independent effect on the item response probability. This differs from the models above in that it requires no latent-class membership to define alternative response processes. Instead, it provides a general measurement framework in which general ability and attribute-specific mastery are distinct and concurrent influences on item responses. Figure 1 presents schematic illustrations of the saturated attribute distribution (Panel A), higher-order (Panel B), and bi-factor (Panel C) CDM structures, for a test of 10 items (rectangles) and 3 discrete attributes (represented as circular nodes bisected by a line). In the saturated and higher-order structures, attributes are labeled A1 * , A2 * , and A3 * , since their definition reflects a mixture of general and specific ability. In the bi-factor model, by contrast, attributes are defined as pure, attribute-specific dimensions, and are labeled without the asterisk.</p>
+<p>A. Saturated attribute structure CDM. B. Higher-order CDM. C. Bi-factor CDM. structures.</p>
+<p>Because the bi-factor structure partitions the variance in item responses into generalability and attribute-specific components, a discrete diagnosis acquires a clearer meaning: mastery beyond what would be expected from general ability. Consider two students with identical overall proportional reasoning proficiency (e.g., see Ma et al., 2020). A bi-factor CDM can reveal that one has mastered constructing ratios and proportions beyond what general ability predicts, whereas the other&#x27;s apparent mastery under a saturated or higher-order structure may be entirely accounted for by high general proficiency. Such distinctions are directly relevant to instructional decisions (e.g., whether remediation should target a specific skill or reflects a broader ability deficit) in a way that standard CDMs, which confound the two sources of variance, cannot support.</p>
+<p>Beyond scoring, the bi-factor structure serves as a diagnostic check on the attribute tier itself. Under saturated or higher-order structures, attribute reliability can be high simply because attributes absorb variance from a general ability that is precisely estimated from the full item set, so such reliability is not evidence that the attributes are distinct. Under a bi-factor CDM, general proficiency is modeled explicitly, and the reliability of the attribute-specific component reflects only how precisely mastery can be classified beyond what general ability explains. High attribute-specific reliability therefore supports the separability of the diagnoses. Low reliability indicates that the classifications carry little reliably recoverable information beyond general proficiency. Because low reliability may also stem from few items per attribute or weak item discrimination for the attribute tier, it is best read as a signal to examine the attribute structure and test design, and high reliability as necessary, but not sufficient, evidence of separability.</p>
+<p>The idea of combining continuous and discrete latent variables is not new, but existing models differ in what the discrete variables represent and in how the two types of variables enter the item response function. In Yamamoto&#x27;s (1989) HYBRID model, latent-class membership separates respondents whose responses follow an IRT model from those whose responses have fixed, class-specific probabilities. Similarly, mixture IRT models (Mislevy &amp; Verhelst, 1990) use latent classes to define distinct response strategies, each with its own item response function. Hong et al. (2015) proposed a model whose item response function is the product of a noncompensatory IRT term and a conjunctive CDM term, so that the continuous and discrete variables act conjunctively. The closest antecedent of the bi-factor structure in CDMs is the scaling individuals and classifying misconceptions (SICM) model (Bradshaw &amp; Templin, 2014). The SICM is a nominal-response model for multiple-choice items in which a continuous ability and binary misconceptions jointly predict option selection, with ability assumed independent of the misconceptions, as in the bi-factor model (Gibbons &amp; Hedeker, 1992). Its discrete variables are misconceptions, whose presence lowers the probability of selecting the correct option; they may correlate with one another; and the model is estimated by MCMC. However, the aforementioned models were designed for specific response processes (different strategies, misconceptions). No general framework has yet added a bifactor structure to standard CDMs in a way that leaves the attribute structure intact and only redefines the attributes as mastery beyond general proficiency. This article introduces the bi-factor CDM (BF-CDM), a bi-factor extension of generalized CDMs in which a continuous general proficiency dimension is modeled alongside discrete attribute mastery profiles, with attributes reflecting specific competences shared by subsets of items as defined in the Q-matrix (Tatsuoka, 1983). The BF-CDM is grounded in the log-linear CDM (LCDM; Henson et al., 2009) and reduces to nested conjunctive (e.g., deterministic input noisy AND gate, DINA; Junker &amp; Sijtsma, 2001), disjunctive (e.g., deterministic input noisy OR gate, DINO; Templin &amp; Henson, 2006) or additive (e.g., linear logistic model, LLM; Maris, 1999) special cases through constraints on the discrete-tier parameters. Like the SICM, the BF-CDM combines a continuous and a discrete tier in the item response function. Unlike the SICM, which relies on a different (nominal responsebased) parameterization, the BF-CDM is a direct extension of the LCDM. It is therefore closely tied to the family of LCDM-based CDMs and can benefit from the methodological developments built around them with little or no adaptation, whereas such developments would require adaptation for the SICM. The BF-CDM targets the common CDM setting of dichotomously scored responses and skill-mastery attributes (de la Torre &amp; Minchen, 2014; Sessoms &amp; Henson, 2018). In this setting, the BF-CDM makes it possible to evaluate skill mastery after partialling out general proficiency and provides a framework for evaluating the incremental diagnostic value of the attribute tier by assessing the reliability of the attributespecific component.</p>
+<p>In this article, the feasibility of the BF-CDM is evaluated through a simulation study of parameter and item response function recovery. Its practical relevance is then illustrated in a real-data application that compares the reliability of mastery and proficiency scores under unidimensional IRT, a saturated attribute structure CDM, and the BF-CDM, and discusses the implications for score interpretation and for evaluating the utility of the attribute tier.</p>
+<h3>2. Saturated Cognitive Diagnosis Models</h3>
+<p>It is first important to distinguish a saturated measurement model from a saturated attribute structure. Saturated measurement models in CDMs allow a distinct response probability to be estimated for every latent group defined by an item, and often also allow the population latent class distribution to be estimated freely as a full multinomial (a saturated attribute structure, which in practice permits intercorrelation among attributes). Examples of such models include the abovementioned LCDM (Henson et al., 2009), the generalized DINA model (de la Torre, 2011), and the general diagnostic model (GDM; von Davier, 2008).</p>
+<p>Within CDMs with saturated measurement models, the LCDM is among the most widely used, serving as a general model from which many reduced-form CDMs can be obtained as special cases by constraining subsets of its parameters (see Henson et al., 2009).</p>
+<p>The LCDM is formulated under logit link function as in Equation 1: logit[𝑃(𝑥 𝑗 = 1|𝛂 𝑙𝑗 * )] = 𝜂 𝑗 (𝛂 𝑙𝑗 * ) = 𝜆 𝑗0 + ∑ 𝜆 𝑗𝑘 𝛼 𝑙𝑘 𝐾 𝑗 * 𝑘=1 + ∑ ∑ 𝜆 𝑗𝑘𝑘 ′ 𝛼 𝑙𝑘 𝛼 𝑙𝑘 ′ 𝐾 𝑗 * -1 𝑘=1 𝐾 𝑗 * 𝑘 ′ =𝑘+1 … + 𝜆 𝑗12…𝐾 𝑗 * ∏ 𝛼 𝑙𝑘 𝐾 𝑗 * 𝑘=1 , (1) where 𝛂 𝑙𝑗 * denotes the reduced attribute profile l with relevant attributes to solve item j (i.e., with Q-matrix entries of 1 for the item) and 𝐾 𝑗 * reflects the number of attributes required to solve item j. In addition, 𝛌 𝑗 represents the j th item parameter vector with dimensions 2 𝐾 𝑗 * × 1, where 𝜆 𝑗0 denotes the logit of the baseline success probability, 𝜆 𝑗𝑘 is the main effect due to 𝛼 𝑙𝑘 ; 𝜆 𝑗𝑘𝑘 ′ the interaction effect due to 𝛼 𝑙𝑘 and 𝛼 𝑙𝑘 ′ , and 𝜆 𝑗12…𝐾 𝑗 * the interaction effect due to 𝛼 𝑙1 , … , 𝛼 𝑙𝑘 ′ . Finally, 𝜂 𝑗 (𝛂 𝑙𝑗 * ) denotes the logistic predictor for latent group 𝛂 𝑙𝑗 * , and the corresponding response probability is recovered as in Equation 2: 𝑃(𝑥 𝑗 = 1|𝛂 𝑙𝑗 * ) = 1 1 + exp[-𝜂 𝑗 (𝛂 𝑙𝑗 * )] . (2) The LCDM can equivalently be written in matrix form for all latent classes at once as 𝛈 𝑗 = 𝐃 𝑗 𝛌 𝑗 , where 𝛈 𝑗 = {𝜂 𝑗 (𝛂 1 ), … , 𝜂 𝑗 (𝛂 𝐿 )} ′ is the 𝐿 × 1 vector of logit predictors (one per latent class 𝛂 𝑙 ), 𝛌 𝑗 is the 𝐿 𝑗 * × 1 vector of item parameters of the reduced model in Equation 1, and 𝐃 𝑗 is an 𝐿 × 𝐿 𝑗 * binary design matrix. Each column of 𝐃 𝑗 corresponds to one item parameter of the reduced model (i.e., the baseline, the main effects of the required attributes, and their interactions), whereas each row corresponds to one of the 𝐿 latent classes. The 𝑙 th row of 𝐃 𝑗 , denoted 𝐝 𝑗𝑙 ′ , indicates which of these effects are activated in the model (e.g., LCDM) by the reduced profile 𝛂 𝑙𝑗 * of class 𝑙, so that 𝜂 𝑗 (𝛂 𝑙 ) = 𝐝 𝑗𝑙 ′ 𝛌 𝑗 . Consequently, classes that share the same pattern on the attributes required by item 𝑗 have identical rows in 𝐃 𝑗 and thus the same logit. Consider, for instance, an item with q-vector 𝐪 𝑗 = {1, 0, 1}. With 𝐾 = 3 attributes, there are 𝐿 = 2 𝐾 = 8 latent classes in the test, but only 𝐿 𝑗 * = 2 𝐾 𝑗 * = 4 distinct latent groups are relevant to item 𝑗, where 𝐾 𝑗 * = ∑ 𝑞 𝑗𝑘 𝑘 = 2 is the number of required attributes.</p>
+<p>Let 𝐀 be the matrix of latent classes, with one row per class. Under a saturated CDM, the design matrix 𝐃 𝑗 contains the intercept, the main effects of the required attributes, and their interaction: , and</p>
+<p>The columns of 𝐃 𝑗 correspond to the intercept, the main effect of attribute 1, the main effect of attribute 3, and the interaction between attributes 1 and 3. For example, latent class 𝛂 𝑙 = {0,0,0} involves only the intercept, whereas classes 𝛂 𝑙 = {1,0,1} and 𝛂 𝑙 = {1,1,1} also involve the main effects of attributes 1 and 3 and their interaction. Because attribute 2 is not required by the item, classes that differ only in that attribute yield identical rows in 𝐃 𝑗 . Lastly, the matrix product 𝐃 𝑗 𝛌 𝑗 then yields the full 𝐿 × 1 vector of logits for all latent classes at once.</p>
+<p>Finally, the GDM (von Davier, 2008) extends the LCDM to accommodate polytomous responses, such as partial-credit data, although is not within the scope of this article.</p>
+<h3>3. The Bi-Factor CDM</h3>
+<p>The extension of the LCDM to the bi-factor structure consists of the model in Equation 3: logit[𝑃(𝑥 𝑗 = 1|𝜃, 𝛂 𝑙𝑗 * )] = 𝜂 𝑗 (𝜃, 𝛂 𝑙𝑗 * ) = 𝛾 𝑗𝐺 𝜃 + 𝜆 𝑗0 + ∑ 𝜆 𝑗𝑘 𝛼 𝑙𝑘 𝐾 𝑗 * 𝑘=1 + ∑ ∑ 𝜆 𝑗𝑘𝑘 ′ 𝛼 𝑙𝑘 𝛼 𝑙𝑘 ′ 𝐾 𝑗 * -1 𝑘=1 𝐾 𝑗 * 𝑘 ′ =𝑘+1 … + 𝜆 𝑗12…𝐾 𝑗 * ∏ 𝛼 𝑙𝑘 𝐾 𝑗 * 𝑘=1 , (3) where 𝜂 𝑗 (𝜃, 𝛂 𝑙𝑗 * ) denotes the logistic predictor accounting for both continuous and discrete tiers, being 𝛾 𝑗𝐺 the (discrimination) effect of the general proficiency 𝜃 on the item responses.</p>
+<p>Correct response probability is obtained from the logistic predictor analogous to Equation 2. Additionally, taking design matrix 𝐃 𝑗 , 𝐃 𝑗 𝛌 𝑗 yields the complete 𝐿 × 1 vector of latent-classspecific intercepts, corresponding to the value of the linear predictor when 𝜃 = 0. From an IRT perspective, the scaled quantities -𝐃 𝑗 𝛌 𝑗 𝛾 𝑗𝐺 ⁄ (let denote it as 𝐛 𝑗 ) can be interpreted as latent-class-specific difficulty parameters on the IRT metric. Specifically, for each latent class, these values correspond to the level of general proficiency 𝜃 at which the probability of a correct response equals .50.</p>
+<p>To ensure that the two tiers of the model are identified and can be interpreted as distinct, non-confounded sources of variation, we impose two structural independence assumptions on the joint population distribution of (𝜃, 𝛂 𝑙 ). The general proficiency 𝜃 is assumed independent of every attribute profile 𝛂 𝑙 in the population: where 𝜙(𝜃) denotes the density of 𝜃 (i.e., 𝜃 ∼ 𝑁(0,1), with mean and variance fixed for scale identification), and 𝜋 𝑙 = 𝑃(𝛂 = 𝛂 𝑙 ) is the population probability of attribute profile 𝑙.</p>
+<p>This restriction is the discrete-tier analogue of the orthogonality between general and specific factors in the continuous bi-factor IRT model (Gibbons &amp; Hedeker, 1992): it guarantees that 𝛾 𝑗𝐺 captures response variance that is not already explained by the attribute profile, and conversely that the attribute main effects 𝜆 𝑗𝑘 do not simply proxy for 𝜃. Without Equation 4, the model would only be partially identified, since any association between 𝜃 and 𝛼 could be arbitrarily reallocated between 𝛾 𝑗𝐺 and the attribute-specific parameters without any change in fit. The remaining identification conditions will be addressed in the Estimation section.</p>
+<p>Beyond the general dimension, mastery of the 𝐾 attributes is mutually independent in the population: where 𝑝 𝑘 = 𝑃(𝛼 𝑘 = 1) is the marginal population probability of mastering attribute 𝑘.</p>
+<p>This reduces the number of structural parameters governing the attribute distribution from 2 𝐾 -1 (free parameters in the saturated structure with fully correlated-attributes model) to 𝐾 marginal mastery probabilities. The restriction is consistent with the logic of the bi-factor formulation, channeling whatever shared source of association among the complete set of items to 𝜃. Jointly, Equations 4 and 5 imply that any marginal correlation among attributes should be null once 𝜃 is accounted for.</p>
+<p>As can be inferred from Equation 3  two-attribute item with 𝐪 𝑗 = {1, 0, 1}. The left panel displays the full conditional response curves, 𝑃(𝑥 𝑗 = 1|𝜃, 𝛂 𝑙𝑗 * ) as a function of 𝜃, forming a separate curve for each latent group 𝑙 (𝑙: 1, … , 2 𝐾 𝑗 * ); the right panel displays the marginal response probability obtained by integrating out 𝜃, i.e., 𝑃 ̅ 𝑗𝑙• = ∫ 𝑃(𝑥 𝑗 = 1|𝜃, 𝛂 𝑙𝑗 * ) 𝜙(𝜃)𝑑𝜃, as a function of attribute profile alone. As shown in the left panel, each latent group defines a distinct two-parameter logistic curve in 𝜃. That is, group membership shifts the location of the IRT curve rather than its shape. For example, a respondent with a moderate general proficiency (i.e., 𝜃 = 0) has a low probability of correctly responding the item if they do not master any of the specific attributes required by the item, i.e., belonging to class {0,0}. By contrast, a respondent with the same general proficiency but mastering both attributes has a much higher expectancy of correct response. 𝜆 𝑗0 = -2.5, 𝜆 𝑗1 = 1, 𝜆 𝑗3 = 1.5, and 𝜆 𝑗1,3 = 2.5. For this example, 𝐀 and 𝐃 𝑗 are the same as in the example in the Saturated Cognitive Diagnosis Models section. The resulting class-specific difficulty parameters 𝐛 𝑗 = -𝐃 𝑗 𝛌 𝑗 𝛾 𝑗𝐺 take {0,1,0} yield the same difficulty value and therefore the same item response curve. Again, this occurs because the second attribute is not required by the item according to the q-vector for the item.</p>
+<h3>4. Estimation</h3>
+<p>The BF-CDM model may be estimated via marginal maximum likelihood (MML) using the expectation-maximization (EM; Dempster et al., 1977) algorithm, with item parameters updated through standard numerical optimization procedures (e.g., BFGS). The continuous general dimension 𝜃 can be approximated using rectangular quadrature between a feasible range (e.g., -6 to 6). Letting 𝑀 denote the number of quadrature nodes used to approximate the density of 𝜃, and 𝐿 = 2 𝐾 denote the number of discrete attribute classes, the E-step requires evaluating the model-implied response probability over the full cross of continuous and discrete latent space (i.e., 𝑀 × 𝐿 points in total). This grid grows exponentially in the number of attributes (𝐿 = 2 𝐾 ) but only linearly in the quadrature size (𝑀), so the added computational burden from the general dimension relative to standard LCDM estimation is modest, provided 𝑀 is kept moderate (e.g., 31).</p>
+<p>The intercept 𝜆 𝑗0 and the discrimination on the general ability, 𝛾 𝑗𝐺 , are identified by fixing the distribution of the continuous latent trait to a standard normal distribution.</p>
+<p>Identification of the discrete-tier parameters, however, depends on the same conditions required for the LCDM model and is therefore governed by properties of the Q-matrix and test design (Gu &amp; Xu, 2021). In particular, the Q-matrix must be complete, meaning that each attribute is measured by at least one item requiring that attribute alone (Köhn &amp; Chiu, 2017).</p>
+<p>Furthermore, each attribute should be measured by multiple items to permit separation of item and latent-class parameters, and the Q-matrix must satisfy the relevant structural identifiability conditions established for the LCDM family. Under these conditions, the discrete latent classes are distinguishable and the attribute-effect parameters are identifiable. Accordingly, the BF-CDM inherits the identification requirements of the underlying CDM while introducing only the additional scale-setting constraints associated with the continuous general ability.</p>
+<p>Although the BF-CDM model presented here utilizes the LCDM response function for the discrete tier, reduced forms such as bi-factor extensions of DINA and DINO models, or the LLM, among other CDMs defined through the logit-link, can be easily obtained through appropriate constraints on the BF-CDM parameter vector 𝛌 𝑗 as in LCDM (e.g., see Henson et al., 2009). Thus, the BF-CDM should be viewed as a general latent-variable framework within which a broad class of reduced CDMs can be embedded.</p>
+<h3>5. Score Interpretation</h3>
+<p>The latent variable structure of the BF-CDM implies a shift in how mastery status should be interpreted compared to saturated attribute structure or higher-order CDMs. Under a classical CDM, mastery of attribute 𝑘 is an absolute classification, reflecting whether a respondent&#x27;s response pattern provides sufficient evidence, against a fixed standard, that the attribute has been acquired. Under the BF-CDM, by contrast, mastery status is more accurately interpreted as relative to a respondent&#x27;s own general proficiency level. That is, it reflects whether attribute-specific performance exceeds, equals, or falls short of what general proficiency predicts for the respondent.</p>
+<p>As an example, under BF-CDM, for a respondent with low general proficiency, nonmastery of an attribute indicates weakness on that attribute beyond the low performance already implied by their general level. Conversely, a respondent with low general proficiency classified as a master on some attribute exhibits a genuine relative strength, since overcoming a low general baseline requires sufficiently strong attribute-specific knowledge. The same logic holds for high-proficiency respondents: a non-mastery classification for such a respondent reflects a specific deficit that persists despite a strong general baseline.</p>
+<p>From a summative perspective, it may be reasonable to define mastery in absolute terms, against a fixed standard derived from the Q-matrix, even when that classification partly reflects general proficiency. From a formative perspective, nonetheless, it may have great practical value to separate general proficiency from specific attribute mastery. This distinction would allow feedback to address both the respondents&#x27; overall level of proficiency and their specific strengths and weaknesses relative to that level. In other words, it could indicate whether the respondent would benefit from reviewing the test content in general, while directing efforts at particular attributes if necessary.</p>
+<p>Additionally, the reliability of attribute classifications under the BF-CDM offers evidence on the validity of applying CDM framework to the data. In essence, it indicates the extent to which variation in estimated attribute status reflects true variation in mastery rather than estimation error. Under a saturated attribute structure CDM, high reliability of attribute classifications may reflect the true variation of a general proficiency dimension underlying attribute mastery, rather than variation specific to each attribute. Under the BF-CDM, by separating the general and specific tiers, low reliability of attribute classifications, once the general proficiency component has been removed, would suggest that the remaining, attributespecific variation is largely random error rather than meaningful differentiation among examinees. Beyond model fit statistics, accounting for attribute profile reliability provides evidence on the practical utility of the scoring framework, that is, on whether attribute-level scores contain information beyond what is already captured by the general proficiency estimate.</p>
+<p>To define reliability of discrete tiers in the metric commonly used for continuous scores, the empirical reliability of attribute classifications may be computed as the coefficient of determination of observed mastery given true mastery (de la Torre et al., 2026), that is, the proportion of true-score variance captured by the estimated scores. For binary mastery classifications, this coefficient reduces exactly to the squared Yule&#x27;s (1912) 𝜙 coefficient of the attribute cross-classification matrix, which tabulates the expected true mastery status, (𝛂 𝑖 ) 𝑘 , against the estimated one, (𝛂 ̂𝑖) 𝑘 (Wang et al., 2015).</p>
+<p>The expected true status of person i in attribute k is obtained by marginalizing the posterior probabilities of the latent classes to the attribute level as in Equation 6: where 𝒜 𝑘 = {𝑙 ∈ {1, … , 𝐿}: (𝛂 𝑙 ) 𝑘 = 1} denotes the latent classes in which attribute k is mastered.</p>
+<p>The cells of the cross-classification matrix are then the sample proportions</p>
+<h3>6. Simulation Study</h3>
+<p>This simulation study aimed at evaluating the effect of relevant assessment characteristics on the recovery of BF-CDM parameters and item response functions.</p>
+<h3>6.1. Method</h3>
+<p>Four factors were manipulated: sample size (𝑁 = 500, 1000, 2000), number of attributes (𝐾 = 3, 5), test length (𝐽 = 30, 60), and attribute-tier discrimination (manipulating guess and slip parameters) either low, i.e., 𝑃(𝛂 = 𝟎) and (1 -𝑃(𝛂 = 𝟏))~ 𝑈(.15, .25), or high, i.e., 𝑃(𝛂 = 𝟎) and (1 -𝑃(𝛂 = 𝟏)) ~ 𝑈(.05, .15). This resulted in a fully crossed 3 × 2 × 2 × 2 design (24 conditions), each replicated 100 times, for a total of 2,400 simulated datasets.</p>
+<h3>6.1.1. Data Simulation</h3>
+<p>The Q-matrices used for each condition contain items with different complexity (requiring varying numbers of attributes) and are properly identified. The Q-matrices were constructed from the built-in Q-matrices provided in the GDINA package (Ma &amp; de la Torre, 2020): for 𝐾 = 3, the 10-item Q-matrix in sim10GDINA object (with equal structure as the one presented in Figure 1) was vertically stacked three times; for 𝐾 = 5, the 30-item Q-matrix in sim30GDINA object was used directly. To generate the 𝐽 = 60 condition, the resulting Qmatrix was further duplicated (row-stacked) to double the number of items while preserving its attribute structure. For simplicity, the population distribution of attribute profiles was fixed to be uniform across the 2 𝐾 possible classes, 𝜋 𝑙 = 1 2 𝐾 for all 𝑙. The general ability discrimination parameters 𝛾 𝑗𝐺 were generated from a log-normal distribution with a log-scale mean of 0 and a log-scale variance of 0.25 (e.g., as in Wallmark &amp; Wiberg, 2026).</p>
+<p>To manipulate the discriminative strength/item-quality of the discrete CDM tier in a similar fashion to previous studies (e.g., Kreitchmann et al., 2023; Nájera et al., 2023), we first generated an identity-link G-DINA parameter matrix with guessing and slipping parameters according to the simulation condition. The success probabilities of the intermediate latent groups were sampled from a uniform distribution between the guessing parameter and 1 minus the slipping parameter, and were ordered so that monotonicity was respected. This true item parameter matrix was then transformed into logit-link item parameters 𝛌 𝑗 . If integrating out the continuous proficiency, the generated BF-CDMs correspond to standard LCDM simulation conditions.</p>
+<h3>6.1.2. Data Analysis</h3>
+<p>For each of the 2,400 replications, item responses were generated from the BF-CDM (Equation 3) using the simulated 𝛾 𝑗𝐺 , 𝛌 𝑗 , the uniform latent class population probabilities and standard-normally distributed 𝜃. Each simulated dataset was fitted using the proposed MML estimation procedure for the BF-CDM, approximating the density of 𝜃 with 31 rectangular quadrature nodes from -6 to 6, as in mirt for three-dimensional models (Chalmers, 2012), a maximum of 1,000 EM iterations, and a convergence criterion of 10 -4 on the change in the data log-likelihood between iterations.</p>
+<p>Parameters 𝜃 and 𝛂 were estimated through EAP given the full posterior distribution of (𝜃, 𝛼) evaluated over a finite 𝐿 × 𝑀 quadrature grid of attribute classes and 𝜃 nodes. The posterior probability at grid point (𝛂 𝑙 , 𝜃 𝑚 ) is:</p>
+<h3>6.1.3. Evaluation Criteria</h3>
+<p>The study assessed the recovery of item and person parameters, as well as of the response functions themselves.</p>
+<h3>Recovery of item parameters.</h3>
+<p>Recovery was assessed for the general discrimination parameter, 𝛾 𝑗𝐺 , and for the 𝛌 𝑗 parameters of each item&#x27;s latent groups. For both parameters, three statistics were computed: (1) the correlation between estimated and generating values, (2) the mean absolute error (MAE), being the average unsigned difference between estimated and generating values, and (3) the mean error (ME), as the average signed difference between estimated and generating values.</p>
+<h3>Recovery of response functions.</h3>
+<p>Given the model&#x27;s complexity, it is also important to assess how closely the entire estimated item response curves reproduce the true, data-generating curves, since parameter-level bias does not necessarily translate into distortion of modelimplied response probabilities.</p>
+<p>For this purpose, the root-integrated squared error (RISE) was computed between the estimated and true response probabilities for each item, evaluated over the joint population distribution of (𝜃, 𝛼) via quadrature approximation, and further averaged across items. Let 𝑃 ̂(𝑥 𝑗 = 1|𝜃 𝑚 , 𝛂 𝑙𝑗 * ) and 𝑃(𝑥 𝑗 = 1|𝜃 𝑚 , 𝛂 𝑙𝑗 * ) denote the model-implied response probabilities for item 𝑗 at quadrature node 𝜃 𝑚 and attribute class 𝛂 𝑙 , computed from the estimated and true parameters, respectively, following Equation 3. The item-level RISE is defined as: RISE 𝑗 = √∑ ∑ 𝜋 𝑙 𝑤 𝑚 (𝑃 ̂(𝑥 𝑗 = 1|𝜃 𝑚 , 𝛂 𝑙𝑗 * ) -𝑃(𝑥 𝑗 = 1|𝜃 𝑚 , 𝛂 𝑙𝑗 * )) 2 𝑀 𝑚=1 𝐿 𝑙=1 , (9) where 𝜋 𝑙 and 𝑤 𝑚 are the attribute-class population probabilities and quadrature weights corresponding to the true latent variable distributions (i.e., the generating class probabilities for 𝜋 𝑙 and normalized standard normal density weights for 𝑤 𝑚 ). A test-level RISE summary is obtained by averaging across items: RISE = 1 𝐽 ∑ RISE 𝑗 𝐽 𝑗=1 . (10) RISE 𝑗 is interpretable directly on the probability scale: it is the population-averaged root-mean-square discrepancy between the estimated and true response probabilities for item 𝑗, jointly over the distribution of general proficiency and attribute mastery. For example, RISE 𝑗 = 0.02 indicates that, averaged across the joint population of (𝜃, 𝛂), the fitted model&#x27;s predicted response probabilities for item 𝑗 differ from the true, generating probabilities by approximately 2 percentage points in root-mean-square terms. Values near zero indicate that the estimated response surface closely reproduces the true surface across the entire latent space, rather than merely on average or at a single summary point (e.g., the population mean); larger values flag items, or simulation conditions, in which estimation error meaningfully distorts model-implied response probabilities.</p>
+<h3>Person parameter recovery.</h3>
+<p>For person parameters, the squared correlation (equivalent to true reliability), MAE, and ME were computed between EAP estimates of general proficiency and the true generating values. The same statistics were computed for discretized EAP estimates of attribute mastery (where squared Yule&#x27;s 𝜙 between true and estimated mastery status is equivalent to the squared correlation), calculated separately for each attribute and then averaged across attributes.</p>
+<h3>Reliability recovery.</h3>
+<p>For EAP estimates of general proficiency, the standard error, SE(𝜃 ̂|𝐱 𝑖 ), is defined as posterior standard deviation for each respondent 𝑖. Empirical reliability is then defined as in traditional formulation (e.g., Brown, 2018; Chalmers, 2012): where var(𝜃 ̂) denotes the variance of the EAP estimators in the sample.</p>
+<p>In accordance with the Score Interpretation section, the reliability of attribute classification was defined as the proportion of true-score variance captured by the estimated scores in squared Yule&#x27;s 𝜙 metric, using the procedures and code proposed by de la Torre et al.</p>
+<p>(2026), retrieved from https://osf.io/ygh7p.</p>
+<p>The recovery of reliability was evaluated for both continuous and discrete latent variables using the average bias of the reliability estimator. Bias was computed as the difference between the estimated reliability and the true reliability, with the latter defined as the squared correlation between the true and estimated latent scores. For the discrete latent variables, reliability bias was computed separately for each attribute and then averaged across attributes.</p>
+<h3>Result summarization.</h3>
+<p>To summarize results, a fixed-effects ANOVA was conducted for each evaluation criterion and parameter, including all possible interaction effects among the manipulated factors.</p>
+<p>Given the large number of replications, statistical significance of these effects is often uninformative, so partial eta-squared (𝜂 𝑃 2 ) was therefore used to quantify effect sizes. All simulations and analyses were conducted in R, using the GDINA package (Ma &amp; de la Torre, 2020) or the authors&#x27; own functions available at https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5.</p>
+<h3>6.2. Results</h3>
+<p>The BF-CDM converged with less than 1,000 iterations in every condition and replication. The marginal results of item parameter and response curve recovery are summarized in Table 1. Overall, all parameters showed good recovery, with correlations between estimated and generating values ranging from .907 to .987 across conditions. Item response functions were likewise well recovered, with RISE values ranging from .024 to .052 across the manipulated conditions. Partial eta-squared effect sizes for main effects and two-way interactions are presented in Table 2; three-way effect sizes were negligible and are therefore omitted.  .00 .17 .00 .11 .00 .00 .25 Note. Attr. Discr. = Manipulated discrimination of the attribute tier. Three-way interaction effect sizes were negligible, thus were omitted from this table.</p>
+<h3>6.2.1. Recovery of General Ability Discrimination</h3>
+<p>Correlation between estimated and generating values of 𝛾 𝑗𝐺 was uniformly high (.945 to .987) across all conditions and was most affected by sample size (𝜂 𝑃2 = .42). Test length showed a smaller effect (𝜂 𝑃2 = .08), with correlations with a small increment from .962 at 𝐽 = 30 to .974 at 𝐽 = 60. MAE followed the same pattern, decreasing from .166 to .076 across the three 𝑁 levels (𝜂 𝑃2 = .62), and decreasing with test length (𝜂 𝑃2 = .14). Mean error in 𝛾 𝑗𝐺 was low in absolute terms throughout the conditions, although with a moderate decrease as sample size increased (𝜂 𝑃2 = .06).</p>
+<h3>6.2.2. Recovery of Latent Group Position Parameters</h3>
+<p>Correlation between estimated and generating values of 𝛌 𝑗 was also high throughout (.907 to .984), but, unlike 𝛾 𝑗𝐺 , was highly sensible to all four manipulated factors: sample size (𝜂 𝑃2 = .51), attribute discrimination (𝜂 𝑃2 = .37), number of attributes (𝜂 𝑃2 = .33), and test length (𝜂 𝑃2 = .26). MAE showed a similar pattern, with sample size again the strongest factor (𝜂 𝑃2 = .69), followed by number of attributes (𝜂 𝑃2 = .45), test length (𝜂 𝑃2 = .35), and attribute discrimination (𝜂 𝑃2 = .08). Bias in 𝛌 𝑗 was negligible throughout, ranging from .003 to .018.  across replications in whiskers) for the BF-CDM.</p>
+<h3>6.2.3. Recovery of Item Response Curves</h3>
+<p>The average RISE also showed large effect sizes for all four manipulated factors, likely as a reflection of their effect on the recovery of latent group position parameters: sample size (𝜂 𝑃2 = .91), attribute discrimination (𝜂 𝑃2 = .64), test length (𝜂 𝑃2 = .58), and number of attributes (𝜂 𝑃2 = .54). All two-way interactions likewise showed large effect sizes, reflecting particularly poor recovery under the combination of 𝑁 = 500, 𝐽 = 30, 𝐾 = 5, and low attribute-tier discrimination.</p>
+<h3>6.2.4. Recovery of General Ability</h3>
+<p>The marginal results of person parameter recovery are summarized in Table 3, with the corresponding partial eta-squared effect sizes reported in Table 4. Expectedly, the recovery of 𝜃 was largely affected by test length (𝜂 𝑃2 = .83 for squared correlation, . 87 for MAE), improving from 𝑟2 = .720 (MAE = .406) at 𝐽 = 30 to 𝑟2 = .860 (MAE = .279) at 𝐽 = 60; sample size, number of attributes, and attribute discrimination showed comparatively lower effect sizes (all 𝜂 𝑃 2 &lt; .14).  .06 .60 .03 .65 .00 .00 .00 .05 Notes.</p>
+<p>Attr. Discr. = Manipulated discrimination of the attribute tier. Three-way interaction effect sizes were negligible, thus were omitted from this table.</p>
+<h3>6.2.5. Recovery of Mastery Profiles</h3>
+<p>Recovery of 𝛂 was, on average, comparable to 𝜃 in terms of squared correlation but showed very large effect sizes for several factors: attribute discrimination (𝜂 𝑃2 = .96 for squared correlation, 𝜂 𝑃2 = .95 for MAE), test length (𝜂 𝑃2 = .93 and . 92), and number of attributes (𝜂 𝑃2 = .79 and .77). Squared correlations for 𝛂 improved from .673 to .909 as attribute discrimination increased, from .703 to .878 with longer tests, and declined from .838 to .743 as the number of attributes increased from 3 to 5; MAE showed the same pattern in reverse, falling from .093 to .024 with higher attribute discrimination, from .085 to .032 with longer tests, and rising from .044 to .073 with more attributes. As with 𝜃, bias in 𝛂 was negligible across every condition. Several two-way interactions also reached moderate or large effect sizes. Namely, 𝐽 × Attr. Discr. (𝜂 𝑃2 = .60 for correlation, .65 for MAE), 𝐾 × Attr. Discr. (𝜂 𝑃2 = .28, .34 for MAE), 𝐾 × 𝐽 (𝜂 𝑃2 = .21, .26 for MAE) and 𝑁 × Attr. Discr. (𝜂 𝑃2 = .06, .08). between estimates and true mastery status. As can be seen, longer tests can largely compensate for the lower recovery of 𝛂 due to low attribute-tier discrimination and greater number of attributes. Additionally, the improvement in the recovery of 𝛂 with increased test length was even bigger with five attributes compared to three (marginal values of .763 for 𝐽 = 30 and 𝐾 = 3, .913 for 𝐽 = 60 and 𝐾 = 3, .643 for 𝐽 = 30 and 𝐾 = 5, and .844 for 𝐽 = 60 and 𝐾 = 5).</p>
+<h3>6.2.6. Recovery of Reliability Estimates</h3>
+<p>Lastly, as can be seen in Table 3, reliability bias was generally small, and showed distinct patterns of sensitivity across the two tiers. Bias in 𝜃-reliability was most strongly associated with sample size (𝜂 𝑃2 = .38), decreasing from .037 at 𝑁 = 500 to .008 at 𝑁 = 2,000, followed by test length (𝜂 𝑃2 = .21; from .028 at 𝐽 = 30 to .012 at 𝐽 = 60) and the 𝑁 × 𝐽 interaction (𝜂 𝑃2 = .12), indicating that larger samples and longer tests jointly improved the accuracy of estimated 𝜃-reliability. Bias in 𝛂-reliability was largely affected by all manipulated factors, especially by sample size (𝜂 𝑃2 = .57; from .051 at 𝑁 = 500 to .009 at 𝑁 = 2,000) and attribute discrimination (𝜂 𝑃2 = .53; .043 under low vs. .011 under high discrimination conditions). Two-way interactions 𝑁 × Att. Discr. and 𝑁 × 𝐽 (𝜂 𝑃2 = .35 and 𝜂 𝑃2 = .18, respectively) were also observed, indicating that sample size had a greater impact on reliability estimation when attribute discrimination was lower or tests were shorter.</p>
+<p>Overall, reliability bias was consistently low across the design (ranging from .008 to .051), although larger sample sizes and longer tests improved reliability recovery for both 𝜃 and 𝛂. Additionally, attribute discrimination played a larger role in improving 𝛂-reliability recovery.</p>
+<h3>7. Real Data Example</h3>
+<p>This study illustrates the application of the BF-CDM to real assessment data. The BF-CDM results are compared with those obtained from a unidimensional IRT 2PL model and a saturated LCDM in terms of model fit, reliability, and validity with external criteria.</p>
+<h3>7.1. Data Description</h3>
+<p>The empirical analysis uses data from the reading assessment of the Programme for International Student Assessment (PISA) 2000 for the United Kingdom, specifically Booklets 8 and 9, as analyzed in Chen and de la Torre (2014) and Nájera et al. (2021). The dataset contains 2,012 respondents who responded to 26 reading comprehension items. Only fully correct answers were considered as correct responses in the reading comprehension items, whereas partially correct were treated as incorrect, and non-responses were treated as missing at random and handled via full-information maximum likelihood, so that each respondent&#x27;s likelihood contribution was computed only from the items to which they responded. The Qmatrix, proposed by Chen and de la Torre (2014) and empirically validated by Nájera et al. (2021), involved six attributes, namely: 1) locating information, 2) forming a broad general understanding, 3) developing a logical interpretation, 4) evaluating a number-rich text with number sense, 5) evaluating the quality or appropriateness of a text, and 6) related to test speediness. Sample descriptives and attribute conceptualizations can be found in Chen and de la Torre (2014).</p>
+<p>In addition to the item responses, five items from the PISA 2000 student questionnaire were used as external criteria to evaluate the validity of the scores estimated under each model.</p>
+<p>These variables capture students&#x27; reading habits, home reading resources, and self-reported performance in English. Item 34 measures the amount of time students spend reading for enjoyment each day, ranging from no reading to more than two hours across five ordinal categories. Item 35 assesses, through nine sub-items, attitudes toward reading using four-category agreement scales, covering aspects such as enjoyment of reading, reading as a hobby, willingness to discuss books, and difficulties sustaining reading.</p>
+<p>The total score for Item 35 is calculated by summing the sub-item scores after reverse-coding negatively keyed items. Item 36 measures how often students voluntarily read different types of material, including magazines, comic books, fiction, non-fiction, emails and web pages, and newspapers. The six sub-items use five-category frequency scales ranging from never or hardly ever to several times a week. The total score is calculated by summing the scores across the six sub-items. Item 37 measures the number of books in the student&#x27;s home across seven ordinal categories, from none to more than 500, providing an indicator of the home reading environment and access to books. Finally, item 41 records students&#x27; self-reported marks in English from their most recent school report prior to the PISA assessment; these grades were discretized into six categories in the original PISA dataset. The number of valid responses was 1,961 for item 34, 1,979 for item 35, 1,978 for item 36, 1,968 for item 37, and 845 for item 41. The complete PISA 2000 Student Questionnaire is available from the OECD at https://www.oecd.org/content/dam/oecd/en/data/datasets/pisa/pisa-2000-datasets/questionnaires/PISA2000_Student_Questionnaire.doc.</p>
+<h3>7.2. Data Analysis</h3>
+<p>A 2PL model, a saturated LCDM, and BF-CDM were calibrated for PISA response data. Comparative fit was assessed using deviance (with the associated number of estimated parameters), AIC, and BIC. Reliability estimates were computed following the procedures described in the simulation study. Namely, the empirical reliability (Equation 11) of general proficiency (in the 2PL and BF-CDM), and the coefficient-of-determination approximation proposed by de la Torre et al. (2026) for the reliability of attribute mastery in the LCDM and BF-CDM. Under the 2PL, reliability is expected to be overestimated because the model ignores local dependence induced by the specific attributes, artificially inflating discrimination parameters (Reise et al., 2018). The magnitude of this overestimation should increase with the relevance of the attributes to the response process (i.e., the variation within 𝛌 𝑗 ). Lastly, the validity of the person-parameter estimates was evaluated using the five external criteria. For each model, the validity index was the 𝑅 2 obtained from a linear regression of each criterion variable on the corresponding EAP estimates of the latent variable, with missing data handled via pairwise deletion. Statistical significance of differences in 𝑅 2 estimates between models was assessed using a nonparametric bootstrap procedure with 500 resamples drawn with replacement from the original data. For each bootstrap sample, the difference in 𝑅 2 estimates between models was computed, and statistical significance was evaluated based on the proportion of bootstrap differences greater than zero. All illustration datasets and codes are available at https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5.</p>
+<h3>7.3. Results</h3>
+<p>All three models converged successfully. Under the LCDM, some of the populationlevel correlations between attributes, computed as Yule&#x27;s 𝜙 from the population class probabilities marginalizing per attribute, were moderate or high (see Table 5), suggesting a considerable amount of variance shared across attributes. The correlation between general proficiency scores estimated under the 2PL and under the BF-CDM was .99, indicating that the two models recover largely the same general dimension. Point-biserial correlations between the LCDM attribute classifications and BF-CDM general proficiency scores were .70, .68, .72, .68, .74, and .68 for attributes 1 to 6, respectively. Together, these results suggest that under a saturated attribute structure, LCDM attribute mastery classifications largely capture general proficiency rather than attribute-specific variance. Consistent with this pattern of positive inter-attribute correlations, a large proportion of profile classifications under the LCDM concentrated in two classes: mastery of all attributes (𝜋 ̂𝑙 = .28) and non-mastery of all attributes (𝜋 ̂𝑙 = .17). Together, these two extreme profiles accounted for 44% of respondents, consistent with attribute mastery behaving largely as a single all-or-none dimension rather than as six differentiated constructs. Under the BF-CDM, by contrast, these two extreme profiles accounted for only 3% of classifications combined, with the remaining probability mass distributed evenly across the other profiles.</p>
+<h3>7.3.1. Model Fit Comparison</h3>
+<p>The deviance, along with AIC and BIC goodness-of-fit indices are presented in Table 6. The BF-CDM was the best-fitting model by both deviance and AIC, indicating that the attribute-specific structure meaningfully improved fit over a unidimensional representation.</p>
+<p>Under BIC, however, which imposes a stronger penalty for model complexity, the 2PL was preferred. This mixed pattern admits two, non-exclusive readings. Under one reading, general proficiency accounts for the majority of the variance in the data, with the additional attributespecific structure contributing comparatively little once model complexity is taken into account. Under a second reading, the BIC penalty may be flagging an overfitting risk after the inclusion of the attribute tier.</p>
+<h3>7.3.2. Reliability Comparison</h3>
+<p>Empirical reliability of the general proficiency factor under the 2PL and the BF-CDM was .86 and .84, respectively. Under the LCDM, attribute-level reliability (expressed as 𝑅²) was .61, .53, .58, .62, .61, and .55, across the six attributes. Expressed instead using the classification accuracy index proposed by Wang et al. (2015), defined as the proportion of respondents whose estimated attribute mastery status matches their true status, without any adjustment for the level of agreement expected by chance alone, these same attributes yielded values of .89, .87, .88, .89, .89, and .87. Although the classification-accuracy index appears high, the 𝑅²-based reliability values reveal comparatively low precision, illustrating how classification accuracy alone can mask substantial measurement error at the attribute level.</p>
+<p>Under the BF-CDM, attribute-level reliability decreased substantively, taking values of .25, .19, .22, .32, .18, .32 across the six attributes, respectively. This drop illustrates how most of what looked like attribute-specific reliability under the LCDM was in fact general-factor variance masked as attribute-specific information. The large population correlations among attributes reported in Table 5 support this interpretation. The BF-CDM&#x27;s tier-separated reliability estimates thus provide a stricter validity check than LCDM reliability alone, precisely because they isolate the variance that is actually attribute-specific rather than shared.</p>
+<h3>7.3.3. Score Validity Comparison</h3>
+<p>As shown in Table 7, scores under the BF-CDM showed higher 𝑅² values than the 2PL and the LCDM for all external criteria, with the largest advantage for the prediction of school marks in English, where the BF-CDM explained approximately 4% more variance than the LCDM and roughly 2% more than the 2PL. The bootstrap comparisons indicated that 𝑅² was significantly higher for the BF-CDM than for the 2PL and the LCDM across all external criteria (p &lt; .05). Finally, BF-CDMΔα indicates the incremental validity of the attribute tier, that is, the change in 𝑅² when predictions use all latent variables in the BF-CDM compared to the general proficiency alone. This increment was at most 2.9%. These results support the validity of the BF-CDM&#x27;s score structure: by separating general proficiency into a continuous general factor and attribute-specific mastery profiles, the model gains predictive power over both a purely unidimensional representation and a purely discrete representation. No statistically significant differences were found between the 2PL and LCDM on any of the criteria.</p>
+<h3>8. Discussion</h3>
+<p>This article introduced the bi-factor cognitive diagnosis model (BF-CDM) as a framework for separating a continuous general proficiency dimension from a discrete, 𝐾dimensional attribute-mastery profile in the analysis of item response data. Unlike saturated attribute structure or higher-order CDMs, in which the general dimension shapes item responses only indirectly, through its influence on the joint attribute distribution, the BF-CDM specifies both tiers as parallel, additive sources of item response variance. This reformulation changes what a discrete mastery classification means: rather than an absolute statement about a fixed content domain, mastery under the BF-CDM is defined relative to what a respondent&#x27;s general proficiency already predicts, and its reliability provides a direct check on whether the attribute tier contributes information beyond that shared, dominant dimension.</p>
+<p>The simulation study demonstrated that item and person parameters, as well as the underlying response functions, can be recovered with good accuracy under the proposed marginal maximum likelihood procedure, across a broad range of realistic testing conditions.</p>
+<p>As expected, recovery of the discrete-tier parameters and of attribute mastery classifications was most sensitive to sample size, test length, number of attributes, and attribute-tier discrimination, mirroring the results in the standard (non-bifactor) CDM literature. Recovery of the general discrimination parameter, by contrast, was comparatively consistent across conditions, suggesting that estimation of the continuous tier is less demanding than estimation of the discrete tier, at least for the range of test lengths and attribute numbers considered here.</p>
+<p>The real-data application illustrated one of the main contributions of the model in practical settings. Under the saturated LCDM, attribute mastery classifications were strongly intercorrelated and dominated by two extreme, all-or-none profiles, and attribute-level reliability appeared moderate. Once the shared general-proficiency variance was isolated under the BF-CDM, however, attribute-level reliability dropped substantially, indicating that most of what appeared to be attribute-specific precision under the LCDM was in fact general-factor variance recovered six separate times. At the same time, BF-CDM scores showed a small but consistent validity advantage over both the 2PL and the LCDM against a broad set of external reading-related criteria, illustrating that separating the two tiers need not come at the cost of predictive power, even when the discrete tier itself carries limited independent information in a given application. For test developers, these results suggest that attribute-level reporting in largely unidimensional data will require more indicators per attribute or more discriminating items than a blueprint designed for a single general ability. By making this quantifiable, the BF-CDM offers test developers a means of judging whether a given blueprint can support attributelevel reporting.</p>
+<p>Several limitations of the present work, and of this application, should be noted. First, identification of the BF-CDM rests on the structural independence assumptions in Equations 4 and 5, which allocate all shared variance among all items to the general dimension by construction. This is a strong assumption, directly analogous to the proportionality and local independence constraints underlying the bi-factor IRT model (Gibbons &amp; Hedeker, 1992; Reise et al., 2010 Reise et al., , 2018)), and it is not statistically tested within the current framework. If some fraction of the association among attributes is not, in fact, mediated by general proficiency, the BF-CDM will still attribute it to 𝜃, and reported attribute reliabilities will be conservative accordingly. Extensions incorporating partial correlations among attributes after accounting for 𝜃, or model comparisons against models that relax Equation 5, would help establish, in a given application, how much a drop in attribute reliability reflects this assumption rather than a genuinely low attribute-specific information.</p>
+<p>Second, the real-data results should not be read as a general statement that discrete attributes are unnecessary once general proficiency is modeled. Model-fit indices sent a mixed signal in the PISA application: AIC favored the BF-CDM over the unidimensional 2PL, whereas BIC favored the simpler model. Because attribute-level reliability under a bi-factor structure is jointly a function of the true attribute-specific information in the data and of the adequacy of the Q-matrix used to define the attribute tier, the low reliabilities obtained here are consistent with either (a) the six PISA reading attributes carrying limited information beyond general reading proficiency, or (b) a Q-matrix that does not optimally isolate attribute-specific variance for this item set. Sensitivity analyses using alternative, empirically or theoretically motivated Q-matrices (e.g., following the balancing procedures as in Nájera et al., 2020 Nájera et al., , 2021) ) would help disentangle these two explanations in future applications.</p>
+<p>Third, the simulation study fixed the discriminative strength of the general dimension and varied only the attribute tier; how recovery depends on the relative discrimination of the two tiers, particularly when the general dimension is weak relative to the attributes, remains to be studied. Relatedly, the current estimation procedure evaluates the model-implied likelihood over the full cross of quadrature nodes and attribute classes; while this grid remained computationally manageable for the number of attributes studied here, it will become prohibitive for tests measuring substantially more attributes, a limitation the BF-CDM shares with saturated CDMs more broadly. Adaptive quadrature, Metropolis-Hastings Robbins-Monro estimation, or variational approximations are natural candidates for extending the model to higher-dimensional attribute spaces.</p>
+<p>Future work could extend the BF-CDM to polytomous responses, following the generalization of the LCDM to the GDM (von Davier, 2008), to multiple correlated general dimensions, or to longitudinal designs in which growth in general proficiency and in attribute mastery are of separate substantive interest. Because attribute-tier reliability under the BF-CDM offers a direct empirical check on the validity of a proposed attribute structure, it may also prove useful as a routine diagnostic tool during test development and Q-matrix validation, independent of whether a bi-factor structure is ultimately adopted for operational scoring.</p>
+<p>In summary, the BF-CDM offers a way to answer a question that saturated and higherorder CDMs cannot directly address: how much of an attribute classification reflects genuine, attribute-specific mastery once general proficiency has been accounted for. As illustrated here, the answer can be sobering, but it is precisely this capacity to distinguish real diagnostic value from an artifact of a dominant general factor that gives the model its practical relevance for both test developers and users of diagnostic score reports.</p>
+<p>9.</p>
+<p>This research received no specific grant funding form any funding agency, commercial or not-for-profit sectors.</p>
+<p>This study presents simulation and real-data studies. Opensource code to implement the bi-factor CDM model, along with all files generated for the simulation and real-data studies are available at https://osf.io/2jcdm/overview?view_only=0fd9b15045e1420292c79d0d6333fdb5.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Schematic definition of saturated (A.), higher-order (B.) and bi-factor (C.) CDM , the BF-CDM response function forms a general framework that encompasses both unidimensional IRT and LCDM.</p>
+<p>In essence, in case the attribute-related 𝛌 𝑗 take values of zero, the model reduces the first terms (𝛾 𝑗𝐺 𝜃 + 𝜆 𝑗0 ) which takes the form of a two-parameter logistic (2PL;Birnbaum, 1968) IRT model (i.e., 𝑎 𝑗 𝜃 + 𝑑 𝑗 ). Because the 2PL model is nested within BF-CDM, likelihood ratio tests may be used to assess whether model fit improves significantly upon adding the discrete attribute tier, providing a formal basis for model selection between the two. Alternatively, the LCDM is nested within the BF-CDM if 𝛾 𝑗𝐺 = 0 and an uncorrelated attribute structure is specified for the former (as in Equations 4 and 5). The total number of estimated item and structural parameters in the BF-CDM model is 𝐽 + 𝐾 + ∑ 2 𝐾 𝑗 * 𝑗 , with 𝐽 general-dimension discrimination parameters, ∑ 2 𝐾 𝑗 * 𝑗 attribute-tier item parameters, being 𝐾 𝑗 * the number of attributes associated with item 𝑗, and 𝐾 population attribute-mastery probabilities, following from the independence assumption in Equation 5. This can be compared to the parameter count of the 2PL model, requiring 2𝐽 parameters (a discrimination and difficulty parameter per item), and the LCDM with correlated attributes, estimating (2 𝐾 -1) + ∑ 2 𝐾 𝑗 * 𝑗 parameters including the fully saturated multinomial distribution over the 2 𝐾 attribute classes.</p>
+<h3>Figure 2</h3>
+<p>Figure2illustrates the item response function implied by the BF-CDM model for a</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Response probabilities under the BF-CDM model, given parameters 𝛾 𝑗𝐺 = 1.5, 𝑃((𝛂 𝑖 ) 𝑘 = 1|𝐱 𝑖 )𝕀((𝛂 ̂𝑖) 𝑘 = 𝑐) for 𝑐 ∈ {0,1}, with 𝕀(•) an indicator of the estimated classification, being 𝑁 the sample size.</p>
+<h3>𝑁 - 1</h3>
+<p>Similarly, the cells for (𝛂 𝑖 ) 𝑘 = 0 are defined 𝑁 -1 𝑃((𝛂 𝑖 ) 𝑘 = 0|𝐱 𝑖 )𝕀((𝛂 ̂𝑖) 𝑘 = 𝑐).</p>
+<p>being 𝑤 𝑚 a normalized weight for 𝜃 𝑚 given the standard normal density function, and 𝐿𝑖𝑘(𝐱 𝑖 |𝜃 𝑚 , 𝛂 𝑙 ) the likelihood of response vector 𝐱 𝑖 given 𝜃 𝑚 and 𝛂 𝑙 . The EAP estimate of general proficiency was obtained by marginalizing this joint posterior across attribute classes, of mastery of attribute 𝑘, 𝑃((𝛂 𝑖 ) 𝑘 |𝐱 𝑖 ), was computed by marginalizing across 𝜃 and across all attribute classes in which attribute 𝑘 is mastered (𝛼 𝑙𝑘 = 1), approximating Equation 6 via finite quadrature. Because 𝑃((𝛂 𝑖 ) 𝑘 |𝐱 𝑖 ) is a posterior probability of mastery, it constitutes a continuous certainty of mastery rather than a discrete mastery classification. Therefore, a binary classification was recovered by thresholding 𝑃((𝛂 𝑖 ) 𝑘 |𝐱 𝑖 ) &gt; .50, following standard practice in CDM scoring (e.g., de la Torre et al., 2026).</p>
+<p>Several two-way interactions also reached large effect sizes for both correlation and MAE, most notably 𝑁 × 𝐾, 𝑁 × Attr. Discr. and 𝐾 × Attr. Discr. And 𝐽 × Attr. Discr., indicating that recovery of the attribute-tier item parameters depends jointly on the four manipulated factors. Figure3presents conditional results for correlation (left) and MAE (right), with the two levels of attribute-tier discrimination represented by colored lines, sample size on the x-axis, test length across rows, and number of attributes across columns. As shown in the figure, these interactions largely reflect substantively poorer recovery (and its variation) under the least favorable combination of measurement conditions (𝑁 = 500, 𝐽 = 30, 𝐾 = 5, and low attribute-tier discrimination).</p>
+<h3>Figure 3.</h3>
+<p>Figure 3. Conditional recovery of latent group position parameters (±1.96 × SD across</p>
+<h3>Figure 4.</h3>
+<p>Figure 4. Conditional average root-integrated-squared error of response curves (±1.96 × SD across replications in whiskers) for the BF-CDM.</p>
+<h3>Figure 5</h3>
+<p>Figure 5 presents the conditional average squared correlation (left) and MAE (right)</p>
+<h3>Figure 5.</h3>
+<p>Figure 5. Conditional average recovery of attribute mastery classifications (±1.96 × SD</p>
+<h3>Table 1.</h3>
+<p>Marginal recovery of item parameters and response functions under the BF-CDM model.𝛾 𝑗𝐺 = continuous discrimination parameters; 𝛌 = latent group position parameter; RISE = Root-Integrated Squared Error of response curves; Attr. Discr. = Manipulated attribute discrimination.</p>
+<h3>Table 2.</h3>
+<p>Partial eta-squared effect sizes for average recovery of general ability discrimination (𝛾 𝑗𝐺 ), latent group position parameters (𝛌 𝑗 ), and root-integrated-squared error (RISE) of response probabilities given the estimated and true parameters for the BF-CDM.</p>
+<h3>Table 3.</h3>
+<p>Marginal recovery of person parameters under the BF-CDM model.</p>
+<h3>Table 4.</h3>
+<p>Partial eta-squared effect sizes for average recovery of general ability (𝜃), and latent classes (𝜶) for the BF-CDM.</p>
+<h3>Table 5.</h3>
+<p>Population Correlations Between Attributes Under the LCDM</p>
+<h3>Table 6.</h3>
+<p>Model FitLowest deviance, AIC, and BIC are shown in bold.</p>
+<h3>Table 7.</h3>
+<p>𝑅² From Regressions of External Criteria on Estimated Scores, by Model</p>
+<h3>References</h3>
+<p>Birnbaum, A. (1968). Some latent trait models and their use in inferring an examinee&#x27;s ability. In F. M. Lord &amp; M. R. Novick, Statistical theories of mental test scores. Addison-Wesley.</p>
+<p>Bradshaw, L., &amp; Templin, J. (2014). Combining Item Response Theory and Diagnostic Classification Models: A Psychometric Model for Scaling Ability and Diagnosing Misconceptions. Psychometrika, 79(3), 403-425. https://doi.org/10.1007/s11336-013- 9350-4</p>
+<p>Brown, A. (2018). Item Response Theory Approaches to Test Scoring and Evaluating the Score Accuracy. In The Wiley Handbook of Psychometric Testing (pp. 607-638). John Wiley &amp; Sons, Ltd. https://doi.org/10.1002/9781118489772.ch20</p>
+<p>Chalmers, R. P. (2012). mirt: A multidimensional item response theory package for the R environment. Journal of Statistical Software, 48(6), 1-29. https://doi.org/10.18637/jss.v048.i06</p>
+<p>Chen, J., &amp; Torre, J. de la. (2014). A Procedure for Diagnostically Modeling Extant Large- Scale Assessment Data: The Case of the Programme for International Student Assessment in Reading. Psychology, 5(18), 1967-1978. https://doi.org/10.4236/psych.2014.518200</p>
+<p>de la Torre, J. (2011). The Generalized DINA Model Framework. Psychometrika, 76(2), 179- 199. https://doi.org/10.1007/s11336-011-9207-7</p>
+<p>de la Torre, J., &amp; Douglas, J. A. (2004). Higher-order latent trait models for cognitive diagnosis. Psychometrika, 69(3), 333-353. https://doi.org/10.1007/BF02295640</p>
+<p>de la Torre, J., &amp; Minchen, N. (2014). Cognitively Diagnostic Assessments and the Cognitive Diagnosis Model Framework. Psicología Educativa, 20(2), 89-97. https://doi.org/10.1016/j.pse.2014.11.001</p>
+<p>de la Torre, J., Sijtsma, K., &amp; Kreitchmann, R. S. (2026). Revisiting reliability and measurement precision: Towards a unified perspective. British Journal of Mathematical and Statistical Psychology. https://doi.org/10.1111/bmsp.70068</p>
+<p>Dempster, A. P., Laird, N. M., &amp; Rubin, D. B. (1977). Maximum Likelihood from Incomplete Data Via the EM Algorithm. Journal of the Royal Statistical Society Series B: Statistical Methodology, 39(1), 1-22. https://doi.org/10.1111/j.2517- 6161.1977.tb01600.x</p>
+<p>Gibbons, R. D., &amp; Hedeker, D. R. (1992). Full-information item bi-factor analysis. Psychometrika, 57(3), 423-436. https://doi.org/10.1007/BF02295430</p>
+<p>Gu, Y., &amp; Xu, G. (2021). Sufficient and Necessary Conditions for the Identifiability of the Q- Matrix. Statistica Sinica, 31(1), 449-472.</p>
+<p>Henson, R. A., Templin, J. L., &amp; Willse, J. T. (2009). Defining a Family of Cognitive Diagnosis Models Using Log-Linear Models with Latent Variables. Psychometrika, 74(2), 191-210. https://doi.org/10.1007/s11336-008-9089-5</p>
+<p>Hong, H., Wang, C., Lim, Y. S., &amp; Douglas, J. (2015). Efficient Models for Cognitive Diagnosis With Continuous and Mixed-Type Latent Variables. Applied Psychological Measurement, 39(1), 31-43. https://doi.org/10.1177/0146621614524981</p>
+<p>Junker, B. W., &amp; Sijtsma, K. (2001). Cognitive Assessment Models with Few Assumptions, and Connections with Nonparametric Item Response Theory. Applied Psychological Measurement, 25(3), 258-272. https://doi.org/10.1177/01466210122032064</p>
+<p>Köhn, H.-F., &amp; Chiu, C.-Y. (2017). A Procedure for Assessing the Completeness of the Q- Matrices of Cognitively Diagnostic Tests. Psychometrika, 82(1), 112-132. https://doi.org/10.1007/s11336-016-9536-7</p>
+<p>Kreitchmann, R. S., de la Torre, J., Sorrel, M. A., Nájera, P., &amp; Abad, F. J. (2023). Improving reliability estimation in cognitive diagnosis modeling. Behavior Research Methods, 55(7), 3446-3460. https://doi.org/10.3758/s13428-022-01967-5</p>
+<p>Liu, R., Huggins-Manley, A. C., &amp; Bulut, O. (2018). Retrofitting Diagnostic Classification Models to Responses From IRT-Based Assessment Forms. Educational and Psychological Measurement, 78(3), 357-383. https://doi.org/10.1177/0013164416685599</p>
+<p>Ma, W., &amp; de la Torre, J. (2020). GDINA: An R package for cognitive diagnosis modeling. Journal of Statistical Software, 93, 1-26.</p>
+<p>Ma, W., Iaconangelo, C., &amp; de la Torre, J. (2016). Model Similarity, Model Selection, and Attribute Classification. Applied Psychological Measurement, 40(3), 200-217. https://doi.org/10.1177/0146621615621717</p>
+<p>Ma, W., Minchen, N., &amp; de la Torre, J. (2020). Choosing between CDM and Unidimensional IRT: The Proportional Reasoning Test Case. Measurement: Interdisciplinary Research and Perspectives, 18(2), 87-96. https://doi.org/10.1080/15366367.2019.1697122</p>
+<p>Maris, E. (1999). Estimating multiple classification latent class models. Psychometrika, 64(2), 187-212. https://doi.org/10.1007/BF02294535</p>
+<p>Mislevy, R. J., &amp; Verhelst, N. (1990). Modeling Item Responses When Different Subjects Employ Different Solution Strategies. Psychometrika, 55(2), 195-215. https://doi.org/10.1007/BF02295283</p>
+<p>Nájera, P., Abad, F. J., Chiu, C.-Y., &amp; Sorrel, M. A. (2023). The Restricted DINA Model: A Comprehensive Cognitive Diagnostic Model for Classroom-Level Assessments. Journal of Educational and Behavioral Statistics, 48(6), 719-749. https://doi.org/10.3102/10769986231158829</p>
+<p>Nájera, P., Sorrel, M. A., de la Torre, J., &amp; Abad, F. J. (2020). Improving Robustness in Q- Matrix Validation Using an Iterative and Dynamic Procedure. Applied Psychological Measurement, 44(6), 431-446. https://doi.org/10.1177/0146621620909904</p>
+<p>Nájera, P., Sorrel, M. A., de la Torre, J., &amp; Abad, F. J. (2021). Balancing fit and parsimony to improve Q-matrix validation. British Journal of Mathematical and Statistical Psychology, 74(S1), 110-130. https://doi.org/10.1111/bmsp.12228</p>
+<p>Reise, S. P., Bonifay, W., &amp; Haviland, M. G. (2018). Bifactor Modelling and the Evaluation of Scale Scores. The Wiley Handbook of Psychometric Testing. https://doi.org/10.1002/9781118489772.ch22</p>
+<p>Reise, S. P., Moore, T. M., &amp; Haviland, M. G. (2010). Bifactor Models and Rotations: Exploring the Extent to Which Multidimensional Data Yield Univocal Scale Scores. Journal of Personality Assessment, 92(6), 544-559. https://doi.org/10.1080/00223891.2010.496477</p>
+<p>Sessoms, J., &amp; Henson, R. A. (2018). Applications of Diagnostic Classification Models: A Literature Review and Critical Commentary. Measurement: Interdisciplinary Research and Perspectives, 16(1), 1-17. https://doi.org/10.1080/15366367.2018.1435104</p>
+<p>Tatsuoka, K. K. (1983). Rule space: An approach for dealing with misconceptions based on item response theory. Journal of Educational Measurement, 345-354. https://doi.org/10.1111/j.1745-3984.1983.tb00212.x</p>
+<p>Tatsuoka, K. K. (1984). Analysis of Errors in Fraction Addition and Subtraction Problems. Final Report. Kikumi K. https://eric.ed.gov/?id=ED257665</p>
+<p>Templin, J., &amp; Henson, R. A. (2006). Measurement of psychological disorders using cognitive diagnosis models. Psychological Methods, 11(3), 287.</p>
+<p>von Davier, M. (2008). A general diagnostic model applied to language testing data. British Journal of Mathematical and Statistical Psychology, 61(2), 287-307. https://doi.org/10.1348/000711007X193957</p>
+<p>Wallmark, J., &amp; Wiberg, M. (2026). The Bit Scale: A Metric Score Scale for Unidimensional Item Response Theory Models. Psychometrika, 91(1), 30-46. https://doi.org/10.1017/psy.2025.10071</p>
+<p>Wang, W., Song, L., Chen, P., Meng, Y., &amp; Ding, S. (2015). Attribute-Level and Pattern-Level Classification Consistency and Accuracy Indices for Cognitive Diagnostic Assessment. Journal of Educational Measurement, 52(4), 457-476. https://doi.org/https://doi.org/10.1111/jedm.12096</p>
+<p>Yamamoto, K. (1989). Hybrid Model of IRT and Latent Class Models. Educational Testing Service. https://doi.org/10.1002/j.2333-8504.1982.tb01326.x</p>
+<p>Yule, G. U. (1912). On the Methods of Measuring Association Between Two Attributes. Journal of the Royal Statistical Society, 75(6), 579-652. https://doi.org/10.2307/2340126</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>

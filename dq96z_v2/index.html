@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Designing Around the Human Creative Core: A
+Construct for Preserving Creative Agency in Human-AI Systems</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Designing Around the Human Creative Core: A Construct for Preserving
+Creative Agency in Human-AI Systems
+</p>
+<p class="meta">
+2026-11-07 · Metacheck 0.4.3.8
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to fix</span></a><span class="count improve zero"><b>0</b><span>to improve</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>The professionals described their own work as collaborators in the
+projects, not as subjects recruited for a study.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 31 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 31 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 31 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
+not succeed at excluding all false positives.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Generative AI can increasingly perform the parts of professional work where a person&#x27;s judgment and sense of identity are most engaged. The common design instinct is to automate wherever AI can plausibly take over, treating capability as the test. This efficiency-first instinct can erode the skill, judgment, ownership, and professional identity. Human-Centered AI frameworks show how to structure collaboration and keep people in control, but not which elements of a given workflow sustain a person&#x27;s creative agency. This paper introduces the Human Creative Core: the subset of workflow elements where a person&#x27;s cognitive contribution and psychological investment converge, identified through four dimensions, strategic intention, signature judgment, identity and ownership, and developmental function. The construct yields a design principle, complement the core and automate the periphery, and a method for locating the core in a given workflow. The method was taught and applied in a graduate instructional design course, and is demonstrated here across five professional cases. The contribution is a design construct and a repeatable method for building AI that preserves, and can strengthen, a person&#x27;s creative agency rather than dissolving it.</p>
+<h3>1. Introduction</h3>
+<p>A litigation lawyer with fifteen years in civil and administrative practice spends much of his time on tasks he would gladly delegate: sifting discovery for the one inconsistency that matters, cross-referencing exhibits, formatting citations, rebuilding a chronology from documents that arrive partial and out of order. A generative system can now do most of this in minutes. The same system can also draft his pleadings and shape the strategic argument. Constructing that argument is the part that makes him a litigator. It reflects his reading of the tribunal, his sense of which claims to lead with, and his direction over the case, and it rests on judgment he is accountable for. An efficiency-first AI design might seek to automate both the sifting and the argument. This paper asks what that costs to the practitioner&#x27;s agency, skill and identity, and how a designer could decide in advance which parts to automate and which to keep with the person.</p>
+<p>AI now enters work that calls for judgment, expertise, and creative effort. This comes with costs in skill, judgment, ownership, and sometimes even a practitioner&#x27;s sense of professional identity. AI assistance can speed the decay of expert skill and slow its acquisition, often without the person noticing (Macnamara et al., 2024). Knowledge workers using generative AI shift their effort from solving to checking, and report investing less in critical thinking as their trust in the tool grows (Lee et al., 2025). The same shift from doing to supervising now shows up in fields once thought safe from it, from medicine to software (Greengard, 2025). Studies of moral decision-making find that the sense of agency itself weakens as the autonomy of the system rises (Salatino et al., 2025). These studies surface a pattern which suggests that AI systems and human-AI workflows designed to achieve maximum optimization of outcome or time, can erode the conditions that keep human capability intact.</p>
+<p>Human-Centered AI offers a strong answer to part of this problem. It shows how high automation and strong human control can coexist rather than trade off (Shneiderman, 2020), provides guidelines for human-AI interaction (Amershi et al., 2019), and models the kinds of interaction a co-creative system can support (Rezwana &amp; Maher, 2023). This body of work is about the structure of collaboration and who holds control. It keeps the person in the loop, able to direct, approve, and adjust what the system does. But a person can keep that control while the thinking that defined their expertise moves to the system. Dix et al. (2024) name the worry when they warn against designs that leave people as cogs in the machine. Holding authority over a workflow is necessary, but on its own it does not sustain the motivation, ownership, and developing skill that creative work rests on. What is missing is a way to decide, element by element, where AI should reach and where it should stop, so that skill, identity, and a person&#x27;s creative agency stay intact.</p>
+<p>This paper treats creative agency as a design objective in its own right, and offers three contributions toward it. The first is the AI-Creative Agency Framework (Barak-Medina, 2025; Watkins &amp; Barak-Medina, 2024), which explains how a person&#x27;s perception of an AI shapes whether working with it strengthens or weakens their agency. The second, and the central concept this paper introduces, is the Human Creative Core (HCC), a construct that identifies the workflow elements a person experiences as the substance of their practice. The third is an agency-aware workflow analysis, a method for locating the HCC in a given workflow. The paper covers the construct, its grounding, the method, and demonstrates its application through five cross-domain cases from a graduate design course where the method was developed and taught.</p>
+<h3>2. The AI-Creative Agency Framework</h3>
+<p>The AI-Creative Agency Framework offers a map that arranges the relationship between how AI functionalities and capabilities are perceived by people, whether correctly or not, and their creative agency. The HCC builds directly on this framework.</p>
+<p>Creative agency is a person&#x27;s motivation, sense of ownership, and accountability when facing challenges that demand high-level cognitive effort, such as creative production, complex decisions, and problem-solving. It is task-specific and dynamic. The same person can hold strong creative agency over one part of their work and little over another. It is related to the concept of creative self-efficacy, the belief that one can produce creative outcomes (Karwowski et al., 2019; Tierney &amp; Farmer, 2002), yet adds ownership and accountability as components to it.</p>
+<p>The framework is built on two assumptions. First, an AI&#x27;s effect on creative agency runs through how the person perceives what the system does, not through what it objectively does. Second, that perception is task-specific. The same system can feel like a welcome assistant on one element and a threat on another. A person&#x27;s experience with a system, realizing what it can or cannot do, changes their perception and therefore its effect on creative agency.</p>
+<p>The framework names four factors that shape whether adding AI to a workflow strengthens or weakens agency:</p>
+<p>The first is whether the person sees the system as competing with their skills or complementing them. This is a perceptual distinction, not a technical one. It matters because complementary performance, where the human and the system together do better than either alone, is harder to reach than is often assumed (Hemmer et al., 2025), and how the person sees the system is part of what decides whether it is reached.</p>
+<p>The second is perceived effectiveness, how capable the person judges the system to be, against themselves and their professional community, in speed, accuracy, scope, or consistency. It sharpens the first. A competing system the person believes is highly effective is the most threatening to creative agency. A complementing system believed to be effective is the most strengthening.</p>
+<p>The third is stakes, the cost of error in the task at hand. High stakes raise the pressure to defer to whatever is most reliable. Low stakes ease it, especially when the value of the activity for the person is in the doing rather than the outcome.</p>
+<p>The fourth factor is the person&#x27;s AI literacy, which includes the mindset they bring to using AI. The framework names four such mindsets (Barak-Medina, 2025; Watkins et al., 2024). A person can use AI to reach what neither they nor the machine could manage alone (empowerment), hand a task over for the system to perform in their place (delegation), stay away from it due to lack of proficiency, or because of value-driven resistance (avoidance), or set it aside on purpose, knowing it could help in the task at hand, to protect their enjoyment of the work or to keep building a skill (suspension). These are not fixed traits. A person can move between them, and the design of the system can encourage one over another. Figure 1 summarizes the framework.</p>
+<p>The framework gives a clear test. AI that a person perceives as complementing and effective is the most likely to strengthen creative agency. When applying this framework to designing AI systems with the aim of preserving human creative agency, that test helps a designer judge how an AI usage existing or discussed will impact creative agency. What it does not do is say where in a workflow AI should go in the first place. Workflow elements differ in what they mean to the person. Some hold the person&#x27;s identity, motivation, and developing skill. Others are tolerated, or actively resented. Deciding where AI belongs needs a construct that tells the two apart, and that takes in what perception alone leaves out, such as the slow erosion of skill. The HCC is that construct.</p>
+<h3>3. The Human Creative Core (HCC)</h3>
+<p>The HCC is the set of workflow elements where a person&#x27;s cognitive contribution and psychological investment converge. It is the part of a workflow the person experiences as the essence of what they do, where their skill and judgment are most engaged, and sometimes the reason they entered the occupation. The core may be a small cluster of elements or a single point in the workflow. It is a feature of the task and the person, not of any AI, and it asks what an element does for the person whether or not a system is present. An element belongs to the core when it engages one or more of four dimensions.</p>
+<p>The first is strategic intention, the elements of a workflow where the person sets the direction of the work, defining the problem, shaping the solution, and fixing the standard a good outcome has to meet. In professional practice it is what Schön called problem setting, naming what the problem is and what would count as resolving it, the move that shapes everything the practitioner does next (Schön, 1983). In creative and research work, the act of finding and formulating the problem, more than solving one already posed, is what distinguishes original work (Getzels &amp; Csikszentmihalyi, 1976). When a researcher decides which question is worth pursuing and what would count as a convincing answer, that is strategic intention. The data gathering and analysis that follow only carry it out. A finding that can suggest AI might threaten strategic intention is one in which students who wrote with a chatbot produced stronger immediate work but did less of the goal-setting and self-evaluation that would exert their influence on the produced work (Fan et al., 2025).</p>
+<p>The second is signature judgment, the element where a person&#x27;s distinctive, experiencegrounded judgment comes through, where their tacit knowledge and their stamp on the work show. It expresses accumulated experience, values, and taste. It does not necessarily mean that it is the person&#x27;s advantage over the machine. Much of what makes skilled practice good cannot be fully put into words and is built only through sustained practice (Collins, 2010; Collins &amp; Evans, 2007; Polanyi, 1966; Sennett, 2008). A generative system can produce work that looks and feels like the exact output done with signature judgment, which is what makes the element tempting to automate. What it cannot supply is the actual reasoning behind the output, the impact of the practitioner&#x27;s heuristics on the outcome, the reading of a situation that comes from having met many like it. Writers given AI-generated story ideas produced work that was individually stronger but more alike, the range of directions narrowing as the system&#x27;s framing stood in for their own (Doshi &amp; Hauser, 2024).</p>
+<p>The third dimension is identity and ownership. These are the elements the person experiences as an expression of who they are, so that doing it is what makes the result feel theirs. People build their professional sense of self around particular practices, not around a job title (Glăveanu &amp; Tanggaard, 2014; Lepisto et al., 2015), which is why, when AI enters creative work, the first worry professionals voice is about identity and value, not efficiency (Hermann et al., 2025; Kyi et al., 2025). Ownership grows from three things: control over the process, close knowledge of the task, and investment of oneself in it (Pierce et al., 2001 (Pierce et al., , 2003)). All three weaken when a system generates and the person only edits. People report not feeling ownership of AI-written text even when they sign their names to it (Draxler et al., 2024), and self-efficacy and meaning drop under passive AI use while active collaboration protects them (Lee et al., 2026; McGuire et al., 2024). These identity-bearing elements tend to be the enjoyable ones, since enjoyment in creative work attaches to particular features of a task, such as the right level of challenge and the exercise of mastery (Amabile &amp; Pratt, 2016; Csikszentmihalyi, 1990). When a system absorbs that part, output can rise while motivation falls and boredom grows (Wu et al., 2025).</p>
+<p>The fourth is developmental function. Doing the element builds or sustains the mastery the task depends on, and adds to the person&#x27;s skill over time. Expertise is reached by passing through stages that cannot be skipped (Dreyfus &amp; Dreyfus, 1986), so an element whose difficulty is the very thing that builds skill belongs to the core even when its immediate output looks minor. Hand the finished output to someone who has not gone through that effort and they may never acquire the underlying skill. High-school students given an unrestricted AI tutor practiced better while they had it and did worse once it was taken away (Bastani et al., 2025). A junior lawyer who has every brief drafted for them may never learn to build one. Much of any workflow is not part of the HCC. An element can matter to the outcome, or be cognitively hard, and still not engage any of the four dimensions. Difficulty is not the test, and neither is importance, although these might converge with the core.</p>
+<p>Non-core elements of the workflow, or the &quot;periphery&quot;, could include the draining work, the routine steps a person would gladly hand off, and the demanding but impersonal tasks that consume time without building skill or supporting identity. These are the elements to automate. Automating them can free time and attention to performing the core elements.</p>
+<h3>4. Agency-Aware Workflow Analysis</h3>
+<p>The agency-aware workflow analysis is a procedure for finding a person&#x27;s HCC inside a workflow, when an existing or a potential AI system could be relevant or integrated into it. Based on this, a designer of an AI system or a human-AI workflow can tell which elements to keep as human and support, and which to automate or offload.</p>
+<p>The method has two steps. The first step breaks the task into its elements. The second step weighs each element against the four dimensions to identify the core. It was developed and taught in a graduate instructional design course whose projects supply the cases in Section 5.</p>
+<p>The first step breaks the task into its elements: the decisions, the smaller skills, and the phases of the workflow, at a grain fine enough to separate elements that feel different to do. &quot;Legal work&quot; is too broad to act on. &quot;Constructing the strategic argument for a particular judge&quot; and &quot;formatting citations to the court&#x27;s standard&quot; are at the right register, because the person experiences them differently and a system could perform them differently. The breakdown can come from an interview, an observation, a questionnaire, or a review of the domain&#x27;s tasks, drawing on cognitive task analysis, an established set of methods for eliciting the structure of expert work (Clark &amp; Estes, 1996; Tofel-Grehl &amp; Feldon, 2013).</p>
+<p>The second step weighs each element two ways. One is how well a current AI system could perform it, which can be estimated from what today&#x27;s systems demonstrably do. The other is what the element does for the person, which is harder to judge, since it depends on how they experience the element and what its loss would cost them, something a task description does not reveal. A few questions, directed at the practitioner, help bring it out: • Where in this task do you exercise your most demanding professional judgment, and where does your judgment most affect the result?</p>
+<p>• Would you still feel like a [profession] if a system did this part for you?</p>
+<p>• If you stopped doing this for a year, which skill would you lose?</p>
+<p>• Which parts of this do you find most engaging?</p>
+<p>These questions are aids, not a list of requirements. They help reveal what different actions, tasks or skills that comprise a process, do for the person.</p>
+<p>An element is part of the HCC when it engages one or more of the four dimensions, whatever an AI system&#x27;s effectiveness on it. The rest is periphery, whether the person finds it burdensome, merely routine, or simply part of the process that is not core. When an element is genuinely in doubt, the safer default is to treat it as core, since automating a core element by mistake is harder to reverse than leaving a peripheral one in the person&#x27;s hands.</p>
+<p>For the most part, the elements that matter most tend to recur across people in the same occupation or sharing the same challenges, and a competent analysis aims for those shared, identity-bearing elements rather than one person&#x27;s idiosyncrasies.</p>
+<p>Consider a graphic designer who produces brand identities for clients. Breaking the work into stages and subskills, then weighing each for how well a system could perform it and what it means to the designer, separates the core from the periphery.</p>
+<p>Developing the central visual concept is core on grounds of signature judgment, since a system that generated it would take what makes the result the designer&#x27;s own. Art-directing the execution, the typographic and compositional choices that give the identity its character, is core on the same grounds, since it is where the designer&#x27;s taste and trained eye show.</p>
+<p>What surrounds these can go to a capable system. Producing sized variations of an approved design is routine and engages no identity. Sourcing and first-pass editing of stock imagery is something current systems do well and does not draw on the designer&#x27;s judgment.</p>
+<p>Table 1 summarizes the evaluation.</p>
+<p>Element What it does for the person Could a current system do it well? Verdict Develop the central visual concept The designer&#x27;s judgment, and what the client is really buying (signature judgment) Can generate candidates, but may miss what makes the brand specific Core Art-direct the execution (type, composition) Personal style; keeps the designer&#x27;s eye sharp (identity and ownership; signature judgment) Partly: routine refinements yes, signature choices no Core Produce sized variations of an approved design Routine; no identity Yes Periphery Source and first-pass edit stock imagery Not where the designer&#x27;s judgment lives Yes Periphery Table 1. A graphic designer&#x27;s workflow, weighed element by element.</p>
+<p>Crossing the two questions (AI&#x27;s capabilities and HCC elements) gives a simple design space (Figure 3). The element that most needs care is one a system could perform well and that is also part of the HCC. Automating it would pull the person out of the thinking that sustains their capability, so an AI design that aims at preserving and enhancing creative agency would look to support that element rather than replace it. An element a system could perform well that is peripheral is a candidate for automation. Elements a system performs poorly stay with the person by default.</p>
+<p>The analysis points to a principle for AI that respects the HCC: complement the core, automate the periphery. The principle has two parts. The first concerns the core: Where possible, the design keeps core elements with the person and uses AI to give those elements better conditions, cleaner inputs, better-organized material, or more chances to practise, rather than to perform them. Support can also take an active form. A tool can challenge the person&#x27;s reasoning so they have to defend and sharpen it, as when a system argues the opposing side and the person has to answer it.</p>
+<p>The second part is to automate the periphery. Here the design builds or adapts AI tools to perform that work, so the person no longer has to. Taken together, the two parts change the question a designer begins with, from what a system can do to what it should do, given what the person needs to stay capable, invested, and accountable.</p>
+<h3>5. Applied Demonstrations</h3>
+<p>The method had been applied in a class dealing with designing human-AI hybrid workflows. The class is part of a graduate program in instructional technologies, performed within a specialty course on AI in learning.</p>
+<p>Working in teams of two, students partnered with a practising professional, analyzed that person&#x27;s workflow, identified the HCC and the periphery, designed a human-AI workflow that supported the core and automated the periphery, and taught the new workflow back to the professional. The professionals described their own work as collaborators in the projects, not as subjects recruited for a study. The work process, the designed workflow, including AIpowered solutions the students had designed for the professional, and the aftermath reports of the professionals, had been documented by the student teams. The paper presents five of these cases, showcasing the application of the analysis method, the identification of the HCC and the resulting design decisions.</p>
+<h3>5.1 A litigation lawyer</h3>
+<p>The first professional is a litigation lawyer with about fifteen years in civil and administrative practice, running his own firm. His goal in the workflow studied is case preparation -taking a matter from intake to the documents a court will see. Interviewing him, the team mapped four stages: intake of the matter, reading and analysis of voluminous pleadings, forming the legal and strategic understanding of the case, and drafting the court documents.</p>
+<p>The team identified the core as the construction of the strategic argument for a particular judge: the reading of the tribunal, the ordering of claims, and the narrative that ties the facts together. This is signature judgment built over years of practice, and the lawyer said it is the part without which he would not feel like a litigator, which ties it to identity and ownership as well. The surrounding periphery was heavy but held none of that: reading and cross-referencing large document sets, rebuilding chronologies, and formatting citations.</p>
+<p>The students built a set of AI tools on the platform the lawyer already used, dividing the work so the system handled processing while the lawyer kept interpretation and decision.</p>
+<p>Two of the tools clear periphery. One maps an uploaded document into claims, evidence, gaps, and a chronology, cutting the initial reading load. Another arranges the content the lawyer has written into the court&#x27;s document template. A third proposes alternative strategic lines with their risks, widening the options he considers without choosing among them. Opposed to the first two which centered on automating the periphery, this tool is designed to support, not replace, the core. The fourth tool works on the core as well, and is the one the lawyer valued most. It is designed as an interactive bot that argues against the lawyer&#x27;s chosen line like a hostile reader, surfacing weak points, likely cross-examination, and the claims a sceptical judge might reject. It does not build the argument. It makes the lawyer build a stronger one. The strategic argument is never generated for him.</p>
+<p>In the framework&#x27;s terms, the design is complementing rather than competing, the system is capable, and the stakes are high. The high stakes are what make the complementing design necessary rather than optional. A bot that drafted the argument would put the lawyer in the supervisory position that erodes judgment over time, signing off on reasoning he no longer built. Here AI does more than spare him the periphery. The challenge bot makes his core sharper than it was before, which is the fuller meaning of complementing the core.</p>
+<p>Asked to assess the workflow after using the tools on real cases, the lawyer estimated it cut his preparation time by at least thirty percent. The figure is his own estimate, not a measured result.</p>
+<h3>5.2 A pedagogical training supervisor</h3>
+<p>The second professional is a senior pedagogical supervisor at a teachers&#x27; college, a specialeducation specialist with more than two decades in the field. She trains student teachers and mentors a small group of newer supervisors. By the time the project began she described herself as close to leaving. The administrative load around her work had grown so heavy that she was near burnout, and her departure would have taken years of the college&#x27;s accumulated knowledge with it. Interviewing her, the team mapped her work as one central activity, mentoring, surrounded by several administrative burdens.</p>
+<p>The team identified the core as mentoring: reading where a developing teacher is, judging what they need next, and guiding them toward it. This is the element she named as the reason she entered the profession, which places it squarely in identity and ownership. The periphery was everything that had grown up around it. She assembled placement schedules by hand from information scattered across messages, calls, and memory. She answered the same procedural questions again and again, because the answers existed only in her head. And she rewrote the feedback that newer supervisors drafted for their own student teachers, which was often thin and inconsistent, so that much of her week went to editing other people&#x27;s reports rather than to mentoring.</p>
+<p>The students developed three AI tools, all aimed at the periphery. A scheduling tool takes structured inputs from students and mentor teachers and produces a draft placement table together with the messages needed to confirm each placement, removing weeks of manual matching. A question-answering bot, built from her own documented procedures, gives the newer supervisors immediate answers to routine questions and refers genuinely sensitive situations back to her. A feedback tool takes a newer supervisor&#x27;s raw observation notes and returns them in that supervisor&#x27;s own pedagogical format, for that supervisor to approve or revise. The mechanical work of transcription and formatting is automated, while the evalu-ative judgment stays with the supervisor writing the feedback. This design does not build a tool for the core. A core-supporting tool here would be something like a bot that tracked classroom participation to give the supervisor sharper material for her judgment, which was beyond the project&#x27;s scope.</p>
+<p>Clearing the periphery returns the supervisor&#x27;s time to the mentoring that defines her. She reported early enthusiasm and beginning use of the tools. Because the design was new at the time of writing, no outcome beyond that is claimed.</p>
+<h3>5.3 A control panel engineer</h3>
+<p>The third professional is an electrical engineer who designs control panels for complex installations, work in which a single wiring error or missing component can cause a short, a fire, or a costly field failure. Interviewing him, the team mapped his process as three stages: designing the panel&#x27;s logic, validating the design against its supporting documents, and signing off on it.</p>
+<p>The team identified the core as the safety judgment: the engineer reasons through the panel&#x27;s wiring and logic and can sense that something is wrong before he can fully articulate why. This is signature judgment of the kind that years of situated practice produce. The periphery was the validation step before sign-off, a manual, line-by-line cross-check across three documents in different formats, the bill of materials, the wiring list, and the schematic. It took about a working week per complex panel, and it was the kind of sustained checking in which human attention fades, precisely where a safety-critical discrepancy can hide.</p>
+<p>The students developed an AI tool that performs the cross-check, leaving the safety judgment with the engineer. Built on the organization&#x27;s existing document platform, it parses the three sources, matches components to connections, and returns only the discrepancies, each with its precise location in the source files. The tool has been set up to be inclusive of anything that could potentially be a discrepancy. The engineer decides what every flagged item means. The tool finds candidates for error but does not certify the panel. In the trial it flagged two breakers specified at the wrong current rating, an error that would otherwise have surfaced only at installation, and the engineer&#x27;s review confirmed the discrepancies were real.</p>
+<p>Here the stakes are high and the AI tool is highly capable at the peripheral element, yet the design keeps it away from the core. It feeds the engineer&#x27;s safety judgment rather than competing with it. The tireless checking goes to the place where human attention fails, and the decision about what the discrepancies mean stays with the person accountable for the panel. The engineer reported that validation fell from about five working days to roughly half a day, a self-reported figure from a single project, and said it freed him to do engineering instead of proofreading.</p>
+<h3>5.4 A commercial real-estate consultant and a civil engineer</h3>
+<p>Two further cases show the same method in other domains.</p>
+<p>A commercial real-estate consultant leads marketing-mix planning for retail space, including units on a light-rail project. The team identified her core as the strategic matching of businesses to properties and the negotiation that rests on her personal knowledge of her clients. The periphery was producing business documents by hand and sorting incoming leads against property attributes. The students built a document tool that drafts marketingmix files from templates, and a lead automation process that cleans incoming enquiries and ranks candidate matches for her review. The ranking does more than clear periphery. No such ranking existed in her workflow before, and its criteria were worked out with her, so it feeds the judgment that is her core, helping her match businesses to properties more sharply than she could unaided. The AI tools prepare and propose. She decides, drawing on knowledge of her clients that the system does not hold.</p>
+<p>A senior civil engineer manages public-infrastructure megaprojects with a lean team, where decisions and knowledge funnel through one person. The students identified his core as the strategic coordination and risk judgment he exercises across many interfaces. The periphery was retrieving knowledge, producing meeting summaries, and answering questions whose answers already existed somewhere. The students built a project knowledge base that answers questions only from documented sources, and a recording-to-summary pipeline whose output he reviews before release. He remains the final reviewer of every output. Over four weeks and five documented meetings he reported that producing a summary fell from between sixty and ninety minutes to five to ten, and retrieving past decisions from one to three hours to a few minutes, both self-reported estimates over a short window.</p>
+<p>Table 2 places the five cases side by side, so the shared structure across distinct professions is visible at a glance. In each of the five cases the teams found a small core, offloaded a periphery that had grown heavy, and built the AI so the core stayed with the person, and in several cases so the core was strengthened. The litigation and engineering cases show the two ways AI can meet a core it could otherwise perform: it can sharpen the core, as the challenge bot does for the lawyer&#x27;s argument, or feed it, as the discrepancy bot does for the engineer&#x27;s safety judgment and the ranking bot does for the consultant&#x27;s matching. The pedagogy and infrastructure cases show the more common move, clearing a heavy periphery so the professional can put attention back on the elements that form the core.</p>
+<p>The recurrence has to be read with care. The teams shared a method and an instructor, so it shows that the analysis can be taught and repeated, not that a profession holds one fixed core waiting to be found. What it does show is that the line between core and periphery is one a designer can locate and act on, across professions that otherwise have little in common.</p>
+<h3>6. Discussion</h3>
+<p>The intuitive instinct in designing and implementing AI systems is asking what it can do, and how it can do more or better. The introduction of the HCC construct offers a slightly nuanced starting point: what should it do, given what the person needs to stay capable and invested. It adds a procedure for answering that, rather than leaving it to intuition. The result is a short list of elements to design around, enough to tell efficiency-driven automation apart from a design that leaves the person intact. The risk that AI erodes human and creative agency is widely discussed. What is still rare is a way to design for agency, not only to worry about it. The HCC is meant to be that method.</p>
+<p>The HCC responds and adds to existing frameworks and studies in the human-AI interaction field and the human-centered AI tradition. The COFI framework (Rezwana &amp; Maher, 2023), one of the major pillars of the field, catalogues the interaction choices a co-creative system can make: whether the partners take turns or work in parallel, how the task is divided, who takes the initiative, and how the two communicate. It describes how an interaction can be built, but not which of those choices sustain the person&#x27;s motivation or identity. The construct supplies that criterion.</p>
+<p>Research on human-AI complementarity is about when a person and an AI together do better than either alone. The advantage comes from two differences between them, in what each knows and in what each can do (Hemmer et al., 2025). It leaves out what happens to the person&#x27;s motivation when they see the system as competing with them. That is what the creative-agency framework addresses and the HCC makes specific.</p>
+<p>Research on task allocation (Schemmer et al., 2024) comes closest to the construct. It places AI&#x27;s role on a continuum from automation to augmentation and shows, for instance, that giving people the hardest, AI-uncertain cases raises a team&#x27;s overall accuracy. Both it and the HCC keep some elements with the person, but they sort by different questions. Task allocation asks who performs a task better. The HCC asks what the person would lose by giving it up, so an element can stay with them for the sake of identity or development even when a system could do it as well or better.</p>
+<p>More empirical work that examines how people experience agency while working with AI is aligned with the dimensions of the HCC. A think-aloud study of co-creation in image generation and writing watched people manage their sense of control, autonomy, and ownership as they worked (Rafner et al., 2025).</p>
+<p>Complementing the core can do more than keep it with the person. The cases reported in the article show that a well-designed system can make the person better at the part they most care about. The challenge bot sharpened the lawyer&#x27;s argument, and the ranking bot sharpened the real-estate consultant&#x27;s matching. The aim is not to protect human work from a more capable machine, but to build a hybrid in which the person stays the author of the core and does it better than before.</p>
+<p>This paper proposes designing AI systems and human-AI workflows by assessing how they affect human creative agency. That could be misread as opposing the drive for more capable AI, or as keeping core elements with the person even when a system would do them better, just to keep agency alive. It is neither. The paper does not argue against capable AI, and it does not claim that agency should always win. It offers a way to assess and design for creative agency, not a rule that it must come first.</p>
+<p>There are cases where letting the system take a core element is the right choice, even at a cost to the person&#x27;s agency. The clearest is safety. Where an error can be catastrophic, in surgery, air-traffic control, or critical infrastructure, and a system clearly outperforms human judgment, performance has to come first, and the article does not dispute that.</p>
+<p>The construct asks only that this be a deliberate choice, not a default. The trade-off between machine reliability and human agency should be stated openly, and its long-term costs counted. Those costs include the skill that fades when a person stops exercising it, the decline in their ability to catch the system&#x27;s errors, and the risk that builds when the system meets a case outside its training (Bainbridge, 1983; Strauch, 2018). Naming the core makes those costs visible when the choice is made, so that giving it up is done knowingly.</p>
+<p>The HCC has not been tested. It offers a way of seeing a workflow, and the claim that its four dimensions converge on the same elements is argued here, not measured. The cases are demonstrations from a teaching setting. Their evaluations rest on what the professionals reported in guided conversation, so the reported time savings should be read as how they experienced the change, not as controlled measurements. Because the teams shared a method and an instructor, the recurrence across cases shows that the analysis can be taught and repeated, not that the same pattern would appear on its own.</p>
+<p>One open question is empirical, whether the analysis, applied to different people in the same role, converges on a core stable enough to design products around, and whether pairing the method with established measures of ownership and motivation would sharpen it. Another is the perceptual claim at the centre of the framework, that the same system helps or harms agency depending on whether the person reads it as complementing or competing. This could be tested directly, holding the system&#x27;s actual capability constant while varying how the person sees it. Both would turn a demonstrated construct into a measured one.</p>
+<h3>7. Conclusion</h3>
+<p>Creative agency belongs among the goals that the design of AI for human work should serve. This paper has offered three things toward that goal: a lens for seeing creative agency, a construct for locating it inside a workflow, and a method for designing around it. The claims are calibrated to what the cases can support. The method can be taught and repeated, and people can locate their own core in conversation. The construct&#x27;s dimensions are grounded in established research and the cases demonstrate the method rather than establishing a fixed law of how work divides. The paper argues that a person&#x27;s engagement, development, and ownership deserve explicit weight as goals in their own right. It does not claim they always matter more than efficiency.</p>
+<p>As AI grows more capable, more people will find that a system can perform the part of their work they consider most their own. The question is not whether machines will be able to do it. It is whether the systems built around them will keep people engaged, developing, and accountable, and, at their best, help people do the part they care about even better than before.</p>
+<h3>Funding</h3>
+<p>This work received no specific grant from any funding agency in the public, commercial, or not-forprofit sectors.</p>
+<h3>Data availability statement</h3>
+<p>The projects draw on confidential professional materials, including the notes and summaries students made during meetings with the professionals, identifying details of the professionals, and proprietary documents such as bills of materials, wiring lists, and client files, which cannot be shared.</p>
+<h3>Conflict of interest</h3>
+<p>The author declares no competing interests.</p>
+<h3>Ethics</h3>
+<p>The projects were conducted as graduate coursework in collaboration with practising professionals who agreed to the use of their anonymized workflows for the projects and for this paper. No personally identifying information is reported, and no procedures were performed on the professionals beyond the design collaboration described.</p>
+<h3>Use of AI tools</h3>
+<p>During the preparation of this manuscript, the author used Elicit and Consensus to help search for and identify relevant sources; Claude (Anthropic) for assistance with phrasing, editing, graphics and locating references; and Paperpal for language revision. The author reviewed and verified all AI-assisted output, including every source and reference, and takes full responsibility for the content of the manuscript.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. The AI-Creative Agency Framework (based on Watkins &amp; Barak-Medina, 2024).</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. The four dimensions of the Human Creative Core.</p>
+<h3>Figure 3.</h3>
+<p>Figure 3. The agency-aware AI design space.</p>
+<h3>Table 2.</h3>
+<p>The five cases on a common structure.</p>
+<p>https://doi.org/10.1038/s41598-025-98385-2</p>
+<h3>References</h3>
+<p>Amabile, T. M., &amp; Pratt, M. G. (2016). The dynamic componential model of creativity and innovation in organizations: Making progress, making meaning. Research in Organizational Behavior, 36, 157-183. https://doi.org/10.1016/j.riob.2016.10.001</p>
+<p>Amershi, S., Weld, D., Vorvoreanu, M., Fourney, A., Nushi, B., Collisson, P., Suh, J., Iqbal, S., Bennett, P. N., Inkpen, K., Teevan, J., Kikin-Gil, R., &amp; Horvitz, E. (2019). Guidelines for human-AI interaction. In Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems (Paper 3, pp. 1-13). Association for Computing Machinery. https://doi.org/10.1145/3290605.3300233</p>
+<p>Bainbridge, L. (1983). Ironies of automation. Automatica, 19(6), 775-779. https://doi.org/10.1016/0005-1098(83)90046-8</p>
+<p>Barak-Medina, E. (2025). Designing AI systems that preserve and promote human creative agency. In SYNERGY 2025: Designing and building hybrid human-AI systems (HHAI Workshops 2025) (CEUR Workshop Proceedings, Vol. 4074, pp. 366-374). CEUR-WS.</p>
+<p>Bastani, H., Bastani, O., Sungu, A., Ge, H., Kabakcı, Ö., &amp; Mariman, R. (2025). Generative AI without guardrails can harm learning: Evidence from high school mathematics. Proceedings of the National Academy of Sciences, 122(26), e2422633122. https://doi.org/10.1073/pnas.2422633122</p>
+<p>Clark, R. E., &amp; Estes, F. (1996). Cognitive task analysis. International Journal of Educational Research, 25(5), 403-417.</p>
+<p>Collins, H. (2010). Tacit and explicit knowledge. University of Chicago Press.</p>
+<p>Collins, H., &amp; Evans, R. (2007). Rethinking expertise. University of Chicago Press.</p>
+<p>Csikszentmihalyi, M. (1990). Flow: The psychology of optimal experience. Harper &amp; Row.</p>
+<p>Dix, A., Roach, M., Turchi, T., Malizia, A., &amp; Wilson, B. (2024). Designing and building hybrid human-AI systems (SYNERGY 2024). In Proceedings of the 2024 International Conference on Advanced Visual Interfaces (AVI &#x27;24). Association for Computing Machinery. https://doi.org/10.1145/3656650.3660537</p>
+<p>Doshi, A. R., &amp; Hauser, O. P. (2024). Generative AI enhances individual creativity but reduces the collective diversity of novel content. Science Advances, 10(28), eadn5290. https://doi.org/10.1126/sciadv.adn5290</p>
+<p>Draxler, F., Werner, A., Lehmann, F., Hoppe, M., Schmidt, A., Buschek, D., &amp; Welsch, R. (2024). The AI ghostwriter effect: When users do not perceive ownership of AI-generated text but self-declare as authors. ACM Transactions on Computer-Human Interaction, 31(2), Article 25. https://doi.org/10.1145/3637875</p>
+<p>Dreyfus, H. L., &amp; Dreyfus, S. E. (1986). Mind over machine: The power of human intuition and expertise in the era of the computer. Free Press.</p>
+<p>Fan, Y., Tang, L., Le, H., Shen, K., Tan, S., Zhao, Y., Shen, Y., Li, X., &amp; Gašević, D. (2025). Beware of metacognitive laziness: Effects of generative artificial intelligence on learning motivation, processes, and performance. British Journal of Educational Technology, 56(2), 489-530. https://doi.org/10.1111/bjet.13544</p>
+<p>Getzels, J. W., &amp; Csikszentmihalyi, M. (1976). The creative vision: A longitudinal study of problem finding in art. Wiley.</p>
+<p>Glăveanu, V. P., &amp; Tanggaard, L. (2014). Creativity, identity, and representation: Towards a socio-cultural theory of creative identity. New Ideas in Psychology, 34, 12-21. https://doi.org/10.1016/j.newideapsych.2014.02.002</p>
+<p>Greengard, S. (2025). The AI deskilling paradox. Communications of the ACM, 68(12), 16-18.</p>
+<p>Hemmer, P., Schemmer, M., Kühl, N., Vössing, M., &amp; Satzger, G. (2025). Complementarity in human-AI collaboration: Concept, sources, and evidence. European Journal of Information Systems, 34(6), 979-1002. https://doi.org/10.1080/0960085X.2025.2475962</p>
+<p>Hermann, E., Puntoni, S., &amp; Morewedge, C. K. (2025). GenAI and the psychology of work. Trends in Cognitive Sciences, 29(9), 802-813. https://doi.org/10.1016/j.tics.2025.04.009</p>
+<p>Karwowski, M., Lebuda, I., &amp; Beghetto, R. A. (2019). Creative self-beliefs. In J. C. Kaufman &amp; R. J. Sternberg (Eds.), The Cambridge handbook of creativity (2nd ed., pp. 396-418). Cambridge University Press. https://doi.org/10.1017/9781316979839.021</p>
+<p>Kyi, L., Mahuli, A., Silberman, M. S., Binns, R., Zhao, J., &amp; Biega, A. J. (2025). Governance of generative AI in creative work: Consent, credit, compensation, and beyond. In Proceedings of the 2025 CHI Conference on Human Factors in Computing Systems. Association for Computing Machinery. https://doi.org/10.1145/3706598.3713799</p>
+<p>Lee, E. H., Yin, Y., Jia, N., &amp; Wakslak, C. J. (2026). Relying on AI at work reduces self-efficacy, ownership, and meaning while active collaboration mitigates the effects. Scientific Reports, 16, Article 13583. https://doi.org/10.1038/s41598-026-42312-6</p>
+<p>Lee, H.-P., Sarkar, A., Tankelevitch, L., Drosos, I., Rintel, S., Banks, R., &amp; Wilson, N. (2025). The impact of generative AI on critical thinking: Self-reported reductions in cognitive effort and confidence effects from a survey of knowledge workers. In Proceedings of the 2025 CHI Conference on Human Factors in Computing Systems. Association for Computing Machinery. https://doi.org/10.1145/3706598.3713778</p>
+<p>Lepisto, D. A., Crosina, E., &amp; Pratt, M. G. (2015). Identity work within and beyond the professions: Toward a theoretical integration and extension. In A. M. Costa e Silva &amp; M. T. Aparicio (Eds.), International handbook of professional identities (pp. 11-37). Scientific &amp; Academic Publishing.</p>
+<p>Macnamara, B. N., Berber, I., Çavuşoğlu, M. C., Krupinski, E. A., Nallapareddy, N., Nelson, N., Smith, P. J., Wilson-Delfosse, A. L., &amp; Ray, S. (2024). Does using artificial intelligence assistance accelerate skill decay and hinder skill development without performers&#x27; awareness? Cognitive Research: Principles and Implications, 9, Article 46. https://doi.org/10.1186/s41235-024-00572-8</p>
+<p>McGuire, J., De Cremer, D., &amp; Van de Cruys, T. (2024). Establishing the importance of co-creation and self-efficacy in creative collaboration with artificial intelligence. Scientific Reports, 14, Article 18525. https://doi.org/10.1038/s41598-024-69423-2</p>
+<p>Pierce, J. L., Kostova, T., &amp; Dirks, K. T. (2001). Toward a theory of psychological ownership in organizations. Academy of Management Review, 26(2), 298-310. https://doi.org/10.5465/amr.2001.4378028</p>
+<p>Pierce, J. L., Kostova, T., &amp; Dirks, K. T. (2003). The state of psychological ownership: Integrating and extending a century of research. Review of General Psychology, 7(1), 84-107. https://doi.org/10.1037/1089-2680.7.1.84</p>
+<p>Polanyi, M. (1966). The tacit dimension. Doubleday.</p>
+<p>Rafner, J., Zana, B., Hansen, I. B., Ceh, S., Sherson, J., Benedek, M., &amp; Lebuda, I. (2025). Agency in human-AI collaboration for image generation and creative writing: Preliminary insights from think-aloud protocols. Creativity Research Journal. Advance online publication. https://doi.org/10.1080/10400419.2025.2587803</p>
+<p>Rezwana, J., &amp; Maher, M. L. (2023). Designing creative AI partners with COFI: A framework for modeling interaction in human-AI co-creative systems. ACM Transactions on Computer-Human Interaction, 30(5), Article 67. https://doi.org/10.1145/3519026</p>
+<p>Salatino, A., Prével, A., Caspar, E. A., &amp; Lo Bue, S. (2025). Influence of AI behavior on human moral decisions, agency, and responsibility. Scientific Reports, 15, Article 12329. https://doi.org/10.1038/s41598-025-95587-6</p>
+<p>Schemmer, M., Kühl, N., Benz, C., &amp; Satzger, G. (2024). Roles of artificial intelligence in collaboration with humans: Automation, augmentation, and the future of work. Management Science. Advance online publication. https://doi.org/10.1287/mnsc.2024.05684</p>
+<p>Schön, D. A. (1983). The reflective practitioner: How professionals think in action. Basic Books.</p>
+<p>Sennett, R. (2008). The craftsman. Yale University Press.</p>
+<p>Shneiderman, B. (2020). Human-centered artificial intelligence: Reliable, safe &amp; trustworthy. International Journal of Human-Computer Interaction, 36(6), 495-504. https://doi.org/10.1080/10447318.2020.1741118</p>
+<p>Strauch, B. (2018). Ironies of automation: Still unresolved after all these years. IEEE Transactions on Human-Machine Systems, 48(5), 419-433. https://doi.org/10.1109/THMS.2017.2732506</p>
+<p>Tierney, P., &amp; Farmer, S. M. (2002). Creative self-efficacy: Its potential antecedents and relationship to creative performance. Academy of Management Journal, 45(6), 1137-1148. https://doi.org/10.2307/3069429</p>
+<p>Tofel-Grehl, C., &amp; Feldon, D. F. (2013). Cognitive task analysis-based training: A meta-analysis of studies. Journal of Cognitive Engineering and Decision Making, 7(3), 293-304. https://doi.org/10.1177/1555343412474821</p>
+<p>Watkins, R., &amp; Barak-Medina, E. (2024). AI&#x27;s influence on human creative agency. Creativity Research Journal, 36(1), 1-13. https://doi.org/10.1080/10400419.2024.2437264</p>
+<p>Watkins, R., Barak-Medina, E., &amp; Pugh, K. (2024). Is AI hijacking our agency? [Working paper].</p>
+<p>OSF Preprints. https://doi.org/10.31219/osf.io/8bpaq</p>
+<p>Wu, S., Liu, Y., Ruan, M., Chen, S., &amp; Xie, X.-Y. (2025). Human-generative AI collaboration enhances task performance but undermines human&#x27;s intrinsic motivation. Scientific Reports, 15, Article 15105.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>

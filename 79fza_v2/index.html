@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Cognitive Offloading to Generative AI: A
+Theoretical Framework for Memory, Metacognition, and Consumer
+Decision-Making</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Cognitive Offloading to Generative AI: A Theoretical Framework for
+Memory, Metacognition, and Consumer Decision-Making
+</p>
+<p class="meta">
+2026-11-07 · Metacheck 0.4.3.8 · DOI 10.1080/00913367.2026.2725645
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to fix</span></a><span class="count improve zero"><b>0</b><span>to improve</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>In a memory test, participants had better memory for low-value items
+when they had offloaded high-value items (Dupont et al., 2021), and this
+effect has been replicated in Gilbert cognitive work to an external
+system (e.g., Gen-AI), which releases internal cognitive resources that
+would otherwise be required for encoding.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>We found 2 replications for 2 originals you cited.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 87 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 87 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 87 references with DOIs. We found 2 replications for 2
+originals you cited.</p>
+<p>Check if you are aware of the replication studies, and cite them
+where appropriate.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Replication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sparrow, B., Liu, J., &amp; Wegner, D. M. (2011). Google Effects on
+Memory: Cognitive Consequences of Having Information at Our Fingertips.
+Science, 333(6043), 776-778.
+</td>
+<td style="text-align:left;">
+Camerer, C. F., Dreber, A., Holzmeister, F., Ho, T.-H., Huber, J.,
+Johannesson, M., Kirchler, M., Nave, G., Nosek, B. A., Pfeiffer, T.,
+Altmejd, A., Buttrick, N., Chan, T., Chen, Y., Forsell, E., Gampa, A.,
+Heikensten, E., Hummer, L., Imai, T., … Wu, H. (2018). Evaluating the
+replicability of social science experiments in Nature and Science
+between 2010 and 2015. Nature Human Behaviour, 2(9), 637–644. <a href="https://doi.org/10.1038/s41562-018-0399-z" class="uri">https://doi.org/10.1038/s41562-018-0399-z</a> Individual
+report available at
+<a href="https://doi.org/10.1038/s41562-018-0399-z" target="_blank">doi:10.1038/s41562-018-0399-z</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Storm, B. C., &amp; Stone, S. M. (2015). Saving-Enhanced Memory: The
+Benefits of Saving on the Learning and Remembering of New Information.
+Psychological Science, 26(2), 182-188. <a href="https://doi.org/10.1177/0956797614559285" class="uri">https://doi.org/10.1177/0956797614559285</a>
+</td>
+<td style="text-align:left;">
+Boyce, V., Mathur, M., &amp; Frank, M. C. (2023). Eleven years of
+student replication projects provide evidence on the correlates of
+replicability in psychology. Royal Society Open Science, 10(11). <a href="https://doi.org/10.1098/rsos.231240" class="uri">https://doi.org/10.1098/rsos.231240</a> Individual report
+available at
+<a href="https://doi.org/10.1098/rsos.231240" target="_blank">doi:10.1098/rsos.231240</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
+not succeed at excluding all false positives.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Cognitive Offloading to Generative AI: A Theoretical Framework for Memory, Metacognition, and Consumer Decision-Making</h3>
+<p>Consumer decision-making unfolds through a complex sequence of interactions across multiple touchpoints and channels. The rapid proliferation of generative AI (Gen-AI) represents a fundamental shift in this process, reshaping what information consumers encounter and how much cognitive effort they expend. Rather than actively navigating a series of discrete exposures to information, Gen-AI systems provide aggregated search results, synthesized comparisons, and annotated recommendations. By March 2026, 68% of consumers reported incorporating Gen-AIenabled search for product decisions (Adams et al., 2026), with a substantial portion trusting AI recommendations more than paid search results (Dooley, 2025). The cognitive processes of making a decision are no longer confined within the consumer, but are distributed across human-AI interactions, with Gen-AI performing portions of the evaluative process. As product search, comparison, and evaluation are increasingly conducted by AI, advertising designed to influence consumer cognition directly, such as search and display advertising, lose effectiveness if consumers are no longer performing the cognitive work those formats presume.</p>
+<p>These developments challenge a foundational, but largely implicit, assumption in advertising theory that the consumer is the primary locus of brand evaluation, and that advertising exerts its effects by shaping processing within that internal system. This assumption, of course, was always a bounded approximation. Simon (1955) established that cognitive capacity is limited and decisions are made with sufficient rather than optimal information. Advertising theory absorbed this insight at what Marr (1982) describes as the computational level, accommodating low-elaboration consumers through peripheral routes and heuristic cues, but left intact a deeper, unexamined commitment to the individual as the site of implementation for the cognitive processes underlying persuasion. This commitment is evident across theories such as the Elaboration Likelihood Model, the Persuasion Knowledge Model, and hierarchy-of-effects frameworks.</p>
+<p>Although these theories specify the goals and conditions of persuasion, they do not explicitly address where the underlying cognitive work occurs. Implicitly, they share an implementationlevel assumption that evaluation, elaboration, and attitude formation take place within the individual consumer&#x27;s biological mind.</p>
+<p>It is true that prior technologies have enabled consumers to externalize portions of their cognitive processes (e.g., Google search, Yelp, recommendation systems), but these processes are constrained enough in scope that bounded-cognition assumptions remain workable. Gen-AI renders that assumption untenable by expanding the scope and form of that delegation, from information retrieval to automated action, the stages of consumers&#x27; decision-making that were previously less susceptible to externalization. When different stages of decision processes are delegated to Gen-AI, the locus of learning, persuasion, and brand influence becomes increasingly distributed across human-technology systems rather than residing fully within the consumer.</p>
+<p>Cognitive science has long recognized that cognition extends across tools, artifacts, and environments through cognitive offloading, the use of external resources to reduce internal cognitive demands (Clark &amp; Chalmers, 1998; Risko &amp; Gilbert, 2016). While cognitive offloading has long been examined in cognitive psychology, prior work largely focused on learning and memory outcomes (Gilbert, 2015; Ferguson et al., 2015). Less research has addressed how cognitive offloading reshapes the consumer decision process beyond information acquisition to later stages, such as information integration, comparison of alternatives, evaluation, and choice, particularly as Gen-AI increasingly supports these functions (Clark, 2025). For advertising, consumers&#x27; cognitive offloading to Gen-AI implies a fundamental reallocation of cognitive labor and decision control from consumers to Gen-AI, with downstream consequences for brand learning, persuasion, loyalty formation, and consumer agency.</p>
+<p>This paper proposes a theoretical framework for understanding when consumers cognitively offload one or multiple decision processes to Gen-AI and articulates the cognitive and persuasive outcomes of such offloading decisions. First, we introduce a delegation continuum that maps the stages of the consumer decision process along which cognitive work can be distributed between the consumer and Gen-AI. Drawing on cognitive offloading research and value-based decision principles (Gilbert, 2024), we then categorize and contextualize key antecedents that predict offloading. Metacognitive beliefs, individual traits, and performance goals moderate these cost-benefit perceptions.</p>
+<p>Building on this foundation, the paper further examines outcomes of cognitive offloading to Gen-AI systems. We show how cognitive offloading produces memory trade-offs, metacognitive illusions, verification costs, and longer-term shifts in consumer autonomy and brand loyalty, developing seven propositions and three conjectures. We conclude by outlining interventions that may recalibrate reliance on Gen-AI while preserving consumer agency. Taken together, this work shifts advertising research from messages and exposures to the distribution of cognition in human-AI systems, providing a new perspective for understanding advertising in an era of AI-mediated choice.</p>
+<h3>Cognitive Offloading in Advertising&#x27;s Theoretical Landscape</h3>
+<p>This paper first employs theory adaptation (Jaakkola, 2020), a conceptual design in which one form of adaptation involves shifting the level of analysis. To specify the level being shifted and situate cognitive offloading within advertising theory, we draw on Marr&#x27;s (1982) tri-level framework. This framework distinguishes three analytically separate questions about any information-processing system: the computational level (what goal does it serve), the algorithmic level (how that goal is achieved), and the implementation level (where those processes occur; Huskey et al., 2020; Marr, 1982). Marr&#x27;s framework was originally developed in the field of vision science, but the analytic power of the framework applies broadly to information-processing systems. This includes consumer cognitions that advertising theory has long sought to describe.</p>
+<p>By this distinction, most advertising and communication theories operate primarily at the computational level. They specify the goals of persuasion (e.g., attitude change) and the conditions under which persuasion succeeds, but not how those processes are carried out or where they take place (Huskey et al., 2020). For instance, the Elaboration Likelihood Model (ELM) posits that motivation and ability determine the processing route (Petty et al., 2005), but it does not specify how it transitions between processing routes, or what mechanisms produce elaboration, nor does it address whether these processes must occur entirely within the individual. The Persuasion Knowledge Model (Friestad &amp; Wright, 1994), hierarchy-of-effects models (Lavidge &amp; Steiner, 1961), and brand learning theories (Alba &amp; Hutchinson, 2000) all similarly exemplify this emphasis. Consequently, advertising theory leaves open the question of how evaluative processing is executed and where it is located-a question that becomes increasingly important as emerging technologies enable parts of this processing to occur outside the individual.</p>
+<p>What each of these frameworks shares implicitly is an assumption at the implementation (physical system) level: that the cognitive work occurs within the individual consumer&#x27;s biological mind. This assumption has been so foundational as to go unstated: persuasion, in the dominant tradition, is mediated by internal cognitive elaboration. The LC4MP (Lang, 2006; Fisher et al., 2018a, b) introduces a breakdown of this logic: when message demands exceed the consumer&#x27;s finite cognitive resources, individuals may turn to cognitive offloading to relieve themselves of the demands of the cognitive task. Yet, advertising research has assumed adjustment occurs internally through heuristic processing, reduced elaboration, or disengagement. These advertising theories have yet to consider the possibility that cognitive processes or evaluative labor can be redistributed to an external system, and that one&#x27;s biological mind is not the only physical system in which those processes can be implemented.</p>
+<p>Cognitive science offers a concept, cognitive offloading, that connects the computational accounts of persuasion with the implementation-level question of where that cognitive work is realized. In information-rich environments replete with external support, cognitive offloading allows users to bypass cognitive limitations (e.g., working memory constraints, limited attention) and avoid cognitive overload by delegating parts of processing to external resources. From this perspective, frameworks such as ELM, PKM, the Hierarchy of Effects model, and brand learning theories specify computational-level goals that can, in principle, be achieved across distributed cognitive systems. Rather than replacing existing advertising theories, cognitive offloading therefore identifies the implementation-level assumption on which they depend and specifies where that assumption progressively breaks down.</p>
+<h3>Cognitive Offloading is not New, but Gen-AI is: A Delegation Continuum for Consumer Decision Making</h3>
+<p>Humans have long recruited external resources to reduce cognitive demands. The practice of cognitive offloading can be traced back to antiquity (e.g., systems of knots or quipus for memory, Nestojko et al., 2013). Examples include using language, mathematical notation, and depictive representations like maps and diagrams, which enhance human reasoning and reduce the burden on internal memory (Clark &amp; Chalmers, 1998). Transactive memory theory formalizes this insight at the social level: individuals in relationships and groups retrieve information through other people, which effectively distributes cognition across a social system (Wegner, 1987). In contemporary contexts, cognitive offloading also extends across digital technologies (Hamilton &amp; Benjamin, 2019), where individuals use devices as repositories of representational information, such as using search engines to retrieve information (Sparrow et al., 2011).</p>
+<p>Each of these tools allows individuals to offload a bounded cognitive task, shifting a portion of the decision process from the biological mind to external systems, while consumers are still responsible for integrating outputs and making judgments. Fully internal cognition was, as Simon (1955) established, always a bounded approximation. Therefore, the question is not &quot;whether consumers offload,&quot; but how much of the decision process can be delegated, and what kinds of cognitive work are transferred.</p>
+<p>Because of this, we propose a delegation continuum for consumer decision-making that maps the progression of cognitive offloading across the stages of product search and evaluation, from its most bounded form to its most expansive, organized by the type of cognitive work being transferred. We draw on Parasuraman et al.&#x27;s (2000) function-based taxonomy of human-machine automation. This taxonomy distinguishes information acquisition, information analysis, decision selection, and action implementation across ten levels of automation ranging from Level 1 (fully manual: the human performs all work) to Level 10 (fully autonomous: the system acts without human involvement). We adapt this framework to consumer decision-making by proposing a seven-stage delegation continuum. The delegation continuum for consumer decision-making maps onto these function types with increasing automation levels. Stages 1 and 2 (information retrieval and synthesis) correspond to information acquisition at lower automation levels. At Stage 1 (storage/retrieval), consumers query apps for items, prices, and specifications. At Stage 2 (synthesis), systems such as Yelp integrate and summarize information across sources. Stages 3-4 (comparison and evaluation) correspond to information analysis and early decision selection. At Stage 3 (comparison), websites like Amazon present options side by side on specified attributes. At Stage 4, alternative evaluation occurs when a feature-matching algorithm evaluates products against stated preferences, effectively performing the comparative judgment on the consumer&#x27;s behalf. At Stage 5 (recommendation), systems such as Netflix or Spotify rank and surface options tailored to inferred preferences. Stages 6-7 (decision execution and automated action) correspond to action implementation at high automation levels. Stage 6 executes a decision without requiring consumers&#x27; approval per step, and Stage 7, like the agentic system, monitors, decides, and acts on predetermined rules without any further engagement from consumers, approaching full automation as described in Parasuraman et al. (2000) 1 . Each stage of offloading can be performed by a technological feature, but none of these technologies has the capacity to span the full range, leaving consumers responsible for integrating outputs across stages (Table 1).</p>
+<p>Gen-AI breaks this pattern by occupying all the stages across this delegation continuum.</p>
+<p>With a single prompt that describes their needs, consumers can receive a synthesized overview, a comparison of products, ranked recommendations, and can even proceed with making decisions and executing transactions using an agentic AI. While prior technologies cover one or several stages of the decision-making process, the integrative and evaluative work still largely remains 1 There are meaningful variations within a stage. Two technologies that both perform recommendation may differ substantially in how much evaluative labor remains with the consumer: a traditional recommender system outputs a ranked list of options based on behavioral patterns, leaving the consumer to evaluate which recommendation to act on, while a generative AI system delivers a synthesized evaluative recommendation with explicit reasoningsubstantially reducing the evaluative work that remains internal. The delegation continuum therefore operates simultaneously across stages -by type of cognitive function -and within each stage -by degree of automation.</p>
+<p>with consumers. Comparatively, Gen-AI produces a qualitative shift: it can absorb all cognitive work and eliminate the cognitive integration that previously occurred between decision stages. In classic offloading, individuals are typically aware of what they are delegating. Unlike earlier forms of offloading, Gen-AI also creates the possibility of a cognitive illusion of agency, whereby consumers experience themselves as making evaluative judgments that were largely performed externally. This possibility motivates the metacognitive outcomes developed later in the paper. As users delegate higher-order cognitive processes to AI, Gen-AI chatbots transform from passive repositories of information into active extended-cognition partners (Orrù et al., 2023; Urban et al., 2024).</p>
+<p>[Table 1 about here]</p>
+<p>When Do We Offload? Outlining Antecedents for Advertising Research Gilbert (2024) formalizes cognitive offloading as a value-based decision process in which individuals delegate cognitive work to an external source when the expected utility of offloading exceeds that of internal processing. Applied to consumer decision making, delegating product search and evaluation to generative AI reflects a comparative assessment of the relative costs and benefits of internal processing (by the consumer) versus external processing (by AI systems).</p>
+<p>Offloading becomes more likely as the costs of internal processing increase due to situational demands or individual cognitive constraints associated with complex tasks (Risko et al., 2014), and as the benefits of external processing increase, such as improved decision quality and reduced cognitive effort (Gao &amp; Garagnani, 2025; Grinschgl et al., 2021). Conversely, offloading is less likely when the costs of external processing rise, including low reliability and usability and increased post-offloading costs (e.g., verification costs), or when the benefits of internal processing are salient, such as preserving autonomy and cultivating expertise (Hamilton &amp; Benjamin, 2019).</p>
+<p>Importantly, these determinants are not independent categories but reflect positions along a shared value continuum such that a reduction in cost can simultaneously function as a gain in benefit, and vice versa. We use this value-based framework to organize key categories of variables that are especially relevant to advertising researchers investigating Gen-AI-mediated consumer decision-making.</p>
+<h3>Costs of Internal Processing Increase the Likelihood of Offloading.</h3>
+<p>Internal processing costs arise from task demands and individual cognitive constraints that increase the effort, difficulty, or likelihood of error in unaided decision making. Task complexity stands out as a central factor that increases the cost of internal processing, as it increases both the number of elements that must be considered (e.g., brands, attributes, information sources; Hu et al., 2007; Hærem et al., 2015) and the need to integrate those elements and evaluate trade-offs (Wood, 1986; Hærem et al., 2015). Greater task complexity creates greater demands for sustained attention, which increases the likelihood of offloading to algorithms (Wahn et al., 2023). Multitasking further elevates costs by introducing additional cognitive load (Gilbert et al., 2015; Grinschgl et al., 2023).</p>
+<p>Finally, individual cognitive constraints, such as short-term memory (STM), working memory limitations, and age-related decline, further increase the offloading likelihood when external systems offer superior reasoning capacity (Richmond &amp; Taylor, 2025; Risko &amp; Dunn, 2015).</p>
+<h3>Benefits of External Processing Increase the Likelihood of Offloading.</h3>
+<p>The benefits of external processing reflect the performance and efficiency gains that make cognitive offloading an attractive alternative to internal processing. Past research identifies performance advantages, particularly improvements in accuracy and reliability, as a central benefit of processing externally (Risko &amp; Dunn, 2015; Gilbert, 2024; Gao &amp; Garagnani, 2025). When individuals offload to external aids, information is retained more reliably than in memory alone (Gilbert et al., 2020; Grinschgl et al., 2023; Weis &amp; Wiese, 2019). Offloading also provides cognitive resource liberation: when consumers offload one task to Gen-AI, it reduces opportunity costs and frees limited attentional and working memory resources for other concurrent tasks (Grinschgl et al., 2023; Storm &amp; Stone, 2015). Accessibility further amplifies these benefits. When external cognitive aids are readily available, easily accessible, and simple to use, individuals are more likely to rely on them (Clark &amp; Chalmers, 1998; Clark, 2005). Gen-AI&#x27;s accessibility via multiple devices with conversational interfaces makes it especially attractive as a cognitive offloading tool, valued for improving decision quality and reducing cognitive fatigue.</p>
+<h3>Costs of External Processing Reduce the Likelihood of Offloading.</h3>
+<p>Factors that increase the costs of external processing fall into two broad categories: tool reliability and usability, and post-offload costs. Poor tool reliability and usability, such as delays, malfunctions, and the physical and cognitive actions required to access, set up, and input requests, impose temporal and interaction costs, which have been found to reduce offloading behavior (Grinschgl et al., 2021 (Grinschgl et al., , 2023;; Gilbert, 2015; Weis &amp; Wiese, 2019; Storm &amp; Stone, 2015). When an external cognitive aid produces unreliable or opaque outputs, additional post-offloading costs arise (Storm &amp; Stone, 2015). For Gen-AI, the most salient include rework costs, verification costs, and liability costs.</p>
+<p>When AI produces biased results or hallucinations, consumers need to repeat the request (Castillo et al., 2021), verify using additional sources (Dimitriadis et al., 2024), and experience emotional and responsibility burdens (Hohenstein &amp; Jung, 2020).</p>
+<h3>Benefits of Internal Processing Reduce the Likelihood of Offloading.</h3>
+<p>Internal processing can foster long-term benefits through &quot;desirable difficulties,&quot; helping users develop schemas and expertise and preserve autonomy and satisfaction. Consumers who expect future purchases in the same category prefer more effortful and elaborate processing to develop schemas for the category, which help them to form more efficient and informed choices in the future (Vogrincic-Haselbacher et al., 2021). In the long term, relying on internal processing is critical for the cultivation of expertise (Hamilton &amp; Benjamin, 2019). Internal processing also satisfies needs for autonomy, competence, and self-expression, particularly for high-involvement or identityrelevant categories. These benefits are largely long-term, fostering skill development and identity formation, which suggests that resistance to offloading reflects not only cognitive constraints but also motivational and identity-based considerations.</p>
+<h3>Moderators that Shape Perception and Change Decision Weights</h3>
+<p>Ultimately, a consumer&#x27;s decision to offload depends on their evaluation of themselves, their goals, and their environment. Therefore, individual factors and goals moderate offload decisions by influencing how costs and benefits are perceived, weighted, and traded off against one another. Moderators do not themselves create cognitive costs or processing benefits, but they shape decision-makers&#x27; sensitivity to existing costs and benefits. Below we provide a brief overview of the most distinctive moderators that shape a consumer&#x27;s perception of their information environment: metacognitive biases, individual traits, performance goals, and situational factors.</p>
+<p>Metacognitive beliefs emerge as one of the strongest moderators influencing how individuals perceive their cognitive abilities, tasks, and tools. Metacognition refers to higher-order thinking, or &quot;thinking about thinking,&quot; that underlies evaluation or control of one&#x27;s mental processes (Risko &amp; Gilbert, 2016). Erroneous metacognitive evaluations modify one&#x27;s offloading behavior. Research on metacognitive bias related to cognitive abilities suggests that users are imperfectly calibrated in assessing their own performance; such miscalibration increases perceived internal processing costs and promotes offloading (Gilbert et al., 2020; Rummel et al., 2013).</p>
+<p>Individuals also exhibit metacognitive biases regarding task demands (Dunn, Lutes, &amp; Risko, 2016; Dunn, Gaspar, &amp; Risko, 2019; Dunn &amp; Risko, 2016), avoiding conditions perceived as harder.</p>
+<p>Research on metacognitive biases related to tools suggests that users are systematically biased to believe that using external tools is more reliable and efficient (Virgo et al., 2017). This bias is conceptually similar to research on automation bias (Lyell &amp; Coiera, 2017) and machine heuristics (Sundar &amp; Kim, 2019), which increase the perceived benefits of external processing, thereby increasing the likelihood of offloading.</p>
+<p>Individual traits, preferences, and past experiences stand out as another group of moderators. Individual traits, such as high need for cognition (Cacioppo &amp; Petty, 1982) and analytical processing style (Chaiken, 1987), or traits associated with valuing the benefits of internal processing, such as high need for autonomy or high need for competence (Vansteenkiste &amp; Ryan, 2013), may lead individuals to place greater weight on internal processing benefits, reducing the likelihood of offloading. Further, maximizers are more likely to leverage Gen-AI to synthesize large product sets, while satisficers use it for quick recommendations (Schwartz et al., 2002).</p>
+<p>Privacy concerns and algorithm aversion reduce offloading propensity (Segijn et al., 2024), while positive past experiences amplify it (Gao et al., 2025).</p>
+<p>The third category of moderators involves goals and performance priorities (Weis &amp; Wiese, 2019). Past research has consistently found that performance goals of speed versus accuracy influence offloading strategy. When accuracy is prioritized, individuals tend to offload more to external cognitive aids when those aids are perceived as reliable (Gilbert et al., 2020). By contrast, when speed is prioritized, users offload less frequently, as relying on internal resources can sometimes be faster than the physical manipulation required to use a tool (Weis &amp; Wiese, 2019).</p>
+<p>Consumer goal orientation further shapes this propensity: consumers driven by utilitarian goals, those focused on efficient task completion, are more likely to delegate evaluative work to Gen-AI, whereas consumers motivated by experiential or hedonic goals, such as the enjoyment of browsing or identity expression through product discovery, derive value from the search process itself and are therefore less likely to offload (Hirschman &amp; Holbrook, 1982). This line of results suggests that offloading involves strategic planning based on one&#x27;s goals.</p>
+<p>Situational context constitutes a final category of moderators. Time pressure and decision urgency increase offloading propensity by narrowing the window for internal deliberation and raising the relative cost of effortful internal processing-under time constraints, consumers adaptively shift toward faster, lower-effort strategies, including external delegation (Payne, Bettman, &amp; Johnson, 1988). Information environment complexity introduces a parallel pressure: when product landscapes are dense or option volumes are high, internal processing capacity is more readily exceeded, shifting the cost-benefit calculus toward external delegation (Malhotra, 1982).</p>
+<h3>Outcomes of Cognitive Offloading to Gen-AI and Formalizing Propositions for Advertising</h3>
+<p>The decision to offload to Gen-AI produces a range of cognitive and persuasive outcomes.</p>
+<p>Prior research on cognitive offloading documents systematic effects on objective memory for offloaded content, metacognitive judgments, and decision performance. Extending these findings to an advertising context, we examine how experimentally validated offloading effects translate into consumer and brand outcomes, including three interrelated clusters: (1) memory trade-offs and product learning, (2) metacognitive illusions that inflate cognitive self-esteem and decision confidence, and (3) post-offloading verification costs and their implications for decision quality (See online supplement, Table 2 for a complete list of propositions and conjectures).</p>
+<h3>Outcomes Cluster 1: Memory Trade-Offs in Gen-AI Cognitive Offloading</h3>
+<p>The most robust finding in cognitive offload literature is that delegation to an external cognitive aid impairs memory for the offloaded content (Eskritt &amp; Ma, 2014; Henkel, 2014; Grinschgl et al., 2021). This cognitive impairment has been found consistently across multiple modalities, such as photo-taking (Henkel, 2014) and information retrieval on a computer (Sparrow et al., 2011). Memory impairment has been found for offloaded content and their source (Siler et al., 2019). When consumers anticipate continued access to externally stored information, the brain suppresses the resource-intensive operations that would otherwise consolidate that material into long-term memory. For instance, when users expect to have continued access to information on a computer, they encode it less deeply, leading to poorer recall (Sparrow et al., 2011). This phenomenon was termed the &quot;Google Effect&quot; (Sparrow et al., 2011; Storm &amp; Stone, 2015), and relies on the individual&#x27;s expectation that the offloaded information can be accessed later.</p>
+<p>The cognitive resources freed through offloading are redistributed to encode new incoming information (saving-enhanced-memory effect; Storm &amp; Stone, 2015). When offloading liberates cognitive resources, these resources are redistributed to other concurrent or subsequent tasks, leading to improved memory for subsequently encountered material (Dupont et al., 2021; Gilbert, 2024). In a memory test, participants had better memory for low-value items when they had offloaded high-value items (Dupont et al., 2021), and this effect has been replicated in Gilbert cognitive work to an external system (e.g., Gen-AI), which releases internal cognitive resources that would otherwise be required for encoding. Resources freed by offloading are then redistributed toward processing externally provided content (Grinschgl et al., 2021; Risko &amp; Gilbert, 2016).</p>
+<p>For Gen-AI-mediated offloading in advertising, two subprocesses of cognitive resource reallocation, anticipatory encoding suppression (Sparrow et al., 2011) and redistribution of freed resources (Storm &amp; Stone, 2015), translate into a theoretically coherent and advertisingconsequential pattern. When consumers query Gen-AI for product information, comparisons, or recommendations, they anticipate that the AI will retain and synthesize the relevant information (Henkel, 2014; Grinschgl et al., 2021; Storm &amp; Stone, 2015). This anticipation suppresses the encoding of brand names, product attributes, and competitive differentiators-the effortful cognitive operations crucial for durable brand knowledge (Alba &amp; Hutchinson, 2000). The resource redistribution process then produces an asymmetric memory profile: freed from encoding brand-level factual content, the consumer&#x27;s available cognitive resources are directed toward the AI&#x27;s evaluative outputs, including the summary judgment, the ranked recommendation, and the explanatory rationale, such that consumers encode what the AI concluded rather than the evidence from which that conclusion derives.</p>
+<p>Proposition 1: Memory Trade-offs. Compared to consumers who evaluate products internally, consumers who offload product evaluation to Gen-AI will show (a) lower recall of brand names and factual product attributes. Within the offloading group, (b) consumers will recall AI-generated evaluative summaries better than they recall the brand attributes and product information underlying those summaries.</p>
+<p>P1a and P1b are driven by two distinct sub-processes operating through different phases of cognitive resource reallocation. P1a is driven by anticipatory encoding suppression: the expectation of continued AI access de-prioritizes internal encoding prospectively, before the AI response is received (Sparrow et al., 2011; Storm &amp; Stone, 2015). P1b is driven by active redistribution of freed resources: once suppression has reduced the encoding load for brandattribute content, released cognitive resources are directed toward the AI output that occupies the consumer&#x27;s attention at delivery (Dupont et al., 2021; Gilbert, 2024; Storm &amp; Stone, 2015).</p>
+<h3>Delegation Boundary Conditions.</h3>
+<p>The mechanism of anticipatory encoding suppression operates at Stages 1-5 of the delegation continuum, and the effect of memory impairment should increase as delegation level increases. The memory impairment at Stage 1, storage and retrieval, is well-validated (Eskritt &amp; Ma, 2014; Henkel, 2014). Memory impairment is expected to worsen as delegation deepens across Stages 2-5 (Synthesis-Recommendation). At Stages 6-7 (Execution-Automated Action), brand knowledge deficits persist and worsen, but the causal pathway is non-exposure rather than suppression.</p>
+<h3>Moderators.</h3>
+<p>The memory effects predicted in Cluster 1 depend primarily on consumers&#x27; expectations of future AI accessibility. Anticipatory encoding suppression should be strongest when consumers believe the delegated information will remain reliably accessible, because this expectation reduces the need to encode brand information internally. Trust in AI reliability should strengthen anticipatory encoding suppression because consumers perceive less need to retain brand information internally when they expect AI to remain dependable (cf. Storm &amp; Stone, 2015).</p>
+<p>Likewise, anticipated ease of re-accessing AI should amplify memory trade-offs by reducing incentives for durable encoding during the initial decision (Magen &amp; Tomer-Offen, 2025).</p>
+<p>Conversely, highly involved consumers or those with substantial category knowledge may continue encoding brand information despite delegating portions of evaluation, thereby attenuating the predicted memory trade-offs.</p>
+<h3>Outcomes Cluster 2: Metacognitive Illusions and Their Consequences</h3>
+<p>Cognitive offloading has been shown to distort metacognition, which refers to individuals&#x27; awareness and understanding of their own knowledge (Risko &amp; Gilbert, 2016). Research suggests that relying on external tools can create illusions of knowledge: individuals experience feelings of being informed without actually carefully processing or understanding the underlying content, and misattribute the information available in the external cognitive aid to their own internal &quot;in-thehead&quot; knowledge (Fisher et al., 2015). Ward (2021) found that using Google to answer trivia questions inflated confidence in one&#x27;s own memory and thinking, showing a misattribution of the search engine&#x27;s retrieval to internal knowledge. Hamilton and Yao (2018) further showed that device ownership amplifies this boundary blurring, with participants using their own smartphones showing stronger metacognitive self-esteem inflation than those using a control device.</p>
+<p>Across these studies, the inflated metacognitive self-esteem is operationalized as cognitive self-esteem (CSE; Ward, 2013 Ward, , 2021)), a construct comprising three subdimensions: Memory CSE Little research has explored this inflated metacognitive self-esteem beyond a memory context to examine how it relates to evaluative and explanatory reasoning (Rozenblit &amp; Keil, 2002). Rozenblit and Keil&#x27;s (2002) study found that people tend to systematically overestimate how deeply they understand complex causal mechanisms, suggesting that misattribution of cognitive competence can operate across reasoning domains. Yet the literature has not examined whether offloading evaluative reasoning to an external tool similarly inflates metacognitive selfassessments of one&#x27;s own evaluative capacity. This is what the current paper discusses: when consumers delegate not just information retrieval but also product evaluation to Gen-AI, their inflated metacognitive self-esteem may shift from memory and access confidence to decisionmaking confidence.</p>
+<p>The conditions for this extended misattribution are more fully met in a Gen-AI-mediated decision-making context than in contexts mediated by any prior technology. When Gen-AI synthesizes across sources, weighs trade-offs, performs product evaluation, and delivers a confident recommendation in a single seamless interaction, the boundary between internal and external processing becomes less transparent: consumers may feel that they are informed and have made well-thought-out decisions, without realizing that the bulk of the information processing actually took place within the Gen-AI system, rather than in their brain.</p>
+<h3>Mechanisms.</h3>
+<p>The proposed mechanism of this outcome is the cognitive illusion of agency.</p>
+<p>Cognitive illusion of agency describes the process by which consumers misattribute evaluative cognitive work performed by an external system (e.g., Gen-AI) to their own internal cognition, mistaking access to AI-generated outputs for personal understanding (Fisher et al., 2015) and conflating externally sourced with internally held knowledge (Ward, 2021; Hamilton &amp; Yao, 2018).</p>
+<p>Two possible components contribute to this blurry boundary: source misattribution (Ward, 2021) and fluency-driven confidence inflation (Schwarz et al., 2021). Source misattribution occurs when the swift and seamless interface between internal thought and external retrieval blurs the boundaries of internal knowledge and system knowledge, making this output feel self-generated (Ward, 2021). Unlike consulting a human expert or searching a reference, Gen-AI delivers its outputs unobtrusively, providing minimal cues to its own contributions and blurring the lines between AI-provided and self-generated knowledge (Fisher et al., 2015; Hamilton &amp; Benjamin, 2019; Ward, 2021). Fluency-driven confidence inflation operates simultaneously: AI produces outputs with ease and fluency, generating a metacognitive signal that can be easily misinterpreted as personal competence, creating a metacognitive illusion of agency (Schwarz et al., 2021; Reber &amp; Unkelbach, 2010; Petrocelli &amp; Whitmire, 2017; Hamilton &amp; Qi, 2023).</p>
+<h3>Delegation Boundary Conditions.</h3>
+<p>The form of the cognitive illusion of agency and the subdimensions of metacognitive self-esteem inflation differ depending on the delegation stage. At</p>
+<p>Stages 1-3 (information retrieval, synthesis, and comparison), the operative form is the illusion of memory. Consumers misattribute AI&#x27;s retrieval and comparison of brand attributes and product information to their own memory and access competence, inflating Memory CSE and Access CSE (Hamilton &amp; Benjamin, 2019; Ward, 2013 Ward, , 2021)). At Stages 4-5 (evaluation, recommendation), the operative form is evaluative misattribution: consumers misattribute AI&#x27;s evaluative reasoning to their own judgment, inflating Thinking/Processing CSE in the domain of decision-making. At Stages 6-7 (decision execution and automated action), however, the mechanism shifts from misattribution to agency displacement. In that case, consumers&#x27; cognitive illusion of agency may decrease, or even disappear (Collier et al., 2025).</p>
+<p>Proposition 2a: Metacognitive Self-esteem inflation in memory: Consumers who offload information retrieval and comparison to Gen-AI at early delegation stages (Stages 1-3) will report higher Memory CSE for brand attributes and product information and higher Access CSE for locating relevant product information than consumers who process this information internally. Proposition 2b: Metacognitive Self-esteem inflation in thinking: Consumers who offload product evaluation and recommendation processing to Gen-AI at mid-to-advanced delegation stages (Stages 4-5) will report higher Thinking/Processing CSE in the domain of decision-making than consumers who evaluate products internally.</p>
+<p>Inflated Thinking/Processing CSE (P2b) has downstream consequences for state-level decision confidence. When consumers feel they are capable evaluators, they feel increased confidence in this specific decision. Processing fluency serves as a second metacognitive cue for reliability and accuracy, influencing consumers&#x27; judgments of truth and confidence (Reber et al., 2010; Petrocelli &amp; Whitmire, 2017; Schwarz et al., 2021). While dual-process models predict that fluency triggers peripheral processing (Chaiken, 1987), our claim operates at the algorithmic level: in Gen-AI contexts, fluency reduces the salience of the internal-external boundary, facilitating source misattribution in ways the ELM and the heuristic-systematic model (HSM) predict in outline but do not specify mechanistically.</p>
+<p>Further, Gen-AI produces fluent and confident responses with few uncertainty signals (Kidd &amp; Birhane, 2023; Zhou et al., 2024) and systematically validates users&#x27; existing positions through sycophantic outputs (Rathje et al., 2025).</p>
+<p>As a result, consumers may mistake AI&#x27;s apparent confidence for their own, and develop decision confidence from AI&#x27;s apparent expertise, even when the evaluative work was performed externally by AI. These metacognitive illusions can negatively impact advertising effectiveness. Consumers who feel well-informed are more likely to defend their existing judgment and discount new information (Perloff, 2018). Moreover, reduced information seeking allows consumers to bypass the extended search and consideration phases where advertising and SEO efforts traditionally exert influence. Together, Propositions 2-4 create a closed epistemic loop: the same Gen-AI interaction that impairs brand memory (P1) also inflates decision confidence (P3) and suppresses the information seeking (P4) that would otherwise correct for that impairment. Consumers have reduced their brand encoding, misattributed that confidence to their own evaluative competence, and foreclosed the possibility of engaging in additional search behaviors.</p>
+<h3>Moderators.</h3>
+<p>Perceived AI expertise should strengthen the cognitive illusion of agency because authoritative AI outputs are more readily misattributed to one&#x27;s own evaluative competence (Sundar &amp; Kim, 2019). Psychological closeness to AI-through ownership, personalization, or repeated interaction-should further blur the boundary between externally generated and internally generated cognition (Clark, 2005; Clark &amp; Chalmers, 1998; Hamilton &amp; Yao, 2018). Domain expertise and AI literacy should weaken Thinking/Processing CSE inflation because knowledgeable consumers are better able to distinguish their own reasoning from AIgenerated evaluation.</p>
+<h3>Outcomes Cluster 3: Decision Quality and Verification Costs</h3>
+<p>The memory trade-offs, CSE inflation, decision confidence, and reduced information seeking examined in Clusters 1 and 2 are produced by the process of offloading itself, either through cognitive resource reallocation or the cognitive illusion of agency, rather than by whether the output of Gen-AI is objectively accurate and reliable. Consumers who receive a flawed AI recommendation experience the same metacognitive inflation as those who receive an accurate one, because the illusion operates at the level of how the output is processed, not what it contains.</p>
+<p>The objective reliability of the Gen-AI output, however, is a new conditional variable in Cluster 3. This conditionality produces three distinct scenarios: (1) when AI is reliable and the consumer does not verify, offloading yields decision-quality gains; (2) when AI is unreliable and the consumer does not verify, offloading yields quality losses, along with the inflated confidence and reduced information seeking from Cluster 2; and (3) when AI is unreliable and the consumer verifies, cognitive and emotional costs emerge, influencing consumer experience and brand evaluation. These three scenarios guide Propositions 5, 6, and 7, and form the verification tradeoff that serves as the central tension in Cluster 3.</p>
+<h3>Mechanism.</h3>
+<p>Cluster 3 does not introduce a new cognitive mechanism. Instead, it focuses on delegation recalibration, where the original antecedent of offloading-the cost-benefit analysis of internal versus external processing-is reactivated. When AI reliability does not meet consumers&#x27; expectations, consumers re-enter this decision process, weighing the expected utility of continued external processing against the costs and benefits of shifting back to internal processing (Gilbert, 2024). Because the recalibration operates at the level of the offloading decision itself (i.e., an antecedent of offloading), it is not treated as a new mechanism.</p>
+<p>Under stable reliability, the offloading decision is made once and the consumer proceeds without re-evaluation. When reliability is disrupted, such as when the system produces a noticeable error, consumers re-engage with the offloading decision and the delegation continuum, but with updated cost and benefit estimates. In this case, the expected value of AI processing decreases, but the benefit of internal processing increases, making them less likely to offload or more likely to move back to earlier stages of the delegation continuum. Past research supports this calibration dynamic (Weis &amp; Wiese, 2019b; Gilbert et al., 2020). When the tool is unreliable or performance falls below a certain threshold, users shift cognitive offloading behavior and retain more information internally.</p>
+<h3>Reliable AI: decision quality gains. Gen-AI can synthesize large volumes of information</h3>
+<p>and perform structured analyses that exceed individual cognitive capacity under real-world conditions. When AI outputs are accurate, well-calibrated, and aligned with the consumer&#x27;s evaluative goal, offloading to Gen-AI can produce objectively better decisions than consumers would reach through internal processing alone. Empirical evidence from the cognitive offloading and decision-aid literatures shows that offloading to reliable external cognitive aids enhances accuracy and provides immediate performance gains across multiple cognitive tasks, including higher attentional accuracy (Wahn et al., 2023) and greater computational efficiency (Gao &amp; Garagnani, 2025). It bears noting, however, that source reliability does not guarantee output reliability: Gen-AI systems can hallucinate, generating plausible but factually incorrect content even when drawing on credible sources, such that P5&#x27;s quality gains are conditional on actual output accuracy rather than on the authority of underlying sources alone (Kidd &amp; Birhane, 2023; León-Domínguez, 2024).</p>
+<h3>Proposition 5: Decision Quality Under Reliable AI.</h3>
+<p>Consumers who offload product evaluation to Gen-AI will demonstrate higher decision quality than consumers who evaluate products internally, when AI recommendations are based on comprehensive and accurate information sources.</p>
+<p>Cognitive costs of verification. When AI outputs are uncertain, biased, or opaque, users may engage in verification behaviors, introducing additional cognitive costs that either pure offloading or pure internal evaluation would not have required. Independent evaluation requires a single sequence of cognitive operations: the consumer assesses available information, weighs options, and chooses. Verification of an AI recommendation requires a minimum of three: understanding AI&#x27;s conclusion, independently evaluating its soundness, and resolving discrepancies between the AI&#x27;s output and the consumer&#x27;s own assessment. Verifying AI-provided sources further adds to the cognitive burden. Consumers need to determine whether the source exists, is relevant, and is accurately presented, a task that consumers who lack AI literacy often fail to perform efficiently (Rheu &amp; Cho, 2025). The increased cognitive cost generated by the subsequent recalibration is consistent with automation research showing that monitoring and verifying automated outputs increases mental workload relative to performing the task manually (Lyell &amp; Coiera, 2017). Therefore, when AI is unreliable and fails to meet consumers&#x27; needs, the additional steps may compound on top of initial evaluation work, making it more cognitively demanding than the single task of independent evaluation.</p>
+<h3>Emotional costs and brand spillover.</h3>
+<p>Beyond cognitive load, verification introduces emotional costs. Consumers who discover during delegation that an AI recommendation was inaccurate or biased are likely to feel that a decision has been invalidated after they have already begun they have already begun to psychologically commit to, creating uncertainty and disrupting the confidence generated by the processing fluency (P3). AI-mediated service failures consistently increase frustration, distress, and dissatisfaction (Castillo et al., 2021). Worse, past research often observes a &quot;spillover&quot; effect, in which the emotional response of blame is frequently redirected toward the service firm or the brand (Leo &amp; Huh, 2020). In product evaluation contexts, such spillover is particularly consequential for brands. Even when the brand had no control over the AI&#x27;s output, consumers&#x27; negative emotional responses to AI failures likely reduce subsequent brand attitudes and behavioral intentions (Chen et al., 2026).</p>
+<p>Proposition 6: Verification Costs. Consumers who offload product evaluation to Gen-AI will report (a) higher perceived cognitive effort and (b) increased negative emotions (upset, frustration, dissatisfaction) when verifying AI recommendations, compared to the cognitive and emotional experience of consumers who evaluate products internally.</p>
+<h3>The verification trade-off.</h3>
+<p>Despite the costs specified in P6, verification simultaneously re-engages cognitive processing that offloading had bypassed, creating a verification trade-off in which these added costs partially restore the core cognitive effects of offloading identified in Clusters 1 and 2. During verification, consumers re-encounter brand names, product attributes, and competitive positioning, partially mitigating the memory impairment established in P1 (Henkel, 2014; Storm &amp; Stone, 2015). The active verification and the realization that AI&#x27;s output is inconsistent may also reduce the inflated cognitive self-esteem of consumers and the inflated decision confidence produced by the cognitive illusion of agency (Dunn, 2010), attenuating P2 and P3. As a result, although the verification process may feel frustrating and cognitively taxing, consumers develop a more accurate perception of their metacognitive self-esteem and ultimately make more informed decisions.</p>
+<p>Proposition 7: Verification Trade-off. Among consumers who offload product evaluation to Gen-AI, those who verify AI recommendations will report (a) mitigated memory impairment for brand and product information relative to non-verifiers, reflecting restored encoding engagement, and (b) lower decision confidence relative to non-verifiers, reflecting attenuation of the metacognitive self-esteem from Cluster 2, establishing verification as the mechanism through which offloading&#x27;s dual cognitive costs can be partially corrected, at the expense of the costs specified in P6.</p>
+<h3>Boundary Conditions.</h3>
+<p>Objective AI reliability determines which propositions in Cluster 3 become operative. Reliability failures have relatively minor consequences during information retrieval (Stages 1-3), become most consequential when evaluative reasoning is delegated (Stages 4-5), and become largely irreversible once AI autonomously executes decisions (Stages 6-7).</p>
+<h3>Moderators.</h3>
+<p>Trust primarily determines whether consumers initiate recalibration after encountering reliability failures. Consumers with lower trust in AI reliability tend to calibrate more actively, detecting reliability issues before they become deeply committed to AI-generated conclusions (Hoff &amp; Bashir, 2015). AI literacy should facilitate efficient verification by helping consumers recognize reliability failures and evaluate AI outputs more effectively. Consumers who are aware of Gen-AI&#x27;s hallucination tendencies are more likely to detect reliability failures early and execute verification with lower incremental cognitive costs (Rheu &amp; Cho, 2025), reducing the verification cost in P6.</p>
+<p>Verification should be most likely for consequential purchasing decisions where the perceived benefits of independent evaluation outweigh its cognitive costs. High-involvement or high-stakes purchases heighten sensitivity to reliability signals and increase the perceived benefit of internal recalibration, making voluntary verification more likely even when P3&#x27;s inflated confidence works to suppress it. Comparatively, low-involvement purchases are more likely to remain delegated. Finally, willingness to expend cognitive effort (e.g., high need for cognition) should determine whether consumers complete verification and realize the corrective effects predicted in P7. See online supplement, Table 3 for a complete view of propositions, each specifying the antecedents, mechanisms, boundary conditions, outcomes, and moderators.</p>
+<p>[Table 2 and 3 about here]</p>
+<h3>Long-Term Theoretical Extensions for Consumer and Advertising Implications of Cognitive</h3>
+<h3>Offloading</h3>
+<p>The previously mentioned short-term effects may accumulate as reliance on AI offloading becomes routine. As Gen-AI becomes a habitual decision intermediary, the episodic cognitive consequences proposed in Clusters 1 and 2 may consolidate into more durable shifts in consumers&#x27; autonomy, competence, and brand relationships. Concurrently, individual cognitive shifts may aggregate to reallocate brand loyalty toward AI platforms (Campbell, 2025). In this section, we theorize long-term implications across three escalating levels: consumers&#x27; autonomy illusion, competence erosion, and loyalty reallocation from brands to AI platforms. 2 Importantly, unlike the formally testable propositions in Clusters 1-3, the theoretical extensions in this section assume that the short-term effects proposed in P1-P7 hold and that their effects accumulate reliably over time. Rather than serving as formal predictions, the following are offered as theoretically grounded conjectures intended to motivate more longitudinal and field-based investigation.</p>
+<h3>Long-term Metacognitive Illusion: Autonomy Illusion, Competence, and Decision Proficiency</h3>
+<p>Building on the mechanisms proposed in Clusters 1 and 2, the long-term trajectory of habitual offloading may consolidate into an autonomy illusion, a systematic overestimation of one&#x27;s agency and control when these are externally scaffolded or algorithmically constrained (MacKay &amp; DeVries, 2022; Ponce-Rojo et al., 2026). Building on predictions from P1 to P3, frequent offloaders may feel capable and autonomous, believing they &quot;can make these decisions&quot;, but at the same time, lack the internal knowledge and deliberative skills for autonomous choice.</p>
+<p>Further, this elevated confidence reduces the likelihood of verification of offloaded output (P4), reinforcing reliance on Gen-AI and further suppressing internal deliberation. Over time, this selfreinforcing dynamic may produce a progressive dissociation between perceived autonomy and objective capability, creating an autonomy illusion.</p>
+<p>Consistent with this account, Shaw and Nave (2025) found that higher trust in AI and lower need for cognition predicted greater cognitive surrender across repeated decision trials, suggesting 2 The long-term consequences of cognitive offloading to Gen-AI systems that we trace through C8-C10 are likely to extend well beyond the individual level. These consequences emerge from the joint structure of human cognition and the technological systems that consumers increasingly rely on. Individual cognitive shifts aggregate across episodes and often across populations, into outcomes that shape the broader advertising-consumer ecosystem. Bainbridge&#x27;s (1983) classic work on the &quot;ironies of automation&quot; captures the central tension: as a control system becomes more capable, the human operator becomes more crucial at the moments when the system fails. As such, when consumers offload evaluation to generative AI, potential atrophy in consumers&#x27; ability to evaluate outcomes becomes more salient when guidance from the AI system is unreliable, opaque, or absent. Phenomena like loss of knowledge about one&#x27;s own preferences, taste, and category expertise can be considered as population-scale instantiations of this dynamic, with outcomes that reflect a coupled interaction of human and AI systems rather than just reflecting changes in individual consumers in isolation.</p>
+<p>that the autonomy illusion is amplified by the very individual-difference moderators identified in Cluster 1. Consequently, autonomy illusion can have long-term consequences: consumers believe they are capable of independent decisions without realizing their growing dependence on AI or their underinvestment in competence building (Lu, 2024).</p>
+<p>Based on the accumulating logic from P1 and P4, the conjecture also predicts lower objective competence in the long term. If the memory trade-off proposed in P1 holds, habitual offloaders develop familiarity with AI-generated summaries but not with the underlying brand attributes and product information. Without frequent encoding and reasoning processes, consumers miss the opportunity to cultivate decision heuristics or category schemas that support competent autonomous choice (Hamilton &amp; Benjamin, 2019). The reduced information seeking (P4) further suppresses the corrective experience needed for accurate self-assessment. León-Domínguez (2024) found that pervasive AI chatbot use may impair higher-order executive functions, including problem-solving, suggesting that the dependency is not merely a knowledge gap but a functional one. Therefore, consumers may have eroded objective competence while maintaining a high sense of autonomy, creating a wide gap between perceived and actual competence.</p>
+<h3>Conjecture 8. Autonomy Illusion.</h3>
+<p>Consumers who more frequently offload product evaluation to generative AI will report (a) higher perceived autonomy while (b) demonstrating lower objective competence (e.g., lower decision quality).</p>
+<p>Then, what happens when AI scaffolding is removed? The inflated metacognitive selfesteem (P2) and decision confidence (P3) are context-dependent: driven by AI&#x27;s fluency and misattribution effects, they require AI&#x27;s presence. When AI is removed, that belief has no basis, and the inflated self-assessments cannot transfer to an autonomous decision context. Therefore, habitual offloaders&#x27; perceived competence and decision confidence may be deflated, potentially even lower than those who never offloaded, as the habit of internal deliberation has atrophied (Shaw &amp; Nave, 2025).</p>
+<p>The memory trade-off (P1) compounds this metacognitive collapse and further affects consumers&#x27; perceived competence and decision confidence. Consumers who habitually offloaded did not encode brand attributes and product information in the first place, and believe this information will be externally accessible. Past research demonstrates the performance cost when access is removed: offloading boosts performance when tools are available but impairs recall when they are removed (Grinschgl et al., 2021; Richmond &amp; Taylor, 2025). The habitual offloader therefore has to work with two deficits: the inflated metacognitive self-esteem has no basis, and the knowledge that could have filled the gap was never encoded. As a result, consumers are at risk of becoming less resilient decision-makers, with diminished perceived competence and confidence in their own judgment.</p>
+<h3>Conjecture 9. Erosion of Perceived Competence and Decision Confidence.</h3>
+<p>Consumers who more frequently offload product evaluation to generative AI will report (a) lower perceived competence and (b) lower decision confidence when forced to make product decisions without Gen-AI, compared to consumers who evaluate products internally.</p>
+<h3>Long-term Memory Trade-off: Loyalty Reallocation and Risks to Brand Equity</h3>
+<p>The loyalty reallocation from brands to AI platforms theorized here follows from two distinct mechanisms established in Clusters 1 and 2. First, when consumers encode AI&#x27;s evaluative summaries but not brand attributes (P1), the cognitive prerequisites for brand awareness, associations, and loyalty are never accumulated (Aaker, 1996). Second, building on P2 and P3, the positive metacognitive experiences generated through AI interaction are tied to the AI platform rather than to the brands it recommends. As discussed, these psychological inflations are contextdependent and experienced through AI interaction. Over repeated episodes, loyalty accumulates around AI platforms rather than brands: consumers may remain indifferent to which brand AI recommends while remaining loyal to the platform itself (Orrù et al., 2023; Urban et al., 2024).</p>
+<h3>Conjecture 10. Loyalty Reallocation.</h3>
+<p>Consumers who more frequently offload product evaluation to generative AI will report higher attitudinal loyalty to AI platforms compared to specific product brands within categories.</p>
+<p>If C10 holds, AI-mediated loyalty reallocation may weaken brand equity (Aaker, 1996).</p>
+<p>When AI mediates product choice, consumers may not be exposed to enough brand-controlled touchpoints to establish distinctive brand associations. Instead, brand equity may be shaped by AI&#x27;s recommendation criteria and training data. For instance, habitual offloaders may select products based on AI&#x27;s recommendations (e.g., &quot;it is the most cost-effective option&quot;), with a shallow and instrumental understanding of the brand or products. As a result, brands risk being homogenized by AI recommendations and losing the distinctiveness through which equity is traditionally built.</p>
+<p>The threat to brand equity extends further to the advocacy stage. Brand engagement theory suggests that advocacy depends on accumulated brand experience (Van Doorn et al., 2010; Maslowska et al., 2016). When consumers remember AI evaluations better than brand information, they may also share AI&#x27;s evaluation rather than their own product knowledge. As a result, wordof-mouth recommendations may shift away from brand-specific beliefs and experiences to AI&#x27;s endorsement of the brand (e.g., &quot;AI recommended it&quot;). Such word-of-mouth prioritizes AI over brand, which strengthens AI&#x27;s role as a decision intermediary and accelerates the middle-funnel contraction that Campbell (2025) identifies, while eroding brand-centered advocacy (Figure 1:</p>
+<p>Conceptual Framework for Cognitive Offload in Advertising).</p>
+<p>[Figure 1 about here] Understanding when and how such interventions recalibrate consumer judgment will help researchers design appropriate AI systems that preserve consumer agency and decision quality.</p>
+<h3>Practical Implications for AI-Mediated Advertising</h3>
+<p>Offloading consumer decision-making to Gen-AI drives fundamental changes in advertising strategy. When consumers delegate information search, comparison, evaluation, and even decision-making to Gen-AI, brands must adapt their advertising strategies to account for AI intermediaries. For instance, as AI synthesizes multiple sources of information, consistent branded messages become more important than the persuasiveness of a single message. In addition, to be more machine-readable, brand attributes need to be stated more explicitly rather than implied via aspirational imagery or emotional narratives. Further, brands may also need to monitor online presence and increase visibility on credible platforms, as AI systems tend to assign greater weight to such sources when generating and citing information.</p>
+<p>This emerging practice is formalized as Generative Engine Optimization (GEO), in which brands optimize not for ranking algorithms but for the citation and synthesis logic of large language models (Aggarwal et al., 2024). Where traditional SEO targets keyword relevance and link authority, GEO requires structuring product information in machine-readable formats, building presence on high-authority platforms that AI systems weigh heavily, and stating brand claims explicitly enough to survive AI summarization without distortion. Empirically, incorporating authoritative citations, statistical evidence, and verifiable persuasive language meaningfully increases the likelihood of being cited in AI-generated recommendations (Aggarwal et al., 2024).</p>
+<p>However, such shifts also create risks. When brand content is created to optimize for AI citation, brands may play the algorithm game rather than serve consumers&#x27; interests. When brand content shifts from resonating with consumers to optimizing for algorithms, advertising risks losing creativity and authenticity. These implications point to a broader tension: when AI-mediated consumer decisions press a brand to change how it communicates, such changes may weaken the consumer-brand relationship. Ensuring that AI-mediated advertising serves consumer interests, rather than simply shifting power from brands to platforms, remains an open and pressing challenge.</p>
+<h3>Conclusion</h3>
+<p>Generative AI is rapidly becoming a central intermediary in consumer decision-making, fundamentally altering how information is accessed, evaluated, and acted upon. This paper advances advertising theory by conceptualizing consumers&#x27; use of Gen-AI for product search and evaluation as a form of cognitive offloading, a value-based decision to delegate evaluative labor from the consumer to an external system. By integrating insights from cognitive offloading, metacognition, and advertising research, we develop a unified framework that explains when consumers offload decisions to Gen-AI, how such offloading reshapes cognition and persuasion in the short term, and why its consequences extend to long-term consumer agency and brand equity.</p>
+<p>In the short term, we suggest that offloading evaluation to Gen-AI produces systematic memory trade-offs, reallocating cognitive resources away from brand and product attributes toward AI-generated evaluative summaries. This reallocation weakens traditional mechanisms of brand learning while fostering metacognitive illusions, including inflated subjective knowledge and decision confidence that dampen subsequent information seeking and reduce receptivity to advertising. Although offloading can improve decision quality when AI is reliable, verification introduces cognitive and emotional costs while restoring knowledge accuracy. In the long term, metacognitive illusions may develop into an autonomy illusion, a systematic mismatch between consumers&#x27; perceived agency and their actual decision competence, hindering consumers&#x27; competence and decision proficiency when autonomous decision-making is required without AI.</p>
+<p>At the market level, memory trade-offs and AI-centered attribution shift evaluative equity away from brands and toward AI platforms, risking consumer loyalty and brand equity formation. The paper concludes by identifying future research on calibrating AI reliance to preserve consumer agency.</p>
+<p>Taken together, this work shifts the theoretical focus of advertising research from messages and exposures to the distribution of cognition in human-AI systems. As evaluative judgment increasingly resides outside the consumer mind, core assumptions about learning, persuasion, and brand equity must be reconsidered. By positioning cognitive offloading as the central mechanism linking generative AI to advertising outcomes, this paper provides a foundation for future advertising theory in an era of AI-mediated choice.</p>
+<p>This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.</p>
+<p>The authors report there are no competing interests to declare.</p>
+<h3>(</h3>
+<p>2024) and Grinschgl et al. (2023). The offloading literature thus documents not a simple memory deficit but a systematic redistribution: what is encoded internally shifts from the delegated content to whatever information occupies the consumer&#x27;s attention at the moment of resource availability. Mechanisms. Cognitive resource reallocation serves as a primary mechanism for the outcomes in Cluster 1. Cognitive resource reallocation describes the process of delegating confidence in one&#x27;s ability to retain information), Thinking/Processing CSE (confidence in one&#x27;s capacity to reason and evaluate), and Access CSE (confidence in knowing where to locate information externally).</p>
+<h3>(</h3>
+<p>In the consumer product evaluation context, Memory CSE refers to confidence in one&#x27;s ability to recall brand attributes and product information; Access CSE refers to confidence in one&#x27;s ability to locate or retrieve relevant product information when needed; andThinking/Processing CSE refers to confidence in one&#x27;s capacity to evaluate, compare, and form judgments about products -the cognitive work most directly implicated in consumer decisionmaking.</p>
+<h3>Proposition 3 :</h3>
+<p>Decision Confidence Inflation.Consumers who offload product evaluation to Gen-AI will report higher decision confidence than consumers who evaluate products internally, driven by inflated Thinking/Processing CSE (P2b) as an antecedent and reinforced by AI output fluency as a peripheral cue for accuracy.Proposition 4 is a downstream consequence of Proposition 3: We propose that decision confidence mediates the relationship between Gen-AI offloading and information seeking.Pescetelli et al. (2021) demonstrated that the probability of seeking additional advice approaches zero at the highest confidence levels, establishing a near-threshold inhibitory effect of confidence on information acquisition. When consumers&#x27; decision confidence is inflated through the cognitive illusion of agency, additional product information, further elaboration of encountered brand messages, or active verification feels unnecessary, as the consumer believes the evaluation has already been adequately performed.Proposition 4: Reduced Information Seeking. Decision confidence (P3) mediates a negative effect of Gen-AI offloading on intention to seek additional product information or to verify AI recommendations, such that offloading inflates confidence and inflated confidence in turn suppresses information-seeking behavior.</p>
+<h3>Future</h3>
+<p>Research: Calibrating Offloading and Restoring Consumer AgencyRather than treating these outcomes as inevitable, future research should examine how offloading can be calibrated to balance efficiency gains with consumer learning, autonomy, and sustainable brand equity. Future research can explore interventions that shape calibration in cognitive offloading. One stream of inquiry concerns interventions that interrupt processing fluency. Instead of presenting information with high certainty(Kidd &amp; Birhane, 2023; Zhou et al., 2024), AI can estimate its confidence level and note information gaps. For instance, when providing recommendations about nutritional supplements, AI can note that its recommendation is based on general nutritional guidelines and that it does not have access to consumers&#x27; specific health conditions or current medications. Such fluency-disrupting interventions may reduce metacognitive illusion and prompt consumers to seek verification from external sources.Another line of inquiry can involve reducing the cost of verification. Up to now, AI has attempted to support verification by providing sources. However, sources may be fabricated, loosely related, outdated, or still require substantial human effort to assess relevance and correctness. Future research could examine how alternative design strategies reduce the perceived and actual costs of verification. For instance, does explainable AI-highlighting key assumptions and reasoning-shift consumers from surface-cue reliance to substantive logic evaluation, and when does lowering verification costs foster appropriate scrutiny versus reinforcing overreliance?</p>
+<h3>Table 1.</h3>
+<p>Delegation Continuum of Consumer Decision Making: Cognitive Offloading Across Technologies and Stages</p>
+<h3>AppendixFigure 1.</h3>
+<p>Conceptual Framework for Cognitive Offload in Advertising</p>
+<h3>References</h3>
+<p>Aaker, D. A. (1996). Measuring Brand Equity Across Products and Markets. California Management Review, 38(3), 102-120. https://doi.org/10.2307/41165845</p>
+<p>Aggarwal, P., Murahari, V., Rajpurohit, T., Kalyan, A., Narasimhan, K., &amp; Deshpande, A. (2024). GEO: Generative Engine Optimization. Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining, KDD &#x27;24, 5-16. https://doi.org/10.1145/3637528.3671900</p>
+<p>Alba, J. W., &amp; Hutchinson, J. (2000). Knowledge calibration: What consumers know and what they think they know. Journal of Consumer Research, 27(2), 123-156.</p>
+<p>Cacioppo, J. T., &amp; Petty, R. E. (1982). The need for cognition. Journal of Personality and Social Psychology, 42(1), 116-131. https://doi.org/10.1037/0022-3514.42.1.116</p>
+<p>Campbell, C. (2025). Whether We Know It or Not, We&#x27;re All Slowly Befriending AI Agents. Journal of Advertising Research, 65(2), 143-145. https://doi.org/10.1080/00218499.2025.2496606</p>
+<p>Castillo, D., Canhoto, A. I., &amp; Said, E. (2021). The dark side of AI-powered service interactions: Exploring the process of co-destruction from the customer perspective. The Service Industries Journal, 41(13-14), 900-925. https://doi.org/10.1080/02642069.2020.1787993</p>
+<p>Castillo, D., Canhoto, A., &amp; Said, E. (2022). When Chatbots Fail: Exploring Customer Responsibility Attributions of Co-Created Service Failures: An Abstract. In J. Allen, B. Jochims, &amp; S. Wu (Eds.), Celebrating the Past and Future of Marketing and Discovery with Social Impact (pp. 171-172). Springer International Publishing. https://doi.org/10.1007/978-3-030-95346-1_56</p>
+<p>Chaiken, S. (1987). The Heuristic Model of Persuasion. In Social Influence. Psychology Press.</p>
+<p>Chen, C. (Crystal), Hu, X., &amp; Xu, X. (2026). Blame the Bot: Extending Attribution Dynamics in Chatbot-Consumer-Brand Interactions. Journal of Current Issues &amp; Research in Advertising, 1-25. https://doi.org/10.1080/10641734.2026.2657272</p>
+<p>Clark, A. (2005). Intrinsic Content, Active Memory and the Extended Mind. Analysis, 65(1), 1- 11.</p>
+<p>Clark, A. (2025). Extending Minds with Generative AI. Nature Communications, 16(1), 4627. https://doi.org/10.1038/s41467-025-59906-9</p>
+<p>Clark, A., &amp; Chalmers, D. (1998). The Extended Mind. Analysis, 58(1), 7-19.</p>
+<p>Collier, M. A., Narayan, R., &amp; Admoni, H. (2025). The Sense of Agency in Assistive Robotics Using Shared Autonomy (arXiv:2501.07462). arXiv. https://doi.org/10.48550/arXiv.2501.07462</p>
+<p>Dimitriadis, F., Alkagiet, S., Tsigkriki, L., Kleitsioti, P., Sidiropoulos, G., Efstratiou, D., Askalidi, T., Tsaousidis, A., Siarkos, M., Giannakopoulou, P., Mavrogianni, A.-D., Zarifis, J., &amp; Koulaouzidis, G. (2024). ChatGPT and Patients With Heart Failure. Angiology, 00033197241238403. https://doi.org/10.1177/00033197241238403</p>
+<p>Dooley, R. (2025, March). AI Search Results More Trusted Than Ads: What CMOs Need To Know. https://www.forbes.com/sites/rogerdooley/2025/03/10/ai-search-results-more- trusted-than-ads-what-cmos-need-to-know/</p>
+<p>Dunn, J. M. (2010). Contradictory Information: Too Much of a Good Thing. Journal of Philosophical Logic, 39(4), 425-452.</p>
+<p>Dunn, T. L., Gaspar, C., &amp; Risko, E. F. (2019). Cue awareness in avoiding effortful control. Neuropsychologia, 123, 77-91. https://doi.org/10.1016/j.neuropsychologia.2018.05.011</p>
+<p>Dunn, T., Lutes, D., &amp; Risko, E. (2016). Metacognitive Evaluation in the Avoidance of Demand. Journal of Experimental Psychology: Human Perception and Performance, 42, 1372- 1387. https://doi.org/10.1037/xhp0000236</p>
+<p>Dupont, D., Zhu, Q., &amp; Gilbert, S. (2021). Value-based routing of delayed intentions into brain- based vs external memory stores. https://doi.org/10.31234/osf.io/wq7rs</p>
+<p>Eskritt, M., &amp; Ma, S. (2014). Intentional forgetting: Note-taking as a naturalistic example. Memory &amp; Cognition, 42(2), 237-246. https://doi.org/10.3758/s13421-013-0362-1</p>
+<p>Friestad, M., &amp; Wright, P. (1994). The persuasion knowledge model: How people cope with persuasion attempts. Journal of consumer research, 21(1), 1-31.</p>
+<p>Fisher, J. T., Huskey, R., Keene, J. R., &amp; Weber, R. (2018a). The limited capacity model of motivated mediated message processing: Taking stock of the past. Annals of the International Communication Association, 42(4), 270-290.</p>
+<p>Fisher, J. T., Huskey, R., Keene, J. R., &amp; Weber, R. (2018b). The limited capacity model of motivated mediated message processing: Looking to the future. Annals of the International Communication Association, 42(4), 291-315.</p>
+<p>Fisher, M., Goddu, M. K., &amp; Keil, F. C. (2015). Searching for explanations: How the Internet inflates estimates of internal knowledge. Journal of Experimental Psychology: General, 144(3), 674-687. https://doi.org/10.1037/xge0000070</p>
+<p>Gao, J., Opute, A. P., Jawad, C., &amp; Zhan, M. (2025). The influence of artificial intelligence chatbot problem solving on customers&#x27; continued usage intention in e-commerce platforms: An expectation-confirmation model approach. Journal of Business Research, 200, 115661. https://doi.org/10.1016/j.jbusres.2025.115661</p>
+<p>Gao, Y., &amp; Garagnani, M. (2025). Improving risky choices: The effect of cognitive offloading on risky decisions. Journal of Risk and Uncertainty, 70(2), 105-128. https://doi.org/10.1007/s11166-025-09451-z</p>
+<p>Gilbert, S. J. (2015). Strategic offloading of delayed intentions into the external environment. Quarterly Journal of Experimental Psychology, 68(5), 971-992. https://doi.org/10.1080/17470218.2014.972963</p>
+<p>Gilbert, S. J. (2024). Cognitive offloading is value-based decision making: Modelling cognitive effort and the expected value of memory. Cognition, 247, 105783. https://doi.org/10.1016/j.cognition.2024.105783</p>
+<p>Gilbert, S. J., Bird, A., Carpenter, J. M., Fleming, S. M., Sachdeva, C., &amp; Tsai, P.-C. (2020). Optimal use of reminders: Metacognition, effort, and cognitive offloading. Journal of Experimental Psychology: General, 149(3), 501-517. https://doi.org/10.1037/xge0000652</p>
+<p>Grinschgl, S., Papenmeier, F., &amp; Meyerhoff, H. S. (2021). Consequences of cognitive offloading: Boosting performance but diminishing memory. Quarterly Journal of Experimental Psychology, 74(9), 1477-1496.</p>
+<p>Grinschgl, S., Papenmeier, F., &amp; Meyerhoff, H. S. (2023). Mutual interplay between cognitive offloading and secondary task performance. Psychonomic Bulletin &amp; Review, 30(6), 2250-2261. https://doi.org/10.3758/s13423-023-02312-3</p>
+<p>Hærem, T., Pentland, B. T., &amp; Miller, K. D. (2015). Task Complexity: Extending a Core Concept. Academy of Management Review, 40(3), 446-460. https://doi.org/10.5465/amr.2013.0350</p>
+<p>Hamilton, K. A., &amp; Benjamin, A. S. (2019). The human-machine extended organism: New roles and responsibilities of human cognition in a digital ecology. Journal of Applied Research in Memory and Cognition, 8(1), 40-45. https://doi.org/10.1016/j.jarmac.2019.01.001</p>
+<p>Hamilton, K. A., &amp; Qi, L. (2023). Search Fluency Mistaken for Understanding: Ease of Information Retrieval from the Internet Inflates Internal Knowledge Confidence. Social Media + Society, 9(3), 20563051231195547. https://doi.org/10.1177/20563051231195547</p>
+<p>Hamilton, K. A., &amp; Yao, M. Z. (2018). Blurring boundaries: Effects of device features on metacognitive evaluations. Computers in Human Behavior, 89, 213-220. https://doi.org/10.1016/j.chb.2018.07.044</p>
+<p>Henkel, L. A. (2014). Point-and-Shoot Memories: The Influence of Taking Photos on Memory for a Museum Tour. Psychological Science, 25(2), 396-402. https://doi.org/10.1177/0956797613504438</p>
+<p>Hirschman, E. C., &amp; Holbrook, M. B. (1982). Hedonic Consumption: Emerging Concepts, Methods and Propositions. Journal of Marketing, 46(3), 92-101. https://doi.org/10.2307/1251707</p>
+<p>Hoff, K. A., &amp; Bashir, M. (2015). Trust in Automation: Integrating Empirical Evidence on Factors That Influence Trust. Human Factors, 57(3), 407-434. https://doi.org/10.1177/0018720814547570</p>
+<p>Hohenstein, J., &amp; Jung, M. (2020). AI as a moral crumple zone: The effects of AI-mediated communication on attribution and trust. Computers in Human Behavior, 106, 106190. https://doi.org/10.1016/j.chb.2019.106190</p>
+<p>Hu, J., Huhmann, B. A., &amp; Hyman, M. R. (2007). The relationship between task complexity and information search: The role of self-efficacy. Psychology &amp; Marketing, 24(3), 253-270. https://doi.org/10.1002/mar.20160</p>
+<p>Huskey, R., Bue, A. C., Eden, A., Grall, C., Meshi, D., Prena, K., ... &amp; Wilcox, S. (2020). Marr&#x27;s tri-level framework integrates biological explanation across communication subfields. Journal of Communication, 70(3), 356-378.</p>
+<p>Jaakkola, E. (2020). Designing conceptual articles: Four approaches. AMS Review, 10(1- 2), 18-26. https://doi.org/10.1007/s13162-020-00161-0</p>
+<p>Kidd, C., &amp; Birhane, A. (2023). How AI can distort human beliefs. Science, 380(6651), 1222- 1223. https://doi.org/10.1126/science.adi0248</p>
+<p>Lang, A. (2006). Using the Limited Capacity Model of Motivated Mediated Message Processing to Design Effective Cancer Communication Messages. Journal of Communication, 56(suppl_1), S57-S80. https://doi.org/10.1111/j.1460-2466.2006.00283.x</p>
+<p>Lavidge, R. J., &amp; Steiner, G. A. (1961). A model for predictive measurement of advertising effectiveness. The Journal of Marketing, 25(6), 59-62.</p>
+<p>Leo, X., &amp; Huh, Y. E. (2020). Who gets the blame for service failures? Attribution of responsibility toward robot versus human service providers and service firms. Computers in Human Behavior, 113, 106520. https://doi.org/10.1016/j.chb.2020.106520</p>
+<p>León-Domínguez, U. (2024). Potential cognitive risks of generative transformer-based AI chatbots on higher order executive functions. Neuropsychology, 38(4), 293-308. https://doi.org/10.1037/neu0000948</p>
+<p>Lu, W. (2024). Inevitable challenges of autonomy: Ethical concerns in personalized algorithmic decision-making. Humanities and Social Sciences Communications, 11(1), 1321. https://doi.org/10.1057/s41599-024-03864-y</p>
+<p>Lyell, D., &amp; Coiera, E. (2017). Automation bias and verification complexity: A systematic review. Journal of the American Medical Informatics Association, 24(2), 423-431. https://doi.org/10.1093/jamia/ocw105</p>
+<p>Magen, H., &amp; Tomer-Offen, M. (2025). Reduced relational and item-specific processing in cognitive offloading. Cognitive Research: Principles and Implications, 10, 41. https://doi.org/10.1186/s41235-025-00647-0</p>
+<p>MacKay, M., &amp; DeVries, I. (2022). Autonomy Illusion in Immersive Virtual Learning Environments. Practitioner Proceedings of the 8th International Conference of the Immersive Learning Research Network (iLRN2022), 90-93. https://doi.org/10.56198/A6PFYZU3N</p>
+<p>Malhotra, N. K. (1982). Information Load and Consumer Decision Making. Journal of Consumer Research, 8(4), 419-430.</p>
+<p>Marr, D. (1982). Vision: A computational investigation into the human representation and processing of visual information. San Francisco, CA: W.H. Freeman.</p>
+<p>Maslowska, E., Malthouse, E. C., &amp; Collinger, T. (2016). The customer engagement ecosystem. Journal of Marketing Management, 32(5-6), 469-501.</p>
+<p>Nestojko, J. F., Finley, J. R., &amp; Roediger, H. L. (2013). Extending Cognition to External Agents. Psychological Inquiry, 24(4), 321-325. https://doi.org/10.1080/1047840X.2013.844056</p>
+<p>Ng, D. T. K., Leung, J. K. L., Chu, S. K. W., &amp; Qiao, M. S. (2021). Conceptualizing AI literacy: An exploratory review. Computers and Education: Artificial Intelligence, 2, 100041. https://doi.org/10.1016/j.caeai.2021.100041</p>
+<p>Orrù, G., Piarulli, A., Conversano, C., &amp; Gemignani, A. (2023). Human-like problem-solving abilities in large language models using ChatGPT. Frontiers in Artificial Intelligence, 6, 1199350.</p>
+<p>Parasuraman, R., Sheridan, T. B., &amp; Wickens, C. D. (2000). A model for types and levels of human interaction with automation. IEEE Transactions on Systems, Man, and Cybernetics -Part A: Systems and Humans, 30(3), 286-297. https://doi.org/10.1109/3468.844354</p>
+<p>Payne, J. W., Bettman, J. R., &amp; Johnson, E. J. (1988). Adaptive Strategy Selection in Decision Making.</p>
+<p>Perloff, R. M. (2018). A Three-Decade Retrospective on the Hostile Media Effect. In Advances in Foundational Mass Communication Theories. Routledge.</p>
+<p>Pescetelli, N., Hauperich, A.-K., &amp; Yeung, N. (2021). Confidence, advice seeking and changes of mind in decision making. Cognition, 215, 104810. https://doi.org/10.1016/j.cognition.2021.104810</p>
+<p>Petrocelli, J. V., &amp; Whitmire, M. B. (2017). Emotion Decoding and Incidental Processing Fluency as Antecedents of Attitude Certainty. Personality and Social Psychology Bulletin, 43(7), 924-939. https://doi.org/10.1177/0146167217700606</p>
+<p>Petty, R., Cacioppo, J., Strathman, A., &amp; Priester, J. (2005). To think or not to think: Exploring two routes to persuasion. In S. Shavitt &amp; T. C. Brock (Eds.), Persuasion: Psychological insights and perspectives. Allyn &amp; Bacon.</p>
+<p>Ponce-Rojo, A., Fontaines-Ruiz, T., &amp; Romero-Rodríguez, L. M. (2026). Apomediation, AI, and the illusion of autonomy: Risks of misinformation in patient decision-making. Frontiers in Communication, 10. https://doi.org/10.3389/fcomm.2025.1684370</p>
+<p>Rathje, S., Ye, M., Globig, L. K., Pillai, R. M., de Mello, V. O., &amp; Van Bavel, J. J. (2025). Sycophantic AI increases attitude extremity and overconfidence (Vmyek_v1). PsyArXiv. https://doi.org/10.31234/osf.io/vmyek_v1</p>
+<p>Reber, R., &amp; Unkelbach, C. (2010). The Epistemic Status of Processing Fluency as Source for Judgments of Truth. Review of Philosophy and Psychology, 1(4), 563-581. https://doi.org/10.1007/s13164-010-0039-7</p>
+<p>Rheu, M. (Mj), &amp; Cho, J. (2025). The Trap of AI Literacy: The Paradoxical Relationships Between College Students&#x27; Use of LLMs, AI Literacy, and Fact-checking Behavior. Proceedings of the Extended Abstracts of the CHI Conference on Human Factors in Computing Systems, 1-7. https://doi.org/10.1145/3706599.3719681</p>
+<p>Richmond, L. L., &amp; Taylor, R. G. (2025). The benefits and potential costs of cognitive offloading for retrospective information. Nature Reviews Psychology, 1-10.</p>
+<p>Risko, E. F., &amp; Dunn, T. L. (2015). Storing information in-the-world: Metacognition and cognitive offloading in a short-term memory task. Consciousness and Cognition, 36, 61- 74. https://doi.org/10.1016/j.concog.2015.05.014</p>
+<p>Risko, E. F., &amp; Gilbert, S. J. (2016). Cognitive Offloading. Trends in Cognitive Sciences, 20(9), 676-688. https://doi.org/10.1016/j.tics.2016.07.002</p>
+<p>Risko, E. F., Medimorec, S., Chisholm, J., &amp; Kingstone, A. (2014). Rotating With Rotated Text: A Natural Behavior Approach to Investigating Cognitive Offloading. Cognitive Science, 38(3), 537-564. https://doi.org/10.1111/cogs.12087</p>
+<p>Rozenblit, L., &amp; Keil, F. (2002). The misunderstood limits of folk science: An illusion of explanatory depth. Cognitive Science, 26(5), 521-562. https://doi.org/10.1207/s15516709cog2605_1</p>
+<p>Rummel, J., Kuhlmann, B. G., Touron, D. R., &amp; Meiser, T. (2013). Metacognition and attention allocation in prospective memory (U. Ansorge, Ed.; p. 236). Pabst Science Publishers. https://hdl.handle.net/20.500.12034/679</p>
+<p>Schwartz, B., Ward, A., Monterosso, J., Lyubomirsky, S., White, K., &amp; Lehman, D. R. (2002). Maximizing versus satisficing: Happiness is a matter of choice. Journal of Personality and Social Psychology, 83(5), 1178-1197. https://doi.org/10.1037/0022-3514.83.5.1178</p>
+<p>Schwarz, N., Jalbert, M., Noah, T., &amp; Zhang, L. (2021). Metacognitive experiences as information: Processing fluency in consumer judgment and decision making. Consumer Psychology Review, 4(1), 4-25. https://doi.org/10.1002/arcp.1067</p>
+<p>Shaw, S. D., &amp; Nave, G. (2025). Thinking-Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender.</p>
+<p>Segijn, C. M., Kim, E., &amp; Van Ooijen, I. (2024). The Role of Perceived Surveillance and Privacy Cynicism in Effects of Multiple Synced Advertising Exposures on Brand Attitude. Journal of Current Issues &amp; Research in Advertising, 45(4), 506-522. https://doi.org/10.1080/10641734.2024.2318711</p>
+<p>Siler, J., Hamilton, K. A., &amp; Benjamin, A. S. (2022). Did you look that up? How retrieving from smartphones affects memory for source. Applied Cognitive Psychology, 36(4), 738-747. https://doi.org/10.1002/acp.3957</p>
+<p>Simon, H. A. (1955). A Behavioral Model of Rational Choice. The Quarterly Journal of Economics, 69(1), 99-118. https://doi.org/10.2307/1884852</p>
+<p>Sparrow, B., Liu, J., &amp; Wegner, D. M. (2011). Google Effects on Memory: Cognitive Consequences of Having Information at Our Fingertips. Science, 333(6043), 776-778.</p>
+<p>Storm, B. C., &amp; Stone, S. M. (2015). Saving-Enhanced Memory: The Benefits of Saving on the Learning and Remembering of New Information. Psychological Science, 26(2), 182-188. https://doi.org/10.1177/0956797614559285</p>
+<p>Sundar, S. S., &amp; Kim, J. (2019). Machine Heuristic: When We Trust Computers More than Humans with Our Personal Information. Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems, 1-9. https://doi.org/10.1145/3290605.3300768</p>
+<p>Urban, M., Děchtěrenko, F., Lukavský, J., Hrabalová, V., Svacha, F., Brom, C., &amp; Urban, K. (2024). ChatGPT improves creative problem-solving performance in university students: An experimental study. Computers &amp; Education, 215, 105031.</p>
+<p>Van Doorn, J., Lemon, K. N., Mittal, V., Nass, S., Pick, D., Pirner, P., &amp; Verhoef, P. C. (2010). Customer Engagement Behavior: Theoretical Foundations and Research Directions. Journal of Service Research, 13(3), 253-266. https://doi.org/10.1177/1094670510375599</p>
+<p>Vansteenkiste, M., &amp; Ryan, R. M. (2013). On psychological growth and vulnerability: Basic psychological need satisfaction and need frustration as a unifying principle. Journal of Psychotherapy Integration, 23(3), 263-280. https://doi.org/10.1037/a0032359</p>
+<p>Virgo, J., Pillon, J., Navarro, J., Reynaud, E., &amp; Osiurak, F. (2017). Are You Sure You&#x27;re Faster When Using a Cognitive Tool? The American Journal of Psychology, 130(4), 493-503. https://doi.org/10.5406/amerjpsyc.130.4.0493</p>
+<p>Vogrincic-Haselbacher, C., Krueger, J. I., Lurger, B., Dinslaken, I., Anslinger, J., Caks, F., Florack, A., Brohmer, H., &amp; Athenstaedt, U. (2021). Not Too Much and Not Too Little: Information Processing for a Good Purchase Decision. Frontiers in Psychology, 12, 642641. https://doi.org/10.3389/fpsyg.2021.642641</p>
+<p>Wahn, B., Schmitz, L., Gerster, F. N., &amp; Weiss, M. (2023). Offloading under cognitive load: Humans are willing to offload parts of an attentionally demanding task to an algorithm. PLOS ONE, 18(5), e0286102. https://doi.org/10.1371/journal.pone.0286102</p>
+<p>Ward, A. F. (2013). One with the cloud: Why people mistake the Internet&#x27;s knowledge for their own. Harvard University.</p>
+<p>Ward, A. F. (2021). People mistake the internet&#x27;s knowledge for their own. Proceedings of the National Academy of Sciences, 118(43), e2105061118. https://doi.org/10.1073/pnas.2105061118</p>
+<p>Weis, P. P., &amp; Wiese, E. (2019a). Problem Solvers Adjust Cognitive Offloading Based on Performance Goals. Cognitive Science, 43(12), e12802. https://doi.org/10.1111/cogs.12802</p>
+<p>Weis, P. P., &amp; Wiese, E. (2019b). Using Tools to Help Us Think: Actual but Also Believed Reliability Modulates Cognitive Offloading. Human Factors.</p>
+<p>Wegner, D. M. (1987). Transactive memory: A contemporary analysis of the group mind. In Theories of group behavior (pp. 185-208). New York, NY: Springer New York.</p>
+<p>Wood, R. (1986). Task complexity: Definition of the construct. Organizational Behavior and Human Decision Processes, 37, 60-82. https://doi.org/10.1016/0749-5978(86)90044-0</p>
+<p>Zhou, M., Abhishek, V., Derdenger, T., Kim, J., &amp; Srinivasan, K. (2024). Bias in Generative AI (arXiv:2403.02726). arXiv. https://doi.org/10.48550/arXiv.2403.02726</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
