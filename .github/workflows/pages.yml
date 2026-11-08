@@ -1,5 +1,6 @@
 # Publishes the website on GitHub Pages: the landing page and its files, the
 # report pages (<id>/index.html), the page of findings per check (modules/),
+# the page of totals (totals/),
 # and the small data files these pages read. The full results in data/papers/ stay in the repository only: GitHub
 # Pages publishes at most 1 GB, counted at full size, while the repository
 # stores its files compressed.
@@ -37,8 +38,10 @@ jobs:
         run: |
           mkdir -p _site/data
           cp index.html site.css landing.css landing.js _site/
-          cp -r fonts images modules _site/
-          for f in data/index.json data/tally.json; do [ -f "$f" ] && cp "$f" _site/data/; done
+          cp -r fonts images modules totals _site/
+          # tally.json: the landing page's numbers; totals.json: the page of
+          # totals (made once a day by totals.yml)
+          for f in data/index.json data/tally.json data/totals.json; do [ -f "$f" ] && cp "$f" _site/data/; done
           # the findings per check, for the page modules/ (made by update.py)
           [ -d data/modules ] && cp -r data/modules _site/data/
           for d in *_v*/; do

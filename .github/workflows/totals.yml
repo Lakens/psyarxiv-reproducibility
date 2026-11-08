@@ -1,0 +1,55 @@
+# Counts everything in the checked preprints once a day, for the page of
+# totals (totals/index.html): runs scripts/totals.py, which writes
+# data/totals.json from the full results in data/papers/, commits that file,
+# and publishes the site. Only this workflow writes data/totals.json, so its
+# commit cannot clash with those of update.yml.
+#
+# Started by hand: Actions tab, "Count the totals", "Run workflow".
+name: Count the totals
+
+on:
+  schedule:
+    - cron: "41 4 * * *"      # every day at 04:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: totals
+  cancel-in-progress: false
+
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Name the commits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+
+      - name: Count
+        run: python3 scripts/totals.py
+
+      - name: Save the totals
+        run: |
+          git add data/totals.json
+          if git diff --cached --quiet; then echo "No changes."; exit 0; fi
+          git commit -m "Count the totals"
+          # update.yml pushes often; take its commits first
+          for try in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 20
+          done
+          exit 1
+
+  publish:
+    needs: count
+    uses: ./.github/workflows/pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
