@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: The Precision Trap: On the Idealization of
+Mathematics in Psychology</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+The Precision Trap: On the Idealization of Mathematics in Psychology
+</p>
+<p class="meta">
+2026-11-08 · Metacheck 0.4.3.11
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to improve</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 2 references with comments in PubPeer.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>You cited 1 article in the RetractionWatch database.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. You cited 2 references with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Fredrickson, B. L., &amp; Losada, M. F. (2005). Positive affect and the
+complex dynamics of human flourishing. American Psychologist, 60(7),
+678-686. <a href="https://doi.org/10.1037/0003-066X.60.7.678" class="uri">https://doi.org/10.1037/0003-066X.60.7.678</a>
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/4943146B9C8FF4E46A177DE4EAA148" target="_blank">link</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oberauer, K., &amp; Lewandowsky, S. (2019). Addressing the theory crisis
+in psychology. Psychonomic Bulletin &amp; Review, 26(5), 1596-1618. <a href="https://doi.org/10.3758/s13423-019-01645-2" class="uri">https://doi.org/10.3758/s13423-019-01645-2</a>
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/48025989A8FA26342D91D254C74240" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. You cited 1 article in the
+RetractionWatch database.</p>
+<p>Check if you are aware of the retraction, correction, or expression
+of concern for each reference, and consider whether it still supports
+your claims.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+RW Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Fredrickson, B. L., &amp; Losada, M. F. (2005). Positive affect and the
+complex dynamics of human flourishing. American Psychologist, 60(7),
+678-686. <a href="https://doi.org/10.1037/0003-066X.60.7.678" class="uri">https://doi.org/10.1037/0003-066X.60.7.678</a>
+</td>
+<td style="text-align:left;">
+Correction
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Calls for greater precision and mathematization in psychology are often motivated by the hope that they will help overcome the field&#x27;s theoretical problems. While mathematics undoubtedly contributes to scientific progress, this paper questions the idea that an increase in mathematization, in itself, constitutes progress. First, it examines the tradeoffs of precision, arguing that making a theory more precise can change what is being studied, reduce its functionality, and sometimes lend an unwarranted authority to its claims. It also considers examples of non-mathematical yet successful psychological approaches. Second, the paper introduces the Mathematization Bind. Under a realist standard, mathematical precision cannot, by itself, establish that a theory has moved closer to Reality, as the history of the luminiferous aether illustrates. Under a pragmatic standard, the value of mathematics depends on what it enables us to accomplish, relative to the goals of inquiry.</p>
+<p>Neither perspective justifies treating greater mathematization as scientific progress by default. The paper also questions the tendency to regard an idealized image of physics as the model of scientific maturity. It concludes that the appropriate role and degree of mathematization in psychology should be determined by what it actually contributes to 2 scientific inquiry, rather than by expectations about what a mature science ought to look like.</p>
+<h3>1. Introduction</h3>
+<p>What I want to do is to change your attitude. I want you to sense chaos where at first you noticed an orderly arrangement of well behaved things and processes.</p>
+<p>-Paul Feyerabend (quoted in Hacking, 2000, p. 28) Psychology has no shortage of methodological reform movements. In the wake of the replication crisis, the field&#x27;s attention has increasingly shifted beyond statistical practice to a deeper concern: perhaps psychology also has a theory problem (Eronen &amp; Bringmann, 2021; Glo; ckner &amp; Fiedler, 2025; McPhetres et al., 2021; Robinaugh et al., 2021), and many psychological theories are only weakly connected to the hypotheses used to test them (Fried, 2020; Oberauer &amp; Lewandowsky, 2019; Scheel et al., 2021).</p>
+<p>One proposed response to the theory crisis is to adopt a more structured methodology, often involving formal modeling to clarify and evaluate theoretical assumptions (Borsboom et al., 2021; Devezer et al., 2021; Robinaugh et al., 2021). The reasoning behind such proposals is rather straightforward. Ambiguities or inconsistencies in a theory are far less likely to be overlooked when it is expressed in an exact language than when it is left to the vagueness of verbal description. Danielle Navarro&#x27;s (2021) defense of mathematical psychology offers one of the clearest and most attractive versions of this position. Drawing on Shepard&#x27;s law of generalization and its Bayesian descendants, Navarro argues that mathematical formalism can both clarify theoretical commitments and support generalization across contexts. A mere verbal formulation of Shepard&#x27;s law, which would state that the probability of generalizing a learned response from one stimulus to another decreases exponentially with their psychological distance, is not particularly useful in practice. This essay accepts much of that argument.</p>
+<p>The problem begins when a fruitful methodological consideration is inadvertently elevated into an ideal. Greater precision can come to be treated as an improvement by default, with mathematical formulation representing its most developed form. One need not explicitly claim that all sciences should eventually become physics, if they can. It is enough to treat vagueness as something theories should continually overcome, or precision as something that should always be maximized. The present argument challenges this expectation, rather than precision, formalization, or conceptual refinement themselves. None of this disputes the need for better theory development and conceptual refinement, for instance along the lines discussed by Eronen and Bringmann (2021). Psychology should also make use of the full range of conceptual tools available, rather than relying on &quot;statistical rituals&quot; (Gigerenzer, 2018). If this is all that proponents of formalism and mathematical psychology are suggesting, then we are all in broad agreement. This essay is particularly concerned with the possibility of a stronger but tacit claim: that mathematization is an essential part of any genuinely scientific practice and that a field should increasingly resemble physics as it develops. This ideal may draw some of its appeal from a broader view that regards familiar psychological categories as obstacles to progress, and thus sees their replacement with more scientific concepts as a promising way forward (Churchland, 1981; Tu; mkaya, 2022). The concern here is less about whether such an outcome is possible and more about the &quot;wouldn&#x27;t it be nice if it were?&quot; part. The essay takes issue with both this way of seeing science and the underlying desire for such an outcome among some academics in the first place.</p>
+<p>This position, of course, is rarely stated in such blunt terms, and it would be unfair to attribute it wholesale to Navarro, Borsboom and colleagues, or many others mentioned in this essay. Several of these authors explicitly recognize limits and trade-offs. Nevertheless, the broader argument developed here considers how the admiration for mathematization is difficult to separate from a family of realist pictures of science in which progress consists, at least partly, in increasingly accurate representations of a mind-independent reality.</p>
+<h3>The essay begins by examining the tradeoffs of increasing precision, including how it can</h3>
+<p>change what is being studied or come at the expense of functionality. It also considers whether mathematization is necessary or sufficient for scientific success. The argument proceeds from a broadly pragmatist perspective, although the purpose here is not to defend pragmatism against its philosophical alternatives. It then examines the realist expectations underlying mathematization, using the history of the aether to question whether mathematical success necessarily brings us closer to reality. Finally, it challenges the tendency to treat an idealized image of physics as the model of scientific success against which psychology should be judged.</p>
+<h3>2. The Tradeoffs of Precision</h3>
+<p>Increasing precision often offers genuine advantages, but it can also come with tradeoffs.</p>
+<h3>This section examines how greater precision may sometimes change what is being studied</h3>
+<p>or otherwise come at the expense of a theory&#x27;s usefulness for the purposes at hand.</p>
+<h3>2.1 From concepts to specifications</h3>
+<p>There are clear advantages to mathematical expression at least in cases such as Shepard&#x27;s law. In simple terms, Shepard&#x27;s law describes how what we learn about one stimulus generalizes to other stimuli. The more psychologically different two stimuli are, the less we tend to generalize from one to the other. For example, if someone learns that one particular dog is dangerous, they may readily generalize that to a similar-looking dog, but not to a canary. As Navarro (2021) discusses, it is the mathematical version, which specifies precisely how generalization declines with psychological distance, that allows for more exact predictions, among other advantages. These advantages, however, come from specifying the phenomenon in a particular way, which in turn requires practical choices about what goes into the model. Guest and Martin (2021) argue that computational modeling forces researchers to examine and specify their intuitions, while also acknowledging that converting a verbal account into a model constrains the dimensions it can span. For present purposes, however, if the goal is to understand or explain a phenomenon, this can lead to a series of problems.</p>
+<p>When there are discrepancies between an initial, often coarse-grained notion and a more fine-grained operational one, a decision eventually has to be made about which of the two should give way. This becomes particularly important if the goal is to understand and explain a phenomenon assumed to exist in a mind-independent reality. Researchers may continue with an operational definition because it works well with the available methods and theoretical framework, or they may continue trying to modify their models to better capture what the initial notion was meant to describe.</p>
+<p>Sometimes the latter effort will succeed, and sometimes it will not. The initial concept may itself turn out to have been misguided. But the opposite error is also possible: researchers may struggle to capture a roughly correct initial concept within their mathematical framework and conclude that the concept itself is defective, rather than considering the limitations of their methods. They may then abandon the original concept in favor of a narrower definition that is easier to accommodate within their existing framework.</p>
+<p>Once this happens, making the resulting model more precise or more fruitful does not recover what was lost. It may simply produce an increasingly successful account of the narrower phenomenon that the available framework made easier to study in the first place.</p>
+<p>Unless realists are prepared to aggressively exclude from the list of real things anything that cannot be neatly captured in mathematical form, they must acknowledge the possibility that mathematization can lead researchers away from the very phenomenon they originally set out to understand. On the other hand, if the case for mathematization is then limited to areas where doing so already works exceptionally well, then it becomes less of a general argument for mathematization and more of an obvious point: use math where math works.</p>
+<p>A related problem is that translating an initial concept or theory into mathematical form can produce several different formulations, potentially leading researchers in different directions. Van Rooij and Baggio (2020) for instance, despite strongly favoring formalization for making theories more precise, acknowledge that the same verbal theory can be formalized in different ways, potentially resulting in different theories and predictions. This possibility is specially important here, although perhaps for reasons that go beyond their argument.</p>
+<p>What follows from this depends partly on the researcher&#x27;s end goal. If the goal is to understand and explain, perhaps motivated by a realist account of scientific activity (i.e. something about science reflects a true structure in reality &quot;out there&quot;), then the question arises of which of these mathematical accounts, if any, should be taken as describing that reality, and why. This is the classic problem of underdetermination (Stanford, 2023; Tulodziecki, 2017), which concerns not only existing alternatives but also possible ones that we have yet to encounter. Indeed, formal modeling alone cannot resolve the underdetermination that underlies the theory crisis (Oude Maatman, 2025).</p>
+<h3>2.2 Precision and the Boundaries of the Target</h3>
+<p>It is worth noting that precision itself can refer to different things, such as numerical exactness, explicit theoretical commitments, finer descriptive resolution, and possibly other definitions that different philosophers find noteworthy (Koberinski, 2022; Strunz, 2012). The notion of precision pursued in this essay mainly concerns concepts and constructs. The realist picture considered here is one in which increasing precision is taken to help our concepts correspond more closely to something in an external, mindindependent world. What that something amounts to can differ between different forms of realism. For the scientific realist, this might concern objects, properties, and relations (Psillos, 1999). For the structural realist, it would concern the structure and relations captured by our best theories, rather than necessarily the intrinsic nature of particular objects (Worrall, 1989). For the entity realist, it would concern entities whose existence is supported by successful experimental intervention, without necessarily accepting the broader theories describing them (Hacking, 1983), and so on.</p>
+<p>Consider two reasons why a researcher might want to mathematize a psychological phenomenon or concept. The first is pragmatic. Mathematization might help us make better predictions, or accomplish something that was previously unfeasible. The second is representational. The researcher believes that there is something out there, with a stable structure that exists independently of our concepts and descriptions, and that increasingly precise mathematical specifications might progressively reveal that structure. In this latter case, mathematization has an additional appeal: even when its practical benefits are unclear, refining a mathematical model may still seem worthwhile if it promises a better understanding of what the phenomenon really is. This is not to say that a realist cannot accept that a concept becomes increasingly precise while still misrepresenting reality. It is to point out that the additional value attributed to precision here may come from the expectation that we are also gaining knowledge about something in an external reality, or at least getting closer to doing so. Without this expectation, precision loses some of its additional importance, with its value depending instead on the task at hand and other pragmatic considerations.</p>
+<p>Ironically, a highly precise definition of precision would not change the argument made in this essay. What matters here is the general intuition behind increasing conceptual precision: the more closely a concept can latch onto something stable in the world without catching other things along with it, the better it has supposedly become. Think of a fishing hook with a specific bait, as opposed to a fishing net. A perfect precision trap, drawing from the world exactly what is sought and nothing else.</p>
+<p>Not only is there no reason to believe that such specificity is possible, even in principle, without presupposing a pre-figured world (Chang, 2022), but the relationship between precision and success can sometimes run in the opposite direction. Even for a realist, precision has to be precision about the right thing. If making a concept more precise causes it to exclude relevant instances of the phenomenon under investigation, the resulting gain in specificity does not by itself amount to an improvement. There are cases in which deliberately reducing precision leads to better outcomes.</p>
+<p>A subway diagram, for instance, helps passengers navigate partly because it discards geographic detail. Restoring centimeter-level spatial accuracy would make the diagram more precise while making it no more useful for navigation, and potentially less so. In such cases, reasonable imprecision is part of what makes the activity possible in the first place.</p>
+<p>Increasing precision can also, at some point, simply cease to tell us more about what we are trying to understand. One can locate progressively smaller parts of a novel by identifying a chapter, page, sentence, and word. Eventually, however, the relationship can break down. A letter or particle of ink belongs to the physical text without containing any corresponding fraction of the story.</p>
+<p>Of course, locating a smaller piece of text is not the same as making our understanding of the story more precise. One might go further and argue that true precision was never about narrowing the target in the first place, but about capturing exactly what is sought, neither more nor less. I shall return to this objection shortly. For now, the point is that in practice this distinction can easily be lost when we begin with a broad, familiar concept as we often do and attempt to clarify it by breaking it down into more precisely specified components.</p>
+<h3>2.3 Premature, Precise, and Prestigious</h3>
+<p>A label can be operationally precise yet conceptually empty or mainly irrelevant for practical purposes. One problem is that mathematical presentation may make research appear stronger even when it adds nothing substantive to the argument (Eriksson, 2012).</p>
+<p>The critical positivity ratio provides a good example. Fredrickson and Losada (2005) proposed that human flourishing occurs above a specific ratio of positive to negative emotions. Using the Lorenz equations from fluid dynamics, they calculated a critical value of approximately 2.9, suggesting that people should experience roughly three positive emotions for every negative one in order to flourish. Brown et al. (2013), however, later showed that there was no adequate justification for applying these equations to positive and negative emotions, and that the mathematical derivation of the threshold of 2.9013 was fundamentally flawed.</p>
+<p>What matters here is that the use of mathematics produced a high degree of precision through a fundamentally flawed mathematical procedure. The added precision cannot be justified, for instance, by pointing out that 2.9013 made the claim easier to test or falsify.</p>
+<p>The problem was not that the proposed threshold turned out to be inaccurate and that, thanks to the specific predictions it generated, we were able to find that out. Rather, the mathematical procedure from which that precise value was derived was unwarranted in the first place.</p>
+<p>I have no way of knowing whether Fredrickson and Losada&#x27;s paper would still have been accepted without their attempt to apply Lorenz equations to a psychological concept and the &quot;cool&quot; impression the whole attempt might have made. But contrary to Navarro&#x27;s (2021) belief that psychological journals sometimes reject papers if they are overtly mathematical, I believe that the mere presence of status markers, including advanced mathematics or statistics, or even expensive, exclusive devices (e.g. MEG as opposed to a humble scalp EEG), could increase the chances of an otherwise weak paper being accepted.</p>
+<p>This remains an interesting open question that could be explored empirically. Both possibilities can unfortunately coexist.</p>
+<h3>2.4 Precision and Loss of Functionality</h3>
+<p>So far, I have argued that greater precision can sometimes change what a concept covers and lend authority to a model whose adequacy remains speculative at best. However, excess precision can also lead to a loss of functionality.</p>
+<p>Consider a clinical guideline stating that patients with condition X often report feeling unusually hot. A patient might say &quot;I feel hot&quot;, complain that the room is too warm, or repeatedly remove layers of clothing. The patient could even make a joke about global warming. A Martian practitioner following a strict lexical or behavioral rule would miss various instances of this symptom because it was looking for a very direct, precise report of &quot;I feel hot&quot;.</p>
+<p>Arguably, the ultra-precise version of the guideline would be easier to study systematically and quantitatively, since it would be almost fully independent of the clinician&#x27;s interpretation. That study could even use a great research design and sophisticated statistics and yet have little relevance to real life.</p>
+<p>One might wonder whether the clinician could confirm the symptom, for the sake of precision, by asking, &quot;So, you are feeling unusually hot?&quot;. But this would merely move the problem one step back rather than solving it. The practitioner must first recognize the original remark or behavior as grounds for clarification. The demand for precision can therefore interfere with detecting the very instances that a coarser approach would have picked up better.</p>
+<p>One might object that these examples mistake precision for narrowing a concept, or zooming in. After all, wouldn&#x27;t true precision describe exactly what is sought, and nothing else? On this view, precision need not mean greater specificity. The appropriate level of precision could itself be relatively coarse-grained. For instance, if the task is to identify the sensation of feeling hot as a symptom of condition X, some flexibility and indeterminacy might be precisely what the task requires. The problem, however, is that the appropriate degree of precision is now being determined by how well a definition serves its intended purpose. A more specific definition that fails to serve its purpose is considered insufficiently precise, while a less specific one that works well can be called more precise.</p>
+<p>But if this is what precision means, then saying that precision improves inquiry basically amounts to saying that something works well because it is specified in a way that makes it work well. This move also makes the claim difficult to challenge with counterexamples. Whenever greater exactness or specificity produces worse results, one can simply respond that this was not the right amount of precision. Unless the appropriate level of precision can be identified independently of the outcome, precision provides little guidance about how an inquiry should proceed. It becomes a retrospective label for whatever worked.</p>
+<p>More importantly, this definition does not provide support for mathematization. If precision means achieving whatever degree of specification best serves a particular purpose, nothing follows regarding the form that specification should take. A verbal description or a mathematical model could each be more useful for one task and less useful for another. Defining whichever one works as appropriately &quot;precise&quot; therefore cannot establish that mathematical form is generally preferable, much less that increasing mathematization constitutes scientific progress. That would require a separate argument.</p>
+<h3>2.5 Fruitful without being mathematical</h3>
+<p>A related question is whether a framework can demonstrate its usefulness without having been formulated mathematically. Dialectical behavior therapy (DBT) is a useful example of what a fairly non-mathematical framework can accomplish. At its core, it combines two seemingly opposing ideas: helping patients change patterns of behavior that are making their lives worse, while also teaching them to accept experiences that cannot simply be changed. In practice, this is organized around skills such as emotion regulation, distress tolerance, mindfulness, and managing interpersonal problems (Linehan &amp; Wilks, 2015).</p>
+<p>The framework is deliberately flexible and principle-based rather than built around a highly structured protocol, allowing different components to be used or modified depending on the problem at hand. Systematic reviews have found that DBT can produce meaningful clinical improvements in people with borderline personality disorder, which is notoriously hard to treat (Crotty et al., 2024; Hernandez-Bustamante et al., 2024).</p>
+<p>These achievements give the framework empirical and practical standing in its current form. A clinician who has just successfully treated a case of borderline personality disorder may not be primarily concerned with the fact that DBT is not sufficiently mathematical, that some of its concepts may be imprecise and overlapping (e.g. fear of abandonment), or that they may be incompatible with concepts derived from the models of a mathematical psychologist working on emotions. Moreover, it matters less whether DBT itself can one day become more mathematical and more precise in its terminology. It already works fine.</p>
+<p>Together, DBT and the positivity ratio illustrate that mathematization, at least in an extensive amount, is neither necessary nor sufficient for scientific success. DBT illustrates the first half of this claim. Despite being comparatively non-mathematical, its concepts have been developed into testable interventions with clinically important results. Its scientific standing does not depend on first translating concepts such as distress tolerance or fear of abandonment into highly precise mathematical terms. The positivity ratio illustrates the other half. Here, mathematical form did produce precise and testable predictions, but the mathematical procedure responsible for that precision was itself unwarranted. Taken together, the two cases give us little reason to treat mathematization as an achievement in and of itself. Its value has to depend on what it actually contributes in the particular case.</p>
+<h3>3. The Mathematization Bind</h3>
+<p>Even if we set aside the preceding objections to precision, a further question still remains: why should becoming more mathematical count as a direction in which science, including the psychological sciences, ought to advance? The Mathematization Bind (TMB) concerns two possible answers. If progress means getting closer to a mind-independent reality, advocates of mathematization must justify why it should bring us closer to that reality rather than simply assume that it does. If progress instead means improving what science enables us to predict or accomplish, then mathematization must be evaluated by its contribution to those outcomes. Neither answer gives mathematization a privileged status in advance.</p>
+<h3>3.1 The Aether and Mathematical Success</h3>
+<p>The dangers of pedestalizing mathematics go beyond overfitting or losing touch with reality in favor of &quot;toy worlds&quot;, as elegantly acknowledged by Navarro (2021). Even in the positivity-ratio case, one could still point to errors in the mathematics and question whether plugging in Lorenz equations to calculate a threshold for human flourishing was warranted in the first place. But what happens when the mathematics is sound, the theory makes a definite prediction, and an experiment supports it? Can we then assume that the theory has correctly identified what exists, in part thanks to its mathematical form? The history of the luminiferous aether gives us reason to doubt that.</p>
+<p>The aether example is highly important because researchers without a background in the relevant fields are rarely taught about aether and, more importantly, what it shows about science. The story is often framed as an illustration of Einstein&#x27;s brilliance in introducing a paradigm shift in physics following the Michelson-Morley experiment, further demonstrating the triumph of science and suggesting that even when we (i.e. scientists) are wrong, further empirical testing and creativity will eventually point us in the right direction. This essay does not share that optimism.</p>
+<p>For nineteenth-century wave theorists, light required a medium in which to travel, just as other waves did, much as sound travels through air. The aether was supposed to be that medium, extending through space and transparent matter. Since aether was included in many scientists&#x27; lists of real things, physicists would naturally investigate its properties and its relation to ordinary bodies. A moving body, for example, might carry the aether along with it or pass through it while leaving it at rest. Disagreements about these possibilities could also be expressed mathematically and tested experimentally.</p>
+<p>Even corpuscular theories of light were not incompatible with aether. Newton, for example, suggested that light particles could create vibrations in a medium as they travelled through it. These vibrations would then affect the particles&#x27; motion, making them more likely to pass through a surface or be reflected by it at regular intervals. This offered a possible explanation for the repeating patterns of color seen in thin transparent films. (Newton, 1730). The existence of the aether was therefore a common starting point for otherwise competing theories (Swenson, 1972).</p>
+<p>Consider light passing through flowing water. If the water carried the aether along with it completely, then light traveling in the same direction should gain the full speed of the water, according to the ordinary rule for adding speeds. If the aether remained entirely unaffected by the water&#x27;s motion, light should gain no additional speed. Fresnel proposed a third possibility in which transparent matter carried along only part of the aether. His partial-drag hypothesis predicted how much the speed of light would change depending on the material&#x27;s refractive index, a measure of how much light slows down in a given material. The hypothesis thus provided a specific, testable prediction between the two extremes of complete dragging and no dragging (Cassini &amp; Levinas, 2019; Stachel, 2005; Swenson, 1972).</p>
+<p>In 1851, Fizeau tested this prediction by sending light through flowing water, comparing beams traveling with and against the flow. When the beams were recombined, changes in their interference pattern revealed the difference in their travel times. The effect agreed with Fresnel&#x27;s formula rather than the prediction of complete dragging. Although Fizeau himself remained cautious about accepting the proposed mechanism (Cassini &amp; Levinas, 2019), the partial-drag account had now more going for it than a plausible explanation or equations. It had also survived an experimental test. If the drag coefficient was taken to quantify a property of the aether with such mathematical precision, what did that precise quantification map onto? Precisely nothing. What followed was equally consequential for interpreting the role of mathematics when Lorentz later obtained the same coefficient within a theory in which the aether remained stationary (Cassini &amp; Levinas, 2019). The question can be asked once more. When highly intelligent academics disagreed about properties of the aether for decades, each presenting reasonable mathematical and empirical evidence in support of their view, what were they disagreeing about, from the perspective of understanding a mind-independent reality and its precise structure? Precisely nothing.</p>
+<p>A structural realist might respond that we should place our commitments in the mathematical relations that survive, rather than in things like the aether itself. But how could researchers have known where to place those commitments before knowing the outcome? Unless we have some independent way of making that distinction, this response risks becoming ad hoc (Vickers, 2017). Whatever survives is treated in hindsight as what the theory was really getting right, while everything that was abandoned is retrospectively dismissed as unimportant.</p>
+<p>The problem should be clearer now. Physicists had precise mathematical predictions, explanations of how the aether supposedly worked, and experimental evidence supporting some of their theories. Although some mathematical formulas survived into successor accounts (Cassini &amp; Levinas, 2019), others did not, and even those that survived did not preserve the physical claims originally attached to them. Most importantly, the luminiferous aether was widely accepted as a real physical entity, yet this fundamental assumption about the world was later rejected as false. Not approximately false or somewhat inaccurate, but completely false (Vickers, 2017). According to our current accounts, there is no such thing as the luminiferous aether.</p>
+<p>Mathematics certainly helped formulate the successor theories, but it was also an integral part of the theories they replaced. The presence of mathematics alone could not tell researchers which account was supposedly closer to reality, nor could mathematical sophistication tell them in advance which parts of those theories would survive.</p>
+<h3>3.2 Mathematization Under a Pragmatic Standard</h3>
+<p>Suppose, now, that we judge a model by what it allows us to do, without worrying about whether it somehow corresponds to a deeper, underlying reality. The case for mathematics then becomes dependent on the task at hand. A mathematical model may be indispensable for one task and contribute very little to another. What matters is how much mathematization helps us achieve our goals in each case. The ability to express concepts and relations more precisely is not, by itself, a reason to prefer a mathematical approach.</p>
+<p>Think of a simple analogy. If all you care about is going from location A to location B, whether the vehicle is automatic or manual matters only insofar as it affects that goal, and no further. You wanted to get to location B, and you got there.</p>
+<p>This also changes how we evaluate the absence of a unified mathematical framework.</p>
+<p>Several useful practices may address different parts of a problem (or a family of similar problems) without sharing a single set of concepts. Their incompatibility does not cancel out what they each accomplish. Unifying them might make them more useful, but it might also require giving up some of the features that made them useful in the first place.</p>
+<p>Whether such unity is worth pursuing therefore depends on its costs and consequences for inquiry, an entirely pragmatic and empirical concern. This is the bind. Under a realist standard, mathematization cannot, by itself, establish that a theory has moved closer to reality. Under a pragmatic standard, mathematics earns its value through what it allows us to accomplish, relative to the goal at hand. In neither case does becoming more mathematical constitute scientific progress by default.</p>
+<p>One might concede that mathematics guarantees nothing while still maintaining that it generally gives us better science. The aether example shows that mathematical and empirical success can coexist with an entirely misguided account of what exists. DBT and the positivity ratio show that the use of mathematics and fruitfulness can come apart in both directions. To what extent mathematization improves psychological science therefore remains an empirical question. Across which tasks, compared with which alternatives, and judged by which outcomes? Indeed, if mathematical psychology did not exist, we might need to invent it (Navarro, 2021). However, any stronger claim requires serious justification that goes beyond good examples from physics and mathematical psychology and also considers good examples of non-mathematical psychology and bad examples of mathematical psychology.</p>
+<h3>3.3 Physics as a Model of Scientific Maturity?</h3>
+<p>Trafimow and Fiedler (2026) discuss the familiar concept of &quot;physics envy&quot;, examining features that might distinguish physics from psychology, including empirical laws, parsimony, and falsifiability. Debates over these differences and psychology&#x27;s supposed inferiority have persisted for decades (Howell et al., 2014; Meehl, 1967). Much of this discussion asks whether psychology can ever become as successful as physics, or whether the nature of what psychology studies makes it unreasonable to expect comparable achievements.</p>
+<p>When the debate is framed in these terms, physics is already granted the superior position, but perhaps for the wrong (or at least questionable) reasons. Psychology&#x27;s inferiority is, at best, tolerated and understood (for instance, due to the complexity of what it studies), in the hope that it might one day become more like physics: more unified, more mathematical, more objective. This essay rejects that framing and questions why scientific success should be judged by mathematical form (or any other kind of form), or by resemblance to physics, rather than by the ability to solve concrete, well-defined problems.</p>
+<p>Under a pragmatic account, any advantage physics has over psychology derives from its capacity to generate useful practices that serve our purposes, not from any privileged access to a perspective-independent reality or a God&#x27;s-eye view. The idea that science should aspire to reveal such a reality rests on a broadly realist conception of science. As long as serious objections to that realist picture remain unresolved (Chang, 2022; Stanford, 2023; Vickers, 2017), this ideal cannot simply be taken for granted as the ultimate measure of scientific progress. Consequently, once theory evaluation is stripped of such assumptions, the treatment of mathematization in psychology follows suit: there can be a too little, a just enough, and a too much.</p>
+<h3>4. Conclusion</h3>
+<p>From a pragmatic perspective, the question of whether psychology needs more mathematics cannot be answered in the abstract. It depends on what psychologists are trying to accomplish and what mathematics can contribute to those efforts. Researchers should not have to justify the absence of mathematics in an otherwise successful approach, just as its introduction should not automatically count as progress merely because it makes a theory more precise or brings it closer in form to the theories of physics. The same applies to precision, unification, and other characteristics commonly associated with scientific maturity. Their value depends on what they enable us to accomplish, relative to the problems we are trying to address.</p>
+<p>Those who instead favor a realist standard must explain why mathematical elegance should count as scientific progress beyond its practical contributions. The history of science offers many examples of mathematically sophisticated theories built on entirely mistaken assumptions about reality. What makes the present case different, and more importantly, how can we tell? Simply assuming that the world has a discoverable mathematical structure, and that greater mathematization therefore brings us closer to it, does not answer this question.</p>
+<p>The point is not to lower our expectations of science, including psychology, but to reconsider what those expectations should be in the first place. Pragmatism offers a way of evaluating scientific progress without first (or ever) having to settle questions about whether our theories capture the true structure of reality, thereby avoiding endless theoretical battles that need not be settled for scientific inquiry to be fruitful. If the goal is to make psychology a more successful science, mathematical form is neither an end in itself nor an ultimate measure of success. It is one of the means available to us, which may prove indispensable in some cases, unnecessary in others, and even counterproductive in still other circumstances. What matters is whether we are making progress toward solving the problems that led us to develop these theories and methods in the first place.</p>
+<h3>5. Acknowledgments</h3>
+<p>I am grateful to Dr. Markus Eronen and Dr. Fred Keijzer for their constructive feedback and valuable comments on earlier drafts of this paper.</p>
+<h3>6. Author&#x27;s Note</h3>
+<p>This manuscript benefited from the use of an AI-assisted editing tool (ChatGPT) for minor language and formatting suggestions. All ideas, arguments, and final editorial decisions are the author&#x27;s own.</p>
+<h3>7. References</h3>
+<p>Borsboom, D., van der Maas, H. L. J., Dalege, J., Kievit, R. A., &amp; Haig, B. D. (2021). Theory construction methodology: A practical framework for building theories in</p>
+<h3>References</h3>
+<p>psychology. Perspectives on Psychological Science, 16(4), 756-766. https://doi.org/10.1177/1745691620969647</p>
+<p>Brown, N. J. L., Sokal, A. D., &amp; Friedman, H. L. (2013). The complex dynamics of wishful thinking: The critical positivity ratio. American Psychologist, 68(9), 801-813. https://doi.org/10.1037/a0032850</p>
+<p>Cassini, A., &amp; Levinas, M. L. (2019). Einstein&#x27;s reinterpretation of the Fizeau experiment: How it turned out to be crucial for special relativity. Studies in History and Philosophy of Science Part B: Studies in History and Philosophy of Modern Physics, 65, 55-72. https://doi.org/10.1016/j.shpsb.2018.08.004</p>
+<p>Chang, H. (2022). Realism for realistic people: A new pragmatist philosophy of science. Cambridge University Press. https://doi.org/10.1017/9781108635738</p>
+<p>Churchland, P. M. (1981). Eliminative materialism and the propositional attitudes. The Journal of Philosophy, 78(2), 67-90. https://doi.org/10.2307/2025900</p>
+<p>Crotty, K., Viswanathan, M., Kennedy, S., Edlund, M. J., Ali, R., Siddiqui, M., Wines, R., Ratajczak, P., &amp; Gartlehner, G. (2024). Psychotherapies for the treatment of borderline personality disorder: A systematic review. Journal of Consulting and Clinical Psychology, 92(5), 275-295. https://doi.org/10.1037/ccp0000833</p>
+<p>Devezer, B., Navarro, D. J., Vandekerckhove, J., &amp; Buzbas, E. O. (2021). The case for formal methodology in scientific reform. Royal Society Open Science, 8(3), 200805. https://doi.org/10.1098/rsos.200805</p>
+<p>Eriksson, K. (2012). The nonsense math effect. Judgment and Decision Making, 7(6), 746- 749. https://doi.org/10.1017/S1930297500003296</p>
+<p>Eronen, M. I., &amp; Bringmann, L. F. (2021). The theory crisis in psychology: How to move forward. Perspectives on Psychological Science, 16(4), 779-788. https://doi.org/10.1177/1745691620970586</p>
+<p>Fredrickson, B. L., &amp; Losada, M. F. (2005). Positive affect and the complex dynamics of human flourishing. American Psychologist, 60(7), 678-686. https://doi.org/10.1037/0003-066X.60.7.678</p>
+<p>Fried, E. I. (2020). Lack of theory building and testing impedes progress in the factor and network literature. Psychological Inquiry, 31(4), 271-288.</p>
+<p>Gigerenzer, G. (2018). Statistical rituals: The replication delusion and how we got there. Advances in Methods and Practices in Psychological Science, 1(2), 198-218. https://doi.org/10.1177/2515245918771329</p>
+<p>Glo; ckner, A., &amp; Fiedler, S. (2025). Addressing psychology&#x27;s theory crisis: Advances in theory specification and theory building. Zeitschrift für Psychologie, 233(4), 219-223. https://doi.org/10.1027/2151-2604/a000608</p>
+<p>Guest, O., &amp; Martin, A. E. (2021). How computational modeling can force theory building in psychological science. Perspectives on Psychological Science, 16(4), 789-802. https://doi.org/10.1177/1745691620970585</p>
+<p>Hacking, I. (1983). Representing and intervening: Introductory topics in the philosophy of natural science. Cambridge University Press. https://doi.org/10.1017/CBO9780511814563</p>
+<p>Hacking, I. (2000, June 22). &#x27;Screw you, I&#x27;m going home&#x27;. London Review of Books, 22(12), 28 -29.</p>
+<p>Hernandez-Bustamante, M., Cjuno, J., HernaQ ndez, R. M., &amp; Ponce-Meza, J. C. (2024). Efficacy of dialectical behavior therapy in the treatment of borderline personality disorder: A systematic review of randomized controlled trials. Iranian Journal of Psychiatry, 19(1), 119-129. https://doi.org/10.18502/ijps.v19i1.14347</p>
+<p>Howell, J. L., Collisson, B., &amp; King, K. M. (2014). Physics envy: Psychologists&#x27; perceptions of psychology and agreement about core concepts. Teaching of Psychology, 41(4), 330- 334.</p>
+<p>Koberinski, A. (2022). &quot;Fundamental&quot; &quot;constants&quot; and precision tests of the Standard Model. Philosophy of Science, 89(5), 1255-1264. https://doi.org/10.1017/psa.2022.41</p>
+<p>Linehan, M. M. (1993). Cognitive-behavioral treatment of borderline personality disorder. Guilford Press.</p>
+<p>Linehan, M. M., &amp; Wilks, C. R. (2015). The course and evolution of dialectical behavior therapy. American Journal of Psychotherapy, 69(2), 97-110.</p>
+<p>McPhetres, J., Albayrak-Aydemir, N., Barbosa Mendes, A., Chow, E. C., Gonzalez-Marquez, P., Loukras, E., Maus, A., O&#x27;Mahony, A., Pomareda, C., Primbs, M. A., Sackman, S. L., Smithson, C. J. R., &amp; Volodko, K. (2021). A decade of theory as reflected in Psychological Science (2009-2019). PLOS ONE, 16(3), e0247986. https://doi.org/10.1371/journal.pone.0247986</p>
+<p>Meehl, P. E. (1967). Theory-testing in psychology and physics: A methodological paradox. Philosophy of Science, 34(2), 103-115. https://doi.org/10.1086/288135</p>
+<p>Navarro, D. J. (2021). If mathematical psychology did not exist we might need to invent it: A comment on theory building in psychology. Perspectives on Psychological Science, 16(4), 707-716. https://doi.org/10.1177/1745691620974769</p>
+<p>Newton, I. (1730). Opticks: Or, a treatise of the reflections, refractions, inflections and colours of light (4th ed.). William Innys.</p>
+<p>Oberauer, K., &amp; Lewandowsky, S. (2019). Addressing the theory crisis in psychology. Psychonomic Bulletin &amp; Review, 26(5), 1596-1618. https://doi.org/10.3758/s13423-019-01645-2</p>
+<p>Oude Maatman, F. J. W. (2025). Psychology&#x27;s theory crisis, and why formal modelling cannot solve it. Meta-Psychology, 9. https://doi.org/10.15626/MP.2024.4224</p>
+<p>Psillos, S. (1999). Scientific realism: How science tracks truth. Routledge.</p>
+<p>Robinaugh, D. J., Haslbeck, J. M. B., Ryan, O., Fried, E. I., &amp; Waldorp, L. J. (2021). Invisible hands and fine calipers: A call to use formal theory as a toolkit for theory construction. Perspectives on Psychological Science, 16(4), 725-743. https://doi.org/10.1177/1745691620974697</p>
+<p>Scheel, A. M., Tiokhin, L., Isager, P. M., &amp; Lakens, D. (2021). Why hypothesis testers should spend less time testing hypotheses. Perspectives on Psychological Science, 16(4), 744-755. https://doi.org/10.1177/1745691620966795</p>
+<p>Stachel, J. (2005). Fresnel&#x27;s (dragging) coefficient as a challenge to 19th century optics of moving bodies. In J. Renn (Ed.), Albert Einstein, chief engineer of the universe: 100 authors for Einstein. Wiley-VCH.</p>
+<p>Stanford, K. (2023). Underdetermination of scientific theory. In E. N. Zalta &amp; U. Nodelman (Eds.), The Stanford Encyclopedia of Philosophy (Summer 2023 ed.). Metaphysics Research Lab, Stanford University. https://plato.stanford.edu/archives/sum2023/entries/scientific- underdetermination/</p>
+<p>Strunz, S. (2012). Is conceptual vagueness an asset? Arguments from philosophy of science applied to the concept of resilience. Ecological Economics, 76, 112-118. https://doi.org/10.1016/j.ecolecon.2012.02.012</p>
+<p>Swenson, L. S., Jr. (1972). The ethereal aether: A history of the Michelson-Morley-Miller aether-drift experiments, 1880-1930. University of Texas Press. https://doi.org/10.7560/720008</p>
+<p>Trafimow, D., &amp; Fiedler, K. (2026). An exploration of physics envy with implications for desiderata of psychology theories. American Psychologist, 81(1), 94-108. https://doi.org/10.1037/amp0001416</p>
+<p>Tulodziecki, D. (2017). Underdetermination. In J. Saatsi, ed., The Routledge Handbook of Scientific Realism, New York: Routledge, 60-71.</p>
+<p>Tu; mkaya, S. (2022). In defence of Churchland-style eliminative materialism: Objections and replies. South African Journal of Philosophy, 41(4), 347-359. https://doi.org/10.1080/02580136.2023.2199607</p>
+<p>van Rooij, I., &amp; Baggio, G. (2020). Theory development requires an epistemological sea change. Psychological Inquiry, 31(4), 321-325. https://doi.org/10.1080/1047840X.2020.1853477</p>
+<p>Worrall, J. (1989). Structural realism: The best of both worlds? Dialectica, 43(1-2), 99-124. https://doi.org/10.1111/j.1746-8361.1989.tb00933.x</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
