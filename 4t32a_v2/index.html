@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Experiment-based calibration in psychology:
+foundational and data-generating model</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Experiment-based calibration in psychology: foundational and
+data-generating model
+</p>
+<p class="meta">
+2026-11-08 · Metacheck 0.4.3.9 · DOI 10.1016/j.jmp.2025.102950
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to
+fix</span></span><a class="count improve" href="#improve"><b>2</b><span>to
+improve</span></a><span class="count decide zero"><b>0</b><span>to
+decide by hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>13</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="improve">To improve <span class="n">(2)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To improve</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We found 1 file in 1 repository.</li>
+<li>We found 0 README files and 1 repository without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/e57zx" target="_blank">osf.io/e57zx</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="files">Files</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Size
+</th>
+<th style="text-align:left;">
+Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/e57zx" class="uri">https://osf.io/e57zx</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/67271871841e9cbe001f6236/" target="_blank">BACH_Calibration_Model_001.m</a>
+</td>
+<td style="text-align:left;">
+2.9 kB
+</td>
+<td style="text-align:left;">
+code
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="readme-files">README Files</h4>
+<p>README files are a way to document the contents and structure of a
+folder, helping users locate the information they need. You can use a
+README to document changes to a repository, and explain how files are
+named. Please consider adding a README to each repository or including
+‘README’ in the name of your overview document.</p>
+<h4 id="file-classification">File Classification</h4>
+<div class="callout-note" title="See how every file was classified and grouped" collapse="true">
+<p><strong>code</strong> (1 file)</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+BACH_Calibration_Model_001.m
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+BACH_Calibration_Model_001.m
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</details>
+</div>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To improve</span> <span class="check-title">Code Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 1 MATLAB,
+and 0 JASP code file.</li>
+<li>All your code files had comments.</li>
+<li>All libraries/imports were loaded in one block.</li>
+<li>No pinned R/package environment (renv.lock, sessionInfo(), or
+groundhog/checkpoint) was found. Consider adding a solution to improve
+computational reproducibility.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Below, we describe some best coding practices and give the results of
+automatic evaluation of these practices in the code files below. This
+check may miss things or produce false positives if your scripts are
+less typical.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File Name
+</th>
+<th style="text-align:left;">
+% Comments
+</th>
+<th style="text-align:right;">
+Missing Files
+</th>
+<th style="text-align:right;">
+Absolute Paths
+</th>
+<th style="text-align:right;">
+Code Between Libraries
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/download/67271871841e9cbe001f6236/" target="_blank">BACH_Calibration_Model_001.m</a>
+</td>
+<td style="text-align:left;">
+15%
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="code-comments">Code Comments</h4>
+<p>Best programming practice is to add comments to code, to explain what
+the code does (to yourself in the future, or peers who want to re-use
+your code). All your code files had comments.</p>
+<h4 id="missing-files">Missing Files</h4>
+<p>All files loaded in the code were present in the repository.</p>
+<h4 id="absolute-paths">Absolute Paths</h4>
+<p>Best programming practice is to use relative file paths (e.g.,
+‘./files’) instead of absolute file paths (e.g.,
+‘C://Lakens/project_dir/files’) as these folder names do not exist on
+other computers. No absolute file paths were found in any of the code
+files.</p>
+<h4 id="working-directory-setwd">Working Directory (setwd)</h4>
+<p>Best programming practice is to avoid <code>setwd()</code> in
+analysis code: it hardcodes an assumption about the working directory
+(often an absolute path on the author’s own machine), so the code breaks
+when run anywhere else. Keep the working directory as the caller sets it
+and use relative paths. No <code>setwd()</code> calls were found in any
+of the code files.</p>
+<h4 id="package-installation-install.packages">Package Installation
+(install.packages)</h4>
+<p>Best programming practice is to avoid <code>install.packages()</code>
+in analysis code: it installs software on whoever runs the script
+without asking, which is at minimum disruptive (an unexpected install,
+network access, a package version the author never tested against) and
+at worst a security risk if it points at an untrusted repository.
+Document required packages instead (a README, or a list of them: an
+<code>renv.lock</code>/<code>DESCRIPTION</code> for R, a
+<code>requirements.txt</code> for Python). No
+<code>install.packages()</code> calls were found in any of the code
+files.</p>
+<h4 id="libraries-imports">Libraries / Imports</h4>
+<p>Best programming practice is to load all required libraries/imports
+in one block near the top of the code. In all code files,
+libraries/imports were loaded in one block.</p>
+<h4 id="packages-dependencies">Packages / Dependencies</h4>
+<p>No packages/libraries were detected as loaded in the code files.
+(This check reads R and Python imports; other languages are not scanned
+for packages.) Even when no imports are detected, it is good practice to
+record the exact package versions the analysis depended on — see
+“Reproducible Environment” below.</p>
+<h4 id="reproducible-environment">Reproducible Environment</h4>
+<p>No <code>renv.lock</code> file,
+<code>sessionInfo()</code>/<code>session_info()</code> record, or
+<code>groundhog</code>/<code>checkpoint</code> date-pin call was found
+anywhere in the repository. Without one of these, the exact R and
+package versions used for the analysis are not recoverable, and package
+versions may drift between when this analysis was run and any later
+reproduction attempt. Consider depositing an <code>renv.lock</code> (via
+the <code>renv</code> package), a <code>sessionInfo()</code> text dump,
+or a <code>groundhog</code>/<code>checkpoint</code> date-pin alongside
+the code.</p>
+<h4 id="parsable-code">Parsable code</h4>
+<p>All R-type code files (.R, .Rmd, .qmd) could be read in. There were
+no parsing issues.</p>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R code to run, but did find other code with no
+reproducible output to check it against — see below.</li>
+</ul>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(13)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>We found 1 OSF link, but no registrations.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We classified 1 file: 1 code.</li>
+<li>We found 0 tabular data files and extracted 0 columns from 0 of
+them.</li>
+<li>We grouped the files into 1 study group (ex1). We found no readable
+tabular data files to validate.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="files">Files in the repository</h2>
+<p>Where the files sit within each repository. Each file is followed by
+how it was classified, which study it belongs to; junk files, hidden
+files and empty folders are marked.</p>
+<p><strong>Repository: <a href="https://osf.io/e57zx" class="uri">https://osf.io/e57zx</a></strong></p>
+<div style="max-height: 40em; overflow: auto;">
+<pre><code>└── BACH_Calibration_Model_001.m  💻 code ex1</code></pre>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+Data Check
+</summary>
+<div class="fold">
+<p>This module classifies repository files and, for tabular data files
+available locally, extracts each column’s type and summary
+statistics.</p>
+</div>
+</details>
+<details>
+<summary>
+Reproducibility Check
+</summary>
+<div id="matlab-code-no-reproducible-output" class="fold">
+<h4>MATLAB code, no reproducible output</h4>
+<p>1 MATLAB code file is present, but this module has no way to extract
+statistics from MATLAB output, and no self-reproducible output
+(JASP/jamovi, SPSS-Viewer, a Stata output log, or Mplus output) was
+found to fall back on. Readers without a MATLAB license cannot currently
+see what the code produced. Consider depositing the results as well, so
+they are visible without MATLAB installed: run
+<code>diary(&#39;output.txt&#39;)</code> (or <code>diary on</code>) before the
+analysis and <code>diary off</code> after to save a plain-text
+transcript of everything printed to the Command Window, or use
+<code>publish(&#39;script.m&#39;, &#39;pdf&#39;)</code> (or the Live Editor’s
+Export/Save As) to generate a single readable document with the code,
+its output, and any figures together.</p>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 16 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 16 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 16 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
+not succeed at excluding all false positives.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Experiment-based calibration is a novel method for measurement validation, which -unlike classical validity metrics -does not require stable between-person variance. In this approach, the latent variable to be measured is manipulated by an experiment, and its predicted scores -termed standard scores -are compared against the measured scores. Previous work has shown that under plausible boundary conditions, the correlation between standard and measured scorestermed retrodictive validity -is informative about measurement accuracy, i.e. combined trueness and precision. Here, I expand these findings in several directions. First, I formalise the approach in a probability-theoretic framework with the concept of a standardised calibration space. Second, I relate this framework to classical validity theory and show that the boundary conditions in fact apply to any form of criterion validity, including classical convergent validity. Thus, I state precise and empirically quantifiable boundary conditions under which criterion validity metrics are informative on validity. Third, I relate these boundary conditions to confounding variables, i.e. correlated latent variables. I show that in the limit, calibration will converge on the latent variable that is most closely related to the standard. Finally, I provide a framework for modelling the data-generating process with Markov kernels, and identify sufficient conditions under which the data generation model results in a calibration space. In sum, this article provides a formal probability-theoretic framework for experiment-based calibration and facilitates modelling and empirical assessment of the data generating processes.</p>
+<h3>1. Introduction</h3>
+<p>Experiment-based calibration is a technique for validation of measurement instruments. The conceptual idea is to evaluate measurement accuracy by comparing the outcome of a measurement method or instrument against a standard, defined as the predicted outcome of a well-defined experiment. This is a canonical technique in the physical sciences [14]. For example, the measurement of physical length can be evaluated against a standard based on the speed of light generated by a helium-neon laser.</p>
+<p>Recently, a similar approach has been introduced to validate the the measurement of latent variables in experimental psychology, such as memory, attention, or perception [4, 3, 5]. For example, the measurement of perceived lightness can be evaluated against standard values derived from physical luminance together with a formal theory of lightness perception (e.g., the CIECAM02 model).</p>
+<p>Experiment-based calibration was introduced to physical quantities in the mid-20th century, long after the laws of physics were already well understood.</p>
+<p>In consequence, there is little doubt in the physical sciences whether, and how, a calibration experiment generates the quantity that one would like to measure (i.e., the measurand ). For example, there is no uncertainty that the helium-neon laser generates light that travels with an invariable speed, and the predicted outcome of an experiment can be very accurately computed. In contrast, uncertainty about the effect of an experimental manipulation is likely higher in psychology and social sciences. Sometimes, we can be quite sure that an experiment impacts on the measurand. Physical luminance of an object influences perceived lightness, and the CIECAM02 model is a very good quantitative model of this impact-but even this model does not numerically capture all aspects, such as the Helmholtz-Kohlrausch effect [9]. In other instances, the relation might be even quite loose or speculative. For example, when manipulating the number of practice trials in a learning task, this will on average affect resulting memory, but the numerical relation of trial number to memory cannot be precisely specified. This raises two key questions. (1) If the relation between experimental manipulation and the latent variable is quite loose, can calibration still yield information on measurement accuracy? (2) If yes, and if several latent variables are loosely impacted by the experimental manipulation, then how can we be sure which one we are actually measuring? For example, changing the luminance of an object changes its perceived lightness but might also affect its aesthetic perception, which we can think of as an &quot;experimental confound&quot;. How can we ensure, in a calibration experiment, that we are evaluating the measurement of lightness perception and not of aesthetic value?</p>
+<p>To formalise such questions, we briefly recapitulate the calibration approach for psychological latent variables (figure 1) [3]. The standard value of a measurand is generated as intended or predicted value of a certain experimental manipulation; denote it with S. Denote the (unknown) true value of the measurand with T , and the measured value of the measurand with Y . Because psychological variables have no natural scale, and actual scale might differ between samples and situations, comparing one measured value against one standard value bears little information. Instead, we will realise several (two or more) values of S, and compare them with the ensuing values of Y . Hence, S, T , and Y are defined as random variables, with the value of S randomly determined at every realisation of an experimental treatment. This experiment will be done multiple times and with multiple persons (in a within-or between-subjects design), such that we can evaluate the correlation between S and Y, ρ SY , which we term retrodictive validity [2].</p>
+<p>As will be shown in detail below, ρ SY depends, among other things, on the measurement error ε := Y -T . Measurement error consists of two components.</p>
+<p>The first is a random component, whereby Y takes different values on repeated measurements even when T is constant. This corresponds to a lack of precision of the measurement [6]. The second component is systematic, whereby the average of Y , across repeated measurements of constant T , deviates from T . This corresponds to a lack of trueness of the measurement (also termed bias) [6]. Naturally, imprecision contributes to the variance of ε. Perhaps counterintuitively, bias can also contribute to the variance of ε, when the bias is different for different values of T . In contrast, a &quot;global bias&quot; (the average of Y deviates from the average of T ) is of no interest here because the anchor point of a psychological variable is usually unknown anyway. Retrodictive validity, ρ SY , depends on error variance, so we can now compare two measurement methods by their retrodictive validity: the method with higher retrodictive validity will have lower error variance, which can mean higher trueness, or higher precision, or both. Thus, retrodictive validity can be taken as a criterion to compare measurement methods. This is conceptually similar to other forms of criterion validity [12], where the criterion is defined as the intended effects of the experimental manipulation.</p>
+<p>To address the aforementioned key questions about uncertainty in the experimental manipulation, previous work has introduced the concept of experimental aberration ω := T -S, i.e., the difference between predicted and actually realised values of the latent variable [3]. As shown in the next section, retrodictive validity depends not only on measurement error but also on experimental aberration. In psychological experiments -in contrast to calibration in physicsexperimental aberration will presumably depend on the specific sample and experimental minutiae in ways that are often not understood in detail. Thus, it might differ between two similar calibration experiments. Hence, previous work has proposed to pitch two measurement methods against each other within the same experiment [3]. In this case, experimental aberration is constant for all tested measurement methods. This is particular simple when different measurement methods consist of different data transformations, applied to the same observables (e.g., reaction times). However, there are also many applications in which different observables can be acquired simultaneously for comparison.</p>
+<p>Examples are key presses for which response time and response force can be observed simultaneously [17], or the simultaneous recording of skin conductance and electrocardiogram [11].</p>
+<p>While aberration is constant for all measurement methods calibrated simultaneously, retrodictive validity depends also on the covariance of aberration and measurement error, which is different between methods. This is why previous work has analysed the covariance conditions under which retrodictive validity is informative on measurement error [3]. In result, if measurement error is uncorrelated with experimental aberration, then a method with higher retrodictive validity is guaranteed to have smaller measurement error variance. If this condition is not fulfilled, then there are boundary conditions under which ρ SY can be informative on measurement error. These will be recapitulated below.</p>
+<p>With the current article, I seek to fill, in probability-theoretic terms, four gaps left by previous work. First, the previous model assumed a discrete distribution of S [3]. Here, I simplify and generalise the previous calibration model to arbitrary including continuous distributions of S and show that the previously derived boundary conditions remain applicable. Secondly, I demonstrate that there is a dual problem in classical validity theory, where &quot;construct-irrelevant variance&quot; or &quot;methods variance&quot; is formally analogous to covariance between experimental aberration and measurement error in calibration. I will show that the same boundary conditions apply to convergent validity. Third, I address the problem of experimental confounds in calibration. Finally, in order to enable simulations and theoretical work on the formal relationship between variables, I present a framework to model the data-generating relation between S, T , and Y.</p>
+<h3>2. Calibration model</h3>
+<p>This section simplifies the previous calibration model [3] and generalises it to continuous distributions of standard values S. With subscripted P, we denote probability measures. We denote expectation and variance with E and V, respectively. The model is illustrated in figure 1. After a narrative derivation, the model is concisely summarised. Proofs are found in the appendix. Let (Ω, A, P) be an arbitrary probability space. Let the standard scores S be a real-valued random variable on (Ω, A) with image measure P S . Without limiting applicability (because psychological variables are bounded and have no scale or anchor point), assume that E (S) := 0 and V (S) := 1.</p>
+<h3>Let the standardised true scores T be another real-valued random variable on</h3>
+<p>(Ω, A) with image measure P T and E (T ) := 0. Let the standardised experimental aberration be ω := T -S. Take standardised to mean that Cov (S, ω) := 0, or equivalently, Cov (S, T ) := V (S) = 1. Loosely speaking, this standardisation ensures that S and T (and further down, all Y i ) are on the same scale, regardless of the added experimental and measurement noise.</p>
+<p>Finally, let the standardised measured scores Y 1 be a real-valued random variable on (Ω, A) with image measure P Y1 and E (Y 1 ) := 0. We use the subscript because we will typically assess several measured scores Y 1 , Y 2 ... simultaneously.</p>
+<p>Denote the set of all measured scores with (Y i ) i∈I with I ⊆ N. Define the standardised measurement error as ε i := Y i -T, such that Y i = S + ω + ε i . Again, standardised is taken to mean that Cov (T, ε) := 0, or equivalently:</p>
+<p>We summarise this model in the following Definition 1. A tupel Ω, A, P; S, T, (Y i ) i∈I with I ⊆ N is called &quot;standardised calibration space&quot; if it has the following properties: 1.</p>
+<p>(Ω, A, P) is a probability space.</p>
+<p>2. S, T, (Y i ) i∈I ∈ L 2 (Ω, A, P).</p>
+<p>3.</p>
+<p>5. Cov (S, T ) = 1.</p>
+<p>A tupel Ω, A, P; S, T, (Y i ) i∈I that fulfills conditions 1-2 and some trival constraints can be mapped onto a calibration space by linear functions (see appendix). This motivates the following Definition 2. A tupel Ω, A, P; S, T, (Y i ) i∈I with I ⊆ N is called &quot;calibration space&quot; if it has the following properties: 1.</p>
+<p>(Ω, A, P) is a probability space.</p>
+<p>2. S, T, (Y i ) i∈I ∈ L 2 (Ω, A, P).</p>
+<h3>3.</h3>
+<p>Cov (S, T ) ̸ = 0.</p>
+<h3>4. Cov (T, Y i ) ̸ = 0 (i ∈ I).</h3>
+<p>A particularly important case is summarised the following Definition 3. A standardised calibration space with Cov (ω, ε) = 0, ω := T -S, ε := Y -T , is called &quot;orthogonal calibration space&quot;.</p>
+<p>In fact, for any correlated random variables S and Y , we can construct a suitable T such that the ensuing calibration space is orthogonal:</p>
+<p>Lemma 4. Let (Ω, A, P) be a probability space, let S, Y ∈ L 2 be random variables on (Ω, A) with Cor (S, Y ) ̸ = 0, Cor 2 (S, Y ) ̸ = 1. Then there exists an orthogonal calibration space (Ω, A, P; and</p>
+<h3>Lemma 5. Retrodiction lemma</h3>
+<p>For a standardised calibration space (Ω, A, P; S, T, Y ):</p>
+<p>This lemma corresponds to eq. (32) in the supplementary material of [3], where it was derived for discrete-valued S. It is easy to see that for an orthogonal calibration space and for fixed V (ω) (e.g., within the same calibration experiment), retrodictive validity is monotonically related to measurement error variance, underlining the special status of orthogonal calibration spaces.</p>
+<p>Theorem 1 from the supplementary material of [3] is also applicable here, and re-stated in simplified form: Theorem 6. Retrodiction theorem For a standardised calibration space Ω, A, P; S, T, (Y i ) i∈{1,2} : (1</p>
+<p>It is easy to see that a similar theorem holds for any calibration space. In words, the theorem gives a boundary condition on Cor (ω, ε 1 ) and Cor (ω, ε 2 ) under which retrodictive validity is informative on measurement error variance.</p>
+<p>Loosely speaking, if ω and ε are not &quot;very&quot; anti-correlated, then higher retrodictive validity can have two causes: either measurement error variance is lower (case 1) or the aberration-error correlation is lower (case 3), or both. If, however, ω and ε are &quot;very&quot; anti-correlated, then higher retrodictive validity can also be caused by higher measurement variance (case 2). In the next section, I show that this boundary condition is not specific to calibration and also applies to convergent validity, as often assessed in the context of classical validity arguments.</p>
+<h3>3. A dual problem in classical convergent validity</h3>
+<p>Assume we seek to measure a real-valued latent variable T with two different measurement procedures which result in measured scores Y 1 and Y 2 . Then ρ Y1,Y2 := Cor (Y 1 , Y 2 ) is a convergent validity score. Convergent validity assessment is performed to demonstrate that both methods measure the same latent variable and not two different latent variables that are only loosely correlated.</p>
+<p>However, there is a possibility that the correlation between the two methods is high not because the methods converge on the same latent variable but simply because the measurement errors of the two methods are correlated [12]. A typical reason for such correlation is the presence of &quot;methods effects&quot;, i.e. variance components that depend on the measurement methods, rather than on the true scores. For a classical example from educational research, language abilities will affect any mathematics test that requires verbal reasoning. Two mathematics tests that use verbal reasoning will thus be correlated, regardless of how well they measure mathematics abilities. Such methods effects can be detected by assessing discriminant validity -i.e. the correlation between measured scores of two clearly different latent variables, established with the same method. In our example, mathematics scores might correlate with scores on a history test which assesses a different latent variable, because the measurement errors are correlated, i.e. discriminant validity is low here. Construct-irrelevant variance is perceived as a &quot;threat to validity&quot; [13], but how threatening is it really? In an application scenario, discriminant validity will often be non-zero because measurement instruments for the same latent variable typically target the same response channels (e.g., both requiring language). However, the literature does not provide clear bounds on what values of discriminant validity are acceptable.</p>
+<p>Within the calibration framework, we can derive these bounds:</p>
+<p>Assume, without loss of applicability, that (Ω, A, P; Y 1 , T, Y 2 ) fulfills the formal definition of a standardised calibration space, where T is the latent variable that both measurement methods purport to measure. Obviously, this calibration space is not orthogonal. The measurement errors for the two methods are ε 1 := Y 1 -T , ε 2 := Y 2 -T . Classically, one seeks to test whether both measurement methods tap into the same latent variable. Equivalently, in our formulation we assume that they do measure the same latent variable T , and test the error in measuring this latent variable. From lemma 5: where -ε 1 takes the role of ω in the lemma.</p>
+<p>Theorem 6 gives the boundary conditions under which convergent validity is informative on measurement error.</p>
+<p>In words, if the measurement errors are not &quot;very&quot; correlated then higher convergent validity means the methods have lower measurement error, but beyond this bound, convergent validity is strictly uninformative on the measurement accuracy, i.e. higher convergent validity then implies lower accuracy. Deriving the exact bound requires knowledge of V (ε 1 ) and V (ε 2 ), which can be approximated from reliability assessment [12].</p>
+<h3>4. The orthogonality assumption</h3>
+<p>In this section, we dissect the reasons why a calibration space might not be orthogonal, i.e. Cor (ω, ε) ̸ = 0. At first glance, orthogonality appears very reasonable: experimental manipulation and measurement instrument are procedurally unrelated, unlike two different measurement methods in classical convergent validity assessment. Hence, the measurement instrument does not &quot;know&quot; that on a particular experiment trial, the realised true score was higher than expected, and so cannot &quot;counter&quot; this with a particular value of measurement error. The problematic case that Cor (ω, ε) &lt; 0 (aberration and error are anticorrelated) would imply that (some of) the aberration, induced by the experiment, is subtracted from the true value during the measurement. Unless the measurement system is &quot;informed&quot; about the standard values or aberration, how could this possibly happen?</p>
+<p>One explanation can be found in the notion of confounds. Assume that many psychological latent variables are weakly correlated. When we seek to manipulate or measure a psychological variable, then we might term any other latent variable that is correlated as confound. Now assume that we seek to calibrate the measurement of a particular psychological variable T 1 , but both our experimental manipulation and the measurement system actually tap into a confounder variable T 2 . To illustrate this with an extreme example, imagine that we seek to calibrate the measurement of aesthetic value. However, our naive calibration experiment manipulates the luminance of of a physical stimulus, and our naive measurement instrument measures the perception of lightness. Assuming that aesthetic value is weakly correlated with lightness, then the assumptions of a calibration space in definition 1 are fulfilled. However, for each realisation of S, the true score for aesthetic value T will quite dramatically deviate from S.</p>
+<p>In turn, because we are measuring lightness rather than aesthetic value, the measured value Y will again dramatically deviate from T , but in the opposite direction. Thus, ω and ε are &quot;very&quot; anti-correlated. From theorem 6, it follows that we can potentially increase retrodictive validity by increasing measurement error. In doing so, Y will become an even worse measure of aesthetic value and, at the same time, become an even better measure of lightness, which however we are not interested in. This demonstrates that non-orthogonality results from mis-specification of the latent variable T . However, we can always find a more appropriate latent variable T ′ for which the calibration space is orthogonal (see lemma 4).</p>
+<p>Non-orthogonality implies that for a given latent variable, both the calibration experiment and the measurement instrument are mis-specified in the same way. We might sometimes have more subtle doubts about the appropriateness of the calibration procedure, and we might be wondering which latent variable we are actually measuring. The crucial role of the calibration standard when arbitrating between confounds is discussed in the next section.</p>
+<h3>5. The role of confounds</h3>
+<p>If both the experimental manipulation and the measurement method are much more closely related to the same confound then to the latent variable of interest, the the calibration space is non-orthogonal. Now consider a perhaps more plausible case experimental manipulation and measurement instrument target different latent variables T 1 and T 2 . For example, if we ask a person to state their level of confidence in a perceptual decision, then the experiment might directly manipulate the latent variable &quot;confidence&quot; (T 1 ), but the verbal expression (Y ) of confidence be mediated by a meta-cognitive representation of confidence (T 2 ), such that this meta-cognitive representation is more closely related to the verbal expression than the true confidence. This can be modelled by assuming that T2 = T 1 + ω T where ω T is i.i.d. error.</p>
+<p>To make the argument more general, we assume Cor (ω, ε 1 ) = Cor (ω, ε 2 ) = 0 and make no assumptions on the latent relation of T 1 and T 2 . We want to know is whether a measured score Y is &quot;more closely related&quot; to T 1 or T 2.</p>
+<p>We can express this situation as:</p>
+<p>Without loss of generality, assume V (ε 2 ) &lt; V (ε 1 ). Then, we have: because of orthogonality, and hence, V (ω 2 ) &gt; V (ω 1 ).</p>
+<p>In words, if the latent variable T 2 is &quot;more closely related&quot; than T 1 to the measure Y (i.e. has smaller measurement error), then T 2 will be &quot;less closely related&quot; to S (i.e. have larger aberration). This reflects the previous intuition that the expression of latent variables in behaviour might be mediated by intervening variables. In the example, the meta-cognitive representation of confidence T 2 will be less closely related than T 1 to any experimental manipulation that directly targets confidence ( T 1 ) as such.</p>
+<p>Now assume an ideal situation in which for each of the latent variables T 1 and T 2 , there exists a sequence of ever more perfect measurement methods with and Cor ω j , ε (j) i = 0 for all i and j.</p>
+<p>Thus, by choosing i large enough, we can</p>
+<p>Then, for large enough i:</p>
+<p>In words, given a sequence of ever more perfect measurement methods, retrodictive validity is maximised by measured scores that are more closely related to T 1 rather than T 2 . Thus, by maximising retrodictive validity, we converge on the latent variable that is more closely related to the standard S. In our example, this might correspond to an implicit measurement of confidence, which does not require a meta-cognitive representation. This underlines the special importance of the calibration standard, and clarifies what we are measuring when nearperfect measurement instruments exist. One might say that we have replaced the proverbial dictum &quot;intelligence is what an IQ test measures&quot; (definition of a latent variable by a measurement) with &quot;intelligence is what a calibration experiment manipulates&quot; (definition of a latent variable by an experimental manipulation). This sits well with a contemporary approach of defining latent variables by substantive theory, rather than by measurement instruments [7].</p>
+<h3>6. Constructing a generative calibration model</h3>
+<p>The previous sections defined a calibration space as a tupel of a probability space and a set of real-valued random variables with minimal constraints, and analysed their interrelation. Researchers will often be interested in modelling or simulating how these variables come about [1]. The goal of this section is to analyse how data-generating relations can be embedded in the calibration concept, and under which conditions they result in a standardised calibration space.</p>
+<p>Throughout, we assume orthogonality, noting that we can always construct a non-orthogonal calibration space from an orthogonal one and vice versa.</p>
+<p>This generative calibration model is based on two key ideas. The first is to cast the data-generating relation as a three-stage probabilistic process with a starting distribution for S, and transition (Markov) kernels that specify T and Y . This formalism provides a very general definition of a generative calibration space. This definition is however rather abstract, and verifying whether any particular implementation fulfils the necessary conditions can be cumbersome.</p>
+<p>To render the concept applicable in practice, the second key idea is to separate systematic bias from random imprecision [see 3, 1]. Thus, we specify deterministic non-linearities for systematic aberration and error, and conditional probability distributions for their random components. This allows formulating a more intuitive and still quite general calibration model, together with sufficient conditions that are easy to verify.</p>
+<p>To formalise the first idea, let the data-generating process start with standard values S. These are under the control of the experimenter, and hence the starting distribution P S can be freely chosen. Once S = s is fixed in a realisation of the experiment, the experimental manipulation results in a true attribute value T = t, according to a probability kernel K S T (s, t). The true kernel might depend on the experimental design in ways that are not fully knowable to the experimenter, but it can be modelled or simulated. The experimenter then takes one or several observations, which are transformed into a measured score Y = y.</p>
+<p>Given the fixed true score t, the measured score follows a kernel K T Y (t, y), which again is unknowable to the experimenter but can be modelled or simulated. In this setup, Y is conditionally independent of S|T , which implies orthogonality,</p>
+<p>The next lemma verifies that our setup results in a joint distribution: Lemma 7. Let P S be a probability measure on σ (R), and</p>
+<p>Then this defines a probability measure P on R 3 , σ R 3 with where 1 A is the indicator function.</p>
+<p>By Fubini&#x27;s theorem, this distribution P exists and is uniquely defined. This motivates the next Definition 8. Generative calibration space.</p>
+<p>Let S (s, t, y) := s, T (s, t, y) := t, Y (s, t, y) := y be random variables on R 3 , σ R 3 , P . If their image distributions fulfill conditions 2-4 of definition 2 then we call P S , K S T , K T Y a generative calibration space.</p>
+<p>The power of this definition is its generality; however it provides no handle on verifying the necessary conditions of definition 2 other than evaluating the integrals for every individual modelling application. This state of affairs is somewhat unsatisfactory. This motivates the following generative calibration model, the conditions of which are sufficient but not necessary.</p>
+<p>Definition 9. Generative calibration model.</p>
+<h3>1. Experimental manipulation: let P S be a probability distribution on (R, σ (R))</h3>
+<p>with finite support and non-zero variance.</p>
+<p>2. Systematic non-linearities: let f, g : R→ R be continuous and strictly monotonic, let g be bounded.</p>
+<p>3. Aberration and error due to random imprecision: let P ω (θ) and P ε (θ) be parametrised probability distributions on (R, σ (R)), which are continuous in their parameter θ, and have zero expectation and finite variance for any fixed parameter value. A proof is found in the appendix. The conditions of finite support of P S and bounded g and P ε (θ ε (t)) ensure that the moments in definition 2 are finite for any aberration kernel. However, they are not strictly necessary, and could be dropped for certain combinations of P ω , P ε and g. Remark 12 in the appendix derives the quantities required to analytically evaluate retrodictive validity in this model. It is likely that in many non-trivial application cases, solving the double integrals V (g (T )) and E (V ε (T )) will require numerical evaluation.</p>
+<p>To illustrate how the model works in practice, consider measuring the subjective perception of a physical quantity, such as subjective lightness. The values of the physical quantity can be drawn from a continuous scale. We are interested in simulating calibration experiments, in which the standard values S are drawn uniformly, and in analysing how the range of S impacts on the expected retrodictive validity values. This could be useful, for example, to compare the results of two calibration experiments that were conducted with different range of S. In the following data-generating model, all random variables are already mean-centred for simplicity: 1.</p>
+<p>Let P S be a uniform distribution on the intervalr 2 , r 2 , which has finite support and non-zero variance.</p>
+<p>2. Let f be the identity function; let g (x) := 10/ 1 + e -0.8x -5 be a sigmoid function to model the range of the measurement instrument; g is obviously bounded.</p>
+<p>3. Let P ω (θ) := P ε (θ) := N (0, θ); this distribution is continuous in θ ∈ R + , has zero expectation and finite variance for fixed θ. Note that changing the range of S is not simply a rescaling of the model because θ ω (x) and g are fixed for different values of r. Figure 2 shows simulated data from this model, and simulated retrodictive validity values. In this particular example, increasing the range of the standard values increases expected retrodictive validity.</p>
+<h3>7. Discussion</h3>
+<p>Experiment-based calibration is a relatively novel approach to psychometrics in experimental fields [3], with several examples of practical application [2, 5] and simulations [1].</p>
+<p>The current work generalises and expands the previous work into several directions and thus contributes to laying a rigorous groundwork for this research program. First, I show that previously derived boundaries under which retrodictive validity can be informative on measurement accuracy hold for any distribution of the experimental standard values. Second, I show that the same boundaries apply in the assessment of convergent validity in classical psychometrics. Third, I dissect the role of confounding variables, i.e.</p>
+<p>variables that covary with the latent variable of interest. When a single method is analysed, if this method relates more closely to latent variable T 1 than to latent variable T 2 , then T 1 will have a less close relationship to the standard values. When multiple methods are compared under ideal conditions, then calibration will converge on the latent variable that has the closer relationship to the standard values. This underlines the importance of the experimental standard. Finally, I lay out a generative calibration model and derive identities that can be used for analytical and numerical modelling and simulations [1].</p>
+<p>Experiment-based calibration requires that substantive theory allows predicting standard values in an experiment, and is thus suitable for consolidated research areas. This reflects the approach of theory-based measurement, whereby any measurement of latent variables should be motivated and defined via substantive theory rather than by the measurement instrument (including its latent variable model) [7]. Interestingly, calibration can also help solving a problem well-known in measurement theory: that there is an (unknown) non-linear mapping from the latent variable to the measured score. Such non-linearity renders, for example, interpretation of non-crossover interaction effects in linear models ambiguous: what appears as an interaction at the level of the measured score might have been caused by a non-linear mapping from latent to measured score, when in fact there is no interaction at the level of the latent variable Loftus [10], Wagenmakers et al. [18]. While statistical techniques have been developed to identify such interactions Dunn and Anderson [8], calibration could aid solving the problem in a more fundamental manner. Non-linearities in the mapping from latent to measured score reduce trueness of the measurement -and thereby, retrodictive validity. If this non-linearity were known, it could be embedded in the measurement model, thus rendering the mapping from latent to the resulting measured score linear. This would, in turn, increase retrodictive validity. In consequence, including various candidate non-linearities into the measurement model and selecting the one with highest retrodictive validity will, in the limit, minimise non-linearities. As one result, this will improve the interpretation of interactions in substantive experiment using this measurement method.</p>
+<p>As any tool, experiment-based calibration comes with limitations. Most notable is the orthogonality assumption, i.e. that aberration and error are uncorrelated [3]. In the present work, I show that violations of this assumptions correspond to a mis-specified substantive theory. As another limitation, calibration does not cleanly separate trueness and precision. Previous work has identified surrogate metrics that can be used for this purpose [3], and alternatively, calibration can be complemented with test-retest reliability assessment, which directly assesses precision [12]. Ultimately, it might be possible to derive clear metrics of uncertainty on psychological measurement [16, 15]. With the present work, I hope to aid the modelling work that will put this approach into practice.</p>
+<h3>Acknowledgement</h3>
+<p>The author thanks Jules Brochard and Edward Rigdon for insightful comments on a first draft of this manuscript. DRB receives funding from the European Research Council (ERC) under the European Union&#x27;s Horizon 2020 research and innovation programme (Grant agreement No. ERC-2018 CoG-816564 ActionContraThreat). The Hertz Chair for Artificial Intelligence and Neuroscience in the Transdisciplinary Research Area Life and Health, University of Bonn, is funded as part of the Excellence Strategy of the German federal and state governments.</p>
+<p>Proof. First, all denominators in the lemma are non-zero by definition 2 and 562 the Cauchy-Schwarz inequality, so S, T, Y i are well-defined. Next, is easy to see</p>
+<p>For the standardisation conditions, we have:</p>
+<p>Proof. (Lemma 4).</p>
+<h3>567</h3>
+<p>Let ω 0 := Y ′ -S ′ + ω I , where ω I ∈ L 2 is a noise variable with E (ω I ) = 0 568 and V (ω I ) &gt; 0 that is stochastically independent of S, Y . Then E (ω 0 ) = 0 and 569 V (ω 0 ) &gt; 0. Furthermore: ) by definition).</p>
+<p>Now we find random vari-572 ables ω := γω 0 , γ ∈ R, T ′ := S ′ + ω and ε := Y ′ -T ′ such that the following 573 conditions are met: (1) Cov (ω, ε) = 0 (orthogonality) (2) Cov (T ′ , ε) = 0 (stan-574 dardisation). (1) leads us to:</p>
+<p>Either solution also fulfills (2): 577</p>
+<p>Selecting the non-trivial solution for γ, we constructed a non-trivial T ′ that 578 fulfills the conditions of an orthonogonal calibration space.</p>
+<h3>Proof. (Retrodiction lemma)</h3>
+<p>580</p>
+<p>From the definition of ω and ε, and</p>
+<p>Using these identities, we have: (1): To prepare, we differentiate lemma 5 with respect to V (ε): the following identity holds:</p>
+<p>Because the denominator of eq. (A.24) is strictly positive, this is equivalent to (2): Analogous to ( 1).</p>
+<p>(3): Follows directly from lemma 5.</p>
+<h3>Proof. (Generative calibration model)</h3>
+<p>First, we show that f, g, P ω , P ε , θ ω , θ ε define probability kernels. Recall that for two measurable spaces (Ω 1 , A 1 ) and (Ω 2 , A 2 ), K 1 2 : Ω 1 × A 2 → [0, 1] is a probability kernel if it has the following two properties: (1) for fixed ω 1 ∈</p>
+<p>Every continuous function h : R →R is measurable on (R, σ (R)). By definition, , and is a probability measure for every fixed s; hence it constitutes a probability kernel.</p>
+<p>Furthermore, because f is continuous, ω I (T ; s) is continuous in s and therefore measurable for every fixed T , and because it is measurable for fixed s, K S T (s, T ) is a probability measure for fixed s. Hence, K S T is a probability kernel, and the same can be shown for K T Y.</p>
+<p>These kernels have the following properties.</p>
+<p>by (b) and because f (S) and V ω (S) are bounded P S -almost everywhere.</p>
+<p>Furthermore, by (a) and because g is bounded.</p>
+<p>Finally, by (b) and because g and V ε are bounded.</p>
+<h3>622</h3>
+<p>(3) We have: (by eq.</p>
+<p>A.42).</p>
+<h3>631</h3>
+<p>Denote the scaling constants from lemma 11 with: .</p>
+<p>With this, we derive the required variances:</p>
+<p>Finally:</p>
+<h3>Figure 1 :</h3>
+<p>Figure 1: Illustration of the probabilistic set-up. The box encloses the foundational calibration model, surrounded by additional elements that illustrate the generative calibration model, which makes additional assumptions. In a calibration experiment, a predicted standard score S is randomly assigned according to a probability distribution P S , and the respective experimental manipulation conducted. This results in an (unknown) true score T , and a measured score Y . The foundational model makes no specific assumptions on the relation of these variables. To model the data generation, we assume a three-stage probabilistic model in which each stage is independent of previous ones. In this model, the true score T is generated for each realised value of S according to a conditional probability distribution K S T . Given this true score, observation and data transformation are embodied in another conditional probability distribution K T Y.</p>
+<h3>4 .Lemma 10.</h3>
+<p>Dependency of random aberration and error on S: Let θ ω , θ ε : R→ R be continuous; let the variance of P ε (θ ε (t)), expressed as a function of t, be bounded. The generative calibration model defines a generative calibration space P S , K S T , K T Y with K S T (s, A) := P ω (θ ω (s)) (ω I (A; s)), (s ∈ R, A ∈ σ (R)), and K T Y (t, A) := P ε (θ ε (t)) (ε I (A; t)), (t ∈ R, A ∈ σ (R)), where ω I , ε I are random variables with ω I (T ; s) := T -f (s) and ε I (Y ; t) := Y -g (t).</p>
+<h3>4.</h3>
+<p>Let θ ω (x) := 0.1 1 + 0.5x 2 ∈ R + to model higher imprecision of the experimental manipulation for more extreme values of S, and θ ε (x) := e -(x/2) 2 to model the range of the measurement instrument. Both functions are continuous. Denote the variance of P ε (θ ε (t)) with V ε (t) ≤ 1.</p>
+<h3>Figure 2 :</h3>
+<p>Figure 2: Results from a simulated calibration model. Scatter plots show one simulated data set with N = 100. The correlation plot is based on 1000 simulations. Code to reproduce these simulations is available on https://osf.io/e57zx/.</p>
+<h3>2 PRY 2 613 ( 1 )( 2 )RdP S f 2 (</h3>
+<p>For every fixed s ∈ R: 608 R T K S T (s, dT ) = R T P ω (θ ω (s)) (ω I (dT ; s)) (A.27) = R (ω I (T ; s) + f (s)) P ω (θ ω (s)) (ω I (dT ; s)) = f (s) , (A.28) using T = ω I (T ; s) + f (s) for any s ∈ R, and by definition of P ω . Similarly, 609 for every fixed t ∈ R: 610 R Y K T Y (t, dY ) = g (t) . (A.29) (b) Denote the variance of P ω (θ ω (s)) with V ω (s). For every fixed s ∈ R: 611 R T 2 K S T (s, dT ) = R (ω I (T ; s) + f (s)) ω (θ ω (s)) (ω I (dT ; s)) (A.30) = f 2 (s) + V ω (s) , (A.31) using (a) and the definition of P ω . Similarly, 612 K T Y (t, dY ) = g 2 (t) + V ε (t) . (A.32) Now, we verify the conditions of definition 2. By lemma 7, P S , K S T , and K T Y define a probability space R 3 , σ R 3 , By definition of P S , S is P-almost everywhere bounded, hence its moments 616 are finite. Next, dP S f (S) = E (f (S)) &lt; ∞, (A.35) by (a) and because f (S) is bounded P S -almost everywhere. Then, S) + V ω (S) (A.37) = E f 2 (S) + V ω (S) &lt; ∞ (A.38)</p>
+<h3>623( 4 )</h3>
+<p>Cov (S, T ) = Cov (S, f (S)) + Cov (S, ω I ) (A.43) = Cov (S, f (S)) ̸ = 0, (A.44)because f is monotonic.624Similar as for (5).</p>
+<h3>625 Remark 12.</h3>
+<p>To allow analytical calculation of retrodictive validity in a genera-626 tive calibration model, we derive the variance of ω := T s -S s and ε := Y s -T s 627 in the corresponding standardised calibration space (Ω, A, P; S s , T s , Y s ). First, 628 we recapitulate:629 V (T ) = V (f (S)) + E (V ω (S)) ,(by eq. A.38), and 630</p>
+<h3>References</h3>
+<p>Bach, D.R., 2023. Experiment-based calibration in psychology: Op- timal design considerations. Journal of Mathematical Psychology 117, REFERENCES 16 102818. URL: https://www.sciencedirect.com/science/article/ pii/S0022249623000743, doi:https://doi.org/10.1016/j.jmp.2023.102818.</p>
+<p>Bach, D.R., Melinscak, F., 2020. Psychophysiological modelling and the measurement of fear conditioning. Behav Res Ther 127, 103576. URL: https://www.ncbi.nlm.nih.gov/pubmed/32087391, doi:10.1016/ j.brat.2020.103576.</p>
+<p>Bach, D.R., Melinscak, F., Fleming, S.M., Voelkle, M.C., 2020. Calibrating the experimental measurement of psychological attributes. Nat Hum Behav 4, 1229-1235. URL: https://www.ncbi.nlm.nih.gov/pubmed/33199857, doi:10.1038/s41562-020-00976-8.</p>
+<p>Bach, D.R., Rigdon, E., Sarstedt, M., 2025. Calibration experiments: an experimentalist alternative to multi-method approaches for measurement validation. Journal of Business Research 193, 115352. doi:https://doi. org/10.1016/j.jbusres.2025.115352.</p>
+<p>Bach, D.R., Sporrer, J., Abend, R., Beckers, T., Dunsmoor, J.E., Ful- lana, M.A., Gamer, M., Gee, D.G., Hamm, A., Hartley, C.A., Herringa, R.J., Jovanovic, T., Kalisch, R., Knight, D.C., Lissek, S., Lonsdorf, T.B., Merz, C.J., Milad, M., Morriss, J., Phelps, E.A., Pine, D.S., Olsson, A., van Reekum, C.M., Schiller, D., 2023. Consensus design of a calibration experi- ment for human fear conditioning. Neuroscience and Biobehavioral Reviews 148, 105146. URL: https://www.sciencedirect.com/science/article/ pii/S014976342300115X, doi:https://doi.org/10.1016/j.neubiorev. 2023.105146.</p>
+<p>BIPM, IEC, IFCC, ILAC, IUPAC, IUPAP, ISO, OIML, 2012. The interna- tional vocabulary of metrology-basic and general concepts and associated terms (vim). JCGM 200, 2012.</p>
+<p>Borgstede, M., Eggert, F., 2023. Squaring the circle: From latent variables to theory-based measurement. The- ory &amp; Psychology 33, 118-137. URL: https://doi.org/10.1177/09593543221127985, doi:10.1177/09593543221127985, arXiv:https://doi.org/10.1177/09593543221127985.</p>
+<p>Dunn, J.C., Anderson, L.M., 2024. The monotonic linear model: Testing for removable interactions. Psychological Methods in press. URL: https://doi.org/10.1037/met0000626, doi:https://doi.org/ 10.1037/met0000626.</p>
+<p>High, G., Green, P., Nussbaum, P., 2023. The helmholtz- kohlrausch effect on display-based light colors and simulated substrate colors. Color Research &amp; Application 48, 167- 177. URL: https://onlinelibrary.wiley.com/doi/abs/10.1002/col.22839, doi:https://doi.org/10.1002/col.22839, arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1002/col.22839.</p>
+<p>Loftus, G.R., 1978. On interpretation of interactions. Memory &amp; Cognition 6, 312-319. URL: https://doi.org/10.3758/BF03197461, doi:10.3758/ BF03197461.</p>
+<p>Mancinelli, F., Sporrer, J.K., Myrov, V., Melinscak, F., Zimmermann, J., Liu, H., Bach, D.R., 2024. Dimensionality and optimal combination of auto- nomic fear-conditioning measures in humans. Behavior Research Methods 56, 6119-6129. URL: https://doi.org/10.3758/s13428-024-02341-3, doi:10.3758/s13428-024-02341-3.</p>
+<p>McDonald, R.P., 2013. Test theory: A unified treatment. psychology press.</p>
+<p>Messick, S., 1987. Validity. ETS Research Report Series 1987, i- 208. URL: https://doi.org/10.1002/j.2330-8516.1987.tb00244.x, doi:https://doi.org/10.1002/j.2330-8516.1987.tb00244.x.</p>
+<p>Phillips, S.D., Estler, W.T., Doiron, T., Eberhardt, K.R., Levenson, M.S., 2001. A careful consideration of the calibration concept. J Res Natl Inst Stand Technol 106, 371-9. URL: https://www.ncbi.nlm.nih.gov/ pubmed/27500027, doi:10.6028/jres.106.014.</p>
+<p>Rigdon, E.E., Sarstedt, M., 2022. Accounting for Uncertainty in the Measurement of Unobservable Marketing Phenomena. Emerald Publish- ing Limited. volume 19 of Review of Marketing Research. pp. 53-73. URL: https://doi.org/10.1108/S1548-643520220000019003, doi:10.1108/S1548-643520220000019003.</p>
+<p>Rigdon, E.E., Sarstedt, M., Becker, J.M., 2020. Quantify uncertainty in be- havioral research. Nat Hum Behav 4, 329-331. URL: https://www.ncbi. nlm.nih.gov/pubmed/31915371, doi:10.1038/s41562-019-0806-0.</p>
+<p>Stahl, J., Rammsayer, T.H., 2005. Accessory stimulation in the time course of visuomotor information processing: Stimulus intensity effects on reaction time and response force. Acta Psychologica 120, 1-18. URL: &lt;GotoISI&gt;: //WOS:000231644900001, doi:10.1016/j.actpsy.2005.02.003.</p>
+<p>Wagenmakers, E.J., Krypotos, A.M., Criss, A.H., Iverson, G., 2012. On the interpretation of removable interactions: A survey of the field 33 years after loftus. Memory &amp; Cognition 40, 145-160. URL: https://doi.org/ 10.3758/s13421-011-0158-0, doi:10.3758/s13421-011-0158-0.</p>
+<p>Appendix A. Appendix Lemma 11. (Mapping a calibration space onto a standardised calibration space)</p>
+<p>Let Ω, A, P; S ′ , T ′ , (Y ′ i ) i∈I be a calibration space. Then the following map- pings define a standardised calibration space Ω, A, P; S, T, (Y i ) i∈I :</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
