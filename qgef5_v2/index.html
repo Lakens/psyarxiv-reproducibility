@@ -196,7 +196,7 @@ Memory Overlap Shapes General and Specific Memory Differently in
 Adolescents and Adults
 </p>
 <p class="meta">
-2026-11-07 · Metacheck 0.4.3.8
+2026-11-08 · Metacheck 0.4.3.19
 </p>
 </header>
 <div class="mc-main">
@@ -234,6 +234,10 @@ value meta-analyses). Best practice is to report exact p-values with
 three decimal places (e.g., <em>p</em> = .032) unless <em>p</em> values
 are smaller than 0.001, in which case you can use <em>p</em> &lt;
 .001.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (e.g., “decreased at the <em>p</em>
+&lt; .05 significance threshold”).</p>
 <div style="max-height:8em;overflow:auto;">
 <table class="dt-static">
 <colgroup>
@@ -13317,7 +13321,7 @@ errored
 undefined_variable
 </td>
 <td style="text-align:right;">
-3.3
+3.0
 </td>
 </tr>
 <tr>
@@ -13331,7 +13335,7 @@ errored
 runtime
 </td>
 <td style="text-align:right;">
-4.9
+3.2
 </td>
 </tr>
 </tbody>
@@ -14317,6 +14321,13 @@ flagging secondary data analyses, computational experiments, or
 economics papers that analyse existing survey data. See
 <code>.detect_live_data()</code> for the full list of patterns and
 intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
 <p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
 manual</a>.</p>
 </div>
@@ -14459,8 +14470,22 @@ flag any values reported as p &gt; ? or p &lt; numbers greater than
 .001. It will also flag p-values reported as exactly zero (e.g., p =
 .000, p = 0.00), which are mathematically impossible — p-values are
 never exactly zero and should instead be reported as p &lt; .001.</p>
-<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
-not succeed at excluding all false positives.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
 <p>This module only checks p-values reported in the running text of the
 manuscript. It cannot (yet) process p-values reported only in tables (as
 opposed to a table’s footnote text, which the module does see and tries
@@ -14771,6 +14796,21 @@ Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
 among the download failures. A one-time session message is also shown
 (see repo_check) the first time a Dryad dataset is encountered with no
 key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
 <p>This module was developed by Daniel Lakens</p>
 <p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
 manual</a>.</p>
@@ -14851,25 +14891,30 @@ treated the same way. <code>not_downloaded</code> is a script that
 stopped on a file the repository lists but that was not downloaded, such
 as one over <code>max_file_size</code>: it could not be tried, so it is
 not counted as a script that did not reproduce
-(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
-timeout means “still running at the cutoff”, not a failure, so raise
-<code>timeout</code> for legitimately long-running (e.g. Bayesian)
-scripts. <code>dependency_unavailable</code> means the script’s own
-package could not be installed from live CRAN, the CRAN Archive, or a
-named GitHub/URL source — an infrastructure limitation, not a defect in
-the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
-it does <strong>not</strong> force the traffic light red. The full
-stdout/stderr of every run is kept in the result’s
-<code>run_results</code> (the report shows it in per-script dropdowns,
-capped for readability). The traffic light reflects the STATIC readiness
-signals by default, but an execution error
-(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
-a script that crashes on its own analysis is a genuine reproduction
-failure. A script that fails with <code>could not find function</code>
-is run once more with the <code>library()</code> calls the project’s
-other scripts make added at its top (or the one package that exports the
-function, or magrittr for <code>%&gt;%</code>), and a script that then
-runs is reported as reproducible only after that repair.</p>
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+For a script that did not run through, <code>table$error_message</code>
+is its error, short (at most 300 characters): the error line of its
+output, which names a package that is not there, with the address it
+asked for when it needed the internet, or the time limit it reached;
+<code>table$reason</code> sorts it into a kind. A timeout means “still
+running at the cutoff”, not a failure, so raise <code>timeout</code> for
+legitimately long-running (e.g. Bayesian) scripts.
+<code>dependency_unavailable</code> means the script’s own package could
+not be installed from live CRAN, the CRAN Archive, or a named GitHub/URL
+source — an infrastructure limitation, not a defect in the paper’s code,
+so unlike <code>errored</code>/<code>timed_out</code> it does
+<strong>not</strong> force the traffic light red. The full stdout/stderr
+of every run is kept in the result’s <code>run_results</code> (the
+report shows it in per-script dropdowns, capped for readability). The
+traffic light reflects the STATIC readiness signals by default, but an
+execution error (<code>errored</code>/<code>timed_out</code>) does
+recolour it to red — a script that crashes on its own analysis is a
+genuine reproduction failure. A script that fails with
+<code>could not find function</code> is run once more with the
+<code>library()</code> calls the project’s other scripts make added at
+its top (or the one package that exports the function, or magrittr for
+<code>%&gt;%</code>), and a script that then runs is reported as
+reproducible only after that repair.</p>
 <p>Dependencies are reported name-only, with the source (CRAN, GitHub,
 or a base package already shipped with R) — static analysis of the code
 cannot know which <em>version</em> was used, and running against current
