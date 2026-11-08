@@ -3,10 +3,26 @@
 // writes from the full results. The address ends in #<check> for each tab,
 // so a tab can be linked to (modules/#stat_check).
 
+// every check, in the order of the report, with the check's own title
 var TABS = [
-  { id: "stat_check", label: "P-values", render: renderStatCheck },
-  { id: "reproducibility_check", label: "Reproducibility", render: renderReproducibility }
+  { id: "ethics_check", label: "Ethics Approval Check" },
+  { id: "power", label: "Power Analysis Check" },
+  { id: "prereg_check", label: "Preregistration Check" },
+  { id: "marginal", label: "Marginal Significance" },
+  { id: "stat_check", label: "StatCheck", render: renderStatCheck },
+  { id: "stat_p_exact", label: "Exact P-Values" },
+  { id: "stat_p_nonsig", label: "Non-Significant P Value Check" },
+  { id: "stat_effect_size", label: "Effect Sizes in t-tests and F-tests" },
+  { id: "codebook_check", label: "Codebook Check" },
+  { id: "repo_check", label: "Repository Check" },
+  { id: "code_check", label: "Code Check" },
+  { id: "data_check", label: "Data Check" },
+  { id: "reproducibility_check", label: "Reproducibility Check", render: renderReproducibility },
+  { id: "ref_pubpeer", label: "PubPeer Comments" },
+  { id: "ref_retraction", label: "RetractionWatch" },
+  { id: "ref_replication", label: "Replication Check" }
 ];
+TABS.forEach(function (t) { if (!t.render) t.render = renderSummary; });
 
 function el(tag, attrs, text) {
   var e = document.createElement(tag);
@@ -44,7 +60,7 @@ function source(p) {
 // the sentence, with the test that was checked marked
 function sentence(text, part) {
   var q = el("blockquote", { class: "sentence" });
-  var i = text.indexOf(part);
+  var i = part ? text.indexOf(part) : -1;
   if (i < 0) { q.textContent = text; return q; }
   q.appendChild(document.createTextNode(text.slice(0, i)));
   q.appendChild(el("mark", {}, part));
@@ -177,6 +193,88 @@ function renderReproducibility(panel, data) {
   if (!data.papers.length) panel.appendChild(el("p", { class: "note" }, "No scripts that did not run found yet."));
 }
 
+// The check's summary, written in Markdown: lines starting with "-" become a
+// list; ** and * (bold, italics) and backquotes are left out
+function summary(text) {
+  var box = el("div", { class: "summary" });
+  var list = null;
+  (text || "").split(/\n/).forEach(function (line) {
+    var plain = line.replace(/\*\*|\*|`/g, "").trim();
+    if (!plain) return;
+    if (/^-\s*/.test(plain)) {
+      if (!list) { list = el("ul"); box.appendChild(list); }
+      list.appendChild(el("li", {}, plain.replace(/^-\s*/, "")));
+    } else {
+      list = null;
+      box.appendChild(el("p", {}, plain));
+    }
+  });
+  return box;
+}
+
+// one flagged sentence (with the flagged part marked) or cited reference
+function findingItem(f) {
+  var li = el("li");
+  if (f.sentence) li.appendChild(sentence(f.sentence, f.mark || ""));
+  if (f.reference) li.appendChild(el("p", { class: "reference" }, f.reference));
+  if (f.note || f.link) {
+    var p = el("p", { class: "note" }, f.note || "");
+    if (f.link) {
+      if (f.note) p.appendChild(document.createTextNode(" "));
+      p.appendChild(el("a", { href: f.link, target: "_blank", rel: "noopener" }, "Link"));
+    }
+    li.appendChild(p);
+  }
+  return li;
+}
+
+// the first SHOW_SCRIPTS items of a list, the others behind "n more"
+function capped(items, make, word) {
+  var box = el("div");
+  var ul = el("ul", { class: "scripts" });
+  items.slice(0, SHOW_SCRIPTS).forEach(function (x) { ul.appendChild(make(x)); });
+  box.appendChild(ul);
+  if (items.length > SHOW_SCRIPTS) {
+    var rest = items.length - SHOW_SCRIPTS;
+    var more = el("details", { class: "more" });
+    more.appendChild(el("summary", {}, rest + " more " + word + (rest === 1 ? "" : "s")));
+    var ul2 = el("ul", { class: "scripts" });
+    items.slice(SHOW_SCRIPTS).forEach(function (x) { ul2.appendChild(make(x)); });
+    more.appendChild(ul2);
+    box.appendChild(more);
+  }
+  return box;
+}
+
+var LIGHTS = [["red", "Red"], ["yellow", "Yellow"], ["info", "For information"]];
+
+// the tab of a check: its preprints, by traffic light, each with the check's
+// summary and the sentences or references it flagged
+function renderSummary(panel, data, tab) {
+  panel.appendChild(el("h2", {}, tab.label));
+  panel.appendChild(el("p", {}, "The preprints where this check gave red, yellow or \"for information\": " +
+    data.papers.length + ". Each with the check's summary, and the sentences or cited references it flagged, " +
+    "if it flags those."));
+  LIGHTS.forEach(function (l) {
+    var papers = data.papers.filter(function (p) { return p.light === l[0]; });
+    if (!papers.length) return;
+    panel.appendChild(el("h3", { class: "light-" + l[0] }, l[1] + " (" + papers.length +
+      (papers.length === 1 ? " preprint)" : " preprints)")));
+    var list = el("ol", { class: "findings" });
+    papers.forEach(function (p) {
+      var li = el("li");
+      li.appendChild(source(p));
+      li.appendChild(summary(p.summary));
+      if (p.findings && p.findings.length) {
+        li.appendChild(capped(p.findings, findingItem, p.findings[0].reference ? "reference" : "sentence"));
+      }
+      list.appendChild(li);
+    });
+    panel.appendChild(list);
+  });
+  if (!data.papers.length) panel.appendChild(el("p", { class: "note" }, "Nothing flagged yet."));
+}
+
 function show(id) {
   var tab = TABS.filter(function (t) { return t.id === id; })[0] || TABS[0];
   document.querySelectorAll("#tabs button").forEach(function (b) {
@@ -187,7 +285,7 @@ function show(id) {
   panel.appendChild(el("p", { class: "note" }, "Loading…"));
   fetch("../data/modules/" + tab.id + ".json")
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function (data) { panel.textContent = ""; tab.render(panel, data); })
+    .then(function (data) { panel.textContent = ""; tab.render(panel, data, tab); })
     .catch(function () {
       panel.textContent = "";
       panel.appendChild(el("p", { class: "note" }, "The findings could not be loaded."));

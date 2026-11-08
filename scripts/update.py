@@ -759,8 +759,121 @@ def reproducibility_findings(result):
     return {"findings": out, "scripts": len(rows)}
 
 
-MODULE_FINDINGS = {"stat_check": stat_check_findings,
-                   "reproducibility_check": reproducibility_findings}
+# The other checks: every preprint where the check gave red, yellow or "info",
+# with the check's own summary; for checks that flag sentences or cited
+# references, also those (each check's function below gives them).
+SHOWN_LIGHTS = ("red", "yellow", "info")
+POWER_PARTS = {"statistical_test": "the statistical test", "sample_size": "the sample size",
+               "alpha_level": "the alpha level", "power": "the power",
+               "effect_size": "the effect size", "effect_size_metric": "the effect size metric",
+               "software": "the software"}
+
+
+def true(x):
+    return x is True or str(x).lower() == "true"
+
+
+def table_of(result, module):
+    t = result.get("modules", {}).get(module, {}).get("table")
+    return t if isinstance(t, list) else []
+
+
+def p_exact_rows(result):
+    # p-values reported imprecisely ("p < .05") or as zero ("p = .000")
+    return [{"sentence": r.get("expanded") or r.get("text"), "mark": r.get("text"),
+             "note": "reported as zero" if true(r.get("zero")) else "imprecise"}
+            for r in table_of(result, "stat_p_exact") if true(r.get("imprecise")) or true(r.get("zero"))]
+
+
+def marginal_rows(result):
+    return [{"sentence": r.get("text")} for r in table_of(result, "marginal") if r.get("text")]
+
+
+def power_rows(result):
+    # power analyses that miss parts, with the parts missing
+    out = []
+    for r in table_of(result, "power"):
+        if true(r.get("complete")):
+            continue
+        missing = [name for k, name in POWER_PARTS.items() if r.get(k) in (None, "", "NA")]
+        out.append({"sentence": shorten(r.get("text") or "", 600) or None,
+                    "note": "Not found: " + ", ".join(missing) + "." if missing else None})
+    return out
+
+
+def effect_size_rows(result):
+    # tests without an effect size, or with one that does not fit the test
+    out = []
+    for r in table_of(result, "stat_effect_size"):
+        if r.get("es") in (None, ""):
+            note = "No effect size reported with this test."
+        elif "no_match" in (r.get("d_coherence"), r.get("eta_coherence")):
+            note = (f"The effect size {r['es']} does not fit the test. "
+                    + (r.get("d_coherence_note") or r.get("eta_coherence_note") or ""))
+        else:
+            continue
+        out.append({"sentence": r.get("text"), "mark": r.get("test_text"), "note": note.strip()})
+    return out
+
+
+def pubpeer_rows(result):
+    out = []
+    for r in table_of(result, "ref_pubpeer"):
+        n = r.get("total_comments")
+        out.append({"reference": r.get("text"), "link": r.get("url"),
+                    "note": f"{n} comment{'' if str(n) == '1' else 's'} on PubPeer"
+                            + (f" (by {r['users']})" if r.get("users") else "")})
+    return out
+
+
+def retraction_rows(result):
+    return [{"reference": r.get("text"), "note": f"In the RetractionWatch database: {r.get('retractionwatch')}"}
+            for r in table_of(result, "ref_retraction")]
+
+
+def replication_rows(result):
+    out = []
+    for r in table_of(result, "ref_replication"):
+        doi = r.get("replication_doi")
+        out.append({"reference": r.get("text"),
+                    "link": f"https://doi.org/{doi}" if doi else r.get("replication_url"),
+                    "note": f"{(r.get('replication_type') or 'replication').capitalize()}, "
+                            f"outcome: {r.get('replication_outcome') or 'not given'}. "
+                            f"{r.get('replication_ref') or ''}".strip()})
+    return out
+
+
+def summary_findings(module, rows=None):
+    # the function for one check: its traffic light and summary, and the rows
+    # rows() gives, for a preprint where the check gave red, yellow or "info"
+    def findings(result):
+        m = result.get("modules", {}).get(module, {})
+        if m.get("traffic_light") not in SHOWN_LIGHTS:
+            return None
+        return {"light": m.get("traffic_light"), "summary": (m.get("summary_text") or "").strip(),
+                "findings": rows(result) if rows else []}
+    return findings
+
+
+# every check, in the order of the report
+MODULE_FINDINGS = {
+    "ethics_check": summary_findings("ethics_check"),
+    "power": summary_findings("power", power_rows),
+    "prereg_check": summary_findings("prereg_check"),
+    "marginal": summary_findings("marginal", marginal_rows),
+    "stat_check": stat_check_findings,
+    "stat_p_exact": summary_findings("stat_p_exact", p_exact_rows),
+    "stat_p_nonsig": summary_findings("stat_p_nonsig"),
+    "stat_effect_size": summary_findings("stat_effect_size", effect_size_rows),
+    "codebook_check": summary_findings("codebook_check"),
+    "repo_check": summary_findings("repo_check"),
+    "code_check": summary_findings("code_check"),
+    "data_check": summary_findings("data_check"),
+    "reproducibility_check": reproducibility_findings,
+    "ref_pubpeer": summary_findings("ref_pubpeer", pubpeer_rows),
+    "ref_retraction": summary_findings("ref_retraction", retraction_rows),
+    "ref_replication": summary_findings("ref_replication", replication_rows),
+}
 
 
 def update_module_lists(data_dir, index, osf_ids=()):
