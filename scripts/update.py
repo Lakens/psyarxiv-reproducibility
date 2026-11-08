@@ -483,9 +483,31 @@ def add_way_back(html):
     return html
 
 
+# The checklist report called a yellow result "To improve"; "To check" says
+# better that it may well be fine (Daniel, 8 November 2026; metacheck says so
+# itself from version 0.4.3.20, scienceverse/metacheck#618). Only the label's
+# three places in the markup: the heading, each check's tag, and the count at
+# the top, so text quoted from a paper or its data is left as it is.
+OLD_LABEL = [
+    (re.compile(r'(<h[1-6] id="improve">)To improve'), r"\1To check"),
+    (re.compile(r'(<span class="tag improve">)To improve(</span>)'), r"\1To check\2"),
+    (re.compile(r'(<span class="count improve[^"]*"><b>\d+</b><span>)to improve(</span>)'), r"\1to check\2"),
+]
+
+
+def relabel(html):
+    for pattern, new in OLD_LABEL:
+        html = pattern.sub(new, html)
+    return html
+
+
+def has_old_label(html):
+    return any(pattern.search(html) for pattern, _ in OLD_LABEL)
+
+
 def decorate_page(html, paper):
     # this site's changes to the server's report page
-    return add_way_back(add_full_text(drop_converter_note(html), paper))
+    return relabel(add_way_back(add_full_text(drop_converter_note(html), paper)))
 
 
 def refresh_pages(site_dir, data_dir):
@@ -495,7 +517,8 @@ def refresh_pages(site_dir, data_dir):
     for path in glob.glob(os.path.join(site_dir, "*_v*", "index.html")):
         with open(path, encoding="utf-8", newline="") as f:
             html = f.read()
-        if 'id="back-to-main"' in html and 'class="logo-home"' in html and 'id="full-text"' in html:
+        if ('id="back-to-main"' in html and 'class="logo-home"' in html and 'id="full-text"' in html
+                and not has_old_label(html)):
             continue
         osf_id = os.path.basename(os.path.dirname(path))
         paper = load(os.path.join(data_dir, "papers", osf_id + ".json"), {}).get("paper")
