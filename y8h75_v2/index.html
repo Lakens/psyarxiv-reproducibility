@@ -195,7 +195,7 @@ MetaCheck Report
 Exploration for gains and loss-avoidance across the human lifespan
 </p>
 <p class="meta">
-2026-11-08 · Metacheck 0.4.3.9
+2026-11-08 · Metacheck 0.4.3.11
 </p>
 </header>
 <div class="mc-main">
@@ -289,7 +289,7 @@ P-Values</span></p>
 <p>What we found</p>
 </div>
 <div class="text">
-<p>We found 19 imprecise <em>p</em> values out of 74 detected <em>p</em>
+<p>We found 18 imprecise <em>p</em> values out of 74 detected <em>p</em>
 values.</p>
 </div>
 </div>
@@ -321,15 +321,6 @@ Text
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-p&lt;.05
-</td>
-<td style="text-align:left;">
-Fixed effects were considered significant at p&lt;.05, with statistics
-based on two-tailed z-tests on the coefficients estimated by the GLMMs.
-</td>
-</tr>
 <tr>
 <td style="text-align:left;">
 p&lt;.01
@@ -1460,8 +1451,18 @@ flag any values reported as p &gt; ? or p &lt; numbers greater than
 .001. It will also flag p-values reported as exactly zero (e.g., p =
 .000, p = 0.00), which are mathematically impossible — p-values are
 never exactly zero and should instead be reported as p &lt; .001.</p>
-<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
-not succeed at excluding all false positives.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
 <p>This module only checks p-values reported in the running text of the
 manuscript. It cannot (yet) process p-values reported only in tables (as
 opposed to a table’s footnote text, which the module does see and tries
