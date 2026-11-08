@@ -1,6 +1,6 @@
 // Metacheck reports for PsyArXiv: on a PsyArXiv preprint page, a button in
 // the bottom right corner that opens Metacheck's report on that preprint, when
-// the site https://lakens.github.io/psyarxiv-reproducibility/ has one (it
+// the site https://lakens.github.io/psyarxiv_metacheck/ has one (it
 // reads the site's data/index.json). Nothing is shown otherwise.
 //
 // Pages: osf.io/preprints/psyarxiv/<id>, next.psyarxiv.org/preprints/<id>,
@@ -10,7 +10,7 @@
 (function () {
   "use strict";
 
-  var SITE = "https://lakens.github.io/psyarxiv-reproducibility/";
+  var SITE = "https://lakens.github.io/psyarxiv_metacheck/";
 
   // The preprint in an address: {base: "jc6rp", version: 1}, version null
   // when the address has none; null when the address is not a preprint's.

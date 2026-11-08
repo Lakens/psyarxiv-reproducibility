@@ -1,6 +1,6 @@
 # Metacheck reports for PsyArXiv: browser extension
 
-On a PsyArXiv preprint page, this extension adds a button in the bottom right corner that opens Metacheck's report on that preprint, when https://lakens.github.io/psyarxiv-reproducibility/ has one. Without a report, nothing is shown.
+On a PsyArXiv preprint page, this extension adds a button in the bottom right corner that opens Metacheck's report on that preprint, when https://lakens.github.io/psyarxiv_metacheck/ has one. Without a report, nothing is shown.
 
 - Pages: `osf.io/preprints/psyarxiv/<id>`, `next.psyarxiv.org/preprints/<id>`, and OSF's short links `osf.io/<id>`; the id with or without its version ending (`jc6rp_v1` or `jc6rp`).
 - The button opens the report on that version. When only another version was checked, it opens the newest version checked and says which ("Metacheck report (version 2)").

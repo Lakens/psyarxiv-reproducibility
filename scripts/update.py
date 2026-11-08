@@ -31,12 +31,15 @@
 
 import argparse
 import base64
+import collections
 import datetime as dt
 import glob
 from html import escape as html_escape
 import json
+import math
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -47,7 +50,7 @@ from test_surf_jobs import post_job, SERVER
 
 OSF = "https://api.osf.io/v2"
 LIST = OSF + "/preprints/?filter[provider]=psyarxiv&page[size]=100"
-UA = "psyarxiv-reproducibility (github.com/Lakens/psyarxiv-reproducibility)"
+UA = "psyarxiv_metacheck (github.com/Lakens/psyarxiv_metacheck)"
 # the checks the SURF server runs for its regular report; with run_code=true the
 # server adds reproducibility_check, which runs the paper's code in the sandbox
 MODULES = ("power,marginal,prereg_check,ethics_check,ref_pubpeer,ref_retraction,"
@@ -57,14 +60,143 @@ FILE_TYPES = {"pdf": "application/pdf",
               "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"}
 MAX_BYTES = 50 * 1024 ** 2      # the server refuses larger files (api.R MAX_UPLOAD_BYTES)
 JOB_WAIT_MINUTES = 75           # the server stops a paper's code after 60 minutes
-MAX_TRIES = 3                   # a preprint whose job fails is tried this often
+MAX_TRIES = 2                   # a preprint whose job fails is tried this often
 BACKFILL_LIMIT = 1000           # older preprints sent to the server, at most
 FIRST_DAY = dt.date(2016, 9, 1)  # PsyArXiv's first preprints
 # files the report page carries inside it that the site has too
 SHARED_FILES = {"font/ttf": "fonts/Cabin.ttf", "image/png": "images/logo.png"}
 
 
+# Keys (passwords for paid services) that authors left in their files can end
+# up in metacheck's result, and GitHub refuses to store a file that contains
+# one. So everything saved is searched for keys, and each key found is
+# replaced by KEY_REMOVED. The rules are those of the secret scanner
+# betterleaks (https://github.com/betterleaks/betterleaks, MIT licence, (c) the
+# betterleaks authors, who also made gitleaks), as collected in
+# key_patterns.json by make_key_patterns.py, which says which rules are taken
+# and why. Each rule is tried only on text that contains one of its
+# keywords, as betterleaks does. Of a match, only the key is replaced: the
+# rule's group for it, else its first group that found text, else all of it.
+# A find is kept out, as betterleaks does, when it is less random than the
+# rule asks (its minimum entropy) or is a placeholder (such as ${API_KEY}).
+KEY_REMOVED = "[key removed]"
+KEY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "key_patterns.json")
+KEY_PATTERNS = None     # read on first use
+KEY_IGNORE = None
+
+
+def key_patterns():
+    global KEY_PATTERNS, KEY_IGNORE
+    if KEY_PATTERNS is None:
+        with open(KEY_FILE, encoding="utf-8") as f:
+            d = json.load(f)
+        KEY_PATTERNS = [{"name": p["name"], "re": re.compile(p["regex"]), "keywords": p["keywords"],
+                         "group": p.get("group"), "entropy": p.get("entropy")} for p in d["patterns"]]
+        KEY_IGNORE = {"patterns": [re.compile(x) for x in d["ignore"]["patterns"]],
+                      "texts": d["ignore"]["texts"]}
+    return KEY_PATTERNS
+
+
+def not_a_key(secret, p):
+    # betterleaks' filters: too little entropy for this rule, or a placeholder
+    e = p["entropy"]
+    if e and (entropy(secret) <= e["min"] if e["strict"] else entropy(secret) < e["min"]):
+        return True
+    return (any(x.search(secret) for x in KEY_IGNORE["patterns"])
+            or any(t in secret for t in KEY_IGNORE["texts"]))
+
+
+def entropy(s):
+    # Shannon entropy in bits per character, as betterleaks computes it
+    n = len(s)
+    return -sum(c / n * math.log2(c / n) for c in collections.Counter(s).values()) if n else 0
+
+
+KEY_WINDOW = 5000   # characters searched on either side of a keyword
+
+
+def windows(low, keywords):
+    # the stretches of text within KEY_WINDOW characters of a keyword, joined
+    # where they overlap. TruffleHog likewise tries a detector's patterns on
+    # each piece of about 10,000 characters that contains one of its
+    # keywords. It also keeps a long text fast: Python's searches are much
+    # slower than those of Go, the language betterleaks is written in.
+    if len(low) <= 2 * KEY_WINDOW:
+        return [(0, len(low))] if any(k in low for k in keywords) else []
+    spans = []
+    for k in keywords:
+        i = low.find(k)
+        while i != -1:
+            spans.append((max(0, i - KEY_WINDOW), min(len(low), i + len(k) + KEY_WINDOW)))
+            i = low.find(k, i + 1)
+    out = []
+    for a, b in sorted(spans):
+        if out and a <= out[-1][1]:
+            out[-1] = (out[-1][0], max(out[-1][1], b))
+        else:
+            out.append((a, b))
+    return out
+
+
+def key_spans(text, patterns):
+    # (start, end, pattern name) of each key the patterns find in text
+    low = text.lower()
+    spans = []
+    for p in patterns:
+        parts = windows(low, p["keywords"]) if p["keywords"] else [(0, len(text))]
+        for a, b in parts:
+            for m in p["re"].finditer(text, a, b):
+                g = p["group"] or next((i for i in range(1, (m.re.groups or 0) + 1) if m.group(i)), 0)
+                if not_a_key(m.group(g), p):
+                    continue
+                if m.end(g) > m.start(g):
+                    spans.append((m.start(g), m.end(g), p["name"]))
+    return spans
+
+
+def remove_keys(obj, found):
+    # obj (a result: dictionaries, lists, text) with every key in its text
+    # replaced by KEY_REMOVED, in the names of dictionary entries too;
+    # `found` counts the keys removed, by pattern
+    whole = json.dumps(obj, ensure_ascii=False).lower()
+    # only the patterns with a keyword somewhere in obj, tried on each text
+    patterns = [p for p in key_patterns()
+                if not p["keywords"] or any(k in whole for k in p["keywords"])]
+    if not patterns:
+        return obj
+
+    def clean(text):
+        spans = sorted(key_spans(text, patterns))
+        if not spans:
+            return text
+        out, pos = [], 0
+        for start, end, name in spans:
+            if start < pos:              # inside a key already replaced
+                if end > pos:
+                    pos = end
+                continue
+            found[name] = found.get(name, 0) + 1
+            out += [text[pos:start], KEY_REMOVED]
+            pos = end
+        return "".join(out) + text[pos:]
+
+    def walk(x):
+        if isinstance(x, str):
+            return clean(x)
+        if isinstance(x, list):
+            return [walk(v) for v in x]
+        if isinstance(x, dict):
+            return {walk(k): walk(v) for k, v in x.items()}
+        return x
+    return walk(obj)
+
+
 class ServerDown(Exception):
+    pass
+
+
+class NotStored(Exception):
+    # GitHub could not be reached, or refused for another reason than a key
     pass
 
 
@@ -441,6 +573,10 @@ def check_one(item, state, index, papers_dir, site_dir):
     if error:
         return fail(state, osf_id, error)
     state["tries"].pop(osf_id, None)
+    keys = {}
+    result = remove_keys(result, keys)
+    if keys:
+        print(f"{osf_id}: removed {sum(keys.values())} key(s) from the result: {keys}", flush=True)
 
     # the report page goes in its own file; the server renders it as the
     # metacheck site does, and leaves it empty when it could not render it
@@ -465,6 +601,7 @@ def check_one(item, state, index, papers_dir, site_dir):
         "errors": [{"module": k, "report": m.get("report")}
                    for k, m in modules.items() if m.get("traffic_light") == "fail"],
         "report_page": bool(html),
+        "keys_removed": keys,      # keys found in the result and replaced, by type
         "paper_info": result.get("paper_info"),
         "modules": modules,
     }
@@ -491,6 +628,74 @@ def write_index_and_tally(data_dir, index):
     })
 
 
+# --push (the workflow): each preprint's files are committed and pushed to
+# GitHub as soon as it is checked, so a preprint whose files GitHub refuses
+# costs only itself, and the reports already made are kept when a run fails.
+# Runs in the repository's top folder.
+def git(*args, check=True):
+    r = subprocess.run(["git", *args], capture_output=True, text=True)
+    if check and r.returncode:
+        raise NotStored(f"git {args[0]}: {(r.stderr or r.stdout).strip()[-500:]}")
+    return r
+
+
+def stage():
+    # True when there is something to commit
+    git("add", "-A", "data")
+    git("add", "-A", "--", "*_v*/index.html")
+    return git("diff", "--cached", "--quiet", check=False).returncode != 0
+
+
+def push():
+    # None when the commit is on GitHub; GitHub's message when it refused the
+    # files themselves: a key in them (push protection, GH009 or GH013) or a
+    # file over 100 MB (GH001). Raises NotStored otherwise.
+    msg = ""
+    for attempt in range(3):
+        r = git("pull", "--rebase", "--autostash", "origin", "main", check=False)
+        if r.returncode:
+            git("rebase", "--abort", check=False)
+            msg = (r.stderr or r.stdout).strip()
+        else:
+            r = git("push", "origin", "HEAD:main", check=False)
+            if r.returncode == 0:
+                return None
+            msg = r.stderr.strip()
+            if "GH001" in msg or ("secret" in msg.lower() and ("GH009" in msg or "GH013" in msg)):
+                return msg
+        time.sleep(30)
+    raise NotStored(msg[-500:])
+
+
+def store(osf_id, state, index, state_path, index_path):
+    # commits and pushes what the check of osf_id changed. When GitHub refuses
+    # the files, that commit is dropped (the files go back to how they were
+    # before this preprint, so state and index are read again) and the
+    # preprint is listed as failed, so it is not sent again.
+    if not stage():
+        return
+    git("commit", "-q", "-m", f"Add the report on {osf_id}")
+    refused = push()
+    if refused is None:
+        return
+    reason = ("a file over 100 MB" if "GH001" in refused
+              else "a key GitHub recognises (its push protection)")
+    print(f"{osf_id}: GitHub refused to store the result ({reason}); left out:\n{refused[-1500:]}", flush=True)
+    git("reset", "-q", "--hard", "HEAD~1")
+    state.clear()
+    state.update(load(state_path, {}))
+    index.clear()
+    index.update({p["id"]: p for p in load(index_path, {"papers": []})["papers"]})
+    state["queue"] = [q for q in state["queue"] if q["id"] != osf_id]
+    state["tries"].pop(osf_id, None)
+    state["failed"][osf_id] = f"GitHub refused to store the result: {reason}"
+    save(state_path, state)
+    if stage():
+        git("commit", "-q", "-m", f"{osf_id}: GitHub refused to store its result")
+        if push() is not None:
+            raise NotStored("GitHub refused the commit that lists the refused preprint")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--minutes", type=float, default=50,
@@ -500,6 +705,9 @@ def main():
     parser.add_argument("--site-dir", default=".", help="where the report pages go (with fonts/ and images/)")
     parser.add_argument("--redo", nargs="+", default=[], metavar="ID",
                         help="check these preprint versions again, first, overwriting their files")
+    parser.add_argument("--push", action="store_true",
+                        help="commit and push each preprint's files as soon as it is checked "
+                             "(the workflow; run from the repository's top folder)")
     args = parser.parse_args()
 
     papers_dir = os.path.join(args.data_dir, "papers")
@@ -583,8 +791,12 @@ def main():
                 # with the --redo lines not yet checked again, so none is lost
                 write_index_and_tally(args.data_dir, {**held, **index})
             save(state_path, state)
+            if args.push and outcome != "skipped":
+                store(item["id"], state, index, state_path, os.path.join(args.data_dir, "index.json"))
     except ServerDown as e:
         print("The server could not be reached; stopping until the next run:", e)
+    except NotStored as e:
+        print("The results could not be stored on GitHub; stopping:", e)
     for osf_id, line in held.items():       # --redo checks that did not succeed
         index.setdefault(osf_id, line)
     if held:

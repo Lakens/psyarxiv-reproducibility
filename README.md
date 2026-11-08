@@ -1,4 +1,4 @@
-# psyarxiv-reproducibility
+# psyarxiv_metacheck
 
 A web page (GitHub Pages) that will show metacheck's reproducibility reports on PsyArXiv preprints. This repository holds the page, the scripts, and the notes for continuing the work.
 
@@ -19,7 +19,9 @@ Done:
   - It lists preprints on the OSF and downloads each one's file (PDF or Word) itself, then uploads it to the SURF server as one job that returns both the JSON result and the report page (`kind=check`, `report=true`). The server's own `psyarxiv` field cannot be used: it looks preprints up on `next.psyarxiv.org`, which does not have the newest ones yet, and it always takes the newest version.
   - Order: preprints published since the last run, newest first; when none is waiting, older ones, one day at a time going back, until 1000 older preprints have been sent.
   - A preprint is checked in the version that is its newest at that moment. When a newer version is checked later, the reports on older versions stay.
-  - A run starts no new preprint after 50 minutes. A failed job is tried three times, then listed in `state.json` under `failed`.
+  - A run starts no new preprint after 50 minutes. A failed job is tried twice (one retry), then listed in `state.json` under `failed` (Daniel, 8 November 2026; it was three times).
+  - Each preprint's files are stored on GitHub (committed and pushed, `--push`) as soon as it is checked, not at the end of the run. So a preprint whose files GitHub refuses costs only itself: it is left out, listed under `failed` with the reason, and not sent again. GitHub refuses a file that contains a key it recognises ("push protection") or that is over 100 MB. (Before 8 November 2026 a run stored everything at its end, and one refused file lost all of that run's reports: twice, on 8 November 2026, for `6qf9p_v3`.)
+  - Keys: authors sometimes leave a key for a paid service in their files (`6qf9p_v3`: an OpenRouter key in a Qualtrics survey file on OSF), and metacheck can copy it into its result. Before saving, the script replaces every key it finds in the result and the report page with `[key removed]`, and lists what it removed, by rule, as `keys_removed` in the result file. The rules are those of the secret scanner betterleaks (MIT licence; by the authors of gitleaks), 427 of its 474: those with high or medium confidence. `scripts/make_key_patterns.py` collects them into `scripts/key_patterns.json`; run it by hand to take up newer rules. Tried on 8 November 2026: it found fake keys of nine common types and the real OpenRouter key, and removed nothing from the 71 reports then on the site. TruffleHog's patterns, tried first, removed ordinary words, links and file names 2,820 times, because TruffleHog checks each find with the provider before reporting it. Keys that betterleaks does not know can still be refused by GitHub; see the previous point.
   - The runs follow each other: at the end of a run that succeeded, the workflow starts the next run itself (job `next`), because GitHub's hourly timetable proved unreliable (on 7 November 2026 it started no run at 19:17 or 20:17; Daniel's other site, automated_review_daily_build, shows scheduled runs hours late or missing). The hourly timetable stays as the backup that restarts the series after a failed run. With nothing waiting, a run looks for new preprints every 10 minutes until its 50 minutes are up.
   - A preprint is sent only when the server is completely idle: no job running or waiting there, ours or anyone's (Daniel's rule, 7 November 2026). Otherwise the script asks again every minute, and the next run carries on waiting. Someone who submits while our paper runs gets the server's other place; only a second person at that moment can wait behind our one paper.
   - One preprint at a time on the server, so one of its two places stays free for other people (Daniel's rule). The job the script has on the server is kept in `data/current_job.json`; no new job is sent while it is still queued or running, also not by the next run. Do not run the script on your own computer while the hourly run is on: the two would not see each other's jobs.
@@ -34,7 +36,7 @@ Done:
 - `scripts/update.py --redo <id> ...` checks the given preprint versions again and overwrites their files.
 - A browser extension, `extension/` (7 November 2026): on a PsyArXiv preprint page it adds a button that opens the preprint's Metacheck report, when there is one. Not yet in a store; install it from the folder (see `extension/README.md`). The site's publishing step leaves this folder out.
 
-- The site: https://lakens.github.io/psyarxiv-reproducibility/ (GitHub Pages, source "GitHub Actions").
+- The site: https://lakens.github.io/psyarxiv_metacheck/ (GitHub Pages, source "GitHub Actions").
 
 ## Decisions so far
 

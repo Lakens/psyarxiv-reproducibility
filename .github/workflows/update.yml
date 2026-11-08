@@ -41,14 +41,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check preprints
-        run: python3 scripts/update.py --minutes 50 --max "${{ inputs.max || '0' }}"
-
-      - name: Save the results
-        if: always()
+      - name: Name the commits
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+
+      # --push: each preprint's files are committed and pushed as soon as it
+      # is checked; a preprint whose files GitHub refuses is left out and
+      # listed as failed (scripts/update.py, store())
+      - name: Check preprints
+        run: python3 scripts/update.py --minutes 50 --max "${{ inputs.max || '0' }}" --push
+
+      # what is left: the run's last changes to data/state.json, and
+      # everything when the run stopped early
+      - name: Save the results
+        if: always()
+        run: |
           git add -A data
           git add -A -- '*_v*/index.html'
           if git diff --cached --quiet; then echo "No changes."; exit 0; fi
