@@ -1,0 +1,32 @@
+# Watches the update runs and keeps the issue "Problems with the runs" up to
+# date (scripts/watch.py): a run that stopped, no new report for a day,
+# modules that failed, preprints that failed. GitHub emails the repository's
+# owner when the issue opens or gets a comment, one per new problem.
+# Separate from "Update the reports", so it goes on when that one stops.
+name: Watch the runs
+
+on:
+  schedule:
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+concurrency:
+  group: watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/watch.py
