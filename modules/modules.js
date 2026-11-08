@@ -16,7 +16,7 @@ var TABS = [
   { id: "codebook_check", label: "Codebook Check" },
   { id: "repo_check", label: "Repository Check" },
   { id: "code_check", label: "Code Check" },
-  { id: "data_check", label: "Data Check" },
+  { id: "data_check", label: "Data Check", render: renderDataCheck },
   { id: "reproducibility_check", label: "Reproducibility Check", render: renderReproducibility },
   { id: "ref_pubpeer", label: "PubPeer Comments" },
   { id: "ref_retraction", label: "RetractionWatch" },
@@ -268,6 +268,50 @@ function renderSummary(panel, data, tab) {
       if (p.findings && p.findings.length) {
         li.appendChild(capped(p.findings, findingItem, p.findings[0].reference ? "reference" : "sentence"));
       }
+      list.appendChild(li);
+    });
+    panel.appendChild(list);
+  });
+  if (!data.papers.length) panel.appendChild(el("p", { class: "note" }, "Nothing flagged yet."));
+}
+
+// The data check: per preprint its summary, then the problems it found in the
+// data files, grouped by kind, each as "file → column: detail"
+function dataIssue(f) {
+  var li = el("li");
+  li.appendChild(el("code", { class: "file" }, f.file + (f.column ? " → " + f.column : "")));
+  li.appendChild(document.createTextNode(": " + f.detail));
+  return li;
+}
+
+function renderDataCheck(panel, data, tab) {
+  panel.appendChild(el("h2", {}, tab.label));
+  panel.appendChild(el("p", {}, "Metacheck reads the data files in the repositories a preprint links to, and " +
+    "checks each column: empty columns, numbers stored as text, stray spaces, inconsistent capitals, " +
+    "problematic column names, signs of personal information, spreadsheet formatting, and more. " +
+    "The preprints where this check gave red, yellow or \"for information\": " + data.papers.length + "."));
+  panel.appendChild(el("p", { class: "note" }, "The flags for personal information are pattern matches, " +
+    "tuned to flag too much rather than too little: a column named \"email\" is flagged whether or not it " +
+    "holds e-mail addresses. A flag means: look at this column. Where the data is already de-identified, " +
+    "nothing needs to be done."));
+  LIGHTS.forEach(function (l) {
+    var papers = data.papers.filter(function (p) { return p.light === l[0]; });
+    if (!papers.length) return;
+    panel.appendChild(el("h3", { class: "light-" + l[0] }, l[1] + " (" + papers.length +
+      (papers.length === 1 ? " preprint)" : " preprints)")));
+    var list = el("ol", { class: "findings" });
+    papers.forEach(function (p) {
+      var li = el("li");
+      li.appendChild(source(p));
+      li.appendChild(summary(p.summary));
+      // the kinds of problem, the most frequent first
+      var kinds = {};
+      (p.findings || []).forEach(function (f) { (kinds[f.label] = kinds[f.label] || []).push(f); });
+      Object.keys(kinds).sort(function (a, b) { return kinds[b].length - kinds[a].length; })
+        .forEach(function (k) {
+          li.appendChild(el("p", { class: "issue-kind" }, k + " (" + kinds[k].length + ")"));
+          li.appendChild(capped(kinds[k], dataIssue, "column"));
+        });
       list.appendChild(li);
     });
     panel.appendChild(list);

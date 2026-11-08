@@ -37,7 +37,7 @@ import base64
 import collections
 import datetime as dt
 import glob
-from html import escape as html_escape
+from html import escape as html_escape, unescape as html_unescape
 import json
 import math
 import os
@@ -625,7 +625,7 @@ def check_one(item, state, index, papers_dir, site_dir):
 # for each check a small file in data/modules/ holds its findings in every
 # preprint. After a preprint is checked only its entry is renewed; the file is
 # made again from all results when it is missing or MODULE_FORMAT changed.
-MODULE_FORMAT = 1
+MODULE_FORMAT = 2
 MAX_SENTENCE = 400      # characters; a longer sentence is shortened around the test
 
 # a sentence ends at . ! or ? followed by a capital, with or without a space
@@ -843,6 +843,99 @@ def replication_rows(result):
     return out
 
 
+# The data check's problems per file and column: from its `findings` (one row
+# per problem; kept in the result since the SURF server's change of November
+# 2026), else from the "Issues Identified" table in its report text, which
+# holds the same as R code: structure(list(File = c(...), Column = c(...),
+# Issues = c(...)), ...), each issue "<span title='detail'>icon label — detail</span>".
+R_TOKEN = re.compile(r'\s*(?:"((?:[^"\\]|\\.)*)"|`([^`]*)`|([A-Za-z_.][A-Za-z0-9_.]*)|'
+                     r'(-?[0-9.]+L?)|([(),=]))', re.S)
+R_ESCAPES = {"n": "\n", "t": "\t", "r": "\r", '"': '"', "'": "'", "\\": "\\"}
+
+
+def r_string(s):
+    # an R string literal's content, as deparse() writes it
+    return re.sub(r"\\(u\{?([0-9A-Fa-f]{1,8})\}?|.)",
+                  lambda m: chr(int(m.group(2), 16)) if m.group(2) else R_ESCAPES.get(m.group(1), m.group(1)), s)
+
+
+def r_table(code):
+    # the columns of the data frame that deparse() wrote in code, as
+    # {name: [values]}; None when there is none
+    i = code.find("structure(list(")
+    if i < 0:
+        return None
+    toks, pos = [], i + len("structure(list(")
+    depth = 1
+    while depth and pos < len(code):
+        m = R_TOKEN.match(code, pos)
+        if not m:
+            return None
+        pos = m.end()
+        s, bq, name, num, p = m.groups()
+        if p == "(":
+            depth += 1
+        elif p == ")":
+            depth -= 1
+        toks.append(("s", r_string(s)) if s is not None else ("n", bq or name) if (bq or name)
+                    else ("v", num) if num else ("p", p))
+    cols, k = {}, 0
+    while k < len(toks) - 2:
+        if toks[k][0] in ("n", "s") and toks[k + 1] == ("p", "="):
+            name, k = toks[k][1], k + 2
+            if toks[k] == ("n", "c") and toks[k + 1] == ("p", "("):
+                vals, k = [], k + 2
+                while toks[k] != ("p", ")"):
+                    if toks[k][0] != "p":
+                        vals.append(None if toks[k] == ("n", "NA") else toks[k][1])
+                    k += 1
+            else:
+                vals = [None if toks[k] == ("n", "NA") else toks[k][1]]
+            cols[name] = vals
+        k += 1
+    return cols
+
+
+ISSUE_SPAN = re.compile(r"<span title='([^']*)'>(.*?)</span>", re.S)
+
+
+def report_data_issues(report):
+    out = []
+    blocks = [b for b in (report or []) if isinstance(b, str)]
+    for i, b in enumerate(blocks):
+        if not b.strip().startswith("#### Issues Identified"):
+            continue
+        code = next((x for x in blocks[i + 1:i + 4] if "structure(list(" in x), None)
+        cols = r_table(code) if code else None
+        if not cols or "Issues" not in cols:
+            continue
+        n = len(cols["Issues"])
+        files, columns = cols.get("File", [None] * n), cols.get("Column", [None] * n)
+        for f, c, cell in zip(files, columns, cols["Issues"]):
+            for detail, shown in ISSUE_SPAN.findall(cell or ""):
+                shown = html_unescape(re.sub(r"<[^>]+>", "", shown)).strip()
+                label = re.sub(r"^[^A-Za-z]+", "", shown.split(" — ")[0]).strip()
+                out.append({"file": f, "column": c, "label": label,
+                            "detail": html_unescape(detail).strip()})
+        break
+    return out
+
+
+def data_rows(result):
+    # each detail at most MAX_MESSAGE characters: some quote long text values
+    # from the data (one preprint's took 1 KB per problem)
+    m = result.get("modules", {}).get("data_check", {})
+    rows = m.get("findings")
+    if isinstance(rows, list):
+        rows = [{"file": r.get("source_file"), "column": r.get("column"),
+                 "label": r.get("label") or r.get("check"), "detail": r.get("detail") or ""} for r in rows]
+    else:
+        rows = report_data_issues(m.get("report"))
+    for r in rows:
+        r["detail"] = shorten(r["detail"])
+    return rows
+
+
 def summary_findings(module, rows=None):
     # the function for one check: its traffic light and summary, and the rows
     # rows() gives, for a preprint where the check gave red, yellow or "info"
@@ -868,7 +961,7 @@ MODULE_FINDINGS = {
     "codebook_check": summary_findings("codebook_check"),
     "repo_check": summary_findings("repo_check"),
     "code_check": summary_findings("code_check"),
-    "data_check": summary_findings("data_check"),
+    "data_check": summary_findings("data_check", data_rows),
     "reproducibility_check": reproducibility_findings,
     "ref_pubpeer": summary_findings("ref_pubpeer", pubpeer_rows),
     "ref_retraction": summary_findings("ref_retraction", retraction_rows),
