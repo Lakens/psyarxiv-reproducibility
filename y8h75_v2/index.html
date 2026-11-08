@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Exploration for gains and loss-avoidance across
+the human lifespan</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Exploration for gains and loss-avoidance across the human lifespan
+</p>
+<p class="meta">
+2026-11-08 · Metacheck 0.4.3.9
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>2</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>2</b><span>to
+improve</span></a><span class="count decide zero"><b>0</b><span>to
+decide by hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>12</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(2)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>Volunteers were recruited from participant databases of the TU
+Dresden and the Max-Planck-Institute for Human Cognitive and Brain
+Sciences, and via local advertising in the Leipzig and Dresden
+areas.</p>
+</blockquote>
+<blockquote>
+<p>Participants were excluded if they reported any current neurological
+or psychiatric condition, took psychotropic medication, or scored below
+23 during onsite Montreal Cognitive Assessment (17) testing (for older
+adults).</p>
+</blockquote>
+<blockquote>
+<p>All participants (and caregivers where applicable) provided written
+informed consent and were compensated for their time.</p>
+</blockquote>
+<blockquote>
+<p>Participants are instructed to try to earn as many and lose as few
+points as possible.</p>
+</blockquote>
+<blockquote>
+<p>The first four trials of each game are forced-choice trials in which
+participants are directed to play specific bandits: sometimes in a [2,
+2] choice pattern, so that each bandit is encountered equally often and
+are thus equally informative, sometimes in a [1, 3] or [3, 1] choice
+pattern, so that one bandit is encountered less often and is thus more
+informative than the other.</p>
+</blockquote>
+<blockquote>
+<p>Further in line with prior work (7), participants were overall more
+likely to choose the more informative bandit in the losses compared to
+the gains condition (Figure 2-A), as reflected in an interaction between
+information difference and motivational context (β=-.68, z=-10.55,
+p&lt;.0001).</p>
+</blockquote>
+<blockquote>
+<p>In the Leipzig sample, participants were also specifically excluded
+if they were over-or underweight, pregnant or breast-feeding, color
+vision deficient, if they had (first-degree family history) of epilepsy
+or schizophrenia, diabetes, thyroid dysfunction, dyslexia, any present
+and past psychiatric disorder (except specific phobias) ascertained
+using the German version of the SCID. Supplementary Table 1 Participant
+characteristics N Gender (N female) DSST M (±SD) Digit Span backwards M
+(±SD) Children (8-12) 51 27 46.53 (±11.71) 5.14 (±1.44) Adolescents
+(12-18) 76 38* 67.35 (±14.36) 7.09 (±1.95) Young adults (18-40) 95 48
+85.64 (±12.50) 7.73 (±2.18) Older adults (65+) 32 17 60.92 (11.92) 6.56
+(±1.61) Note.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Exact
+P-Values</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 19 imprecise <em>p</em> values out of 74 detected <em>p</em>
+values.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Reporting <em>p</em> values imprecisely (e.g., <em>p</em> &lt; .05)
+reduces transparency, reproducibility, and re-use (e.g., in <em>p</em>
+value meta-analyses). Best practice is to report exact p-values with
+three decimal places (e.g., <em>p</em> = .032) unless <em>p</em> values
+are smaller than 0.001, in which case you can use <em>p</em> &lt;
+.001.</p>
+<div style="max-height:8em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+P-Value
+</th>
+<th style="text-align:left;">
+Text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p&lt;.05
+</td>
+<td style="text-align:left;">
+Fixed effects were considered significant at p&lt;.05, with statistics
+based on two-tailed z-tests on the coefficients estimated by the GLMMs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+Moreover, there was an interaction between motivational context and
+logarithmic age (β=.07, z=2.94, p&lt;.01; Fig. 3-C), indicating that
+directed exploration increased markedly with age in the gains but not
+significantly in the losses condition (log(age) in gains condition:
+β=.21, z=5.25, p&lt;.0001; log(age) in losses condition: β=.08, z=1.79,
+p=.07 This was reflected in a strong age-related increase in strategic
+choices of the more informative bandit in long horizon games in the
+gains condition (Fig. 3-A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+The age group analysis showed an interaction between age group and
+motivational context on β Δinfo, such that older adults differed from
+younger adults (motivational context x younger adults vs older adults:
+β=.24, z=3.07, p&lt;.01; Fig. 3-C) and adolescents (motivational context
+x adolescents vs older adults: β=.18, z=2.24, p=.03; Fig. 3-C), but not
+from children (p&gt;.82).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.82
+</td>
+<td style="text-align:left;">
+The age group analysis showed an interaction between age group and
+motivational context on β Δinfo, such that older adults differed from
+younger adults (motivational context x younger adults vs older adults:
+β=.24, z=3.07, p&lt;.01; Fig. 3-C) and adolescents (motivational context
+x adolescents vs older adults: β=.18, z=2.24, p=.03; Fig. 3-C), but not
+from children (p&gt;.82).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.32
+</td>
+<td style="text-align:left;">
+In line with previous work (11, 12), the age group analysis revealed an
+interaction between age group and horizon on β Δvalue, such that older
+adults showed less of a horizon difference in β Δvalue than younger
+adults (horizon x younger adults: β=-.46, z=-3.93, p&lt;.0001; Fig.
+3-D), but did not differ significantly from children or adolescents (all
+p&gt;.32).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt;.19
+</td>
+<td style="text-align:left;">
+Consistent with the factor analysis, there was no evidence that the
+motivational context (gains vs loss condition) modulated the age effects
+on random exploration in either the continuous (ps &gt;.19) or the age
+group analysis (ps &gt;.46).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt;.46
+</td>
+<td style="text-align:left;">
+Consistent with the factor analysis, there was no evidence that the
+motivational context (gains vs loss condition) modulated the age effects
+on random exploration in either the continuous (ps &gt;.19) or the age
+group analysis (ps &gt;.46).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .20
+</td>
+<td style="text-align:left;">
+However, processing speed itself did not exert a significant effect on β
+Δinfo (ps &gt; .20).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+When working memory was included in the model predicting β Δinfo from
+continuous age (8-40), the main effect of log(age) (β=.13, z=3.34,
+p&lt;.001) and the interaction between log(age) and horizon diminished
+but remained significant (β=.09, z=3.1, p&lt;.01), while the interaction
+between log(age) and motivational context disappeared (β=.02, z=.55,
+p=.58).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+Indeed, it seemed to be superseded by an interaction between working
+memory and motivational context (β=.09, z=3.11, p&lt;.01), where higher
+working memory was associated with lower β Δinfo in the losses condition
+(working memory in losses condition: β=-.11, z=-2.27, p=.02; in gains
+condition: β=.07, z=1.41, p=.16; Fig. 4-A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .47
+</td>
+<td style="text-align:left;">
+When processing speed was included in the model predicting β Δvalue from
+age groups, the age group differences disappeared (ps &gt; .47).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .13
+</td>
+<td style="text-align:left;">
+Likewise, when processing speed was included in the model predicting β
+Δvalue from continuous age, the effects of inverse age were no longer
+significant (ps &gt; .13).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+Instead, there was an interaction between processing speed and horizon
+(β=-.19, z=-3.34, p&lt;.001) in addition to a main effect of processing
+speed (β=.65, z=3.27, p&lt;.01), suggesting that age-related changes in
+processing speed might account for the age effects on random exploration
+(Fig. 4-B).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+Interestingly, when working memory was included in the model predicting
+β Δvalue from age groups, the interaction between age group and horizon
+was reduced but not eliminated (older adults vs. younger adults x
+horizon: β=-.41, z=-3.1, p&lt;.01).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+Likewise, when working memory was included in the model predicting value
+β Δvalue from continuous age, the interaction between inverse age and
+horizon was reduced but not eliminated (1 -1 𝑎𝑔𝑒 3 x horizon: β=-.17,
+z=-3.99, p&lt;.001), even though working memory had significant effects
+of its own (working memory x horizon: β=-.15, z=-3.6, p&lt;.0001;
+working memory: β=.48, z=3.23, p&lt;.01).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+A follow-up mediation analysis showed that both the direct effect of
+inverse age on β Δvalue and the indirect effect via working memory were
+significant (direct effect: β=.27, SE=.1, p&lt;.01, indirect effect:
+β=.19, SE=.05, p&lt;.0001), suggesting both shared and independent
+contributions of age and working memory capacity on random exploration.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.01
+</td>
+<td style="text-align:left;">
+Term β z p Motivational context x Block 0 0.02 0.98 Information
+difference x Motivational context x Block -0.02 -0.19 0.85 Value
+difference x Motivational context x Block -0.15 -0.7 0.48 Information
+difference x Value difference x Motivational context x Block -0.01 -0.13
+0.89 Information difference x Horizon x Motivational context x Block
+-0.02 -0.48 0.63 Value difference x Horizon x Motivational context x
+Block 0.14 1.12 0.26 Information difference x Value difference x Horizon
+x Motivational context x Block -0.02 -0.28 0.78 8.4 Training/fatigue
+effects 8.4.1 Random exploration There was evidence of a training effect
+on random exploration (value difference x horizon x block: β=-.15,
+z=-3.15, p&lt;.01), such that value sensitivity went up from the first
+to the second block, especially in short horizon trials, reinforcing the
+difference between horizons in the second block (value difference in
+first block in short horizon: β=5.19, z=21.78, p&lt;.0001; value
+difference in second block in short horizon: β=6.11, z=24.9, p&lt;.0001;
+value difference in first block in long horizon: β=2.48, z=22.71,
+p&lt;.0001; value difference in second block in long horizon: β=2.82,
+z=25.27, p&lt;.0001).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.44
+</td>
+<td style="text-align:left;">
+There was no evidence of a training effect on information sensitivity
+(p&gt;.44) or the modulation of information sensitivity by horizon
+(p&gt;.92).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.92
+</td>
+<td style="text-align:left;">
+There was no evidence of a training effect on information sensitivity
+(p&gt;.44) or the modulation of information sensitivity by horizon
+(p&gt;.92).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>The APA manual states: Report exact <em>p</em> values (e.g.,
+<em>p</em> = .031) to two or three decimal places. However, report
+<em>p</em> values less than .001 as <em>p</em> &lt; .001. However, 2
+decimals is too imprecise for many use-cases (e.g., a <em>p</em> value
+meta-analysis), so report <em>p</em> values with three digits.</p>
+<p>American Psychological Association (2020). <em>Publication manual of
+the American Psychological Association</em>, 7 edition. American
+Psychological Association.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="improve">To improve <span class="n">(2)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To improve</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 23 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p=.71
+</td>
+<td style="text-align:left;">
+Thus, there was a negative effect of informativeness in short horizon
+games (β=-1.08, z=-9.67, p&lt;.0001) -participants sought out more
+familiar options -, and no significant effect of informativeness in
+either direction in long horizon games (β=.03, z=.37, p=.71).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.07
+</td>
+<td style="text-align:left;">
+There was no significant interaction between the effects of information
+and value difference (β=-.08, z=-1.76, p=.07), or between strategic
+directed and random exploration (information difference x value
+difference x horizon: β=-.02, z=-.54, p=.59).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.59
+</td>
+<td style="text-align:left;">
+There was no significant interaction between the effects of information
+and value difference (β=-.08, z=-1.76, p=.07), or between strategic
+directed and random exploration (information difference x value
+difference x horizon: β=-.02, z=-.54, p=.59).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.23
+</td>
+<td style="text-align:left;">
+Thus, we observed an interaction between horizon and logarithmic age on
+β Δinfo (β=.1, z=3.96, p&lt;.0001; Fig. 3-C), such that there was a
+significant age effect on the impact of information difference in long
+but not short horizon games (log(age) in long horizon: β=.25, z=5.84,
+p&lt;.0001; log(age) in short horizon: β=.05, z=1.2, p=.23).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.07
+</td>
+<td style="text-align:left;">
+Moreover, there was an interaction between motivational context and
+logarithmic age (β=.07, z=2.94, p&lt;.01; Fig. 3-C), indicating that
+directed exploration increased markedly with age in the gains but not
+significantly in the losses condition (log(age) in gains condition:
+β=.21, z=5.25, p&lt;.0001; log(age) in losses condition: β=.08, z=1.79,
+p=.07 This was reflected in a strong age-related increase in strategic
+choices of the more informative bandit in long horizon games in the
+gains condition (Fig. 3-A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.82
+</td>
+<td style="text-align:left;">
+The age group analysis showed an interaction between age group and
+motivational context on β Δinfo, such that older adults differed from
+younger adults (motivational context x younger adults vs older adults:
+β=.24, z=3.07, p&lt;.01; Fig. 3-C) and adolescents (motivational context
+x adolescents vs older adults: β=.18, z=2.24, p=.03; Fig. 3-C), but not
+from children (p&gt;.82).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.41
+</td>
+<td style="text-align:left;">
+Simple effects showed that these differences were driven by less
+directed exploration in older adults in the gains but not the losses
+condition (younger adults vs older adults in gains condition: β=.59,
+z=4.46, p&lt;.0001; younger adults vs older adults in losses condition:
+β=.11, z=.83, p=.41; adolescents vs older adults in gains condition:
+β=.25, z=1.82, p=.07; adolescents vs older adults in losses condition:
+β=-.12, z=-.84, p=.4).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.07
+</td>
+<td style="text-align:left;">
+Simple effects showed that these differences were driven by less
+directed exploration in older adults in the gains but not the losses
+condition (younger adults vs older adults in gains condition: β=.59,
+z=4.46, p&lt;.0001; younger adults vs older adults in losses condition:
+β=.11, z=.83, p=.41; adolescents vs older adults in gains condition:
+β=.25, z=1.82, p=.07; adolescents vs older adults in losses condition:
+β=-.12, z=-.84, p=.4).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.4
+</td>
+<td style="text-align:left;">
+Simple effects showed that these differences were driven by less
+directed exploration in older adults in the gains but not the losses
+condition (younger adults vs older adults in gains condition: β=.59,
+z=4.46, p&lt;.0001; younger adults vs older adults in losses condition:
+β=.11, z=.83, p=.41; adolescents vs older adults in gains condition:
+β=.25, z=1.82, p=.07; adolescents vs older adults in losses condition:
+β=-.12, z=-.84, p=.4).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.32
+</td>
+<td style="text-align:left;">
+In line with previous work (11, 12), the age group analysis revealed an
+interaction between age group and horizon on β Δvalue, such that older
+adults showed less of a horizon difference in β Δvalue than younger
+adults (horizon x younger adults: β=-.46, z=-3.93, p&lt;.0001; Fig.
+3-D), but did not differ significantly from children or adolescents (all
+p&gt;.32).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.44
+</td>
+<td style="text-align:left;">
+Interestingly, and in contrast to previous findings (11, 12), simple
+effects analyses suggest that this pattern was driven by a drop in the
+impact of value difference from young adults to older adults in short
+but not long horizon games (younger adults vs older adults in short
+horizon games: β=1.11, z=2.53, p=.01; younger adults vs older adults in
+long horizon games: β=.19, z=0.44, p=.44).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt;.19
+</td>
+<td style="text-align:left;">
+Consistent with the factor analysis, there was no evidence that the
+motivational context (gains vs loss condition) modulated the age effects
+on random exploration in either the continuous (ps &gt;.19) or the age
+group analysis (ps &gt;.46).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt;.46
+</td>
+<td style="text-align:left;">
+Consistent with the factor analysis, there was no evidence that the
+motivational context (gains vs loss condition) modulated the age effects
+on random exploration in either the continuous (ps &gt;.19) or the age
+group analysis (ps &gt;.46).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.87
+</td>
+<td style="text-align:left;">
+When processing speed was included in the model predicting β Δinfo from
+continuous age (8-40), the main effect of log(age) (β=.18, z=3.27,
+p=.001) and the interaction between log(age) and horizon (β=.08, z=2.06,
+p=.04) remained significant, while the interaction between log(age) and
+motivational context disappeared (β=.01, z=.17, p=.87).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .20
+</td>
+<td style="text-align:left;">
+However, processing speed itself did not exert a significant effect on β
+Δinfo (ps &gt; .20).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.58
+</td>
+<td style="text-align:left;">
+When working memory was included in the model predicting β Δinfo from
+continuous age (8-40), the main effect of log(age) (β=.13, z=3.34,
+p&lt;.001) and the interaction between log(age) and horizon diminished
+but remained significant (β=.09, z=3.1, p&lt;.01), while the interaction
+between log(age) and motivational context disappeared (β=.02, z=.55,
+p=.58).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.16
+</td>
+<td style="text-align:left;">
+Indeed, it seemed to be superseded by an interaction between working
+memory and motivational context (β=.09, z=3.11, p&lt;.01), where higher
+working memory was associated with lower β Δinfo in the losses condition
+(working memory in losses condition: β=-.11, z=-2.27, p=.02; in gains
+condition: β=.07, z=1.41, p=.16; Fig. 4-A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .47
+</td>
+<td style="text-align:left;">
+When processing speed was included in the model predicting β Δvalue from
+age groups, the age group differences disappeared (ps &gt; .47).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .13
+</td>
+<td style="text-align:left;">
+Likewise, when processing speed was included in the model predicting β
+Δvalue from continuous age, the effects of inverse age were no longer
+significant (ps &gt; .13).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.86
+</td>
+<td style="text-align:left;">
+This was supported in a follow-up mediation analysis, where we found
+that the direct effect of inverse age on β Δvalue was no longer
+statistically significant when processing speed was accounted for
+(β=-.03, SE=.14, p=.86) while the indirect effect of inverse age via
+processing speed was significant (β=.49, SE=.1, p&lt;.0001; Fig. 4-B).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.44
+</td>
+<td style="text-align:left;">
+There was no evidence of a training effect on information sensitivity
+(p&gt;.44) or the modulation of information sensitivity by horizon
+(p&gt;.92).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.92
+</td>
+<td style="text-align:left;">
+There was no evidence of a training effect on information sensitivity
+(p&gt;.44) or the modulation of information sensitivity by horizon
+(p&gt;.92).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.42
+</td>
+<td style="text-align:left;">
+Simple effects analyses showed that there was more random exploration,
+i.e., a sharper drop in value sensitivity from short to long horizon
+games horizon in the second compared to the first block, but only for
+informative bandits (value difference x horizon x block when information
+difference is negative: β=-.05, z=-.81, p=.42; value difference x
+horizon x block when information difference is positive: β=-.23,
+z=-3.69, p&lt;.001).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To improve</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We found 2 empty repositories.</li>
+<li>We found 0 files in 2 repositories.</li>
+<li>We found 0 README files and 2 repositories without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Double-check permissions on repositories with no detectable
+files.</p>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://zenodo.org/records/23890163" target="_blank">zenodo.org/records/23890163</a>
+</td>
+<td style="text-align:left;">
+zenodo
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="10.5281/zenodo.23890163" target="_blank">10.5281/zenodo.23890163</a>
+</td>
+<td style="text-align:left;">
+zenodo
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="readme-files">README Files</h4>
+<p>README files are a way to document the contents and structure of a
+folder, helping users locate the information they need. You can use a
+README to document changes to a repository, and explain how files are
+named. Please consider adding a README to each repository or including
+‘README’ in the name of your overview document.</p>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(12)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests detected</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+StatCheck
+</summary>
+<div class="fold">
+<p>No t-tests or F-tests detected.</p>
+<p>The accuracy of StatCheck has only been validated for
+<em>t</em>-tests and <em>F</em>-tests.</p>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 33 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 33 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 33 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>We try to exclude figure and table notes like “* p &lt; .05”, but may
+not succeed at excluding all false positives.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Navigating an uncertain world, we constantly face the explore-exploit dilemma: should we stick with what we know, or explore options that may or may not prove better? An influential theory proposes that humans solve this dilemma through a division of labor in time: explore in childhood, exploit in old age. Our work adds critical empirical nuance to this theory. Exploration can manifest as deliberate information-seeking (&quot;directed exploration&quot;) or choice randomness (&quot;random exploration&quot;), and these strategies are employed differently for gain-seeking and loss-avoidance. Here, we ask how these modes of exploration relate to one another and jointly shape decision-making across the lifespan. A cross-sectional sample of 254 participants aged 8-79 performed a bandit task dissociating directed and random exploration in gain-seeking and lossavoidance contexts. Factor analysis revealed three factors driving behavior: two domain-specific factors reflecting information-seeking for gains and loss-avoidance, respectively, and a domain-general factor reflecting choice randomness. Directed exploration for gains increased steadily and well into young adulthood before declining in older adulthood, whereas directed exploration for loss-avoidance changed little across the lifespan. Children and older adults, relative to young adults, were characterized by greater choice randomness across contexts, even when exploration was disadvantageous. Though working memory and processing speed accounted for some of these effects, independent effects of age remained. Our findings demonstrate that exploration is not a unitary phenomenon: it encompasses dissociable subprocesses -some domain-specific and others domain-general -with distinct developmental timelines that are shaped by cognitive maturation and decline as well as factors beyond cognitive ability.</p>
+<p>When navigating an uncertain world, we face a fundamental dilemma: should we stick with what we know, or explore options that may or may not prove better? The response may be different depending on our stage of life and whether we are motivated by gainseeking or loss-avoidance. In participants aged 8 to 79, deliberate information-seeking to maximize gains increased steadily from childhood into young adulthood before declining in old age, whereas information-seeking to avoid losses remained relatively stable throughout life. Across contexts, children and older adults were also less strategic, choosing at random even when exploring unfamiliar options was disadvantageous. Our findings show that exploration encompasses domain-specific and domain-general subprocesses that develop according to their own timelines.</p>
+<h3>1 Introduction</h3>
+<p>The explore-exploit-dilemma is a fundamental challenge of adaptive decision-making at every stage of the human lifespan. A prominent theory by Gopnik and colleagues (1) proposes that we partially solve this dilemma through a &quot;division of labor in time&quot;, i.e., by exploring during childhood and exploiting what we have learned during adulthood and older age. Though compelling, this account is complicated by two intersecting strands of research.</p>
+<p>The first shows that not all exploration is created equal. Among others, there is directed exploration, where choices are deliberately biased towards informative options, and random exploration, where random choice behavior facilitates information gain by chance (2). Likewise, exploration can be employed non-strategically or strategically -if and when the environment offers sufficient opportunity to capitalize on acquired information (2). It can be driven by factors such as novelty (3, 4), uncertainty (5), boredom (6), and the &quot;richness&quot; of the environment (i.e., availability of reward) (7, 8). Also, context is key: how much people explore seems to be modulated by whether they are trying to minimize losses or maximize gains (7).</p>
+<p>The second strand shows that these different kinds of exploration have divergent developmental trajectories. Thus, in line with Gopnik and colleagues&#x27; theory, several studies report that children and adolescents have an increased tendency to seek out uncertainty (4, 9, 10) and to engage in random or value-free exploration (3-5), while older adults have been shown to display diminished uncertainty seeking and random exploration (11, 12). However, novelty seeking seems to remain stable at least across early-life development (3, 4), and strategic directed exploration has been demonstrated to expand rather than recede during adolescence (13), consistent with increasingly sophisticated cognitive abilities. Understanding the development of exploration therefore does not mean tracking a unidimensional behavior from childhood to old age.</p>
+<p>Rather, it means identifying independent and interacting components that result in (different) explorative behavior(s) in different contexts, and investigating their impact across the lifespan.</p>
+<p>In this study, we contribute to a better understanding of exploratory behavior from a lifespan perspective by studying several facets of exploration in a large in-lab sample spanning childhood and adolescence as well as young adulthood and old age. We investigate exploration along three dimensions and their intersections -strategic vs non-strategic, random vs directed, and motivated by gains or loss-avoidance -using the Horizon task, a bandit task designed to independently manipulate the value and informativeness of different options, the future value of information, and the motivational context (2, 7).</p>
+<p>In line with previous findings, we hypothesize that in the gains domain, strategic exploration, especially strategic directed exploration, would expand from childhood to adulthood (13), while randomness would decline (5), with both reaching a plateau in young adulthood. We further hypothesize that older age would be associated with less directed and strategic random exploration (11, 12). As the lifespan development of exploration for loss-avoidance, and its relationship to exploration for gains, has not yet been systematically studied, we do not have strong directional hypotheses for these questions, and treat them as open empirical questions.</p>
+<h3>2 Methods</h3>
+<h3>2.1 Participants</h3>
+<p>We pooled data from N=222 participants between 8 and 40 years (51% female) and N=32 older adults between 65 and 79 years (53% female) (Fig. 1-A.) from two larger laboratory studies investigating lifespan development of learning and decision-making (14) (15) (16). Volunteers were recruited from participant databases of the TU Dresden and the Max-Planck-Institute for Human Cognitive and Brain Sciences, and via local advertising in the Leipzig and Dresden areas. Participants were excluded if they reported any current neurological or psychiatric condition, took psychotropic medication, or scored below 23 during onsite Montreal Cognitive Assessment (17) testing (for older adults). For additional exclusion criteria in the Leipzig sample, see supplement. All participants (and caregivers where applicable) provided written informed consent and were compensated for their time. For detailed participant characteristics, see Supplementary Table 1.</p>
+<h3>2.2 Neuropsychological testing</h3>
+<p>All participants performed the Digit Symbol Substitution and Digit Span (backwards) tests (18, 19), assessing processing speed and working memory capacity, respectively (Fig. 1-B).</p>
+<h3>2.3 Horizon task</h3>
+<p>Participants performed a modified bandit task designed to probe strategic and nonstrategic directed and random exploration (the Horizon task) (2) in gain-seeking and loss-avoidance contexts (7). As illustrated in Fig. 1-B, the task consists of two blocks of 80 games each, a gains and a loss block. In each game, participants choose between two slot machines (one-armed bandits) with either 5 or 10 slots (trials). Each choice is followed by feedback (point gains in gains block, point losses in loss block).</p>
+<p>Participants are instructed to try to earn as many and lose as few points as possible.</p>
+<p>Payoffs for each bandit are drawn from normal distributions with variable means and a fixed standard deviation (SD=8). The task has several key manipulations to independently vary the value and informativeness of the bandits, as well as the strategic utility of exploration.</p>
+<p>First, the task systematically manipulates the value difference between bandits. That is, in each game, the mean payoff of one bandit (chosen at random) is set to either 40 or 60 (-40 or -60 in the loss block), and the mean of the other bandit is offset relative to that value by ±30, ±20, ±12, ±8, or ±4.</p>
+<p>Second, the task manipulates the informativeness of the bandits independent of their values. The first four trials of each game are forced-choice trials in which participants are directed to play specific bandits: sometimes in a [2, 2] choice pattern, so that each bandit is encountered equally often and are thus equally informative, sometimes in a [1, 3] or [3, 1] choice pattern, so that one bandit is encountered less often and is thus more informative than the other.</p>
+<p>Third, the task manipulates the strategic utility of exploration for future choices by varying the number of free choice trials after the first four (forced-choice) trials (the horizon). Exploration on the first free-choice trial is useful only if that information can be used in the future: in games with 5 trials in total (short horizon), the first free choice trial is also the last. In this situation, a rational strategic agent should always exploit (i.e., choose the bandit with the higher observed mean reward value). In games with 10 trials in total, the first free choice trial is one out of six (long horizon), so that it may make sense to explore. As Wilson et al. have previously shown (2), humans do this by preferentially choosing more informative bandits in the long horizon (strategic directed exploration) but also by choosing more randomly (less driven by value) , which promotes information gain through more balanced sampling of bandits (strategic random exploration).</p>
+<p>Note that a subset of participants (N=16) performed 160 games per block. Due to time constraints, this was reduced to 80 games per block in subsequent participants; all games are retained in the analysis.</p>
+<h3>2.4 Analysis</h3>
+<h3>2.4.1 Behavioral analysis</h3>
+<p>To analyze behavior on the first free choice trial of each game, we employed a logistic mixed-effects model with maximal random effects structure (20) estimated using fitglme in MATLAB 2023a: The coefficient for Information difference (β Δinfo ) captures the tendency to choose the bandit with higher informativeness, i.e., directed exploration. The coefficient for Value difference (β Δvalue ) captures the tendency to exploit the higher mean bandit, i.e., random exploration, reverse coded. Their respective interactions with horizon capture the strategic deployment of information-seeking and random decision-making in long horizon games (strategic directed and random exploration, respectively).</p>
+<p>Note that we do not include the Motivational context x Block interaction (order effect).</p>
+<p>This is because, due to problems with randomization in the Dresden sample, 80% of participants performed the loss condition first, including all children (8) (9) (10) (11) (12) and older adults (65+), and therefore age and order are partially confounded. However, because we found no order effects beyond training/fatigue effects in a sensitivity analysis in the order-balanced Leipzig sample (see Supplement), we are confident that the imbalance is satisfactorily addressed by including Block (accounting for training/fatigue) as a predictor.</p>
+<p>For visualization purposes, we additionally calculated logistic mixed-effects models predicting participants&#x27; choices of the lower mean bandit and the more informative bandit, respectively. To avoid redundancy (all effects are covered by M1), we do not report the results in the main manuscript, but see Supplement for full results.</p>
+<h3>2.4.2 Factor analysis</h3>
+<p>To better understand the relationships between directed and random, strategic and non-strategic exploration for gains and loss-avoidance respectively, we performed exploratory factor analysis on the random slopes from M1 for Information difference (β Δinfo ) and Value difference (β Δvalue ) in short and long horizon games and the gains and losses conditions. Because these are linear combinations of predictors (main effects and interactions), we calculate their variance as a function of the predictor variances and their covariances as 𝑳 × 𝚺 ̂× 𝑳 ⊤ (21), where 𝑳 is the contrast matrix of the predictors and 𝚺 ̂ is the variance-covariance matrix of M1. We calculated the resulting matrix&#x27; eigenvalues and used the scree plot and Kaiser criterion to determine the appropriate number of factors. We then performed factor analysis with Promax rotation (i.e., oblique rotation allowing for correlated factors) using the factoran function in MATLAB 2023a.</p>
+<h3>2.4.3 Age analyses</h3>
+<p>To investigate age differences in directed and random exploration, we extracted individual random slopes for Information difference (β Δ𝑖𝑛𝑓𝑜 ) and Value difference (β Δvalue ) for each subject, horizon and motivational context from M1, and fit several second-level models capturing plausible shapes of age curves (see Fig. 3-A) M2/3a: 𝛽 Δ𝑖𝑛𝑓𝑜/Δ𝑣𝑎𝑙𝑢𝑒 ~ [age term] * Horizon * Motivational context + (1 | Subject) To investigate age differences from childhood to adulthood (8-40 years), where we have continuous data, we considered traditional linear and quadratic age trajectories, but also shapes that allow for steep development that eventually plateaus, as previously observed in the context of exploration (13). Model comparison (including models without age term) was performed based on BIC scores. We report statistics based on the winning models. To investigate differences between older adults (65-79 years) and younger adults (&gt;18 to &lt;=40 years), adolescents (&gt;12 to &lt;=18 years) and children (8 to &lt;=12 years), we further performed group comparisons, including age groups as a categorical regressor: M2/3b: β Δ𝑖𝑛𝑓𝑜/Δ𝑣𝑎𝑙𝑢𝑒 ~ Age group * Horizon * Motivational context + (1 | Subject) In these models, the older age group serves as the reference group, such that the coefficients for the other age groups capture differences from the older age group.</p>
+<h3>2.4.4 Statistics</h3>
+<p>Fixed effects were considered significant at p&lt;.05, with statistics based on two-tailed z-tests on the coefficients estimated by the GLMMs.</p>
+<h3>2.5 Code and data availability</h3>
+<p>All analysis code is available via https://zenodo.org/records/23890163 (DOI: 10.5281/zenodo.23890163). Under the EU&#x27;s GDPR, we cannot legally share the raw data until it is fully anonymized. We will make the data publicly available as soon as possible in the same repository; until then, we are happy to make the data available to interested researchers under a data sharing agreement.</p>
+<h3>3 Results</h3>
+<p>We fit a logistic mixed-effects model (M1) that yields coefficients for the impact of the difference in information (𝛽 Δ𝑖𝑛𝑓𝑜 ) and mean value (𝛽 Δ𝑣𝑎𝑙𝑢𝑒 ) between bandits on choices.</p>
+<p>𝛽 Δ𝑖𝑛𝑓𝑜 tracks directed exploration: the higher 𝛽 Δ𝑖𝑛𝑓𝑜 , the stronger the preference for more informative bandits. The modulation of 𝛽 Δ𝑖𝑛𝑓𝑜 by horizon indicates strategic directed exploration. 𝛽 Δ𝑣𝑎𝑙𝑢𝑒 tracks random exploration: the lower 𝛽 Δ𝑣𝑎𝑙𝑢𝑒 , the more random and less value-driven the behavior. The modulation of 𝛽 Δ𝑣𝑎𝑙𝑢𝑒 by horizon indicates strategic random exploration.</p>
+<h3>3.1 Task effects</h3>
+<h3>Strategic directed exploration.</h3>
+<p>Consistent with previous reports, we found that on average, participants strategically sought out informative options when the utility of information was high (strategic directed exploration) (e.g., 2, 7, 12, 13). Thus, there was a significant interaction of information difference x horizon (β=.27, z=8.43, p&lt;.0001), indicating higher sensitivity to the informativeness of the bandits in long horizon games. This was reflected in a higher probability of choosing the more informative bandit in long horizon games (p(high info); Figure 2-A).</p>
+<p>Further in line with prior work (7), participants were overall more likely to choose the more informative bandit in the losses compared to the gains condition (Figure 2-A), as reflected in an interaction between information difference and motivational context (β=-.68, z=-10.55, p&lt;.0001).</p>
+<p>Interestingly, the motivational context (gains vs. loss-avoidance) also affected the extent to which directed exploration was deployed strategically. Thus, we found a three-way interaction between information difference x horizon x motivational context (β=.29, z=8.06, p&lt;.0001), such that the strategic modulation of directed exploration was more pronounced in the gains compared to the losses condition (Figure 2-A). To explore the interaction further, we performed simple effects analyses. These show that in the gains condition, participants overcame a bias towards exploitation in the gains condition when the utility of information was high. Thus, there was a negative effect of informativeness in short horizon games (β=-1.08, z=-9.67, p&lt;.0001) -participants sought out more familiar options -, and no significant effect of informativeness in either direction in long horizon games (β=.03, z=.37, p=.71). Contrastingly, in the losses condition, there was a strong and approximately equal positive effect of informativeness in short and long horizon games (β=.84, z=9.15, p&lt;.0001; β=.82, z=10.41, p&lt;.0001), indicating that participants did not deploy directed exploration strategically in the losses condition.</p>
+<h3>Strategic random exploration.</h3>
+<p>Consistent with previous reports (e.g., 2, 7, 12, 13), participants showed more random exploration when the utility of information was high.</p>
+<p>Thus, we found a significant interaction of value difference x horizon (β=-1.5, z=-19.85, p&lt;.0001), indicating a decrease of exploitation (an increase in random decisionmaking) in long horizon games. This was reflected in a higher probability of choosing the lower mean bandit (p(low mean)) in long vs short horizon games (Figure 2-B). In addition, there was a three-way interaction between value difference, horizon, and motivational context (β=-.13, z=-2.56, p=.01), such that the strategic modulation of random exploration by horizon was more pronounced in the gains vs the losses condition (β=.08, z=3.6, p&lt;.001; Figure 2-B). Though not significant, the same qualitative effect has previously been shown in a smaller sample (7).</p>
+<h3>Interaction between directed and random exploration.</h3>
+<p>There was no significant interaction between the effects of information and value difference (β=-.08, z=-1.76, p=.07), or between strategic directed and random exploration (information difference x value difference x horizon: β=-.02, z=-.54, p=.59).</p>
+<p>Training/fatigue effects. For details on training/fatigue effects, please refer to the Supplement.</p>
+<h3>3.2 Factor analysis</h3>
+<p>To further investigate how directed and random exploration and exploitation in gainseeking and loss-avoidance contexts relate to one another, we performed exploratory factor analysis on the subject-specific random slopes of information and value difference (β Δinfo and β Δvalue ) in short and long horizon games in each motivational context (Fig. 2-C). Visual inspection of the raw correlation matrix derived from M1 (Fig.</p>
+<p>2-C) foreshadows the three-factor structure reported below: the four β Δvalue slopes were strongly and uniformly intercorrelated (r&#x27;s = .76-.91) regardless of horizon or motivational context, while the β Δinfo slopes clustered separately by motivational context, with strong short-long horizon correlations within gains (r = .65) and within losses (r = .74), but weak-to-negative correlations across contexts (r&#x27;s = -.38 to .34).</p>
+<p>After extracting the eigenvalues from the correlation matrix, we applied the Kaiser criterion (i.e., discarding all components with eigenvalues &lt;1 ( 22)), retaining three factors (Fig. 2-C). Factor 1 (Exploitation) was dominated by strong contributions of the effect of value difference independent of horizon and motivational context, with small to moderate negative contributions of the preference for the more informative bandit in short horizon games. Factors 2 and 3 (Information seeking for loss-avoidance and Information seeking for gains) were dominated by the effect of information difference in the losses and gains conditions, respectively, with somewhat more prominent contributions of long horizon (strategic) information seeking. Overall, the three factors showed weak correlations (Fig. 2-C), with no significant associations between Information seeking for loss avoidance and Information seeking for gains. Exploitation and Information seeking for gains were weakly negatively correlated.</p>
+<h3>3.3 Age effects</h3>
+<p>Based on the factor analysis, we expected that age-related effects of random and directed exploration might diverge. We therefore extracted the subject-level slopes for β Δinfo (reflecting directed exploration) and β Δvalue (reflecting random exploration) for each horizon and motivational context from M1 and analyzed them separately.</p>
+<p>To investigate age differences from childhood to mid adulthood (8-40 years) in, we fit several age terms capturing linear and non-linear age trajectories -parabolic, but also curves capturing rapid early change that levels off in adulthood -to β Δinfo and β Δvalue and compared competing age terms based on BICs. To investigate differences between older adults (65-79 years) and younger adults (18 to 40 years), adolescents (12-18 years) and children (8-12 years), we used age group as a categorical regressor (older adults as reference).</p>
+<h3>Directed exploration</h3>
+<p>Childhood to mid adulthood. Model comparison showed that a model with a logarithmic age term -with a gently curved upwards trajectory -best captured the relationship between age and directed exploration from childhood to adulthood (8-40 years; BIC: 2028.8, ΔBIC [runner up ag𝑒 𝑙inear ]: 1.77; see supplement for all BICs). Upon closer examination of the winning model, we found that, in line with previous work (13), strategic exploration expanded across adolescence. Thus, we observed an interaction between horizon and logarithmic age on β Δinfo (β=.1, z=3.96, p&lt;.0001; Fig. 3-C), such that there was a significant age effect on the impact of information difference in long but not short horizon games (log(age) in long horizon: β=.25, z=5.84, p&lt;.0001; log(age) in short horizon: β=.05, z=1.2, p=.23).</p>
+<p>Moreover, there was an interaction between motivational context and logarithmic age (β=.07, z=2.94, p&lt;.01; Fig. 3-C), indicating that directed exploration increased markedly with age in the gains but not significantly in the losses condition (log(age) in gains condition: β=.21, z=5.25, p&lt;.0001; log(age) in losses condition: β=.08, z=1.79, p=.07 This was reflected in a strong age-related increase in strategic choices of the more informative bandit in long horizon games in the gains condition (Fig. 3-A).</p>
+<p>Fig. 3 -A. p(high info) by motivational context, horizon and age. B. p(low mean) by horizon and age. C. 𝛽 𝛥𝑖𝑛𝑓𝑜 by motivational context, horizon and age. D. 𝛽 𝛥𝑣𝑎𝑙𝑢𝑒 by horizon and age Solid lines reflect the best fitting age trajectories. Dots and confidence intervals reflect fitted values for the four age groups: children Older adults vs. younger adults, adolescents and children. The age group analysis showed an interaction between age group and motivational context on β Δinfo , such that older adults differed from younger adults (motivational context x younger adults vs older adults: β=.24, z=3.07, p&lt;.01; Fig. 3-C) and adolescents (motivational context x adolescents vs older adults: β=.18, z=2.24, p=.03; Fig. 3-C), but not from children (p&gt;.82). Simple effects showed that these differences were driven by less directed exploration in older adults in the gains but not the losses condition (younger adults vs older adults in gains condition: β=.59, z=4.46, p&lt;.0001; younger adults vs older adults in losses condition: β=.11, z=.83, p=.41; adolescents vs older adults in gains condition: β=.25, z=1.82, p=.07; adolescents vs older adults in losses condition: β=-.12, z=-.84, p=.4). Consistent with previous work (11, 12), these findings indicate that older adults tend to explore less than younger participants in the gains condition, but also show that this does not generalize to loss-avoidance contexts (Fig. 3-E).</p>
+<h3>Random exploration</h3>
+<p>Childhood to mid adulthood. Model comparison showed that a model with an inverse age term (1 -1 𝑎𝑔𝑒 3 ) -with rapid early development that levels off after adolescence -best captured the relationship between age and random exploration (BIC: 3276.1, ΔBIC [runner up 1 -1 𝑎𝑔𝑒 2 ]: 2.46; see supplement for all BICs). We found a sharp decrease in choices of the lower mean bandit, reflecting randomness, from childhood into adolescents, especially in short horizon games (Fig. 3-B). Thus, in the winning model, there was a main effect of inverse age on β Δvalue (1 -1 𝑎𝑔𝑒 3 : β=.51, z=3.99, p&lt;.0001; Fig. 3-D) as well as an interaction between inverse age and horizon (1 -1 𝑎𝑔𝑒 3 x horizon: β=-.25, z=-6.84, p&lt;.0001; Fig. 3-B). Post-hoc tests showed a stronger increase in β Δvalue with age in short horizon than long horizon games (1 -1 𝑎𝑔𝑒 3   in short horizon games: β=.76, z=5.71, p&lt;.0001; 1 -1 𝑎𝑔𝑒 3 in long horizon games: β=.26, z=1.96, p=.05). Since the difference between β Δvalue in long and short horizon games increases with age, this pattern can be interpreted as an expansion of strategic random exploration. However, given that it is largely driven by increasing β Δvalue in short horizon games, it may be better construed as an expansion of exploitation when the utility of information is low.</p>
+<p>Older adults vs. younger adults, adolescents and children. In line with previous work (11, 12), the age group analysis revealed an interaction between age group and horizon on β Δvalue , such that older adults showed less of a horizon difference in β Δvalue than younger adults (horizon x younger adults: β=-.46, z=-3.93, p&lt;.0001; Fig. 3-D), but did not differ significantly from children or adolescents (all p&gt;.32). This was reflected in more frequent choices of the lower mean bandit in old age, especially in short horizon games (Fig. 3-B). Interestingly, and in contrast to previous findings (11, 12), simple effects analyses suggest that this pattern was driven by a drop in the impact of value difference from young adults to older adults in short but not long horizon games (younger adults vs older adults in short horizon games: β=1.11, z=2.53, p=.01; younger adults vs older adults in long horizon games: β=.19, z=0.44, p=.44). This means that rather than a bona fide reduction in strategic random exploration in long horizon games, we see an increase in non-strategic random behavior in older adults compared to younger adults.</p>
+<p>Consistent with the factor analysis, there was no evidence that the motivational context (gains vs loss condition) modulated the age effects on random exploration in either the continuous (ps &gt;.19) or the age group analysis (ps &gt;.46).</p>
+<h3>3.4 Effects of cognitive ability</h3>
+<p>In order to better understand whether the age effects might be driven by changes in cognitive ability, we performed sensitivity analyses, including processing speed (as assessed by the Digit-Symbol-Substitution Task) and working memory (as assessed by the backwards version of the Digit Span Task), respectively, as covariates in the age models. Where we found that age effects disappeared after including processing speed and/or working memory in the models, we performed follow-up mediation analyses.</p>
+<h3>Processing speed and working memory across age groups.</h3>
+<p>Both processing speed and working memory showed a non-linear association with age, characterized by peak performance in young adulthood and lower scores in older age (Fig. 1 -B).</p>
+<h3>Directed exploration.</h3>
+<p>When processing speed was included in the model predicting β Δinfo from age groups, all age effects (coding for differences between older adults and other age groups) remained significant. When processing speed was included in the model predicting β Δinfo from continuous age (8-40), the main effect of log(age) (β=.18, z=3.27, p=.001) and the interaction between log(age) and horizon (β=.08, z=2.06, p=.04) remained significant, while the interaction between log(age) and motivational context disappeared (β=.01, z=.17, p=.87). However, processing speed itself did not exert a significant effect on β Δinfo (ps &gt; .20). Hence, we did not perform mediation analyses.</p>
+<p>When working memory was included in the model predicting β Δinfo from age groups, all age group effects remained significant. When working memory was included in the model predicting β Δinfo from continuous age (8-40), the main effect of log(age) (β=.13, z=3.34, p&lt;.001) and the interaction between log(age) and horizon diminished but remained significant (β=.09, z=3.1, p&lt;.01), while the interaction between log(age) and motivational context disappeared (β=.02, z=.55, p=.58). Indeed, it seemed to be superseded by an interaction between working memory and motivational context (β=.09, z=3.11, p&lt;.01), where higher working memory was associated with lower β Δinfo in the losses condition (working memory in losses condition: β=-.11, z=-2.27, p=.02; in gains condition: β=.07, z=1.41, p=.16; Fig. 4-A). In line with this, a follow-up mediation analysis showed that the direct effect of log(age) on β Δinfo in the losses condition was positive when working memory was accounted for (β=.12, SE=.05, p=.03), while the indirect effect of log(age) mediated by working memory was negative (β=-.04, SE=.02, p=.05; Fig. 4-A). This suggests that there is an overall positive effect of age on β Δinfo , which, in the loss domain, is masked by the negative effect of working memory capacity on β Δinfo with advancing age. have opposite effects on 𝛽 𝛥𝑖𝑛𝑓𝑜 in the loss-avoidance condition. B. Left: Relationship between 𝛽 𝛥𝑣𝑎𝑙𝑢𝑒 and performance on the Digit Symbol Substitution Task, by horizon. Right: Mediation analysis showing that processing speed and the age term capture similar variance in 𝛽 𝛥𝑣𝑎𝑙𝑢𝑒.</p>
+<h3>Random exploration.</h3>
+<p>When processing speed was included in the model predicting β Δvalue from age groups, the age group differences disappeared (ps &gt; .47).</p>
+<p>Likewise, when processing speed was included in the model predicting β Δvalue from continuous age , the effects of inverse age were no longer significant (ps &gt; .13).</p>
+<p>Instead, there was an interaction between processing speed and horizon (β=-.19, z=-3.34, p&lt;.001) in addition to a main effect of processing speed (β=.65, z=3.27, p&lt;.01), suggesting that age-related changes in processing speed might account for the age effects on random exploration (Fig. 4-B). This was supported in a follow-up mediation analysis, where we found that the direct effect of inverse age on β Δvalue was no longer statistically significant when processing speed was accounted for (β=-.03, SE=.14, p=.86) while the indirect effect of inverse age via processing speed was significant (β=.49, SE=.1, p&lt;.0001; Fig. 4-B).</p>
+<p>Interestingly, when working memory was included in the model predicting β Δvalue from age groups, the interaction between age group and horizon was reduced but not eliminated (older adults vs. younger adults x horizon: β=-.41, z=-3.1, p&lt;.01). Likewise, when working memory was included in the model predicting value β Δvalue from continuous age , the interaction between inverse age and horizon was reduced but not eliminated (1 -1 𝑎𝑔𝑒 3 x horizon: β=-.17, z=-3.99, p&lt;.001), even though working memory had significant effects of its own (working memory x horizon: β=-.15, z=-3.6, p&lt;.0001; working memory: β=.48, z=3.23, p&lt;.01). A follow-up mediation analysis showed that both the direct effect of inverse age on β Δvalue and the indirect effect via working memory were significant (direct effect: β=.27, SE=.1, p&lt;.01, indirect effect: β=.19, SE=.05, p&lt;.0001), suggesting both shared and independent contributions of age and working memory capacity on random exploration.</p>
+<h3>4 Discussion</h3>
+<p>Exploration is not a unitary phenomenon (2, 4, 6, 7). A central distinction is between directed exploration, where people explicitly seek out unfamiliar options, and random exploration, where they inject randomness into their response pattern to &quot;passively&quot; increase sampling of unfamiliar options (2). The motivational context -whether the focus is on maximizing gains or avoiding losses -has been shown to modulate how we employ these strategies (7). In this study, a large sample of participants with an age range spanning from childhood to old age performed a gain-and loss-framed variant of the Horizon task (7), allowing us to characterize how strategies of exploration for gain and loss-avoidance change across the lifespan.</p>
+<p>First, we replicate previous findings, confirming that people strategically use random exploration in both gain-seeking and loss-avoidance contexts (7). We also confirm that in loss-avoidance contexts, participants tend to seek out unfamiliar options even when information has no strategic value (7). Extending prior work, we show that in gainseeking contexts, participants tended to avoid unfamiliar options when information had no strategic value but overcame this bias when information was useful, demonstrating strategic directed exploration (2, 7). There was no evidence of a strategic deployment of directed exploration in loss-avoidance contexts when the whole sample was considered, although exploratory analyses in young adults replicated Krueger et al.-&#x27;s (7) finding of strategic directed exploration of loss avoidance (see Supplement for details).</p>
+<h3>4.1 Factor structure of exploration for gains and loss-avoidance</h3>
+<p>We further demonstrate that individual tendencies towards directed and random exploration across motivational contexts were largely independent of each other. This was further underscored by divergent and distinct associations with age and cognitive abilities. First, exploratory factor analyses leveraging the variance-covariance structure of our behavioral model identified three mostly independent factors: one dominated by value sensitivity across horizons and conditions (Exploitation); and two factors reflecting directed exploration in the gains and loss-avoidance conditions, respectively.</p>
+<p>The three factors were only weakly correlated. Exploitation had a small negative association with Information seeking for gains and none with Information seeking for loss-avoidance. Thus, a person&#x27;s inclination towards exploitation -the mirror image of their inclination towards random exploration -reveals almost nothing about their inclination toward directed exploration, consistent with previous reports of different neural substrates (23). Similarly, Information seeking for gains and loss-avoidance were effectively orthogonal. The latter is consistent with prior investigations indicating that individual differences in uncertainty processing are mostly independent across motivational contexts (24, 25). Distinct developmental timelines of directed exploration for gains and loss-avoidance</p>
+<p>In line with the factor analysis, our data suggest that directed exploration for gains and losses, and random exploration develop according to different age trajectories. Thus, directed exploration for gains and loss-avoidance showed noticeably divergent relationships with age. Consistent with previous work (13, 26), strategic directed exploration for gains increased steadily, substantially, and well into young adulthood.</p>
+<p>Strategic directed exploration for loss-avoidance also expanded, though much less precipitously. The pattern reversed in older adults, who, in line with prior work (11, 12), showed a decline of strategic directed exploration in the gains and the losses condition relative to younger adults. The divergence across conditions is reminiscent of prior reports that another behavior involving uncertainty processing -risk-taking -, shows more pronounced age-related changes in the gains than the losses domain (27, 28).</p>
+<p>To understand what drives the divergence, it helps to disentangle different mechanistic contributions. Recall that the gain-loss divergence from childhood to young adulthood reflected two parallel processes. First, strategic directed exploration -the additional premium placed on information in long-horizon games -expanded with age across conditions; second, the overall tendency to choose the more informative bandit increased with age in the gains, but not the losses condition. These effects compounded, such that the rise of the premium on information was particularly sharp in long horizon games of the gains condition.</p>
+<p>Interestingly, accounting for age-related improvements in working-memory completely absorbed the gain/loss, but not the horizon differences in the age-related expansion of directed exploration, which remained statistically significant. This suggests that the influences of age and cognitive improvements are partially independent from each other. In fact, mediation analyses showed that -ceteris paribus -working memory and age had opposing directional effects on directed exploration in the loss domain: highe r working memory was associated with weaker, and age with stronger preference for more informative bandits in the loss condition. This suggests that two opposing developmental processes might underlie the observed pattern of age effects on directed exploration: from childhood to young adulthood, age-related gains in cognitive abilities may diminish deviations from rationality, reducing a tendency toward familiarity-seeking in the gains condition and toward ambiguity-seeking in the loss condition. An independent maturational process could, at the same time, lead to an overall expansion in strategic information seeking. Speculatively, this could reflect the increasing real-world strategic utility of information during young or &quot;emerging&quot; adulthood: the time period between age 18 and 29, defined by consequential, sometimes irreversible decisions about career commitments, relationships, family planning and so on (29). It is arguably during this period that gathering information before committing has the greatest value. Whether this manifests when informationseeking is tested in the lab is speculative, but the alignment in developmental timing is suggestive.</p>
+<p>Older adults showed diminished sensitivity to information compared to younger adults and adolescents in the gains condition. Interestingly, accounting for neuropsychological metrics did not abolish this effect, indicating that in the older age group, there might be a &quot;genuinely&quot; age-related difference in directed exploration in different motivational contexts. A speculative interpretation might invoke Carstensen&#x27;s socioemotional sensitivity theory (30), which posits that as perceived future time horizon shrinks in old age, motivation shifts toward more present and consumption focused goals, such that future-relevant information is discounted in favor of more certain, proximate gains.</p>
+<h3>4.2 Developmental timeline of random exploration</h3>
+<p>In contrast to what we saw for directed exploration and in line with the factor analysis, there was no difference in the development of random exploration for gains and lossavoidance. Strategic random exploration expanded rapidly during childhood and reached a plateau in late adolescence, where the difference in choice randomness across horizons reached its maximum. Critically, this was largely driven by increasing sensitivity to value differences between bandits in short horizon games -which makes people more likely to exploit when exploration is strategically inadvisable -rather than decreasing value sensitivity in long horizon games. This finding dovetails with a welldocumented overall decrease in choice randomness in adolescence (5, 14, 16, 31, 32). Congruently, the age-related increase in value sensitivity was mediated by processing speed, a measure of general cognitive efficiency. The mirror image of this pattern emerged in later life: older adults showed less strategic random exploration than younger adults, again mostly due to maladaptively high randomness in shorthorizon games rather than lower long horizon randomness. As in the younger cohort, the difference in value sensitivity disappeared when processing speed was controlled for. Though contrary to previous reports emphasizing reduced strategic random exploration in aging (11, 12), these findings chime with studies showing an overall increase in choice randomness (33, 34) and fluid intelligence (35) in older age.</p>
+<p>Together, our data suggest that the development of random exploration is primarily driven by the acquisition and subsequent erosion of value sensitivity and general cognitive efficiency, rather than by bona fide changes of the disposition to explore. An intriguing possibility is that &quot;random exploration&quot; may in fact be better construed as &quot;strategic exploitation&quot;, where the cognitive resources needed for precise value-driven decision-making are deployed when it is useful to do so -if and when those resources are available. Future work should investigate whether this is related to developmental changes in (striatal) dopamine and noradrenaline signaling, both of which have been implicated in general cognitive functioning across the lifespan (36) (37) (38), choice randomness in exploration contexts (39) (40) (41) (42) (43), and indeed, the willingness to exert cognitive effort (44, 45).</p>
+<h3>4.3 Limitations</h3>
+<p>Several limitations of our study should be acknowledged. The design is crosssectional, which means developmental trajectories are inferred from age differences rather than individual change, and cohort effects cannot be ruled out. In addition, our older adult sample is relatively modest in size, and the gap in coverage of middle age means the transition from young adulthood to older adulthood is not well characterized.</p>
+<p>Longitudinal work with more uniform age sampling would be valuable to support and complement the findings of the current study.</p>
+<h3>4.4 Conclusions and future directions</h3>
+<p>These limitations notwithstanding, our results clearly demonstrate that exploration is neither a uniform behavior nor one with a unified developmental timeline. How exploration changes with age -and what drives that change -critically depends on which component of exploration one examines, and in what motivational context people explore. Our findings raise interesting questions that should be addressed in future research: Is random exploration really strategic exploitation? Does high working memory (or fluid intelligence generally) protect against biases in uncertainty processing? And might lifespan changes in strategic exploration be tied to lifespan changes in the value of information for current life goals? There is plenty yet to explore.</p>
+<p>8 Supplement</p>
+<h3>8.1 Additional exclusion criteria</h3>
+<p>In the Leipzig sample, participants were also specifically excluded if they were over-or underweight, pregnant or breast-feeding, color vision deficient, if they had (first-degree family history) of epilepsy or schizophrenia, diabetes, thyroid dysfunction, dyslexia, any present and past psychiatric disorder (except specific phobias) ascertained using the German version of the SCID. Supplementary Table 1 Participant characteristics N Gender (N female) DSST M (±SD) Digit Span backwards M (±SD) Children (8-12) 51 27 46.53 (±11.71) 5.14 (±1.44) Adolescents (12-18) 76 38* 67.35 (±14.36) 7.09 (±1.95) Young adults (18-40) 95 48 85.64 (±12.50) 7.73 (±2.18) Older adults (65+) 32 17 60.92 (11.92) 6.56 (±1.61) Note. DSST -Digit-Symbol-Substitution-Test; Digit Span -Digit Span backwards (items). *Gender data was unavailable for N=1 participant. DSST data was unavailable for N=22 participants. Digit Span data was unavailable for N=39 participants.</p>
+<h3>8.2 Demographics Table</h3>
+<h3>8.3 Order effects in balanced Leipzig sample</h3>
+<p>There was no evidence of order effects (captured by interactions involving motivational context and block) in the balanced Leipzig sample:</p>
+<p>Term β z p Motivational context x Block 0 0.02 0.98 Information difference x Motivational context x Block -0.02 -0.19 0.85 Value difference x Motivational context x Block -0.15 -0.7 0.48 Information difference x Value difference x Motivational context x Block -0.01 -0.13 0.89 Information difference x Horizon x Motivational context x Block -0.02 -0.48 0.63 Value difference x Horizon x Motivational context x Block 0.14 1.12 0.26 Information difference x Value difference x Horizon x Motivational context x Block -0.02 -0.28 0.78 8.4 Training/fatigue effects 8.4.1 Random exploration There was evidence of a training effect on random exploration (value difference x horizon x block: β=-.15, z=-3.15, p&lt;.01), such that value sensitivity went up from the first to the second block, especially in short horizon trials, reinforcing the difference between horizons in the second block (value difference in first block in short horizon: β=5.19, z=21.78, p&lt;.0001; value difference in second block in short horizon: β=6.11, z=24.9, p&lt;.0001; value difference in first block in long horizon: β=2.48, z=22.71, p&lt;.0001; value difference in second block in long horizon: β=2.82, z=25.27, p&lt;.0001).</p>
+<h3>8.4.2 Directed exploration</h3>
+<p>There was no evidence of a training effect on information sensitivity (p&gt;.44) or the modulation of information sensitivity by horizon (p&gt;.92).</p>
+<h3>8.4.3 Interactive effects of value and information sensitivity</h3>
+<p>There was a four-way interaction between value difference x information difference x horizon x block (β=-.09, z=-2.07, p=.04). Simple effects analyses showed that there was more random exploration, i.e., a sharper drop in value sensitivity from short to long horizon games horizon in the second compared to the first block, but only for informative bandits (value difference x horizon x block when information difference is negative: β=-.05, z=-.81, p=.42; value difference x horizon x block when information difference is positive: β=-.23, z=-3.69, p&lt;.001).</p>
+<h3>8.4.4 Side bias</h3>
+<p>There was a main effect of block (β=-.05, z=-2.31, p=.02), such that participants chose the left side less in their second block.</p>
+<h3>8.5 Replication of Krueger et al., 2017 (young adults)</h3>
+<p>Constricting the sample to young adults (18-30), we replicate findings by Krueger et al. 2017, who observed strategic random exploration in both gains and loss-avoidance contexts. Here, we find a three-way interaction between informativeness, horizon, and motivational context (β=.23, z=3.54, p&lt;.001), with a weaker, though significant informativeness x horizon interaction in the loss-avoidance than the gains condition (β=.28, z=2.96, p=.003; β=.75, z=7.71, p&lt;.0001).</p>
+<h3>8.6 P(low mean) and P(high info) models</h3>
+<p>In p(low mean) models, Information difference is 1 if the lower mean bandit is more informative (was chosen less), 0 if it is equally informative, and -1 if it less informative (was chosen more) than the higher mean bandit. In p(high info) models, only unequal information trials are considered. Value difference reflects the difference in value between the more informative and the less informative bandit (&gt;0 if the more informative bandit has a higher mean value). Otherwise, all variables and coding is as described in the methods section of the main manuscript.</p>
+<p>8.6.1 Across age groups 8.6.1.1 P(low mean) Term β z p (Intercept) -2.16 -36.47 &lt;0.01 Information difference 0.10 2.11 0.03 Horizon 0.30 13.80 &lt;0.01 Motivational context -0.02 -0.83 0.41 Block -0.12 -4.65 &lt;0.01 Information difference x Horizon 0.26 8.59 &lt;0.01 Information difference x Motivational context -0.63 -11.27 &lt;0.01 Horizon x Motivational context 0.08 3.60 &lt;0.01 Information difference x Block -0.02 -0.44 0.66 Horizon x Block 0.03 1.49 0.14 Information difference x Horizon x Motivational context 0.27 8.41 &lt;0.01 Information difference x Horizon x Block 0.08 2.87 &lt;0.01 8.6.1.2 P(high info) Term β z p (Intercept) 0.14 3.42 &lt;0.01 Information difference 3.57 25.37 &lt;0.01 Horizon 0.19 7.15 &lt;0.01 Motivational context -0.54 -10.58 &lt;0.01 Block -0.07 -1.41 0.16 Information difference x Horizon -1.33 -18.72 &lt;0.01 Information difference x Motivational context -0.09 -1.27 0.20 Horizon x Motivational context 0.21 6.99 &lt;0.01 Information difference x Block 0.33 4.80 &lt;0.01 Horizon x Block 0.03 0.96 0.34 Information difference x Horizon x Motivational context 0.01 0.09 0.93 Information difference x Horizon x Block -0.15 -2.88 &lt;0.01 8.6.2 Age models 8.6.2.1 P(low mean) by continuous age Term β z p (Intercept) -2.18 -38.54 &lt;0.01 Information difference 0.14 2.86 &lt;0.01 Horizon 0.32 15.37 &lt;0.01 Motivational context -0.01 -0.29 0.77 Block -0.12 -4.31 &lt;0.01 1-1/age³ -0.23 -4.06 &lt;0.01 Information difference x Horizon 0.25 8.07 &lt;0.01 Information difference x Motivational context -0.63 -11.02 &lt;0.01 Horizon x Motivational context 0.07 3.08 &lt;0.01 Information difference x Block 0.02 0.34 0.73 Horizon x Block 0.03 1.51 0.13 Information difference x 1-1/age³ 0.12 2.60 0.01 Horizon: 1-1/age³ 0.13 6.50 &lt;0.01 Motivational context x 1-1/age³ -0.03 -1.02 0.31 Information difference x Horizon x Motivational context 0.26 7.73 &lt;0.01 Information difference x Horizon x Block 0.08 2.39 0.02 Information difference x Horizon: 1-1/age³ 0.13 4.39 &lt;0.01 Information difference x Motivational context x 1-1/age³ 0.06 1.27 0.20 Horizon x Motivational context x 1-1/age³ 0.02 1.00 0.31 Information difference x Horizon x Motivational context x 1-1/age³ 0.09 3.33 &lt;0.01 8.6.2.2 P(low mean) by age group Term β z p (Intercept) -1.92 -11.78 &lt;0.01 Information difference -0.11 -0.87 0.39 Horizon 0.15 2.82 &lt;0.01 Motivational context -0.06 -0.84 0.40 Block -0.13 -4.41 &lt;0.01 Children vs Older adults 0.03 0.14 0.89 Adolescents vs Older adults -0.26 -1.32 0.19 Younger adults vs Older adults -0.45 -2.37 0.02 Information difference x Horizon 0.21 2.77 0.01 Information difference x Motivational context -0.74 -5.52 &lt;0.01 Horizon x Motivational context 0.07 1.50 0.13 Information difference x Block 0.02 0.37 0.71 Horizon x Block 0.02 1.11 0.27 Information difference x Children vs Older adults 0.03 0.18 0.86 Information difference x Adolescents vs Older adults 0.12 0.85 0.40 Information difference x Younger adults vs Older adults 0.43 3.01 &lt;0.01 Horizon x Children vs Older adults -0.03 -0.36 0.72 Horizon x Adolescents vs Older adults 0.15 2.23 0.03 Horizon x Younger adults vs Older adults 0.29 4.47 &lt;0.01 Motivational context x Children vs Older adults 0.04 0.42 0.67 Motivational context x Adolescents vs Older adults 0.04 0.49 0.62 Motivational context x Younger adults vs Older adults 0.05 0.65 0.51 Information difference x Horizon x Motivational context 0.32 4.30 &lt;0.01 Information difference x Horizon x Block 0.08 2.66 0.01 Information difference x Horizon x Children vs Older adults -0.13 -1.27 0.20 Information difference x Horizon x Adolescents vs Older adults -0.06 -0.67 0.50 Information difference x Horizon x Younger adults vs Older adults 0.22 2.45 0.01 Information difference x Motivational context x Children vs Older adults -0.08 -0.47 0.64 Information difference x Motivational context x Adolescents vs Older adults 0.13 0.89 0.38 Information difference x Motivational context x Younger adults vs Older adults 0.16 1.09 0.27 Horizon x Motivational context x Children vs Older adults -0.02 -0.36 0.72 Horizon x Motivational context x Adolescents vs Older adults -0.01 -0.12 0.91 Horizon x Motivational context x Younger adults vs Older adults 0.02 0.41 0.68 Information difference x Horizon x Motivational context x Children vs Older adults -0.20 -2.17 0.03 Information difference x Horizon x Motivational context x Adolescents vs Older adults -0.10 -1.13 0.26 Information difference x Horizon x Motivational context x Younger adults vs Older adults 0.04 0.45 0.65 8.6.2.3 P(high info) by continuous age Term β z p (Intercept) 0.15 3.54 &lt;0.01 Information difference 3.60 26.06 &lt;0.01 Horizon 0.19 6.89 &lt;0.01 Motivational context -0.56 -10.46 &lt;0.01 Block -0.02 -0.36 0.72 log(age) 0.17 3.98 &lt;0.01 Information difference x Horizon -1.42 -20.01 &lt;0.01 Information difference x Motivational context -0.09 -1.06 0.29 Horizon x Motivational context 0.19 5.68 &lt;0.01 Information difference x Block 0.32 3.76 &lt;0.01 Horizon x Block 0.05 1.40 0.16 Information difference x log(age) 0.30 2.19 0.03 Horizon x log(age) 0.12 4.45 &lt;0.01 Motivational context x log(age) 0.09 2.08 0.04 Information difference x Horizon x Motivational context 0.00 0.01 0.99 Information difference x Horizon x Block -0.17 -2.53 0.01 Information difference x Horizon x log(age) -0.23 -3.41 &lt;0.01 Information difference x Motivational context x log(age) -0.06 -0.80 0.43 Horizon x Motivational context x log(age) 0.07 2.56 0.01 Information difference x Horizon x Motivational context x log(age) 0.00 0.04 0.97 8.6.2.4 P(high info) by age group Term β z p (Intercept) 0.01 0.11 0.91 Information difference 3.18 8.26 &lt;0.01 Horizon 0.15 2.18 0.03 Motivational context -0.68 -5.53 &lt;0.01 Block -0.03 -0.54 0.59 Children vs Older adults 0.01 0.05 0.96 Adolescents vs Older adults 0.01 0.05 0.96 Younger adults vs Older adults 0.34 2.59 0.01 Information difference x Horizon -0.80 -4.70 &lt;0.01 Information difference x Motivational context -0.02 -0.09 0.93 Horizon x Motivational context 0.24 3.56 &lt;0.01 Information difference x Block 0.32 4.31 &lt;0.01 Horizon x Block 0.04 1.38 0.17 Information difference x Children vs Older adults -0.09 -0.18 0.85 Information difference x Adolescents vs Older adults 0.37 0.80 0.42 Information difference x Younger adults vs Older adults 0.75 1.68 0.09 Horizon x Children vs Older adults -0.11 -1.27 0.20 Horizon x Adolescents vs Older adults -0.03 -0.37 0.71 Horizon x Younger adults vs Older adults 0.19 2.33 0.02 Motivational context x Children vs Older adults -0.09 -0.59 0.55 Motivational context x Adolescents vs Older adults 0.14 1.04 0.30 Motivational context x Younger adults vs Older adults 0.23 1.70 0.09 Information difference x Horizon x Motivational context 0.05 0.46 0.65 Information difference x Horizon x Block -0.13 -2.31 0.02 Information difference x Horizon x Children vs Older adults -0.27 -1.24 0.21 Information difference x Horizon x Adolescents vs Older adults -0.46 -2.25 0.02 Information difference x Horizon x Younger adults vs Older adults -0.81 -3.96 &lt;0.01 Information difference x Motivational context x Children vs Older adults -0.05 -0.24 0.81 Information difference x Motivational context x Adolescents vs Older adults -0.03 -0.14 0.89 Information difference x Motivational context x Younger adults vs Older adults -0.15 -0.78 0.44 Horizon x Motivational context x Children vs Older adults -0.15 -1.84 0.07 Horizon x Motivational context x Adolescents vs Older adults -0.08 -0.98 0.33 Horizon x Motivational context x Younger adults vs Older adults 0.00 0.05 0.96 Information difference x Horizon x Motivational context x Children vs Older adults -0.05 -0.34 0.73 Information difference x Horizon x Motivational context x Adolescents vs Older adults -0.03 -0.22 0.83 Information difference x Horizon x Motivational context x Younger adults vs Older adults -0.10 -0.70 0.48</p>
+<h3>8.7 Age model comparison</h3>
+<p>To compare plausible shapes of age trajectories -flat, linear, quadratic, and rising before reaching a plateau (Figure S1) -, we compared models containing no age term, a linear age term, a linear and a quadratic age term, a logarithmic age term, and three inverse age terms based on BICs.</p>
+<p>Fig. S1 -Plausible shapes of developmental trajectories (arbitrary units). Note that with a sign reversal, the curves can also slope downwards rather than up.</p>
+<h3>Acknowledgements</h3>
+<p>We thank David Reindel, Miriam Huml, Eva Burmeister, Lisa-Marie Okhof, and Lion Schulz for their assistance with data collection. We are also grateful to Nathaniel Daw, Johannes Hewig, Ari Kahn, Kate Nussenbaum, and Lisa Bas for helpful discussions. This work was supported by the German Federal Ministry of Research, Technology and Space (BMFTR) (Grants 01EO1501 to LD and 01GQ2302A to AR and LD) and the German Research Foundation (Grants 572000592 to MW and LD; 178833530 -B07 to AR and BE; and 433490190 to AR).</p>
+<h3>Conflicts of Interest</h3>
+<p>The authors declare no conflicts of interest.</p>
+<p>No age term 𝑎𝑔𝑒 𝑎𝑔𝑒 + 𝑎𝑔𝑒 2 log (𝑎𝑔𝑒) 1 -1 𝑎𝑔𝑒 1 -1 𝑎𝑔𝑒 2 1 -1 𝑎𝑔𝑒 3 β Δinfo 2223.8 2210.6 2257.3 2208.8 2211.3 2216.9 2222.9 β Δvalue 3311.1 3311.7 3324.9 3298.5 3286.1 3278.5 3276.1</p>
+<h3>Fig 1 -</h3>
+<p>Fig.1 -A. Age and gender distribution of the sample. B. Performance on the Digit Symbol Substitution Test (assessing processing speed) and the Digit Span (backwards) task (assessing working memory) from the Wechsler battery by age group. Plots show group means in addition to the Kernel Density Estimate and individual data points. C. Illustration of the Horizon task.</p>
+<h3>:</h3>
+<p>Choice ~ Value difference * Information difference * Horizon * (Motivational context + Block) + (Value difference * Information difference * Horizon * Motivational context | Subject) Choice ([0 1]) reflects whether the participant chose left or right; Value difference reflects the difference in mean payoff between the two bandits (z-scored; &lt;0 if left bandit had lower mean than right bandit, &gt;0 if higher); Information difference reflects the informativeness of the left bandit, i.e., whether it has been chosen more, equally often, or less than the right bandit in the first four choices ([-1 0 1]); Horizon reflects the number of free choices in the game ([-1 1] for one vs six free choices); Motivational context reflects the objective of the current game ([-1 1] for avoiding losses vs accumulating gains); and Block whether a game is part the first or second block of the task ([-1 1]).</p>
+<h3>Fig 2 -</h3>
+<p>Fig.2 -A. Directed exploration across age groups. B. Random exploration across age groups. C. Factor analysis. Top left -Correlations between random slopes for value and information difference, per horizon and motivational context, derived from the variance-covariance matrix of model M1. Bottom left -scree plot of eigenvalues of the matrix. Top right -Factor loadings. Bottom right -correlations between factors.</p>
+<h3>( 8 -</h3>
+<p>12), adolescents (12-18), young adults (18-40), and older adults (65+). Faded dots reflect individual 𝛽s (C, D) or individual fitted values (A, B).</p>
+<h3>Fig 4 -</h3>
+<p>Fig.4 -A. Left: Relationship between 𝛽 𝛥𝑖𝑛𝑓𝑜 and performance on the Digit Span Task (backwards version), by motivational context. Right: Mediation analysis showing that working memory and log(age)</p>
+<h3>References</h3>
+<p>A. Gopnik, Childhood as a solution to explore-exploit tensions. Philosophical Transactions of the Royal Society B: Biological Sciences 375 (2020).</p>
+<p>R. C. Wilson, A. Geana, J. M. White, E. A. Ludvig, J. D. Cohen, Humans use directed and random exploration to solve the explore-exploit dilemma. Journal of Experimental Psychology: General 143, 2074-2081 (2014).</p>
+<p>M. Dubois, et al., Exploration heuristics decrease during youth. Cognitive, affective &amp; behavioral neuroscience 22, 969-983 (2022).</p>
+<p>K. Nussenbaum, et al., Novelty and uncertainty differentially drive exploration across development. eLife 12, e84260 (2023).</p>
+<p>A. P. Giron, et al., Developmental changes in exploration resemble stochastic optimization. Nature Human Behaviour (2023). https://doi.org/10.1038/s41 56 2- 023-01662-1.</p>
+<p>A. Geana, R. C. Wilson, N. Daw, J. D. Cohen, Boredom, Information-Seeking and Exploration. Proceedings of the 38th Annual Meeting of the Cognitive Science Society, CogSci 2016 1751-1756 (2016).</p>
+<p>P. M. Krueger, R. C. Wilson, J. D. Cohen, Strategies for exploration in the domain of losses. Judgment and Decision Making 12, 104-117 (2017).</p>
+<p>K. Shimomura, K. Morita, The Effect of Reward Magnitude on Different Types of Exploration in Human Reinforcement Learning. Computational Brain &amp; Behavior 8, 147-161 (2025).</p>
+<p>A. Ruggeri, O. Stanciu, M. Pelz, A. Gopnik, E. Schulz, Preschoolers search longer when there is more information to be gained. Developmental Science 1-7 (2023). https://doi.org/10.1111/desc.13411.</p>
+<p>E. Schulz, C. M. Wu, A. Ruggeri, B. Meder, Searching for Rewards Like a Child Means Less Generalization and More Directed Exploration. Psychological Science 30, 1561-1572 (2019).</p>
+<p>J.-M. Mizell, et al., Differential impacts of healthy cognitive aging on directed and random exploration. Psychology and Aging 39, 88-101 (2024).</p>
+<p>C. E. Phelps, et al., The dynamics of explore-exploit decisions suggest a threshold mechanism for reduced random exploration in older adults. PLOS Computational Biology 21, e1012873 (2025).</p>
+<p>L. H. Somerville, et al., Charting the expansion of strategic exploratory behavior during adolescence. Journal of Experimental Psychology: General 146, 155-164 (2017).</p>
+<p>V. Scholz, M. Waltmann, N. Herzog, A. Horstmann, L. Deserno, Decrease in decision noise from adolescence into adulthood mediates an increase in more sophisticated choice behaviors and performance gain. PLOS Biology 22, e3002877 (2024).</p>
+<p>V. Scholz, et al., Cortical Grey Matter Mediates Increases in Model-Based Control and Learning from Positive Feedback from Adolescence to Adulthood. The Journal of Neuroscience 43, 2178 LP -2189 (2023).</p>
+<p>M. Waltmann, et al., Diminished reinforcement sensitivity in adolescence is associated with enhanced response switching and reduced coding of choice probability in the medial frontal pole. Developmental cognitive neuroscience 60, 101226 (2023).</p>
+<p>Z. S. Nasreddine, et al., The Montreal Cognitive Assessment, MoCA: A Brief Screening Tool For Mild Cognitive Impairment. Journal of the American Geriatrics Society 53, 695-699 (2005).</p>
+<p>D. Wechsler, Wechsler Adult Intelligence Scale -Fourth Edition (WAIS-IV) (2008).</p>
+<p>D. Wechsler, Wechsler Intelligence Scale for Children, Fourth Edition (WISC-IV) (2003).</p>
+<p>D. J. Barr, R. Levy, C. Scheepers, H. J. Tily, Random effects structure for confirmatory hypothesis testing: Keep it maximal. Journal of memory and language 68, 10.1016/j.jml.2012.11.001 (2013).</p>
+<p>A. C. Rencher, G. B. Schaalje, Linear models in statistics (John Wiley &amp; Sons, 2008).</p>
+<p>H. F. Kaiser, The application of electronic computers to factor analysis. Educational and psychological measurement 20, 141-151 (1960).</p>
+<p>W. K. Zajkowski, M. Kossut, R. C. Wilson, A causal role for right frontopolar cortex in directed, but not random, exploration. eLife 6 (2017).</p>
+<p>M. Cohen, J.-Y. Jaffray, T. Said, Experimental comparison of individual behavior under risk and under uncertainty for gains and for losses. Organizational Behavior and Human Decision Processes 39, 1-22 (1987).</p>
+<p>Y. A. Kurnianingsih, O. A. Mullette-Gillman, Divergence and Convergence of Risky Decision Making Across Prospective Gains and Losses: Preferences and Strategies. Frontiers in Neuroscience Volume 9-2015 (2015).</p>
+<p>M. B. Harms, et al., The structure and development of explore-exploit decision making. Cogn Psychol 150, 101650 (2024).</p>
+<p>J. A. Weller, I. P. Levin, N. L. Denburg, Trajectory of risky decision making for potential gains and losses from ages 5 to 85. Journal of Behavioral Decision Making 24, 331-344 (2011).</p>
+<p>R. B. Rutledge, et al., Risk Taking for Potential Reward Decreases across the Lifespan. Current Biology 26, 1634-1639 (2016).</p>
+<p>J. J. Arnett, R. Žukauskienė, K. Sugimura, The new life stage of emerging adulthood at ages 18-29 years: implications for mental health. The Lancet Psychiatry 1, 569-576 (2014).</p>
+<p>L. L. Carstensen, Socioemotional Selectivity Theory: The Role of Perceived Endings in Human Motivation. Gerontologist 61, 1188-1196 (2021).</p>
+<p>K. Nussenbaum, C. A. Hartley, Reinforcement learning across development: What insights can we draw from a decade of research? Developmental Cognitive Neuroscience 40, 100733 (2019).</p>
+<p>G. Chierchia, et al., Confirmatory reinforcement learning changes with age during adolescence. Developmental Science 1-15 (2021). https://doi.org/10.1111/desc.13330.</p>
+<p>J. Steffen, et al., Shorter planning depth and higher response noise during sequential decision-making in old age. Sci Rep 13, 7692 (2023).</p>
+<p>R. B. Sojitra, I. Lerner, J. R. Petok, M. A. Gluck, Age affects reinforcement learning through dopamine-based learning imbalance and high decision noise-not through Parkinsonian mechanisms. Neurobiology of Aging 68, 102-113 (2018).</p>
+<p>A. S. Kaufman, The Precipitous Decline in Reasoning and Other Key Abilities with Age and Its Implications for Federal Judges. J Intell 9 (2021).</p>
+<p>C. Eckart, N. Bunzeck, Dopamine modulates processing speed in the human mesolimbic system. NeuroImage 66, 293-300 (2013).</p>
+<p>S.-C. Li, U. Lindenberger, L. Bäckman, Dopaminergic modulation of cognition across the life span. Neuroscience &amp; Biobehavioral Reviews 34, 625-630 (2010).</p>
+<p>N. Holland, T. W. Robbins, J. B. Rowe, The role of noradrenaline in cognition and cognitive disorders. Brain 144, 2243-2256 (2021).</p>
+<p>S. J. Gershman, B. G. Tzovaras, Dopaminergic genes are associated with both directed and random exploration. Neuropsychologia 120, 97-104 (2018).</p>
+<p>C. S. Chen, D. Mueller, E. Knep, R. B. Ebitz, N. M. Grissom, Dopamine and Norepinephrine Differentially Mediate the Exploration-Exploitation Tradeoff. J. Neurosci. 44, e1194232024 (2024).</p>
+<p>F. Cinotti, et al., Dopamine blockade impairs the exploration-exploitation trade-off in rats. Scientific Reports 9, 1-14 (2019).</p>
+<p>M. Dubois, et al., Human complex exploration strategies are enriched by noradrenaline-modulated heuristics. eLife 10, 1-34 (2021).</p>
+<p>A. Cremer, F. Kalbe, J. C. Müller, K. Wiedemann, L. Schwabe, Disentangling the roles of dopamine and noradrenaline in the exploration-exploitation tradeoff during human decision-making. Neuropsychopharmacology (2022). https://doi.org/10.1038/s41386-022-01517-9.</p>
+<p>R. Frömer, H. Lin, C. K. Dean Wolf, M. Inzlicht, A. Shenhav, Expectations of reward and efficacy guide cognitive control allocation. Nature Communications 12 (2021).</p>
+<p>A. Shenhav, M. P. Fahey, I. Grahek, Decomposing the motivation to exert mental effort. Curr Dir Psychol Sci 30, 307-314 (2021).</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
