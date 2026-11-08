@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: REPAIR: Random-effect prediction adjustment for
+inference in regression</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+REPAIR: Random-effect prediction adjustment for inference in regression
+</p>
+<p class="meta">
+2026-11-08 · Metacheck 0.4.3.19
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to improve</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>16</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="na">Not applicable <span class="n">(16)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 50 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 50 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 50 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+For a script that did not run through, <code>table$error_message</code>
+is its error, short (at most 300 characters): the error line of its
+output, which names a package that is not there, with the address it
+asked for when it needed the internet, or the time limit it reached;
+<code>table$reason</code> sorts it into a kind. A timeout means “still
+running at the cutoff”, not a failure, so raise <code>timeout</code> for
+legitimately long-running (e.g. Bayesian) scripts.
+<code>dependency_unavailable</code> means the script’s own package could
+not be installed from live CRAN, the CRAN Archive, or a named GitHub/URL
+source — an infrastructure limitation, not a defect in the paper’s code,
+so unlike <code>errored</code>/<code>timed_out</code> it does
+<strong>not</strong> force the traffic light red. The full stdout/stderr
+of every run is kept in the result’s <code>run_results</code> (the
+report shows it in per-script dropdowns, capped for readability). The
+traffic light reflects the STATIC readiness signals by default, but an
+execution error (<code>errored</code>/<code>timed_out</code>) does
+recolour it to red — a script that crashes on its own analysis is a
+genuine reproduction failure. A script that fails with
+<code>could not find function</code> is run once more with the
+<code>library()</code> calls the project’s other scripts make added at
+its top (or the one package that exports the function, or magrittr for
+<code>%&gt;%</code>), and a script that then runs is reported as
+reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Random-effect predictions from multilevel models are often used to relate individual differences in processes, such as growth or stress reactivity, to other variables. Yet, regressions using these predictions can distort regression coefficients and standard errors because the predictions combine shrinkage with sampling error. Here, we introduce and evaluate Random-Effect Prediction Adjustment for Inference in Regression (REPAIR), a two-step framework for linear regressions involving random effects. For linear Gaussian multilevel models, REPAIR obtains likelihood-only predictions by generalized least squares. A regularized method-of-moments estimator then uses estimated cluster-specific sampling-error covariances to correct structural moments. Four simulation studies examined random effects as predictors, outcomes, or both, including unequal cluster sizes. REPAIR generally showed small bias at medium to high predictor reliability and often had lower root mean squared error than alternative methods. Low predictor reliability remained challenging, particularly for confidence interval coverage in small samples. These findings support REPAIR as a practical framework for estimating structural relationships involving random effects while accounting for their measurement uncertainty.</p>
+<h3>1. Introduction</h3>
+<p>Many psychological studies concern individual differences in processes that unfold over time or across situations (Hamaker &amp; Wichers, 2017). Researchers may ask whether people who improve more rapidly during treatment experience better subsequent outcomes, whether long-term personality or behavior change predicts life outcomes, or how cognitive processes elicited by an experimental task relate to mental health. Multilevel models (MLMs) are natural tools for such questions because they distinguish population-average effects from person-specific deviations representing individual levels or within-person associations (Raudenbush &amp; Bryk, 2010). A common analytic strategy is to fit an MLM, extract its random-effects predictions, and use those predictions in a second analysis (Liu &amp; Rhemtulla, 2022).</p>
+<p>The scientific goal, however, is typically to understand relationships among the underlying person-specific processes, rather than merely among their model-predicted values.</p>
+<p>This distinction matters in a range of applications. For example, in a randomized meditation trial, Webb et al. (2024) predicted person-specific rates of change in mindfulness, then examined whether these mediated the overall effect of the intervention on subsequent distress. Other researchers have considered whether random intercepts and slopes from MLMs capture meaningful psychological attributes. For example, drawing on five ecological momentary assessment (EMA) studies, Kuper and colleagues 2022 predicted within-person relationships between Big Five personality states and eight situation-specific characteristics (e.g., whether the situation was experienced as pleasant). To better understand personality-situation contingencies, they then examined the reliability, short-term stability, external correlates, and latent structure of the 40 random slopes extracted from the MLMs. In both of these examples, as well as numerous others (e.g., Hallquist and Lenzenweger, 2013; McCormick et al., 2026; Willroth et al., 2025), the substantive goal is to characterize individual differences in within-person processes, such as change or decision-making. The shared statistical strategy is to predict person-specific values of those processes from repeated observations and then use them as variables in a downstream analysis.</p>
+<p>A standard approach for predicting person-specific random effects is Empirical Bayes (EB) (Robinson, 1991). EB predictions borrow information from the full sample, shrinking uncertain individual values toward the population mean. This adaptive shrinkage can substantially improve the predictions of individual values (Katahira, 2016). When the goal is to estimate relationships among underlying random effects, however, shrinkage complicates the use of EB predictions as observed variables (Liu &amp; Rhemtulla, 2022; Liu et al., 2021). Shrinkage changes the variances and covariances of EB predictions, so downstream analyses using these as outcomes or predictors may not recover the true relationships involving the underlying random effects. The predictions also retain sampling error; treating them as perfectly measured can distort structural estimates and their standard errors (Bollen, 1989; Cohen et al., 2015; Fuller, 1987).</p>
+<p>Here, we develop a two-step framework-Random-Effect Prediction Adjustment for Inference in Regression (REPAIR)-that accounts for shrinkage and uncertainty in random-effect predictions. The first step produces likelihoodonly predictions and their cluster/person-specific sampling error covariances within an MLM framework. The second step uses those covariances in a modified method-of-moments errors-in-variables regression that extends established measurement error models (Fuller, 1987). This framework offers a practical way to investigate relationships among person-specific processes measured across different tasks, settings, or timescales. Although our examples emphasize within-person processes arising from repeated observations, we note that the methods presented here apply equally to other forms of clustering such as students nested within classrooms.</p>
+<h3>2. Existing Approaches</h3>
+<p> &gt;Existing Approaches</p>
+<h3>2.1. Joint modeling vs. two-step approaches</h3>
+<p>The most direct solution to avoiding the problems of treating EB predictions as ordinary variables is not to rely on random-effect predictions at all. A joint model can simultaneously specify an MLM linking observed data to underlying random effects and a structural model describing how those effects relate to one another or to other variables, accounting for uncertainty in the random effects through the full likelihood. Joint modeling might involve simply incorporating person-level variables into an MLM through a cross-level interaction, or fitting latent curve models (Bollen &amp; Curran, 2006), multilevel structural equation models, or other joint latent variable models when a random effect predicts a distal outcome or participates in a more complex path model. Joint modeling is not always practical, however. Researchers often collect repeated measures from several tasks or assessments within the same study, yet these observations may not have a natural occasion-level correspondence. This can lead to difficulties in specification and estimation when model complexity grows (Hickey et al., 2016; Rustand et al., 2024), or loss of information about uncertainty when &quot;shortcuts&quot; such as taking averages or percentages are used (Haines et al., 2025). Two-step approaches offer a practical alternative by representing each latent process or trait with a separately fitted MLM. Information from these models is then carried into a second-step structural analysis estimating relationships among the processes or traits while accounting for measurement error (Lai &amp; Liu, 2026; Rosseel &amp; Loh, 2024).</p>
+<p>A separate motivation for two-step estimation is to hold a vetted step 1 model fixed while comparing structural models. Estimating the step 1 model separately can prevent misspecification in the structural model from biasing step 1 model parameter estimates, a phenomenon known as interpretational confounding (Bollen et al., 2007; Burt, 1973 Burt, , 1976)). Similar motivations underlie structural-after-measurement and other multi-step latent-variable procedures (Bollen, 1996; Kuha &amp; Bakk, 2024; Levy, 2023; Rosseel &amp; Loh, 2024). These advantages depend on an appropriately specified first-step model and a second-step procedure that accounts for how the latent quantities were measured.</p>
+<h3>2.2. Factor score regression and corrected moments</h3>
+<p>Modularized estimation procedures in structural equation modeling (SEM) address how to estimate relationships among latent traits while accounting for measurement error using models that map those traits to observed indicators. Examples of modularized estimation frameworks include factor score regression (Skrondal &amp; Laake, 2001), the structural-aftermeasurement approach (Rosseel &amp; Loh, 2024), measurement and uncertainty preserving parametric modeling (Levy, 2023), and model-implied instrumental variable, two-stage least squares estimation (Bollen, 1996).</p>
+<p>Factor score regression provides a particularly direct parallel to downstream analyses of random-effect predictions.</p>
+<p>Factor scores predict individuals&#x27; values on latent factors, much as random-effect predictions do for person-specific intercepts or slopes. This connection also has a formal basis: random effects are latent variables, and MLMs can be represented as SEMs (Bauer, 2003; Curran, 2003). Using either type of prediction in a subsequent regression raises the same essential question: how do the prediction method and its corresponding error affect estimates of structural relationships among the latent variables? Skrondal and Laake (2001) showed that the appropriate factor scoring method can depend on the score&#x27;s role in the structural model. Under their model assumptions, pairing regression-method scores for predictors with Bartlett scores for outcomes yields consistent estimates of unstandardized regression coefficients. Regression-method scores are analogous to EB predictions, whereas Bartlett scores are analogous to likelihood-only predictions. This result shows that shrinkage does not necessarily bias a structural regression coefficient. However, consistency of these coefficients does not imply that the scores&#x27; variances and covariances are equal to those of the underlying latent variables (McDonald, 1981; ten Berge et al., 1999). Consequently, standardizing the regression coefficients using the score variance can induce bias (Devlieger et al., 2016). The measurement error structure can also affect standard errors, so coefficient consistency alone does not establish the validity of conventional inference (Saxonhouse, 1976). These considerations motivate the complementary approach of correcting score variances and covariances before estimating structural relationships. Croon (2002) developed such a correction that accounts for both the transformation of the latent variables and the error introduced by scoring. The central logic follows classical errors-in-variables: for scores already expressed as a latent value plus sampling error, their observed covariance contains separable latent and error components. Thus, subtracting the expected error covariance recovers the moment matrix relevant to the latent structural relation. Croon&#x27;s method additionally generalizes to factor scores without a clean &quot;latent value plus error&quot; structure. For scoring methods that also transform the latent variables-e.g., via shrinkage, such as regression-method scores-the moment correction must account for both the transformation and the error covariance. Devlieger and Rosseel (2017) found that using Croon&#x27;s correction in a factor score path analysis achieved higher convergence rates than simultaneous SEM estimation, and Devlieger et al. (2016) introduced an accompanying inferential adjustment. Importantly, however, this approach cannot be applied directly to random-effects predictions because the transformations and error covariances can differ across clusters.</p>
+<h3>2.2.1. Role-specific score selection: Skrondal &amp; Laake</h3>
+<p> &gt;Role-specific score selection: Skrondal &amp; Laake</p>
+<h3>2.2.2. Corrected moments: Croon</h3>
+<p>Devlieger and Rosseel (2020) extended Croon&#x27;s correction to multilevel factor-score regression, estimating structural relationships from corrected within-and between-cluster covariance matrices. Their between-level correction accounts for sampling variability in cluster means, and their simulations include unequal cluster sizes. However, their proposed procedure does not accommodate random slopes, which they identify as an important direction for further development.</p>
+<p>For these effects, measurement precision depends not only on observation counts but also on cluster-specific predictor designs and residual covariance structures.</p>
+<h3>2.2.3. Latent measurement modeling: Lai &amp; Liu</h3>
+<p>In standard linear factor models with common measurement parameters, a given scoring method produces a common score-error covariance across individuals. Random-effect predictions from MLMs, however, can have cluster-specific error covariances, and thus varying levels of precision. To address this, Lai and Liu (2026), building on Lai and Hsiao (2022), provide a method for using random-effect predictions from MLMs as predictors and/or outcomes in structural models. They represent each BLUP vector as an indicator of the latent random-effect vector, with person-specific loadings and error covariance carried into a second-step SEM. This &quot;measurement&quot; model accounts for multivariate shrinkage, correlated errors, and differences in precision across individuals. Structural parameters are then estimated using an iterative method such as maximum likelihood. Their approach parallels the &quot;global structural-after-measurement&quot; approach for structural equation models (Rosseel &amp; Loh, 2024).</p>
+<p>As detailed below, our approach shares this measurement model foundation, but transforms the predictions to an additive-error scale, allowing linear structural regressions to be estimated using corrected moments rather than iterative second-step likelihood estimation. Numerical stability provides an additional motivation for considering a non-iterative estimator: Lai and Liu (2026) reported limited convergence in some conditions with low intraclass correlations (ICCs) and small cluster sizes, although penalized first-step estimation improved performance.</p>
+<h3>3. Current Work</h3>
+<p>This paper makes three contributions. First, we show that when the shrinkage map is nonsingular, the prior-induced shrinkage in a Gaussian MLM&#x27;s BLUP can be removed exactly. The inverse-shrinkage transformation recovers the cluster-specific generalized least-squares, or likelihood-only, prediction. Crucially, this prediction, as opposed to the BLUP, equals the underlying random effect plus sampling error uncorrelated with that effect, which provides the basis for classical errors-in-variables correction.</p>
+<p>Second, we adapt and evaluate the modified method-of-moments (M-MOM) estimator of Fuller (1987) for the second-step structural model involving these predictions. This estimator accommodates measurement error in predictors and outcomes, including correlated errors and cluster-specific error covariance matrices. The resulting structural calculations avoid iterative likelihood optimization, although they still require sufficient information, nonsingular corrected matrices, and explicit diagnostics in sparse settings.</p>
+<p>Third, we use simulation studies to clarify when the role and precision of random-effect predictions affect structural estimation. We compare the M-MOM estimator to naive plug-in analyses, simple corrected-moment estimators, Lai and Liu&#x27;s (2026) two-stage path analysis, and direct joint models when available. The simulations distinguish random effects used as predictors, outcomes, or both, while varying first-step reliability, random intercept-slope covariance, and cluster-size heterogeneity. We evaluate bias, precision, inferential performance, and convergence to determine how well each approach recovers relationships among the underlying person-specific processes.</p>
+<h3>4. Statistical Methods</h3>
+<p>In a Gaussian MLM with known parameters, the conditional mean of a cluster&#x27;s random effect given its observations is the best linear unbiased predictor (BLUP) (Goldberger, 1962; Henderson, 1973). In practice, replacing the population parameters with their fitted values yields EB predictions, also known as empirical BLUPs (EBLUPs). These predictions balance information from each person&#x27;s observations with information from the population distribution based on the reliability of a person&#x27;s observations. While helpful in some contexts, the shrinkage induced to achieve this balance poses problems for downstream structural analyses.</p>
+<p>In regression models, accurate coefficients for target effects depend on their underlying variances and covariances, which may not be preserved in EB predictions. Classical measurement error models represent an observed value as a sum of its true value and uncorrelated random error (Fuller, 1987). Instead, EB predictions contain a shrunken version of the true random effect, so their prediction errors generally covary with the effects being predicted. Additionally, shrinkage can differ across individuals because of unequal observation counts, different predictor distributions, or different residual covariances, and can be multivariate when a model includes correlated random effects. These hurdles preclude straightforward strategies for recovering the latent variance, such as subtracting the prediction-error variance from the EB prediction variance. Instead, our approach first removes this prior-induced shrinkage, then corrects the second-step regression for the remaining sampling error. The four sections below develop this approach from a scalar intuition to the general multivariate case. We call our approach Random-Effect Prediction Adjustment for Inference in Regression, or REPAIR.</p>
+<h3>4.1. View shrinkage as reliability weighting</h3>
+<p>Consider a simple MLM where observation 𝑖 from person 𝑗 is modeled as a function of a fixed component with predictor 𝑥 and a random component with a single random intercept, or</p>
+<p>The variance of the random intercept is denoted Var(𝑏 𝑗 ) and the variance of the errors is denoted 𝜎 2.</p>
+<p>A random effect prediction is a function of the data 𝑥 and 𝑦 as well as the model coefficient and variance parameters.</p>
+<p>For EB predictions, this function adaptively assigns weights to the data and to the &quot;prior&quot; population distribution depending on the precision of the data. Specifically, the EB prediction uses a reliability ratio, or the variance attributable to the random component of the model divided by the total variance found in the (centered) data (Skrondal &amp; Rabe-Hesketh, 2009).</p>
+<p>For the simple model above, the (true) BLUP for the random intercept uses weight -1 on the centered data which, given that variances are bounded below at zero, is always between zero and one. By assumption, the &quot;prior&quot; population mean is zero; thus, the BLUP can be written as a single where • indicates the sample mean (Gelman &amp; Hill, 2021).</p>
+<p>In practice, we only have access to estimated parameters which are plugged in for the true ones yielding the EB prediction.</p>
+<p>This expression illuminates the mechanics of EB predictions: the less variance explained solely by the random component, the smaller the weight, shrinking the prediction toward the population mean, which in this case is zero.</p>
+<p>These results scale up to the multi-predictor, multi-random effect case which can be expressed in matrix notation.</p>
+<p>For outcome data 𝒚 𝑗 from person 𝑗, fixed effect predictor design 𝑿 𝑗 and random effect predictor design 𝒁 𝑗 , the standard MLM is 𝒚 𝑗 = 𝑿 𝑗 𝜷 + 𝒁 𝑗 𝒃 𝑗 + 𝜺 𝑗 (4.2) where 𝒃 𝑗 are the random effects with variance-covariance 𝑮 and 𝜺 𝑗 are the observation-level errors with variancecovariance 𝑹 𝑗 . A linear random effect predictor for person 𝑗 uses some matrix 𝑴 𝑗 to transform the data, i.e., b 𝑗 = 𝑴 𝑗 ( 𝒚 𝑗 -𝑿 𝑗 𝜷) (4.3) Denoting the variance-covariance matrix of 𝒚 𝑗 as 𝚺 𝑗 , the matrix for (true) BLUPs is 𝑴 𝐸 𝑗 = 𝑮 𝒁 ′ 𝑗 𝚺 -1 𝑗 with subscript 𝐸 denoting Empirical Bayes. In the matrix case, the shrinkage operator is 𝑴 𝐸 𝑗 𝒁 𝑗 as shown in the next section. Again, estimates are plugged in for the true values to produce the EB prediction.</p>
+<h3>4.2. Write the exact BLUP measurement model</h3>
+<p>The next goal in our approach is to modify the BLUP expression to yield a prediction that follows the structure and properties of classical measurement assumptions, i.e., true value plus conditionally mean-zero sampling error. Lai and Liu (2026) intuitively express the BLUP in terms of the true random effect which they call the BLUP&#x27;s &quot;measurement model,&quot; where the BLUP is an indicator of the latent random effect (see their Equation 4). A similar expression was given earlier by McDonald and Burr (1967, Equation 37). We assume the same starting point before applying our modifications.</p>
+<p>Substituting the original MLM formulation, Equation (4.2), into the BLUP definition and adding and subtracting</p>
+<p>Observe the parallel to classical measurement error: b 𝑗 is the observed value, 𝒃 𝑗 is the true value, and -( 𝑰-𝑴 𝐸 𝑗 𝒁 𝑗 )𝒃 𝑗 + 𝑴 𝐸 𝑗 𝜺 𝑗 is the error.</p>
+<p>The prediction error in Equation (4.4) contains two distinct components. The first, -( 𝑰-𝑴 𝐸 𝑗 𝒁 𝑗 )𝒃 𝑗 , is the conditional bias introduced by shrinkage: for a given true random effect, it represents a systematic displacement of the expected prediction. The second, 𝑴 𝐸 𝑗 𝜺 𝑗 , is sampling noise with conditional mean zero. Under the known-parameter Gaussian model, this noise is independent of the true random effect. However, the shrinkage component generally depends on that effect, so the total prediction error generally covaries with it:</p>
+<p>This dependence motivates the inverse-shrinkage transformation in the next section.</p>
+<h3>4.3. Invert the shrinkage map</h3>
+<p>To obtain a random effect prediction that satisfies the true-value-plus-error representation, the shrinkage in the BLUP expression needs to be removed exactly. Explicit &quot;de-shrinking&quot; methods have been proposed in the medical and pharmaceutical literatures via moments-based and regularization techniques (Baklouti et al., 2022; Yuan et al., 2019).</p>
+<p>Here, we apply person-specific inverse-shrinkage matrices to obtain likelihood-only predictions. This yields an additiveerror representation for subsequent structural moment correction while retaining differences in precision across clusters.</p>
+<p>Provided that 𝑴 𝐸 𝑗 𝒁 𝑗 is nonsingular, a transformation can be applied to Equation (4.4). It follows that this transformation is ( 𝑴 𝐸 𝑗 𝒁 𝑗 ) -1 = (𝑮 𝒁 ′ 𝑗 𝚺 -1 𝑗 𝒁 𝑗 ) -1 since multiplying Equation (4.4) by this factor yields</p>
+<p>The bias term vanishes, leaving the true value 𝑇 = 𝒃 𝑗 plus an error term 𝐸 = ( 𝑴 𝐸 𝑗 𝒁 𝑗 ) -1 𝑴 𝐸 𝑗 𝜺 𝑗 that is independent of the true value: the classical measurement error form.</p>
+<p>Importantly, the transformed prediction is not a new statistical quantity: it is the likelihood-only prediction, analogous to the Bartlett factor score. While virtually never used in the MLM context, the likelihood-only prediction is an alternative to the BLUP obtained via a maximum likelihood perspective (Bartholomew et al., 2009; Grønneberg &amp; Irmer, 2024; Skrondal &amp; Rabe-Hesketh, 2004; Skrondal &amp; Rabe-Hesketh, 2009). Likelihood-only predictions are derived by conditioning on the random effect being equal to the person&#x27;s true realized value-thus, they can alternatively be conceptualized as &quot;estimates&quot; of a fixed person parameter (Skrondal &amp; Rabe-Hesketh, 2009). Here, we showed that the likelihood-only prediction can be expressed as a transformation of the BLUP to demonstrate how it inverts shrinkage.</p>
+<p>However, likelihood-only predictions can be computed directly. The likelihood-only prediction matrix is a function of the random effect design and the error covariance matrix, or</p>
+<p>This is equivalent to the person-specific GLS coefficient vector estimate for the outcome after subtracting the fitted fixed-effect contribution. When 𝑹 𝑗 = 𝜎 2 𝑰, the error covariance matrix cancels from Equation (4.6), yielding the OLS estimate. For a random-intercept-random-slope model with the same fixed-and random-effect design matrices, deleting the fitted fixed-effect contribution from Equation (4.6) gives the intercept and slope estimates from a separate OLS regression for each person. More generally, a diagonal error covariance with unequal entries yields weighted least squares and a nondiagonal error covariance yields GLS.</p>
+<p>The benefit of retaining the first-step MLM is therefore distinct from shrinkage of the individual coefficients. For known MLM parameters, the likelihood-only prediction has conditional sampling-error covariance which follows from Equation (4.5) (see Appendix C).</p>
+<p>Under uncorrelated errors with common variance, its plug-in estimate is 𝚿 𝑗 = 𝜎 2 ( 𝒁 ′ 𝑗 𝒁 𝑗 ) -1 . When the common-variance assumption holds, the MLM pools information across people to estimate 𝜎 2 , potentially improving precision with few or unequal observations per person. Inverting shrinkage still recovers person-specific OLS slopes, but pooling can stabilize their estimated measurement error covariances, which enter the corrected moments and weights (Appendix D). This can improve the second-step correction without reducing the sampling variance of the recovered slopes themselves.</p>
+<p>When 𝑹 𝑗 = σ2 𝑰, the only parameter estimate needed for the measurement error variance estimates is σ2 , whereas for a structured or heteroskedastic 𝑹 𝑗 , all parameters needed for that error covariance are required. But Ĝ is not needed for the direct calculation in either case. We therefore compute likelihood-only predictions directly in our simulations, though explicit shrinkage inversion may be necessary in non-Gaussian cases.</p>
+<h3>4.4. Use first-step elements for second-step structural model correction</h3>
+<p>Inverting shrinkage restores the classical additive measurement-error form, but Equation (4.5) also shows why unshrinking alone is not a universal second-step correction. The remaining error has cluster-specific covariance, 𝚿 𝑗 , and its consequences depend on whether the prediction is an outcome, a predictor, or both. To address this, we adapt Fuller&#x27;s (1987) heteroskedastic measurement-error estimator with the accompanying suggested modification (Fuller, 1987, Eqs 3.1.19 and 3.1.20), which we call modified method of moments (M-MOM). The method only requires the classical additive measurement-error form achieved in the likelihood-only predictions, avoiding the role-specific choice in Skrondal and Laake (2001). The rationale parallels the use of likelihood-only (Bartlett) factor scores in regression (Grønneberg &amp; Irmer, 2024, Lemma 1 and the surrounding discussion).</p>
+<p>M-MOM starts with a linear structural equation 𝒃 𝑦 = 𝑩 𝑥 𝜸 + 𝝐, where 𝒃 𝑦 is the true outcome vector, 𝑩 𝑥 is the true predictor matrix, and 𝜸 is the structural coefficient vector of interest. Predictors and outcomes may include observed variables treated as error-free, as well as random effects. M-MOM then proceeds in three steps. First, it obtains a preliminary estimate of 𝜸 by correcting the corresponding moment estimators ( Cov(𝑩 𝑥 , 𝒃 𝑦 ) and ( Var(𝑩 𝑥 )) for measurement error, accounting for both prediction sampling error and correlated errors across predictions. Second, the regression error variance, Var(𝝐), is estimated using the preliminary estimate of 𝜸 and is similarly corrected for measurement error. Third, the regression error variance estimate is paired with the measurement error variance estimates to construct cluster-specific weights. These weights enter the ultimate 𝜸 estimator and normal-theory standard errors.</p>
+<p>Note that in the case of random-effect-as-outcome, the procedure reduces to the one described in Hanushek (1974).</p>
+<p>Measurement error subtraction can leave corrected moment matrices nearly singular or indefinite, even when the error covariances are known. Thus, we apply a theoretically derived regularization modification from Fuller (1987) to both the preliminary and final matrices to ensure the estimator has moments. Bogaert et al. (2023) use the same modification to correct for small samples in factor score regression. The standard implementation uses a fixed regularization constant based on the number of predictors in the model; we also develop an alternative &quot;step-up&quot; version of the modification. See Appendix D for complete details on the M-MOM assumptions, procedures, and distinctions from Fuller&#x27;s (1987) procedure.</p>
+<h3>5. Simulation Methods</h3>
+<p> &gt;Simulation Methods</p>
+<h3>5.1. Study Design</h3>
+<p>We validated REPAIR in four simulation studies. The first two studies used a random-effects-as-predictors structural model. We see this as the most straightforward application of our approach since psychological data are often longitudinal, e.g., predicting a distal outcome from earlier trends (McCormick et al., 2026). The studies differed in homogeneity of cluster size: when cluster size is homogeneous (Study 1), our approach mimics a classic moment correction estimator like that of Croon (2002) which assumes homoskedasticity in errors; it is when cluster sizes differ (Study 2) that we hypothesized our approach would show an advantage, since the M-MOM procedure in Fuller (1987) is equipped for heteroskedasticity. Lai and Liu (2026) took a similar approach and observed a similar advantage.</p>
+<p>These studies were followed by the random-effect-as-outcome case (Study 3). We see two use-cases for this model structure. First, one may wish to analyze the effect of multiple variables on a single random effect (rather than just a bivariate correlation), which a multiple-regression structural model is equipped to estimate. Second, many linear MLMs with level-two predictors can be estimated under this framework (see Appendix B). Thus, the random-effect-asoutcome case can be considered an approach to MLM estimation that reaps the benefits of other two-step procedures (e.g., isolating misspecification error) laid out in the introduction.</p>
+<p>Finally, Study 4 combined the predictor and outcome cases by placing random effects on both sides of the structural equation. The design represents two growth processes, each with its own MLM, in which the random intercept and slope of an earlier process predict the random slope of a later one. See Table 1 for each study&#x27;s data-generating model.</p>
+<p>Across studies, we hypothesized that naively using OLS with predictions would achieve minimal bias when the EB prediction (which we refer to as the &quot;BLUP&quot; for simplicity) is used as the predictor and the likelihood-only prediction is used as the outcome, following from Skrondal and Laake (2001). However, minimal coefficient bias does not itself guarantee well-calibrated standard errors, coverage, or Type I error rates, particularly when precision varies across clusters or first-step parameters are estimated. Thus, we investigated whether measurement error methods (e.g., M-MOM and 2S-PA) would improve both coefficient estimation and inference.</p>
+<p>Additionally, in the case of heterogeneous cluster sizes (Study 2), we hypothesized that the measurement error methods would fare far better in terms of bias and other properties than simplified versions that do not account for heterogeneity (e.g., averaging measurement errors over people). The divergence in performance would increase as heterogeneity became more severe. In all cases, we posited that joint modeling would be the best benchmark for performance under adequate sample size, and would agree with the true target asymptotically. Finally, we hypothesized that low-reliability conditions would lead to the largest advantage for methods that account for measurement error over those that do not and the worst cross-method performance. As a corollary, we also expected large method differences for the dual process model (Study 4) when one process had low reliability while the other had high.</p>
+<h3>Table 1. Data-Generating Models Across Studies.</h3>
+<p>Table 1. Data-Generating Models Across Studies.</p>
+<h3>Study Level 1 Model 1</h3>
+<p>Level 2 Model 2 EOI 3 1</p>
+<p>Same as Study 1.</p>
+<p>The index 𝑗 denotes cluster. For Studies 1-3, 𝑖 indexes observations within cluster. For Study 4, 𝑖 and 𝑘 index observations within cluster for the 𝑦 and 𝑞 processes, respectively. In Studies 1-3, 𝑦 is the level-one outcome and 𝑥 is a predictor representing time. In Study 4, 𝑦 and 𝑞 are separately modeled level-one outcome variables with process-specific time predictors, 𝑥 𝑦 and 𝑥 𝑞 ; 𝑦 refers to the predictor-side process and 𝑞 refers to the outcome-side process.</p>
+<p>2 In Studies 1-2, 𝑤 is an endogenous level-two variable regressed on the random effects from the level-one model. In Study 3, 𝑤 is an exogenous level-two variable predicting the random slope. Note that because the random slopes are assumed to have a mean of zero, there is no intercept term in the level-two model for Studies 3 and 4.</p>
+<p>3 EOI = effect of interest, identifying the focal raw coefficient in the displayed model. Effect size conditions and performance summaries use its standardized counterpart, as detailed in Appendix E.</p>
+<p>For all studies, we compared our proposed M-MOM estimator to an additional suite of one-and two-step methods.</p>
+<p>We analyzed method performance across (a) number of clusters, (b) cluster size (either homogeneous or heterogeneous), (c) effect size, (d) random effect correlation (i.e., off-diagonals of 𝑮), and (e) random effect posterior reliability. We ran 1000 replications per condition. See Table 2 for a complete summary.</p>
+<h3>5.2. Performance Metrics</h3>
+<p>We evaluated estimator performance via five primary metrics. First, we computed per-replication relative bias by dividing the raw bias by the true effect. We report mean relative bias values as a percentage for interpretability. Null conditions are excluded from relative bias summaries and instead inform Type I error. Second, we computed the root mean square error (RMSE) of estimates across replications to investigate how well the estimator balances bias and variance simultaneously (James et al., 2013). Third, we investigated 95% coverage and standard error (SE) ratios (estimated SE divided by empirical SE) as measures of inferential performance. The SE ratio is the mean reported standard error divided by the empirical standard deviation of the coefficient estimates from the same replications.</p>
+<p>Fourth, we calculated Type I error rates in null (i.e. 𝛾 = 0) conditions. Finally, we looked at convergence, defining converged replication as those producing a finite point estimate and a finite, positive standard error. Model fitting programs often issue warnings in non-convergent cases.</p>
+<p>Performance metrics are reported either on (a) the subset of replications for which all methods converged in step two (&quot;shared&quot;) or (b) the subset of replications for which the method of interest converged in step two (&quot;method-specific&quot;).</p>
+<p>The former allows for comparisons across methods on identical datasets, while the latter allows for evaluation of each method&#x27;s standalone performance conditional on convergence. Metrics reported on scheme (b) also include convergence metrics for complete interpretation. Coverage is conditional on convergence, rather than the probability of obtaining a covering interval across all attempted replications. Additional simulation specifications are given in Appendix E.</p>
+<h3>5.3. Posterior Reliability Calibration Approach</h3>
+<p>Because the focal first-step quantity was a person-specific random slope, we manipulated the information available for predicting that slope using posterior reliability. For a Gaussian random-intercept-random-slope model with population random-effect covariance 𝑮, random-effect design 𝒁 𝑗 , and level-1 residual covariance 𝑹 𝑗 , the posterior covariance of the random effects for cluster 𝑗 is .</p>
+<p>The marginal posterior reliability of the random slope was then defined as</p>
+<p>Thus, 𝜌 2 is the expected proportional reduction in uncertainty about the slope after observing a cluster&#x27;s repeated measurements. A value of .80, for example, means that the design removes 80% of the slope&#x27;s marginal variance as posterior uncertainty. This definition is useful for the present simulations because it incorporates not only the variance components, but also the number and placement of observations, the within-person predictor distribution, the interceptslope covariance, and the residual covariance. The expectation in Equation (5.1) was taken over the planned distribution of cluster designs. Under a common design, it reduces to the reliability for that design; under heterogeneous designs, it is a frequency-weighted mean and individual clusters can remain more or less reliable than the target. Posterior reliability is not determined by cluster size alone: the same observation count can yield different levels of information about a random slope. We therefore crossed cluster size with target posterior reliability, calibrating the residual variance separately for each design. This allowed us to compare different cluster sizes at matched average posterior reliability and different reliability levels within each cluster size. See Appendix A for details.</p>
+<h3>5.4. Model Fitting</h3>
+<p>All step 1 multilevel models were fit using the lme4 package in R (Bates et al., 2015; R Core Team, 2024). 2S-PA was implemented by adapting code from Lai and Liu (2026)foot_0 , using lme4 for step 1 fitting and OpenMx in R for step 2 fitting (Bates et al., 2015; Boker et al., 2011; R Core Team, 2024). Joint models (MSEM and latent growth models) were fit via</p>
+<p>Mplus v.8.9 using the MLR estimator (Muthén &amp; Muthén, 1998). Mplus was run via R using the MplusAutomation package (Hallquist &amp; Wiley, 2018). Step 2 fitting by M-MOM was implemented via code written by the authors.</p>
+<h3>6. Results</h3>
+<p> &gt;Results</p>
+<h3>6.1. Study 1: Random Effects as Predictors-Homogeneous Cluster Sizes</h3>
+<p>For Study 1, we compared seven methods for estimating the effect of interest. These included  (Muthén &amp; Muthén, 1998).</p>
+<p>Summary results are reported in Appendix, Table 3.</p>
+<h3>Bias in naive methods</h3>
+<p>Naive OLS using BLUPs showed a marked difference between typical errors and tail behavior (Figure 1). At high reliability, it yielded a method-specific median relative bias of 0.8% and a mean relative bias of 1,636% (Appendix, Table 3). Thus, high reliability reduced typical error without eliminating extreme estimates. Low-reliability conditions also produced pronounced instability.</p>
+<p>Naive OLS with likelihood-only predictions led to attenuation of the coefficient across all conditions, condition means (among the method-specific convergence subset) ranging from -97% to -63% for low reliability, -83% to -32% for medium reliability, and -46% to -5% for high reliability.</p>
+<h3>Bias/RMSE in error correction methods</h3>
+<p>Among the shared convergence subset, the error correction methods showed low bias across conditions for high slope reliability, with bias becoming minimal as sample size increased (Figure 2a). For medium slope reliability, both M-MOM variants showed the smallest bias, over most other condition factors, with absolute mean bias generally decreasing over the evaluated sample sizes, although improvement varied by method and intercept-slope correlation.</p>
+<p>For low slope reliability, the M-MOM variants tended to produce attenuated coefficient estimates, but improved with larger samples. Conversely, 2S-PA was generally positively biased, marginally improving with sample size (except for -0.5 intercept-slope correlation). MSEM showed smaller absolute bias than M-MOM for small samples, but showed a similar positive bias pattern to 2S-PA for greater ones.</p>
+<p>The full distribution of bias metrics qualifies these results: under low reliability, estimates show positive skew that shifts bias means more positive than their median counterparts (Figure 3). Median bias indicates that M-MOM has more negative bias across sample sizes, while 2S-PA and MSEM have less absolute bias with larger sample sizes.</p>
+<p>However, IQRs and tail behavior show 2S-PA and MSEM producing much more variable estimates and more extreme outliers. RMSE results match this behavior (see below).</p>
+<p>Compared to the shared subset, the method-specific convergence subset revealed two primary differences. First, MSEM showed greater positive bias for -0.5 intercept-slope correlation; second, the 𝛼 step-up variant of M-MOM produced generally lower bias, primarily for larger samples under a -0.5 intercept-slope correlation.</p>
+<p>On the shared convergence subset, both M-MOM variants performed similarly in terms of RMSE. M-MOM tended to have lower RMSE than 2S-PA and MSEM across most conditions. In some cases (e.g., small effect sizes), naive OLS with likelihood-only predictors had lower RMSE than M-MOM. Its attenuation reduced variability sufficiently to improve squared-error loss in those conditions, despite biased estimation of the latent coefficient. RMSE tended to decrease with larger samples, particularly for 2S-PA and to a lesser degree MSEM. The presence of outliers in naive OLS with BLUPs led to occasionally extreme RMSE values. In their absence, it showed similar RMSE values to 2S-PA and MSEM. The RMdSE (median) was smaller than RMSE for the M-MOM variants, 2S-PA, and MSEM, indicating that large squared errors contributed disproportionately to RMSE. This was not true for naive OLS with likelihood-only predictions.</p>
+<h3>Inference</h3>
+<p>Coverage behavior was heterogeneous across methods and conditions (Figure 2b). Naive OLS with likelihood-only predictions showed severe undercoverage across the board, while naive OLS with BLUPs showed undercoverage only under low to medium slope reliability. On the shared convergence subset, low slope reliability generally produced the worst coverage in the focal methods (M-MOM, 2S-PA, and MSEM), especially in M-MOM which showed extreme undercoverage for small samples and large effect sizes. Coverage generally improved with increased slope reliability with rates reaching nominal for M-MOM and 2S-PA.</p>
+<p>Naive OLS with BLUPs underestimated standard errors. With likelihood-only predictions, SE ratios were near one despite severe undercoverage, consistent with intervals centered on attenuated coefficients. On the method-specific convergence subset, low slope reliability generated miscalibrated standard errors in the focal methods, while greater reliability produced very good standard errors. Sample size had a notable effect on 2S-PA, especially under low slope reliability, with more clusters leading to better standard errors.</p>
+<p>Naive OLS with BLUPs showed systematically inflated Type I error rates which improved with slope reliability.</p>
+<p>Naive OLS with likelihood-only predictions showed increasingly inflated Type I error rates with larger samples, but only for non-zero intercept-slope correlations. With correlated predictors, measurement error can induce a nonzero coefficient for a predictor whose true structural effect is zero (Fuller, 1987, p. 55).</p>
+<p>On the method-specific convergence subset, both M-MOM variants and 2S-PA showed Type I error rates below the nominal 5% for low reliability, but approached the nominal rate with increasing reliability. For MSEM, Type I error rates were inflated when slope reliability was low and the number of clusters was small, but approached 5% as reliability and the number of clusters increased.</p>
+<h3>Convergence</h3>
+<p>Both M-MOM variants converged 100% of the time across all conditions. In contrast, 2S-PA and MSEM had 100% convergence in fewer than half the conditions. 2S-PA especially suffered in low-reliability conditions, though improved with larger samples.</p>
+<p>Step 1 MLM singularity was a major delineator of convergence: while M-MOM converged in 100% of singular cases (since likelihood-only predictions do not involve the 𝑮 matrix), 2S-PA converged in only 1% and MSEM converged in 95% of these cases. Overall, 12% of replications produced singularity in step 1, with the majority of those replications being in the low reliability conditions.</p>
+<h3>6.2. Study 2: Random Effects as Predictors-Heterogeneous Cluster Sizes</h3>
+<p>For Study 2, we compared the same seven estimators from Study 1, along with two additional methods: an &quot;average measurement&quot; version of the M-MOM procedure (M-MOMA), and Lai and Liu&#x27;s (2026) 2S-PA with averaging (2S-PAA). Both average-measurement variants replace the cluster-specific BLUP &quot;loading&quot; matrices and sampling-error covariance matrices by their averages. In M-MOMA, predictions are transformed using the inverse average loading matrix, and the average BLUP error covariance is transformed by the same matrix. Study 2 evaluates the commonmeasurement approximation rather than averaging additive-error covariances alone. Summary results are reported in Appendix, Table 4.</p>
+<h3>Standard vs. &quot;average measurement&quot; methods</h3>
+<p>The &quot;average measurement&quot; versions of M-MOM and 2S-PA showed differential performance as a function of cluster size distribution, while the non-average variants generally did not. For homogeneous cluster sizes, M-MOMA and 2S-PAA performed nearly identically to their standard counterparts (mean/median relative absolute difference was less than 1% for both). As cluster size heterogeneity increased, however, slope estimates attained via M-MOMA and 2S-PAA became more attenuated. The same pattern manifested across sample sizes.</p>
+<p>Among the non-average methods, the bias results for both M-MOM variants, 2S-PA, and MSEM replicated those from Study 1 for homogeneous cluster size distribution conditions. On the shared convergence subset, high slope reliability led to minimal bias across conditions and methods, medium slope reliability revealed an advantage for M-MOM, especially for small samples, and low slope reliability showed the most bias across methods, with M-MOM showing an advantage for larger samples (Figure 4a).</p>
+<p>In terms of coverage, the standard and average measurement variants of both M-MOM and 2S-PA diverged the most over differing cluster size distributions and slope reliabilities (Figure 4b). Specifically, average measurement methods showed severe undercoverage for low/medium reliabilities and severely heterogeneous cluster sizes compared to their standard counterparts. The effect worsened with larger samples, with both methods dipping below 80% at 300 clusters on the shared convergence subset.</p>
+<p>For homogeneous cluster size distributions, the results of the previous study were replicated among the focal methods. Under heterogeneous cluster sizes, M-MOM and M-MOMS showed undercoverage with low slope reliability and few clusters. Coverage improved with higher reliability and more clusters. At low reliability, 2S-PA generally showed overcoverage across the evaluated cluster counts.</p>
+<h3>Naive methods</h3>
+<p>Similar to the homogeneous cluster size study, both naive OLS methods performed poorly in terms of bias. Naive OLS with likelihood-only predictions consistently produced attenuation of the slope coefficient across conditions including slope reliabilities and cluster size distributions. Excluding outliers (which, again, were astronomical in some cases), naive OLS with BLUPs did show minimal bias, even in the severely heterogeneous cluster size conditions. However, naive OLS with BLUPs underestimated standard errors for low slope reliability while naive OLS with likelihood-only predictions generally produced very good standard errors across the board.</p>
+<h3>Convergence</h3>
+<p>M-MOM demonstrated 100% convergence across all conditions and regardless of step 1 singularity. At low reliability, 2S-PA showed a median condition convergence rate of 85% and a range of 45% to ∼100% across conditions; MSEM showed a median condition convergence rate of 99% and a range of 96%-100%. At medium slope reliability, both methods had a median condition rate of 100%, though some conditions still showed less than 100%. At high slope reliability, both had perfect convergence.</p>
+<h3>Other metrics</h3>
+<p>On the shared convergence subset, cluster size distribution had little effect on RMSE. M-MOM (and the similarly performing 𝛼 step-up M-MOM) demonstrated the lowest RMSE across conditions among the focal methods. 2S-PA and MSEM benefited the most from both increasing sample size and increasing slope reliability. Interestingly, the average measurement versions of M-MOM and 2S-PA sometimes had lower RMSE than their individual measurement counterparts, despite greater attenuation, perhaps reflecting a favorable bias-variance tradeoff under squared-error loss in those conditions. All methods approached the oracle for high slope reliability.</p>
+<p>Standard error ratios tended towards one for all standard correction methods and conditions at medium and high slope reliabilities on method-specific convergence subsets. Low slope reliability tended to produce overestimated standard errors. Standard and average measurement variants of M-MOM showed ratios closer to one than 2S-PA, 2S-PAA and MSEM for small samples, but the latter performed well with larger samples.</p>
+<p>Cluster size distribution had a noticeable effect on Type I error rates on the method-specific subset. Specifically, cluster size heterogeneity had a noticeable effect on standard M-MOM, especially in low slope reliability where the error rate was inflated under severe heterogeneity and small cluster numbers, and deflated for large sample sizes. M-MOMS improved upon standard M-MOM in some of these conditions (these are comparable since their converged subsets are the same). Conversely, 2S-PA and both average measurement methods demonstrated very low Type I error rates across all conditions when slope reliability was low. Performance mostly improved with greater slope reliability for all methods. Summary results are reported in Appendix, Table 5.</p>
+<h3>Bias</h3>
+<p>As hypothesized, naively using OLS with BLUPs led to severe attenuation of the structural coefficient, whereas using likelihood-only predictions led to minimal bias, in line with the results of Skrondal and Laake (2001). Increasing reliability reduced the attenuation effect of using BLUPs, but even for high reliability, there was negative bias (condition means ranged from ∼-20 to -25% for high reliability, compared to ∼-73 to -77% for low reliability).</p>
+<p>On the shared convergence subset, the error correction methods showed positive bias for low and medium reliability that reduced with increasing sample size and minimal bias for high reliability. Bias means were nearly identical across methods. On the method-specific subset, both M-MOM variants and direct MLM yielded minimal bias even for low reliability and small samples.</p>
+<h3>Inference</h3>
+<p>On the method-specific convergence subset, standard error ratios hovered around one across nearly all methods and conditions. Naive OLS with BLUPs and 2S-PA both showed standard error attenuation for low reliability and small samples. Coverage behavior mostly matched standard error behavior in that methods and conditions with attenuated standard errors also showed slight undercoverage. Naive BLUP showed severe undercoverage across the board, likely due in part to its severe bias.</p>
+<h3>Convergence</h3>
+<p>M-MOM and direct MLM had a 100% convergence rate across the board, whereas 2S-PA dipped in convergence for low reliability conditions, and small sample conditions at medium reliability. Naive BLUP sometimes produced an eligible point estimate but not an eligible standard error.</p>
+<h3>Other metrics</h3>
+<p>On the shared convergence subset, RMSE was virtually identical across methods using likelihood-only predictions and direct MLM. RMSE tended to decrease with both larger samples and slope reliability, approaching the oracle benchmark. On the method-specific convergence subset, all methods showed slightly inflated Type I error rates for small samples, but approached nominal with larger samples.</p>
+<h3>6.4. Study 4: Random Effects on Both Sides of the Equation</h3>
+<p>The  Muthén and Muthén, 1998). Summary results are reported in Appendix, Table 6.</p>
+<h3>Bias in naive methods</h3>
+<p>Consistent with the role-specific result of Skrondal and Laake (2001), using BLUPs as predictors and likelihoodonly predictions as outcomes yielded minimal bias when predictor reliability was high (Figure 6). The other prediction combinations showed attenuation regardless of outcome reliability. When predictor reliability was low, the biasavoiding method over-or under-estimated the slope, depending on the outcome reliability, while the likelihood-only-onlikelihood-only and BLUP-on-BLUP exhibited attenuation. Moreover, under low predictor reliability, the bias avoiding method and the BLUP-on-BLUP method both produced astronomical outliers on the method-specific subsets.</p>
+<h3>Bias in error correction methods</h3>
+<p>Among the error correction methods, predictor slope reliability had the greatest effect on relative bias. On the shared convergence subset, all methods showed coefficient attenuation for low predictor reliability and small samples, with M-MOM showing more negative bias than the other methods. With growing sample size, M-MOM approached zero, while 2S-PA and SEM approached positive bias. All methods showed minimal bias for high predictor reliability. Like Study 1, 2S-PA and SEM demonstrated positive skew and more variable distributions (verified by RMSE performance) under low slope reliability which contributed to the positive mean bias. Median bias places these values closer to zero.</p>
+<p>On the method-specific subset at low predictor reliability, both M-MOM variants showed smaller absolute mean bias than on the shared subset, with little bias at 100 or more clusters. 2S-PA was positively biased, though less so in larger samples. Because the estimates were skewed, mean bias alone does not indicate uniformly accurate estimation.</p>
+<h3>Inference in error correction methods</h3>
+<p>On the shared convergence subset, coverage was generally at the nominal value and standard error ratios were generally equal to one across all methods and cluster sizes when the predictor was highly reliable (Figure 7). When the predictor had low reliability, results depended on both effect size and outcome reliability. Small effect sizes generally showed overcoverage across methods and outcome reliability. Interestingly, medium effect sizes showed nominal coverage across methods for low outcome reliability, but undercoverage for high outcome reliability.</p>
+<p>The most prominent difference in the method-specific convergence subset was that M-MOM and 2S-PA both showed far less undercoverage under medium effect sizes and high outcome reliability than their shared convergence subset counterparts.</p>
+<h3>Convergence</h3>
+<p>M-MOM showed 100% convergence across all conditions, while 2S-PA and SEM had convergence issues for low cluster numbers (SEM generally converging less). These effects persisted across all reliability conditions except for high predictor and high outcome reliability in which convergence rates were much higher across cluster number conditions.</p>
+<h3>Other Metrics</h3>
+<p>On the shared convergence subset, M-MOM generally showed lower RMSE across sample sizes when the predictor reliability was low, regardless of outcome reliability. When predictor reliability was high, all methods showed nearly identical RMSE. On the method-specific subset, standard errors and type I error rate differences were a function of predictor reliability. Low predictor reliability generally led to inflated standard errors and deflated Type I error rates, while high predictor reliability led to standard error ratios near one, and type I error rates near nominal.</p>
+<h3>7. Discussion</h3>
+<p>Random-effect predictions enable researchers to explore individual differences in within-person processes, yet treating these predictions as directly observed variables can bias estimates of relationships involving those processes and misrepresent their uncertainty. In this work, we developed and evaluated Random-Effect Prediction Adjustment for Inference in Regression (REPAIR), a two-step method for estimating relationships among underlying person-specific processes and other variables. REPAIR inverts the shrinkage in random-effect predictions to recover likelihoodonly predictions that represent the underlying random effects plus sampling error. It then accounts for this error by incorporating person-specific sampling error covariances into a modified method-of-moments (M-MOM) structural regression. Across four simulation studies, REPAIR generally recovered structural relationships well at medium to high predictor reliability, often had lower RMSE than alternative methods, and converged in every evaluated simulated dataset.</p>
+<h3>7.1. Key Findings</h3>
+<p>Our simulations illustrate why shrinkage and sampling error pose distinct challenges. When a random slope was the structural outcome (Study 3), likelihood-only predictions removed the attenuation associated with using the BLUPs directly, and OLS regression yielded favorable estimates and standard errors in the conditions tested. This result is consistent with additive outcome error contributing to residual variation without biasing coefficients when it is uncorrelated with the predictors (Skrondal &amp; Laake, 2001); heterogeneous outcome precision may still require appropriate weighting or standard error adjustments to achieve accurate inference. When random effects were predictors (Studies 1 and 2), however, removing shrinkage alone left substantial measurement-error-related attenuation.</p>
+<p>Study 4 reinforced this conclusion: predictor-side reliability largely determined the difficulty of structural estimation when random effects appeared on both sides of the equation.</p>
+<p>These findings also qualify the role-specific strategy of using BLUPs as predictors and likelihood-only predictions as outcomes (Skrondal &amp; Laake, 2001). In Study 4, this combination showed favorable median bias in some conditions, but low predictor reliability produced highly skewed estimates and extreme outliers. A nearly unbiased median therefore did not establish stable estimation or accurate inference. The implication is that the suitability of extracted predictions depends on their structural role and precision. REPAIR provides a common additive-error representation and an explicit correction for those properties that addresses measurement error when random effects serve as predictors, outcomes, or both in a structural regression.</p>
+<p>Across studies, predictor-side reliability was the most consistent determinant of REPAIR&#x27;s performance. With random-effect predictors (Studies 1 and 2), medium to high reliability generally yielded small bias, although small samples and correlated random intercepts and slopes remained challenging; at low reliability, bias was larger but generally decreased with sample size. When a random slope served only as the outcome (Study 3), REPAIR showed minimal bias at every reliability level on its method-specific convergence subset. With random effects on both sides of the equation (Study 4), high predictor reliability supported small bias regardless of outcome reliability.</p>
+<p>Inferential performance generally followed a similar pattern. Medium to high predictor reliability usually supported well-calibrated standard errors and approximately nominal confidence-interval coverage, whereas low reliability produced less consistent results, particularly in small samples. However, coverage and Type I error did not always deteriorate together. In Study 1 (predictor, homogeneous cluster sizes), for example, REPAIR&#x27;s undercoverage for nonzero effects coexisted with conservative null rejection rates at low reliability. This distinction matters because intervals centered on biased estimates can miss the true effect even when standard errors are not underestimated.</p>
+<p>Study 2 (predictor, heterogeneous cluster sizes) further showed that preserving differences in precision helped REPAIR accommodate unequal observation counts. With person-specific sampling error covariances, bias and coverage were generally less sensitive to cluster size heterogeneity than with the average measurement variants. Those variants became increasingly attenuated as heterogeneity increased: under severe heterogeneity and low or medium reliability, their coverage fell below 80% at a sample size of 300. Increasing sample size did not compensate for the averaging approximation in these conditions.</p>
+<p>These findings support retaining person-specific shrinkage information when observation counts differ, consistent with Lai and Liu (2026). However, they do not imply that every correction using an average error covariance is inadequate. M-MOMA used the inverse average BLUP loading matrix to transform each prediction and the average BLUP sampling-error covariance (as in (Lai &amp; Liu, 2026)). This differs from first obtaining individual likelihood-only predictions and then averaging their error covariances, an alternative not evaluated here. Person-specific correction also did not eliminate all difficulties under low reliability and small samples but did mitigate the deterioration associated with heterogeneous observation counts.</p>
+<h3>7.2. Comparison to Alternative Methods</h3>
+<p>When the structural relationship could be represented by a conventional cross-level interaction, REPAIR performed comparably to direct MLM estimation. In Study 3 (outcome), both approaches achieved complete convergence, yielded minimal bias on their method-specific convergence subsets, and showed comparable standard errors, coverage, and RMSE. REPAIR also compared favorably with MSEM, a joint-model benchmark for relationships involving latent random effects. In several low-and medium-reliability settings, REPAIR produced less variable estimates and lower RMSE, despite MSEM sometimes showing smaller absolute bias. These findings demonstrate that a regularized two-step method can offer favorable finite-sample performance relative to a correctly specified joint model.</p>
+<p>Both REPAIR and 2S-PA offer two-step approaches that account for shrinkage and person-specific measurement error. Whereas 2S-PA represents EB predictions as indicators of latent random effects and estimates their structural relationships through iterative likelihood estimation, REPAIR transforms the predictions to an additive-error scale and uses regularized moment calculations to estimate the structural regression. This difference translated into substantial advantages for REPAIR in difficult conditions. For example, in the low-reliability conditions of Study 1 (predictor, homogeneous cluster sizes), REPAIR achieved 100% convergence compared with 65.5% for 2S-PA. Moreover, even on shared convergence subsets, REPAIR often had lower RMSE. REPAIR therefore offers an alternative that combines the flexibility of two-step estimation with favorable numerical stability and estimation accuracy.</p>
+<p>These advantages nevertheless require qualification when predictor reliability is low and samples are small. REPAIR&#x27;s greatest difficulties with bias and confidence interval coverage generally occurred in the same conditions that caused the most convergence failures among competing methods. Although REPAIR continued to produce estimates, they could remain biased and their confidence intervals could miss the true effect more frequently than desired. These problems generally diminished as sample size increased, although larger samples did not ensure nominal coverage in every condition. Thus, REPAIR&#x27;s numerical stability and frequently lower RMSE are useful advantages, but neither alone establishes that its confidence intervals are well calibrated.</p>
+<h3>7.3. Practical Recommendations</h3>
+<p>REPAIR is a useful option when researchers wish to estimate structural relationships using predictions from separately fitted multilevel models, or to examine several structural models while holding the level 1 models fixed. The latter is a motivation shared with other two-step latent-variable methods (Levy, 2023; Rosseel &amp; Loh, 2024). A direct MLM or other joint model remains an attractive option when it readily represents the scientific question. The choice should therefore reflect how readily each approach accommodates the intended MLM and structural model.</p>
+<p>For any structural model involving random effects, whether joint or two-step, we recommend checking the adequacy of the first-step MLM and the reliability of the individual effects (e.g., via the posterior reliability in Appendix A; see also Liu et al., 2021; Neubauer et al., 2020). Our simulations offer initial planning benchmarks for REPAIR. With randomeffect predictors, posterior slope reliabilities of .50 and .80 generally supported favorable performance, although small samples and correlated random effects remained challenging in some conditions. At a reliability of .25, analyses with 30-50 clusters were particularly vulnerable to bias and poor coverage, and performance improved with more clusters.</p>
+<p>In Study 4, for example, REPAIR generally showed minimal bias with 100 or more clusters, though this depended on reliability and effect size and is not a universal threshold. Researchers should use these benchmarks to select candidate designs and then evaluate expected bias, coverage, and power through simulations tailored to their analysis.</p>
+<p>The number of observations needed within each person depends on how much information those observations provide about the effects used as predictors. Our simulations varied cluster size and calibrated reliability separately, so they do not identify a universal minimum number of repeated observations. Researchers should instead assess whether their planned design is likely to yield adequately reliable effects. When predictor reliability is low, collecting more observations per person or increasing the informative variation in the within-person predictor may improve precision.</p>
+<p>For example, with the same number of observations, a person&#x27;s linear rate of change can be estimated more precisely when assessments span the period of interest than when they are concentrated near a single time point.</p>
+<p>We have also developed the repair R package, which fits step 1 models with common R backends (e.g., lme4; et al., 2015) and step 2 models with our M-MOM implementation, using standard formula syntax and C++ for computation. The package has been submitted to CRAN and will be available publicly prior to publication of this manuscript.</p>
+<h3>7.4. Limitations and Future Directions</h3>
+<p>Several questions remain for future research. Our simulations evaluated correctly specified Gaussian MLMs and linear structural regressions. Although robustness to misspecification is an important motivation for two-step methods (Bollen et al., 2007; Robitzsch, 2022; Rosseel &amp; Loh, 2024), our studies did not examine this. Future work should test misspecified mean and covariance structures, informative observation patterns, and departures from distributional assumptions.</p>
+<p>We also focused on MLMs having homoskedastic, uncorrelated level 1 residuals. The REPAIR equations already accommodate more general residual covariance structures through 𝑹 𝑗 , which enters both the likelihood-only prediction and its sampling-error covariance (Equations 4.6 and 4.7). Evaluating performance with heteroskedastic or serially correlated residuals would therefore be a natural extension supporting longitudinal applications.</p>
+<p>The choice of regularization for the second-step moment matrices warrants further study. Our M-MOM implementation used the regularization proposed by Fuller (1987) with the minimum constant, 𝑝 + 1, keeping the correction close to its unregularized form. We also developed and evaluated a step-up procedure that chose the smallest constant that yielded a well-conditioned estimating matrix. The variants generally performed similarly, with selected improvements for the step-up variant, including bias in some Study 1 conditions. Alternative choices proposed (e.g., Bogaert et al., 2023; Wall &amp; Amemiya, 2000) could be evaluated for their effects on bias, RMSE, and confidence-interval coverage.</p>
+<p>We further note that in its current implementation, REPAIR does not account for &quot;error in the errors&quot;: Our secondstep covariance calculation treats the supplied measurement-error covariances and selected regularization constants as fixed. Related two-step methods account for first-step estimation uncertainty through corrected standard errors (e.g., Bogaert et al., 2023; Wall &amp; Amemiya, 2000). Future research should examine when these adjustments materially improve inference using REPAIR.</p>
+<p>Finally, REPAIR&#x27;s prediction-level correction requires each within-person random-effects design to have full column rank. This is a limitation relative to joint models that can combine partial individual information when the overall model remains identified. It is distinct from a singular estimated random-effect covariance, which does not prevent direct likelihood-only calculation. Future extensions could retain estimable combinations of effects from incomplete individual records and recover structural moments by combining information across people (e.g., Botosaru &amp; Powell, 2026).</p>
+<h3>8. Conclusion</h3>
+<p>REPAIR provides a two-step framework for structural regression with random effects as predictors, outcomes, or both.</p>
+<p>Separating multilevel models from structural estimation allows researchers to retain models suited to their clustered data and use the resulting predictions to address relationships among underlying person-or cluster-specific effects and other variables. This flexibility may be particularly useful for understanding relationships among person-specific processes that are measured across different tasks, settings, or timescales. REPAIR enables researchers to use random-effect predictions in structural regression while explicitly accounting for their shrinkage and sampling error.</p>
+<p>Yuan, M., Xu, X. S., Yang, Y., Xu, J., Huang, X., Tao, F., Zhao, L., Zhang, L.</p>
+<p>, &amp; Pinheiro, J. (2019). A quick and accurate method for the estimation of covariate effects based on empirical Bayes estimates in mixed-effects modeling: Correction of bias due to shrinkage. Statistical Methods in Medical Research, 28(12), 3568-3578. https://doi.org/10.1177/0962280218812595 where Ĝ is the estimated random-effect covariance matrix and V𝑗 is the estimated posterior covariance matrix of the random effects.</p>
+<p>Note that in the case where Ĝ is singular, the posterior covariance can be obtained as</p>
+<p>The residualized posterior reliability of the random slope, i.e., the reliability unique to the slope, can also be calculated using the formula</p>
+<p>We provide easy-to-use functions for computing both in our R package.</p>
+<h3>B. Two-Step Multilevel Model Estimation</h3>
+<p>The random-effect-as-outcome case also provides a two-step representation for common two-level random-coefficient models. Consider the following toy model written in the notation of Raudenbush and Bryk (2010): where 𝑦 and 𝑥 are within-person variables and 𝑤 is a between-person variable.</p>
+<p>If one is interested in the population-level effect 𝛾 01 , standard joint estimation substitutes the level-two equations into the level-one equation and fits the resulting model.</p>
+<p>However, the two-step approach estimates the individual equations one at a time, carrying uncertainty from the level-one equation to the leveltwo equation. More specifically, the cluster-specific intercepts and slopes can first be estimated by GLS and then used as outcomes in the level-two equations. The second step accounts for both their sampling-error covariances and the residual between-cluster variation represented by 𝑢 0 𝑗 and 𝑢 1 𝑗.</p>
+<p>This retains the separate interpretation of the level-one and level-two equations while accounting for uncertainty in the estimated cluster coefficients.</p>
+<p>This approach potentially reduces the effects of misspecification error (see Introduction) and is often more theoretically intuitive given how MLMs are typically formulated in psychology. Additional study is required to assess the performance and generalizability of this framework. We note that this representation requires full-column-rank cluster designs. Moreover, when first-step covariance parameters are estimated, their samplingerror covariances enter as plug-in quantities. Our work does not establish equivalence in efficiency to joint estimation or guarantee protection against model misspecification.</p>
+<h3>C. Statistical Properties of Random Effect Predictions</h3>
+<p>Consider the multilevel model for data with 𝑚 clusters, where Var(𝒃 𝑗 ) = 𝑮 for all 𝑗, Var(𝜺 𝑗 ) = 𝑹 𝑗 (this can vary by cluster), and the marginal variance of 𝒚 is 𝚺 𝑗 = 𝒁 𝑗 𝑮𝒁 ′ 𝑗 + 𝑹 𝑗 (using notation similar to, e.g., Jiang, 2007).</p>
+<p>Throughout this appendix, expectations and variances condition on the observed design matrices 𝑿 𝑗 and 𝒁 𝑗.</p>
+<p>Key assumptions of the mixed model are that both 𝑮 and 𝑹 𝑗 are symmetric and positive-definite for all 𝑗, that random effects and observationlevel errors are independent across clusters, that observation-level errors are independent of the random effects (𝐸 (𝜺 𝑗 | 𝒃 𝑗 ) = 0), and that the expected value of the random component is zero, i.e., 𝐸 [𝒁 𝑗 𝒃 𝑗 + 𝜺 𝑗 ] = 0 (Pinheiro &amp; Bates, 2002).</p>
+<p>A linear predictor multiplies cluster 𝑗&#x27;s data, after subtracting the fixed-effect component, by a matrix 𝑴 𝑗 to make a &quot;best guess&quot; at the true value of the random effect. The BLUP prediction matrix for cluster 𝑗 is</p>
+<p>The likelihood-only prediction matrix is</p>
+<p>These give predictions</p>
+<p>The former is the known-parameter version of the Best Linear Unbiased Predictor, or BLUP. Under normality, replacing population parameters with estimates gives the empirical Bayes (EB) predictor.</p>
+<p>BLUPs minimize unconditional mean squared prediction error among linear predictors by introducing &quot;shrinkage.&quot; The effect of shrinkage is evident when taking the conditional expected value: (C.5)</p>
+<p>Thus, the BLUPs are conditionally biased. When there is less cluster-level information, predictions are shrunk toward zero, which is the assumed population mean of the random effects (Skrondal &amp; Rabe-Hesketh, 2004). Although the unconditional mean prediction error is zero, that error is generally correlated with the latent random effect:</p>
+<p>Likelihood-only predictions avoid inducing shrinkage and are conditionally unbiased but have higher variance than the BLUPs via the biasvariance tradeoff (e.g., James et al., 2013). Importantly, they still maintain minimum conditional variance for all possible unbiased predictors (Skrondal &amp; Rabe-Hesketh, 2004).</p>
+<p>The conditional unbiasedness of the likelihood-only predictor can be seen in that</p>
+<p>Lai and Liu (2026) view the multilevel model through the lens of a factor model, allowing them to construct a &quot;measurement model&quot; for the BLUPs: where the cluster-specific &quot;loading&quot; matrix is 𝑨 𝑗 = 𝑴 𝐸 𝑗 𝒁 𝑗 (see McDonald and Burr, 1967, for a similar expression).</p>
+<p>Taking the conditional expectation yields the expression above. Taking the conditional variance yields</p>
+<p>This is a sampling covariance of the prediction conditional on the true random effect, rather than a posterior covariance of the random effect given the observations.</p>
+<p>In the main text, we invert the BLUP shrinkage to recover the likelihood-only prediction: (C.9)</p>
+<p>The final step follows from the identity: (C.10) For example, writing 𝑸 𝑗 = 𝒁 ′ 𝑗 𝑹 -1 𝑗 𝒁 𝑗 , the matrix inversion lemma gives which is a generalized version of the final equation in, e.g., Thomson (1938).</p>
+<p>This identity is also used to obtain the ML mapping matrix for the SAM approach in Rosseel and Loh (2024).</p>
+<p>Prediction method equalities of this kind have been referenced in the factor score literature (see Thomson, 1938 or McDonald and Burr, 1967) and infrequently in the MLM literature (Skrondal &amp; Rabe-Hesketh, 2004), but have not been framed explicitly as &quot;shrinkage inversion&quot; methods. Croon&#x27;s correction likewise adjusts moments of predicted latent scores rather than correcting each score separately (Croon, 2002). Related &quot;de-shrinking&quot; methods have been proposed in the medical and pharmaceutical literatures (Baklouti et al., 2022; Yuan et al., 2019), as have methods for correcting bias in posterior means (Iba, 2024). These connections do not establish an analogous identity for generalized linear or nonlinear mixed models.</p>
+<p>In the Gaussian MLM case considered here, the inverted BLUP reduces to the closed-form likelihood-only predictor. Thus, an explicit shrinkage inversion step is not necessary for our REPAIR method. Computing 𝑴 𝐿 𝑗 directly also remains possible when 𝑮 is singular, provided 𝑹 𝑗 is positive definite and 𝒁 𝑗 has full column rank. In that case, however, 𝑨 𝑗 is singular and its inverse cannot be used to recover the likelihood-only prediction from the BLUP. However, future work involving non-Gaussian models may require an explicit shrinkage inversion step, like those in the aforementioned literatures.</p>
+<p>The conditional unbiasedness of the likelihood-only prediction follows directly from its additive-error representation. Similarly, its conditional sampling covariance reduces to</p>
+<p>A diagonal 𝑹 𝑗 with unequal diagonal entries does not permit this simplification. In practice, all predictions and error variances are replaced by their estimated counterparts.</p>
+<h3>D. Modified Method of Moments (M-MOM)</h3>
+<p>This appendix details our adaptation of the heteroskedastic measurement-error estimator in Fuller (1987, §3.1). The adaptation uses a modified preliminary moment matrix to construct feasible weights and a modified final moment matrix in the covariance estimator. These choices distinguish the implementation from using Fuller&#x27;s unmodified preliminary correction and covariance-estimator matrix. Fixed regularization is denoted M-MOM; the numerical step-up variant is denoted M-MOMS.</p>
+<h3>D.1. Model and Predictions</h3>
+<p>Given 𝑝 -1 predictors, a structural intercept, and 𝑗 = 1, . . . , 𝑚 clusters, the true structural model is In practice, one has predictions b𝑦 and B𝑥 , together with estimated measurement-error covariances. For the second-step working model, we assume independent clusters conditional on their designs and additive prediction errors with conditional mean zero given the latent predictors and structural disturbances. These assumptions concern the joint measurement-error model; their application to fitted first-step predictions is discussed in Appendix C.</p>
+<p>Letting b𝑦 𝑗 be the 𝑗th element of b𝑦 and b𝑥 𝑗 be the 𝑗th row of B𝑥 expressed as a column vector, we collect the observed or predicted quantities for cluster 𝑗 into a ( 𝑝 + 1)-vector:</p>
+<p>Let 𝒃 𝑗 denote the corresponding vector of true quantities. The associated ( 𝑝 + 1) × ( 𝑝 + 1) measurement-error covariance matrix is estimated by The predictor block is 𝑝 × 𝑝, and the predictor-outcome cross-covariance is a 𝑝-vector. The structural intercept is measured without error, so its row and column are zero, as are those of any other error-free variables. Consequently, Ψ 𝑗 may be singular even when the structural regression is identified.</p>
+<p>For likelihood-only predictions, the outcome measurement-error variance is obtained from the corresponding diagonal element of (𝒁 ′ 𝑗 R-1 𝑗 𝒁 𝑗 ) -1 for its first-step model and cluster. The predictor block is constructed from the corresponding sampling covariance matrices, retaining covariances among the selected predictors and inserting zeros for the structural intercept and other error-free predictors. Fitting separate predictor and outcome models does not itself imply ψ𝑥𝑦 𝑗 = 0; this restriction requires zero cross-process prediction-error covariance. Likewise, sampling covariances among predictors from the same model need not be zero.</p>
+<p>Treating these estimated measurement-error covariances as known, we proceed with M-MOM (Fuller, 1987). The resulting calculations do not propagate uncertainty from estimating these covariances in the first step.</p>
+<h3>D.2. Point Estimation</h3>
+<p>Step 1. To obtain a preliminary estimate of 𝜸, we first find the smallest finite real generalized eigenvalue λ1 satisfying</p>
+<p>Infinite generalized eigenvalues arising from error-free components are excluded. For a generic eigenvalue 𝜆 and regularization constant 𝛼, define the correction coefficient</p>
+<p>The coefficient 𝑐 (𝜆, 𝛼) determines how much estimated measurement error covariance is subtracted from the observed moments. For a fixed eigenvalue, increasing 𝛼 decreases this coefficient.</p>
+<p>The preliminary modified moment matrix and coefficient estimate are</p>
+<p>Here, 𝑺 * 1𝑥 is the 𝑝 × 𝑝 predictor block, including the structural intercept, and 𝒔 * 1𝑥 𝑦 is the 𝑝-vector of predictor-outcome cross-moments. All moment matrices in this subsection are sums, not averages. The preliminary estimate requires a usable generalized eigenvalue and a nonsingular predictor block. The choices of 𝛼 1 and 𝛼 2 are described in the regularization subsection below.</p>
+<p>Step 2. This preliminary estimate is then used to compute the structural regression error variance. For 𝑚 &gt; 𝑝, set σ2</p>
+<p>The final estimate is the maximum of this expression and zero. The first term is the residual sum of squares divided by 𝑚 -𝑝, and the second subtracts the estimated measurement-error contribution to the residual variance.</p>
+<p>Step 3. Cluster-specific composite residual variance estimates ŵ𝑗 are then constructed using σ2 𝜖 :</p>
+<h3>D.4. Standard Errors</h3>
+<p>Assuming errors are normal (as in ordinary regression), standard errors for the regression coefficients can be computed using the variance-covariance matrix of γ2 as a function of the modified preliminary coefficient and modified final moment matrix described above: where ω 𝑗 = ψ𝑥𝑦 𝑗 -Ψ𝑥 𝑗 γ1 .</p>
+<p>The intercept component of ω 𝑗 is zero. This covariance estimator treats first-step measurement-error covariances and selected regularization constants as fixed, without a separate adjustment for their estimation or selection. Our simulations assess the performance of this approximation under the conditions studied, but do not establish when uncertainty from estimating the first-step measurement-error covariances or selecting the regularization constants can safely be ignored.</p>
+<h3>E. Simulation Specification and Evaluation</h3>
+<p>The following specification supplements the condition tables in the main text and the reliability calibration in Appendix A. Throughout, let 𝜏 = .9, let 𝑟 denote the manipulated intercept-slope correlation, and 𝑮 = 𝜏 2 1 𝑟 𝑟 1 . The within-cluster predictor is equally spaced, centered, and scaled to unit sample standard deviation. Observation errors are Gaussian with covariance 𝜎 2 𝑰 , where the condition-specific 𝜎 is calibrated rather than fixed across reliability conditions. The residual random-effect blocks and structural errors are generated from Gaussian draws independently across clusters.</p>
+<p>In Studies 1 and 2, generate 𝒃 𝑗 = (𝑏 0 𝑗 , 𝑏 1 𝑗 ) ′ ∼ 𝑁 (0, 𝑮) and</p>
+<p>Here 𝜂 𝑗 is independent of 𝒃 𝑗 and the observation errors. Thus Var(𝑧 𝑗 ) = 1 and the focal fully standardized coefficient is 𝛾 = 𝑔𝜏. Study 2 uses homogeneous sizes of 10 or equal proportions of sizes (5, 15) and (3, 17) for moderate and severe heterogeneity, respectively. Cluster-size allocation does not depend on the latent effects. Its reliability calibration averages over these size profiles.</p>
+<p>In Study 3, draw independent standard normal values independently of (𝑏 0 𝑗 , 𝑢 1 𝑗 ) ′ and center and divide them by their sample SD to obtain 𝑤 𝑗.</p>
+<p>Set</p>
+<p>The calibration targets marginal slope variance 𝜏 2 , with 𝛾 = 𝑔/𝜏. The marginal and residual intercept-slope correlations in that calibration model differ whenever 𝑔 ≠ 0. Within-replication standardization fixes the sample variance of 𝑤 𝑗 at one and makes its values dependent across clusters; the generated predictor is therefore not an independent standard normal sample after this transformation. Centering ensures a mean-zero structural contribution, and the nominal population scaling 1/𝜏 is retained for reporting.</p>
+<p>In Study 4, let 𝒃 𝑦 𝑗 ∼ 𝑁 (0, 𝑮 𝑦 ), with 𝑮 𝑦 = 𝑮 𝑞 = 𝑮, and define</p>
+<p>The block (𝑏 𝑞0 𝑗 , 𝑣 𝑗 ) ′ is independent of 𝒃 𝑦 𝑗 ; the two observation-error processes are mutually independent and independent of both latent blocks.</p>
+<p>The outcome process retains marginal covariance 𝑮 𝑞 . Both process slope SDs equal 𝜏, so the raw focal coefficient and its fully standardized value coincide. More generally, the standardized value is 𝑔 √︁ [𝑮 𝑦 ] 22 /[𝑮 𝑞 ] 22 . Residual variances and covariance matrices must remain positive definite; the calibration routines check feasibility after inserting the structural effects.</p>
+<p>The effect-size conditions refer to the focal fully standardized structural coefficient, not a correlation or total structural 𝑅 2 . If 𝑔 is the raw coefficient, the standardized target is 𝑔 SD(𝑋 * )/SD(𝑌 * ), where 𝑋 * and 𝑌 * are the corresponding structural predictor and outcome. In models with multiple predictors, nuisance effects can contribute to explained variance even when the focal coefficient is zero. Estimates, standard errors, and interval endpoints are mapped to the target scale using the fixed reporting factors 𝜏, 1/𝜏, and 1 for Studies 1-2, 3, and 4, respectively, with 𝜏 = .9.</p>
+<p>These factors are not re-estimated within each replication. Study 3 retains the nominal calibration scale despite within-replication centering and standardization of its observed predictor. 1 Reliability refers to the posterior reliability of the random slope predictions.</p>
+<p>2 Heterogeneity refers to cluster size heterogeneity.</p>
+<p>3 Bias is reported as relative bias.</p>
+<p>4 &quot;Shared&quot; refers to the subset of replications on which all methods converged; &quot;Method-Specific&quot; refers to the subset of replications for which that particular method converged. 5 𝐾 = thousand, 𝑀 = million, and ∼ indicates an approximate value.</p>
+<p>50</p>
+<h3>A.1. Simulation Study Methods</h3>
+<p>We used a shape-preserving version of the posterior reliability calibration. Specifically, we parameterized the population random-effect covariance as fixed [𝑮]11 = .81 and the slope-to-intercept variance ratio at 𝜅 = 1 in the primary design, and manipulated 𝜌 12 as shown below in the study-specific condition tables.</p>
+<p>Within-person time values were equally spaced, centered, and scaled to have unit sample standard deviation, and 𝑹 𝑗 = 𝜎 2 𝑰 . For each combination of reliability target and cluster design, we held the entire covariance shape fixed and used a one-dimensional root search over the positive residual scale 𝜎 until Equation (5.1) equaled the target. Compared with changing [𝑮] 22 alone, this procedure prevents a reliability manipulation from also changing the slope-to-intercept variance ratio or making the random-effect covariance increasingly ill-conditioned.</p>
+<p>The same calibration rule was used across the four studies. For the balanced designs in Studies 1 and 3, reliability was calibrated for each common cluster size. For the heterogeneous profiles in Study 2, a single residual scale was chosen so that the equally weighted mean reliability across the two cluster sizes matched the target (the cluster-specific posterior covariances were retained in estimation). For the dual-process design in Study 4, the predictor and outcome processes were calibrated separately for every combination of their cluster sizes and reliability targets.</p>
+<p>Calibration was performed once at the condition level using the population design and variance parameters, and the resulting residual scale was held fixed across replications. Calibration preceded the addition of structural effects. When a slope was generated as an outcome, its residual variance and residual intercept-slope correlation were adjusted so that the total marginal 𝑮 seen by the first-step MLM remained the calibrated covariance.</p>
+<p>Because several structural regressions also control for the random intercept, we additionally recorded the posterior reliability of the slope component residualized on the intercept; this conditional diagnostic was not the primary manipulated factor.</p>
+<h3>A.2. Empirical Calculation</h3>
+<p>Our simulation study revealed that posterior reliability was the most influential condition factor on performance results among those we included.</p>
+<p>Thus, we emphasize the importance of empirically checking the (estimated) posterior reliability of one&#x27;s own data in an analysis, which can be computed directly. In a model with both a random intercept and a random slope, the estimated marginal posterior reliability of the random slope is given by</p>
+<p>Their inverses provide the regression weights, so each ŵ𝑗 must be positive and finite. These weights are used to compute the final estimate of 𝜸, accounting for differences in composite residual variance across clusters. As in Step 1, we apply the correction function 𝑐 (𝜆, 𝛼) to the weighted moments to stabilize the corrected moment matrix (Fuller, 1987, p. 194, following Eq. 3.1.26). Specifically, let λ2 be the smallest finite real generalized eigenvalue satisfying</p>
+<p>Then, the final modified moment matrix and coefficient estimate are where the predictor block 𝑺 * 2𝑥 must be nonsingular.</p>
+<h3>D.3. Fixed and Adaptive Regularization</h3>
+<p>M-MOM fixes 𝛼1 = 𝛼2 = 𝑝 + 1, following the finite-moment modifications in Fuller (1987, §2.5). This choice does not guarantee a well-conditioned estimating matrix, however. M-MOMS instead selects the constants sequentially, seeking the smallest evaluated value that satisfies prespecified</p>
+<p>When the interval is nonempty, these bounds retain a nonnegative correction coefficient 𝑐 (𝜆, 𝛼). For each regularization constant, M-MOMS checks the corrected predictor moment matrix, excluding the structural intercept.</p>
+<p>In the simulations, acceptance required a successful fit, numerical positive definiteness, a smallest eigenvalue at least 5% of the largest eigenvalue of the corresponding observed predictor block before measurement error subtraction, and a condition number no greater than 10 5 . The corrected and observed blocks use the same weights and normalization. These checks use uncentered moments on the analysis scale and therefore depend on predictor units and location.</p>
+<p>A grid search with local refinement seeks the smallest evaluated constant satisfying these criteria. If the search cannot identify an acceptable value, the procedure attempts the baseline fit at 𝛼 = 𝑝 + 1, which need not satisfy the criteria or retain a nonnegative correction coefficient. The accompanying R package documentation specifies the numerical search and fallback rules. The finite-moment results motivating fixed regularization constants do not automatically extend to this adaptive selection rule.</p>
+<p>(a) OLS using both true random effects (&quot;oracle&quot;); (b) OLS using the BLUPs for both random effect (&quot;naive&quot;); (c) OLS using both likelihoodonly predictions; (d) our proposed M-MOM procedure using both likelihood-only predictions; (e) the alternative M-MOM procedure with 𝛼 step up (&quot;M-MOMS&quot;); (f) Lai and Liu&#x27;s (2026) two-stage path analysis estimator (2S-PA); (g) and finally, a joint multilevel structural equation model (MSEM) fit using Mplus</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Study 1: Relative bias for naive methods, method-specific replications, and non-null effect sizes. Vertical dashed line indicates zero bias. Relative bias computed on inverse hyperbolic sine scale per replication. Shading indicates ±100% relative bias on original scale. Ticks mark the boundaries of values for each method.</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Study 1: (a) Mean relative bias (left panel) and (b) coverage (right panel) for selected methods. Top panels show results for the shared convergence subset; bottom panels show results for the method-specific convergence subset (low reliability only). Dashed lines indicate zero bias (left panel) or nominal 95% coverage (right panel). *Point transparency indicates convergence rate in the lower panels only; convergence rate is computed over all replications in the corresponding bin.</p>
+<h3>Figure 3.</h3>
+<p>Figure 3. Study 1: Relative bias distributions for focal measurement-error correction methods, shared convergence subset, and non-null effect sizes. Relative bias computed on inverse hyperbolic sine scale per replication. Shaded region represents ±100% relative bias on original scale. Diamond indicates mean.</p>
+<h3>Figure 4.</h3>
+<p>Figure 4. Study 2: (a) Mean relative bias (left panel) and (b) coverage (right panel) for measurement-error correction methods, shared convergence subset, and medium effect size. Dashed lines indicate zero bias (left panel) or nominal 95% coverage (right panel).</p>
+<h3>6.3.</h3>
+<p>Study 3: Random Slope as Outcome Estimators used in Study 3 were (a) OLS using the true random slope (&quot;oracle&quot;); (b) OLS using the BLUP for the random slope (&quot;naive BLUP&quot;); (c) OLS using the likelihood-only prediction for the random slope (&quot;naive likelihood-only&quot;); (d) the standard implementation of the M-MOM procedure; (e) the M-MOM variant with 𝛼 step-up (M-MOMS); (f) Lai and Liu&#x27;s (2026) two-stage path analysis (2S-PA); (g) and a directly estimated MLM with 𝑤 entered in at level two.</p>
+<h3>Figure 5.</h3>
+<p>Figure 5. Study 3: Mean relative bias for focal measurement-error correction methods. Left panels show results for the shared convergence subset; right panels show results for the method-specific convergence subset (low reliability only). Dashed lines indicate zero bias. *Point transparency indicates convergence rate in the right panels only; convergence rate is computed over all replications in the corresponding bin.</p>
+<p>estimators used in Study 4 were (a) OLS using all true random effects (&quot;oracle&quot;); (b) OLS using BLUPs for all random effects (&quot;naive BLUP&quot;); (c) OLS using likelihood-only predictions for all random effects (&quot;naive likelihoodonly&quot;); (d) OLS using the BLUP from process 𝑞 and the likelihood-only predictions from process 𝑦 (&quot;BLUP-onlikelihood-only&quot;); (e) OLS using the likelihood-only prediction from process 𝑞 and the BLUPs from process 𝑦 (&quot;likelihood-only-on-BLUP&quot;); (f) the standard implementation of the M-MOM procedure; (g) the M-MOM variant with 𝛼 step-up (M-MOMS); (h) Lai and Liu&#x27;s (2026) two-stage path analysis (2S-PA); (i) and a latent curve model/structural equation model fit using Mplus (SEM;</p>
+<h3>Figure 6.</h3>
+<p>Figure 6. Study 4: Relative bias for naive methods, shared convergence subset, and non-null effect sizes. Relative bias computed on inverse hyperbolic sine scale per replication. Y-axis truncated to ±100% relative bias on original scale. Bar indicates median, dot indicates mean..</p>
+<h3>Figure 7.</h3>
+<p>Figure 7. Study 4: Coverage for measurement-error correction methods. Top panels show results for the shared convergence subset; bottom panels show results for the method-specific convergence subset. Dashed lines indicate nominal 95% coverage. *Point transparency indicates convergence rate in the lower panels only; convergence rate is computed over all replications in the corresponding bin.</p>
+<p>D.1) where the 𝑗th row of 𝑩 𝑥 is 𝒃 ′ 𝑥 𝑗 = [1, 𝑏 𝑥1 𝑗 , . . . , 𝑏 𝑥 ( 𝑝-1) 𝑗 ]. We assume 𝐸 (𝝐 | 𝑩 𝑥 ) = 0 and Var(𝝐 | 𝑩 𝑥 ) = 𝜎 2 𝜖 𝑰 . In practice, random effects may appear only as predictors or only as outcomes, but the general model is given here for concision.</p>
+<p>3) Under the working measurement-error model, its blocks are plug-in estimates of the conditional sampling covariances: ψ𝑦 𝑗 = Var( b𝑦 𝑗 | 𝒃 𝑗 ), Ψ𝑥 𝑗 = Var( b𝑥 𝑗 | 𝒃 𝑗 ), and ψ𝑥𝑦 𝑗 = Cov( b𝑥 𝑗 , b𝑦 𝑗 | 𝒃 𝑗 ). These conditional sampling covariances are evaluated for each cluster&#x27;s observed design, including its observation schedule and predictor values.</p>
+<h3>Table 2.</h3>
+<p>Simulation Conditions Across Studies.</p>
+<h3>Table 3.</h3>
+<p>Study 1 Results by Slope Reliability.</p>
+<h3>Table 4.</h3>
+<p>Study 2 Results Summary by Slope Reliability and Cluster Size Heterogeneity.</p>
+<h3>Table 5.</h3>
+<p>Study 3 Results by Slope Reliability.Reliability refers to the posterior reliability of the random slope predictions.2 Bias is reported as relative bias.3 &quot;Shared&quot; refers to the subset of replications on which all methods converged; &quot;Method-Specific&quot; refers to the subset of replications for which that particular method converged. 51</p>
+<h3>Table 6.</h3>
+<p>Study 4 Results Summary by Slope Reliability.</p>
+<p>conditioning criteria. During selection of 𝛼 1 , 𝛼 2 remains at 𝑎 = 𝑝 + 1; selection of 𝛼 2 then holds the chosen 𝛼 1 fixed. The search interval for 𝛼 𝑘 is [𝑎, 𝑢( λ𝑘 ) ], for 𝑘 = 1, 2, where</p>
+<p>Github repository: https://github.com/marklhc/2spa-random-slopes-supp; commit hash: 9ffe53168f6bb04e13ef977dc19a8d953d0bf29d</p>
+<p>Reliability refers to the posterior reliability of the random slope predictions.</p>
+<p>Bias is reported as relative bias.</p>
+<p>&quot;Shared&quot; refers to the subset of replications on which all methods converged; &quot;Method-Specific&quot; refers to the subset of replications for which that particular method converged.</p>
+<p>𝐾 = thousand, 𝑀 = million, and ∼ indicates an approximate value.</p>
+<p>Reliability refers to the posterior reliability of the random slope predictions.</p>
+<p>Bias is reported as relative bias.</p>
+<p>&quot;Shared&quot; refers to the subset of replications on which all methods converged; &quot;Method-Specific&quot; refers to the subset of replications for which that particular method converged.</p>
+<p>𝑀 = million and ∼ indicates an approximate value.</p>
+<h3>References</h3>
+<p>Baklouti, S., Gandia, P., &amp; Concordet, D. (2022). &quot;De-shrinking&quot; EBEs: The solution for Bayesian therapeutic drug monitoring. Clinical Pharmacokinetics, 61(5), 749-757. https://doi.org/10.1007/s40262-021-01105-y</p>
+<p>Bartholomew, D. J., Deary, I. J., &amp; Lawn, M. (2009). The origin of factor scores: Spearman, Thomson and Bartlett. British Journal of Mathematical and Statistical Psychology, 62(3), 569-582. https : / / doi . org / 10 . 1348 / 000711008X365676</p>
+<p>Bates, D., Mächler, M., Bolker, B., &amp; Walker, S. (2015). Fitting linear mixed-effects models using lme4. Journal of Statistical Software, 67(1). https://doi.org/10.18637/jss.v067.i01</p>
+<p>Bauer, D. J. (2003). Estimating multilevel linear models as structural equation models. Journal of Educational and Behavioral Statistics, 28(2), 135-167. https://doi.org/10.3102/10769986028002135</p>
+<p>Bogaert, J., Loh, W. W., &amp; Rosseel, Y. (2023). A small sample correction for factor score regression. Educational and Psychological Measurement, 83(3), 495-519. https://doi.org/10.1177/00131644221105505</p>
+<p>Boker, S., Neale, M., Maes, H., Wilde, M., Spiegel, M., Brick, T., Spies, J., Estabrook, R., Kenny, S., Bates, T., Mehta, P., &amp; Fox, J. (2011). OpenMx: An open source extended structural equation modeling framework. Psychometrika, 76(2), 306-317. https://doi.org/10.1007/s11336-010-9200-6</p>
+<p>Bollen, K. A. (1989, April). Structural equations with latent variables (1st ed.). Wiley. https://doi.org/ 10.1002/ 9781118619179</p>
+<p>Bollen, K. A. (1996). An alternative two stage least squares (2SLS) estimator for latent variable equations. Psychometrika, 61(1), 109-121. https://doi.org/10.1007/BF02296961</p>
+<p>Bollen, K. A., &amp; Curran, P. J. (2006). Latent curve models: A structural equation perspective. Wiley-Interscience. https://doi.org/10.1002/0471746096</p>
+<p>Bollen, K. A., Kirby, J. B., Curran, P. J., Paxton, P. M., &amp; Chen, F. (2007). Latent variable models under misspecification: Two-stage least squares (2SLS) and maximum likelihood (ML) estimators. Sociological Methods &amp; Research, 36(1), 48-86. https://doi.org/10.1177/0049124107301947</p>
+<p>Botosaru, I., &amp; Powell, J. L. (2026, August). Moments of random coefficients in short panels [arXiv:2608.31085 [econ.EM]]. https://doi.org/10.48550/arXiv.2608.31085</p>
+<p>Burt, R. S. (1973). Confirmatory factor-analytic structures and the theory construction process. Sociological Methods &amp; Research, 2(2), 131-190. https://doi.org/10.1177/004912417300200201</p>
+<p>Burt, R. S. (1976). Interpretational confounding of unobserved variables in structural equation models. Sociological Methods &amp; Research, 5(1), 3-52. https://doi.org/10.1177/004912417600500101</p>
+<p>Cohen, J., Cohen, P., West, S. G., &amp; Aiken, L. S. (2015). Applied multiple regression correlation analysis for the behavioral sciences (Third edition). Routledge Taylor &amp; Francis Group.</p>
+<p>Croon, M. A. (2002). Using predicted latent scores in general latent structure models [Section: 10].</p>
+<p>In G. A. Marcoulides &amp; I. Moustaki (Eds.), Latent Variable and Latent Structure Models (pp. 195-223). Psychology Press.</p>
+<p>Curran, P. J. (2003). Have multilevel models been structural equation models all along? Multivariate Behavioral Research, 38(4), 529-569. https://doi.org/10.1207/s15327906mbr3804_5</p>
+<p>Devlieger, I., Mayer, A., &amp; Rosseel, Y. (2016). Hypothesis testing using factor score regression: A comparison of four methods. Educational and Psychological Measurement, 76(5), 741-770. https : / / doi . org / 10 . 1177 / 0013164415607618</p>
+<p>Devlieger, I., &amp; Rosseel, Y. (2017). Factor score path analysis: An alternative for SEM? Methodology, 13(Supplement), 31-38. https://doi.org/10.1027/1614-2241/a000130</p>
+<p>Devlieger, I., &amp; Rosseel, Y. (2020). Multilevel factor score regression. Multivariate Behavioral Research, 55(4), 600- 624. https://doi.org/10.1080/00273171.2019.1661817</p>
+<p>Fuller, W. A. (1987). Measurement error models. Wiley.</p>
+<p>Gelman, A., &amp; Hill, J. (2021). Data analysis using regression and multilevel/hierarchical models (23rd printing). Cambridge Univ. Press.</p>
+<p>Goldberger, A. S. (1962). Best linear unbiased prediction in the generalized linear regression model. Journal of the American Statistical Association, 57(298), 369-375. https://doi.org/10.1080/01621459.1962.10480665</p>
+<p>Grønneberg, S., &amp; Irmer, J. P. (2024). Non-parametric regression among factor scores: Motivation and diagnostics for nonlinear structural equation models. Psychometrika, 89(3), 822-850. https://doi.org/10.1007/s11336-024- 09959-4</p>
+<p>Haines, N., Kvam, P. D., Irving, L., Smith, C. T., Beauchaine, T. P., Pitt, M. A., Ahn, W.-Y., &amp; Turner, B. M. (2025). A tutorial on using generative models to advance psychological science: Lessons from the reliability paradox. Psychological Methods. https://doi.org/10.1037/met0000674</p>
+<p>Hallquist, M. N., &amp; Lenzenweger, M. F. (2013). Identifying latent trajectories of personality disorder symptom change: Growth mixture modeling in the Longitudinal Study of Personality Disorders. Journal of Abnormal Psychology, 122(1), 138-155.</p>
+<p>Hallquist, M. N., &amp; Wiley, J. F. (2018). MplusAutomation: An R package for facilitating large-scale latent variable analyses in Mplus. Structural Equation Modeling: A Multidisciplinary Journal, 25(4), 621-638. https://doi. org/10.1080/10705511.2017.1402334</p>
+<p>Hamaker, E. L., &amp; Wichers, M. (2017). No time like the present: Discovering the hidden dynamics in intensive longitudinal data. Current Directions in Psychological Science, 26(1), 10-15. https : / / doi . org / 10 . 1177 / 0963721416666518</p>
+<p>Hanushek, E. A. (1974). Efficient estimators for regressing regression coefficients. The American Statistician, 28(2), 66-67. https://doi.org/10.1080/00031305.1974.10479073</p>
+<p>Henderson, C. R. (1973). Sire evaluation and genetic trends. Journal of Animal Science, 1973(Symposium), 10-41. https://doi.org/10.1093/ansci/1973.Symposium.10</p>
+<p>Hickey, G. L., Philipson, P., Jorgensen, A., &amp; Kolamunnage-Dona, R. (2016). Joint modelling of time-to-event and multivariate longitudinal outcomes: Recent developments and issues. BMC Medical Research Methodology, 16(1), 117. https://doi.org/10.1186/s12874-016-0212-5</p>
+<p>Iba, Y. (2024, September). Bias correction of posterior means using MCMC outputs [arXiv:2409.03513 [stat]]. https: //doi.org/10.48550/arXiv.2409.03513</p>
+<p>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (Eds.). (2013). An introduction to statistical learning: With applications in R. Springer.</p>
+<p>Jiang, J. (2007). Linear and generalized linear mixed models and their applications. Springer.</p>
+<p>Katahira, K. (2016). How hierarchical models improve point estimates of model parameters at the individual level. Journal of Mathematical Psychology, 73, 37-58. https://doi.org/10.1016/j.jmp.2016.03.007</p>
+<p>Kuha, J., &amp; Bakk, Z. (2024, July). Two-step estimation of latent trait models [arXiv:2303.16101 [stat]]. https://doi.org/ 10.48550/arXiv.2303.16101</p>
+<p>Kuper, N., Breil, S. M., Horstmann, K. T., Roemer, L., Lischetzke, T., Sherman, R. A., Back, M. D., Denissen, J. J. A., &amp; Rauthmann, J. F. (2022). Individual differences in contingencies between situation characteristics and personality states. Journal of Personality and Social Psychology, 123(5), 1166-1198. https://doi.org/10.1037/ pspp0000435</p>
+<p>Lai, M. H. C., &amp; Hsiao, Y.-Y. (2022). Two-stage path analysis with definition variables: An alternative framework to account for measurement error. Psychological Methods, 27(4), 568-588. https://doi.org/10.1037/met0000410</p>
+<p>Lai, M. H. C., &amp; Liu, S. (2026). A two-stage approach to account for measurement error when using empirical Bayes estimates of random slopes. Psychological Methods. https://doi.org/10.1037/met0000838</p>
+<p>Levy, R. (2023). Precluding interpretational confounding in factor analysis with a covariate or outcome via measurement and uncertainty preserving parametric modeling. https://doi.org/10.6084/M9.FIGSHARE.22148777</p>
+<p>Liu, S., Kuppens, P., &amp; Bringmann, L. (2021). On the use of empirical Bayes estimates as measures of individual traits. Assessment, 28(3), 845-857. https://doi.org/10.1177/1073191119885019</p>
+<p>Liu, S., &amp; Rhemtulla, M. (2022). Treating random effects as observed versus latent predictors: The bias-variance tradeoff in small samples. British Journal of Mathematical and Statistical Psychology, 75(1), 158-181. https: //doi.org/10.1111/bmsp.12253</p>
+<p>McCormick, E. M., Curran, P. J., &amp; Hancock, G. R. (2026). Latent growth factors as predictors of distal outcomes. Psychological Methods, 31(4), 661-675. https://doi.org/10.1037/met0000642</p>
+<p>McDonald, R. P. (1981). Constrained least squares estimators of oblique common factors. Psychometrika, 46(3), 337- 341. https://doi.org/10.1007/BF02293740</p>
+<p>McDonald, R. P., &amp; Burr, E. J. (1967). A comparison of four methods of constructing factor scores. Psychometrika, 32(4), 381-401. https://doi.org/10.1007/BF02289653</p>
+<p>Muthén, L. K., &amp; Muthén, B. O. (1998). Mplus user&#x27;s guide (8th ed.). Muthén &amp; Muthén.</p>
+<p>Neubauer, A. B., Voelkle, M. C., Voss, A., &amp; Mertens, U. K. (2020). Estimating reliability of within-person couplings in a multilevel framework. Journal of Personality Assessment, 102(1), 10-21. https : / / doi . org / 10 . 1080 / 00223891.2018.1521418</p>
+<p>Pinheiro, J., &amp; Bates, D. (2002). Mixed-effects models in S and S-PLUS. Springer New York.</p>
+<p>R Core Team. (2024). R: A language and environment for statistical computing. https://www.R-project.org/.</p>
+<p>Raudenbush, S., &amp; Bryk, A. S. (2010). Hierarchical linear models: Applications and data analysis methods (2. ed., [Reprint]). Sage Publ.</p>
+<p>Robinson, G. K. (1991). That BLUP is a good thing: The estimation of random effects. Statistical Science, 6(1), 15-32. Retrieved September 10, 2026, from https://www.jstor.org/stable/2245695</p>
+<p>Robitzsch, A. (2022). Comparing the robustness of the structural after measurement (SAM) approach to structural equation modeling (SEM) against local model misspecifications with alternative estimation approaches. Stats, 5(3), 631-672. https://doi.org/10.3390/stats5030039</p>
+<p>Rosseel, Y., &amp; Loh, W. W. (2024). A structural after measurement approach to structural equation modeling. Psychological Methods. https://doi.org/10.1037/met0000503</p>
+<p>Rustand, D., van Niekerk, J., Krainski, E. T., Rue, H., &amp; Proust-Lima, C. (2024). Fast and flexible inference for joint models of multivariate longitudinal and survival data using integrated nested Laplace approximations. Biostatistics, 25(2), 429-448. https://doi.org/10.1093/biostatistics/kxad019</p>
+<p>Saxonhouse, G. R. (1976). Estimated parameters as dependent variables. The American Economic Review, 66(1), 178- 183. http://www.jstor.org/stable/1804956</p>
+<p>Skrondal, A., &amp; Laake, P. (2001). Regression among factor scores. Psychometrika, 66(4), 563-575. https://doi.org/10.1007/BF02296196</p>
+<p>Skrondal, A., &amp; Rabe-Hesketh, S. (2004). Generalized latent variable modeling: Multilevel, longitudinal, and structural equation models. Chapman &amp; Hall/CRC.</p>
+<p>Skrondal, A., &amp; Rabe-Hesketh, S. (2009). Prediction in multilevel generalized linear models. Journal of the Royal Statistical Society Series A: Statistics in Society, 172(3), 659-687. https://doi.org/10.1111/j.1467-985X.2009.</p>
+<p>Berge, J. M. F., Krijnen, W. P., Wansbeek, T., &amp; Shapiro, A. (1999). Some new results on correlation-preserving factor scores prediction methods. Linear Algebra and its Applications, 289(1), 311-318. https://doi.org/10.1016/S0024-3795(97)10007-6</p>
+<p>Thomson, G. H. (1938). Methods of estimating mental factors. Nature, 141(3562), 246-246. https://doi.org/10.1038/ 141246a0</p>
+<p>Wall, M. M., &amp; Amemiya, Y. (2000). Estimation for polynomial structural equation models. Journal of the American Statistical Association, 95(451), 929-940. https://doi.org/10.1080/01621459.2000.10474283</p>
+<p>Webb, C. A., Hirshberg, M. J., Gonzalez, O., Davidson, R. J., &amp; Goldberg, S. B. (2024). Revealing subgroup-specific mechanisms of change via moderated mediation: A meditation intervention example. Journal of Consulting and Clinical Psychology, 92(1), 44-53. https://doi.org/10.1037/ccp0000842</p>
+<p>Willroth, E. C., Beck, E., Yoneda, T. B., Beam, C. R., Deary, I. J., Drewelies, J., Gerstorf, D., Huisman, M., Katz, M. J., Lipton, R. B., Muniz Tererra, G., Pedersen, N. L., Reynolds, C. A., Spiro, A., III, Turiano, N. A., Willis, S., Mroczek, D. K., &amp; Graham, E. K. (2025). Associations of personality trait level and change with mortality risk in 11 longitudinal studies. Journal of Personality and Social Psychology, 128(2), 392-409. https://doi.org/10.1037/pspp0000531</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
