@@ -25,7 +25,10 @@
 # Other files in the data folder:
 #   index.json        one line per checked preprint, for the list of reports
 #   tally.json        the numbers on the landing page
-#   state.json        where the run is: the newest preprint listed, the next
+#   modules/<module>.json  the findings of one check in every preprint, for
+#                     the page of examples per check (modules/index.html),
+#                     because the full results are not on the website
+#   state.json       where the run is: the newest preprint listed, the next
 #                     older day to list, the preprints waiting, and those
 #                     skipped or failed
 
@@ -617,9 +620,188 @@ def check_one(item, state, index, papers_dir, site_dir):
     return "done"
 
 
-def write_index_and_tally(data_dir, index):
+# ── The page of examples per check (modules/index.html) ──────────────────────
+# The website does not have the full results (data/papers/, see pages.yml), so
+# for each check a small file in data/modules/ holds its findings in every
+# preprint. After a preprint is checked only its entry is renewed; the file is
+# made again from all results when it is missing or MODULE_FORMAT changed.
+MODULE_FORMAT = 1
+MAX_SENTENCE = 400      # characters; a longer sentence is shortened around the test
+
+# a sentence ends at . ! or ? followed by a capital, with or without a space
+# (the converter sometimes joins two paragraphs: "participants.In Experiment"),
+# but not after a single capital, as in "J. Smith"
+SENTENCE_END = re.compile(r"(?<![A-Z])(?<=[.!?])\s*(?=[A-Z])")
+
+
+def sentence_around(text, part):
+    # the sentence of text that holds part (the reported test)
+    text = re.sub(r"\s+", " ", text or "").strip()
+    i = text.find(part)
+    if i < 0:
+        return text[:MAX_SENTENCE]
+    start = 0
+    for m in SENTENCE_END.finditer(text, 0, i):
+        start = m.end()
+    m = SENTENCE_END.search(text, i + len(part))
+    s = text[start:m.start() if m else len(text)].strip()
+    if len(s) > MAX_SENTENCE:
+        j = s.find(part)
+        a = max(0, j - (MAX_SENTENCE - len(part)) // 2)
+        b = min(len(s), a + MAX_SENTENCE)
+        s = ("…" if a else "") + s[a:b].strip() + ("…" if b < len(s) else "")
+    return s
+
+
+# Each check's function returns what the page shows of one preprint (at least
+# "findings"), or None when there is nothing to show.
+
+def stat_check_findings(result):
+    # the p-values that differ from the p-value computed from the test
+    # statistic and its degrees of freedom; decision_error: the difference
+    # changes whether the result is significant
+    out = []
+    for r in (result.get("modules", {}).get("stat_check", {}).get("table") or []):
+        if not r.get("error") or not r.get("raw"):
+            continue
+        out.append({"test": r["raw"],
+                    "sentence": sentence_around(r.get("text"), r["raw"]),
+                    "reported_p": r.get("reported_p"), "p_comp": r.get("p_comp"),
+                    "computed_p": r.get("computed_p"),
+                    "decision_error": bool(r.get("decision_error")),
+                    "one_tailed_in_text": bool(r.get("one_tailed_in_txt")),
+                    "section": r.get("header")})
+    return {"findings": out} if out else None
+
+
+# The reproducibility check: the outcomes of a script that ran through, or that
+# another script ran (metacheck's .repro_error_message()); any other outcome is
+# a script that did not run through.
+RAN_THROUGH = {"ran_ok", "run_by_source", "run_by_import", "jags_model", "not_r_content",
+               "defines_functions", "not_analysis"}
+# the reason for an outcome, for results made before metacheck gave `reason`
+# for every outcome (metacheck's .repro_failure_reason())
+OUTCOME_REASON = {"timed_out": "time", "skipped_time_limit": "time", "needs_internet": "internet",
+                  "dependency_unavailable": "package", "not_parsed": "syntax", "python2": "syntax",
+                  "needs_a_person": "interactive", "out_of_memory": "environment",
+                  "docker_failed": "environment", "download_too_large": "download",
+                  "not_downloaded": "download", "skipped_missing_inputs": "file"}
+MAX_MESSAGE = 300       # characters, as metacheck's error_message
+OUTPUT_BLOCK = re.compile(r'::: \{\.callout-tip title="Output — (.*) \(([a-z_0-9]+)\)"')
+STDERR = re.compile(r"\*\*Messages / errors \(stderr\):\*\*\s*````\n(.*?)\n````", re.S)
+
+
+def shorten(s, n=MAX_MESSAGE):
+    s = re.sub(r"\s+", " ", s).strip()
+    return s if len(s) <= n else s[:n - 1] + "…"
+
+
+def error_line(stderr, python=False):
+    # the error line of a script's output, as metacheck's .repro_error_line():
+    # R: from the first line starting with "Error" to before "Calls:" and the
+    # like; Python: the last line naming an Error or Exception
+    lines = [l.strip() for l in (stderr or "").splitlines() if l.strip()]
+    if python:
+        hit = [l for l in lines if re.match(r"[A-Za-z_.]*(Error|Exception)\b", l)]
+        return shorten(hit[-1]) if hit else ""
+    start = next((i for i, l in enumerate(lines) if re.match(r"Error\b", l)), None)
+    if start is None:
+        return ""
+    end = next((i for i in range(start + 1, len(lines)) if re.match(
+        r"(Calls:|Backtrace:|In addition:|Execution halted|Run `rlang::last_trace|Warning message)",
+        lines[i])), min(len(lines), start + 6))
+    return shorten(" ".join(lines[start:end]))
+
+
+def report_messages(report):
+    # file name -> the error message of each script in the report text, for
+    # results made before metacheck kept it in its table (version 0.4.3.19)
+    out = {}
+    for block in report or []:
+        m = OUTPUT_BLOCK.search(block) if isinstance(block, str) else None
+        if not m or m.group(1) in out:
+            continue
+        err = STDERR.search(block)
+        err = err.group(1) if err else ""
+        line = error_line(err) or error_line(err, python=True)
+        if not line:
+            rest = [l.strip() for l in err.splitlines() if l.strip()
+                    and not re.match(r"(Execution halted|Calls:|Backtrace:)", l.strip())]
+            line = shorten(rest[-1]) if rest else ""
+        out[m.group(1)] = line or None
+    return out
+
+
+def reproducibility_findings(result):
+    # the scripts that did not run through, each with why
+    m = result.get("modules", {}).get("reproducibility_check", {})
+    rows = [r for r in (m.get("table") or []) if r.get("outcome")]
+    failed = [r for r in rows if r["outcome"] not in RAN_THROUGH]
+    if not failed:
+        return None
+    old = None
+    out = []
+    for r in failed:
+        reason = r.get("reason") or OUTCOME_REASON.get(r["outcome"], "other")
+        if "error_message" in r:
+            msg = r["error_message"]
+        elif reason == "time":
+            # metacheck gives the time limit here; the output of a script that
+            # was stopped ends anywhere ("Start sampling"), so nothing
+            msg = None
+        else:
+            if old is None:
+                old = report_messages(m.get("report"))
+            msg = old.get(r.get("file_name"))
+        out.append({"file": r.get("file_name"), "outcome": r["outcome"], "reason": reason,
+                    "message": msg or None,
+                    "missing_files": r.get("unresolved_inputs") or None})
+    return {"findings": out, "scripts": len(rows)}
+
+
+MODULE_FINDINGS = {"stat_check": stat_check_findings,
+                   "reproducibility_check": reproducibility_findings}
+
+
+def update_module_lists(data_dir, index, osf_ids=()):
+    # renews the entries of osf_ids in data/modules/<module>.json, and adds the
+    # preprints of the index the file has not looked at yet (such as those an
+    # older version of this script checked); makes the whole file again from
+    # all results when it is missing or out of date. "looked_at": every
+    # preprint looked at, also those without findings.
+    os.makedirs(os.path.join(data_dir, "modules"), exist_ok=True)
+    for module, findings in MODULE_FINDINGS.items():
+        path = os.path.join(data_dir, "modules", module + ".json")
+        old = load(path, None)
+        if old is None or old.get("format") != MODULE_FORMAT:
+            papers, todo = {}, list(index)
+        else:
+            seen = set(old.get("looked_at", []))
+            papers = {p["id"]: p for p in old["papers"]}
+            todo = list(dict.fromkeys(list(osf_ids) + [i for i in index if i not in seen]))
+        for osf_id in todo:
+            result = load(os.path.join(data_dir, "papers", osf_id + ".json"), None)
+            found = findings(result) if result and osf_id in index else None
+            if not found:
+                papers.pop(osf_id, None)
+                continue
+            line = index[osf_id]
+            papers[osf_id] = {"id": osf_id, "title": line["title"], "url": line["url"],
+                              "published": line["published"], "report_page": line["report_page"],
+                              **found}
+        papers = [p for p in papers.values() if p["id"] in index]
+        papers.sort(key=lambda p: p["published"] or "", reverse=True)
+        looked_at = sorted(index)
+        if (old is None or old.get("format") != MODULE_FORMAT or papers != old["papers"]
+                or looked_at != old.get("looked_at")):
+            save(path, {"format": MODULE_FORMAT, "module": module, "looked_at": looked_at,
+                        "papers": papers})
+
+
+def write_index_and_tally(data_dir, index, checked=()):
     papers = sorted(index.values(), key=lambda p: p["published"] or "", reverse=True)
     save(os.path.join(data_dir, "index.json"), {"papers": papers})
+    update_module_lists(data_dir, index, checked)
     total = get(LIST.replace("page[size]=100", "page[size]=1"))["links"]["meta"]["total"]
     save(os.path.join(data_dir, "tally.json"), {
         "preprints": total,       # every version the OSF lists counts once
@@ -789,7 +971,7 @@ def main():
             if outcome == "done":
                 changed = True
                 # with the --redo lines not yet checked again, so none is lost
-                write_index_and_tally(args.data_dir, {**held, **index})
+                write_index_and_tally(args.data_dir, {**held, **index}, [item["id"]])
             save(state_path, state)
             if args.push and outcome != "skipped":
                 store(item["id"], state, index, state_path, os.path.join(args.data_dir, "index.json"))
