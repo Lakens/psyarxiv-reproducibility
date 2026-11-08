@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: The Autocorrelated Bayesian Decision Maker:
+Mental Sampling Processes Capture Preference, Confidence and Response
+Time in Risky Choice</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+The Autocorrelated Bayesian Decision Maker: Mental Sampling Processes
+Capture Preference, Confidence and Response Time in Risky Choice
+</p>
+<p class="meta">
+2026-11-08 · Metacheck 0.4.3.11
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>1</b><span>to
+improve</span></a><span class="count decide zero"><b>0</b><span>to
+decide by
+hand</span></span><a class="count fine" href="#fine"><b>2</b><span>fine</span></a><a class="count na" href="#na"><b>11</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Effect
+Sizes in t-tests and F-tests</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 2 t-tests and/or F-tests where effect sizes are not
+reported. Check these tests in the table below, and consider adding
+effect sizes.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>We recommend checking the sentences below, and add any missing effect
+sizes.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Greater differences are however seen in the influence of the
+model-specific predictors: each sample in the ABDM was estimated to add
+0.685 seconds (95% CI: [0.593, 0.778], t(359657) = 14.6, p &lt; .001) to
+RT, whereas the additional sample count predictors of BEAST and DFT
+showed no significant Predicted response times from each of the
+candidate models against the equivalent empirical times for that
+problem, averaged across participants.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+As with the main analysis, the effect of sample count is significant for
+the ABDM, though its size is also reduced to 0.036 seconds per sample
+(95% CI: [0.027, 0.044], t(14153) = 8.27, p &lt;.001).
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating that effect sizes are often
+not reported:</p>
+<ul>
+<li>Peng, C.-Y. J., Chen, L.-T., Chiang, H.-M., &amp; Chiang, Y.-C.
+(2013). The Impact of APA and AERA Guidelines on Effect Size Reporting.
+Educational Psychology Review, 25(2), 157–209. <a href="doi:%5B10.1007/s10648-013-9218-2" class="uri">doi:[10.1007/s10648-013-9218-2</a>](<a href="https://doi.org/10.1007/s10648-013-9218-2" class="uri">https://doi.org/10.1007/s10648-013-9218-2</a>).</li>
+</ul>
+<p>For educational material on reporting effect sizes:</p>
+<ul>
+<li><a href="https://matthewbjane.quarto.pub/guide-to-effect-sizes-and-confidence-intervals/">Guide
+to Effect Sizes and Confidence Intervals</a></li>
+</ul>
+</div>
+<div class="callout-tip" title="All detected and assessed stats" collapse="true">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Sentence
+</th>
+<th style="text-align:left;">
+Effect Size
+</th>
+<th style="text-align:left;">
+Reported Test
+</th>
+<th style="text-align:left;">
+Test Type
+</th>
+<th style="text-align:left;">
+d Coherence
+</th>
+<th style="text-align:left;">
+d Assumption
+</th>
+<th style="text-align:left;">
+d Coherence Note
+</th>
+<th style="text-align:left;">
+eta Coherence
+</th>
+<th style="text-align:left;">
+eta Assumption
+</th>
+<th style="text-align:left;">
+eta Coherence Note
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Greater differences are however seen in the influence of the
+model-specific predictors: each sample in the ABDM was estimated to add
+0.685 seconds (95% CI: [0.593, 0.778], t(359657) = 14.6, p &lt; .001) to
+RT, whereas the additional sample count predictors of BEAST and DFT
+showed no significant Predicted response times from each of the
+candidate models against the equivalent empirical times for that
+problem, averaged across participants.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+t(359657) = 14.6
+</td>
+<td style="text-align:left;">
+t-test
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable d effect size found.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+As with the main analysis, the effect of sample count is significant for
+the ABDM, though its size is also reduced to 0.036 seconds per sample
+(95% CI: [0.027, 0.044], t(14153) = 8.27, p &lt;.001).
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+t(14153) = 8.27
+</td>
+<td style="text-align:left;">
+t-test
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable d effect size found.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</details>
+</div>
+<h2 id="improve">To improve <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To improve</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We found 1 empty repository.</li>
+<li>We found 0 files in 1 repository.</li>
+<li>We found 0 README files and 1 repository without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Double-check permissions on repositories with no detectable
+files.</p>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5281/zenodo.23770058" target="_blank">doi.org/10.5281/zenodo.23770058</a>
+</td>
+<td style="text-align:left;">
+zenodo
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="readme-files">README Files</h4>
+<p>README files are a way to document the contents and structure of a
+folder, helping users locate the information they need. You can use a
+README to document changes to a repository, and explain how files are
+named. Please consider adding a README to each repository or including
+‘README’ in the name of your overview document.</p>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>We detected no errors in t-tests or F-tests.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 6 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(11)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 59 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Ratcliff, R., &amp; McKoon, G. (2008). The diffusion decision model:
+Theory and data for two-choice decision tasks. Neural Computation,
+20(4), 873-922. <a href="https://doi.org/10.1162/neco.2008.12-06-420" class="uri">https://doi.org/10.1162/neco.2008.12-06-420</a>
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/153C687DFF3C517B4A2EEA6243FF1C" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 59 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 59 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart). A
+timeout means “still running at the cutoff”, not a failure, so raise
+<code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Modern models of preferential decision making have achieved substantial success in predicting choice behaviour both qualitatively and quantitatively, but often overlook related aspects such as response time or confidence. In parallel, recently proposed mental sampling frameworks have offered broad explanations for multiple aspects of behaviour including probability judgments, perceptual estimates and numerical forecasts, but have not yet been applied to preferential choice. Here, we seek to unite these lines of research by extending one such framework, the Autocorrelated Bayesian Sampler (ABS; Zhu et al., 2024), to decisions between alternatives which differ in the value of their potential outcomes. We present a new version of the ABS adapted to such decisions, the Autocorrelated Bayesian Decision Maker (ABDM), able to predict not just choices, but also reaction times and confidence in selections.</p>
+<p>We compare the predictions of the ABDM against extant choice and response time data in risky choice tasks, finding strong correspondence in both. We also contrast the new model against leading explanations for behaviour in such tasks, showing the ABDM is competitive in choice and ahead in response times. We thus propose this model as a broader approach to decision making capable of explaining multiple measures from a common process.</p>
+<h3>[div-01]</h3>
+<p>The Autocorrelated Bayesian Decision Maker: Mental Sampling Processes Capture Preference, Confidence and Response Time in Risky Choice</p>
+<h3>Introduction</h3>
+<p>We often must make decisions between alternatives where an objectively superior option is difficult to define or entirely absent: for example, which meal to order at an unfamiliar restaurant, whether a new phone&#x27;s features are worth the price, or whether a new medication will cure a symptom. Determining how we make choices in such scenarios is thus of vital importance both to deepen our understanding of human behaviour as well as to help guide people toward better decisions.</p>
+<p>Naturally, then, many potential theories have been offered to capture how people make such choices, with almost 100 decision making models proposed over the last 70 years (He et al., 2022). In many cases, these theories have been designed to accommodate observed behavioural patterns which violate earlier models: expected utility theory offers reasons for violations of expected value via subjective transformations of value (Bernoulli, 1954), prospect theory offers reasons for violations of expected utility via reweighting of probabilities (Kahneman &amp; Tversky, 1979), cumulative prospect theory offers reasons for violations of prospect theory via distinct accumulation processes for gains and losses (Tversky &amp; Kahneman, 1992), and so on. The result of this has been a series of models steadily improving in their ability to capture choice behaviour, both in terms of reducing quantitative error between predicted and empirical choice rates and matching qualitative choice phenomena (Bhatia, 2014; Birnbaum, 2008; Erev et al., 2017; Kellen et al., 2020). This is particularly evident in recent models leveraging machine learning techniques to provide high predictive accuracy in large-scale data (Peterson et al., 2021; Plonsky et al., 2025).</p>
+<p>At the same time, the overarching focus on choice within these models has arguably led to a deep but possibly narrow understanding of decision making: modern models certainly offer strong performance in predicting choices, but predictions of related aspects such as decision confidence or time are rarer, while others such as estimates and valuations of prospects are often entirely distinct. Such a focus is perhaps understandable given that choices are ultimately the main consequential aspect of decision making, but these other responses can themselves offer insight into the choice process. A key example is the time taken to make a decision: more difficult choices often take longer, providing an indication of the time course of the underlying cognitive systems (Ayal &amp; Hochman, 2009; Glöckner &amp; Betsch, 2008).</p>
+<p>Consideration of these measures can thus offer a more complete understanding of choice behaviour via the relations between choice and other response types, which risks being overlooked in models strictly focused on predicting selections.</p>
+<p>A contrasting approach to this line of work is to attempt to provide a more general model of behaviour which includes decision making as one of the many actions a person can take. This principle underlies the Autocorrelated Bayesian Sampler (ABS), a general purpose cognitive framework that can be applied to a wide range of potential tasks (Zhu et al., 2024).</p>
+<p>The ABS proposes that much of behaviour may be based on a consistent underlying mental sampling process in which agents repeatedly simulate possible cases in their mind and use these simulations to guide responses: for example, when faced with a simple perceptual stimulus like a field of dots, people may iteratively imagine a series of potential counts of the actual number. This set of samples can then be used in various ways to answer questions on the original stimulus: the mean of the samples provides an estimate of the target value, the relative proportion of samples above or below a boundary value (e.g., higher vs. lower than 25) can act as a judgment of the probability of that classification, and the number of samples needed to make a classification can predict the response time. Importantly, this means that samples collected for one query can be reused for another, creating links between responses which may be missed by narrower models focusing on one response at a time. This trades on the flexibility of mental sampling as a cognitive process: simulated samples offer rich sources of information able to answer multiple queries from a common source, while the generality of sampling allows for applications to a broad range of domains.</p>
+<p>The ABS draws upon a series of recent studies offering sampling-based explanations for observed behaviours in varying tasks, including perceptual decisions, probability judgments and numerical estimates (Dasgupta et al., 2017; Lieder, Griffiths, Huys, et al., 2018; Spicer et al., 2022 Spicer et al., , 2024;; Zhu et al., 2020). The findings of this work inform the specific sampling algorithm at the core of the ABS: for example, samples are assumed to be autocorrelated due to common violations of independence in human response series (Castillo et al., 2024; Castillo et al., 2026; Zhu et al., 2022), and samples are moderated by a prior on beliefs to avoid overly polarised judgments when relying on small sample sizes (Sundh et al., 2023; Zhu et al., 2020). More generally, the ABS uses the consistency of these patterns between tasks to propose a common underlying psychological system supporting varying aspects of behaviour from low-level perception to high-level reasoning.</p>
+<p>There is however a key caveat to this model: the ABS uses sampling to approximate the probability of particular responses within an individual&#x27;s mental distribution, but does not consider how these responses may differ in their value. This may be sufficient in simple objective cases where the decision maker need only consider the accuracy of their choice (as in the field of dots example above), but may not contend well when the available alternatives offer substantially different rewards: for example, a monetary gamble may have a low probability of paying out, but if the potential win is high enough, it may still be worth playing.</p>
+<p>As such, despite the breadth of its framework, the ABS is not well suited to capturing preferential choice in its current implementation. This is not to say that sampling cannot be applied to such choices: in fact, mental sampling models have become increasingly prominent in recent decision making research.</p>
+<p>Key examples include Decision Field Theory which uses sampling to capture the allocation of attention to potential outcomes (Bhatia, 2014; Busemeyer &amp; Townsend, 1993), &#x27;Decision by Sampling&#x27; approaches which draw samples from memory to determine the relative rank of an outcome within the decision maker&#x27;s psychological distribution (Noguchi &amp; Stewart, 2018; Stewart et al., 2006), the Best Estimate and Sampling Tools (BEAST) model which combines biased sampling mechanisms with expected value when evaluating options (Erev et al., 2017), and Utility Weighted Sampling which prioritises sampling of outcomes which would have the greatest impact on the decision maker (Lieder, Griffiths, &amp; Hsu, 2018). Much like the ABS, these models assume decisions are driven by mental simulation, in this case generating the potential outcomes of a particular choice in the mind and selecting according to the results of these simulations. As previously referenced, however, these models principally focus on choices, with little to no consideration of related behaviours such as confidence or valuation.</p>
+<p>There thus remains a gulf between even these sampling models of decision making and the broader sampling framework of the ABS, preventing a more unified description of choice behaviour.</p>
+<p>In this paper, we seek to bridge this gulf by extending the ABS to preferential choice, connecting the existing framework with established models of value-based decision making to create an even broader depiction of behaviour. We suggest that such a combination offers benefits for both individual lines of work: expanding the ABS to such choices not only increases the scope of this particular model, but also provides a more general account of decision making, including potential relationships between response types overlooked by existing choice-focused models. In the following sections, we first introduce the current sampling framework of the ABS, then describe how this can be extended to preferential choice scenarios. We then assess the adequacy of this model by comparing its predictions to available data, as well as contrasting its performance with other leading models of decision making.</p>
+<p>Crucially, we examine the model&#x27;s predictions on multiple response types (choice, response time and confidence) to assess its breadth of coverage, drawing all measures from a single common posterior distribution. Finally, we close with discussion of the implications of this newly developed model for both theories of preferential choice and sampling approaches to cognition.</p>
+<h3>The Autocorrelated Bayesian Sampler</h3>
+<p>The Autocorrelated Bayesian Sampler (ABS) proposes a consistent rational framework underlying a number of human behavioural responses (Zhu et al., 2024). The ABS approximates full Bayesian inference via a sequential sampling process in which samples are drawn from an internal psychological distribution over potential hypotheses. These samples are assumed to be able to answer multiple potential queries, including estimates, probability judgments and basic decisions between alternatives (for example, whether a particular target value is higher or lower than some boundary). In the case of such decisions, each sample is treated as evidence for one particular selection, with an accumulation process aggregating this evidence as more samples are taken. This results in a posterior distribution approximating the probability of each choice within the psychological distribution. We shall first detail the current process of the ABS to provide a foundation for its modification for value-based choices, separating the model into three distinct components for clarity: the sampling space, the autocorrelated sampling algorithm, and the evidence accumulator.</p>
+<h3>The Sampling Space</h3>
+<p>Before beginning sampling, it is first necessary to define the space from which samples will be drawn. In the existing definition of the ABS, this is a psychological distribution within the mind reflecting the probability of particular states of the world according to that individual&#x27;s mental representation. The definition of this distribution is purposefully left open to allow the framework of the ABS to be applicable to multiple potential tasks, scenarios and queries: states could reflect perceptual properties of a given stimulus (e.g., the number of dots on a screen), empirical distributions of particular values (e.g., the ages of a group of people) or inferred beliefs (e.g., the future price of a financial asset). Similarly, the source of this psychological distribution is deliberately undefined within the ABS as the model is only concerned with how the mental representation is used once it has been acquired.</p>
+<h3>The Autocorrelated Sampling Algorithm: MC 3</h3>
+<p>As its name suggests, a key tenet of the ABS is that samples are not independent of one another but are autocorrelated, with each new sample being related to its predecessors.</p>
+<p>For this purpose, the ABS uses a particular sampling algorithm named Metropolis-Coupled Markov Chain Monte Carlo (MC 3 ) in which multiple sampling chains run in parallel, differing in their propensity to explore the psychological distribution. On each timestep, each chain proposes a new potential sample given its most recent sample, and probabilistically decides whether to accept or reject this proposal. This can itself be divided into separate subcomponents: the starting point of the sampler, the proposal function determining new values, and the swapping of chains as a distinct exploratory aspect of the MC 3 algorithm.</p>
+<h3>Starting Point</h3>
+<p>Because the autocorrelated sampling algorithm proposes similar values to the preceding sample, sequences are inherently biased towards their starting point under a limited number of samples as there is less potential for movement away from this initial value. As such, the setting of this value can substantially impact the resulting series of samples, and therefore any decisions based on them. A basic setting for this value is simply to draw an initial random sample from the space, meaning any starting point bias is eliminated across simulations. One notable alternative to this however is to set the starting point to prominent values offered by the query (for example, a boundary between responses), as in this case the resulting starting point bias offers an explanation for anchoring effects where estimates are drawn towards presented values (Lieder, Griffiths, Huys, et al., 2018; Spicer et al., 2022).</p>
+<h3>Proposal Function</h3>
+<p>The proposal function generates a new potential sample at each timestep given the most recent sample in that chain. This uses a Gaussian distribution with the latest sample as its mean: where Y c,t is the proposed value at time t for chain c, X c,t-1 is the most recent sample in that chain, and σ controls the width of the proposal function.</p>
+<p>This distribution is then itself sampled to produce a proposal value for that chain, with more similar values thus being more likely to be proposed.</p>
+<p>Proposals are then assessed by comparing their probability against that of the preceding sample in that chain using the Metropolis-Hastings rule: where both p(X c,t-1 ) and p(Y c,t ) are the probabilities of those events within the sampling distribution, while p(Y c,t |X c,t-1 ) and p(X c,t-1 |Y c,t ) reflect the proposal probabilities as defined in Equation 1.</p>
+<p>As the proposal function here is Gaussian, these two proposal probabilities are equal and so cancel out for the present definition, but we retain these here to aid extension to other cases using non-symmetric proposal functions. The parameter τ c meanwhile reflects the temperature of chain c, moderating its tendency to move to lower probability regions: higher temperatures make probabilities more even, increasing the likelihood of such moves.</p>
+<p>Temperatures are initialised according to: to ensure one chain remains undistorted (i.e., τ1 = 1), with φ controlling the temperature increment between the exploratory chains.</p>
+<p>If the proposal is rejected, the previous sample is repeated (i.e., X c,t = X c,t-1 ).</p>
+<h3>Swapping Chains</h3>
+<p>While the multiple chains of MC 3 allow for greater exploration of the sampling space, the sampler ultimately only produces one key sample on each timestep, taken from the undistorted chain. In order to make use of this explorative ability, the sampler compares the values produced by each chain and probabilistically determines whether to swap their positions using a similar decision rule to that determining sample acceptance above. After each chain either accepts or rejects its most recent proposal, chains are randomly paired (without replacement) and the probability of these values at their current positions are contrasted with the probability if these positions were exchanged: with swaps being selected according to this probability.</p>
+<p>This then allows for larger movements of the undistorted chain where a higher temperature chain discovers a high probability region and these positions are exchanged.</p>
+<h3>Evidence Accumulator</h3>
+<p>In order to make a choice, samples are converted into evidence towards a potential selection, with an accumulator aggregating this evidence as the sampler progresses. Samples are thus converted into single units of evidence for the prospect favoured in that sample (e.g., &#x27;higher&#x27; or &#x27;lower&#x27;), essentially counting the number of &#x27;wins&#x27; for that option across the sequence. This is a purely ordinal comparison with no consideration of magnitude: for example, a sample of 26 dots and a sample of 30 dots are equally supportive of the &#x27;higher than 25&#x27; response. This results in a posterior distribution approximating the probability of each response within the psychological distribution, being either a Beta distribution for binary decisions or a Dirichlet distribution for multialternative decisions: where p(h i |s) is the probability of response i given samples s and the β parameters reflect the counts of samples supporting each of k possible responses.</p>
+<h3>Prior on Responses</h3>
+<p>While the evidence accumulator tracks the output of the sampling algorithm, it is also initialised with a prior to capture pre-existing expectations on the likelihood of each response before sampling begins. These priors can be viewed as &#x27;pseudocounts&#x27; of assumed observations before actual sampling begins, with their relative proportion reflecting pre-existing expectations of the likelihood of each considered response. This prevents extreme polarization of the evidence accumulator when only a few samples have been taken: for example, after a single sample, all evidence will naturally favour one response, which may lead to overconfidence that this response is correct (Zhu et al., 2020). This prior can then be adapted according to experience with the task, for instance favouring a response which has occurred more frequently in past trials.</p>
+<h3>Stopping Rule</h3>
+<p>The stopping rule determines whether sufficient evidence has been accumulated to cease sampling and make a selection. As the accumulator tracks wins against losses, the stopping rule is defined by a fixed threshold measuring the difference in evidence count between options (or between the top two options in multialternative cases), with this threshold being an additional free parameter of the model. Despite the relative simplicity of this rule, such a heuristic offers a reasonable approximation of the optimal stopping rule in such decisions (Dragalin et al., 1999 (Dragalin et al., , 2000)), and has been suggested to be used by actual learners (Brown et al., 2009).</p>
+<p>Once sampling is terminated, the decision maker is assumed to select the option with the highest probability in the final posterior distribution. In addition to this choice, the set of collected samples also predicts both the time taken to reach this decision and confidence in the selection. Response time is based on the number of samples taken before termination, assuming that each sample carries a time cost to produce. This is captured using a Poisson process where the delay between samples is exponentially distributed, resulting in an Erlang distribution: where n is the final sample count and λ is number of samples generated per second.</p>
+<p>The expected RT is then simply the sample count divided by the sampling rate:</p>
+<p>Confidence meanwhile is based on the mean of the final posterior distribution: in both binary and multialternative cases, this is simply the relative proportion of samples (including the prior) supporting the chosen option:</p>
+<p>Importantly, this means that these responses are based on the same set of evidence, leading to relationships between response types; for example, more conflicted evidence leads to more even posteriors and hence lower confidence, but also higher sample counts as it is more difficult to meet the termination threshold, resulting in longer RTs.</p>
+<h3>Decision Making in the ABS</h3>
+<p>Decisions in the current ABS are thus based on an approximation of that option&#x27;s probability within the internal distribution, where higher sample counts provide better approximations but are restricted by the optional stopping rule. As previously noted, this suffices for basic perceptual or cognitive tasks where the available options carry equivalent values as decisions need only consider the expected accuracy of selecting the most likely alternative. Such a definition fails however to account for cases in which the available options carry differing values, meaning the ABS is currently unable to effectively simulate preferential choice tasks.</p>
+<h3>Defining the Task: Risky Choice</h3>
+<p>Before attempting to apply the ABS to value-based decision, we should first specify the format of the choices which it must solve as this will determine some aspects of the new definition. For this purpose, we use the risky choice paradigm in which decision makers must choose between options varying in both monetary outcomes and the probability of receiving those outcomes (e.g. 100% chance of £10 vs. 50% of £20, 50% of £0). We shall initially focus on scenarios in which both the possible outcomes and their associated probabilities are provided ahead of the choice (so-called &#x27;decisions from description&#x27;) rather than being learned through observation (&#x27;decisions from experience&#x27;), though we will return to the influence of experience later. We shall also focus exclusively on choices between two risky prospects rather than multialternative choice as this is the more common paradigm in previous work.</p>
+<p>Such choices have been a focus of extensive work in decision making research, commonly using behavioural patterns in these tasks to identify underlying systems and discriminate between potential decision models (Bhatia, 2014; Birnbaum, 2008; Busemeyer &amp; Townsend, 1993; Erev et al., 2017; Glöckner &amp; Pachur, 2012; Kellen et al., 2020; Tversky &amp; Kahneman, 1992; Zhao et al., 2020). In addition, the probabilistic nature of these choices offers a closer match to the existing probabilistic nature of the ABS, allowing for easier application.</p>
+<h3>The Autocorrelated Bayesian Decision Maker</h3>
+<p>Having set the task, we next offer a new definition of the ABS adapted to risky decisions. We name this the Autocorrelated Bayesian Decision Maker (ABDM) to distinguish this new definition from its predecessor, though we view this as an extension of the same underlying sampling framework rather than an entirely separate model. The ABDM samples the potential outcomes of an actual choice, with an accumulator tracking the evidence towards each selection as more samples are collected. This follows the approach of many existing mental sampling models treating samples as mental simulations of possible outcomes (Bhatia, 2014; Busemeyer &amp; Townsend, 1993; Erev et al., 2017; Lieder, Griffiths, &amp; Hsu, 2018). Such a change does however require alterations to many of the components of the ABS outlined above, including the addition of new model functions and parameters. In some cases, these changes are intended to offer greater flexibility in model behaviour, allowing for interpolation between specific model settings rather than static rules. The following section thus redefines the components of the model, noting any changes from the previous definition. The full set of parameters of the ABDM as well as brief descriptions of their functions are summarised in Table 1.</p>
+<h3>Figure 1</h3>
+<p>Illustration of the conversion of objective information to the subjective sampling space in the ABDM: described probabilities (A) are first converted to posterior distributions (B), which are then sampled to produce the mental sampling space (C). This is then converted to a set of joint events across options (D) to simplify sampling.</p>
+<h3>The Sampling Space</h3>
+<p>In contrast to the previous ABS, the ABDM includes a specific method by which external information is used to set the mental distribution used for sampling. This reflects the translation of the objective information provided in the gamble descriptions of a risky choice problem into a subjective mental representation, allowing for further distortions from pure rational behaviour. Figure 1 provides a visual illustration of this process.</p>
+<h3>Conversion to Utilities</h3>
+<p>Given the extensive focus on expected utility in the previous decision making literature (Bhatia, 2014; Birnbaum, 2008; Kellen et al., 2020; Lieder, Griffiths, &amp; Hsu, 2018; Tversky &amp; Kahneman, 1992), outcomes are converted to utilities using a power-law function whose exponent α is a free parameter:</p>
+<p>Setting α to 1 thus means that utilities match objective values.</p>
+<h3>Conversion to Subjective Probabilities</h3>
+<p>The ABDM also converts any explicit probabilities provided in the description of the alternatives into a posterior distribution over the probability space to reflect potential uncertainties in the stated probabilities (see Figure 1B). For gambles with two outcomes, this uses a Beta distribution, while a Dirichlet distribution is used for gambles with more outcomes: where o i is outcome i from the considered gamble and k is the number of outcomes for that gamble.</p>
+<p>The parameters of this posterior are determined by two factors of the decision maker: their confidence in the stated probabilities, and their own personal prior on probability.</p>
+<p>For the former, this is captured by assuming that the stated probability is itself the mean of the posterior of the person providing the gamble description (again being either a Beta or Dirichlet distribution depending on the number of outcomes): this essentially treats the probabilities as reported proportions from an assumed previous set of samples with total n d , where higher counts imply greater confidence in the listed values (Fennell &amp; Baddeley, 2012).</p>
+<p>For the latter, this is captured by a separate prior distribution reflecting pre-existing beliefs on probabilities, allowing for inferred probabilities even where no explicit probability is given.</p>
+<p>This can also be viewed as a pseudocount of observations β 0 reflecting how often each outcome is assumed to have been observed in the past, allowing for simple combination with the count assumed to be used to produce the stated probabilities. For simplicity, we assume this prior is uniform across available options, treating all events as equally likely a priori, though the magnitude of this parameter can vary to reflect the strength of this prior: higher β 0 values imply stronger prior beliefs.</p>
+<p>These distributions are then aggregated to produce the parameters of the posterior: where n d is the assumed sample count for the description and β 0 is the parameter for the prior distribution.</p>
+<p>Figure 1 demonstrates this process where n d = 100 and β0 = 5: the subjective distribution for option A combines the samples assumed from the description (75 and 25) with those from the personal prior (5 and 5), resulting in a β(80, 30) distribution.</p>
+<p>This posterior is then sampled to provide subjective probabilities to be used by the sampler, replacing the stated probabilities, and remaining constant throughout sampling. For certain outcomes (i.e., p(o i ) = 1), no conversion is performed as this would require the inference of alternate outcomes that have not been provided in the description.</p>
+<h3>Creating a Joint Event Space</h3>
+<p>To provide a singular distribution for sampling, the ABDM uses a joint event space across options, as in Busemeyer and Townsend (1993) and Bhatia (2014), essentially sampling differences between outcomes rather than separate samples for each prospect (see Figure 1D).</p>
+<p>Such a representation of the sampling space is also important for capturing scenarios where outcomes are correlated and so must be considered as pairs (Diederich &amp; Busemeyer, 1999).</p>
+<p>Events are defined by the difference in utility between each possible pairing of outcomes from the two gambles. Where gambles are uncorrelated, the probability of each event is simply the product of the probability of its component outcomes. For correlated gambles, event probabilities are determined by aligning the inverse cumulative density functions of each gamble and identifying the density within each unique pair of outcomes.</p>
+<h3>The Autocorrelated Sampling Algorithm</h3>
+<p>While the core of the ABDM remains the MC 3 sampling algorithm, two adjustments were made to this process to suit the risky choice task: first, we consider several options for the starting point, treating this as an additional model parameter; and second, we replace the continuous proposal function with a discrete function better suited to the specific outcomes of a particular risky choice. Figure 2 provides a visual illustration of this process following the same example begun in Figure 1. All other aspects of the MC 3 algorithm are identical to those given above.</p>
+<h3>Starting Point</h3>
+<p>We consider four potential starting rules for the sampler: first, the max rule begins at the event which reflects the highest absolute outcome of each gamble, following the suggestion that decision makers should prioritise consideration of the most impactful events in a set, whether positive or negative (Lieder, Griffiths, &amp; Hsu, 2018). Second, the min rule begins at the lowest absolute outcomes of each gamble, assuming that the initial expectation of any choice is that closest to no change, reflecting a form of status-quo bias (Johnson et al., 2007; Zhao et al., 2020). Third, the most likely rule begins at the event with the highest probability given that this is most likely to occur (Azab et al., 2016; Falbén et al., 2024; Li et al., 2026). Fourth, the random rule simply selects one of the possible events at random under uniform probability. For simplicity, we use a common starting rule for all chains within the sampler, meaning each chain in a given simulated choice begins at the same point even under the random rule.</p>
+<h3>Proposal Function</h3>
+<p>As the sampling space is now divided into discrete events, the proposal function is here defined using a Markov transition matrix where the probability of proposing each event is determined by the similarity between that event and the most recent sample (see Figure 2B).</p>
+<p>We use this matrix in place of the Gaussian proposal from the previous definition (see Equation 1) to prevent the sampler from proposing entirely impossible events with zero probability in the mental distribution. To retain a form of autocorrelation in the samples, transition probabilities are set using an exponential function of the squared difference between events, moderated by an additional free parameter h:</p>
+<p>Low h values thus produce more uniform proposal distributions, while high h values increase focus on the most similar event. This setting is also supported by recent findings that people prefer transitions to more similar values when explicitly generating sequences of potential decision outcomes (Spicer et al., 2026).</p>
+<p>As an additional parameter, we also vary whether proposed repetitions of the latest event (i.e., p(Y c,t = X c,t-1 )) are permitted as these lead to the same sample value whether accepted or rejected; such exact repetitions are almost impossible for continuous scales but become far more probable for discrete events, particularly if transition probabilities are based on similarity as the most similar value to any outcome is naturally itself.</p>
+<p>Preventing these proposed repetitions thus increases the efficiency of the sampler, as well as corresponding Illustration of the autocorrelated sampling algorithm of the ABDM: a starting point for the chain is first selected, here being the most probable event (A). A new potential value is then drawn from the proposal matrix given this value based on similarity in events (B) and compared against its predecessor to determine acceptance (C).</p>
+<p>with the apparent aversion to direct repetitions in repeated generations (Castillo et al., 2024; Spicer et al., 2026). This is achieved by setting the probability of repetitions to zero and normalising the remaining transition probabilities. Note that this only prevents repetitions in proposed values: the previous sample can still be repeated if a proposal is rejected. Proposals are then assessed by comparing their probability against that of the preceding sample in that chain using the Metropolis-Hastings rule as defined in Equation 2.</p>
+<h3>Evidence Accumulator</h3>
+<p>For simplicity, samples are again converted into single units of evidence for the prospect with the better outcome in that sample. This does mean however that evidence is based primarily on the probability of each gamble outperforming the other with no consideration of the degree of difference in value. As such, we include an additional parameter here determining how often this conversion is performed: rather than converting each individual sample into evidence, conversion instead occurs every n steps using the mean of the last n samples (illustrated in Figure 3), with this count being a free parameter. This then allows the ABDM to approximate the expected difference between options, with n controlling the fidelity of this approximation: high ns provide more accurate estimates leading the model to tend towards expected utility, while low ns continue to focus on the probability of advantage as in the original ABS.</p>
+<h3>Prior on Responses</h3>
+<p>As in the previous definition of the ABS, the evidence accumulator is initialised with a Beta prior to capture pre-existing expectations on the likelihood of each response, fitting with the continued accumulation of discrete units of evidence for each choice. This is initially fixed and uniform across options for all choices to reflect no pre-existing bias, but can be updated as experience with these options is gathered.</p>
+<h3>Stopping Rule</h3>
+<p>As the accumulator continues to track wins vs. losses, the stopping rule is here again defined by a fixed threshold measuring the difference in evidence count between options, with this threshold being an additional free parameter of the model. For practical purposes, we also include an absolute limit of 1000 total samples to avoid indefinite sampling where evidence is indecisive; if this limit is reached, the model selects the option with the higher win count at that point regardless of the threshold, or selects randomly if counts are equal.</p>
+<p>The final set of samples can then be used to direct choice according to the maximum of the posterior distribution as in the ABS. This also includes predictions of response time based on the final sample count (following Equation 7) and confidence based on the posterior mean (following Equation 8).</p>
+<h3>Additional Noise</h3>
+<p>As with many other models, there remains the possibility that the above processes are not perfectly executed, leading to additional noise beyond the stochasticity inherent within the sampling algorithm. The ABDM includes two sources of such noise: within the accumulator, and when selecting responses. Accumulator noise reflects errors when converting samples to evidence, captured by adding Gaussian noise to the average over recent samples, with the variance of this Gaussian being a further free parameter: meaning evidence is more likely to be miscalculated where the mean of the sampled values is closer to 0.</p>
+<p>Response noise reflects errors when making the final selection such as typing errors, captured by a fixed probability of choosing the alternative gamble to that favoured by the sampler. Following previous model definitions (Erev et al., 2017), accumulator noise is not included for dominated choices where one option is clearly superior to the other, but response noise is included in these cases as this is independent of actual values.</p>
+<h3>Incorporating Feedback</h3>
+<p>Thus far, the ABDM has remained focused on purely descriptive scenarios in which all relevant information on the available prospects is provided ahead of choice. We next consider how the behaviour of this model may change when experiencing the outcomes of previous choices. Such a distinction is an important consideration given that past work has observed differing behavioural patterns between these domains: for example, decisions from experience suggest underweighting of rare events, in contrast to overweighting of rare events commonly observed in description (Hertwig et al., 2004; Wulff et al., 2018).</p>
+<p>Model Component Parameter Description Sampling Space Utility exponent (α) Exponent for conversion of value to utility Description Confidence (n d ) Assumed sample count used to generate stated probabilities Probability Prior (β 0 ) Parameter of prior distribution over probabilities Autocorrelated Sampling Algorithm Starting rule Rule determining first sample in chain Proposal Repetitions Consideration of proposing sample repetitions Similarity Parameter (h) Control parameter for similarity function Chain Count Number of parallel sampler chains Temperature increment (φ) Difference in temperature between parallel chains Evidence Accumulator Decision Threshold (∆) Difference in sample counts needed for termination Response Prior Initial pseudocount of evidence Samples per timestep Number of samples taken before evidence conversion Accumulator Noise (σ 2 ) Variance of noise in evidence accumulator Response Noise Probability of incorrect selection Table 1</p>
+<p>Parameters of the Autocorrelated Bayesian Decision Maker.</p>
+<p>We incorporate feedback into the model by treating these observations as additional samples within the evidence accumulator, adding actual outcomes to the simulated counts to further update the posterior with external evidence. As with mental samples, feedback values can be translated into wins and losses for each alternative, allowing them to be added on top of the counts generated in the mind. This method will however only reflect the probability of that option outperforming the alternative with no consideration of the degree of difference. As such, we tune the update from each set of feedback values to reflect the degree of advantage in that observation, relative to the range of outcomes in that choice: where β A,t is the posterior parameter for option A on trial t after sampling is terminated and A t and B t are the respective outcomes of gambles A and B on that trial (an equivalent update is applied to β B,t ).</p>
+<p>The minimum feedback value in that trial is also subtracted to prevent negative increments to the distribution parameters. This updating process is however specific to only that particular pair of options, and resets back to the symmetrical form described above when moving to a new problem to reflect no substantive prior preference.</p>
+<h3>Competing Models</h3>
+<p>To evaluate the predictive ability of the new ABDM, we must compare it against current leading theories from the literature. We therefore selected four competing models to provide a contrast with the ABDM, chosen to reflect key models of decision making proposed in previous work, including existing sequential sampling models. We next briefly introduce these models before comparing their performance with the ABDM.</p>
+<h3>BEAST</h3>
+<p>&#x27;Best Estimate and Sampling Tools&#x27; (BEAST) is an alternate sequential sampling model aiming to capture the qualitative choice phenomena in both description and experience (Erev et al., 2017). In brief, BEAST also offers a sampling explanation for choice behaviour, but with several notable differences from the ABDM: first, BEAST switches between four sampling methods within its sampling process, each reflecting particular behavioural biases (unbiased sampling from the true probabilities, uniform sampling reflecting equal weighting, focus on the lowest available outcome to capture pessimism, and focusing solely on the sign of outcomes). Selection of these sampling tools is stochastic, with increasing probability of the unbiased tool as more feedback is observed: where t is the number of trials with feedback, β controls the baseline tendency towards the biased sampling tools and θ reflects sensitivity to feedback.</p>
+<p>Second, BEAST takes a fixed number of samples in every decision, treating this count as a stable property of the decision maker (denoted κ). Third, samples are used alongside an approximation of that option&#x27;s expected value, with the difference in both estimates between alternatives directing choice: where ∆ t is the estimated difference on trial t, BEV is the best estimate of an option&#x27;s expected value, ST is the mean across samples for that option, and ε is normally distributed noise.</p>
+<p>Where all outcomes and their probabilities for an option are known, BEV matches the true expected value (i.e., ∑ i p(x i )x i ); if probabilities are unknown (so-called &#x27;ambiguous&#x27; gambles), BEV is instead inferred via a weighted average of a uniform weighting of the outcomes, the expected value of the alternative option, and the minimum outcome: where ψ reflects the decision maker&#x27;s sensitivity to ambiguity by controlling the weight applied to the lowest outcome min(B).</p>
+<p>This allows BEAST to make choices when comparing an ambiguous gamble against an unambiguous alternative, but not between two ambiguous gambles.</p>
+<p>Fourth, BEAST resamples for every trial: feedback is instead incorporated into the unbiased sampling tool, using the store of observed outcomes as a source for mental samples in place of the listed probabilities. As the number of observations grows, proportions within this store will eventually converge to the true probabilities, though greater discrepancies will appear in earlier decisions. BEAST also increases its likelihood of using the unbiased tool as the amount of feedback increases (see Equation 16), meaning later choices will more closely follow objective probabilities. BEAST offers a valuable standard for model evaluation as this provided strong performance in the comparison of Erev et al. (2017), with even the better performing models in that competition using BEAST as a foundation.</p>
+<h3>Cumulative Prospect Theory (CPT)</h3>
+<p>Cumulative Prospect Theory (CPT) is a well-established choice model that has been dominant in risky choice for over thirty years (Tversky &amp; Kahneman, 1992). Unlike the ABDM and BEAST, CPT is not a sequential sampling model, but instead estimates the values of available options using subjective transformations of both value and probability. Outcomes are first separated into gains and losses, and ordered by magnitude within each branch.</p>
+<p>Subjective value is then determined using distinct utility functions for each domain: where λ is a loss aversion parameter.</p>
+<p>Subjective probabilities are calculated for each outcome using a weighting function that considers the difference between the cumulative probability of outcomes as extreme as that outcome and those that are strictly larger: where i, j and k are the ranks of the outcomes. w(p) is the subjective weighting function of probability:</p>
+<p>The γ parameter controls the distortion of this function: if γ = 1, weights match probabilities, but where γ &lt; 1, weights are shifted towards more central values. Following the original definition of Tversky and Kahneman (1992), we use distinct weighting parameters for gains and losses, denoted by differing symbols (γ where x ≥ 0, δ where x &lt; 0), though the function remains the same. The final valuation is then a combination of the weighted utilities from each domain: where subscript g denotes gains and subscript l denotes losses.</p>
+<p>CPT also differs from the sampling models as its estimates are deterministic, meaning preferences are fixed for a particular set of parameters. To provide a choice probability, estimates are passed to a softmax function: where θ controls sensitivity to the difference in estimated values.</p>
+<h3>Decision Field Theory (DFT)</h3>
+<p>Decision Field Theory (DFT) is also a sequential sampling model, though somewhat simpler than either the ABDM or BEAST. DFT assumes sampling reflects stochastic allocation of attention to potential outcomes, where the sampling rates are proportional to the probability of those outcomes occurring (Busemeyer &amp; Townsend, 1993). These samples are then iteratively added to a running estimate of the difference in value between the options: where ∆ t is the estimated difference between options A and B after t samples, x A,t and x B,t are the latest samples, u(x) is a utility function, and ε t is normally distributed noise.</p>
+<p>Sampling ends when the estimated difference exceeds some threshold θ, with choice being determined by the sign of the difference. Like the ABDM, the number of samples needed to meet this threshold also gives an estimate of the response time assuming a particular sampling rate.</p>
+<p>Following Bhatia (2014) and Kellen et al. (2020), we use an extended version of DFT in which decision makers are occasionally &#x27;distracted&#x27; and attention becomes evenly allocated across outcomes. This is achieved by a weighted combination of the true probabilities and a uniform distribution across potential outcomes: where q(x i ) is the probability of sampling outcome x i , p(x i ) is that outcome&#x27;s true probability, n is the number of possible outcomes and π is the probability of distraction.</p>
+<p>While analytical solutions for the probability of particular choices in DFT are available (Bhatia, 2014; Busemeyer &amp; Townsend, 1993; Kellen et al., 2020), we here use simulation to provide model predictions to capture the stochasticity of the sampling process, as well as for parity with the ABDM and BEAST which do not hold simple analytical solutions. As with the ABDM, we include an absolute limit of 1000 samples to prevent indefinite sampling where evidence is mixed.</p>
+<h3>Transfer of Attention Exchange (TAX)</h3>
+<p>The transfer of attention exchange (TAX) model is similar to CPT in that it also produces valuations of each option using subjective weighting and utility functions rather than sequential sampling, though with some key differences (Birnbaum, 2008). First, TAX does not separate between gains and losses, ordering all outcomes in a single ranking. This also means that the utility function is equivalent between domains, with no loss aversion parameter.</p>
+<p>Second, the probability weighting function is a power law applied to the true probability:</p>
+<p>Third, TAX transfers weight between the possible outcomes, with the direction of transfer depending on an additional parameter δ: where ω(p i , p k , K) is the weight transferred from outcome i to outcome k and n is the total number of outcomes. δ controls the direction and size of transfer: if δ &gt; 0, weight transfers from higher ranks to lower ranks, whereas if δ ≤ 0, weight transfers from lower ranks to higher ranks.</p>
+<p>The final valuation is then a combination of the weighted utilities and the transferred weights:</p>
+<p>As with CPT, this valuation is fixed for a given parameter set, so choice probabilities are determined using the softmax function given in Equation 23.</p>
+<h3>Model Evaluation Choice</h3>
+<p>We next evaluated the predictive ability of the ABDM by fitting the model to empirical data, beginning with choices themselves. This also includes comparison against the other candidate models to measure the ABDM&#x27;s relative performance against current leading descriptions of choice behaviour.</p>
+<h3>Method</h3>
+<h3>Dataset</h3>
+<p>We assessed the performance of the candidate models by simulating choices on a set of 150 risky choice problems taken from Erev et al. (2017). We use this dataset for model evaluation as it provides empirical choice rates for several major choice phenomena from a common participant sample: 30 of the problems capture prominent behavioural effects observed in previous decision making research, reflecting common criteria for model assessment in this field (Bhatia, 2014; Birnbaum, 2008; Busemeyer &amp; Townsend, 1993; Erev et al., 2017; Kellen et al., 2020; Tversky &amp; Kahneman, 1992). The remaining 120 problems meanwhile provide a generalisation to a wider set of choices for a broader perspective of choice behaviour. Another advantage of this data set is that problems were answered both with and without feedback: each choice is repeated 25 times, with feedback on actual outcomes from each gamble beginning on the sixth trial. Choice rates are thus separated into five blocks, each collecting five trials, where block 1 represents choices from description alone and subsequent blocks reflect increasing amounts of experience. This then allows for examination of behaviour in both description and experience, and the transition between.</p>
+<h3>Model Criteria</h3>
+<p>Model performance was assessed both qualitatively and quantitatively: qualitative fit was measured according to the model&#x27;s ability to produce the choice phenomena targeted in the gamble set, such as preference for certainty in gains but not losses, aversion to risk and losses, and differences in choice when outcomes are split into separate components. Each effect is defined by choices between monetary gambles, with model targets being set according to empirical choice rates across participants, either reflecting preferences for particular options, or preference patterns between two related choices. Effects are thus measured at the aggregate level rather than the individual level based on whether the majority of decision makers select a particular option. 14 total effects are included in the gamble set, with 10 occurring in description and 4 occurring in experience. Descriptions of these effects are given in Table A1.</p>
+<p>Quantitative fit meanwhile was assessed using numerical measures of the difference between empirical and simulated choice rates. We use two quantitative fit metrics: first, we examine the mean squared deviation (MSD) between the average choice rate across model simulations and the empirical choice rate across participants, collapsed across problems, matching the metric used by Erev et al. (2017). Second, we calculate the marginal log likelihood (MLL) of the model by determining the probability of each choice made by each participant and averaging across parameters, allowing for individual level fitting. We use marginal likelihoods as opposed to maximum estimates to control for the size of the parameter space within the likelihood itself, meaning no further adjustments for model complexity are required.</p>
+<h3>Modelling Procedure</h3>
+<p>The candidate models were simulated by sampling 100 independent parameter sets from their prior distributions (listed in Appendix B) and using these to predict selections in each of the 150 target problems. To allow fitting of individual participants, choice probabilities were defined for each problem for a given parameter set; for the sampling models (ABDM, BEAST and DFT), this was done by repeating simulations 100 times and taking the proportion selecting an option as its likelihood, thus reflecting the inherent stochasticity of the sampling algorithm. This also included response noise described above for these models to prevent likelihoods of 0 where all simulations favoured one option. For CPT and TAX, this used the softmax function from Equation 23.</p>
+<p>Following the task format of Erev et al. (2017), the models predicted a sequence of 25 choice probabilities for each gamble pair at each parameter set: for the ABDM, the full sampling process produced predictions for the first trial, and subsequent trials were predicted by updating the results of this initial trial according to received feedback as described in Equation 15. To further support individual-level fitting, we updated the ABDM&#x27;s predictions using the actual feedback sequence viewed by each participant to capture their exact experience in the task. BEAST resampled on each trial to allow its increasing use of feedback (see Equation 16). CPT, DFT and TAX meanwhile all offer no method to incorporate feedback information and so were only simulated for the first trial of each gamble pair, with subsequent trials assuming the same choice probability. CPT, DFT and TAX also have no method to account for ambiguous scenarios where explicit probabilities are not given, though in this case these models are completely unable to make predictions. As such, we assume in these cases that these models predict indifference (i.e., choice probabilities are 0.5). We use this assumption to maintain equal numbers of empirical observations for each model to aid comparison of likelihoods, though we also examine model performance when excluding ambiguous cases in Appendix C as a robustness check.</p>
+<p>Once calculated, these probabilities were compared against each participant&#x27;s choices to determine likelihoods, which were then aggregated across trials to produce their likelihood at that parameter set and subsequently marginalised across simulations. Individual-level marginal likelihoods were then logged and summed across participants to produce an overall measure of model performance.</p>
+<p>To calculate MSD, we produced posterior predictive choice rates for each participant: individual-level likelihoods were normalised across simulations to produce posterior distributions for each participant, which were then used to weight the predicted choice rates of each simulation to create posterior predictive rates for each individual for each model.</p>
+<p>We then averaged these posterior predictive rates across participants to produce group-level predictions. As in Erev et al. (2017), predicted rates were also averaged in blocks of 5 trials before being compared to equivalent empirical measures. We then took the mean squared deviation between the simulated and empirical rates as a general measure of model error.</p>
+<h3>Transparency and Openness</h3>
+<p>All code used for model simulation and evaluation is available on Zenodo (https://doi.org/10.5281/zenodo.23770058). Empirical data was taken from the Choice Prediction Competition 2018, aggregating both calibration and test data (Plonsky, 2025; Plonsky et al., 2017). No new data was collected for this study. No part of this study was preregistered.</p>
+<h3>Figure 4</h3>
+<p>Predicted choice rates from each of the candidate models against the equivalent empirical rate for that problem, separated by trial block. Block 1 reflects decisions from description only, while subsequent blocks reflect increasing levels of experience. Text provides correlation results between means.</p>
+<h3>Results</h3>
+<p>Figure 4 shows predicted choice rates from the posterior over parameters from each model against their empirical equivalents, separated by trial block, while quantitative measures are listed in Table 2. The ABDM showed high accuracy in capturing human preferences, with a strong positive correlation between mean empirical and predicted choice rates (r = 0.909, p &lt; .001). This was also reflected in the qualitative criteria: of the 14 total behavioural phenomena, the model reproduced 9 effects in decisions from description, missing ambiguity aversion, and 2 of the 4 experience effects based on block 5, missing underweighting of rare events and the reversed reflection effect (see Appendix A for effect definitions).</p>
+<p>Comparison with the competing models however finds BEAST provides the best Model MSD MLL Fit Rate Effects ABDM 0.0123 -191136 18.8% 11 BEAST 0.0080 -182933 54.9% 13 CPT 0.0298 -202671 5.16% 8 DFT 0.0203 -191492 15.3% 8 TAX 0.0359 -207509 5.83% 8 Table 2</p>
+<p>Fitting metrics for the candidate models: MSD gives mean squared deviation between simulated and empirical choice rates, MLL gives marginal likelihood across participants, Fit Rate gives the percentage of participants best fit by that model, and Effects gives the number of behavioural phenomena reproduced (out of 14).</p>
+<p>explanation for choice behaviour across measures: BEAST held the highest correlation 675 between empirical and simulated choice rates, mean squared deviation and marginal log 676 likelihood, and best fit the highest number of participants at the individual level. BEAST also 677 performed well on the qualitative criteria, matching 9 of the 10 effects in description (missing 678 overweighting of rare events) and all 4 effects from experience. It should be noted that 679 BEAST did successfully match all 14 effects in the comparison performed by Erev et al. 680 (2017); the failure here may then reflect differences in fitting method, most notably the use of 681 posterior predictive choice rates for each participant.</p>
+<h3>682</h3>
+<p>The ABDM ranked second on all measures, with the second highest correlation 683 between empirical and simulated choice rates. This was followed closely by DFT which 684 ranked third on all measures, though its performance was worse on the qualitative criteria.</p>
+<h3>685</h3>
+<p>CPT and TAX meanwhile both performed below the other models at both the aggregate and 686 individual levels.</p>
+<h3>687</h3>
+<p>The ABDM thus shows strong predictive ability in choice competitive with leading 688 models from the field, though it is outperformed by more specialised models directly targeted 689 at choice behaviour. As previously referenced, however, the ABDM is a broader description of 690 behaviour than many existing choice models, meaning advantages may emerge when considering other response types. The next section thus expands this comparison to evaluate performance on another aspect of choice behaviour, response time.</p>
+<h3>Response Time</h3>
+<p>As previously noted, a particular advantage of the ABS framework is that it produces multiple response types from a consistent sampling process (Zhu et al., 2024). This strength is inherited by the new version of the model: in addition to predicting choice, the ABDM also predicts the time taken to make that choice, as dictated by the number of samples drawn before the accumulator passes its threshold parameter. This uses the same Erlang distribution of response time given in Equation 6: by assuming a particular sampling rate λ, the ABDM can also simulate RTs alongside predicted choices. What is more, this means the ABDM can predict decision times even without directly fitting equivalent empirical data, instead inferring these times directly from choice simulations.</p>
+<p>The competing models meanwhile vary in their ability to predict choice response times. As noted above, DFT also assumes response times reflect the number of samples taken to reach the threshold, meaning this count can be used to estimate RT by assuming a particular sample rate. A similar process can be applied to BEAST: while this model was not intended to produce response times, as this also assumes a mental sampling process, the sample count can again be used to predict response times under a given sampling rate. Unlike the ABDM and DFT, however, BEAST assumes this sample count is fixed for all trials and gambles for a particular decision maker, meaning variations can only emerge between individuals. In contrast, CPT and TAX do not natively offer any predictions of response time, providing only valuations of each option. As such, to allow these models to compete on this measure, we supplemented them using Drift Diffusion Models (DDMs) translating choice parameters to predicted response times: this converts model valuations into a &#x27;drift&#x27; term reflecting the tendency towards a particular selection which can be used to estimate the expected time to reach a threshold for choice (Ratcliff &amp; McKoon, 2008; Ratcliff et al., 2016). Comparing the models on their correspondence to empirical response time data thus offers an alternate lens to evaluate their performance, supplementing our previous model comparison results.</p>
+<h3>Method</h3>
+<h3>Dataset</h3>
+<p>Unfortunately, the data provided by Erev et al. (2017) does not include response times for the choices examined above, so while the ABDM does predict RTs for these decisions, these cannot be compared to existing empirical data. A new dataset is thus needed to examine the RT predictions of the models: for this purpose, we use the data of Plonsky et al. (2025), which is itself a follow-up to the Erev et al. (2017) study using the same methodology. As with the previous dataset, Plonsky et al. (2025) had participants repeatedly complete a series of risky choice problems, beginning purely from descriptions and later introducing feedback.</p>
+<p>Choice problems were drawn from the same parameter space as the previous gamble set, further broadening the range of evaluated behaviour. This dataset does however include response times for all choices in these new gambles, though this was not the focus of the previous study. This provided RTs for 120 gamble pairs each completed by 120 participants.</p>
+<p>Mean RT across all participants and trials was 1.35s (SD = 4.19), though due to the repetition of choice within the task, RTs are substantially slower in the first trial of each pair (M = 11.9s, SD = 15.1s) than subsequent choices (M = 0.91s, SD = 2.00). We here evaluate the models across all trials to offer a more stringent test of their predictive ability, though a supplemental analysis considering only the first trial is given in Appendix E. As a precautionary measure, we excluded any response times below 0.2s or above 60s as these are unlikely to fairly reflect the time course of the related decision process, removing 340 (&lt;0.1%) data points.</p>
+<h3>Modelling Procedure</h3>
+<p>Rather than directly fitting the candidate models to empirical response time data, we instead predicted RTs from the models&#x27; posterior distributions after fitting them to choices; this acts as a form of generalisation test in which models are fit to one task and then tested in another to prevent overfitting (Busemeyer &amp; Wang, 2000), though in this case this uses different measures from the same task rather than entirely separate designs. This includes the supplementary DDMs added to CPT and TAX: to avoid altering the base behaviour of these models, we only use DDMs to map choice rates to RTs rather than directly fitting DDM parameters. Full details on this procedure are given in Appendix D.</p>
+<p>The candidate models were applied to the choice problems of Plonsky et al. (2025) using the same fitting process described above to provide predicted decision rates and model likelihoods for each participant. RT estimates were then derived from these fitted simulations using mixed-model regressions predicting empirical RTs according to model-specific factors reflecting their assumptions on the decision process: for the ABDM, BEAST and DFT, this used the posterior mean number of samples drawn for each problem, meaning the fitted coefficient estimates the time taken to produce each sample. For CPT and TAX, this used the estimated time from the supplementary DDM, translating the arbitrary units of the diffusion process to meaningful time. In addition, to capture the time needed to read the available options when first presented, all regressions included the number of joint outcomes in that gamble pair as a predictor, reflecting the complexity of that choice problem; this was assumed to only impact the first trial of each pair, with the count for subsequent trials set to zero.</p>
+<p>Regressions also adjusted their predictors according to the assumed time course of each model: as the ABDM assumes sampling only occurs in the first trial for a particular gamble pair, sample count was set to 0 for all subsequent trials. In contrast, BEAST and DFT assume sample counts are stable across repetitions and so use the same count for all trials, though BEAST also assumes sample count is stable across problems for a given individual.</p>
+<p>The DDM estimates used by CPT and TAX were also assumed to be stable across trials but could vary between problems and individuals. All regressions included random intercepts and slopes for the considered predictors to capture individual differences in pace.</p>
+<h3>Results</h3>
+<p>Regression results are summarised in Table 3, with predicted response times based on these rates shown in Figure 5. Regressions generally predicted a baseline RT of approximately 1 second (ABDM: 0.923; BEAST: 1.13; DFT: 1.09; CPT: 1.06; TAX: 1.07), with significant contributions of outcome count in all models, though this was slightly lower for the ABDM (0.207 per gamble event compared to 0.483 in all other models). Greater differences are however seen in the influence of the model-specific predictors: each sample in the ABDM was estimated to add 0.685 seconds (95% CI: [0.593, 0.778], t(359657) = 14.6, p &lt; .001) to RT, whereas the additional sample count predictors of BEAST and DFT showed no significant Predicted response times from each of the candidate models against the equivalent empirical times for that problem, averaged across participants. Text provides correlation results between means.</p>
+<p>effect. The DDM estimates used by CPT and TAX meanwhile also significantly predicted RTs, though the scale of this effect was small in both models, leading to similar overall RT predictions to BEAST and DFT. This is demonstrated visually in Figure 5: all models other than the ABDM offer highly similar predictions of RT, with a more modest correlation between mean estimates and observations (r = 0.732 vs. r = 0.963). What is more, predictive accuracy for these models can be mostly attributed to the complexity of the gambles themselves rather than the decision process, being principally driven by the number of outcomes that must be read before a choice can be made. This can also be seen by comparing the R² of the regression models: the ABDM captured a substantially higher proportion of variance in RT (0.538) than any of the other models (0.332).</p>
+<p>The ABDM thus offers a better description of the time course of decisions than other choice-focused models, even when these are supplemented with additional mechanisms to to decision making: the sampling framework underlying the ABDM offers a wider coverage 791 of behaviours than existing theories, allowing it to capture aspects that others may miss. We 792 therefore next extend this even further by considering another response modality, confidence.</p>
+<h3>Confidence</h3>
+<p>In addition to predicting the time taken to make a decision, the ABDM also inherits its predecessor&#x27;s ability to predict the decision maker&#x27;s confidence in their selection. This follows the ABDM&#x27;s use of sampling to approximate the probability that an option is better than its alternative, captured by the posterior distribution produced after sampling is terminated: the final sample counts for each alternative form a Beta distribution whose mean represents the expected probability of advantage (see Equation 8). This means that, as with response times, the ABDM automatically produces a confidence estimate alongside each predicted choice, derived from the same set of samples used to direct decisions. As such, the ABDM simulations used in the preceding model comparisons also include confidence judgements for these choices as well, though again the empirical datasets do not include equivalent measures from human participants to compare the model against. Empirical ratings of confidence in risky choice are in fact relatively rare, though there are some recent exceptions (da Silva Castanheira et al., 2021; da Silva Castanheira &amp; Otto, 2026; Hu et al., 2026; Lejarraga &amp; Lejarraga, 2020). Even within these studies, there are differences in task set-up, elicitation method and measurement scale which make this data difficult to use: for example, some studies focus on comparisons of confidence between description and experience formats (Camilleri &amp; Newell, 2019; Lejarraga &amp; Lejarraga, 2020), while others use simplified response scales which are harder to contrast with the probabilities produced by the ABDM (da Silva Castanheira et al., 2021; da Silva Castanheira &amp; Otto, 2026).</p>
+<p>Model evaluation on confidence is also complicated by the fact that the competing models make no formal predictions regarding confidence at all, offering no point of comparison with the ABDM. Furthermore, unlike the previous comparison of response times, it is difficult to even define a baseline for these models: while we could assume new methods to extract confidence measures from the operation of these models, these would be highly speculative and not reflective of the original definitions of these theories. This then prevents a direct model comparison of the form used in the previous sections.</p>
+<p>As such, rather than directly comparing predicted confidence judgments from each of the candidate models to empirical data, we instead here evaluate the ABDM&#x27;s predictive ability in confidence by examining particular qualitative patterns in the model&#x27;s simulations. This targets three main relationships between confidence and other measures raised by previous research: the relation between confidence and choice, the relation between confidence and RT, and the relation between confidence and the value of the stimuli. We assess each of these using the posterior predictions on these measures across both datasets from the previous simulations, where the posteriors are again defined at the individual level based only on fits to each participant&#x27;s choices.</p>
+<p>While confidence is always derived the same way from the model, we use two different codings of confidence depending on the comparison: option coding provides the confidence in a given alternative even if that is not what was ultimately selected, while choice coding provides the confidence in the actual selection, creating a lower bound of 0.5. As choices here are all binary, choice coding is simply the complement of option coding where that alternative was not favoured (i.e., con f (A) = 1con f (B)). For simplicity, we restrict these analyses to only the first trial of each gamble to focus on the internal samples before incorporating feedback. In addition, we also exclude model predictions for three gamble pairs from the dataset of Erev et al. (2017) as these led to extreme outliers in response time: all three cases include common outcomes between alternatives, leading the model to become stuck sampling indifferent events and therefore never reaching a decision (these gamble pairs did not affect the RT comparison above as these did not have empirical equivalents).</p>
+<h3>Confidence and Choice</h3>
+<p>Studies of value-based decisions without risk have found negative relationships between choice confidence and variability: for example, less confident decisions are associated with weaker preferences (De Martino et al., 2013) and are more likely to change when repeated (Folke et al., 2016). We assessed whether this pattern held in the ABDM by testing the correlation between predicted confidence and choice rate. For this test, confidence was coded by option rather than choice to match the definition of choice rate as preference for option B used above. Figure 6A illustrates this relationship: confidence was strongly positively related to choice rate, with a correlation of 0.986 (p &lt; .001). This reflects the fact Red lines show best fitting slopes, while text provides correlation results between means.</p>
+<p>that both choice and confidence are taken from the final posterior once sampling terminates, with the model always selecting the option with higher probability. As a result, when preference is more consistent, confidence is more polarised, whereas where choice predictions vary, confidence falls closer to indifference.</p>
+<h3>Confidence and RT</h3>
+<p>Decisions in both risky and risk-free choice have shown negative relations between confidence and response time: slower choices commonly demonstrate lower confidence ratings (da Silva Castanheira et al., 2021; De Martino et al., 2013; Folke et al., 2016). We assessed this within the ABDM by examining the correlation between predicted confidence and RT, where RT was calculated using the same sampling rate recovered above (see Table 3).</p>
+<p>In contrast to the previous analysis, confidence is in this case choice-coded as RT cannot be coded by option. Figure 6B shows this relationship, demonstrating a moderate negative correlation of -0.395 (p &lt; .001). This again results from both measures being driven by the sampling process: longer response times result from higher sample counts, which are more likely where evidence is more conflicted and confidence is therefore lower.</p>
+<h3>Confidence and Value</h3>
+<p>In addition to relations to other responses, confidence also shows sensitivity to the features of the options that are being decided between: confidence is higher with larger differences in the value of the available options, demonstrated in both direct subjective valuations (De Martino et al., 2013; Folke et al., 2016), estimates from model fits (da Silva Castanheira et al., 2021) and objective expected values (da Silva Castanheira &amp; Otto, 2026). We assessed this pattern here using the correlation between confidence and the difference in expected value (EV) between the target gambles in each pair. This used option coding, focusing on the confidence in selecting option B according to its advantage in EV.</p>
+<p>Figure 6C illustrates this relationship, showing a moderate positive correlation of 0.575 (p &lt; .001): larger differences in EV lead to more confidence in the selection. This is because the conversion of samples to evidence in the ABDM approximates the difference in EV of the considered alternatives, meaning the accumulator will tend towards the higher EV option; greater differences in EV thus lead to more consistent evidence and so higher confidence.</p>
+<p>These results thus show the ABDM is able to capture key effects in confidence from the decision making literature, further illustrating the breadth of its coverage. This stands in sharp contrast to the competing models which all offer no predictions of confidence at all.</p>
+<h3>Discussion</h3>
+<p>The above comparisons demonstrate the Autocorrelated Bayesian Decision Maker&#x27;s ability to describe human decision making, showing that it not only accurately predicts choice behaviour in general terms but is also competitive with other existing leading models, even outperforming some well-established theories. This correspondence is both quantitative and qualitative: the ABDM demonstrates good numerical fit to empirical data and captures most of the key phenomena observed in choice, again demonstrating an advantage over previous models. What is more, our results show that the ABDM in fact offers more accurate predictions of the time taken to make such choices than these competitors, thus better explaining the time course of these decisions. We have also shown the ABDM can describe key qualitative phenomena in confidence, further outperforming its competitors which do not consider this measure.</p>
+<p>These results illustrate the breadth of this approach described in the Introduction to this paper: by proposing a detailed sampling process underlying choice, the ABDM provides a more multifaceted depiction of this behaviour, considering how sampled evidence determines not just selections but other related responses like response time and confidence. This breadth does not end with these responses, however: as with its predecessor, the ABDM is also able to predict valuations of the alternatives as well as confidence intervals around these valuations (Zhu et al., 2024). Such responses are in fact available within the current model predictions, though the considered datasets do not provide equivalent empirical values for comparison.</p>
+<p>Further contrasts with such data are thus a key avenue for future work, particularly where all response types are given from a single task and participant sample to allow for examination of their relations to one another. This is contrasted with the behaviour of the more specialised models in our comparisons: considering choice alone, BEAST provides the best description, demonstrating the advantage of focusing on one particular aspect of behaviour. Such an advantage could in fact be even greater for more recent models which use modern machine learning techniques to provide even closer matches to empirical choice rates (Peterson et al., 2021; Plonsky et al., 2025). Evaluation of the other response types show where these models can fall down, however: none of the competing models match the ABDM&#x27;s ability to predict the time course of decisions and offer no predictions of choice confidence, revealing the limitations of their approach. The ABDM thus provides a better description of behaviour when considering more aspects than just the immediate choice rate, so offering a more &#x27;complete&#x27; account. In fact, a similar argument could be applied to the more specialised models as well: BEAST is itself a broader model than the other candidates, considering the additional influence of feedback and ambiguity on decisions. From this perspective, the ABDM takes this a step further by expanding not just the set of choice problems that can be modelled, but also the range of responses drawn from these problems. This is not to suggest that the ABDM completely captures all behaviour in these tasks, of course: as with any computational model, some detail must be lost to make it tractable, inevitably leading to an imperfect description. At the same time, the ABDM does provide substantially wider coverage of behaviour than other leading models, not only predicting multiple aspects of the choice process, but also linking this to other behaviour in perception and judgment from its prior definition (Zhu et al., 2024).</p>
+<p>The value of this broader approach is not just in providing a more complete theory of behaviour, but also in identifying the practical implications of the processes actually supporting decision making: understanding the underlying cognitive systems reveals the possible interactions between responses which may be missed if focusing purely on choice.</p>
+<p>The response time analyses provide a demonstration of this: because RT in the ABDM depends on the number of samples needed to make a choice, this model links RT to the difficulty of a decision, with longer RTs reflecting more conflicted evidence and hence harder choices. These patterns are however ignored by base CPT and TAX which generate immediate estimates of choice without considering how the difficulty of that comparison might impact its speed (Ayal &amp; Hochman, 2009; Glöckner &amp; Betsch, 2008). This is not however an inherent trait of process models, also demonstrated by our comparisons: both BEAST and DFT propose sequential sampling processes support choice but fail to fully account for variation in RT. The reasons for this are more specific to these models: DFT does attempt to predict the time course of decisions but ignores the influence of experience, predicting consistent behaviour across repetitions, while BEAST uses a fixed sample count for a given person, preventing variations in RT across both trials and problems. Similarly, confidence in the ABDM reflects the relative proportion of samples favouring each choice, meaning more mixed evidence results in more moderate confidence, as well as longer RTs as more samples are needed to meet the threshold.</p>
+<p>Identifying these underlying systems also allows for new predictions of likely behaviour where the process is constrained by external factors: for example, adding a time limit to decisions may further restrict the amount of considered evidence, thus strengthening the influence of the starting point and prior on responses and so leading to different decisions.</p>
+<p>Our results also indicate that the narrowness of choice-focused models cannot be easily solved by simply appending these models with additional mechanisms: we find that supplementing both CPT and TAX with a Drift Diffusion Model to allow predictions of response time does not lead to a better description of this data. This is particularly important given such mechanisms have become increasingly common as general purpose explanations for behaviour in this field: DDMs have had substantial success in recent years in matching both the choice and timing patterns of human decision makers in perceptual (Drugowitsch et al., 2012; Ratcliff &amp; McKoon, 2008) and preferential tasks (Krajbich et al., 2010; Krajbich &amp; Rangel, 2011). Moreover, DDMs have also been extended to allow for judgments of confidence (Pleskac &amp; Busemeyer, 2010) and continuous valuations (Kvam &amp; Busemeyer, 2020), providing their own form of breadth. The present results however suggest that DDMs are not a universal solution for capturing such behaviour, offering little additional explanatory power for the response times observed in the tasks examined here. This being said, our comparisons consider only a fairly basic form of DDM without starting point bias or variation in parameters across trials; this was a deliberate decision to avoid diverging from the predictions of the base choice models, but may limit the predictive ability of these approaches.</p>
+<p>Continued contrasts with DDMs are thus a key avenue for future work.</p>
+<p>There are also more theoretical distinctions between DDMs and the form of breadth discussed here: while DDMs are highly versatile, no single setting captures all response types, instead requiring separate diffusion processes for each modality. As such, while DDMs may capture the relation between a response and its timing, they do not predict direct connections between differing responses such as choices and valuations. This is in contrast to the use of a consistent sampling process for multiple responses in the ABS, leading to relations between responses, for example decision-contingent biases in estimates like anchoring (Spicer et al., 2022; Zhu et al., 2024). More generally, DDMs do not fully specify the processes supporting choice, offering an abstracted vision of evidence accumulation to facilitate RT predictions as opposed to the concrete sampling framework offered by the ABDM.</p>
+<p>The breadth of the sampling framework is not just across responses within decision making, but also across tasks: while we have focused here on extending the ABS to value-based choice, the model retains its prior applications to other domains, continuing to predict a number of empirical phenomena in estimation (e.g., anchoring, repulsion), probability judgments (e.g., conservatism, unpacking effects), response times (e.g., speed-accuracy trade-offs, slow vs. fast errors) and confidence (e.g., metacognitive inefficiency), as originally outlined in Zhu et al. (2024). This reinforces that the definition of the ABDM given here is an extension of the existing framework to a new domain rather than an entirely new model, linking choice processes to a common sampling system used across a range of tasks. This then opens the possibility of examining the performance of this framework across these domains, for example fitting the model to a perceptual task and then using this fit to predict behaviour in preferential decision making (e.g., Frydman and Nave, 2017).</p>
+<p>Moreover, the generality of sampling itself allows for further applications to new domains by simply switching out the target distribution according to the task at hand: distributions could reflect perceptual features, semantic memory, or linguistic space, with the same sampling algorithm being used to access these distributions to support varying responses. This particular aspect of the sampling framework is a further distinction from the more focused decision making models which are not intended to be applied outside of choice contexts.</p>
+<p>We should note that the definition of the ABDM presented here is not the only method to adapt this sampling framework to value-based choices, as previous models have offered differing answers to both what is sampled and accumulated: for example, &#x27;Decision by Sampling&#x27; suggests that samples are not limited to potential outcomes from the presented options but also draw from the decision maker&#x27;s memory of all experienced values (Stewart et al., 2006), while DFT accumulates differences in outcomes between options rather than the wins and losses used here (Bhatia, 2014; Busemeyer &amp; Townsend, 1993). These may then present alternate forms of the ABDM to explore in future comparisons, though such possibilities are more complex than the current model, and reflect greater deviations from the initial definition from Zhu et al. (2024). This would also increase the space of models to evaluate, potentially making full comparisons of all settings intractable.</p>
+<p>There are however some limitations of the present study which should be noted. First, while we evaluate the candidate models in multiple response modalities, we do not perform any joint fitting across these response types, with RTs and confidence judgments instead being inferred from fits to choice. Such joint fitting can prove challenging to ensure fit metrics over differing datasets are evenly weighted, but could provide greater assurance that the ABDM truly offers the better explanation across measures. As previously referenced, however, this approach does offer a form of generalisation test (Busemeyer &amp; Wang, 2000), and so could in fact be seen as a strength of this study: the ABDM demonstrates high accuracy in predicted RTs even when its parameters are fit to other data (though from the same task), providing some assurance that this is not simply the result of overfitting. Fits are also limited by the number of simulations used to evaluate the models: we restricted comparisons to 100 parameter sets per model for tractability, but this may not be sufficient to fully cover the relatively large parameter space of the ABDM. More extensive simulations are thus advisable to verify the robustness of these results, though these will naturally carry greater computational costs.</p>
+<p>The current comparisons are also entirely focused on risky choice, potentially limiting the generality of our conclusions. Risky choice is a dominant paradigm within decision making research, and has provided the basis for many key models, including those considered here (Bhatia, 2014; Birnbaum, 2008; Erev et al., 2017; Glöckner &amp; Pachur, 2012; Kellen et al., 2020; Rieskamp, 2008; Tversky &amp; Kahneman, 1992), but extensions to other forms of choice will provide valuable tests of the true breadth of the ABDM. The generality of the sampling framework should allow application to other forms of choice, though further minor adjustments to the model to suit these tasks may be required. Even within this paradigm, we have focused on a particular task design from Erev et al. (2017) and Plonsky et al. (2025) in which choices are directly repeated multiple times, which may not offer a fair reflection of wider choice behaviour. This particularly applies to the RT analyses: such repetition leads to particular patterns in choice timing, with much slower RTs in the first instance of each decision. This could lead to suggestions that the advantage of the ABDM in these results is specific to this task; indeed, a supplementary analysis found model performance was more even if only considering the first trial (see Appendix E). At the same time, our results show that these tasks offer a method to distinguish these models based on their account for repeated choice, illustrating the value of this design. Relatedly, while the current model does account for feedback, it does not capture decisions made from experience alone, which will require further adjustments to the definition of the sampling space in the absence of objective descriptions. Similar criticisms do however also apply to the other candidate models which also lack concrete predictions when nothing is initially known about the choice options.</p>
+<p>Finally, these comparisons also consider only a subset of the many choice models from the existing literature: the current candidates were specifically chosen given their prevalence in past research, reflecting key theories for comparison with our approach, but are certainly not exhaustive given the number of models available in this area. Further contrasts with such candidates will thus help place the ABDM within the wider space of decision making theories.</p>
+<h3>Conclusion</h3>
+<p>We have presented the Autocorrelated Bayesian Decision Maker, a new application of mental sampling to value-based choice further expanding the scope of this already broad framework to this domain. Our results show that this model offers a wider coverage of choice behaviour than many existing theories, accurately describing human choices and response times in both absolute and relative terms, as well as key effects in choice confidence. This represents a broader perspective on human decision making not only capturing a wider array of behaviours within these tasks but also linking theories of decision making to other domains.</p>
+<h3>Figure E1</h3>
+<p>Predicted response times from each of the candidate models against the equivalent empirical times for that problem from only the first instance of each choice, averaged across participants. Text provides correlation results between means.</p>
+<p>These results then support the suggestion that part of the ABDM&#x27;s advantage in the main analysis is due to the structure of the considered tasks: when the competing models are not required to balance fitting both the slower initial trials and faster later trials, model performance becomes more even. This does however demonstrate a key difference in the assumptions of these models, revealing a method to discriminate their predictions: assuming a consistent decision process across repeated choices is clearly insufficient to capture the timing patterns of actual behaviour. We thus retain focus on the RT analyses considering all trials in the main text as we argue this offers a more stringent test of model behaviour.</p>
+<p>Acknowledgements Spicer, Falbén, Qian and Sanborn were supported by a European Research Council consolidator grant [817492-SAMPLING]. Spicer was also supported by an ESRC New Investigator grant [UKRI609]. The funders had no role in study design, data collection and analysis, decision to publish or preparation of the manuscript.</p>
+<p>Model Predictor Coefficient t DF p ABDM Intercept 0.930 [0.909, 0.950] 89.8 359657 &lt;.001 Sample Count 0.685 [0.593, 0.778] 14.6 359657 &lt;.001 Outcome Count 0.207 [0.187, 0.228] 19.7 359657 &lt;.001 BEAST Intercept 1.13 [1.08, 1.18] 43.5 359657 &lt;.001 Sample Count -0.023 [-0.049, 0.003] -1.74 359657 .082 Outcome Count 0.483 [0.448, 0.517] 27.6 359657 &lt;.001 DFT Intercept 1.09 [1.07, 1.11] 90.7 359657 &lt;.001 Sample Count 5.02e -05 [-9.02e -05 , 0.0001] 0.70 359657 .483 Outcome Count 0.483 [0.448, 0.517] 27.6 359657 &lt;.001 CPT Intercept 1.04 [1.00, 1.08] 51.8 359657 &lt;.001 DDM Estimate 0.004 [0.001, 0.007] 2.88 359657 .004 Outcome Count 0.483 [0.448, 0.517] 27.6 359657 &lt;.001 TAX Intercept 1.04 [0.989, 1.08] 42.7 359657 &lt;.001 DDM Estimate 0.004 [0.001, 0.006] 2.69 359657 .007 Outcome Count 0.483 [0.448, 0.517] 27.6 359657 &lt;.001 Table A1 Descriptions of qualitative choice phenomena. Appendix B Parameter Prior Distributions This section lists the prior distributions for each parameter of each candidate model. 1245 ABDM 1246 Table B1 provides the prior distribution for each parameter of the ABDM. Parameter Distribution Utility exponent (α) U(0, 2) Description Confidence (n d ) U(1, 500) Probability Prior (β 0 ) U(0, 100) Starting rule {Random, Max Event, Min Event, Max Probability} Proposal Repetitions {0, 1} Similarity Parameter (h) U(0, 0.3) Chain Count {1, 2, 3,..., 10} Temperature Increment (φ) U(1, 10) Decision Threshold (∆) U(1, 5) Response Prior U(0, 10) Samples per timestep U(1, 5) Accumulator Noise (σ 2 ) U(0, 5)</p>
+<p>Response Noise U(0, 0.1) Table B1 Prior distributions for each parameter of the ABDM.</p>
+<h3>1247 BEAST 1248</h3>
+<p>Table B2 provides the prior distribution for each parameter of BEAST. These Table B2 Prior distributions for each parameter of the BEAST model.</p>
+<h3>CPT 1251</h3>
+<p>Table B3 provides the prior distribution for each parameter of CPT, taken from Kellen 1252 et al.</p>
+<p>(2020). Parameter Distribution Gain utility exponent (α) U(0, 2) Loss utility exponent (β) U(0, 2) Loss aversion (λ) U(0, 3) Gain probability weighting (γ) U(0, 2) Loss probability weighting (δ) U(0, 2) Softmax Scale (θ) U(0, 4)</p>
+<p>Table B3 Prior distributions for each parameter of CPT.</p>
+<h3>DFT 1254</h3>
+<p>Table B4 provides the prior distribution for each parameter of DFT, taken from Kellen 1255 et al.</p>
+<p>(2020). Parameter Distribution Utility exponent (α) U(0, 2) Decision Threshold (θ) U(0, 4) Distraction Weight (π) U(0, 1) Response Noise U(0, 0.1)</p>
+<p>Table B4 Prior distributions for each parameter of DFT.</p>
+<h3>TAX 1257</h3>
+<p>Table B5 provides the prior distribution for each parameter of TAX, taken from Kellen 1258 et al.</p>
+<p>(2020). Parameter Distribution Utility exponent (α) U(0, 2) Probability weighting (γ) U(0, 2) Attention transfer (δ) U(-1.5, 1.5) Softmax scale (θ) U(0, 4)</p>
+<p>Table B5 Prior distributions for each parameter of the TAX model.</p>
+<h3>Appendix C Excluding Ambiguous Cases</h3>
+<p>We here provide alternate model comparison results after removing any choice pairs including 1260 ambiguous options from the dataset of Erev et al. (2017).</p>
+<p>Table C1 lists choice fitting metrics 1261 after filtering these trials, showing highly consistent results with the main analysis: BEAST 1262 remains the best fitting model by MSD, MLL, fit rate and number of effects reproduced. 1263 ABDM ranks second on MSD, fit rate and number of effects, but falls behind DFT on MLL, 1264 suggesting the ABDM was less consistent across participants. DFT ranks third on MSD and 1265 fit rate, while CPT and TAX again show substantially worse fits. 1266 Table C2 gives results from RT regressions after filtering ambiguous choice problems. 1267 This is fairly consistent with the main analysis: all models estimate an intercept of 1268 approximately 1 second, with significant contributions of outcome count, though this was 1269 again lower for the ABDM. Sample count was again a significant predictor for the ABDM but 1270 not DFT. In contrast to the main analysis, however, BEAST showed a significant negative 1271 relationship between sample count and RT, while the DDM estimate for CPT and TAX was 1272 now do not reach significance in either case. 1273 Model MSD MLL Fit Rate Effects ABDM 0.0104 -163869 20.4% 11 BEAST 0.0068 -158350 47.5% 12 CPT 0.0253 -173940 6.95% 8 DFT 0.0144 -162761 19.1% 8 TAX 0.0322 -178778 6.05% 8 Table C1</p>
+<p>Fitting metrics for the candidate models after excluding ambiguous choice problems: MSD gives mean squared deviation between simulated and empirical choice rates, MLL gives marginal likelihood across participants, Fit Rate gives the percentage of participants best fit by that model, and Effects gives the number of behavioural phenomena reproduced (out of 14).</p>
+<p>Model Predictor Coefficient t DF p ABDM Intercept 0.935 [0.914, 0.955] 88.4 296693 &lt;.001 Sample Count 0.592 [0.499, 0.686] 12.4 296693 &lt;.001 Outcome Count 0.248 [0.214, 0.281] 14.5 296693 &lt;.001 BEAST Intercept 1.14 [1.09, 1.20] 39.3 296693 &lt;.001 Sample Count -0.031 [-0.059, -0.002] -2.13 296693 .033 Outcome Count 0.527 [0.479, 0.574] 21.7 296693 &lt;.001 DFT Intercept 1.09 [1.07, 1.11] 88.0 296693 &lt;.001 Sample Count 3.92e-05 [-1.02e-04, 1.81e-04] 0.544 296693 .587 Outcome Count 0.527 [0.479, 0.574] 21.7 296693 &lt;.001 CPT Intercept 1.08 [1.05, 1.10] 76.2 296693 &lt;.001 DDM Estimate 0.002 [-1.58e-04, 0.004] 1.81 296693 .071 Outcome Count 0.527 [0.479, 0.575] 21.7 296693 &lt;.001 TAX Intercept 1.07 [1.05, 1.10] 76.5 296693 &lt;.001 DDM Estimate 0.002 [-8.16e-05, 0.004] 1.89 296693 .059 Outcome Count 0.527 [0.479, 0.575] 21.7 296693 &lt;.001 Table C2</p>
+<p>Results from the regressions predicting empirical response time for each model after filtering ambiguous cases. Brackets give 95% CIs on each coefficient, while t, DF and p compare that coefficient against 0.</p>
+<h3>Appendix D Drift Diffusion Model Process</h3>
+<p>To provide predicted response times for the CPT and TAX models, we used a basic Drift Diffusion Model (DDM) to convert choice predictions to RTs. In brief, DDMs depict choice as a diffusion process taking stochastic steps until reaching a boundary reflecting selection of a given option, with the number of steps taken determining response time (Ratcliff, 1978; Ratcliff et al., 2016). Importantly, this diffusion is modified by a drift rate tending towards a particular selection which can be adjusted to follow the predictions of an underlying valuation model, for example assuming a stronger trend with larger differences in estimates from</p>
+<p>Expected Utility (Guo et al., 2025; Zhao et al., 2020). We therefore generated RT predictions for CPT and TAX by assuming drift is a linear function of the difference in the prospect valuations made by these models (see Equations 22 and 28).</p>
+<p>For a simple DDM with symmetric thresholds for both selections and no starting point bias, the expected choice rate is: where v is the mean drift towards option A, z is the threshold for a decision to be made, and c is the noise in the diffusion process (Bogacz et al., 2006).</p>
+<p>Comparing this against the softmax function given in Equation 23 reveals a bridging condition where</p>
+<p>We thus derived DDM parameters from the selected θ to provide RT predictions without altering choice rates by holding c constant at 1, sampling z from a uniform prior U(0, 5) and setting</p>
+<p>For ambiguous gambles where the models are unable make these valuations, drift is instead set to near-zero (v = 10 -100 ) to maintain approximately indifferent choice rates without producing undefined RTs.</p>
+<p>With these parameters in place, the expected RT for a problem is then:</p>
+<p>We then took the posterior mean estimate of this RT across parameter samples for each participant and gamble pair and passed it as a predictor to the regressions fitting empirical RT</p>
+<h3>Appendix E Alternate RT Analysis</h3>
+<p>While the analysis of response times in the main text suggests the ABDM provides a better account of choice times than the other candidate models, concerns could be raised that this is attributable to this model simply better matching the particular methodology used by Erev et al. (2017) and Plonsky et al. (2025): these tasks both involve a series of immediate repetitions of each choice, leading to substantial differences in RT in the first trial of each pair, beginning much slower and subsequently settling at a faster level. This could mean that models assuming consistent choice processes across trials may struggle to match the data, whereas the ABDM, by assuming sampling only occurs in the first trial, can better follow the empirical reduction in RT.</p>
+<p>To evaluate the impact of this design element on our findings, we repeated the RT analysis using only the first trial of each gamble pair from each participant. This followed the same procedure as the main analysis, using regressions to predict RTs from outcome count and sample count or DDM estimate depending on the model after restricting data to the first trial only. Figure E1 shows the fitted RTs for each model against empirical data under this restriction, with full regression results given in Table E1: model predictions do become more similar when only considering the first trial, leading to more consistent correlations and R² values (ABDM: 0.394, BEAST: 0.384, CPT: 0.386, DFT: 0.385, TAX: 0.386).</p>
+<p>Intercepts for all models increase substantially to between 8.5 and 9.5s to account for the slower pace of the first trial, with coefficients for outcome counts correspondingly falling to around 0.13s per joint event as the intercept absorbs a greater share of the non-decision time. As with the main analysis, the effect of sample count is significant for the ABDM, though its size is also reduced to 0.036 seconds per sample (95% CI: [0.027, 0.044], t(14153) = 8.27, p &lt;.001). In contrast, sample count in BEAST and DFT were again non-significant, suggesting little influence of sampling on decision time in these models. The DDM estimates for CPT and TAX meanwhile were significant predictors for both models, with both also increasing in scale compared to the analysis across all trials as the model no longer needs to account for the later faster trials.</p>
+<p>Model Predictor Coefficient t DF p ABDM Intercept 8.36 [7.87, 8.84] 33.7 14153 &lt;.001 Sample Count 0.036 [0.027, 0.044] 8.27 14153 &lt;.001 Outcome Count 0.132 [0.119, 0.144] 20.6 14153 &lt;.001 BEAST Intercept 9.54 [8.50, 10.6] 18.0 14153 &lt;.001 Sample Count -0.166 [-0.705, 0.374] -0.60 14153 .547 Outcome Count 0.133 [0.121, 0.146] 21.1 14153 &lt;.001 DFT Intercept 9.25 [8.79, 9.72] 38.8 14153 &lt;.001 Sample Count -0.001 [-0.004, 8.62e -04 ] -1.18 14153 .239 Outcome Count 0.133 [0.121, 0.146] 21.1 14153 &lt;.001 CPT Intercept 8.81 [8.30, 9.32] 33.9 14153 &lt;.001 DDM Estimate 0.154 [0.079, 0.230] 4.01 14153 &lt;.001 Outcome Count 0.134 [0.121, 0.146] 21.1 14153 &lt;.001 TAX Intercept 8.09 [7.47, 8.71] 25.5 14153 &lt;.001 DDM Estimate 0.152 [0.098, 0.205] 5.57 14153 &lt;.001 Outcome Count 0.134 [0.121, 0.146] 21.1 14153 &lt;.001</p>
+<h3>Table E1</h3>
+<p>Results from the regressions predicting empirical response time in the first trial only from predicted sample count and total outcome count in each model. Brackets give 95% CIs on each coefficient, while t, DF and p compare that coefficient against 0.</p>
+<h3>Figure 2</h3>
+<p>Figure2</p>
+<h3>Figure 3</h3>
+<p>Figure3Illustration of the evidence accumulator of the ABDM: the sequence of samples is converted to evidence by averaging across the last n steps (here 3) to estimate the expected difference and determining which option this supports (shown by colour: blue samples favour A, red sample favour B). Sampling ceases where the difference in count exceeds a predetermined threshold (here 2). In this illustration, the prior on responses is symmetrical, hence the starting point of the accumulator is neutral.</p>
+<h3>Figure 5</h3>
+<p>Figure5</p>
+<h3>Figure 6</h3>
+<p>Figure 6Predicted confidence effects from the ABDM. Panels show posterior predicted confidence against posterior predicted choice rates (A), posterior predicted response time (B) and difference in expected value of the options in that pair (C), each averaged across participants.</p>
+<h3>1249</h3>
+<p>distributions were taken fromErev et al. (2017).</p>
+<h3>Table 3</h3>
+<p>Results from the regressions predicting empirical response time from predicted sample count and total outcome count in each model. Brackets give 95% CIs on each coefficient, while t, DF and p compare that coefficient against 0.</p>
+<h3>References</h3>
+<p>Ayal, S., &amp; Hochman, G. (2009). Ignorance or integration: The cognitive processes underlying choice behavior. Journal of Behavioral Decision Making, 22(4), 455-474. https://doi.org/10.1002/bdm.642</p>
+<p>Azab, H., Ruskin, D., &amp; Kidd, C. (2016). Adults&#x27; guesses on probabilistic tasks reveal incremental representativeness biases. Proceedings of the 38th Annual Meeting of the Cognitive Science Society, 38. https://escholarship.org/uc/item/4vp9n4wm</p>
+<p>Bernoulli, D. (1954). Exposition of a new theory on the measurement of risk. Econometrica, 22(1), 23-36. https://doi.org/10.2307/1909829</p>
+<p>Bhatia, S. (2014). Sequential sampling and paradoxes of risky choice. Psychonomic Bulletin &amp; Review, 21(5), 1095-1111. https://doi.org/10.3758/s13423-014-0650-1</p>
+<p>Birnbaum, M. H. (2008). New paradoxes of risky decision making. Psychological Review, 115(2), 463-501. https://doi.org/10.1037/0033-295X.115.2.463</p>
+<p>Bogacz, R., Brown, E., Moehlis, J., Holmes, P., &amp; Cohen, J. D. (2006). The physics of optimal decision making: A formal analysis of models of performance in two-alternative forced-choice tasks. Psychological Review, 113(4), 700-765. https://doi.org/10.1037/0033-295X.113.4.700</p>
+<p>Brown, S., Steyvers, M., &amp; Wagenmakers, E.-J. (2009). Observing evidence accumulation during multi-alternative decisions. Journal of Mathematical Psychology, 53(6), 453-462. https://doi.org/10.1016/j.jmp.2009.09.002</p>
+<p>Busemeyer, J. R., &amp; Townsend, J. T. (1993). Decision field theory: A dynamic-cognitive approach to decision making in an uncertain environment. Psychological Review, 100(3), 432-459. https://doi.org/10.1037/0033-295X.100.3.432</p>
+<p>Busemeyer, J. R., &amp; Wang, Y.-M. (2000). Model comparisons and model selections based on generalization criterion methodology. Journal of Mathematical Psychology, 44(1), 171-189. https://doi.org/10.1006/jmps.1999.1282</p>
+<p>Camilleri, A. R., &amp; Newell, B. R. (2019). Better calibration when predicting from experience (rather than description). Organizational Behavior and Human Decision Processes, 150, 62-82. https://doi.org/10.1016/j.obhdp.2018.10.006</p>
+<p>Castillo, L., León-Villagrá, P., Chater, N., &amp; Sanborn, A. N. (2024). Explaining the flaws in human random generation as local sampling with momentum. PLOS Computational Biology, 20(1), e1011739. https://doi.org/10.1371/journal.pcbi.1011739</p>
+<p>Castillo, L., León-Villagrá, P., Falbén, J. K., Chater, N., &amp; Sanborn, A. N. (2026). Random generation is what comes to mind in naturalistic settings. Cognition, 274, 106554. https://doi.org/10.1016/j.cognition.2026.106554</p>
+<p>Dasgupta, I., Schulz, E., &amp; Gershman, S. J. (2017). Where do hypotheses come from? Cognitive Psychology, 96, 1-25. https://doi.org/10.1016/j.cogpsych.2017.05.001</p>
+<p>da Silva Castanheira, K., Fleming, S. M., &amp; Otto, A. R. (2021). Confidence in risky value-based choice. Psychonomic Bulletin &amp; Review, 28(3), 1021-1028. https://doi.org/10.3758/s13423-020-01848-y da Silva Castanheira, K., &amp; Otto, A. R. (2026). Demand avoidance in value-based choice under risk: A behavioral and pupillometric examination. Cognitive, Affective, &amp; Behavioral Neuroscience, 26(2), 703-723. https://doi.org/10.3758/s13415-025-01392-z</p>
+<p>De Martino, B., Fleming, S. M., Garrett, N., &amp; Dolan, R. J. (2013). Confidence in value-based choice. Nature Neuroscience, 16(1), 105-110. https://doi.org/10.1038/nn.3279</p>
+<p>Diederich, A., &amp; Busemeyer, J. R. (1999). Conflict and the stochastic-dominance principle of decision making. Psychological Science, 10(4), 353-359. https://doi.org/10.1111/1467-9280.00167</p>
+<p>Dragalin, V. P., Tartakovsky, A. G., &amp; Veeravalli, V. V. (1999). Multihypothesis sequential probability ratio tests. i. asymptotic optimality. IEEE Transactions on Information Theory, 45(7), 2448-2461. https://doi.org/10.1109/18.796383</p>
+<p>Dragalin, V. P., Tartakovsky, A. G., &amp; Veeravalli, V. V. (2000). Multihypothesis sequential probability ratio tests. ii. accurate asymptotic expansions for the expected sample size. IEEE Transactions on Information Theory, 46(4), 1366-1383. https://doi.org/10.1109/18.850677</p>
+<p>Drugowitsch, J., Moreno-Bote, R., Churchland, A. K., Shadlen, M. N., &amp; Pouget, A. (2012). The cost of accumulating evidence in perceptual decision making. The Journal of Neuroscience, 32(11), 3612-3628. https://doi.org/10.1523/JNEUROSCI.4010-11.2012</p>
+<p>Erev, I., Ert, E., Plonsky, O., Cohen, D., &amp; Cohen, O. (2017). From anomalies to forecasts: Toward a descriptive model of decisions under risk, under ambiguity, and from experience. Psychological Review, 124(4), 369-409. https://doi.org/10.1037/rev0000062</p>
+<p>Falbén, J. K., Castillo, L., León-Villagrá, P., Chater, N., &amp; Sanborn, A. N. (2024). Biased mind or biased world? Assessing the accuracy of cultural beliefs that underlie social judgments. PsyArXiv Preprint. https://doi.org/10.31234/osf.io/5hdbp</p>
+<p>Fennell, J., &amp; Baddeley, R. (2012). Uncertainty plus prior equals rational bias: An intuitive bayesian probability weighting function. Psychological Review, 119(4), 878-887. https://doi.org/10.1037/a0029346</p>
+<p>Folke, T., Jacobsen, C., Fleming, S. M., &amp; De Martino, B. (2016). Explicit representation of confidence informs future value-based decisions. Nature Human Behaviour, 1(1), 0002. https://doi.org/10.1038/s41562-016-0002</p>
+<p>Frydman, C., &amp; Nave, G. (2017). Extrapolative beliefs in perceptual and economic decisions: Evidence of a common mechanism. Management Science, 63(7), 2340-2352. https://doi.org/10.1287/mnsc.2016.2453</p>
+<p>Glöckner, A., &amp; Pachur, T. (2012). Cognitive models of risky choice: Parameter stability and predictive accuracy of prospect theory. Cognition, 123, 21-32. https://doi.org/10.1016/j.cognition.2011.12.002</p>
+<p>Glöckner, A., &amp; Betsch, T. (2008). Do people make decisions under risk based on ignorance? an empirical test of the priority heuristic against cumulative prospect theory. Organizational Behavior and Human Decision Processes, 107(1), 75-95. https://doi.org/10.1016/j.obhdp.2008.02.003</p>
+<p>Guo, M., Ikink, I., Roelofs, K., &amp; Figner, B. (2025). Ambiguity preferences in intertemporal and risky choice: A large-scale study using drift-diffusion modelling. Psychonomic Bulletin &amp; Review, 32(6), 2939-2956. https://doi.org/10.3758/s13423-025-02709-2</p>
+<p>He, L., Zhao, W. J., &amp; Bhatia, S. (2022). An ontology of decision models. Psychological Review, 129(1), 49-72. https://doi.org/10.1037/rev0000231</p>
+<p>Hertwig, R., Barron, G., Weber, E. U., &amp; Erev, I. (2004). Decisions from experience and the effect of rare events in risky choice. Psychological Science, 15(8), 534-539. https://doi.org/10.1111/j.0956-7976.2004.00715.x</p>
+<p>Hu, X., Li, Y., Chen, X., Wu, J., Shi, J., Guo, Q., Liu, Y., Yang, C., &amp; Luo, L. (2026). Metacognitive sensitivity predicts the quality of information search in value-based decision making. Cognition, 269, 106410. https://doi.org/10.1016/j.cognition.2025.106410</p>
+<p>Johnson, E. J., Häubl, G., &amp; Keinan, A. (2007). Aspects of endowment: A query theory of value construction. Journal of Experimental Psychology: Learning, Memory, and Cognition, 33(3), 461-474. https://doi.org/10.1037/0278-7393.33.3.461</p>
+<p>Kahneman, D., &amp; Tversky, A. (1979). Prospect theory: An analysis of decision under risk. Econometrica, 47(2), 263-291. https://doi.org/10.2307/1914185</p>
+<p>Kellen, D., Steiner, M. D., Davis-Stober, C. P., &amp; Pappas, N. R. (2020). Modeling choice paradoxes under risk: From prospect theories to sampling-based accounts. Cognitive Psychology, 118, 101258. https://doi.org/10.1016/j.cogpsych.2019.101258</p>
+<p>Krajbich, I., Armel, C., &amp; Rangel, A. (2010). Visual fixations and the computation and comparison of value in simple choice. Nature Neuroscience, 13(10), 1292-1298. https://doi.org/10.1038/nn.2635</p>
+<p>Krajbich, I., &amp; Rangel, A. (2011). Multialternative drift-diffusion model predicts the relationship between visual fixations and choice in value-based decisions. Proceedings of the National Academy of Sciences of the United States of America, 108(33), 13852-13857. https://doi.org/10.1073/pnas.1101328108</p>
+<p>Kvam, P. D., &amp; Busemeyer, J. R. (2020). A distributional and dynamic theory of pricing and preference. Psychological Review, 127(6), 1053-1078. https://doi.org/10.1037/rev0000215</p>
+<p>Lejarraga, T., &amp; Lejarraga, J. (2020). Confidence and the description-experience distinction. Organizational Behavior and Human Decision Processes, 161, 201-212. https://doi.org/10.1016/j.obhdp.2020.07.003</p>
+<p>Li, Y.-X., Falbén, J. K., Castillo, L., Spicer, J., Zhu, J.-Q., Qian, C. S., Chater, N., &amp; Sanborn, A. N. (2026). Does outcome utility bias the mental simulations of risky events? PsyArXiv Preprint. https://doi.org/10.31234/osf.io/awdr7_v2</p>
+<p>Lieder, F., Griffiths, T. L., &amp; Hsu, M. (2018). Overrepresentation of extreme events in decision making reflects rational use of cognitive resources. Psychological Review, 125(1), 1-32. https://doi.org/10.1037/rev0000074</p>
+<p>Lieder, F., Griffiths, T. L., Huys, Q. J., &amp; Goodman, N. D. (2018). The anchoring bias reflects rational use of cognitive resources. Psychonomic Bulletin &amp; Review, 25, 322-349. https://doi.org/10.3758/s13423-017-1286-8</p>
+<p>Noguchi, T., &amp; Stewart, N. (2018). Multialternative decision by sampling: A model of decision making constrained by process data. Psychological Review, 125(4), 512-544. https://doi.org/10.1037/rev0000102</p>
+<p>Peterson, J. C., Bourgin, D. D., Agrawal, M., Reichman, D., &amp; Griffiths, T. L. (2021). Using large-scale experiments and machine learning to discover theories of human decision-making. Science, 372(6547), 1209-1214. https://doi.org/10.1126/science.abe2629</p>
+<p>Pleskac, T. J., &amp; Busemeyer, J. R. (2010). Two-stage dynamic signal detection: A theory of choice, decision time, and confidence. Psychological Review, 117(3), 864-901. https://doi.org/10.1037/a0019737</p>
+<p>Plonsky, O. (2025). CPC18 [Data Set] [Open Science Framework]. https://osf.io/dekt3</p>
+<p>Plonsky, O., Apel, R., Ert, E., Tennenholtz, M., Bourgin, D., Peterson, J. C., Reichman, D., Griffiths, T. L., Russell, S. J., Carter, E. C., Cavanagh, J. F., &amp; Erev, I. (2025). Predicting human decisions with behavioural theories and machine learning. Nature Human Behaviour, 9, 2271-2284. https://doi.org/10.1038/s41562-025-02267-6</p>
+<p>Plonsky, O., Erev, I., &amp; Ert, E. (2017). Calibration data for Choice Prediction Competition 2018 (CPC18) [Data Set] [Zenodo]. https://doi.org/10.5281/zenodo.845873</p>
+<p>Ratcliff, R. (1978). A theory of memory retrieval. Psychological Review, 85(2), 59-108. https://doi.org/10.1037/0033-295X.85.2.59</p>
+<p>Ratcliff, R., &amp; McKoon, G. (2008). The diffusion decision model: Theory and data for two-choice decision tasks. Neural Computation, 20(4), 873-922. https://doi.org/10.1162/neco.2008.12-06-420</p>
+<p>Ratcliff, R., Smith, P. L., Brown, S. D., &amp; McKoon, G. (2016). Diffusion decision model: Current issues and history. Trends in Cognitive Sciences, 20(4), 260-281. https://doi.org/10.1016/j.tics.2016.01.007</p>
+<p>Rieskamp, J. (2008). The probabilistic nature of preferential choice. Journal of Experimental Psychology: Learning, Memory, and Cognition, 34(6), 1446-1465. https://doi.org/10.1037/a0013646</p>
+<p>Spicer, J., Li, Y.-X., Castillo, L., Falbén, J. K., Qian, C. S., &amp; Sanborn, A. N. (2026). Generated outcomes in risky choice reveal biased sampling and sequential dependencies. Communications Psychology, 4, 104. https://doi.org/10.1038/s44271-026-00467-y</p>
+<p>Spicer, J., Zhu, J.-Q., Chater, N., &amp; Sanborn, A. N. (2022). Perceptual and cognitive judgments show both anchoring and repulsion. Psychological Science, 33, 1395-1407. https://doi.org/10.1177/09567976221089599</p>
+<p>Spicer, J., Zhu, J.-Q., Chater, N., &amp; Sanborn, A. N. (2024). How do people predict a random walk? Lessons for models of human cognition. Psychological Review, 131(5), 1069-1113. https://doi.org/10.1037/rev0000493</p>
+<p>Stewart, N., Chater, N., &amp; Brown, G. D. (2006). Decision by sampling. Cognitive Psychology, 53(1), 1-26. https://doi.org/10.1016/j.cogpsych.2005.10.003</p>
+<p>Sundh, J., Zhu, J.-Q., Chater, N., &amp; Sanborn, A. N. (2023). A unified explanation of variability and bias in human probability judgments: How computational noise explains the mean-variance signature. Journal of Experimental Psychology: General, 152(10), 2842-2860. https://doi.org/10.1037/xge0001414</p>
+<p>Tversky, A., &amp; Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and Uncertainty, 5(4), 297-323. https://doi.org/10.1007/BF00122574</p>
+<p>Wulff, D. U., Mergenthaler-Canseco, M., &amp; Hertwig, R. (2018). A meta-analytic review of two modes of learning and the description-experience gap. Psychological Bulletin, 144(2), 140-176. https://doi.org/10.1037/bul0000115</p>
+<p>Zhao, W. J., Walasek, L., &amp; Bhatia, S. (2020). Psychological mechanisms of loss aversion: A drift-diffusion decomposition. Cognitive Psychology, 123, 101331. https://doi.org/10.1016/j.cogpsych.2020.101331</p>
+<p>Zhu, J.-Q., León-Villagrá, P., Chater, N., &amp; Sanborn, A. N. (2022). Understanding the structure of cognitive noise. PLoS Computational Biology, 18(8), e1010312. https://doi.org/10.1371/journal.pcbi.1010312</p>
+<p>Zhu, J.-Q., Sanborn, A. N., &amp; Chater, N. (2020). The Bayesian sampler: Generic Bayesian inference causes incoherence in human probability judgments. Psychological Review, 127(5), 719-748. https://doi.org/10.1037/rev0000190</p>
+<p>Zhu, J.-Q., Sundh, J., Spicer, J., Chater, N., &amp; Sanborn, A. N. (2024). The Autocorrelated Bayesian Sampler: A rational process for probability judgments, estimates, confidence intervals, choices, confidence judgments, and response times. Psychological Review, 131(2), 456-493. https://doi.org/10.1037/rev0000427</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
