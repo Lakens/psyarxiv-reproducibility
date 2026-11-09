@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Attention in Model-based Cognitive
+Neuroscience: Mechanisms for Optimization under Constraint</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Attention in Model-based Cognitive Neuroscience: Mechanisms for
+Optimization under Constraint
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.23
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 193 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Smith, S., &amp; Krajbich, I. (2019). Gaze ampli- fies value in decision
+making. Psychological Science, 30(1), 116-128. (DOI: <a href="https://doi.org/10.1177/" class="uri">https://doi.org/10.1177/</a>
+0956797618810521)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/D3A3F4EC39965F459B9764CD3B1334" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 193 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 193 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Two major criticisms of attention research are: 1) verbal theories lack the specificity to make falsifiable predictions about how the various mechanisms of attention operate; and 2) the term &quot;attention&quot; is frequently ascribed to conceptually similar phenomena despite dissociable neural underpinnings. The field of model-based cognitive neuroscience is well-positioned to address (1) through mathematical formalization of hypothesized processes, but may perpetuate (2) insofar as similar algorithms and parameters may recur across modeling traditions without necessarily drawing upon a shared neuro-mechanistic basis. This review provides a functionfirst organization of the algorithms that have been hypothesized to implement or give rise to &quot;attention&quot; at various levels of processing: perception, decision-making, and learning. We ground mathematically-formalized processes in the performance-relevant objectives they serve and the processing constraints that limit them. In doing so, we provide a road map of the broader computational-level solutions that &quot;attention&quot; mechanisms have been invoked to provide.</p>
+<h3>Introduction</h3>
+<p>Despite William James&#x27;s often-quoted, pre-theoretical notion that &quot;Everyone knows what attention is,&quot; (James, 1890, p. 403), efforts to empirically define, measure, and explain attention have produced considerable controversy. The subjective experience of &quot;paying attention&quot; to a particular location, object, or train of thought is straightforward and relatable, consistent with the early intuition that attention is a unitary construct (Kahneman, 1973; Broadbent, 1958; Titchener, 1908). Attempting to describe even its most basic properties, however, immediately requires delineation into subtypes: attention can be either internally or externally directed (Chun et al., 2011); it can be consciously engaged or can filter what enters consciousness in the first place (Koch &amp; Tsuchiya, 2007); it can be drawn by bottom-up salience or guided by top-down goals (Sarter et al., 2001); among many other distinctions. Accordingly, a vast literature of experimental and neuroimaging findings suggests that what is experienced as &quot;attention&quot; is in fact highly diverse and lacks a dedicated control center in the brain (Styles, 1997; Parasura-1 Corresponding author: Emily R. Weichart, Department of Psychology, Utah State University, 2810 Old Main Hill, Logan, Utah 84321, Email: emily.weichart@usu.edu man, 2000; Duncan, 2006). The need to revise the concept of unitary attention was powerfully captured by Alan Allport:</p>
+<p>Even a brief survey of the heterogeneity and functional separability of different components of spatial and nonspatial attentional control prompts the conclusion that, qua causal mechanism, there can be no such thing as attention. There is no one uniform computational function or mental operation (in general no one causal mechanism) to which all so-called attentional phenomena can be attributed. (Allport, 1993, p. 203).</p>
+<p>Modern perspectives thus accommodate mechanistic disunity by characterizing &quot;attention&quot; as a general term for processes that prioritize information for ongoing thought and action (Wu, 2011; Watzl, 2011; Wu, 2024; Smithies, 2011; Koralus, 2014). When attention is no longer treated as a single quantity or explanatory operation, new research questions emerge: what are the various mechanisms through which information is prioritized, and what factors determine which mechanisms are engaged?</p>
+<p>This paper provides a state-of-the-field review of how model-based cognitive neuroscience has addressed these questions. Given its emphasis on mathematical formalization, we suggest that this subfield is particularly well-suited to understanding &quot;attention&quot; as many mechanisms that may be instantiated differently depending on the goal and the neural systems involved (Palmeri et al., 2015; Turner et al., 2017; Kriegeskorte &amp; Douglas, 2018; Forstmann &amp; Turner, 2024). Unlike verbal theories in which &quot;attention&quot; is presented as metaphors (Di Lollo, 2018) or retrofit latent causes of observed effects (B. Anderson, 2011), there is less room for ambiguity when hypotheses must be mathematically specified. Accordingly, model-based cognitive neuroscience approaches involve expressing process-level hypotheses as systems of equations, and comparing predictions against against behavioral and neurophysiological data (e.g., from human, non-human primate, or other animal participants). In many cases, fitting and comparing models based on how well they account for both behavioral outputs and process-level data provides the specificity to adjudicate among competing accounts. While many existing reviews helpfully classify attentional phenomena into subtypes for targeted study (e.g., Klein, 2022; Posner &amp; Petersen, 1990; Corbetta &amp; Shulman, 2002), this review examines how model-based cognitive neuroscience approaches have operationalized &quot;attention&quot; in terms of neural mechanisms.</p>
+<p>Although model-based cognitive neuroscience may offer valuable explanatory power, formal precision does not necessarily equate to a generalizable understanding of how the brain works. This literature is often siloed according to specific modeling traditions, such that models that operate at the timescales relevant to perception, decision-making, and learning invoke overlapping constructs (i.e., as parameters) without intending to imply a shared neural mechanism (Kvam &amp; Alaukik, 2026). Mechanisms described as &quot;attention&quot; that regulate comparison during a choice between snack options (Krajbich, 2019) comprise a separate theoretical discussion from the &quot;attention&quot; that is hypothesized to mediate visual search (Satel et al., 2011; Itti &amp; Koch, 2001). The distinctions that vary by modeling tradition, however, are not necessarily explicit-a problem which mirrors the broader field of psychology&#x27;s unbounded use of the word &quot;attention&quot; to refer to distinct phenomena (B. Anderson, 2023). Attentional mechanisms of interest, such as competitive inhibition and multiplicative gain, may therefore recur across models of individual tasks while drawing upon different neural processes and networks. Mathematical formalization may solve the problem of conceptual overreach, but a proliferation of task-specific mechanisms may &#x27;miss the forest for the trees&#x27; by obscuring general principles for how and why information is prioritized.</p>
+<p>To address this, the current review provides a high-level function-first organization of the mechanisms hypothesized in model-based cognitive neuroscience to comprise-or give rise to-attention. When many implementations are considered together, a shared structure becomes visible: the processing domain (i.e., perception, decision-making, learning) comprises a problem space with an objective and constraints, and &quot;attention&quot; constitutes a set of solutions for navigating the space effectively. As summarized by Table 1, objectives refer to desired performance outcomes and constraints refer to the resource, capacity, and informational factors that limit the system&#x27;s ability to achieve those outcomes (Lieder &amp; Griffiths, 2019). Prolonged stimulus processing, for example, may improve representational fidelity but is limited by the temporal and metabolic costs of sustained neural activity (Stroud et al., 2025). At a broader level, this perspective aligns with the evolutionary argument that wide-ranging &quot;attention&quot; phenomena emerged to enable goal-directed behavior under the selection demands imposed by an expanding repertoire of possible actions (i.e., necessarily leaving some actions untaken and some inputs unprocessed) (Hommel et al., 2019). We do not, however, argue that all &quot;attention&quot; must be unilaterally optimal, as this would not be an apt description of attentional capture by irrelevant stimuli (Theeuwes, 1992), perseverative attention (Castro &amp; Wasserman, 2016), and attentional lapses (Weissman et al., 2006). The paper&#x27;s organization instead focuses on the mechanisms through which attentional phenomena emerge and the functions they serve, including instances where optimization of one objective results in observable decrements in other dimensions (Weichart &amp; Darby, 2026).</p>
+<h3>Scope and Approach</h3>
+<p>To conduct the present structured narrative review, we identified articles that fit the following a priori inclusion criteria: 1) mechanisms of attention were a primary theoretical focus; 2) a computational model was fit to observed output; and 3) process-level neurophysiological or neuroanatomical data informed or constrained model predictions (functional magnetic resonance imaging, fMRI; electroencephalography, EEG; single-unit recording; eye-tracking; tissue volume). A total of 64 articles were identified.</p>
+<p>We first organized the identified papers according to the recurring processing domains of perception and encoding, comparing and evaluating decision evidence, and learning, which reflect the principal contexts in which model-based cognitive neuroscience has formalized attentional mechanisms. We emphasize that while these domains provide a useful organizing structure for this literature, they are not intended to accommodate all models that exist. Models that focus on emotion (Ong et al., 2020), memory retrieval (Vasishth et al., 2019), and language (Goldstein et al., 2022) that do not explicitly specify a mechanistic role for attentionor do not describe how attentional phenomena emergeare not discussed here. Through our synthesis, we identified common functional solutions implemented to navigate the implicit tradeoffs between system objectives and processing constraints (Table 1). Interpreted through the lens of Marr&#x27;s (1982) levels of analysis, solutions for navigating Optimization under constraint Perception &amp; Encoding Comparing &amp; Evaluating Decision Evidence Learning Objective Construct useful internal representations Select goal-consistent options Maximize cumulative reward over time Constraints Energy; perceptual/memory capacity Time; effort Knowledge/experience; computational bandwidth Solutions Reduction of predictive redundancy Adaptively regulating evidence quality and commitment policy Experience-based priority updating Goal-relevant perceptual enhancement Regulating option-wise comparison over time Exerting control over information acquisition and integration Gating access to limitedcapacity resources Selective attribute weighting during choice Figure 1</p>
+<p>Function-first organization of processes described as &quot;attention&quot; in the reviewed model-based cognitive neuroscience literature. Domains reflect recurring contexts in which the included models were applied, and each is characterized by an overarching objective and biological or processing constraints. Mechanisms described as &quot;attention&quot; are grouped according to the computational-level solutions they provide for navigating these tradeoffs, and each solution may encompass multiple alternative algorithmic specifications or neural implementations.</p>
+<p>these domain-specific problem spaces constitute computational-level descriptions of what the corresponding hypothesized mechanisms achieve. Within each dedicated solution subsection, we review papers that algorithmically formalize the given solution, and explicate how it is physically implemented by neural systems. Ultimately, this function-first organizing structure provides an accessible entry point into an otherwise fragmented literature, allowing researchers to start with a functional hypothesis and identify relevant processlevel modeling work.</p>
+<h3>1. Attention in perception and encoding</h3>
+<p>Visual perception and encoding transform low-level sensory inputs into internal representations that support accurate inference and adaptive action (e.g., Creem-Regehr &amp; Kunz, 2010). Maintaining high-fidelity representations across all sensory inputs, however, is fundamentally bounded by the metabolic costs of neural firing (i.e., glucose and oxygen; Niven &amp; Laughlin, 2008; Wong-Riley, 2010) and limits on the temporal persistence and capacity of visual processing (Enns &amp; Di Lollo, 1997; Di Lollo et al., 2000). Mecha-nisms operationalized as &quot;attention&quot; address these biological and processing limits through three recurring functional solutions: by selectively prioritizing unpredicted sensory inputs over predictable ones (Solution 1.1), by focusing perceptual processing toward goal-relevant features or locations rather than distributing resources uniformly across sensory space (Solution 1.2), and by gating which sensory inputs enter downstream, capacity-limited systems (Solution 1.3).</p>
+<h3>Solution 1.1: Reduction of predictive redundancy</h3>
+<p>A central computational pressure in perceptual systems is the need to accurately represent sensory input while minimizing energy cost. Early single-cell recordings in the visual cortex established that neurons exhibit selective tuning for local stimulus properties within receptive fields (Hubel &amp; Wiesel, 1965 , 1968). However, subsequent work demonstrated that firing in the presence of a preferred input is suppressed when matching stimulus features are simultaneously represented by surrounding neurons (Allman et al., 1985). Computational modeling work leveraged these extraclassical surround effects to formalize a core optimization strategy in perception: reduction of prediction-redundant processing.</p>
+<h3>Prediction error as a driver of perceptual encoding</h3>
+<p>In natural environments, a large proportion of visual information is redundant across space and time. Static background elements like the sky and ground, for example, remain largely unchanged from one moment to the next. Constant transmission of raw, fully predictable sensory input would consume an untenable amount of metabolic energy, and deplete the resources available to process novel or dynamic objects that are of more immediate concern to the organism&#x27;s survival. Sensory architectures can therefore balance representational accuracy with resource efficiency by making and evaluating predictions, and using prediction error as a signal to selectively propagate information up the cortical hierarchy.</p>
+<p>Predictive coding models accomplish this by representing the visual system as a neural network with bottom-up and top-down connections (Rao &amp; Ballard, 1999; Mumford, 1992; Friston, 2005; McClelland &amp; Rumelhart, 1981). When processing sensory input, these models instantiate the following properties 1) superordinate layers (e.g., V2 relative to V1) learn statistical regularities across multiple images as they are processed over time; 2) top-down connections communicate predicted activation patterns to subordinate layers; 3) bottom-up connections communicate how reality deviated from the prediction, rather than a comprehensive impression of reality itself; and 4) superordinate layers update predictions based on error signals received from subordinate layers. The hypothesized system, in other words, simultaneously optimizes for the goals of making accurate predictions and minimizing redundant input signal. Simulations of predictive coding models have replicated several observed properties of neuronal populations in the visual cortex, including the aforementioned suppression effect when a neuron&#x27;s preferred input extends beyond its receptive field.</p>
+<p>Selectivity emerges naturally from predictive coding architectures, insofar as inputs that deviate from expectation receive privileged processing relative to inputs that match expectation. In the related specification provided by biased competition models, attention is explicitly described as the selectivity that results from top-down biases influencing which inputs within the receptive field receive enhanced processing (Desimone &amp; Duncan, 1995). Mechanisms for biased competition and predictive coding have been shown to be mathematically equivalent under certain conditions (Spratling, 2008; Feldman &amp; Friston, 2010; Spratling, 2010). This equivalence provides a key insight: attentional phenomena may not require a dedicated mechanism, but may instead result from architectures optimized to achieve system-level goals while accommodating processing constraints (Lieder &amp; Griffiths, 2019).</p>
+<h3>Predictive coding across the visual hierarchy</h3>
+<p>To function effectively, the perceptual system cannot unilaterally ignore well-predicted information. Instead, it must flexibly adapt which inputs are selected for additional processing according to behavioral goals. A traffic light may remain statically red for several moments, yet it requires continuous monitoring so that the observer is prepared to react when it turns green. At the level of the neuron, mechanisms that suppress processing of predicted inputs may, at times, conflict with top-down attention processes that prioritize task-relevant inputs (Corbetta et al., 1990; Brefczynski &amp; DeYoe, 1999). To examine how the perceptual system reconciles these two forces, Kok et al. (2012) factorially crossed predictability and task-relevance in an fMRI experiment. Two counterbalanced cue types were provided at the outset of each block: 1) a prediction cue accurately informed participants whether stimuli were more likely to appear in the left or right hemifield; 2) a task-based cue instructed participants to only respond to stimuli that appeared in either the left or the right hemifield. Fits of a Bayesian causal model to connectivity data showed that while the nodes of visual cortex self-inhibit at baseline, task-relevant prioritization overrode this state and enhanced the forward drive of sensory information through the early visual cortical hierarchy (V1 to V2 and V3).</p>
+<p>While these interactions shape low-level feature representation in early visual areas, predictive coding principles also extend to higher, category-selective levels of the visual hierarchy. Activity in the fusiform face area (FFA), for example, has been linked to visual processing of faces (Kanwisher et al., 1997). Egner et al. (2010) contrasted three possibilities regarding the role of prediction in the FFA, using a task where faces and houses were preceded by colored frames that were probabilistically predictive of category. First, if FFA activity primarily reflects bottom-up category information, faces should elicit greater activation than houses regardless of expectation. Second, predictive cues could recruit topdown attention, such that expecting a face amplifies FFA response when a face is subsequently presented. Third, under predictive coding, FFA activity should reflect both the expectation of a face and the prediction error generated when a house is expected but a face is presented. FFA activation was best explained by predictive coding without additional mechanisms for expectation-based enhancement. Taken together, these findings demonstrate that dissociable mechanisms of prediction error and task-relevant prioritization can enhance processing of both low-level sensory features and high-level category features.</p>
+<h3>Solution 1.2: Goal-relevant perceptual enhancement</h3>
+<p>As foregrounded in the previous section, perceptual systems must prioritize sensory signals that align with current task goals in addition to reducing predictive redundancy. The studies reviewed here address important questions regarding perceptual enhancement, including: what functional forms best-describe increasing perceptual discriminability of goalrelevant targets across time? (Itthipuripat et al., 2014); and how does the brain implement dynamic goal-relevant target identification and enhancement? (Cox et al., 2022; Wyble et al., 2020).</p>
+<h3>Algorithms for perceptual enhancement</h3>
+<p>While fMRI experiments with clever factorial manipulations can spatially dissociate high-level drivers of perceptual enhancement (Kok et al., 2012; Egner et al., 2010), macrolevel BOLD signals lack the temporal specificity for adjudicating among algorithms that instantiate them. Perceptual enhancement of goal-relevant input can conceivably occur at several points in the sub-second processing timeline of an individual sensory event. It may occur during early encoding as sensory gain that amplifies feature-tuned firing rates of neurons with goal-relevant receptive fields (Moran &amp; Desimone, 1985; Motter, 1993; Luck et al., 1997). Alternatively, the effects of signal enhancement may be achieved by reducing noise and otherwise improving sensory discriminability (Mitchell et al., 2007; Cohen &amp; Maunsell, 2009). It may also occur at the level of post-sensory pooling by selectively weighting response-relevant activation after sensory information has been integrated into a decision variable (Palmer et al., 2000; Pestilli et al., 2011). These mechanistic hypotheses can be formalized as competing model variants and evaluated by fitting them to high-temporal-resolution neural data.</p>
+<p>Indeed, signal detection model variants that implemented each mechanism were fit to EEG data recorded during a visual contrast discrimination task under focused or divided attentional load (Itthipuripat et al., 2014). Models that included sensory gain mechanisms alone were sufficient for predicting the observed EEG signals, whereas adding additional noisereduction or post-sensory pooling mechanisms did not improve model fits. These results suggest that conditions of focused (as opposed to divided) attention amplify discriminability via multiplicative sensory gain in the earliest stages of perceptual encoding, prior to the pooling of neuronal responses into a decision-relevant readout.</p>
+<h3>Neural implementations of dynamic target selection</h3>
+<p>A critical theoretical gap in accounts of perceptual enhancement concerns how goal-relevant objects are selected for enhancement in the first place. In naturalistic visual search, the environment rarely provides explicit cues indicating which stimulus is relevant; instead, the perceptual system must arbitrate among competing inputs, identify which matches current task goals, and subsequently deploy processing resources accordingly (Gibson, 1979; Roth et al., 2023). While cued paradigms isolate the downstream consequences of so-called &quot;attention&quot; mechanisms (e.g., Itthipuripat et al., 2014), they circumvent the question of how top-down goals dynamically guide the selection process itself. Cox et al. (2022) addressed this problem by examining how task relevance shapes perceptual selection dynamics in visual search. Their neurally grounded model, salience by competitive and recurrent interactions (SCRI), links spiking dynamics in frontal eye field (FEF) populations to spatial salience and saccadic selection. Located within the prefrontal cortex (PFC), the FEF functions as a priority map that integrates salience-driven and goal-driven signals to identify saccade targets (Schall et al., 1995; Itti &amp; Koch, 2000; Murthy et al., 2001; Lowe &amp; Schall, 2018). SCRI formalizes this priority map through dynamical differential equations (i.e., representing changes through time) where inputs are stimuli in a visual search array and outputs are FEF neuron spike rates. Fitting model variants to cortical data recorded from behaving non-human primates provided evidence of two core mechanisms: recurrent interactions between neurons and feedforward inhibition. Through recurrent interactions, initial bottom-up feature activation is evaluated against a target template; if a match is detected, topdown feedback multiplicatively amplifies the firing rate of corresponding spatial location units (see also P. Smith &amp; Sewell, 2013; P. Smith et al., 2015). Simultaneously, feedforward inhibition suppresses activity across competing, nonmatching locations (Grossberg, 1980). When coupled with a downstream decision module, SCRI&#x27;s recurrent gain dynamics accurately reproduced both the spiking profiles of FEF neurons and observed saccadic choice behaviors (see also Purcell et al., 2010 Purcell et al., , 2012)). Because nonhuman primates in Cox et al. (2022) selected visual targets via saccades, however, these FEF spiking dynamics could conceivably be interpreted as serving motor decision preparation rather than pure perceptual encoding.</p>
+<p>Similar principles of recurrent enhancement and competitive suppression have a rich history in computational psychophysics (e.g., Di Lollo et al., 2000), and have been shown to operate across distributed cortical hierarchies. Neurally plausible models of covert attention, for example, demonstrate that transient &quot;lock-on&quot; attractor states between topographically aligned visual and parietal areas selectively enhance activity at target locations while suppressing competing distractors (Tan &amp; Wyble, 2015; Callahan-Flintoft et al., 2018; Wyble et al., 2020). By evaluating covert selection (i.e., attending to a location without moving the eyes) independently of overt motor responses, these models demonstrate that the recurrent neural dynamics central to SCRI may reflect general principles of attention-like selectivity rather than motor preparation alone.</p>
+<h3>Solution 1.3: Gating access to limited-capacity resources</h3>
+<p>The previous subsections highlighted several examples in which task-based goals (via top-down projections) were hypothesized to dictate which sensory inputs were prioritized for perceptual processing. The relevant algorithms thus largely focused on optimizing discriminability and performance. Other model-based accounts, such as those discussed here, are additionally considerate of capacity constraints when specifying mechanisms that would support overall performance. A recurring theme is that capacity bottlenecks are assumed to apply to higher-level processes (e.g., memory; Cowan, 2001), and &quot;attentional&quot; mechanisms applied during early perception are a means to gate access.</p>
+<h3>Gating short-term memory via perceptual competition</h3>
+<p>The competitive dynamics that were previously discussed as a mechanism for selecting among visual targets (Cox et al., 2022) have also been instantiated as a mechanism for selecting which inputs gain access to limited-capacity visual short term memory (VSTM; P. Smith &amp; Ratcliff, 2009; P. Smith &amp; Sewell, 2013; P. Smith et al., 2015 P. Smith et al., , 2016)). In these accounts, &quot;attention&quot; is operationalized as multiple discrete processes, including shunting equations that determine the rate of VSTM growth from stimulus discriminability, attention gain that acts multiplicatively on stimulus intensity, and competitive interaction between currently-active nodes. The mapping from VSTM to the decision component is intentionally straightforward, such that variability in predicted output is driven by which sensory inputs gain access to VSTM and with what quality. When constrained by neural data, models from this tradition demonstrate that explicitly gating perceptual evidence prior to decision commitment provides superior fits to FEF activity compared to non-gated alternatives (Purcell et al., 2010). Closely related frameworks have linked the gating functions served by recurrent, competitive dynamics to activity in the PFC and demonstrated how reducing the strength of recurrent connections could give rise to memory deficits among patients with frontal lobe damage (Usher &amp; Cohen, 1999).</p>
+<p>In tasks that require conscious retrieval of high-value stimuli from memory, EEG evidence suggests that a goalsensitive attentional gate acts at memory encoding rather than early sensory acquisition. Incorporating task-driven priorities into temporal context frameworks (e.g., Context Maintenance and Retrieval Model, (CMR); Polyn et al., 2009; Talmi et al., 2019) reveals that selective enhancement modulates late EEG correlates of memory encodingsuch as the parietal late positive potential and frontal slow waves-while leaving early occipital sensory responses (steady-state visual evoked potentials) unchanged (Hellerstedt et al., 2023). Therefore, while some accounts have characterized attentional mechanisms that gate entry into VSTM via early sensory gain and competition (P. Smith &amp; Sewell, 2013), other accounts demonstrate that gating can operate downstream as well, regulating which perceptual representations are successfully consolidated into memory without altering early sensory intake.</p>
+<h3>Coping with temporal and biological limitations on memory consolidation</h3>
+<p>The limits of memory consolidation become particularly clear in rapid serial visual presentation tasks that give rise to the attentional blink-the robust failure to detect a second visual target (T2) when it appears within 500 ms of a first (T1; Broadbent &amp; Broadbent, 1987; Raymond et al., 1992; Kawahara et al., 2001). This phenomenon is generally interpreted as evidence that conscious detection and consolidation draw upon a common limited-capacity resource. The resulting temporal bottleneck was initially formalized as a consequence of transient neuromodulatory dynamics within the locus coeruleus-norepinephrine (LC-NE) system (Nieuwenhuis, Gilzenrat, et al., 2005; Nieuwenhuis, Aston-Jones, &amp; Cohen, 2005; Usher et al., 1999). As implemented in these connectionist frameworks, sensory inputs are multiplicatively scaled by &quot;attention&quot; resulting from LC-NE release. Because the LC undergoes a brief refractory period following stimulus-driven NE release (e.g., when T1 is presented), subsequent inputs arriving during this recovery window fail to receive attentional scaling. This biocomputational account directly links the behavioral timecourse of the attentional blink to neurophysiological markers of LC-NE activity, including single-unit firing in non-human primates, P3 event-related potential (ERP) amplitudes, and task-evoked pupil dilation (Nieuwenhuis, Gilzenrat, et al., 2005; Sergent et al., 2005; Jepma &amp; Nieuwenhuis, 2011).</p>
+<p>While refractory LC-NE accounts frame gating as an unintended biological constraint, alternative model-based accounts reinterpret the attentional blink as an adaptive control mechanism deployed to protect working memory consolidation (Bowman &amp; Wyble, 2007; Olivers &amp; Meeter, 2008; Wyble et al., 2009). Under these accounts, top-down suppression actively inhibits ongoing perceptual processing following T1 identification-either to prevent distractor from intruding into working memory (Olivers &amp; Meeter, 2008) or to segment rapidly presented items into distinct episodic representations for future retrieval (Wyble et al., 2009). When parameterized to reflect individual variability in attentional control, model predictions mirror behavioral differences in blink magnitude and concurrent variability in P3 ERP amplitude (Martens et al., 2006; Martens &amp; Wyble, 2010).</p>
+<p>Work using the cognitive architecture model, adaptive control of thought-rational (ACT-R), shows that temporal gating can also manifest as an emergent property of working memory constraints (J. Anderson et al., 1998; van Vugt, 2014). ACT-R accounts for the attentional blink by assuming an overextension of control over the module that handles memory consolidation, such that successive targets are not consolidated while the first is still being written out to memory. From this perspective, the gating and enhancement effects typically attributed to &quot;attention&quot; do not require a dedicated attentional mechanism, but are instead an emergent property of other architectural constraints on working memory consolidation. Activation of the working memory module covaried with 4-9 Hz theta oscillations measured with EEG, which has been linked to attentional processing in other work (Clayton &amp; Yeung, 2015).</p>
+<p>The accounts discussed here demonstrate that while all of these models address the same attentional phenomenon, they formalize &quot;attention&quot; and its neural implementations in fundamentally distinct ways. Gated propagation of sensory input to memory may be an unintended consequence of attention-mediated perceptual encoding (Nieuwenhuis, Gilzenrat, et al., 2005), or it may be a purposeful means of segmenting memory traces via top-down attention (Wyble et al., 2009), or it may emerge from interactions between control and memory processes that do not necessitate an additional &quot;attention&quot; mechanism at all (van Vugt, 2014). Considering these perspectives together highlights how computational modeling allows us to dissociate the behavioral signatures of a temporal limit from the diverse mechanical routes that plausibly produce it. While these accounts arguably implement the same computational-level solution for forming useful memory representations under processing constraints, the most theoretically meaningful distinctions lie at the level of algorithms and their neural implementations.</p>
+<h3>2. Attention in the comparison and evaluation of decision evidence</h3>
+<p>Once information is available to guide behavior, it must be evaluated relative to current goals, stored knowledge, and competing alternatives in order to select an appropriate action. Evidence accumulation models (EAMs) provide a foundational framework for how organisms process competing options over time and make decisions (Boag et al., 2025). In these models, the observer is thought to collect and evaluate evidence for each available option over time in reference to a criterion, which may take the form of a sensory, memorybased, or value-based signal depending on the task. Drift rate parameters represent the quality of evidence stemming from each option and the threshold or boundary separation parameter represents a level of evidence needed for a choice to be made. Importantly, the evidence accumulation process is &quot;noisy,&quot; such that a simple comparison of drift rates does not perfectly explain choice; an incorrect or less valuable option may be spuriously selected.</p>
+<p>The evidence accumulation framework naturally formalizes a cost-benefit tradeoff. Because evidence is noisy and time is costly, the cognitive system must balance competing objectives: integrating information long enough to sup-port accurate selection, while minimizing the costs of continued deliberation and delayed action. The threshold specifically manages this trade-off between speed and accuracy, with higher thresholds generating slower response times (RTs) and choices less susceptible to spurious error (Heitz, 2014). Time minimization can reflect strict environmental constraints or an observer&#x27;s preference, both of which pressure the system to balance deliberation against commitment to a choice. Evidence accumulation also appears to be cognitively effortful, as indexed by increased BOLD response in frontal and sensorimotor regions during difficult choices and multi-attribute integration (T. Liu &amp; Pleskac, 2011; Lee &amp; Daunizeau, 2021). Within this framework, studies in model-based cognitive neuroscience conceptualize various ways in which &quot;attention&quot; manages this tradeoff, including algorithms that dynamically regulate evidence quality and decision policy as task demands change (Solution 2.1), regulate comparisons between options over time (Solution 2.2), and selectively prioritize certain attributes within multidimensional comparisons (Solution 2.3).</p>
+<p>Whereas perceptual accounts of so-called &quot;attentional&quot; mechanisms (Section 1) describe how and why particular sensory inputs are selected for processing and admittance into internal representations, decision-making accounts have a somewhat different overarching focus and address different questions. The relevant output in the latter accounts is an action-relevant signal-what to do with an input-rather than an encoded trace of the input itself. While some algorithms may appear to recur across perception and decisionmaking (e.g., multiplicative gain; competitive inhibition and enhancement), this review is organized to highlight the importance of system-level objectives and constraints when drawing functional interpretations. A neural system optimizing for representational fidelity may produce a different output than one optimizing for a correct overt decision, despite involving overlapping transformations.</p>
+<h3>Solution 2.1: Adaptively regulating evidence quality and commitment policy</h3>
+<p>Perceptual decision-making requires sensory information to be converted into task-relevant decision evidence, which is then evaluated relative to a threshold. Because classical EAMs such as the standard diffusion decision model (DDM; Ratcliff, 1978) assume a relatively predictable trajectory for this transformation across trials, questions have emerged about the extent to which top-down adjustments to increase accuracy or conserve resources are possible, and how those adjustments might be implemented.</p>
+<h3>Regulating evidence quality and stability</h3>
+<p>Real-world perceptual decision-making tasks, like detecting and reacting to forthcoming curves in the road when driving in heavy fog, present distinct computational challenges: extracting high-fidelity signal from noisy sensory input and preserving accumulated evidence over time against decay, distraction, or capacity bottlenecks. EEG correlates of perceptual processes like signal detection, signal enhancement, and spatial selectivity-which have been referred to as tracking &quot;attention&quot;-provide process-level measures that can be linked to latent components of evidence accumulation (e.g., steady-state visual evoked potentials, SSVEPs; Morgan et al., 1996; Mueller et al., 1998; Ding et al., 2006). For example, individual differences in noise suppression indexed by SSVEPs covary with DDM estimates of drift rate, whereas SSVEP-indexed signal enhancement is negatively associated with parameter estimates of within-trial drift rate variability (Nunez et al., 2015). Rather than purely representing stable perceptual traits across individuals, however, these processes are flexibly tuned according to trial-level perceptual demands. Trial-by-trial fluctuations in early event-related potentials (ERPs) that have been previously linked to &quot;attentional load&quot; (e.g., N200; E. Callaway &amp; Halliday, 1982) track corresponding fluctuations in drift rate, with larger ERP amplitudes corresponding to faster evidence accumulation under medium-and high-noise conditions (Nunez et al., 2017).</p>
+<p>Endogenous cognitive state has also been associated with model-estimated changes in evidence quality. In moments of self-reported &quot;mind-wandering&quot; as opposed to &quot;focused attention,&quot; systematic shifts in oculomotor patterns coincide with elevated estimates of decision noise, consistent with the view that evidence quality degrades when internal state deviates from task goals (Krasich et al., 2024). A related bottleneck is revealed when processing demands are experimentally imposed: when perceptual processing is divided across two concurrent stimulus streams, evidence accumulation becomes strongly recency-weighted, suggesting that capacity limits can prevent earlier sensory samples from being stably maintained in the evolving decision variable (Wyart et al., 2015). In sum, linking neural selection signals to decision parameters that vary across changing external demands, internal states, and processing constraints suggests that both the immediate quality of sensory evidence and its temporal stability are dynamically regulated during integration.</p>
+<h3>Adaptively regulating decision policy under conflict</h3>
+<p>A distinct computational challenge arises when available evidence provides similar support for competing responses. Under these conditions, noisy accumulation can produce premature or unstable choices unless the decision process adapts to unresolved conflict. When choosing between two options, evidence accumulation appears to be modulated within-trial with &quot;attention&quot; amplifying the relative evidence associated with the currently-fixated option (see Solution 2.2; Krajbich et al., 2010). When the two available options are approximately equal in value and thus produce &quot;conflict,&quot; es-timated decision thresholds increase in a way that covaries with pupillometry measures that have been previously linked to &quot;arousal&quot; (Aston-Jones &amp; Cohen, 2005; Cavanagh et al., 2014). The presence of conflict may therefore result in reactive adjustment of the decision policy to maintain accuracy.</p>
+<p>Convergent findings have come from model-based investigations of perceptual conflict tasks, in which the observer must respond to a target while ignoring distractors (e.g., flanker; Eriksen &amp; Eriksen, 1974). Through model comparison, an evidence-based calculation of &quot;conflict&quot; was shown to be a more plausible driver of a spatial &quot;attentional spotlight&quot; than the mere passage of time, and tracked within-trial EEG amplitude in parietal electrodes (Weichart et al., 2020). A related account outside conventional EAM frameworks formalizes conflict resolution as changes in gaze-based &quot;attentional dynamics,&quot; with oscillation between competing alternatives progressively diminishing as a quantum representation moves from a state of uncertainty toward certainty (Rosner et al., 2022).</p>
+<h3>Solution 2.2: Regulating option-wise comparison over time</h3>
+<p>While historically rooted in perceptual decision-making (Stone, 1960; Laming, 1969), EAMs have been applied across a wide range of choice domains, including valuebased decision-making where two or more options are presented and the observer chooses the option they prefer. As in the accounts discussed in the previous section, these latter applications assume the observer makes choices by transforming information into decision evidence and integrating it through time. Rather than beginning with perceptual encoding, however, value-based decisions are assumed to begin with the activation of existing, complex internal representations of each option. When presented with images of an apple and a bag of chips, for example, the relevant decision variable is thought to be constructed (in part) from the observer&#x27;s knowledge and experience with each option, rather than perceptual properties of the images themselves. In gaze-based EAMs such as the attentional drift diffusion model (aDDM), gaze shifts dynamically regulate how heavily these existing option representations are weighted during evaluation and choice (Krajbich et al., 2010). In its most frequent specification, fixating an option amplifies its relative rate of evidence integration. &quot;Attention,&quot; instantiated directly as gaze, is thus hypothesized to actively shape within-trial decision trajectories.</p>
+<h3>Dynamically controlling evidence gain via gaze</h3>
+<p>The aDDM provides a framework for investigating the algorithms through which gaze modulates decision processes under various conditions. It has proven particularly revealing in subjective value-based choices, illustrating a bidirectional relationship between option-wise preference and likelihood of fixation (Krajbich et al., 2012). Model comparisons in this domain have favored accounts where gaze imposes a multiplicative-rather than additive-gain function on the fixated option&#x27;s relative evidence (S. Smith &amp; Krajbich, 2019). This suggests that gaze scales value dynamically: fixating a high-value option boosts its evidence accumulation, whereas fixating a low-value option accelerates its relative rejection. The magnitude of gaze-driven biases, represented by fitted parameter estimates, exhibits stable individual differences (Thomas et al., 2019) and operates as a domain-general trait expressed consistently across several types of value-based decisions (S. Smith &amp; Krajbich, 2018). The same multiplicative mechanism also accounts for magnitude-sensitive decision times: aDDM&#x27;s instantiation of attentional discounting remains stable across overall value levels, such that identical gaze weighting produces larger fluctuations in evidence accumulation when option values are greater (Pirrone &amp; Gobet, 2021). Mechanisms for gazeregulated multiplicative gain have also provided compelling accounts of perceptual discriminability decisions (Tavares et al., 2017), and decisions requiring comparison between remembered representations in which the options are not perceptually present at all (Weilbaecher et al., 2021). Importantly, gaze influences evidence accumulation even when it is drawn by bottom-up salience rather than reflecting top-down control (Towal et al., 2013). Likewise, the magnitude of aDDM&#x27;s implementation of attentional bias depends on peripheral visibility: masking unfixated options approximately doubles the bias induced by differential gaze, suggesting that peripheral vision normally permits partial processing of unattended alternatives (Eum et al., 2023). Taken together, these findings characterize gaze as a flexible weighting mechanism whose algorithmic form is relatively stable, but whose influence on evidence accumulation depends on an option&#x27;s current perceived alignment with a task-based goal (e.g., choose the subjectively-valued &quot;best&quot; option; choose the objectively correct option) relative to other alternatives.</p>
+<p>By incorporating observed fixation patterns directly into the accumulation process, aDDM successfully accounts for trial-level choice-RT properties and idiosyncrasies that are not well-captured by noisy accumulation alone. Relative to previously-discussed perception models whose mechanisms either give rise to attentional phenomena or predict which stimuli will be fixated, however, aDDM is agnostic to the saccade-generating process itself. It is therefore well-suited for investigating the impact of hypothesized attention mechanisms on decision outcomes, but does not explain when and why gaze shifts occur during the decision-making process.</p>
+<h3>Trade-offs in gaze-mediated evidence accumulation</h3>
+<p>The aDDM&#x27;s single-accumulator architecture is specifically suited to binary choice scenarios. Binary choice, however, provides limited leverage for determining what happens to evidence associated with unfixated optionsstrengthening one alternative and weakening its sole competitor have equivalent consequences for relative preference. Investigations of multi-alternative choice provide the opportunity to disentangle these processes: models can instantiate competing hypotheses about how gaze alters evidence for a fixated option and how evidence associated with unfixated alternatives is maintained, lost, or actively suppressed. Robust context effects in multi-alternative choice provide a fascinating set of test cases whereby, for example, the presence of an undesirable third option systematically shifts preference between the remaining alternatives, despite rarely being chosen itself (Huber et al., 1982; Simonson, 1989). Computational accounts capture these context effects using attention implemented as weights that scale pairwise option comparisons (Roe et al., 2001; Trueblood et al., 2014; Noguchi &amp; Stewart, 2014; Turner et al., 2018).</p>
+<p>However, eye-tracking evidence demonstrates that gaze allocation is itself dynamically shaped by option value: higher-valued alternatives increasingly attract visual sampling as the trial unfolds. An extended aDDM captured these dynamics by allowing accumulated evidence to influence subsequent fixation probabilities, thereby introducing reciprocal interactions between gaze and evidence accumulation (Gluth et al., 2020). Integrating evidence regulation via gaze into racing accumulator architectures further allows users to compare competing mechanistic hypotheses for why the locus of comparison gravitates toward high-value options throughout a trial (gaze-weighted linear accumulator model, GLAM; Thomas et al., 2019). Model comparisons have favored accounts where gaze controls evidence accumulation, and evidence leaks away from unfixated options rather than being subject to lateral inhibition (Glickman et al., 2019; Molter et al., 2022). Some individual differences have been identified, however, such that both leak and lateral inhibition are needed to account for data from individuals who exhibit extreme context effects (Molter et al., 2022).</p>
+<p>While gaze-mediated gain control accelerates deliberation, it does not universally optimize choice accuracy. Indeed, individuals with lower numeracy show greater distortion of the evidence favoring unfixated alternatives, and simulations have suggested that gaze-mediated evidence accumulation can degrade choice quality when internal value representations are poorly calibrated (Zilker, 2024). If &quot;attention&quot; in decision frameworks can reduce decision quality, one wonders what objective it serves. One hypothesis is that participants seek to maximize reward rate, rather than overall value. Attentional biases via gaze may shorten decision time by amplifying value, which may be a sufficient benefit for the system to overcome an occasional sacrifice to accuracy (Zilker, 2022). Alternatively, shifting gaze toward uncertain options may reflect an effort-confidence trade-off, where visual sampling may be upregulated to satisfy internal confi-dence thresholds rather than objective expected value (Lee &amp; Daunizeau, 2021; Brus et al., 2021). Characterizing the precise objective functions that govern these sampling policies remains a key frontier for unifying computational models of visual search and value-based choice.</p>
+<h3>Solution 2.3: Selective attribute weighting during choice</h3>
+<p>While standard frameworks simplify decision-making by collapsing subjective value into a unidimensional quantity, real-world alternatives are inherently multidimensional. The subjective value of a food item is a composite of taste, healthiness, price, and visual appeal. Likewise, choosing between gambles in a risky choice task is thought to involve weighted comparisons of potential payoff, loss magnitude, and outcome probability (Busemeyer &amp; Townsend, 1993). In computational accounts of how attribute-wise information is combined into a decision-relevant signal, the relative influence of each attribute on choice is formalized as an &quot;attention weight.&quot; Estimating these weights from choice patterns has revealed that contextual demands and task goals can dynamically shift which specific attributes are prioritized (Turner et al., 2018). Identifying which attributes individuals prioritize further provides important information about the objective they are personally seeking to optimize (Fisher, 2017).</p>
+<h3>Algorithms for multi-attribute integration and comparison</h3>
+<p>A central computational problem in multi-attribute choice is determining how multidimensional feature inputs across multiple alternatives are transformed into a decision variable. In principle, information can be integrated in two ways: within-option integration, where an option&#x27;s attributes are first combined into a holistic subjective value before being compared to other alternatives; or within-attribute integration, where options are compared one attribute at a time and these attribute-wise contrasts are aggregated.</p>
+<p>Gaze-informed EAM frameworks have provided a means to pit these competing integration accounts directly against one another. Interestingly, model comparisons initially appeared to show that attribute integration and comparison occurs differently in different choice contexts. In risky choice where each alternative has attributes for potential reward and win probability, the results favor within-option integration (Glickman et al., 2019). In intertemporal choice where each alternative has attributes for potential reward and a delay duration, by contrast, the results favor within-attribute integration (Amasino et al., 2019). However, these accounts can be reconciled by allowing the integration strategy itself to be dynamically determined by relative attribute importance. Extending the aDDM to accommodate separate attentional discounting parameters for unfixated options versus unfixated attributes demonstrated that within-option comparisons dominate when attribute weights are relatively balanced, whereas within-attribute comparisons take over when one feature dimension strongly outweighs another (Yang &amp; Krajbich, 2022). Because potential reward often outweighs delay time in intertemporal choice, evaluation shifts toward withinattribute comparison; conversely, when potential reward and win probability carry more equal weight in risky choice, integration occurs within-option. Feature-level salience further modulates this process: extreme attribute values (such as win probabilities near 0% or 100%) draw visual gaze and distort feature weights directly during accumulation (Zilker &amp; Pachur, 2022). These findings suggest that evidence in multi-attribute choice is dynamically configured by the relative importance and salience of the available information, both of which can be instantiated through gaze-dependent weighting.</p>
+<h3>Distorting multi-dimensional category representations</h3>
+<p>In multi-attribute decision models, attention weights reflect the subjective importance of an attribute when determining an option&#x27;s value and deciding whether or not to select it. &quot;Attention weights&quot; are similarly embedded in longstanding categorization models to account for different biases and strategies participants use to sort multidimensional object stimuli into categories (e.g., generalized context model, GCM; Nosofsky, 1986). Categorization models formalize hypotheses about how internal category representations form over the course of experience and iterative feedback, with attention weights allowing some dimensions to be expanded and others to be compressed in psychological space.</p>
+<p>Approaches that integrate neurophysiological measures and categorization models have provided a means to adjudicate between competing hypotheses about the structure of the internal representations that support categorization decisions. A longstanding debate concerns whether these representations are organized around abstract category prototypes or preserve information about individual exemplars encountered during feedback-based learning (Minda &amp; Smith, 2002; Nosofsky, 1986). The classic 5-4 category structure provides an especially useful opportunity for adjudication because prototype and exemplar models can produce similar categorization behavior while predicting different distributions of attention across stimulus dimensions (Medin &amp; Shaffer, 1978). Although no single physiological measure provides an agreed-upon ground truth against which to compare model-predicted &quot;attention,&quot; eye movements and neural activity offer observable signals that can constrain otherwise behaviorally equivalent representational hypotheses. In eye-tracking work, observed fixations across dimensions were more consistent with the attention weights estimated by the exemplar-based GCM than with a competing prototype account (Rehder &amp; Hoffman, 2005b). Similarly, latent representational similarity matrices generated by a fitted exemplar-based model corresponded more closely to multivoxel patterns of BOLD activity than those generated by a prototype model (Mack et al., 2013), with attention-weighted exemplar similarity reflected in lateral occipital, posterior parietal, and prefrontal cortices. These convergent findings suggest that category representations maintain item-specific detail, with feature dimensions weighted dynamically during similarity comparison.</p>
+<p>A critical question arising from these categorization frameworks is whether dimension-weighting reflects a dynamic decision-time policy or a structural property of stored memory traces. If prioritization functioned merely as a latestage readout strategy, it would simply scale feature-level evidence during similarity evaluation without altering the fidelity of the underlying memory exemplar. Indeed, eyetracking data indicates that weighting is highly strategic: dimensions containing unique, perfectly diagnostic features attract earlier fixations and consequently impose greater influence on decisions as determined by model-estimated &quot;attention&quot; (Z. Liu et al., 2015). However, weighting effects do not appear to be confined to a late-stage decision-time readout process. Rather than tracking activity in evaluative regions (e.g., ventromedial PFC; Bechara et al., 2000), GCMestimated dimension weights covary with feature decoding accuracy in the visual stream&#x27;s category-selective occipitotemporal cortex (Braunlich &amp; Love, 2019). Model comparisons that used gaze during feature encoding and subsequent decision-making to constrain GCM attention weights additionally showed that accounting for partially encoded representations, in which unfixated dimensions may be absent from stored exemplars, was necessary to explain subsequent memory and categorization behavior (Weichart et al., 2024; Vance et al., 2025). Consequently, &quot;attention&quot; parameters in GCM may reflect more than the observer&#x27;s beliefs about which dimensions are most task-relevant; they can also reflect constraints imposed by selective encoding, whereby efficient prioritization during learning produces biased representations that shape subsequent generalization.</p>
+<h3>3. Attention in learning</h3>
+<p>Defining a general objective for learning is a challenge in itself, and researchers across fields of psychology, artificial intelligence, and neuroscience have grappled with this question for decades (e.g. Klopf, 1972; Sutton &amp; Barto, 1998). For our purposes, we borrow from a rich tradition of reinforcement learning (RL) the idea of &quot;a learning system that wants something, that adapts its behavior in order to maximize a special signal from its environment,&quot; (p. viii; Sutton &amp; Barto, 1998). In other words, the objective can be described as maximizing cumulative reward over time.</p>
+<p>The agent&#x27;s ability to maximize reward, particularly during early learning, is constrained by knowledge about actionoutcome contingencies within the environment. These contingencies must typically be acquired through trial and error, requiring the agent to navigate environmental uncertainty and learn from limited feedback. In classical RL terms, an optimal solution could be identified with a sufficiently rich representation of states, transitions, and rewards to simulate future trajectories and select actions that maximize expected long-run value. This brute force approach, however, is intractable for real organisms. The space of possible action sequences, exploration time, and complexity of value calculations quickly exceeds the feasible computational bandwidth of biological agents-a problem known as the curse of dimensionality (Bellman, 1957). In high-dimensional environments, the agent must further cope with the problem of credit assignment, or distinguishing between features that directly led to the reward, and those that were incidentally present (Minsky, 1961). Attention in the context of learning thus comprises solutions that enable state abstraction (i.e., compressing a detailed state space) and selective credit assignment, allowing the agent to behave effectively despite incomplete knowledge of the environment&#x27;s structure.</p>
+<h3>Solution 3.1: Experience-based priority-updating</h3>
+<p>The ability to associate environmental cues with outcomes is essential for making accurate predictions, allowing organisms to maximize reward and minimize harm. How these associations are learned and alter behavior across experiences was historically studied using animal conditioning paradigms, where isolated or compound cues were paired with reinforcements or punishments (e.g. Kamin, 1968; Mackintosh, 1975; Rescorla &amp; Wagner, 1972; Pearce &amp; Hall, 1980; Grossberg, 1982). In several early accounts, attention was described as the latent quantity determining the extent to which credit is assigned to a given cue following an outcome. Diverging computational theories emerged regarding the relationship between experience and attention allocation. Mackintosh (1975) proposed that attention is allocated to cues that reliably precede the outcome, while others are increasingly ignored. In a model later mirrored by predictive coding in visual perception, Pearce &amp; Hall (1980) proposed that attention decreases alongside increasing prediction accuracy and is maximized when cue-outcome contingencies are uncertain. While both models suggest that attention serves to maximize accurate predictions, they differ in how attention is purported to achieve this: by focusing on the most predictive cue, or by learning about cues that are least understood (Pearce &amp; Mackintosh, 2010).</p>
+<p>Subsequent hybrid models calculate which cues will be attended based on a combination of associability and prediction error (Pearce et al., 1998; Le Pelley, 2004; Pearce &amp; Mackintosh, 2010; Esber &amp; Haselgrove, 2011). This theoretical lineage inspired attention updating models of human category learning, which specify prediction error as a signal to update attention (e.g. Kruschke, 1992; Kruschke &amp; Johansen, 1999; Logan, 2002; Nosofsky et al., 1994; Kruschke, 2003). Across these formalizations, attention evolves across trials to balance exploration of uncertain cues with exploitation of reliably diagnostic cues.</p>
+<h3>Feature selection and state abstraction in reinforcement learning</h3>
+<p>In multi-attribute reinforcement learning, selective attention implements a form of feature-based state abstraction. By weighting task-relevant dimensions and ignoring irrelevant ones, high-dimensional environments can be collapsed into low-dimensional representations (Gershman &amp; Niv, 2010; Wilson &amp; Niv, 2012). Niv et al. (2015) provided relevant insight to this idea by fitting RL models to behavioral data collected while participants chose among stimuli that varied along dimensions of shape, color, and texture. Choice behavior was best captured by a model in which associative weights operated at the level of outcomes and individual features and decayed across trials (e.g., a square feature in the shape dimension; f RL + decay) rather than operating on outcomes and feature conjunctions (e.g., a green square with wavy texture). The degree of feature-value differentiation predicted by f RL + decay tracked BOLD activity in a frontoparietal network consisting of the intraparietal sulcus, precuneus, and dorsolateral PFC (dlPFC), suggesting that this network implements state abstraction based on goal-relevant features.</p>
+<p>Because f RL + decay captures choice history without explicit attention parameters, subsequent work investigated when attention operates: Does it weight features during the choice, or does it react to feedback to select which features will contribute to the next choice? Incorporating fixation data into RL models supported a dual role for attention: attended features were more heavily weighted when calculating stimulus value during the choice, and attention further biased how subjective value was updated during post-feedback credit assignment (Leong et al., 2017). Importantly, frontoparietal BOLD activation increased on trials in which prediction errors prompted shifts in gaze, supporting the idea that this network orients attention toward reward-predictive dimensions and reallocates it elsewhere when predictions are violated. Prediction errors and their influence on attention weights are subject to internal state biases as well (e.g., affect: Bennett et al., 2023).</p>
+<p>While feature-weighting models treat attention as a filter operating over fixed dimensions, attentional selection can also emerge naturally from higher-order belief updating about the structure of the environment. After learning that different animals occur with different frequencies across sectors of an animal reserve, for example, participants can use a sequence of observed animals to infer which hidden sector most likely generated them. In Bayesian terms, this hidden context constitutes a latent cause and was found to be represented by the orbitofrontal cortex (OFC; Chan et al., 2016). Such belief states could, in turn, provide an overarching con-trol signal for determining which features and past experiences are treated as relevant for ongoing decisions without an explicit attention mechanism.</p>
+<h3>Algorithms for minimizing errors and costs</h3>
+<p>Although attention is supposedly allocated across features to maximize predictive accuracy, it can, at times, seemingly lead to irrational behaviors. Two examples are the phenomena of blocking, where a novel cue is ignored when an established cue already predicts the outcome, and highlighting, where a novel cue receives more attention than an established cue when an unpredicted outcome occurs (Kamin, 1968; Medin &amp; Edelson, 1988). From a normative statistical standpoint, the &quot;rational&quot; baseline in both cases would be for attention to be proportional to cue validity (i.e., equal attention when both cues are equally predictive of an outcome). These phenomena provided early evidence that attention does not simply track raw feature-outcome contingencies. Instead, attention appears to be a resource-rational mechanism that maximizes predictive accuracy within the system&#x27;s processing constraints (Lieder &amp; Griffiths, 2019). Kruschke et al. (2005) investigated this idea using a connectionist model that implements attention as a finite resource which is updated through error-driven gradient descent. With these constraints in place, 1) increasing attention toward one cue necessitates decreasing attention toward the others; and 2) attention increases for cues whose contribution reduces error and decreases for misleading cues. These properties account for blocking and highlighting effects, respectively, whereas model variants without attention constraints predict outcomes strictly in proportion to cue-outcome cooccurrences. Attention weights predicted by the constrained model additionally mapped onto observed gaze allocation between cues.</p>
+<p>While Kruschke et al. (2005) treated attention as a fixedcapacity resource, more recent work formalizes attention allocation as an explicit cost-benefit trade-off (Galdo et al., 2022). The adaptive attention representation model (AARM) updates attention after feedback using an objective function that balances the utility of error reduction against the computational cost of attentional deployment, specifically favoring a sparsity/LASSO (L 1 ) penalty and dimensional competition as proxies for capacity limits. AARM variants with biases toward minimal attention expenditure provided better fits to choice and dimension-level gaze data across several category learning paradigms than simpler baseline variants in which attention was optimized for error reduction alone. This progression illustrates that attentional biases are not arbitrarily irrational, but rather emerge as the system attempts to balance predictive accuracy against the cost of resource expenditure.</p>
+<h3>Neural implementations of feedback-based tuning</h3>
+<p>Translating these algorithmic principles to their neural implementations reveals that attention updating requires coordinated processing instead of being subserved by a single &quot;attention&quot; center. Weichart, Evans, et al. (2022), for example, found that changes in the magnitude of the attention gradient predicted by AARM covaried with BOLD timeseries data across regions canonically involved in category learning (Seger &amp; Miller, 2010). This network spans parietal cortex (orienting), visual cortex (visual perception), hippocampus and medial temporal lobe (retrieval of previously-stored objects), midbrain and basal ganglia (prediction error), and PFC (goal maintenance). This finding suggests that error-and cost-driven attentional tuning alters processing from end-toend: from the perceptual acquisition of features, to the biased representation of objects, to the overarching decision policy.</p>
+<p>A core hub within this network is the loop between the PFC and hippocampus, which dynamically reorganizes stored representations as task demands shift. In a modelbased fMRI analysis using the category learning model, SUSTAIN (Love et al., 2004), functional coupling between PFC and hippocampus was shown to track modelpredicted shifts in object similarity when task demands change (Mack et al., 2016). Ventromedial PFC (vmPFC) tracks mechanisms for selectively filtering out task-irrelevant feature dimensions during initial stimulus encoding (Mack et al., 2020). Together, these findings support the idea that vmPFC-hippocampal interactions subserve a resourcerational gating mechanism, compressing memory representations to reflect only task-relevant features. Broschard et al. (2024) extended this work by examining how distinct subregions of the PFC shape learning dynamics. While vmPFC evaluates and integrates goal-relevant information (Bechara et al., 2000; Mack et al., 2020), dorsolateral PFC (dlPFC) represents accumulated evidence during perceptual discrimination and conflict resolution (Heekeren et al., 2008). The authors compared patients with focal dlPFC or vmPFC lesions and healthy controls across unidimensional rule-based (RB), multidimensional informationintegration (II), and category learning tasks. Consistent with their specialized roles, dlPFC damage primarily impaired performance on perceptual discrimination tasks (RB and II), whereas vmPFC damage primarily disrupted category learning, where success depended on identifying a deterministic dimension amid probabilistic distractors. Comparisons of fitted AARM parameters showed that damage to either subregion increased attention regularization, reflecting a general tendency to rely on fewer dimensions compared to controls. Initial values of the model&#x27;s latent attention variable primarily accounted for performance differences between lesion groups.</p>
+<p>One explanation for the latter finding is that the authors&#x27; model specification assumes low-level perceptual discrim-inability and higher-level construction of a decision variable are controlled by the same variable. Initialized values may have been the only available knob for capturing reduced perceptual discriminability among dlPFC patients and reduced ability to discriminate between dimensions in terms of predictive value among vmPFC patients. These lesion dissociations-echoed by single-unit electrophysiology findings that OFC, ACC, and dlPFC simultaneously code distinct decision and belief-updating variables (Hunt et al., 2018)may suggest that &quot;attention&quot; during learning comprises multiple sub-processes. While healthy systems may seamlessly align perceptual gain, predictive evaluation, and action policy to a core mechanism (Galdo et al., 2022; Weichart, Evans, et al., 2022), damage can uncouple these levels and reveal a more modular neural architecture.</p>
+<h3>Solution 3.2: Exerting control over information acquisition and integration</h3>
+<p>While attention in learning is often formalized as latent weights distributed over stimulus dimensions, observers deploy attention as an active information sampling policy that is expressed through sequential fixations. Framing attention weights as an information sampling policy connects two complementary domains. In category learning, these policies determine how learned dimension priorities generate withintrial fixation sequences across features before committing to a choice. In value-based decision-making, gaze operates as an optimal sampling policy that balances uncertainty reduction against time costs.</p>
+<h3>Sequential feature sampling in category learning</h3>
+<p>Although changes in attention weights across learning may be reflected in proportions of fixations across dimensions (Rehder &amp; Hoffman, 2005a), learning models are not typically explicit about how expectations about dimension relevance translate into information sampling behaviors. Fixation order effects, such as those that emerge when a contextual feature dictates which additional dimension contains category-relevant information (Blair et al., 2009), are not naturally predicted by static trial-level attention accounts.</p>
+<p>One way to bridge learned attention weights with feature sampling is by mirroring the mechanics that control post-feedback attention updates into within-trial sampling dynamics (Weichart, Galdo, et al., 2022). When a stimulus is presented, AARM&#x27;s within-trial module utilizes attention weights to probabilistically select a dimension to fixate first. As the feature in the fixated dimension is encoded, matching exemplars are stochastically activated in memory. Those activations are converted to decision variables corresponding to the available category responses (Nosofsky, 1986). If the difference in response activation exceeds a decision threshold, no further dimensions are fixated and a response is made (as in evidence accumulation models). Otherwise, attention is updated within-trial to maximize the probability of responding consistently with the currently-leading option, and a new dimension is fixated.</p>
+<p>In another account, dimensions are selected for fixation based on predicted information gain (Braunlich &amp; Love, 2022). The Sampling Emergent Attention (SEA) model assumes that the representational feature space is partitioned into clusters, and the observer can estimate the probability that a new item belongs to each available cluster given the observation of one or more features. The expected utility of observing each possible feature informs which dimension to sample. Attention is thus formalized as the expected gain in utility from sampling each dimension.</p>
+<p>A third account selects dimensions to sample by combining influences across three modularized control units (Lag-1; Barnes et al., 2022). On each trial, stimulus features are represented as spatially locked inputs to a visual field. Competition in a spatial attention field yields a prioritized fixation target, and saccades are initiated when activity in a motor field crosses a threshold. Feature information extracted at each fixation activates feature detectors and category nodes. As evidence accumulates during a trial, the system dynamically reorients gaze toward additional diagnostic features until a category response threshold is reached.</p>
+<p>While attention in these three models serves the objective of acquiring information that will maximize the probability of a correct response, they instantiate it in different ways: Weichart, Galdo, et al. (2022) by first reading out learned attention weights and then biasing sampling toward the leading hypothesis, Braunlich &amp; Love (2022) by simulating all possible sampling sequences and enacting the one with the best expected outcome, and Barnes et al. (2022) through a dynamical priority map that is continuously shaped by expected gain.</p>
+<h3>Active sampling under value uncertainty</h3>
+<p>In value-based choice, information sampling can be formalized as an optimal control problem in which attention balances uncertainty reduction against sampling costs, such as dwell duration and saccade transitions (F. Callaway et al., 2021; Shimojo et al., 2003; Gluth et al., 2020). Under this framework, gaze allocation is determined by a combination of estimated uncertainty about the value of each option relative to competing alternatives. Whereas standard gazeinfused decision-making accounts treat attention as a filter that biases evidence accumulation (e.g. Krajbich, 2019), framing attention as a control policy demonstrates how topdown mechanisms actively determine which options are inspected and for how long to efficiently reduce uncertainty before a choice.</p>
+<p>This active sampling perspective extends beyond uncertainty reduction to encompass goal-dependent prioritization. Observers preferentially sample high-value items during ap-proach decisions (selecting a preferred option) but reallocate fixations toward low-value items during avoidance decisions (rejecting an undesirable option; Sepulveda et al., 2020). By approaching attention through the lens of the computational problem it solves (i.e. maximizing goalconsistent responses, reducing uncertainty, and minimizing time), these approaches redress a longstanding issue in the broader attention-mediated decision-making literature. Knowing that fixations guide choices offers little inferential value if we do not have a complete understanding of what drives the sampling process in the first place.</p>
+<h3>Discussion</h3>
+<p>The broad and heterogeneous use of the term &quot;attention&quot; has long complicated attempts to explain conceptually-linked phenomena from a mechanistic standpoint. Invoking &quot;attention&quot; as a latent explanans for such phenomena provides limited explanatory power (Hommel et al., 2019), yet neural or mathematical explication of any single phenomenon cannot be expected to generalize across them all (Allport, 1993). One solution is to allow that &quot;attentional&quot; phenomena arise from multiple distinguishable processes-a perspective with which the current review aligns-and, more generally, to replace appeals to &quot;attention&quot; as an explanatory cause with explicit accounts of the mechanisms that produce the phenomena of interest (Di Lollo, 2018). Model-based cognitive neuroscience implements this strategy by mathematically specifying mechanisms for &quot;attention&quot; and adjudicating between competing hypotheses based on their ability to account for observed behavior, often while constrained by process-level data. However, a new problem has arguably arisen whereby mechanisms are highly contextualized by the modeling frameworks in which they were embedded and the paradigms those frameworks were developed to accommodate. Individual papers often tell us what a mechanism does within this model and this task, while providing little sense of which aspects retain theoretical significance outside of that context.</p>
+<p>This review operates at a higher level of abstraction than specific algorithms and neural implementations (Marr, 1982), while preserving the notion that &quot;attention&quot; should be understood as multiple mechanisms. Organizing the target literature based on the computational-level functions that &quot;attention&quot; serves across multiple contexts has proven revealing in several respects. First, similar algorithmic motifs do not imply shared processes. Algorithms for multiplicative enhancement, for example, appear in models of perceptual encoding, memory gating, and value-based evidence accumulation, despite loading on different neurophysiological measures and serving different computational functions. Replacing the term &quot;attention&quot; with a collection of operational definitions risks reproducing the same explanatory problem at a lower level of description. Second, while mechanisms for attention are often studied at bounded timescales, this does not imply that mechanisms operate independently between timescales. Models of value-based decision-making, for example, may query or freely-estimate an option&#x27;s subjective value and implement &quot;attention&quot; as a regulator of evidence accumulation relative to an alternative. The subjective values that enter this process, however, reflect the culmination of experiences over a longer timescale, which may themselves have been shaped by selective information processing. Likewise, biases expressed during a single choice can determine what information is sampled and available in future contexts. Third, algorithmic dissimilarity does not imply computational dissimilarity. In many examples provided in this review, multiple algorithms account for the same phenomenon or achieve a similar functional outcome. Considered only at the algorithmic level, these accounts may appear fundamentally distinct; considered at the computational level, they can instead be understood as alternative implementations of a common functional solution. This distinction helps localize theoretical disagreement. Competing accounts may disagree about how a function is realized without disagreeing about what function is being served.</p>
+<p>The functional correspondences identified here can motivate hypotheses about relations among mechanisms without implying that those mechanisms instantiate a common process. Recent proposals for relational definitions provide one framework for evaluating such hypotheses. Kvam &amp; Alaukik (2026), for example, framed relational definitions around the question of whether parameters or measures that are taken to reflect the same theoretical construct exhibit shared structure across tasks. The present synthesis suggests a complementary basis for generating such tests. Whereas relational approaches may begin with parameters or measures conventionally assigned to the same construct, the present framework suggests that computational function can provide another theoretically motivated basis for identifying processes whose relationships are worth testing. Thus, two task-specific processes need not both instantiate &quot;competition,&quot; &quot;gain,&quot; or another common algorithmic motif to motivate a relational hypothesis; their shared functional role may itself provide a theoretically meaningful basis for asking whether they covary or generalize across contexts.</p>
+<p>Several caveats apply to the organizing framework presented here. First, the objective-constraint structure is partly interpretive. Not all of the reviewed studies explicitly characterize &quot;attention&quot; in terms of an objective to be achieved under processing constraints, although many formalize mechanisms in ways that permit such an interpretation and some modeling traditions are explicitly grounded in performance tradeoffs (e.g., EAMs). Second, the proposed solutions are necessarily provisional because they were derived from a restricted subset of the literature. Our inclusion criteria favored computational accounts constrained by neurophysio-logical or neuroanatomical data, excluding relevant phenomena and modeling traditions that have not been studied using these approaches. Inclusion should therefore not be interpreted as a judgment of theoretical importance, nor should the resulting framing be considered exhaustive. Additional modeling traditions may reveal further solutions, alter the boundaries among those identified here, or expose distinctions that are not apparent in the present sample. Finally, mechanistic conclusions drawn from model comparison remain conditional on the hypothesis space considered. A bestfitting model identifies the most successful account among the alternatives tested, but cannot establish that its assumptions uniquely characterize the true data-generating process. These limitations bound the claims of the present synthesis while preserving its utility as a framework for organizing formally specified accounts of attentional phenomena.</p>
+<p>This function-first organization preserves the mechanistic diversity of &quot;attention&quot; while providing a common level of analysis across otherwise siloed modeling traditions. Advancing cumulative theory may require moving beyond asking what &quot;attention&quot; is, and instead asking what the multiple mechanisms described as &quot;attention&quot; do.</p>
+<h3>Acknowledgments</h3>
+<p>This work was sponsored by the U.S. Army Research Institute for the Behavioral and Social Sciences, Department of the Army (Grant No. W911NF-26-1-A110 awarded to ERW). The views expressed in this article are those of the authors and do not reflect the official policy or position of the Department of Defense, U.S. Army, or U.S. Army Research Institute for the Behavioral and Social Sciences.</p>
+<p>Author Contributions ERW: conceptualization, investigation, supervision, writing-original draft, writing-review and editing; RPK: investigation, writing-review and editing; JV: investigation, writing-review and editing.</p>
+<h3>References</h3>
+<p>Allman, J., Miezin, F., &amp; McGuinness, E. (1985). Stimu- lus specific responses from beyond the classical receptive field: Neurophysiological mechanisms for local-global comparisons in visual neurons. Annual Review of Neu- roscience, 8(1), 407-430. (DOI: https:doi.org/10 .1146/annurev.ne.08.030185.002203)</p>
+<p>Allport, A. (1993). Attention and control: Have we been asking the wrong questions? A critical review of twenty- five years. In D. Meyer &amp; S. Kornblum (Eds.), Attention and performance XIV (pp. 183-218). Cambridge, MA: The MIT Press.</p>
+<p>Amasino, D., Sullivan, N., Kranton, R., &amp; Huettel, S. (2019). Amount and time exert independent influences on in- tertemporal choice. Nature Human Behaviour, 3, 383- 392. (DOI: https://doi.org/10.1038/s41562-019 -0537-2)</p>
+<p>Anderson, B. (2011). There is no such thing as attention. Frontiers in Psychology, 2(1). (DOI: https://doi.org/ 10.3389/fpsyg.2011.00246)</p>
+<p>Anderson, B. (2023). Stop paying attention to &quot;atten- tion&quot;. WIREs Cognitive Science, 14(1), e1574. (DOI: https://doi.org/10.1002/wcs.1574)</p>
+<p>Anderson, J., Bothell, D., Lebiere, C., &amp; Matessa, M. (1998). An integrated theory of list memory. Journal of Mem- ory and Language, 38(4), 341-380. (DOI: https://doi.org/10.1006/jmla.1997.2553)</p>
+<p>Aston-Jones, G., &amp; Cohen, J. (2005). An integrative the- ory of locus coeruleus-norepinephrine function: Adap- tive gain and optimal performance. Annual Reviews Neu- roscience, 28(1), 403-450. (DOI: https://doi.org/ 10.1146/annurev.neuro.28.061604.135709)</p>
+<p>Barnes, J., Blaire, M., Walsche, R., &amp; Tupper, P. (2022). LAG-1: a dynamic, integrative model of learning, at- tention, and gaze. Plos One, 17(3), e0259511. (DOI: https://doi.org/10.1371/journal.pone.0259511)</p>
+<p>Bechara, A., Tranel, D., &amp; Damasio, H. (2000). Charac- terization of the decision-making deficits of patients with ventromedial prefrontal cortex lesions. Brain, 123(11), 2189-2202. (DOI: https://doi.org/10.1093/brain/ 123.11.2189)</p>
+<p>Bellman, R. (1957). Dynamic programming. Princeton, NJ: Princeton University Press.</p>
+<p>Bennett, D., Radulescu, A., Zorowitz, S., Felso, V., &amp; Niv, Y. (2023). Affect-congruent attention modulates gener- alized reward expectations. Plos Computational Biology, 19(12), e1011707. (DOI: https://doi.org/10.1371/ journal.pcbi.1011707)</p>
+<p>Blair, M., Watson, M., Walshe, R., &amp; Maj, F. (2009). Ex- tremely selective attention: Eye-tracking studies of the dy- namic allocation of attention to stimulus features in cate- gorization. Journal of Experimental Psychology: Learn- ing, Memory and Cognition, 35(5), 1196-1206. (DOI: https://doi.org/10.1037/a0016272)</p>
+<p>Boag, R., Innes, R., Stevenson, N., Bahg, G., Busemeyer, J., Cox, G., . . . Forstmann, B. (2025). An expert guide to planning experimental tasks for evidence-accumulation modeling. Advances in Methods and Practices in Psy- chological Science, 8(2). (DOI: https://doi.org/10 .1177/25152459251336127)</p>
+<p>Bowman, H., &amp; Wyble, B. (2007). The simultane- ous type, serial token model of temporal attention and working memory. Psychological Review, 114(1), 38- 70. (DOI: https://psycnet.apa.org/doi/10.1037/ 0033-295X.114.1.38)</p>
+<p>Braunlich, K., &amp; Love, B. (2019). Occipitotemporal rep- resentations reflect individual differences in conceptual knowledge. Journal of Experimental Psychology: Gen- eral, 148(7), 1192-1203. (DOI: https://doi.org/10 .1037/xge0000501)</p>
+<p>Braunlich, K., &amp; Love, B. (2022). Bidirectional influences of information sampling and concept learning. Psycholog- ical Review, 129(2), 213-234. (DOI: https://doi.org/ 10.1037/rev0000287)</p>
+<p>Brefczynski, J., &amp; DeYoe, E. (1999). A physiological cor- relate of the &#x27;spotlight&#x27; of visual attention. Nature Neuro- science, 2, 370-374. (DOI: https://doi.org/10.1038/ 7280)</p>
+<p>Broadbent, D. (1958). Perception and communication. Perg- amon Press. (DOI: https://doi.org/10.1037/10037 -000)</p>
+<p>Broadbent, D., &amp; Broadbent, M. (1987). From detection to identification: Response to multiple targets in rapid serial visual presentation. Perception &amp; Psychophysics, 42, 105- 113. (DOI: https://doi.org/10.3758/BF03210498)</p>
+<p>Broschard, M., Turner, B., Tranel, D., &amp; Freeman, J. (2024). Dissociable roles of the dorsolateral and ventromedial pre- frontal cortex in human categorization. Journal of Neu- roscience, 44(34), e2343232024. (DOI: https://doi .org/10.1523/JNEUROSCI.2343-23.2024)</p>
+<p>Brus, J., Aebersold, H., Grueschow, M., &amp; Polania, R. (2021). Sources of confidence in value-based choice. Nature Communications, 12(7337), e63282. (DOI: https://doi.org/10.1038/s41467-021-27618-5)</p>
+<p>Busemeyer, J., &amp; Townsend, J. (1993). Decision field theory: A dynamic-cognitive approach to decision mak- ing in an uncertain environment. Psychological Review, 100(3), 432-459. (DOI: https://doi.org/10.1037/ 0033-295X.100.3.432)</p>
+<p>Callahan-Flintoft, C., Chen, H., &amp; Wyble, B. (2018). A hierarchical model of visual processing simulates neu- ral mechanisms underlying reflexive attention. Jour- nal of Experimental Psychology: General, 147(9), 1273-1294. (DOI: https://psycnet.apa.org/doi/10 .1037/xge0000484)</p>
+<p>Callaway, E., &amp; Halliday, R. (1982). The effect of atten- tional effort on visual evoked potential N1 latency. Psychi- atry Research, 7(3), 299-308. (DOI: https://doi.org/ 10.1016/0165-1781(82)90066-X)</p>
+<p>Callaway, F., Rangel, A., &amp; Griffiths, T. (2021). Fix- ation patterns in simple choice reflect optimal informa- tion sampling. PLos Computational Biology, 17(3), e1008863. (DOI: https://doi.org/10.1371/journal .pcbi.1008863)</p>
+<p>Castro, L., &amp; Wasserman, E. (2016). Attentional shifts in categorization learning: Perseveration but not learned ir- relevance. Behavioural Processes, 123, 60-73. (DOI: https://doi.org/10.1016/j.beproc.2015.11.001)</p>
+<p>Cavanagh, J., Wiecki, T., Kochar, A., &amp; Frank, M. (2014). Eye tracking and pupillometry are indicators of dissocia- ble latent processes. Journal of Experimental Psychology: General, 143(4), 1476-1488. (DOI: https://doi.org/ 10.1037/a0035813)</p>
+<p>Chan, S., Niv, Y., &amp; Norman, K. (2016). A probability distri- bution over latent clauses, in the orbitofrontal cortex. Jour- nal of Neuroscience, 36(30), 7817-7828. (DOI: https://doi.org/10.1523/JNEUROSCI.0659-16.2016)</p>
+<p>Chun, M., Golomb, J., &amp; Turk-Browne, N. (2011). A tax- onomy of external and internal attention. Annual Review of Psychology, 62(1), 73-101. (DOI: https://doi.org/ 10.1146/annurev.psych.093008.100427)</p>
+<p>Clayton, M., &amp; Yeung, N. (2015). The roles of corti- cal oscillations in sustained attention. Trends in Cogni- tive Sciences, 19(4), 188-195. (DOI: https://doi.org/ 10.1016/j.tics.2015.02.004)</p>
+<p>Cohen, M., &amp; Maunsell, J. (2009). Attention improves performance primarily by reducing interneuronal corre- lations. Nature Neuroscience, 12, 11594-1600. (DOI: https://doi.org/10.1038/nn.2439)</p>
+<p>Corbetta, M., Miezin, F., Dobmeyer, S., Shulman, G., &amp; Petersen, S. (1990). Attentional modulation of neural processing of shape, color, and velocity in humans. Sci- ence, 248(4962), 1556-1559. (DOI: https://doi.org/ 10.1126/science.2360050)</p>
+<p>Corbetta, M., &amp; Shulman, G. (2002). Control of goal- directed and stimulus-driven attention in the brain. Na- ture Reviews Neuroscience, 3, 201-215. (DOI: https://doi.org/10.1038/nrn755)</p>
+<p>Cowan, N. (2001). The magical number 4 in short-term memory: A reconsideration of mental storage capacity. Behavioral and Brain Sciences, 24(1), 87-114. (DOI: https://doi.org/10.1017/S0140525X01003922)</p>
+<p>Cox, G., Palmeri, T., Logan, G., Smith, P., &amp; Schall, J. (2022). Salience by competitive and recurrent interactions: Bridging neural spiking and computation in visual atten- tion. Psychological Review, 129(5), 1144-1182. (DOI: https://doi.org/10.1037/rev0000366)</p>
+<p>Creem-Regehr, S., &amp; Kunz, B. (2010). Perception and ac- tion. WIREs Cognitive Science, 1(6), 800-810. (DOI: https://doi.org/10.1002/wcs.82)</p>
+<p>Desimone, R., &amp; Duncan, J. (1995). Neural mechanisms of selective visual attention. Annual Review of Neuro- science, 18(1), 193-222. (DOI: https://doi.org/10 .1146/annurev.ne.18.030195.001205)</p>
+<p>Di Lollo, V. (2018). Attention is a sterile concept; itera- tive reentry is a fertile substitute. Consciousness and Cog- nition, 64, 45-49. (DOI: https://doi.org/10.1016/ j.concog.2018.02.005)</p>
+<p>Di Lollo, V., Enns, J., &amp; Rensink, R. (2000). Compe- tition for consciousness among visual events: The psy- chophysics of reentrant visual processes. Journal of Ex- perimental Psychology: General, 129(4), 481-507. (DOI: https://doi.org/10.1037/0096-3445.129.4.481)</p>
+<p>Ding, J., Sperling, G., &amp; Srinivasan, R. (2006). Atten- tional modulation of SSVEP power depends on the net- work tagged by the flicker frequency. Cerebral Cortex, 16(7), 1016-1029. (DOI: https://doi.org/10.1093/ cercor/bhj044)</p>
+<p>Duncan, J. (2006). Brain mechanisms of attention. Quarterly Journal of Experimental Psychology, 59(1), 2-27. (DOI: https://doi.org/10.1080/17470210500260674)</p>
+<p>Egner, T., Monti, J., &amp; Summerfield, C. (2010). Expectation and surprise determine neural population responses in the visual stream. Journal of Neuroscience, 30(49), 16601- 16608. (DOI: https://doi.org/10.1523/JNEUROSCI .2770-10.2010)</p>
+<p>Enns, J., &amp; Di Lollo, V. (1997). Object substitution: A new form of masking in unattended visual locations. Psychological Science, 8(2), 135-139. (DOI: https://doi.org/10.1111/j.1467-9280.1997.tb00696.x)</p>
+<p>Eriksen, B., &amp; Eriksen, C. (1974). Effects of noise letters upon the identification of a target letter in a nonsearch task. Perception &amp; Psychophysics, 16(1), 143-149. (DOI: https://doi.org/10.3758/BF03203267)</p>
+<p>Esber, G., &amp; Haselgrove, M. (2011). Reconciling the influence of predictiveness and uncertainty on stimulus salience: A model of attention in associative learning. Proceedings of the Royal Society B: Biological Sciences, 278(171B), 2553-2561. (DOI: https://doi.org/10 .1098/rspb.2011.0836)</p>
+<p>Eum, B., Dolbier, S., &amp; Rangel, A. (2023). Peripheral visual information halves attentional choice biases. Psychologi- cal Science, 34(9), 984-998. (DOI: https://doi.org/ 10.1177/09567976231184878)</p>
+<p>Feldman, H., &amp; Friston, K. (2010). Attention, uncer- tainty, and free-energy. Frontiers in Human Neuro- science, 4. (DOI: https://doi.org/10.3389/fnhum .2010.00215)</p>
+<p>Fisher, G. (2017). An attentional drift diffusion model over binary-attribute choice. Cognition, 168, 34-45. (DOI: https://doi.org/10.1016/j.cognition.2017 .06.007)</p>
+<p>Forstmann, B., &amp; Turner, B. (Eds.). (2024). An introduc- tion to model-based cognitive neuroscience (2nd ed.). New York, NY: Springer.</p>
+<p>Friston, K. (2005). A theory of cortical responses. Philo- sophical Transactions of the Royal Society B, 360(1456), 815-836. (DOI: https://doi.org/10.1098/rstb .2005.1622)</p>
+<p>Galdo, M., Weichart, E., Sloutsky, V., &amp; Turner, B. (2022). The quest for simplicity in human learning: Identi- fyig the constraints on attention. Cognitive Psychology, 138(5), 101508. (DOI: https://doi.org/10.1016/j .cogpsych.2022.101508)</p>
+<p>Gershman, S., &amp; Niv, Y. (2010). Learning latent struc- ture: Carving nature at its joints. Current Opinion in Neu- robiology, 20(2), 251-256. (DOI: https://doi.org/ 10.1016/j.conb.2010.02.008)</p>
+<p>Gibson, J. (1979). The ecological approach to visual per- ception. Houghton, Mifflin, and Company.</p>
+<p>Glickman, M., Sharoni, O., Levy, D., Niebur, E., Stuphorn, V., &amp; Usher, M. (2019). The formation of preference in risky choice. PLOS Computational Biology, 15(8), e1007201. (DOI: https://doi.org/10.1371/journal .pcbi.1007201)</p>
+<p>Gluth, S., Kern, N., Kortmann, M., &amp; Vitali, C. (2020). Value-based attention but not divisive normalization in- fluences decisions with multiple alternatives. Nature Hu- man Behaviour, 4, 634-645. (DOI: https://doi.org/ 10.1038/s41562-020-0822-0)</p>
+<p>Goldstein, A., Zada, Z., Buchnik, E., Schain, M., Price, A., Aubrey, B., . . . Jansen, A. (2022). Shared computational principles for language processing in humans and deep language models. Nature Neuroscience, 25(3), 369-380. (DOI: https://doi.org/10.1038/s41593-022-01026</p>
+<p>Grossberg, S. (1980). How does a brain build a cogni- tive code? Psychological Review, 87(1), 1-51. (DOI: https://doi.org/10.1037/0033-295X.87.1.1)</p>
+<p>Grossberg, S. (1982). Processing of expected and unexpected events during conditioning and attention: A psychophys- iological theory. Psychological Review, 89(5), 529- 572. (DOI: https://doi.org/10.1037/0033-295X.89 .5.529)</p>
+<p>Heekeren, H., Marrett, S., &amp; Ungerleider, L. (2008). The neural systems that mediate human perceptual decision making. Nature Reviews Neuroscience, 9, 467-479. (DOI: https://doi.org/10.1038/nrn2374)</p>
+<p>Heitz, R. (2014). The speed-accuracy tradeoff: History, physiology, methodology, and behavior. Frontiers in Neu- roscience, 8(150). (DOI: https://doi.org/10.3389/ fnins.2014.00150)</p>
+<p>Hellerstedt, R., Bekinschtein, T., &amp; Talmi, D. (2023). Can neural correlates of encoding explain the context depen- dence of reward-enhanced memory? Psychophysiology, 60(9), e14322. (DOI: https://doi.org/10.1111/psyp .14322)</p>
+<p>Hommel, B., Chapman, C., Cisek, P., Neyedli, H., Song, J.- H., &amp; Welsh, T. (2019). No one knows what attention is. Attention, Perception, &amp; Psychophysics, 81(7), 2288- 2303. (DOI: https://doi.org/10.3758/s13414-019 -01846-w)</p>
+<p>Hubel, D., &amp; Wiesel, T. (1965). Receptive fields and funci- tonal architecture in two nonstriate visual areas (18 and 19) of the cat. Journal of Neurophysiology, 28(2), 229- 289. (DOI: https://doi.org/10.1152/jn.1965.28.2 .229)</p>
+<p>Hubel, D., &amp; Wiesel, T. (1968). Receptive fields and funcitonal architecture of monkey striate cortex. Journal of Neurophysiology, 195(1), 215-243. (DOI: https://doi.org/10.1113/jphysiol.1968.sp008455)</p>
+<p>Huber, J., Payne, J., &amp; Puto, C. (1982). Adding asym- metrically dominated alternatives: Violations of regularity and the similarity hypothesis. Journal of Consumer Re- search, 9(1), 90-98. (DOI: https://doi.org/10.1086/ 208899)</p>
+<p>Hunt, L., Malalasekera, W., de Berker, A., Miranda, B., Farmer, S., Behrens, T., &amp; Kennerley, S. (2018). Triple dissociation of attention and decision computations across prefrontal cortex. Nature Neuroscience, 21(10), 1471- 1481. (DOI: https://doi.org/10.1038/s41593-018 -0239-5)</p>
+<p>Itthipuripat, S., Ester, E., Deering, S., &amp; Serences, J. (2014). Sensory gain outperforms efficient readout mech- anisms in predicting attention-related improvements in behavior. Journal of Neuroscience, 34(40), 13384- 13398. (DOI: https://doi.org/10.1523/JNEUROSCI .2277-14.2014)</p>
+<p>Itti, L., &amp; Koch, C. (2000). A saliency-based search mech- anism for overt and covert shifts of visual attention. Vi- sion Research, 40(10-12), 1489-1506. (DOI: https://doi.org/10.1016/S0042-6989(99)00163-7)</p>
+<p>Itti, L., &amp; Koch, C. (2001). Computational modelling of vi- sual attention. Nature Reviews Neuroscience, 2, 194-203. (DOI: https://doi.org/10.1038/35058500)</p>
+<p>James, W. (1890). The principles of psychology. Cambridge, MA: Harvard University Press.</p>
+<p>Jepma, M., &amp; Nieuwenhuis, S. (2011). Pupil diameter pre- dicts changes in the exploration-exploitation trade-off: Ev- idence for the adaptive gain theory. Journal of Cogni- tive Neuroscience, 23(7), 1587-1596. (DOI: https://doi.org/10.1162/jocn.2010.21548)</p>
+<p>Kahneman, D. (1973). Attention and effort. Englewood Cliffs, NJ: Prentice-Hall.</p>
+<p>Kamin, L. (1968). Predictability, surprise, attention, and conditioning. In B. Campbell &amp; R. Church (Eds.), Pun- ishment and aversive behavior. New York: Appleton- Century-Crofts.</p>
+<p>Kanwisher, N., McDermott, J., &amp; Chun, M. (1997). The fusiform face area: A module in human extrastriate cortex specialized for face perception. Journal of Neuroscience, 17(11), 4302-4311. (DOI: https://doi.org/10.1523/ JNEUROSCI.17-11-04302.1997)</p>
+<p>Kawahara, J.-I., Di Lollo, V., &amp; Enns, J. (2001). At- tentional requirements in visual detection and identifica- tion: Evidence from the attentional blink. Journal of Experimental Psychology: Human Perception and Per- formance, 27(4), 969-984. (DOI: https://doi.org/ 10.1037/0096-1523.27.4.969)</p>
+<p>Klein, R. (2022). Thinking about attention: Succes- sive approximations to a productive taxonomy. Cogni- tion, 225, 105137. (DOI: https://doi.org/10.1016/ j.cognition.2022.105137)</p>
+<p>Klopf, A. (1972). Brain function and adaptive sys- tems: A heterostatic theory. Retrieved 2026-01- 16, from https://apps.dtic.mil/sti/citations/ AD0742259</p>
+<p>Koch, C., &amp; Tsuchiya, N. (2007). Attention and conscious- ness: Two distinct brain processes. Trends in Cogni- tive Sciences, 11(1), 16-22. (DOI: https://doi.org/ 10.1016/j.tics.2006.10.012)</p>
+<p>Kok, P., Rahnev, D., Jehee, J., Lau, H., &amp; De Lange, F. (2012). Attention reverses the effect of predic- tion in silencing sensory signals. Cerebral Cortex, 22(9), 2197-2206. (DOI: https://doi.org/10.1093/ cercor/bhr310)</p>
+<p>Koralus, P. (2014). The erotetic theory of attention: Ques- tions, focus and distraction. Mind &amp; Language, 29(1), 26- 50. (DOI: https://doi.org/10.1111/mila.12040)</p>
+<p>Krajbich, I. (2019). Accounting for attention in sequen- tial sampling models of decision making. Current Opin- ion in Psychology, 29, 6-11. (DOI: https://doi.org/ 10.1016/j.copsyc.2018.10.008)</p>
+<p>Krajbich, I., Armel, C., &amp; Rangel, A. (2010). Visual fixations and the computation and comparison of value in simple choice. Nature Neuroscience, 13(10), 1292-1298. (DOI: https://doi.org/10.1038/nn.2635)</p>
+<p>Krajbich, I., Lu, D., Camerer, C., &amp; Rangel, A. (2012). The attentional drift-diffusion model extends to simple pur- chasing decisions. Frontiers in Psychology, 3, 193. (DOI: https://doi.org/10.3389/fpsyg.2012.00193)</p>
+<p>Krasich, K., O&#x27;Neill, K., Murray, S., Brockmole, J., De Brigard, F., &amp; Nuthmann, A. (2024). A computational modeling approach to investigating mind wandering- related adjustments to gaze behavior during scene view- ing. Cognition, 242(105624). (DOI: https://doi.org/ 10.1016/j.cognition.2023.105624)</p>
+<p>Kriegeskorte, N., &amp; Douglas, P. (2018). Cognitive com- putational neuroscience. Nature Neuroscience, 21, 1148- 1160. (DOI: https://doi.org/10.1038/s41593-018 -0210-5)</p>
+<p>Kruschke, J. (1992). ALCOVE:An exemplar-based con- nectionist model of category learning. Psychological Re- view, 99(1), 22-44. (DOI: https://doi.org/10.1037/ 0033-295X.99.1.22)</p>
+<p>Kruschke, J. (2003). Attention in learning. Current Di- rections in Psychological Science, 12(5), 171-175. (DOI: https://doi.org/10.1111/1467-8721.01254)</p>
+<p>Kruschke, J., &amp; Johansen, M. (1999). A model of proba- bilistic category learning. Journal of Experimental Psy- chology: Learning, Memory, and Cognition, 25(5), 1083- 1119. (DOI: https://doi.org/10.1037/0278-7393 .25.5.1083)</p>
+<p>Kruschke, J., Kappenman, E., &amp; Hetrick, W. (2005). Eye gaze and individual differences consistent with learned at- tention in associative blocking and highlighting. Jour- nal of Experimental Psychology: Learning, Memory and Cognition, 31(5), 830-845. (DOI: https://doi.org/ 10.1037/0278-7393.31.5.830)</p>
+<p>Kvam, P., &amp; Alaukik, A. (2026). Moving on from simple operationalism: Anchoring theoretical constructs in rich relational models. Perspectives on Psychologi- cal Science, 0(0). (DOI: https://doi.org/10.1177/ 17456916261471413)</p>
+<p>Laming, D. (1969). Subjective probability in choice- reaction experiments. Journal of Mathematical Psychol- ogy, 6(1), 81-120. (DOI: https://doi.org/10.1016/ 0022-2496(69)90030-3)</p>
+<p>Lee, D., &amp; Daunizeau, J. (2021). Trading mental effort for confidence in the metacognitive control of value-based decision-making. eLife, 10, e63282. (DOI: https://doi.org/10.7554/eLife.63282)</p>
+<p>Leong, Y., Radulescu, A., Daniel, R., DeWoskin, V., &amp; Niv, Y. (2017). Dynamic interaction between reinforcement learning and attention in multidimensional environments. Neuron, 93(2), 451-463. (DOI: https://doi.org/10 .1016/j.neuron.2016.12.040)</p>
+<p>Le Pelley, M. (2004). The role of associative history in mod- els of associative learning: A selective review and a hybrid model. Quarterly Journal of Experimental Psychology, 57(3b), 193-243. (DOI: https://doi.org/10.1080/ 02724990344000141)</p>
+<p>Lieder, F., &amp; Griffiths, T. (2019). Resource-rational analy- sis: Understanding human cognition as the optimal use of limited computational resources. Behavioral and Brain Sciences, 43, e1. (DOI: https://doi.org/10.1017/ S0140525X1900061X)</p>
+<p>Liu, T., &amp; Pleskac, T. (2011). Neural correlates of evidence accumulation in a perceptual decision task. Journal of Neurophysiology, 106(5), 2383-2398. (DOI: https://doi.org/10.1152/jn.00413.2011)</p>
+<p>Liu, Z., Song, X., &amp; Seger, C. (2015). An eye-tracking study of multiple feature value category structure learn- ing: The role of unique features. PLoS One, 10(8), e0135729. (DOI: https://doi.org/10.1371/journal .pone.0135729)</p>
+<p>Logan, G. (2002). An instance theory of attention and memory. Psychological Review, 109(2), 376-400. (DOI: https://doi.org/10.1037/0033-295X.109.2.376)</p>
+<p>Love, B., Medin, D., &amp; Gureckis, T. (2004). SUSTAIN:A network model of category learning. Psychological Re- view, 111(2), 309. (DOI: https://doi.org/10.1037/ 0033-295X.111.2.309)</p>
+<p>Lowe, K., &amp; Schall, J. (2018). Functional categories of vi- suomotor neurons in macaque frontal eye field. eNeuro, 5(5). (DOI: https://doi.org/10.1523/ENEURO.0131 -18.2018)</p>
+<p>Luck, S., Chelazzi, L., Hillyard, S., &amp; Desimone, R. (1997). Neural mechanisms of spatial selective attention in areas v1, v2, and v4 of macaque visual cortex. Journal of Neu- rophysiology, 77(1). (DOI: https://doi.org/10.1152/ jn.1997.77.1.24)</p>
+<p>Mack, M., Love, B., &amp; Preston, A. (2016). Dynamic updating of hippocampal object representations reflects new conceptual knowledge. Proceedings of the National Academy of Sciences, 113(46), 13203-13208. (DOI: https://doi.org/10.1073/pnas.1614048113)</p>
+<p>Mack, M., Preston, A., &amp; Love, B. (2013). Decoding the brain&#x27;s algorithm for categorization from its neural imple- mentation. Current Biology, 23(20), 2023-2027. (DOI: https://doi.org/10.1016/j.cub.2013.08.035)</p>
+<p>Mack, M., Preston, A., &amp; Love, B. (2020). Ventromedial pre- frontal cortex compression during concept learning. Na- ture Communications, 11(46). (DOI: https://doi.org/ 10.1038/s41467-019-13930-8)</p>
+<p>Mackintosh, N. (1975). A theory of attention: Variations in the associability of stimuli with reinforcement. Psycholog- ical Review, 82(4), 276-298. (DOI: https://doi.org/ 10.1037/h0076778)</p>
+<p>Marr, D. (1982). Vision. San Francisco, CA: W.H. Freeman and Co.</p>
+<p>Martens, S., Elmallah, K., London, R., &amp; Johnson, A. (2006). Cuing and stimulus probability effects on the P3 and the AB. Acta Psychologica, 123(3), 204-218. (DOI: https://doi.org/10.1016/j.actpsy.2006.01.001)</p>
+<p>Martens, S., &amp; Wyble, B. (2010). The attentional blink: Past, present, and future of a blind spot in perceptual awareness. Neuroscience &amp; Biobehavioral Reviews, 34(6), 947-957. (DOI: https://doi.org/10.1016/j.neubiorev.2009 .12.005)</p>
+<p>McClelland, J., &amp; Rumelhart, D. (1981). An interactive activation model of context effects in letter perception: I. An account of basic findings. Psychological Review, 88(5), 375-407. (DOI: https://doi.org/10.1037/ 0033-295X.88.5.375)</p>
+<p>Medin, D., &amp; Edelson, S. (1988). Problem structure and the use of base-rate information from experience. Journal of Experimental Psychology: General, 117(1), 68-85. (DOI: https://doi.org/10.1037//0096-3445.117.1.68)</p>
+<p>Medin, D., &amp; Shaffer, M. (1978). Context theory of classifi- cation learning. Psychological Review, 85(3), 207. (DOI: https://doi.org/10.1037/0033-295X.85.3.207)</p>
+<p>Minda, J., &amp; Smith, D. (2002). Comparing prototype-based and exemplar-based accounts of category learning and at- tentional allocation. Journal of Experimental Psychology: Learning, Memory, and Cognition, 28(2), 275-292. (DOI: https://doi.org/10.1037/0278-7393.28.2.275)</p>
+<p>Minsky, M. (1961). Steps toward artificial intelligence. Proceedings of the IRE, 49(1), 8-30. (DOI: https://doi.org/10.1109/JRPROC.1961.287775)</p>
+<p>Mitchell, J., Sundberg, K., &amp; Reynolds, J. (2007). Dif- ferential attention-dependent response modulation across cell classes in macaque visual area v4. Neuron, 55(1), 131-141. (DOI: https://doi.org/10.1016/j.neuron .2007.06.018)</p>
+<p>Molter, F., Thomas, A., Huettel, S., Heekeren, H., &amp; Mohr, P. (2022). Gaze-dependent evidence accumulation pre- dicts multi-alternative risky choice behavior. PLOS Com- putational Biology, 18(7), e1010283. (DOI: https://doi.org/10.1371/journal.pcbi.1010283)</p>
+<p>Moran, J., &amp; Desimone, R. (1985). Selective attention gates visual processing in the extrastriate cortex. Sci- ence, 229(4715), 782-784. (DOI: https://doi.org/ 10.1126/science.4023713)</p>
+<p>Morgan, S., Hansen, J., &amp; Hillyard, S. (1996). Selec- tive attention to stimulus location modulates the steady- state visual evoked potential. Proceedings of the Na- tional Academy of Sciences, 93(10), 4770-4774. (DOI: https://doi.org/10.1073/pnas.93.10.4770)</p>
+<p>Motter, B. (1993). Focal attention produces spatially se- lective processing in visual cortical areas v1, v2, and v4 in the presence of competing stimuli. Journal of Neuro- physiology, 70(3). (DOI: https://doi.org/10.1152/ jn.1993.70.3.909)</p>
+<p>Mueller, M., Picton, T., Valdes-Sosa, P., Riera, J., Teder- Salejarvi, W., &amp; Hillyard, S. (1998). Effects of spa- tial selective attention on the steady-state visual evoked potential in the 20-28 hz range. Cognitive Brain Re- search, 6(4), 249-261. (DOI: https://doi.org/10 .1016/S0926-6410(97)00036-0)</p>
+<p>Mumford, D. (1992). On the computational architecture of the neocortex. Biological Cybernetics, 66(1), 241-251. (DOI: https://doi.org/10.1007/BF00198477)</p>
+<p>Murthy, A., Thompson, K., &amp; Schall, J. (2001). Dynamic dissociation of visual selection from saccade program- ming in frontal eye field. Journal of Neurophysiology, 86(5), 2634-2637. (DOI: https://doi.org/10.1152/ jn.2001.86.5.2634)</p>
+<p>Nieuwenhuis, S., Aston-Jones, G., &amp; Cohen, J. (2005). Decision making, the P3, and the locus coeruleus- norepinephrine system. Psychological Bulletin, 131(4), 510-532. (DOI: https://psycnet.apa.org/doi/10 .1037/0033-2909.131.4.510)</p>
+<p>Nieuwenhuis, S., Gilzenrat, M., Holmes, B., &amp; Cohen, J. (2005). The role of Locus Coeruleus in medi- ating the attentional blink: A neurocomputational the- ory. Journal of Experimental Psychology: General, 134(3), 291-307. (DOI: https://doi.org/10.1037/ 0096-3445.134.3.291)</p>
+<p>Niv, Y., Daniel, R., Geana, A., Gershman, S., Leong, Y., Rad- ulescu, A., &amp; Wilson, R. (2015). Reinforcement learn- ing in multidimensional environments relies on attentional mechanisms. Journal of Neuroscience, 35(21), 8145- 8157. (DOI: https://doi.org/10.1523/JNEUROSCI .2978-14.2015)</p>
+<p>Niven, J., &amp; Laughlin, S. (2008). Energy limitation as a se- lective pressure on the evolution of sensory systems. Jour- nal of Experimental Biology, 211(11), 1792-1804. (DOI: https://doi.org/10.1242/jeb.017574)</p>
+<p>Noguchi, T., &amp; Stewart, N. (2014). In the attraction, com- promise, and similarity effects, alternatives are repeat- edly compared in pairs of single dimensions. Cogni- tion, 132(1), 44-56. (DOI: https://doi.org/10.1016/ j.cognition.2014.03.006)</p>
+<p>Nosofsky, R. (1986). Attention, similarity, and the identification-categorization relationship. Journal of Ex- perimental Psychology: General, 115(1), 39. (DOI: https://doi.org/10.1037/0096-3445.115.1.39)</p>
+<p>Nosofsky, R., Palmeri, T., &amp; McKinley, S. (1994). Rule- plus-exception model of classification learning. Psycho- logical Review, 101(1), 53-79. (DOI: https://doi.org/ 10.1037/0033-295x.101.1.53)</p>
+<p>Nunez, M., Srinivasan, R., &amp; Vandekerckhove, J. (2015). In- dividual differences in attention influence perceptual de- cision making. Frontiers in Psychology, 8(18). (DOI: https://doi.org/10.3389/fpsyg.2015.00018)</p>
+<p>Nunez, M., Vandekerckhove, J., &amp; Srinivasan, R. (2017). How attention influences perceptual decision making: Single-trial EEG correlates of drift-diffusion model pa- rameters. Journal of Mathematical Psychology, 76, 117- 130. (DOI: https://doi.org/10.1016/j.jmp.2016 .03.003)</p>
+<p>Olivers, C., &amp; Meeter, M. (2008). A boost and bounce theory of temporal attention. Psychological Review, 115(4), 836- 863. (DOI: https://doi.org/10.1037/a0013395)</p>
+<p>Ong, D., Zaki, J., &amp; Goodman, N. (2020). Computational models of emotion inference in theory of mind: A review and roadmap. Topics in Cognitive Science, 11(2), 338- 357. (DOI: https://doi.org/10.1111/tops.12371)</p>
+<p>Palmer, J., Verghese, P., &amp; Pavel, M. (2000). The psy- chophysics of visual search. Vision Research, 40(10-12), 1227-1268. (DOI: https://doi.org/10.1016/S0042 -6989(99)00244-8)</p>
+<p>Palmeri, T., Schall, J., &amp; Logan, G. (2015). Neurocognitive modeling of perceptual decision making. In J. Busemeyer, Z. Wang, J. Townsend, &amp; A. Eidels (Eds.), The oxford handbook of computational and mathematical psychology. Oxford University Press.</p>
+<p>Parasuraman, R. (2000). The attentive brain. Cambridge, MA: The MIT Press.</p>
+<p>Pearce, J., George, D., &amp; Redhead, E. (1998). The role of attention in the solution of conditional discriminations. In N. Schmajuk &amp; P. Holland (Eds.), Occasion setting: As- sociative learning and cognition in animals. American Psychological Association. (DOI: https://doi.org/ 10.1037/10298-009)</p>
+<p>Pearce, J., &amp; Hall, G. (1980). A model for pavlovian learn- ing: Variations in the effectiveness of conditioned but not of unconditioned stimuli. Psychological Review, 87, 532- 552. (DOI: https://doi.org/10.1037/0033-295X.87 .6.532)</p>
+<p>Pearce, J., &amp; Mackintosh, N. (2010). Two theories of atten- tion: A review and a possible integration. In C. Mitchell &amp; M. Le Pelley (Eds.), Attention and associative learning: From Brain to Behavior. Oxford University Press.</p>
+<p>Pestilli, F., Carrasco, M., Heeger, D., &amp; Gardner, J. (2011). Attentional enhancement via selection and pooling of early sensory responses in human visual cortex. Neuron, 72(5), 832-846. (DOI: https://doi.org/10.1016/j .neuron.2011.09.025)</p>
+<p>Pirrone, A., &amp; Gobet, F. (2021). Is attentional dis- counting in value-based decision making magnitude sen- sitive? Journal of Cognitive Psychology, 33(3), 327-336. (DOI: https://doi.org/10.1080/20445911 .2021.1890091)</p>
+<p>Polyn, S., Norman, K., &amp; Kahana, M. (2009). A context maintenance and retrieval model of organizational pro- cesses in free recall. Psychological Review, 116(1), 129- 156. (DOI: https://doi.org/10.1037/a0014420)</p>
+<p>Posner, M., &amp; Petersen, S. (1990). The attention system of the human brain. Annual Review of Neuroscience, 13(1), 25-42. (DOI: https://doi.org/10.1146/annurev.ne .13.030190.000325)</p>
+<p>Purcell, B., Heitz, R., Cohen, J., Schall, J., Logan, G., &amp; Palmeri, T. (2010). Neurally constrained modeling of perceptual decision making. Psychological Review, 117(4), 1113-1143. (DOI: https://doi.org/10.1037/ a0020311)</p>
+<p>Purcell, B., Schall, J., Logan, G., &amp; Palmeri, T. (2012). From salience to saccades: Multiple-alternative gated stochastic accumulator model of visual search. Journal of Neuro- science, 32(10), 3433-3446. (DOI: https://doi.org/ 10.1523/JNEUROSCI.4622-11.2012)</p>
+<p>Rao, R., &amp; Ballard, D. (1999). Predictive coding in the visual cortex: A functional interpretation of some extra-classical receptive-field effects. Nature Neuroscience, 2(1), 79-87. (DOI: https://doi.org/10.1038/4580)</p>
+<p>Ratcliff, R. (1978). A theory of memory retrieval. Psy- chological Review, 85(2), 59. (DOI: https://doi.org/ 10.1037/0033-295X.85.2.59)</p>
+<p>Raymond, J., Shapiro, K., &amp; Arnell, K. (1992). Temporary suppression of visual processing in an RSVP task: An at- tentional blink? Journal of Experimental Psychology: Hu- man Perception and Performance, 18(3), 849-860. (DOI: https://doi.org/10.1037//0096-1523.18.3.849)</p>
+<p>Rehder, B., &amp; Hoffman, A. (2005a). Eyetracking and se- lective attention in category learning. Cognitive Psychol- ogy, 51(1), 1-41. (DOI: https://doi.org/10.1016/ j.cogpsych.2004.11.001)</p>
+<p>Rehder, B., &amp; Hoffman, A. (2005b). Thirty-something categorization results explained: Selective attention, eye- tracking, and models of category learning. Journal of Experimental Psychology: Learning, Memory and Cog- nition, 31(5), 811-829. (DOI: https://doi.org/10 .1037/0278-7393.31.5.811)</p>
+<p>Rescorla, R., &amp; Wagner, A. (1972). A theory of pavlovian conditioning:variations in the effectieness of reinforce- ment and non-reinforcement. In A. Black &amp; W. Prokasy (Eds.), Classical conditioning ii: Current research and theory (pp. 64-99). Appleton-Century-Crofts.</p>
+<p>Roe, R., Busemeyer, J., &amp; Townsend, J. (2001). Multi- alternative decision field theory: A dynamic connection- ist model of decision making. Psychological Review, 108(2), 370-392. (DOI: https://doi.org/10.1037/ 0033-295X.108.2.370)</p>
+<p>Rosner, A., Basieva, I., Barque-Duran, A., Gloeckner, A., von Helversen, B., Khrennikov, A., &amp; Pothos, E. (2022). Ambivalence in decision making: An eye tracking study. Cognitive Psychology, 134, 101464. (DOI: https://doi.org/10.1016/j.cogpsych.2022.101464)</p>
+<p>Roth, N., Rolfs, M., Hellwich, O., &amp; Obermayer, K. (2023). Objects guide human gaze behavior in dynamic real- world scenes. PLOS Computational Biology, 19(10), e1011512. (DOI: https://doi.org/10.1371/journal .pcbi.1011512)</p>
+<p>Sarter, M., Givens, B., &amp; Bruno, J. (2001). The cog- nitive neuroscience of sustained attention: Where top- down meets bottom-up. Brain Research Reviews, 35(2), 146-160. (DOI: https://doi.org/10.1016/S0165 -0173(01)00044-3)</p>
+<p>Satel, J., Wang, Z., Trappenberg, T., &amp; Klein, R. (2011). Modeling inhibition of return as short-term depression of early sensory input to the superior colliculus. Vision Research, 51(9), 987-996. (DOI: https://doi.org/ 10.1016/j.visres.2011.02.013)</p>
+<p>Schall, J., Morel, A., King, D., &amp; Bullier, J. (1995). To- pography of visual cortex connections with frontal eye field in macaque: Convergence and segretation of pro- cessing streams. Journal of Neuroscience, 15(6), 4464- 4487. (DOI: https://doi.org/10.1523/JNEUROSCI .15-06-04464.1995)</p>
+<p>Seger, C., &amp; Miller, E. (2010). Category learning in the brain. Annual Review of Neuroscience, 33, 203-219. (DOI: https://doi.org/10.1146/annurev .neuro.051508.135546)</p>
+<p>Sepulveda, P., Usher, M., Davies, N., Benson, A., Pietro, O., &amp; De Martino, B. (2020). Visual attention mod- ulates the integration of goal-relevant evidence and not value. eLife, e60705. (DOI: https://doi.org/10 .7554/eLife.60705)</p>
+<p>Sergent, C., Baillet, S., &amp; Dehaene, S. (2005). Timing of the brain events underlying access to consciousness during the attentional blink. Nature Neuroscience, 8, 1391-1400. (DOI: https://doi.org/10.1038/nn1549)</p>
+<p>Shimojo, S., Simion, C., Shimojo, E., &amp; Scheier, C. (2003). Gaze bias both reflects and influence preference. Nature Neuroscience, 6, 1317-1322. (DOI: https://doi.org/ 10.1038/nn1150)</p>
+<p>Simonson, I. (1989). Choice based on reasons: The case of attraction and compromise effects. Journal of Consumer Research, 16(2), 158-174. (DOI: https://doi.org/ 10.1086/209205)</p>
+<p>Smith, P., Lilburn, S., Corbett, E., Sewell, D., &amp; Kyllings- baek, S. (2016). The attention-weighted sample-size model of visual short-term memory: Attention capture predicts resource allocation and memory load. Cogni- tive Psychology, 89, 71-105. (DOI: https://doi.org/ 10.1016/j.cogpsych.2016.07.002)</p>
+<p>Smith, P., &amp; Ratcliff, R. (2009). An integrated theory of attention and decision making in visual signal detec- tion. Psychological Review, 116(2), 283-317. (DOI: https://doi.org/10.1037/a0015156)</p>
+<p>Smith, P., &amp; Sewell, D. (2013). A competitive interac- tion theory of attentional selection and decision making in brief, multielement displays. Psychological Review, 120(3), 589-627. (DOI: https://doi.org/10.1037/</p>
+<p>Smith, P., Sewell, D., &amp; Lilburn, S. (2015). From shunt- ing inhibition to dynamic normalization: Attentional se- lection and decision-making in brief visual displays. Vi- sion Research, 116, 219-240. (DOI: https://doi.org/ 10.1016/j.visres.2014.11.001)</p>
+<p>Smith, S., &amp; Krajbich, I. (2018). Attention and choice across domains. Journal of Experimental Psychology: General, 147(12), 1810-1826. (DOI: https://doi.org/ 10.1037/xge0000482)</p>
+<p>Smith, S., &amp; Krajbich, I. (2019). Gaze ampli- fies value in decision making. Psychological Science, 30(1), 116-128. (DOI: https://doi.org/10.1177/ 0956797618810521)</p>
+<p>Smithies, D. (2011). Attention is rational-access conscious- ness. In C. Mole, D. Smithies, &amp; W. Wu (Eds.), Atten- tion: Philosophical and Psychological Essays (pp. 247- 273). Oxford, UK: Oxford University Press.</p>
+<p>Spratling, M. (2008). Reconciling predictive coding and biased competition models of cortical function. Fron- tiers in Computational Neuroscience, 2. (DOI: https://doi.org/10.3389/neuro.10.004.2008)</p>
+<p>Spratling, M. (2010). Predictive coding as a model of re- sponse properties in cortical area v1. Journal of Neuro- science, 30(9), 3531-3543. (DOI: https://doi.org/ 10.1523/JNEUROSCI.4911-09.2010)</p>
+<p>Stone, M. (1960). Models for choice-reaction time. Psy- chmetrika, 25(3), 251-260. (DOI: https://doi.org/ 10.1007/BF02289729)</p>
+<p>Stroud, J., Wojcik, M., Jensen, K., Kusnoki, M., Kado- hisa, M., Buckley, M., . . . Lengyel, M. (2025). Effects of noise and metabolic cost on cortical task representa- tions. Elife, 13(1), RP94961. (DOI: https://doi.org/ 10.7554/eLife.94961.2)</p>
+<p>Styles, E. (1997). The psychology of attention. Erlbaum, UK: Taylor &amp; Francis.</p>
+<p>Sutton, R., &amp; Barto, A. (1998). Reinforcement learning: An Introduction. Cambridge, MA: MIT Press.</p>
+<p>Talmi, D., Lohnas, L., &amp; Daw, N. (2019). A retrieved context model of the emotional modulation of memory. Psychological Review, 126(4), 455-485. (DOI: https://doi.org/10.1037/rev0000132)</p>
+<p>Tan, M., &amp; Wyble, B. (2015). Understanding how vi- sual attention locks on to a location: Toward a computa- tional model of the N2pc component. Psychophysiology, 52(2), 199-213. (DOI: https://doi.org/10.1111/ psyp.12324)</p>
+<p>Tavares, G., Perona, P., &amp; Rangel, A. (2017). The atten- tional drift diffusion model of simple perceptual decision- making. Frontiers in Neuroscience, 11(468). (DOI: https://doi.org/10.3389/fnins.2017.00468)</p>
+<p>Theeuwes, J. (1992). Perceptual selectivity for color and form. Perception &amp; Psychophysics, 51(6), 599-606. (DOI: https://doi.org/10.3758/BF03211656)</p>
+<p>Thomas, A., Molter, F., Krajbich, I., Heekeren, H., &amp; Mohr, P. (2019). Gaze bias differenes capture individual choice behavior. Nature Human Behaviour, 3(6), 625-635. (DOI: https://doi.org/10.1038/s41562-019-0584-8)</p>
+<p>Titchener, E. (1908). Lecures on the elementary psychology of feeling and attention. MacMillan Co.</p>
+<p>Towal, R., Mormann, M., &amp; Koch, C. (2013). Simulta- neous modeling of visual saliency and value computation improves predictions of economic choice. Proceedings of the National Academy of Sciences, 110(40), e3858-e3867. (DOI: https://doi.org/10.1073/pnas.1304429110)</p>
+<p>Trueblood, J., Brown, S., &amp; Heathcote, A. (2014). The mul- tiattribute linear ballistic accumulator model of context ef- fects in multialternative choice. Psychological Review, 121(2), 179-205. (DOI: https://doi.org/10.1037/</p>
+<p>Turner, B., Forstmann, B., Love, B., Palmeri, T., &amp; van Maa- nen, L. (2017). Approaches to analysis in model-based cognitive neuroscience. Journal of Mathematical Psy- chology, 76, 65-79. (DOI: https://doi.org/10.1016/ j.jmp.2016.01.001)</p>
+<p>Turner, B., Schley, D., Muller, C., &amp; Tsetsos, K. (2018). Competing theories of multialternative, multiattribute preferential choice. Psychological Review, 125(3), 329. (DOI: https://doi.org/10.1037/rev0000089)</p>
+<p>Usher, M., &amp; Cohen, J. (1999). Short term memory and selection processes in a frontal-lobe model. In L. Itti, G. Rees, &amp; J. Tsotsos (Eds.), Connectionist models in cognitive neuroscience: Perspectives in neural comput- ing. Springer. (DOI: https://doi.org/10.1007/978 -1-4471-0813-9_7)</p>
+<p>Usher, M., Cohen, J., Servan-Schreiber, D., Rajkowski, J., &amp; Aston-Jones, G. (1999). The role of locus coeruleus in the regulation of cognitive performance. Science, 283(5401), 549-554. (DOI: https://doi.org/10.1126/science .283.5401.549)</p>
+<p>Vance, J., Darby, K., &amp; Weichart, E. (2025). Gaze insights into partially-encoded representations of objects and cate- gories. Proceedings of the Annual Meeting of the Cogni- tive Science Society, 47, 5587-5594.</p>
+<p>van Vugt, M. (2014). Cognitive architectures as a tool for investigating the role of oscillatory power and coherence in cognition. NeuroImage, 85, 685-693. (DOI: https://doi.org/10.1016/j.neuroimage.2013.09.076)</p>
+<p>Vasishth, S., Nicenboim, B., Engelmann, F., &amp; Burchert, F. (2019). Computational models of retrieval processes in sentence processing. Trends in Cognitive Sciences, 23(11), 968-982. (DOI: https://doi.org/10.1016/ j.tics.2019.09.003)</p>
+<p>Watzl, S. (2011). The nature of attention. Philosophy Compass, 6(11), 842-853. (DOI: https://doi.org/ 10.1111/j.1747-9991.2011.00433.x)</p>
+<p>Weichart, E., &amp; Darby, K. (2026). Overcoming the costs of selective attention: Resoloving rule-uncertainty sup- ports acquisition of generalizable memory traces. Cogni- tion, 272, 106505. (DOI: https://doi.org/10.1016/ j.cognition.2026.106505)</p>
+<p>Weichart, E., Evans, D., Galdo, M., Bahg, G., &amp; Turner, B. (2022). Distributed neural systems support flexi- ble attention updating during category learning. Journal of Cognitive Neuroscience, 34(10), 1761-1779. (DOI: https://doi.org/10.1162/jocn_a_01882)</p>
+<p>Weichart, E., Galdo, M., Sloutsky, V., &amp; Turner, B. (2022). As within, so without; as above, so below: Common mechanisms can support between-and within- trial category learning dynamics. Psychological Review, 129(5), 1104-1143. (DOI: https://doi.org/10.1037/</p>
+<p>Weichart, E., Turner, B., &amp; Sederberg, P. (2020). A model of dynamic, within-trial conflict resolution for decision making. Psychological Review, 127(5), 749-777. (DOI: https://doi.org/10.1037/rev0000191)</p>
+<p>Weichart, E., Unger, L., King, N., Sloutsky, V., &amp; Turner, B. (2024). &quot;The eyes are the window to the represen- tation&quot;: Linking gaze to memory precision and decision weights in object discrimination tasks. Psychological Re- view, 131(4), 1045-1067. (DOI: https://doi/10.1037/ rev0000475)</p>
+<p>Weilbaecher, R., Krajbich, I., Rieskamp, J., &amp; Gluth, S. (2021). The influence of visual attention on memory- based preferential choice. Cognition, 215, 104804.</p>
+<p>DOI: https://doi.org/10.1016/j.cognition.2021</p>
+<p>Weissman, D., Roberts, K., Wisscher, K., &amp; Woldorff, M. (2006). The neural bases of momentary lapses in at- tention. Nature Neuroscience, 9(7), 971-978. (DOI: https://doi.org/10.1038/nn1727)</p>
+<p>Wilson, R., &amp; Niv, Y. (2012). Inferring relevance in a changing world. Frontiers in Human Neuroscience, 5(189). (DOI: https://doi.org/10.3389/fnhum.2011 .00189)</p>
+<p>Wong-Riley, M. (2010). Energy metabolism of the visual system. Eye and Brain, 2, 99-116. (DOI: https://doi.org/10.2147/EB.S9078)</p>
+<p>Wu, W. (2011). What is conscious attention? Phi- losophy and Phenomenological Research, 82(1), 93-192. (DOI: https://doi.org/10.1111/j.1933-1592.2010 .00457.</p>
+<p>Wu, W. (2024). We know what attention is! Trends in Cogni- tive Sciences, 28(4), 304-318. (DOI: https://doi.org/ 10.1016/j.tics.2023.11.007)</p>
+<p>Wyart, V., Myers, N., &amp; Summerfield, C. (2015). Neu- ral mechanisms of human perceptual choice under fo- cused and divided attention. Journal of Neuroscience, 35(8), 3485-3498. (DOI: https://doi.org/10.1523/ JNEUROSCI.3276-14.2015)</p>
+<p>Wyble, B., Bowman, H., &amp; Nieuwenstein, M. (2009). The attentional blink provides episodic distinctiveness: Spar- ing at a cost. Journal of Experimental Psychology: Hu- man Perception and Performance, 35(3), 787-807. (DOI: https://doi.org/10.1037/a0013902)</p>
+<p>Wyble, B., Callahan-Flintoft, C., Chen, H., Marnov, T., Sarkar, A., &amp; Bowman, H. (2020). Understanding visual attention with RAGNAROC: A Reflexive Attention Gradi- ent through Neural AttRactOr Competition. Psychological Review, 127(6), 1163-1198. (DOI: https://doi.org/ 10.1037/rev0000245)</p>
+<p>Yang, X., &amp; Krajbich, I. (2022). A dynamic computa- tional model of gaze and choice in multi-attribute de- cisions. Psychological Review, 130(1), 52-70. (DOI: https://doi.org/10.1037/rev0000350)</p>
+<p>Zilker, V. (2022). Sronger attentional biases can be linked to higher reward rate in preferential choice. Cogni- tion, 225, 105095. (DOI: https://doi.org/10.1016/ j.cognition.2022.105095)</p>
+<p>Zilker, V. (2024). Attentional dynamics of evidence accu- mulation explain why more numerate people make better decisions under risk. Scientific Reports, 14, 18788. (DOI: https://doi.org/10.1038/s41598-024-68969-5)</p>
+<p>Zilker, V., &amp; Pachur, T. (2022). Nonlinear probability weighting can reflect attentional biases in sequential sam- pling. Psychological Review, 129(5), 949-975. (DOI: https://doi.org/10.1037/rev0000304)</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
