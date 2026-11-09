@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: GEST-A: A Hierarchical and Dynamic Framework of
+Conceptual Abstraction</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+GEST-A: A Hierarchical and Dynamic Framework of Conceptual Abstraction
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.23
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>16</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="na">Not applicable <span class="n">(16)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 113 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 113 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 113 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Abstraction is central to human cognition, yet the term covers at least three senses that are routinely conflated: abstractness (how far a concept is removed from perceptible experience), specificity (how general or inclusive a category is), and the process by which conceptual change. We propose GEST-A (Grounded, Embodied, Situated Trajectories of Abstraction), a hierarchical and dynamic framework that separates these senses. Being abstract is a concept&#x27;s position in a dimensional space of grounding (physical-world constraints), embodiment (body-specific sensorimotor and interoceptive experience), and situatedness (dependence on context of use), with specificity as orthogonal descriptor. Becoming abstract, in this view, is a trajectory through this space, driven by generalization and re-weighting of grounded, embodied, and situated content, and linked to a shift in feature structure from complete overlap to family resemblance.</p>
+<p>Using number concepts to illustrate these dynamics, we position GEST-A against earlier hybrid accounts of grounding, clarify that linguistic labels are cues and binding devices rather than constituting concepts, and argue that abstract concepts constrain rather than refute embodied cognition. We also revisit concreteness ratings and the symbol grounding problem, and derive testable predictions. Abstract concepts reveal language as a powerful scaffold for building conceptual knowledge that exceeds individual sensorimotor experience.</p>
+<h3>1. Introduction</h3>
+<p>The capacity to form abstract concepts, that is, to extract regularities across experiences and represent them independently of particular instances, is fundamental to human intellectual achievement (Barsalou, 2005; Dove, 2016). From mathematics to morality, from justice to jealousy, abstract concepts permeate thought and communication. Yet, as with William James&#x27;s remark about attention, everyone knows what abstraction is until asked to define it. James himself pressed the difficulty from the other side: we ought to speak of &quot;a feeling of and, a feeling of if, a feeling of but,&quot; as readily as of a feeling of blue or of cold (James, 1890, vol. 1, pp. 245-246). Even the most abstract logical relations, on this view, have an experiential and situated character (see also Johnson, 2017, Chapter 2). This insight anticipated the contemporary debate about whether, and how, abstract concepts are grounded in experience (Friedrich et al., 2025; Kiefer &amp; Trumpp, 2026).</p>
+<p>That debate has been slowed by a terminological problem. The word &quot;abstract&quot; is used in (at least) three different senses: It is used for abstractness, the degree to which a concept is removed from perceptible, sensorimotor experience (JUSTICE versus CANDY); for generality, the degree to which a category is inclusive rather than specific (FOOD versus CANDY; JUSTICE versus RESTORATIVE JUSTICE); and for abstraction, the process by which concepts are formed, generalized, and transformed. These senses are related but not equivalent. BANANA and FRUIT are both concrete yet differ strongly in specificity; FREEDOM and FREEDOM OF SPEECH are both abstract yet differ in specificity too (Bolognesi et al., 2020). Conflating these senses has consequences: findings about &quot;abstract concepts&quot; may reflect either of these senses, and claims about conceptual grounding hold for one but not the other (Bolognesi, 2025).</p>
+<p>This paper asks what a theory of abstract concepts must explain once these senses are separated, and develops a hierarchical and dynamic framework, GEST-A (Grounded, Embodied, Situated Trajectories of Abstraction), in response. GEST-A builds on the TEST theory of cognition (Myachykov et al., 2014), on similar hierarchical views of numerical cognition (Fischer, 2012 (Fischer, , 2018 (Fischer, , 2024)), and on our earlier commentary in this journal, which proposed that abstractness has grounded, embodied, and situated aspects (Myachykov &amp; Fischer, 2019) in response to the account of abstract concepts as words used as social tools (Borghi et al., 2019).</p>
+<p>Several ingredients of our argument are not new. Proposals that abstract concepts form a continuum rather than a dichotomy, that they are heterogeneous, that concreteness ratings are an imperfect measure, and that hybrid accounts combining grounded, linguistic, and intermediate representations are viable, all have a long history (Section 3). The novel contribution we claim is more specific, and it has five parts: 1.</p>
+<p>A separation of abstractness, specificity, and abstraction, with working definitions that can be mapped onto a recent consensus glossary (Reilly et al., 2025) (Section 2).</p>
+<p>2. A coordinate system for abstractness in which three ordered constraints (grounding, embodiment, situatedness) jointly position each concept, with proposals for how each coordinate can be measured (Sections 4 and 5).</p>
+<p>3. A dynamic account in which becoming abstract is a trajectory through that space, tied to changes in feature structure (Pulvermüller, 2013 (Pulvermüller, , 2018a (Pulvermüller, , 2023) ) (Section 6). 4. A deliberately limited claim about language: linguistic labels cue, bind, and coordinate concepts, but do not constitute them (Sections 2.3 and 6.3).</p>
+<p>5. A set of testable predictions, identifying outcomes that would count against GEST-A (Section 9). Section 2 sets out terminology. Section 3 positions GEST-A against earlier hybrid accounts. Sections 4 and 5 describe being abstract and its relation to brain-based and simulation theories. Section 6 describes becoming abstract and works through number concepts as a case study. Section 7 revisits the symbol grounding problem, Section 8 draws methodological consequences, Section 9 states predictions, and Sections 10 and 11 consider implications for development and education.</p>
+<p>2. Terminology: Abstractness, abstraction, specificity, and the concept-word distinction 2.1 Abstractness, concreteness, and specificity A recent multidisciplinary consensus project defined &quot;abstraction&quot; as the process of forming general ideas or concepts by extracting similarities across instances, and separated it explicitly from &quot;abstractness&quot;, a property of concepts or words (Reilly et al., 2025). The glossary also records principled views on how abstractness should be defined, which shows that the field has not converged. We adopt this process-property distinction and use the terms as summarized in Box 1. By abstractness we mean the degree to which a concept&#x27;s content is detached from direct, perceptible, bodily experience. It is graded, and we argue that it is expressed by three dimensions (Section 4). Concreteness, as indexed by rating studies, is its conventional opposite and serves as an empirical proxy, not a definition. Specificity (or its inverse, generality) refers to where a category sits in an inclusion hierarchy, that is, its semantic granularity.</p>
+<p>The empirical decoupling of concreteness and specificity is now well documented. Bolognesi et al. (2020) operationalized and tested the relation between conceptual concreteness and categorical specificity and argued that they should be treated as separate. Muraki and Pexman (2026) have since published specificity norms for 8,500 English words, and Bolognesi (2025) argues that specificity is a missing piece in theories of embodied language comprehension. From this, we draw two conclusions: First, ratings of concreteness and ratings of specificity measure different things, and a theory of abstract concepts must say which of them it addresses. Second, embodiment is unlikely to be a unitary phenomenon, operating identically across conceptual categories: How a concept is grounded depends not only on perceptual accessibility but also on semantic granularity, and linguistic and other contextual constraints. GEST-A is primarily a theory of abstractness and of the abstraction process that alters it. It treats specificity as an orthogonal descriptor (Section 4.5).</p>
+<h3>2.2 Abstraction as a process</h3>
+<p>We distinguish two sub-processes that the single word &quot;abstraction&quot; covers.</p>
+<p>Generalization is the extraction of similarity across instances, accompanied by loss of specificity; this is the sense captured in Reilly et al.&#x27;s (2025) consensus glossary.</p>
+<p>Detachment is the progressive re-weighting of grounded, embodied, and situated content through which a concept&#x27;s abstractness increases. The two can dissociate: FRUIT is more general than BANANA but not necessarily more abstract. Conversely, a child&#x27;s THREE, initially anchored in fingers and subitized arrays, can become a node in a relational number system (Section 6.5) without becoming more inclusive. &quot;Becoming abstract&quot; in the present article refers to detachment, with generalization being one among several routes.</p>
+<h3>2.3 Concepts, words, and labels</h3>
+<p>A second source of confusion concerns the relation between concepts and words. We take a concept to be a mental representation of a category, kind, or relation that supports categorization, inference, and action, and that can in principle exist and operate without a word. Three observations motivate this separation.</p>
+<p>First, concepts exist outside language. Preverbal infants and nonhuman animals categorize objects and discriminate quantities, and adults hold concepts for which they have no ready word. Second, one lexical form can map onto several concepts. MARS the planet, MARS the Roman god, and MARS the confectionery are distinct concepts that happen to share a form; they are not three instances of one concept. Such polysemy and homonymy matter for how word-level ratings should be interpreted, but they are a lexical phenomenon and not evidence of contextual flexibility within a single concept. Third, dissociations between number concepts and number words (for example, preserved exact calculation despite severe agrammatism; Varley et al., 2005) suggest that even the most language-dependent concepts are not identical to the words that name them.</p>
+<p>What, then, is the role of language? We distinguish three relations between a label and a concept. As a cue, the label activates or constrains a concept in context (Lupyan &amp; Lewis, 2019). As a binding device or placeholder, the label links instances that share no common perceptible feature during learning and maintenance, so that a coherent category can form and persist (Carey, 2009; Dobler et al., 2024 Dobler et al., , 2026;; Pulvermüller, 2018a). As a coordination device, the label allows members of a community to align and negotiate meanings (Borghi et al., 2019). We do not claim the stronger thesis that the label is constitutive of the concept, so that removing the label would remove the concept. We claim language-dependence, not language-identity: For concepts whose instances lack shared perceptible features, the formation, coherence, and stability of the category depend causally on a label or another stable symbol. This dependence is graded, varies between concepts, and is empirically testable. A &quot;label&quot; in this sense need not be a word of a natural language; numerals, notations, and gestures can serve.</p>
+<p>Finally, concepts &quot;inside&quot; and &quot;outside&quot; language are not two kinds of thing. A concept formed largely through linguistic input, such as DEMOCRACY, can be used in nonverbal reasoning, and a concept formed through direct experience, such as HAMMER, can be named, described, and revised through language. GEST-A describes how much of a given concept&#x27;s content and organization relies on each source at a given time, not a dichotomy between language-based and experience-based concepts.</p>
+<p>Box 1. Working definitions used in this article Term Working definition Note Abstractness Degree to which a concept&#x27;s content is detached from direct, perceptible, bodily experience; graded; positioned by grounding, embodiment, and situatedness Property of concepts (cf. Reilly et al., 2025) Concreteness Conventional opposite of abstractness as indexed by ratings Proxy, not definition Specificity (generality) Position of a category in an inclusion hierarchy; semantic granularity Orthogonal to abstractness (Bolognesi et al., 2020) Abstraction Process with two sub-processes: generalization (loss of specificity) and detachment (gain in abstractness) Generalization corresponds to the glossary sense; detachment is our addition Concept Mental representation of a category, kind, or relation, able to function without a word Not equated with words Lexical form The word form (sound, spelling, or sign) One form can map to several concepts Term Working definition Note Label A lexical form or other stable symbol (numeral, notation, gesture) associated with a concept Cue, binder, or coordination device; not identical to the concept Grounding Constraints imposed by invariant structure of the physical world (e.g., gravity, object permanence) on what can be perceived and learned &quot;Tropic&quot; in Myachykov et al. (2014) Embodiment Body-specific, experience-dependent sensorimotor, interoceptive, and affective states associated with a concept Narrower than the broad programme of grounded cognition Situatedness Extent to which a concept&#x27;s content is determined by the context of use (task, social, linguistic, or formal system) Has a weight and a variability (Section 4.3) Feature structure Complete overlap (all instances share defining features) versus family resemblance (features shared pairwise) After Pulvermüller (2013, 2018a)  &gt;Predecessors and positioning</p>
+<h3>3.1 Hybrid accounts of grounding</h3>
+<p>The idea that abstract concepts combine components that are grounded in experience with components that are linguistic, and perhaps components in between, is not new. Harnad&#x27;s (1990) solution to the symbol grounding problem (how do concepts become meaningful?) is a hybrid of three representations: iconic (analog projections of sensory input), categorical (learned invariance detectors), and symbolic (names and propositions composed from grounded names). Paivio&#x27;s (1986) dual-coding theory posits both verbal and imagistic systems whose relative contributions differ for abstract and concrete words.</p>
+<p>Similarly, Prinz (2002), Chatterjee (2010), and Dove (2014 Dove ( , 2016 Dove ( , 2020) each, in different ways, treat concepts as composites of grounded, linguistic, and intermediate components. Barsalou and colleagues&#x27; language and situated simulation account holds that linguistic and simulation systems interact during conceptual processing (Barsalou et al., 2008; Barsalou &amp; Wiemer-Hastings, 2005). Vigliocco et al. (2009) and Andrews et al. (2009) argued that experiential and distributional information are complementary sources of meaning. Borghi et al. (2017 Borghi et al. ( , 2019) ) also emphasize multiple sources of grounding, including social and introspective experience, and the role of words as social tools. Zwaan (2014) is an important precursor with respect to situatedness and displaced reference, and Louwerse (2011) showed that language itself encodes perceptual and embodied relations. Brain-constrained modelling (Pulvermüller, 2013 (Pulvermüller, , 2018a (Pulvermüller, , 2023) ) supplies a mechanistic account of how labels interact with feature structure. Table 1 summarizes how GEST-A relates to these accounts.</p>
+<p>Table 1. Relation of GEST-A to earlier accounts Account Components Role of language Relation to GEST-A Harnad (1990) Iconic, categorical, symbolic representations Names build symbolic representations from grounded names Closest ancestor. We split the sensory base into two ordered constraints (grounding, embodiment) and replace the symbolic representation by situatedness, which language fulfils in many but not all cases Paivio (1986) Verbal and imagistic codes One of two codes Compatible; we add physical-world constraints, feature structure, and trajectories Barsalou et al. (2008) Linguistic and simulation systems Fast, shallow processing Compatible with our simulation view (Section 5); feature structure Account Components Role of language Relation to GEST-A alongside simulation specifies when language is indispensable Vigliocco et al. (2009); Andrews et al. (2009) Experiential and distributional information Distributional information complements experience We locate the distributional contribution within situatedness (Section 4.3) Borghi et al. (2017, 2019) Sensorimotor, linguistic, social, introspective Words as social tools We share the multiplicity; we treat grounding as a reweighted constraint, not something every concept must exhibit directly Prinz (2002); Chatterjee (2010); Dove (2014, 2016, 2020) Perceptual plus amodal or linguistic components Medium or enhancement of thought Compatible hybrids; we add dimensions, measurement proposals, and predictions Pulvermüller (2013, 2018a, 2023) Brainconstrained networks with feature structure Labels bind familyresemblance categories Mechanistic basis for our account of becoming abstract</p>
+<h3>3.2 What GEST-A retains and what it changes</h3>
+<p>We retain the core of the hybrid view: no single code accounts for all concepts, and the contribution of language grows as the contribution of perceptible instances shrinks.</p>
+<p>However, GEST-A differs in four respects. First, we propose dimensions rather than representational types. In Harnad&#x27;s scheme the representational types together make up a symbol-grounding system. In ours, grounding, embodiment, and situatedness are coordinates that characterize any individual concept at a given time. Every concept has a position on all three, and the same concept can occupy different positions at different times or in different contexts. Second, we suggest a decomposed sensory base. The grounded dimension concerns invariants of the physical world, such as gravity and stable object locations, that constrain what can be learned (Friedrich et al., 2024). The embodied dimension concerns body-specific and experience-dependent states, including interoception and culturally shaped motor habits, such as finger counting. Our use of &quot;embodiment&quot; is therefore narrower than Barsalou&#x27;s &quot;grounded cognition&quot;, which covers all modal re-enactments. To avoid ambiguity, we use &quot;grounded cognition&quot; for the broader research programme and &quot;embodiment&quot; only for learning-related constraints.</p>
+<p>Third, we identify context-dependence or situatedness, rather than linguistic labels, as the most influential cognitive constraint. Task, social, and formal-system contexts matter, while a label is only one mechanism among several. Fourth, GEST-A treats being abstract and becoming abstract as two aspects of one dynamic description: It poses both a coordinate system and trajectories through it at the time scales of moment-to-moment context, individual development, and cultural history.</p>
+<h3>3.3 Do abstract concepts challenge embodied cognition?</h3>
+<p>It is sometimes said that abstract concepts challenge embodied cognition because they possess no sensorimotor features (e.g., Mahon &amp; Caramazza, 2008).</p>
+<p>That statement needs qualification. If embodied cognition means that every concept is directly and exclusively grounded in modal re-enactment, so that cognition is embodied from top to bottom, then abstract concepts that lack a sensorimotor core do challenge it. The resolution we propose, that some representations are directly grounded whereas others depend on language and on other grounded concepts, is incompatible with that strong view. What abstract concepts do not challenge is a hierarchical, systemic version of grounded cognition of the kind that Harnad&#x27;s (Vincent-Lamarre et al., 2016) hybrid position already allows. Our claim is therefore that abstract concepts constrain what embodied cognition can mean. They rule out monolithic accounts and require grounded cognition to be hierarchical and language-inclusive.</p>
+<p>Importantly, pursuing a dimensional approach to meaning has a tradition. Osgood et al. (1957) proposed that connotative meaning is organized along evaluation, potency, and activity. Dodds et al. (2026) recently challenged that framework and its successors with large-scale corpus analyses, arguing that meaning is better described by power, danger, and structure. These frameworks concern the affective-evaluative meaning of words, whereas ours concerns the sources of conceptual content, so these views are compatible.</p>
+<p>They also illustrate a more general point, namely that no single axis, including the concrete-abstract continuum, spans conceptual space.</p>
+<h3>4. Being abstract: A hierarchical, three-dimensional framework</h3>
+<p>GEST-A rests on a hierarchy of constraints on cognition (Fischer, 2012 (Fischer, , 2018 (Fischer, , 2024;; Myachykov et al., 2014; Myachykov &amp; Fischer, 2019; see also Körner et al., 2023; Pezzulo et al., 2011 Pezzulo et al., , 2013)). Grounding constrains embodiment, and embodiment constrains situatedness. We first describe each dimension and then how they combine.</p>
+<h3>4.1 Grounding: Constraints of the physical world</h3>
+<p>Grounding concerns the extent to which a concept maintains a connection to observable, physical referents and to the invariant structure of the world (Shepard, 1984; Friedrich et al., 2024). Gravity, stable object locations, and object permanence constrain what organisms can perceive. These constraints are evolutionarily mediated and hierarchically foundational (the &quot;tropic&quot; component of Myachykov et al., 2014). On the ontological reading of abstractness, DEMOCRACY, LOVE, and ANGER are abstract because they lack bounded physical referents, whereas STONES, BOOKS, and DOGS are concrete.</p>
+<p>This corresponds to the philosophical contrast between natural kinds, which exist independently of human observers, and social kinds, which depend on human agreement and institutions (Dunn, 2015). A stone would exist without humans to perceive it; democracy would not. The connection between a concept and the world it is about (Pezzulo &amp; Castelfranchi, 2007) acts as a hard constraint and a precondition for embodiment.</p>
+<p>Two caveats apply. First, equating ungrounded concepts with social kinds is not fully appropriate. BLUE is grounded in sensorimotor experience, yet where people draw its boundaries is shaped by social and linguistic factors (Lupyan et al., 2020). Grounding is therefore one dimension of abstractness and not its whole. Second, concepts without physical referents plausibly emerged from the need to conceptualize relations that cannot be pointed to in physical space but are crucial for social coordination, such as roles, norms, and moral principles (Borghi et al., 2019). They are abstract not because they are less real or less important, but because their content cannot be anchored in a bounded physical referent.</p>
+<h3>4.2 Embodiment: Body-specific experience</h3>
+<p>Embodiment concerns the body-specific, experience-dependent states associated with a concept: its sensory and motor capacities (Lynott et al., 2020), interoception and emotion (Tallon-Baudry, 2023), and learned cultural practices (Göbel et al., 2011). It is contingent on grounded structure, since the body evolved within, and is constrained by, the physical world.</p>
+<p>Embodiment can vary independently of grounding. The planet MARS is ontologically concrete, yet experientially remote, since most people have no direct sensorimotor contact with it. LOVE, by contrast, is ontologically abstract but experientially rich: most people have embodied experience of loving and being loved, which is reflected in the abundance of similar conceptual metaphors across languages (Kövecses, 2003; Myachykov &amp; Fischer, 2019). A concept can therefore be physically real yet experientially remote, or physically abstract yet experientially rich. The embodiment dimension captures the density and variety of sensorimotor and interoceptive traces associated with a concept, whether or not those traces connect to a bounded physical referent. Because the traces are modality-specific, embodiment is not a single quantity but a profile across the senses, interoception, and action.</p>
+<h3>4.3 Situatedness: Context of use</h3>
+<p>Situatedness concerns how far a concept&#x27;s content is determined by the context in which it is formed and used, rather than by invariant world constraints or by the body (Robbins &amp; Aydede, 2009; Casper &amp; Artese, 2023). Relevant contexts include the task and goal, the social situation, the surrounding discourse, and, for formal concepts, the symbolic system in which they are defined. Situated constraints are transient, but they shape ongoing processing most strongly, because they serve goal accomplishment (Fischer, 2012 (Fischer, , 2024)). Abstractness is therefore not a fixed property but varies with use (Wittgenstein, 1953).</p>
+<p>Two properties of situatedness should be kept apart. The weight of the situated component is how much of a concept&#x27;s content is fixed by context of use rather than by world and body. Its variability is how much that content changes across contexts. To illustrate, JUSTICE has a high situated weight and high variability, because what counts as just shifts with legal, moral, and interpersonal context. PRIME NUMBER also has a high situated weight, because its content is fixed entirely by definitions within a formal system, but very low variability, because that system is explicit and stable. Separating weight from variability removes an apparent paradox, in which precise formal concepts seem at once highly situated and context-free. Variability can be estimated from corpora with measures of contextual or semantic diversity (Hoffman et al., 2013).</p>
+<p>Context-dependence within a single concept is well documented. The features that come to mind for PIANO differ depending on whether one is imagining moving it or hearing it played, and context-dependent properties are retrieved only in situations that make them relevant (Barsalou, 1982; Yee &amp; Thompson-Schill, 2016). In our terms, the same concept shifts along the embodiment dimension as context changes: it is more embodied in a moving context (weight, grasp, effort) and less so in a context of music theory. This is different from polysemy, where distinct concepts share a lexical form.</p>
+<p>Linguistic context is the most important situating context for abstract concepts.</p>
+<p>Distributional learning, that is, learning from the co-occurrence of words with other words, is one mechanism by which linguistic context shapes conceptual content. We therefore place it within situatedness: it is a route by which the linguistic context of use becomes part of a concept (Andrews et al., 2009; Louwerse, 2011; Lenci, 2018).</p>
+<h3>4.4 The three-dimensional space</h3>
+<p>Together these dimensions define a space in which every concept occupies a position  (constraints of the physical world), embodied (body-specific sensorimotor and interoceptive experience) and situated (dependence on the context of use) content.</p>
+<p>Marker colour shows an illustrative composite of abstractness, which increases as the grounded and embodied weights fall and the situated weight rises. Positions are provisional hypotheses for a subset of the exemplars in Table 2, not measured values.</p>
+<p>Specificity, which is orthogonal to the space, is not shown.</p>
+<p>Table 2 gives provisional positions for a set of exemplars, and</p>
+<p>Table 3 lists candidate measures for each coordinate. The positions are hypotheses to be tested, not findings; the measures indicate how the hypotheses could be tested with existing resources.</p>
+<p>Table 2. Provisional positions Concept Grounding Embodiment Situated weight Situated variability APPLE High High Low Low HAMMER High High (motor) Lowmedium Low MARS (planet) High Low Medium Low THREE (young child, subitizing) Medium High Low Low FEAR Low High (interoceptive, motor) Lowmedium Medium LOVE Low High (interoceptive) Medium Mediumhigh CAUSATION Low Medium-high (action-perception) Lowmedium Low JUSTICE Low Low-medium High High DEMOCRACY Low Low High High PRIME NUMBER Low Low High (formal system) Low Table 3. Candidate measures for each coordinate Coordinate Candidate measures Grounding Judged perceptibility and physical instantiation of referents; natural versus social kind classification Embodiment Modality-specific sensorimotor and interoceptive strength ratings, for example the Lancaster Sensorimotor Norms (Lynott et al., 2020; Connell &amp; Lynott, 2012) Situated weight Dependence of meaning on defining context or system, estimated by context-manipulation tasks Situated variability Semantic or contextual diversity from corpora (Hoffman et al., 2013) Specificity Specificity norms (Bolognesi et al., 2020; Muraki &amp; Pexman, 2026) Feature structure Overlap of features across instance sets, from feature-listing or exemplar-similarity tasks</p>
+<h3>4.5 Where specificity fits</h3>
+<p>Specificity is not a fourth coordinate of the same kind, because it describes a category&#x27;s place in an inclusion hierarchy and not the source of its content. We treat it as an orthogonal descriptor that interacts with the three dimensions. BANANA and FRUIT share high grounding and embodiment but differ in specificity. The more general FRUIT subsumes instances with different perceptual features and should therefore tend to evoke more variable simulations. At the abstract end, FREEDOM OF SPEECH is more specific than FREEDOM and is also more constrained by context. This generates predictions that cannot be derived from concreteness alone. The two sub-processes move concepts along different axes: generalization moves a concept up the inclusion hierarchy, whereas detachment moves it through the three-dimensional space.</p>
+<h3>4.6 Emotion is not a further dimension</h3>
+<p>Some accounts hold that abstract concepts differ from concrete ones in being more emotional (Kousta et al., 2011; Vigliocco et al., 2014). However, when full data distributions are plotted instead of fitted curves, the U-shaped relation between emotionality and concreteness appears to be driven by clusters of items (Winter, 2022).</p>
+<p>Emotional valence explains little variance in concreteness ratings and appears orthogonal to abstractness, not constitutive of it. The dispute concerns how general the special role of emotion is, not whether emotion matters for some abstract concepts. We therefore do not list emotion as a separate dimension. Affective and interoceptive content enters through embodiment, and it varies systematically within abstract subtypes, being strongest for social-emotional concepts and weakest for philosophical-logical ones (Villani et al., 2019), rather than tracking the concrete-to-abstract transition itself.</p>
+<h3>4.7 Abstract concepts are not a unitary class</h3>
+<p>Cluster analyses with multiple rating dimensions consistently reveal subgroups of abstract concepts, such as social-emotional (LOVE, ANGER), philosophical-logical (TRUTH, NECESSITY), and numerical-mathematical (INFINITY, PROBABILITY), that differ systematically in cognitive profile (Villani et al., 2019; Muraki et al., 2022). In GEST-A the subtypes of abstract concepts occupy different regions within the same space and do not require separate theories. Their heterogeneity nevertheless has a theoretical consequence: any account of &quot;abstract concepts&quot; must say which subtypes it addresses, since a theory developed around social-emotional concepts may fail for mathematical ones and vice versa. Feature structure, introduced in Section 6.2, cross-cuts the subtypes. FEAR, with consistent bodily signatures across instances, differs from JEALOUSY, whose instances vary across social scenarios, although both are socialemotional. ADDITION with small numbers differs likewise from INFINITY within mathematics.</p>
+<h3>5. Relation to brain-based and simulation accounts</h3>
+<p> &gt;Relation to brain-based and simulation accounts</p>
+<h3>5.1 Brain-constrained models</h3>
+<p>GEST-A is compatible with neurobiological constraints for each of its three dimensions.</p>
+<p>For grounding, physical constraints have shaped the sensory capacities, motor constraints, and connectivity of human brains over phylogeny and development (Neubauer et al., 2018). For embodiment, repeated sensorimotor activity shapes representations through synaptic adjustment (Qin et al., 2023). For situatedness, contextual demands transiently adjust neural processing through attentional mechanisms (Fiebelkorn &amp; Kastner, 2019). These are plausibility arguments, not tests of GEST-A.</p>
+<p>Brain-constrained computational modelling gives a more specific mechanistic account (Pulvermüller, 2013 (Pulvermüller, , 2018a (Pulvermüller, , 2023)). In Pulvermüller&#x27;s account most concepts lie on a continuum and are held together by features that are shared to different degrees. Concrete concepts typically show perceptual overlap, in that all instances share defining features.</p>
+<p>Many abstract concepts instead show a family-resemblance structure, in which features are shared pairwise but no single feature is common to all instances. In network simulations this difference leads to distinct learning patterns, and it explains why abstract concepts weight situated components more heavily. Their representational variability requires linguistic labels as compensatory binding mechanisms for conceptual coherence (Dobler et al., 2024 (Dobler et al., , 2026)). The results come from simulations constrained by neuroanatomy and neurophysiology, and direct evidence from human learners is more limited; Section 9 states what such evidence would look like.</p>
+<h3>5.2 Simulation theories</h3>
+<p>GEST-A is also compatible with simulation theories (reviewed in Friedrich et al., 2025), most prominently Barsalou&#x27;s situated simulation theory (Barsalou, 1999 (Barsalou, , 2008)). On this view, concepts are not static amodal symbols but dynamic, multimodal representations in the brain&#x27;s systems for perception, action, and introspection. Cognitive processing reenacts relevant states in a selective, context-sensitive way. Simulations for abstract concepts may be more schematic, more reliant on introspective and social content, and more tightly coupled with linguistic forms (Barsalou &amp; Wiemer-Hastings, 2005; Borghi et al., 2022).</p>
+<p>This theoretical commensurability has several implications: First, simulation is a plausible mechanism for the embodied dimension: for HAMMER it involves motor simulation of grasping and swinging, whereas for DEMOCRACY it involves social scenarios, evaluations, and linguistic contexts. Second, the context-sensitive tailoring of simulations to current goals is a plausible mechanism for the situated dimension, and it explains why a concept&#x27;s position shifts with context. Third, simulation theories agree that highly abstract concepts are multimodal but may draw more on interoceptive and social experience than on object-oriented sensorimotor experience. JUSTICE may be grounded in simulations of emotional responses to fairness, in memories of social interactions, and in experience of legal discourse, which complements the multiplegrounding view (Borghi et al., 2017; Villani et al., 2019). Finally, simulation theories also acknowledge a role for language: linguistic forms can trigger simulations, constrain them, and provide schematic frames for organizing multimodal experience (Barsalou et al., 2008; Casto et al., 2025). Abstract concepts may therefore rely more heavily on linguistic cues to coordinate complex and heterogeneous simulations.</p>
+<h3>6. Becoming abstract: Abstraction as a dynamic process</h3>
+<p>In Section 4, we described concepts at a point in time. However, abstraction is the process by which concepts move through the hypothesized 3D space, and it also operates on multiple time scales: Moment to moment, as context shifts a concept&#x27;s position; over individual development; and over cultural and evolutionary history. In the sense of detachment, a central feature of becoming abstract is a progressive reduction in the weight of embodied content relative to linguistically mediated and situated content. We see this as re-weighting and not as loss.</p>
+<h3>6.1 Generalization, simplification, and displacement</h3>
+<p>One route to becoming abstract is the gradual removal of properties of individual objects, which yields more general, automated, and simplified concepts. The process includes generalizing across instances to extract common features, simplifying by discarding irrelevant detail, automating access through familiarity, and categorizing by grouping entities with shared properties. Generalization lowers specificity.</p>
+<p>Displacement is a second route, and it is more directly linked to detachment. Early communication was plausibly anchored in the here and now, but over evolutionary and developmental time language acquired the capacity to refer to absent entities, past and future times, hypothetical scenarios, and imagined situations (Zwaan, 2014). This progression frees reference from perceptual anchoring. Reference to present, perceivable entities can draw on rich sensorimotor simulation, whereas reference to displaced or imagined entities relies more heavily on linguistic representation with attenuated embodied content.</p>
+<h3>6.2 Feature structure and the shift from complete overlap to family resemblance</h3>
+<p>Changes in feature structure provide the mechanistic link between being and becoming abstract. Concrete concepts, and some abstract ones, show complete feature overlap: all instances share features that can be directly experienced. HAMMER involves grasping, swinging, and striking across all exemplars, so a conceptual system can extract the common sensorimotor pattern through repeated experience. Many other concepts show family resemblance (Wittgenstein, 1953): DEMOCRACY is instantiated by voting with raised hands, by ballot boxes, and by parliamentary procedure, and no single perceptible or action feature characterizes all of them, yet instances share features pairwise.</p>
+<p>Brain-constrained network simulations indicate that concepts with family-resemblance structure are formed and maintained differently from those with complete overlap. Verbal symbols support the formation of concrete concepts but are enabling for abstract ones (Pulvermüller, 2018a (Pulvermüller, , 2023;; Dobler et al., 2024 Dobler et al., , 2026)). The label &quot;democracy&quot; can bind instances that share only partial features into a coherent representation despite the absence of complete overlap.</p>
+<p>On this account, becoming abstract often involves a shift from complete overlap towards family resemblance as a concept is applied to more varied instances and contexts. The conceptual shift connects static and dynamic descriptions. A concept&#x27;s position in the 3D space (for example, low embodiment and high situated weight) is the outcome of a history of re-weighting, and feature structure explains why re-weighting requires linguistic binding. It also implies that feature structure, and not abstractness as such, should predict how much linguistic scaffolding a concept needs. FEAR, with consistent bodily signatures across instances, requires little; JEALOUSY and JUSTICE, whose instances vary across social scenarios, require more. A concrete-seeming concept with family-resemblance structure, such as GAME, should show a labelling benefit that its concreteness alone would not predict.</p>
+<h3>6.3 What labels do and do not do</h3>
+<p>The role of language in this process of conceptual shift needs a precise statement because it is the claim most open to misreading. The claim defended here is that, for concepts with family-resemblance structure, a label or other stable symbol plays a binding role in learning and maintaining the category, and that its contribution grows as shared perceptible features shrink. This does not make the label the concept.</p>
+<p>There is evidence that labels do bind. In infants, hearing a novel word applied to a set of objects promotes categorization of those objects (Waxman &amp; Markow, 1995), and in brain-constrained simulations labels improve category formation and persistence (Pulvermüller, 2018a; Dobler et al., 2024 Dobler et al., , 2026)). Abstract concepts are acquired late, and their acquisition benefits from explicit labelling and from the situations in which labels are used. Whether the labelling benefit is disproportionate for family-resemblance concepts, relative to concepts with complete overlap and matched on concreteness, is one of the predictions we make.</p>
+<p>There is also evidence that labels are not identical to concepts. Severely agrammatic patients can retain the ability to reason about exact numbers and to calculate (Varley et al., 2005), which suggests that the grammatical machinery of natural language is not what constitutes number concepts. The symbols that support exact number are not restricted to spoken words: numerals, finger-counting postures and routines, and written notation can all serve (Wasner et al., 2014; Sixtus et al., 2023). Our term &quot;label&quot; therefore covers any stable symbol that can be attached to a set of instances.</p>
+<p>The two accounts of labels as constitutive vs. binding make different predictions. If labels were constitutive, a concept should be lost when its label is lost, and a label presented without instances should be sufficient to form the concept. If labels are binding devices, removing the label should degrade category coherence in a graded way while instancebased structure remains partly intact, and a label without instances should not yield a usable concept. Section 9 states these as separate predictions.</p>
+<p>Finally, language is known to influence thought in abstract domains such as time (Boroditsky, 2001) and exact number (Frank et al., 2008). Whether such linguistic effects are larger for abstract concepts than for concrete ones has not been tested with matched materials, and we state it as a prediction and not as an established fact.</p>
+<h3>6.4 Trajectories need not point towards abstractness</h3>
+<p>The account described so far might suggest a single path from rich sensorimotor grounding to linguistic abstraction. Developmental evidence shows that this is too simple.</p>
+<p>Abstract concepts such as JUSTICE are learned late, and one explanation is that they are learned largely from linguistic and distributional regularities, whereas concrete concepts are learned through ostensive links to referents (Sloutsky &amp; Deng, 2019). Distributional models show that considerable semantic structure can be recovered from word cooccurrence (Lenci, 2018), and early in acquisition words co-occur mainly with their referents, whereas later they increasingly co-occur with other words, a shift in salience from word-to-world to word-to-word associations (Bolognesi, 2020; Louwerse, 2008 Louwerse, , 2011)). For adults, distributional profiles may be stronger than direct word-to-world connections for many concepts, with embodied content remaining accessible but no longer dominant.</p>
+<p>Three consequences follow from this proposal: First, for a concept such as JUSTICE the starting point is already situated: it is acquired through language and social interaction and begins with a high situated weight. Second, such a concept can later move away from abstractness through experience. Novel concepts learned from language alone can be rapidly mapped onto the body schema (Günther et al., 2020), abstract or socially complex concepts can be represented on a body map that organizes affective and introspective states alongside sensorimotor information (Gatti et al., 2024), and even statistical concepts such as regression to the mean can be grounded through suitable educational experience (Fischer et al., 2022). Third, as a result, the dynamics include several movement types, summarized in Table 4, and only the first of them is &quot;becoming abstract&quot; in the sense of detachment.</p>
+<p>Table 4. Movement types in conceptual space Movement Description Example Expected signature Detachment Embodied weight falls and situated or relational weight rises as instances diversify THREE moving from fingeranchored quantity to node in a number system Reduced sensorimotor strength; increased vulnerability to linguistic interference Movement Description Example Expected signature Regrounding A concept acquired mainly through language gains embodied content through experience A learner&#x27;s first experience of the situation a concept names Increased sensorimotor and interoceptive strength over time Context shift The same concept occupies different positions in different contexts PIANO when moved versus when played Context-dependent feature retrieval Latent reactivation Backgrounded embodied content returns under load or in unfamiliar situations Finger-based strategies in number-fluent adults Embodied effects that increase under cognitive load 6.5 Number concepts as an illustration</p>
+<p>Number concepts span the whole range from perceptible quantity to formal abstraction, and their development and cultural history are well studied (Fischer, 2018; Sixtus et al., 2023). We use them to show how a concept moves through the proposed 3D space and how the role of labels changes along the way. Figure 2 depicts four stages.</p>
+<p>In Stage 1, perceptual grounding, small quantities within the subitizing range (about one to four items) are immediately apprehended and can be embodied in finger counting.</p>
+<p>These representations show complete feature overlap: all representations of &quot;three&quot; involve the same quantity and, in a given culture, the same number of fingers. The particular fingers used reflect culturally shaped (embodied) and context-specific (situated) constraints (Pika et al., 2009; Lindemann et al., 2011; Wasner et al., 2014).</p>
+<p>Even here, number representations remain imprecise until children acquire languagebased knowledge such as number words and arithmetic facts (Mix et al., 2002).</p>
+<p>In Stage 2, linguistic binding, quantities beyond the subitizing range shift from perceptually grounded quantities to linguistic-symbolic constructions (see the contrast between knowers of particular numbers and learners who have grasped the cardinality principle; Sarnecka, 2021). SEVEN can be instantiated as seven fingers, seven objects in an array, the numeral 7, the word &quot;seven,&quot; or a position in a counting sequence. These instances share features pairwise but lack a single perceptual core, and a stable label binds them into one category (Sixtus et al., 2023). This resembles the placeholder role that Carey (2009) proposed for the counting list, which children first learn as a sequence whose meaning is filled in later through bootstrapping. The placeholder is not the number concept; it is the structure through which the concept is built.</p>
+<p>In Stage 3, relational structuring, the meaning of concepts, such as fractions and negative numbers, depends on their position in a formal system of rules and relationships.</p>
+<p>Properties such as divisibility and decomposability are inherently relational and propositional (Shapiro, 1997), and manipulating numbers relies heavily on languagespecific processes (Göbel et al., 2011).</p>
+<p>In Stage 4, axiomatic instantiation, concepts such as imaginary numbers and different orders of infinity have no possible sensory analogue, and their content is fixed by explicit definitions and inferential relations within an axiomatic system. Even here the relevant structure is a public symbolic system, not a single word. increasing symbolic and relational structure. Dashed lines and percentages give the schematic relative weight of embodied content at each stage (not measured values); darker shades mark later stages. The label under each panel gives the role of the label or symbol system at that stage. The stages describe both the trajectory of a single concept (e.g., THREE in a child, which later also becomes a node in a relational number system) and the typical end points of different concepts (e.g., imaginary numbers, which are never anything but Stage 4); the figure does not claim that one concept becomes another. an individual concept, the stages describe a trajectory: a child&#x27;s THREE begins at Stage 1 and later also becomes a node in a relational number system (Stage 3), while finger-based associations persist in a re-weighted form. At the level of the number domain, the stages mark the typical terminal positions of different concepts: small numbers remain close to Stage 1, whereas imaginary numbers are never anything but Stage 4. Concepts such as TRIANGLE and DEMOCRACY are distinct concepts and do not lie on one trajectory; the figure makes no claim that one becomes the other.</p>
+<p>Sensorimotor norms show that this progression is a re-composition of embodied content and not a simple loss. In the Lancaster Sensorimotor Norms (Lynott et al., 2020), small numbers are dominated by perceptual-motor strength, and haptic and hand or arm ratings decrease as magnitude increases. Action ratings increase with magnitude, consistent with a shift towards magnitude-based representation (Walsh, 2003), and for large exact numbers the dominant association shifts to the mouth effector, consistent with sub-vocal articulation and counting sequences (Borghi &amp; Zarcone, 2016). As numbers increase from the uni-and bi-manual finger range to teens and decades, their perceptual and haptic ratings drop to around 72% and 29% of their uni-manual values, respectively, while the strength of mouth associations remains nearly constant at about 96% of its uni-manual value (our computation from Lynott et al., 2020). Representational weight thus shifts from hand and finger schemas for small manipulable quantities, to action and effort systems for large magnitudes, to the articulatory system for exact large symbols.</p>
+<p>Cross-cultural data bear on the role of labels. The Pirahã lack exact number words, and their exact quantification is limited to small sets (Frank et al., 2008). The Mundurucu, whose counting system is also limited, can approximate large quantities through the analog magnitude system but are impaired in exact arithmetic (Pica et al., 2004; Dehaene et al., 2008). Both patterns fit the claim that Stages 2 and 3 depend on a symbolic counting system. Combined with the finding that severely agrammatic patients can still reason about exact numbers and calculate (Varley et al., 2005; Section 6.3), they support language-dependence without language-identity.</p>
+<h3>6.6 Re-weighting, not loss</h3>
+<p>The empirical signature of detachment is a changed distribution of processing and a changed vulnerability to interference. Meta-analyses of neuroimaging show that concrete and abstract words engage partly different networks: concrete words engage more perceptual and association regions, and abstract words engage more left inferior frontal and anterior temporal, language-related regions (Binder et al., 2005; Wang et al., 2010).</p>
+<p>The contrast in sensorimotor cortex itself is not uniform across studies, and we regard the imaging evidence as suggestive only. Behaviorally, concrete concept processing is disrupted by concurrent sensorimotor tasks (Scorolli &amp; Borghi, 2007), whereas abstract concept processing is more vulnerable to tasks that compete for linguistic or workingmemory resources (Borghi &amp; Zarcone, 2016; Fini et al., 2022). This pattern suggests that abstract concepts depend more on linguistically mediated binding, which is itself a limited resource.</p>
+<p>Reduced embodiment does not imply reduced richness or precision. PRIME NUMBER is extraordinarily precise despite minimal sensorimotor content (Table 2): low in grounding and embodiment, high in situated weight because it is defined within a formal system, and low in variability because that system is stable. Its precision derives from definitions and relational position, not from embodied experience, and this combination of minimal sensorimotor footprint and maximal definitional precision is itself a signature of advanced abstraction. Embodied traces are backgrounded by efficient symbolic routines but not erased. Finger-based representations influence symbolic number processing in adults across cultures (Dehaene, 2011, pp. 181-183; Domahs et al., 2010; but see Lepoittevin et al., 2025), and latent embodied content can be expected to return under load or in unfamiliar situations.</p>
+<h3>7. The symbol grounding problem revisited 7.1 What grounding requires</h3>
+<p>A widespread assumption holds that every concept must be directly grounded in sensorimotor experience in order to be meaningful, so that abstract concepts, which lack a bounded and perceivable referent, pose a challenge. This reading goes beyond Harnad (1990). His claim is that the conceptual system as a whole requires grounding, to avoid the infinite regress of symbols defined only by other symbols, not that every individual symbol must be grounded directly. Analyses of dictionary structure suggest that only a minority of words needs direct grounding, with the remainder learnable from definitions built on grounded words (Vincent-Lamarre et al., 2016). The universal grounding assumption nevertheless motivates a research programme that seeks grounding for every abstract concept, typically by correlating abstractness with interoception, emotional valence, or social interaction. Borghi et al. (2017), for example, read the symbol grounding problem as requiring that symbols ultimately be grounded in their world referents, and the challenge of abstract concepts follows from the absence of such referents.</p>
+<p>Two levels of analysis are often conflated here: the structural organization of concepts (complete feature overlap versus family resemblance) and the mechanism of semantic reference (direct grounding versus linguistic mediation). This conflation produces divergent solutions: The systemic solution holds that abstract concepts are coherent because they are linguistically defined in terms of other, ultimately grounded concepts, so that the apparent challenge dissolves (Goldinger et al., 2016). The strong embodiment solution holds that the challenge is real and is met by a richer, distributed grounding in social, emotional, introspective, and linguistic experience, that is, multiple grounding (Borghi et al., 2017).</p>
+<p>GEST-A does not force a choice between them. With respect to organization, it tracks the transition of a concept&#x27;s dominant mode from sensorimotor to linguistic-relational, which fits the systemic account. With respect to content, it tracks the transformation of grounding, which fits the multiple-grounding account. A concept&#x27;s grounding changes and is re-weighted instead of disappearing, and linguistic binding repurposes embodied content instead of replacing it. This is a hybrid position, and it does not claim that debates about the best reading of Harnad (1990) are settled.</p>
+<h3>7.2 When perception is absent</h3>
+<p>Research on congenitally blind individuals is a critical test case. Blind individuals develop rich and accurate knowledge of visual attributes that they have never perceived directly, including colors, visual verbs such as &quot;glitter,&quot; and animal appearances (Bedny et al., 2019; Kim et al., 2019 Kim et al., , 2021)), and this knowledge is predicted by distributional semantics, that is, the statistical structure of word co-occurrence (Lewis et al., 2019). The finding does not show that such concepts are purely linguistic, since they are certainly integrated with, and scaffolded by, other grounded modalities such as touch, audition, and social explanation. It shows that linguistic distributional information can provide a dominant organizing scaffold for conceptual coherence when a primary perceptual modality is missing. For abstract concepts in sighted individuals the parallel is that, where stable perceptual commonality is absent, labels and their distributional relations can become a primary organizing principle.</p>
+<h3>7.3 Direct grounding where feature overlap is complete</h3>
+<p>The family-resemblance structure of many abstract concepts requires linguistic support for their acquisition, but it does not follow that all abstract concepts lack direct grounding. Some highly abstract concepts retain complete feature overlap across instances. CAUSATION, arguably among the most abstract concepts humans have, can be grounded in repeated action-perception sequences such as pushing, pulling, and pressing, which share a common causal structure across all instances (Pulvermüller, 2018b; Wolff, 2007). Fear, anger, and joy have characteristic bodily signatures (arousal, facial expression, action tendencies), and emotion concepts can be grounded in interoceptive and motor systems (Seth, 2013; Winkielman et al., 2018 Winkielman et al., , 2023)). This contrasts with DEMOCRACY or JUSTICE, where instances share features only pairwise and linguistic labels become necessary for coherence (Barsalou &amp; Wiemer-Hastings, 2005; Borghi &amp; Zarcone, 2016). The relevant distinction is therefore not between abstract and concrete concepts; it is between concepts with complete overlap, which permit direct grounding, and concepts with family-resemblance structure, which require binding. A continuum runs from concepts that require substantial linguistic construction (JUSTICE, DEMOCRACY, INFINITY) to concepts that can be grounded directly in repeated action-perception patterns (CAUSATION, FEAR, small numbers), irrespective of their ontological abstractness.</p>
+<h3>7.4 Language encodes embodied information</h3>
+<p>The claim that some abstract concepts are largely linguistic does not deny embodiment.</p>
+<p>Language encodes information about perceptual and spatial properties of referents. The co-occurrence of city names in text mirrors their geographical distances (Louwerse &amp; Zwaan, 2009), linguistic context predicts the perceptual modality of words (Louwerse &amp; Connell, 2011), and word order and co-occurrence carry embodied relations (Louwerse, 2008 (Louwerse, , 2011)). On the linguistic shortcut view, language provides efficient access to embodied knowledge without full perceptual simulation (Louwerse, 2018). Abstract concepts, built largely from language, thereby inherit indirect connections to embodied experience, even when they lack direct sensorimotor grounding. This view fits the tradition of treating meaning as use (Wittgenstein, 1953) and the finding that large language models, although trained on text alone, capture substantial regularities in human conceptual structure (Piantadosi &amp; Hill, 2022). Such findings need not be read as a threat to grounded cognition, since they are what one would expect if linguistic structure encodes embodied information (Winter, 2019). Our claim here is limited: Text carries embodied regularities. We do not claim that models trained on text understand language in the way that grounded human learners do (cf. Chemero, 2023).</p>
+<h3>8. Methodological implications</h3>
+<p>To investigate the proposed re-weighting of conceptual dimensions empirically, research has long relied on concreteness ratings. Large-scale norms such as those of Brysbaert et al. (2014) treat concreteness and abstractness as endpoints of a single bipolar scale and are an invaluable foundation. Methodological critiques nevertheless show that this unidimensional approach has limits, and GEST-A helps to specify them.</p>
+<p>The first limit concerns the scale instruction. The norms of Brysbaert et al. (2014, p. 905) asked participants to rate words from &quot;very abstract (language-based)&quot; to &quot;very concrete (experience-based).&quot; This conflates a concept&#x27;s dominant acquisition modality with its abstractness and risks circularity: if abstract concepts are defined by their dependence on linguistic explanation, finding that they rely on language is a tautology (Lupyan &amp; Winter, 2018). Ratings of this kind may capture the very shift from sensorimotor to linguistic dominance that is central to the early stages of detachment (Figure 2). The recent specificity norms of Muraki and Pexman (2026) address a different conflation, between abstractness and specificity, and, together with the work of Bolognesi et al. (2020), allow concreteness and specificity to be modelled jointly.</p>
+<p>The second limit concerns the concrete pole. Global concreteness ratings are biased towards visual experience and can overshadow grounding in other modalities. Modalityspecific strength ratings (for touch, sound, smell) often predict lexical processing better than a single concreteness score (Connell &amp; Lynott, 2012). Concepts tied strongly to nonvisual senses (ECHO, PUNGENT) may therefore receive middling concreteness ratings not because they are abstract but because the scale fails to capture their specific sensorimotor features. Embodiment is multimodal, and its reduction during detachment may proceed differently across perceptual systems.</p>
+<p>The third limit concerns polysemy and context. Treating abstractness as a stable property of a word form is challenged by the fact that decontextualized ratings force participants to average across senses, for example grasping a cup versus grasping an idea (Löhr, 2022).</p>
+<p>The word MARS offers a clearer illustration: a rating for the form averages over distinct concepts (planet, God, confectionery), and the same is true of any homonym (Section 2.3). Abstractness is better regarded as a property of a specific meaning in a specific context, corresponding to a position in the space of Figure 1, than as a lexical tag (Petrova et al., 2018; see also Pollock, 2018; Strik Lievers et al., 2021).</p>
+<p>These observations do not negate the concrete-abstract distinction. They decompose it.</p>
+<p>The classic uni-dimensional scale confounds at least four things: (1) the balance between sensorimotor and linguistic representation, (2) the distribution across perceptual modalities, (3) dependence on context for meaning specification, and (4) specificity. The empirical signature of detachment, such as reduced sensorimotor engagement or a shift from motor to linguistic interference, is best interpreted as evidence of re-weighting within a multidimensional space. We recommend that researchers acknowledge the limitations of concreteness ratings, use several operationalizations of abstractness, use sense-level or context-specific materials, include modality-specific and specificity measures, and avoid treating concreteness as the sole or primary dimension of conceptual structure.</p>
+<h3>9. Testable predictions and open problems</h3>
+<p>A framework earns its place only if it can fail. Table 5 lists predictions that follow from the account and, for each, the result that would count against it. Predictions 3 and 4 are especially important, since they distinguish a binding role for labels from a constitutive one.</p>
+<p>Table 5. Predictions and results that would count against GEST-A # Prediction Possible test Would count against GEST-A 1 Grounding, embodiment, situated weight, situated variability, and specificity jointly explain variance in processing beyond a single concreteness score Regression of lexical decision, categorization, or learning measures on the Table 3 measures A single factor explains the same variance 2 At matched concreteness, more general concepts evoke more variable simulations than more specific ones Compare BANANA-FRUIT or FREEDOM OF SPEECH-FREEDOM pairs with sensorimotor and imaging measures No effect of specificity once concreteness is controlled # Prediction Possible test Would count against GEST-A 3 Labels aid learning and retention more for family-resemblance categories than for completeoverlap categories at matched concreteness Category learning with and without labels, in artificial categories and in real concepts Equal benefit, or benefit tracking concreteness and not structure 4 Labels bind but do not constitute: removing a label after learning degrades category coherence in a graded way, and a label without instances does not yield a usable</p>
+<h3>10. Implications for development and education</h3>
+<p>If abstraction involves progressive re-weighting from sensorimotor grounding towards linguistic construction, and a transition from complete overlap to family resemblance, then education should ensure strong initial grounding while recognizing that advanced thinking necessarily becomes more symbolic. The process is a re-weighting and not an erasure, and it generalizes across domains.</p>
+<p>In mathematics, effective instruction should progress from situated, experiential representations towards symbolic ones, treating situatedness and embodiment as continuous design dimensions (Chatain et al., 2025). Manipulatives provide crucial grounding (Carbonneau et al., 2013), but students must eventually move to symbolic manipulation for fluency. The work on inner speech and working memory in mental arithmetic (DeStefano &amp; LeFevre, 2004; Fini et al., 2022) shows that symbolic routines are language-dependent. Forcing abstraction before adequate grounding may impair learning, and insisting on manipulatives indefinitely may limit efficient abstract reasoning. Consistent labels throughout the transition (&quot;multiplication,&quot; &quot;product,&quot;</p>
+<p>&quot;times&quot;) are likely to facilitate integration, which is a prediction of the binding account.</p>
+<p>For concepts lacking complete overlap, including many mathematical, scientific, and philosophical abstractions, explicit verbal labels during learning may be essential and not optional (Pulvermüller, 2018a; Dobler et al., 2024 Dobler et al., , 2026)). Evidence that hands-on learning precedes symbolic instruction in Montessori education is consistent with this sequence (Lillard et al., 2025).</p>
+<p>Moral and legal reasoning offers a related lesson. Legal judgment retains an interoceptive component even in expert practitioners (Angioletti et al., 2022), which suggests that grounding is a persistent substrate on which instruction should build and not only a scaffold to be discarded. The pedagogical challenge is to support learners through reweighting while keeping connections to grounded foundations and providing linguistic scaffolding for family-resemblance concepts. Individual differences in abstract reasoning may partly reflect the efficiency of re-weighting and the capacity to use labels to integrate concepts whose instances overlap only partially.</p>
+<h3>11. Conclusions</h3>
+<p>Abstraction is currently used both as a property of concepts and a process of conceptual development, and a theory of either must first separate abstractness, specificity, and abstraction. As a property, abstractness is multidimensional: concepts are positioned by grounding, embodiment, and situatedness, with specificity as an orthogonal descriptor, and they vary continuously and not categorically. As a process, abstraction includes generalization and detachment. Detachment is marked by a re-weighting of grounded, embodied, and situated content, with a reduction in embodied weight that transforms and does not erase sensorimotor foundations. Changes in feature structure, from complete overlap to family resemblance, provide the mechanism linking being and becoming abstract, and they explain when concepts need linguistic binding. concepts; they do not constitute them, and the evidence from aphasia, from cross-cultural comparison, and from the diversity of symbol systems that can support exact number is consistent with language-dependence without language-identity. Abstract concepts do not refute grounded cognition, but they do rule out monolithic accounts in which every concept is directly grounded. They require grounded cognition to be hierarchical and language-inclusive, and they show the power of language to create conceptual knowledge that exceeds individual sensorimotor experience.</p>
+<p>The challenge for cognitive science is not to choose between linguistic and embodied accounts but to understand how they interact to produce the flexibility of human conceptual thought. The predictions in Table 5 are intended to make that task empirical, and they specify what would show that GEST-A is wrong.</p>
+<h3>Acknowledgments</h3>
+<p>AM&#x27;s research contributing to this paper has been supported by the Center for Cognitive and Brain Sciences, University of Macau. MHF was supported by DFG FI 1915/12-1 &quot;Boundary conditions of conceptual spaces&quot;.</p>
+<p>Declaration of competing interest: Authors declare no competing interest. Declaration of generative AI in the writing process: The authors used Claude (Anthropic) to design the drafts of the Figures and for minor language revisions while maintaining full responsibility for the conceptual content and the composition of the paper.</p>
+<p>Author contributions: Both authors contributed equally to the paper&#x27;s conceptualization, writing, and editing.</p>
+<h3>(</h3>
+<p>Figure1). A concept weighted towards grounded and embodied components (APPLE) is relatively concrete. A concept dominated by situated components with minimal grounded and few embodied ingredients (JUSTICE) is relatively abstract. Most concepts contain all three components in varying proportions, and their positions change through use. The axes are conceptually distinct and can in principle vary independently, as the cases of MARS, LOVE, and PRIME NUMBER show, but they are not assumed to be uncorrelated across the population of concepts. Because of the ordering of constraints, high embodiment with very low grounding is rare, for example. 20 Hierarchical and dynamic describe two facets of GEST-A. Hierarchical refers to the ordering of constraint: grounding constrains embodiment, which constrains situatedness. Dynamic refers to how concepts move within the space, synchronically as context changes (situatedness) and diachronically as abstraction re-weights a concept&#x27;s profile over individual and cultural time. The hierarchical aspect provides the coordinate system, and the dynamic aspect describes trajectories through it. Abstractness answers the question &quot;how abstract is this concept?&quot;, a measurable property at a given time.Abstraction answers &quot;how did it become abstract?&quot;, a process. Neither reduces to the other: a purely hierarchical description would treat abstractness as static, and a purely dynamic account would lack the vocabulary to say what changes and in which direction.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. The three-dimensional conceptual space. Axes show the weight of grounded</p>
+<p>Villani et al. (2019) identified four clusters across 425 abstract concepts: concepts of physical space-time and quantity scored highest on sensorimotor components, whereas philosophical-spiritual concepts were the most detached from both sensorimotor and inner bodily experience. Interoception characterizes emotional abstract concepts most strongly, whereas sensorimotor aspects are more pivotal for quantitative and spatiotemporal ones.</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Four stages in the development of number concepts. The arrow shows</p>
+<h3>Figure 2</h3>
+<p>Figure2can be read in two ways, and we state which reading we intend. At the level of open.</p>
+<p>It is not yet clear how to estimate the relative weight of grounded, embodied, and situated components for a single concept, as opposed to a rated word. Whether the coordinates of a concept are stable across individuals and cultures is unknown. Mapping the dimensions onto neural measures is largely a task for the future, and the same is true for testing brain-constrained models of label binding against data from human learners. Finally, trajectories of detachment and re-grounding have been charted most fully for number, and it is an open question whether the stages and recomposition seen there generalize to social-emotional and philosophical-logical concepts.</p>
+<h3>References</h3>
+<p>Andrews, M., Vigliocco, G., &amp; Vinson, D. (2009). Integrating experiential and distributional data to learn semantic representations. Psychological Review, 116(3), 463-498. https://doi.org/10.1037/a0016261</p>
+<p>Angioletti, L., Tormen, F., &amp; Balconi, M. (2022). Judgment and embodied cognition of lawyers. Moral decision-making and interoceptive physiology in the legal field. Frontiers in Psychology, 13, 853342. https://doi.org/10.3389/fpsyg.2022.853342</p>
+<p>Barsalou, L. W. (1982). Context-independent and context-dependent information in concepts. Memory &amp; Cognition, 10(1), 82-93. https://doi.org/10.3758/BF03197629</p>
+<p>Barsalou, L. W. (1999). Perceptual symbol systems. Behavioral and Brain Sciences, 22(4), 577-660. https://doi.org/10.1017/S0140525X99002149</p>
+<p>Barsalou, L. W. (2005). Abstraction as dynamic interpretation in perceptual symbol systems. In L. Gershkoff-Stowe &amp; D. R. Rakison (Eds.), Building object categories in developmental time (pp. 407-450). Psychology Press.</p>
+<p>Barsalou, L. W. (2008). Grounded cognition. Annual Review of Psychology, 59, 617-645. https://doi.org/10.1146/annurev.psych.59.103006.093639</p>
+<p>Barsalou, L. W., Santos, A., Simmons, W. K., &amp; Wilson, C. D. (2008). Language and simulation in conceptual processing. In M. De Vega, A. M. Glenberg, &amp; A. C. Graesser (Eds.), Symbols, embodiment, and meaning (pp. 245-283). Oxford University Press.</p>
+<p>Barsalou, L. W., &amp; Wiemer-Hastings, K. (2005). Situating abstract concepts. In D. Pecher &amp; R. A. Zwaan (Eds.), Grounding cognition: The role of perception and action in memory, language, and thought (pp. 129-163). Cambridge University Press.</p>
+<p>Bedny, M., Koster-Hale, J., Elli, G., Yazzolino, L., &amp; Saxe, R. (2019). There&#x27;s more to &quot;sparkle&quot; than meets the eye: Knowledge of vision and light verbs among congenitally blind and sighted individuals. Cognition, 189, 105-115. https://doi.org/10.1016/j.cognition.2019.03.017</p>
+<p>Binder, J. R., Westbury, C. F., McKiernan, K. A., Possing, E. T., &amp; Medler, D. A. (2005). Distinct brain systems for processing concrete and abstract concepts. Journal of Cognitive Neuroscience, 17(6), 905-917. https://doi.org/10.1162/0898929054021102</p>
+<p>Bolognesi, M. (2020). Where words get their meaning: Cognitive processing and distributional modelling of word meaning in first and second language. John Benjamins Publishing Company.</p>
+<p>Bolognesi, M. (2025). Beyond concreteness: Why word specificity is the missing piece in theories on embodied language comprehension. Frontiers in Psychology, 16, 1718655. https://doi.org/10.3389/fpsyg.2025.1718655</p>
+<p>Bolognesi, M., Burgers, C., &amp; Caselli, T. (2020). On abstraction: Decoupling conceptual concreteness and categorical specificity. Cognitive Processing, 21, 365-381. https://doi.org/10.1007/s10339-020-00965-9</p>
+<p>Borghi, A. M., Barca, L., Binkofski, F., Castelfranchi, C., Pezzulo, G., &amp; Tummolini, L. (2019). Words as social tools: Language, sociality and inner grounding in abstract concepts. Physics of Life Reviews, 29, 120-153. https://doi.org/10.1016/j.plrev.2018.12.001</p>
+<p>Borghi, A. M., Binkofski, F., Castelfranchi, C., Cimatti, F., Scorolli, C., &amp; Tummolini, L. (2017). The challenge of abstract concepts. Psychological Bulletin, 143(3), 263- 292. https://doi.org/10.1037/bul0000089</p>
+<p>Borghi, A. M., Fini, C., &amp; Mazzuca, C. (2022). Abstract concepts, social interaction, and beliefs. Frontiers in Psychology, 13, 919808. https://doi.org/10.3389/fpsyg.2022.919808</p>
+<p>Borghi, A. M., &amp; Zarcone, E. (2016). Grounding abstractness: Abstract concepts and the activation of the mouth. Frontiers in Psychology, 7, 1498. https://doi.org/10.3389/fpsyg.2016.01498</p>
+<p>Boroditsky, L. (2001). Does language shape thought? Mandarin and English speakers&#x27; conceptions of time. Cognitive Psychology, 43(1), 1-22. https://doi.org/10.1006/cogp.2001.0748</p>
+<p>Brysbaert, M., Warriner, A. B., &amp; Kuperman, V. (2014). Concreteness ratings for 40 thousand generally known English word lemmas. Behavior Research Methods, 46(3), 904-911. https://doi.org/10.3758/s13428-013-0403-5</p>
+<p>Carbonneau, K. J., Marley, S. C., &amp; Selig, J. P. (2013). A meta-analysis of the efficacy of teaching mathematics with concrete manipulatives. Journal of Educational Psychology, 105(2), 380-400. https://doi.org/10.1037/a0031084</p>
+<p>Carey, S. (2009). The origin of concepts. Oxford University Press.</p>
+<p>Casper, M. O., &amp; Artese, G. F. (Eds.). (2023). Situated cognition research: Methodological foundations. Springer Nature.</p>
+<p>Casto, C., Ivanova, A., Fedorenko, E., &amp; Kanwisher, N. (2025). What does it mean to understand language? arXiv preprint. https://doi.org/10.48550/arXiv.2511.19757</p>
+<p>Chatain, J., Müller, C., Chatain, K., Calabrese, L., &amp; Kapur, M. (2025). Concreteness and abstraction in mathematics education: A taxonomy of the semantic landscape. Educational Psychology Review, 37(4), 92. https://doi.org/10.1007/s10648-025- 10073-9</p>
+<p>Chatterjee, A. (2010). Disembodying cognition. Language and Cognition, 2(1), 79-116. https://doi.org/10.1515/LANGCOG.2010.004</p>
+<p>Chemero, A. (2023). LLMs differ from human cognition because they are not embodied. Nature Human Behaviour, 7, 1826-1829. https://doi.org/10.1038/s41562-023- 01723-5</p>
+<p>Connell, L., &amp; Lynott, D. (2012). Strength of perceptual experience predicts word processing performance better than concreteness or imageability. Cognition, 125(3), 452-465. https://doi.org/10.1016/j.cognition.2012.07.010</p>
+<p>Dehaene, S. (2011). The number sense: How the mind creates mathematics (2nd ed.). Oxford University Press.</p>
+<p>Dehaene, S., Izard, V., Spelke, E., &amp; Pica, P. (2008). Log or linear? Distinct intuitions of the number scale in Western and Amazonian indigene cultures. Science, 320(5880), 1217-1220. https://doi.org/10.1126/science.1156540</p>
+<p>DeStefano, D., &amp; LeFevre, J.-A. (2004). The role of working memory in mental arithmetic. European Journal of Cognitive Psychology, 16(3), 353-386. https://doi.org/10.1080/09541440244000328</p>
+<p>Dobler, F. R., Henningsen-Schomers, M. R., &amp; Pulvermüller, F. (2024). Verbal symbols support concrete but enable abstract concept formation: Evidence from brain- constrained deep neural networks. Language Learning, 74(S1), 258-295. https://doi.org/10.1111/lang.12646</p>
+<p>Dobler, F. R., Stroppa, L., &amp; Pulvermüller, F. (2026). What is so hard about abstract words, anyways? A neuromechanistic explanation using brain-constrained neural network models. Cognitive Neurodynamics, 20, 186. https://doi.org/10.1007/s11571-026-10542-z</p>
+<p>Dodds, P. S., Alshaabi, T., Fudolig, M. I., Zimmerman, J. W., Lovato, J., Beaulieu, S., … Danforth, C. M. (2026). Ousiometrics: The essence of meaning aligns with a power-danger-structure framework instead of valence-arousal-dominance. Science Advances, 12(19), eadr4039. https://doi.org/10.1126/sciadv.adr4039</p>
+<p>Domahs, F., Moeller, K., Huber, S., Willmes, K., &amp; Nuerk, H.-C. (2010). Embodied numerosity: Implicit hand-based representations influence symbolic number processing across cultures. Cognition, 116(2), 251-266. https://doi.org/10.1016/j.cognition.2010.05.007</p>
+<p>Dove, G. (2014). Thinking in words: Language as an embodied medium of thought. Topics in Cognitive Science, 6(3), 371-389. https://doi.org/10.1111/tops.12102</p>
+<p>Dove, G. (2016). Three symbol ungrounding problems: Abstract concepts and the future of embodied cognition. Psychonomic Bulletin &amp; Review, 23(4), 1109-1121. https://doi.org/10.3758/s13423-015-0825-4</p>
+<p>Dove, G. (2020). More than a scaffold: Language is a neuroenhancement. Cognitive Neuropsychology, 37(5-6), 288-311. https://doi.org/10.1080/02643294.2019.1637338</p>
+<p>Dunn, J. (2015). Modeling abstractness and metaphoricity. Metaphor and Symbol, 30(4), 259-289. https://doi.org/10.1080/10926488.2015.1074801</p>
+<p>Fiebelkorn, I. C., &amp; Kastner, S. (2019). A rhythmic theory of attention. Trends in Cognitive Sciences, 23(2), 87-101. https://doi.org/10.1016/j.tics.2018.11.009</p>
+<p>Fini, C., Zannino, G. D., Orsoni, M., Carlesimo, G. A., Benassi, M., &amp; Borghi, A. M. (2022). Articulatory suppression delays processing of abstract words: The role of inner speech. Quarterly Journal of Experimental Psychology, 75(7), 1343-1354. https://doi.org/10.1177/17470218211053623</p>
+<p>Fischer, M. H. (2012). A hierarchical view of grounded, embodied and situated numerical cognition. Cognitive Processing, 13, S161-S164. https://doi.org/10.1007/s10339- 012-0477-5</p>
+<p>Fischer, M. H. (2018). Why numbers are embodied concepts. Frontiers in Psychology, 8, 2347. https://doi.org/10.3389/fpsyg.2017.02347</p>
+<p>Fischer, M. H. (2024). On the embodied nature of knowledge: From neurons to numbers. Annals of the New York Academy of Sciences, 1-8. https://doi.org/10.1111/nyas.15182</p>
+<p>Fischer, M. H., Glenberg, A. M., Moeller, K., &amp; Shaki, S. (2022). Grounding (fairly) complex numerical knowledge: An educational example. Psychological Research, 86(8), 2389-2397. https://doi.org/10.1007/s00426-021-01577-4</p>
+<p>Frank, M. C., Everett, D. L., Fedorenko, E., &amp; Gibson, E. (2008). Number as a cognitive technology: Evidence from Pirahã language and cognition. Cognition, 108(3), 819- 824. https://doi.org/10.1016/j.cognition.2008.04.007</p>
+<p>Friedrich, J., Fischer, M. H., &amp; Raab, M. (2024). Invariant representations in abstract concept grounding -the physical world in grounded cognition. Psychonomic Bulletin &amp; Review, 31(6), 2558-2580. https://doi.org/10.3758/s13423-024-02522-3</p>
+<p>Friedrich, J., Fischer, M. H., &amp; Raab, M. (2025). Issues in grounded cognition and how to solve them -The minimalist account. Journal of Cognition, 8(1), 31. https://doi.org/10.5334/joc.444</p>
+<p>Gatti, D., Günther, F., &amp; Rinaldi, L. (2024). A body map beyond perceptual experience. Journal of Cognition, 7(1), 22.7(1), 22. https://doi.org/10.5334/joc.347</p>
+<p>Göbel, S. M., Shaki, S., &amp; Fischer, M. H. (2011). The cultural number line: A review of cultural and linguistic influences on the development of number processing. Journal of Cross-Cultural Psychology, 42(4), 543-565. https://doi.org/10.1177/0022022111406251</p>
+<p>Goldinger, S. D., Papesh, M. H., Barnhart, A. S., Hansen, W. A., &amp; Hout, M. C. (2016). The poverty of embodied cognition. Psychonomic Bulletin &amp; Review, 23(4), 959- 978. https://doi.org/10.3758/s13423-015-0860-1</p>
+<p>Günther, F., Nguyen, T., Chen, L., Dudschig, C., Kaup, B., &amp; Glenberg, A. M. (2020). Immediate sensorimotor grounding of novel concepts learned from language alone. Journal of Memory and Language, 115, 104172. https://doi.org/10.1016/j.jml.2020.104172</p>
+<p>Harnad, S. (1990). The symbol grounding problem. Physica D: Nonlinear Phenomena, 42(1-3), 335-346. https://doi.org/10.1016/0167-2789(90)90087-6</p>
+<p>Hoffman, P., Lambon Ralph, M. A., &amp; Rogers, T. T. (2013). Semantic diversity: A measure of semantic ambiguity based on variability in the contextual usage of words. Behavior Research Methods, 45(3), 718-730. https://doi.org/10.3758/s13428-012-0278-x</p>
+<p>James, W. (1890). The principles of psychology. Henry Holt.</p>
+<p>Johnson, M. (2017). Embodied mind, meaning, and reason: How our bodies give rise to understanding. University of Chicago Press.</p>
+<p>Kiefer, M., &amp; Trumpp, N. M. (2026). The grounding of abstract concepts in the sensory- motor, mentalizing and social interaction brain systems: A multiple representation framework. Cortex, 204, 46-65. https://doi.org/10.1016/j.cortex.2026.07.004</p>
+<p>Kim, J. S., Aheimer, B., Manrara, V. M., &amp; Bedny, M. (2021). Shared understanding of color among sighted and blind adults. Proceedings of the National Academy of Sciences, 118(33), e2020192118. https://doi.org/10.1073/pnas.2020192118</p>
+<p>Kim, J. S., Elli, G. V., &amp; Bedny, M. (2019). Knowledge of animal appearance among sighted and blind adults. Proceedings of the National Academy of Sciences, 116(23), 11213-11222. https://doi.org/10.1073/pnas.1900952116</p>
+<p>Körner, A., Castillo, M., Drijvers, L., Fischer, M. H., Günther, F., Marelli, M., … Glenberg, A. M. (2023). Embodied processing at six linguistic granularity levels: A consensus paper. Journal of Cognition, 6(1), 60. https://doi.org/10.5334/joc.231</p>
+<p>Kousta, S.-T., Vigliocco, G., Vinson, D. P., Andrews, M., &amp; Del Campo, E. (2011). The representation of abstract words: Why emotion matters. Journal of Experimental Psychology: General, 140(1), 14-34. https://doi.org/10.1037/a0021446</p>
+<p>Kövecses, Z. (2003). Metaphor and emotion: Language, culture, and body in human feeling. Cambridge University Press.</p>
+<p>Lenci, A. (2018). Distributional models of word meaning. Annual Review of Linguistics, 4, 151-171. https://doi.org/10.1146/annurev-linguistics-030514-125254</p>
+<p>Lepoittevin, S., Geers, L., &amp; Andres, M. (2025). Beyond numerical quantity: A study of the sub-base-five effect in single-digit comparison. Cognition, 264, 106240. https://doi.org/10.1016/j.cognition.2025.106240</p>
+<p>Lewis, M., Zettersten, M., &amp; Lupyan, G. (2019). Distributional semantics as a source of visual knowledge. Proceedings of the National Academy of Sciences, 116(39), 19237-19238. https://doi.org/10.1073/pnas.1910148116</p>
+<p>Lillard, A. S., Loeb, D., Berg, J., Escueta, M., Manship, K., Hauser, A., &amp; Daggett, E. D. (2025). A national randomized controlled trial of the impact of public Montessori preschool at the end of kindergarten. Proceedings of the National Academy of Sciences, 122(43), e2506130122. https://doi.org/10.1073/pnas.2506130122</p>
+<p>Lindemann, O., Alipour, A., &amp; Fischer, M. H. (2011). Finger counting habits in Middle Eastern and Western individuals: An online survey. Journal of Cross-Cultural Psychology, 42(4), 566-578. https://doi.org/10.1177/0022022111406254</p>
+<p>Löhr, G. (2022). What are abstract concepts? On lexical ambiguity and concreteness ratings. Review of Philosophy and Psychology, 13(3), 549-566. https://doi.org/10.1007/s13164-021-00542-9</p>
+<p>Louwerse, M. M. (2008). Embodied relations are encoded in language. Psychonomic Bulletin &amp; Review, 15(4), 838-844. https://doi.org/10.3758/PBR.15.4.838</p>
+<p>Louwerse, M. M. (2011). Symbol interdependency in symbolic and embodied cognition. Topics in Cognitive Science, 3(2), 273-302. https://doi.org/10.1111/j.1756- 8765.2010.01106.x</p>
+<p>Louwerse, M. M. (2018). Knowing the meaning of a word by the linguistic and perceptual company it keeps. Topics in Cognitive Science, 10(3), 573-589. https://doi.org/10.1111/tops.12349</p>
+<p>Louwerse, M. M., &amp; Connell, L. (2011). A taste of words: Linguistic context and perceptual simulation predict the modality of words. Cognitive Science, 35(2), 381- 398. https://doi.org/10.1111/j.1551-6709.2010.01157.x</p>
+<p>Louwerse, M. M., &amp; Zwaan, R. A. (2009). Language encodes geographical information. Cognitive Science, 33(1), 51-73. https://doi.org/10.1111/j.1551-6709.2008.01003.x</p>
+<p>Lupyan, G., &amp; Lewis, M. (2019). From words-as-mappings to words-as-cues: The role of language in semantic knowledge. Language, Cognition and Neuroscience, 34(10), 1319-1337. https://doi.org/10.1080/23273798.2017.1404114</p>
+<p>Lupyan, G., Rahman, R. A., Boroditsky, L., &amp; Clark, A. (2020). Effects of language on visual perception. Trends in Cognitive Sciences, 24(11), 930-944. https://doi.org/10.1016/j.tics.2020.08.005</p>
+<p>Lupyan, G., &amp; Winter, B. (2018). Language is more abstract than you think, or, why aren&#x27;t languages more iconic? Philosophical Transactions of the Royal Society B, 373(1752), 20170137. https://doi.org/10.1098/rstb.2017.0137</p>
+<p>Lynott, D., Connell, L., Brysbaert, M., Brand, J., &amp; Carney, J. (2020). The Lancaster Sensorimotor Norms: Multidimensional measures of perceptual and action strength for 40,000 English words. Behavior Research Methods, 52(3), 1271-1291. https://doi.org/10.3758/s13428-019-01316-z</p>
+<p>Mahon, B. Z., &amp; Caramazza, A. (2008). A critical look at the embodied cognition hypothesis and a new proposal for grounding conceptual content. Journal of Physiology-Paris, 102(1-3), 59-70. https://doi.org/10.1016/j.jphysparis.2008.03.004</p>
+<p>Mix, K. S., Huttenlocher, J., &amp; Levine, S. C. (2002). Multiple cues for quantification in infancy: Is number one of them? Psychological Bulletin, 128(2), 278-294. https://doi.org/10.1037/0033-2909.128.2.278</p>
+<p>Muraki, E. J., &amp; Pexman, P. M. (2026). Distinguishing abstraction from abstractness: Specificity norms for 8,500 English words. Behavior Research Methods, 58(2), 60. https://doi.org/10.3758/s13428-026-02949-7</p>
+<p>Muraki, E. J., Sidhu, D. M., &amp; Pexman, P. M. (2022). Heterogenous abstract concepts: Is &quot;ponder&quot; different from &quot;dissolve&quot;? Psychological Research, 86(8), 2478-2494. https://doi.org/10.1007/s00426-020-01398-x</p>
+<p>Myachykov, A., &amp; Fischer, M. H. (2019). A hierarchical view of abstractness: Grounded, embodied, and situated aspects. Physics of Life Reviews, 29, 161-163. https://doi.org/10.1016/j.plrev.2019.04.005</p>
+<p>Myachykov, A., Scheepers, C., Fischer, M. H., &amp; Kessler, K. (2014). TEST: A tropic, embodied, and situated theory of cognition. Topics in Cognitive Science, 6(3), 442- 460. https://doi.org/10.1111/tops.12024</p>
+<p>Neubauer, S., Hublin, J.-J., &amp; Gunz, P. (2018). The evolution of modern human brain shape. Science Advances, 4(1), eaao5961. https://doi.org/10.1126/sciadv.aao5961</p>
+<p>Osgood, C. E., Suci, G. J., &amp; Tannenbaum, P. H. (1957). The measurement of meaning. University of Illinois Press.</p>
+<p>Paivio, A. (1986). Mental representations: A dual coding approach. Oxford University Press.</p>
+<p>Petrova, A., Navarrete, E., Suitner, C., Sulpizio, S., Reynolds, M., Job, R., &amp; Peressotti, F. (2018). Spatial congruency effects exist, just not for words: Looking into Estes, Verges, and Barsalou (2008). Psychological Science, 29(7), 1195-1199. https://doi.org/10.1177/0956797617728127</p>
+<p>Pezzulo, G., Barsalou, L. W., Cangelosi, A., Fischer, M. H., McRae, K., &amp; Spivey, M. J. (2011). The mechanics of embodiment: A dialog on embodiment and computational modeling. Frontiers in Psychology, 2, 5. https://doi.org/10.3389/fpsyg.2011.00005</p>
+<p>Pezzulo, G., Barsalou, L. W., Cangelosi, A., Fischer, M. H., McRae, K., &amp; Spivey, M. J. (2013). Computational grounded cognition: A new alliance between grounded cognition and computational modeling. Frontiers in Psychology, 3, 612. https://doi.org/10.3389/fpsyg.2012.00612</p>
+<p>Pezzulo, G., &amp; Castelfranchi, C. (2007). The symbol detachment problem. Cognitive Processing, 8(2), 115-131. https://doi.org/10.1007/s10339-007-0164-0</p>
+<p>Piantadosi, S. T., &amp; Hill, F. (2022). Meaning without reference in large language models. arXiv preprint. https://doi.org/10.48550/arXiv.2208.02957</p>
+<p>Pica, P., Lemer, C., Izard, V., &amp; Dehaene, S. (2004). Exact and approximate arithmetic in an Amazonian indigene group. Science, 306(5695), 499-503. https://doi.org/10.1126/science.1102085</p>
+<p>Pika, S., Nicoladis, E., &amp; Marentette, P. (2009). How to order a beer: Cultural differences in the use of conventional gestures for numbers. Journal of Cross-Cultural Psychology, 40(1), 70-80. https://doi.org/10.1177/0022022108326197</p>
+<p>Pollock, L. (2018). Statistical and methodological problems with concreteness and other semantic variables: A list memory experiment case study. Behavior Research Methods, 50(3), 1198-1216. https://doi.org/10.3758/s13428-017-0938-y</p>
+<p>Prinz, J. J. (2002). Furnishing the mind: Concepts and their perceptual basis. MIT Press.</p>
+<p>Pulvermüller, F. (2013). How neurons make meaning: Brain mechanisms for embodied and abstract-symbolic semantics. Trends in Cognitive Sciences, 17(9), 458-470. https://doi.org/10.1016/j.tics.2013.06.004</p>
+<p>Pulvermüller, F. (2018a). Neural reuse of action perception circuits for language, concepts and communication. Progress in Neurobiology, 160, 1-44. https://doi.org/10.1016/j.pneurobio.2017.07.001</p>
+<p>Pulvermüller, F. (2018b). The case of CAUSE: Neurobiological mechanisms for grounding an abstract concept. Philosophical Transactions of the Royal Society B, 373(1752), 20170129. https://doi.org/10.1098/rstb.2017.0129</p>
+<p>Pulvermüller, F. (2023). Neurobiological mechanisms for language, symbols and concepts: Clues from brain-constrained deep neural networks. Progress in Neurobiology, 230, 102511. https://doi.org/10.1016/j.pneurobio.2023.102511</p>
+<p>Qin, S., Farashahi, S., Lipshutz, D., Sengupta, A. M., Chklovskii, D. B., &amp; Pehlevan, C. (2023). Coordinated drift of receptive fields in Hebbian/anti-Hebbian network models during noisy representation learning. Nature Neuroscience, 26(2), 339-349. https://doi.org/10.1038/s41593-022-01225-z</p>
+<p>Reilly, J., Shain, C., Borghesani, V., Kuhnke, P., Vigliocco, G., Peelle, J. E., Mahon, B. Z., Buxbaum, L. J., Majid, A., Brysbaert, M., Borghi, A. M., De Deyne, S., Dove, G., Papeo, L., Pexman, P. M., Poeppel, D., Lupyan, G., Boggio, P., Hickok, G., Gwilliams, L., … Vinson, D. (2025). What we mean when we say semantic: Toward a multidisciplinary semantic glossary. Psychonomic Bulletin &amp; Review, 32(1), 243-280. https://doi.org/10.3758/s13423-024-02556-7</p>
+<p>Robbins, P., &amp; Aydede, M. (2009). A short primer on situated cognition. In P. Robbins &amp; M. Aydede (Eds.), The Cambridge handbook of situated cognition (pp. 3-10). Cambridge University Press.</p>
+<p>Sarnecka, B. W. (2021). Learning to represent exact numbers. Synthese, 198(Suppl 5), 1001-1018. https://doi.org/10.1007/s11229-015-0854-6</p>
+<p>Scorolli, C., &amp; Borghi, A. M. (2007). Sentence comprehension and action: Effector specific modulation of the motor system. Brain Research, 1130, 119-124. https://doi.org/10.1016/j.brainres.2006.10.033</p>
+<p>Seth, A. K. (2013). Interoceptive inference, emotion, and the embodied self. Trends in Cognitive Sciences, 17(11), 565-573. https://doi.org/10.1016/j.tics.2013.09.007</p>
+<p>Shapiro, S. (1997). Philosophy of mathematics: Structure and ontology. Oxford University Press.</p>
+<p>Shepard, R. N. (1984). Ecological constraints on internal representation: Resonant kinematics of perceiving, imagining, thinking, and dreaming. Psychological Review, 91(4), 417-447. https://doi.org/10.1037/0033-295X.91.4.417</p>
+<p>Sixtus, E., Krause, F., Lindemann, O., &amp; Fischer, M. H. (2023). A sensorimotor perspective on numerical cognition. Trends in Cognitive Sciences, 27(4), 367-378. https://doi.org/10.1016/j.tics.2023.01.002</p>
+<p>Sloutsky, V. M., &amp; Deng, W. (2019). Categories, concepts, and conceptual development. Language, Cognition and Neuroscience, 34(10), 1284-1297. https://doi.org/10.1080/23273798.2017.1391398</p>
+<p>Strik Lievers, F., Bolognesi, M., &amp; Winter, B. (2021). The linguistic dimensions of concrete and abstract concepts: Lexical category, morphological structure, countability, and etymology. Cognitive Linguistics, 32(4), 641-670. https://doi.org/10.1515/cog-2021-0007</p>
+<p>Tallon-Baudry, C. (2023). Interoception: Probing internal state is inherent to perception and cognition. Neuron, 111(12), 1854-1857. https://doi.org/10.1016/j.neuron.2023.04.019</p>
+<p>Varley, R. A., Klessinger, N. J. C., Romanowski, C. A. J., &amp; Siegal, M. (2005). Agrammatic but numerate. Proceedings of the National Academy of Sciences, 102(9), 3519-3524. https://doi.org/10.1073/pnas.0407470102</p>
+<p>Vigliocco, G., Kousta, S.-T., Della Rosa, P. A., Vinson, D. P., Tettamanti, M., Devlin, J. T., &amp; Cappa, S. F. (2014). The neural representation of abstract words: The role of emotion. Cerebral Cortex, 24(7), 1767-1777. https://doi.org/10.1093/cercor/bht025</p>
+<p>Vigliocco, G., Meteyard, L., Andrews, M., &amp; Kousta, S. (2009). Toward a theory of semantic representation. Language and Cognition, 1(2), 219-247. doi:10.1515/LANGCOG.2009.011</p>
+<p>Villani, C., Lugli, L., Liuzza, M. T., &amp; Borghi, A. M. (2019). Varieties of abstract concepts and their multiple dimensions. Language and Cognition, 11(3), 403-430. https://doi.org/10.1017/langcog.2019.23</p>
+<p>Vincent-Lamarre, P., Massé, A. B., Lopes, M., Lord, M., Marcotte, O., &amp; Harnad, S. (2016). The latent structure of dictionaries. Topics in Cognitive Science, 8(3), 625- 659. https://doi.org/10.1111/tops.12211</p>
+<p>Walsh, V. (2003). A theory of magnitude: Common cortical metrics of time, space and quantity. Trends in Cognitive Sciences, 7(11), 483-488. https://doi.org/10.1016/j.tics.2003.09.002</p>
+<p>Wang, J., Conder, J. A., Blitzer, D. N., &amp; Shinkareva, S. V. (2010). Neural representation of abstract and concrete concepts: A meta-analysis of neuroimaging studies. Human Brain Mapping, 31(10), 1459-1468. https://doi.org/10.1002/hbm.20950</p>
+<p>Wasner, M., Moeller, K., Fischer, M. H., &amp; Nuerk, H.-C. (2014). Aspects of situated cognition in embodied numerosity: The case of finger counting habits. Cognitive Processing, 15, 317-328. https://doi.org/10.1007/s10339-014-0599-z</p>
+<p>Waxman, S. R., &amp; Markow, D. B. (1995). Words as invitations to form categories: Evidence from 12-to 13-month-old infants. Cognitive Psychology, 29(3), 257-302.</p>
+<p>Winkielman, P., Coulson, S., &amp; Niedenthal, P. (2018). Dynamic grounding of emotion concepts. Philosophical Transactions of the Royal Society B, 373(1752), 20170127. https://doi.org/10.1098/rstb.2017.0127</p>
+<p>Winkielman, P., Davis, J. D., &amp; Coulson, S. (2023). Moving thoughts: Emotion concepts from the perspective of context dependent embodied simulation. Language, Cognition and Neuroscience, 38(10), 1531-1553. https://doi.org/10.1080/23273798.2023.2236731</p>
+<p>Winter, B. (2019). Sensory linguistics: Language, perception, and metaphor. John Benjamins.</p>
+<p>Winter, B. (2022). Abstract concepts and emotion: Cross-linguistic evidence and arguments against affective embodiment. Philosophical Transactions of the Royal Society B, 378(1870), 20210368. https://doi.org/10.1098/rstb.2021.0368</p>
+<p>Wittgenstein, L. (1953). Philosophical investigations. Blackwell.</p>
+<p>Wolff, P. (2007). Representing causation. Journal of Experimental Psychology: General, 136(1), 82-111. https://doi.org/10.1037/0096-3445.136.1.82</p>
+<p>Yee, E., &amp; Thompson-Schill, S. L. (2016). Putting concepts into context. Psychonomic Bulletin &amp; Review, 23(4), 1015-1027. https://doi.org/10.3758/s13423-015-0948-7</p>
+<p>Zwaan, R. A. (2014). Embodiment and language comprehension: Reframing the discussion. Trends in Cognitive Sciences, 18(5), 229-234. https://doi.org/10.1016/j.tics.2014.02.008</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
