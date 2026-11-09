@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Can AI Scale Human Fact-Checking? Evidence from
+Community Notes</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Can AI Scale Human Fact-Checking? Evidence from Community Notes
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.23
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>2</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>10</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>Until recently, Community Notes could only be submitted by human
+volunteers enrolled in the program.</p>
+</blockquote>
+<blockquote>
+<p>To isolate the causal effect of AI author disclosure-and evaluate
+whether AI authorship reduces credibility-we recruited 800 American
+participants from CloudResearch Connect and showed each participant a
+real X post (randomly sampled from a set of 50 posts).</p>
+</blockquote>
+<blockquote>
+<p>Participants were randomly assigned to one of two fact-checking
+conditions: (A) a Community Note written by a human contributor or (B) a
+Community Note generated by an AI model.</p>
+</blockquote>
+<blockquote>
+<p>The userEnrollment file identifies whether each participant enrolled
+via the standard volunteer pathway or the API pathway (enrollmentState =
+apiEarnedIn).</p>
+</blockquote>
+<blockquote>
+<p>We recruited 800 U.S. adults through CloudResearch Connect.</p>
+</blockquote>
+<blockquote>
+<p>Participants were first shown a social media post from X and asked to
+evaluate its accuracy on a 10-point Likert scale.</p>
+</blockquote>
+<blockquote>
+<p>Following this initial evaluation, participants were randomly
+assigned to one of the experimental conditions described below.</p>
+</blockquote>
+<blockquote>
+<p>In the AI disclosure condition, participants were told: “After seeing
+the post, we will show you a fact-check of the post, generated by a
+large language model (LLM), and ask you again for your evaluation of the
+post.”</p>
+</blockquote>
+<blockquote>
+<p>In the human disclosure condition, participants were told: “After
+seeing the post, we will show you a fact-check of the post, written by a
+member of X’s Community Notes program, and ask you again for your
+evaluation of the post.</p>
+</blockquote>
+<blockquote>
+<p>Figures S1-S3 the undisclosed condition, participants were simply
+told: “After seeing the post, we will show you a fact-check of the post,
+and ask you again for your evaluation of the post,” without revealing
+the source of the fact-check.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(2)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 1 non-significant p value that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p = 0.43
+</td>
+<td style="text-align:left;">
+64.7%; p = 0.43; Fig 1C).
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We could not check 3 repositories: com/xai-org (invalid or
+inaccessible GitHub repository); community-writer/blob (invalid or
+inaccessible GitHub repository); main/ACCOUNTS.md (invalid or
+inaccessible GitHub repository).</li>
+<li>We found 0 files in 3 repositories.</li>
+<li>We found 0 README files and 0 repositories without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories-that-could-not-be-checked">Repositories that could
+not be checked</h4>
+<p>These repositories are linked in the paper, but their contents could
+not be retrieved, so nothing below describes them. When the reason is
+that the platform did not answer, running the check again later may
+work.</p>
+<ul>
+<li><p>com/xai-org: invalid or inaccessible GitHub repository</p></li>
+<li><p>community-writer/blob: invalid or inaccessible GitHub
+repository</p></li>
+<li><p>main/ACCOUNTS.md: invalid or inaccessible GitHub
+repository</p></li>
+</ul>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:left;">
+Error
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="com/xai-org" target="_blank">com/xai-org</a>
+</td>
+<td style="text-align:left;">
+github
+</td>
+<td style="text-align:left;">
+invalid or inaccessible GitHub repository
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="community-writer/blob" target="_blank">community-writer/blob</a>
+</td>
+<td style="text-align:left;">
+github
+</td>
+<td style="text-align:left;">
+invalid or inaccessible GitHub repository
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="main/ACCOUNTS.md" target="_blank">main/ACCOUNTS.md</a>
+</td>
+<td style="text-align:left;">
+github
+</td>
+<td style="text-align:left;">
+invalid or inaccessible GitHub repository
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>README files were found in all repositories.</p>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>We found 1 preregistration.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 1 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(10)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+Preregistration Check
+</summary>
+<div class="fold">
+<p>We found 1 preregistration.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+id
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:left;">
+template
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://aspredicted.org/26sq4j" target="_blank">26sq4j</a>
+</td>
+<td style="text-align:left;">
+AI vs CN fact-checking
+</td>
+<td style="text-align:left;">
+AsPredicted
+</td>
+</tr>
+</tbody>
+</table>
+<p>Meta-scientific research has shown that deviations from
+preregistrations are often not reported or checked, and that the most
+common deviations concern the sample size. We recommend manually
+checking the full preregistration at the link above, and have provided
+the preregistered sample size.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+id
+</th>
+<th style="text-align:left;">
+sample_<wbr>size
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+26sq4j
+</td>
+<td style="text-align:left;">
+800 participants
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Full Preregistration" collapse="true">
+<div style="max-height:15em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Field
+</th>
+<th style="text-align:left;">
+Preregistration 1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+template_name
+</td>
+<td style="text-align:left;">
+AsPredicted
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+id
+</td>
+<td style="text-align:left;">
+26sq4j
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+link
+</td>
+<td style="text-align:left;">
+<a href="https://aspredicted.org/26sq4j" class="uri">https://aspredicted.org/26sq4j</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+title
+</td>
+<td style="text-align:left;">
+AI vs CN fact-checking
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+date_created
+</td>
+<td style="text-align:left;">
+2026/05/19 09:01 (PT)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+date_registered
+</td>
+<td style="text-align:left;">
+2026-05-19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+existing_data_explanation
+</td>
+<td style="text-align:left;">
+No, no data have been collected for this study yet.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+research_questions
+</td>
+<td style="text-align:left;">
+Do people respond more to LLM-created or crowd-created fact-checks, and
+how does knowing the source affect fact check effectiveness?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+design_dependent_variables
+</td>
+<td style="text-align:left;">
+Change in perceived accuracy of a tweet from before seeing the
+fact-check to after seeing the fact-check, measured using 10 point
+Likert scales each time (and then rescaled to [0,1] for analysis). Each
+participant rates one tweet.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+study_design_overview
+</td>
+<td style="text-align:left;">
+We use a 2x2 design where participants are randomized to see fact-checks
+from AI or Community Notes, and are randomized to be informed or not
+informed about the the source that generated the fact-checks.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+statistical_tests
+</td>
+<td style="text-align:left;">
+We will run a regression with robust standard errors, predicting change
+in accuracy rating of the tweet from before to after seeing the
+fact-check, a center-coded dummy for source (-0.5 AI, 0.5 Crowd), a
+center-coded dummy for participants being informed of the source (-0.5
+hidden, 0.5 revealed), a z-scored partisanship dummy (dem/rep excluding
+true independents) and all interactions, while controlling for accuracy
+rating of the tweet before seeing the LLM fact-check.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+outliers_and_exclusions
+</td>
+<td style="text-align:left;">
+No subjects who complete the outcomes will be excluded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sample_size
+</td>
+<td style="text-align:left;">
+800 participants
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+additional_comments
+</td>
+<td style="text-align:left;">
+Nothing else to pre-register.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+paper_id
+</td>
+<td style="text-align:left;">
+input
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of deviations from
+preregistrations, see:</p>
+<p>van den Akker O, Bakker M, van Assen M, Pennington C, Verweij L,
+Elsherif M, Claesen A, Gaillard S, Yeung S, Frankenberger J, Krautter K,
+Cockcroft J, Kreuer K, Evans T, Heppel F, Schoch S, Korbmacher M, Yamada
+Y, Albayrak-Aydemir N, Wicherts J (2024). “The potential of
+preregistration in psychology: Assessing preregistration producibility
+and preregistration-study consistency.” <em>Psychological Methods</em>.
+<a href="https://doi.org/10.1037/met0000687">doi:10.1037/met0000687</a>.</p>
+<p>For educational material on how to report deviations from
+preregistrations, see:</p>
+<p>Lakens, Daniël (2024). “When and How to Deviate From a
+Preregistration.” <em>Collabra: Psychology</em>, <b>10</b>(1), 117094.
+<a href="https://doi.org/10.1525/collabra.117094">doi:10.1525/collabra.117094</a>.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 10 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+S. Vosoughi, D. Roy, S. Aral, The spread of true and false news online.
+Science 359 (6380), 1146-1151 (2018).
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/EDEE760A4BAACE8336C8C723B4531E" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 10 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 10 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Community Notes-a crowd-based fact-checking program through which social media users can flag a post with a note explaining why the post is misleading, and the note is displayed if a diverse set of users rate the note as helpful-has become central to online content moderation. The program, however, faces substantial scalability constraints, as the generation of notes takes considerable time and effort, and the number of user participants is limited. Here, we investigate whether allowing AI models to write Community Notes helps to alleviate these constraints by analyzing the full corpus of AI-generated Community Notes on X through May 2026. Encouragingly, AI-generated notes are submitted more quickly, are longer, and cite more and higher-quality sources than human-written notes, while being rated helpful at a similar rate and being associated with similar decreases in reposts following the publication of a rated-helpful note. Furthermore, a pre-registered survey experiment finds no statistically detectable difference between AI-and human-generated fact-checks in their effect on belief updating, regardless of whether the author was revealed to participants. On the other hand, AI-generated note writing is highly concentrated, as a handful of accounts produce the large majority of notes, and are significantly less likely to engage with posts involving controversial and polarized topics such as politics and elections. While those findings suggest that AI may be a powerful tool for scaling crowd-based fact-checking systems such as Community Notes, this evolution also entails important risks: shifting the primary bottleneck from note production to note evaluation, moving the system from a decentralized toward a more centralized model, and creating incentives to prioritize claims that are more likely to achieve consensus over those of greater societal importance.</p>
+<h3>Introduction</h3>
+<p>Identifying false and misleading claims at scale is challenging because of the massive volume of content posted online every day. While professional fact-checking is highly effective when applied (1), this approach does not scale: there are relatively few professional fact-checkers, and professional fact-checking is time-consuming and expensive. Harnessing the &quot;wisdom of crowds&quot; has been proposed as a way to increase the scope and speed of fact-checking (2-4). A prominent example of this approach is Community Notes, first deployed on X (formerly Twitter), with similar systems subsequently introduced by Meta (on Facebook, Instagram and Threads), TikTok and YouTube. These systems allow volunteer contributors to evaluate potentially misleading posts and attach a brief, sourced correction that is displayed to all users once a consensus emerges (5).</p>
+<p>A growing body of experimental and observational evidence indicates that crowd-sourced factchecking can effectively identify (for a review, see (4)) and reduce the spread of (6, 7) false and misleading content on social media platforms. Yet crowd-sourced fact-checking turns out to face a similar structural capacity constraint as professional fact-checking: even though there are more Community Notes contributors than professional fact-checkers, the volume of potentially misleading content still far exceeds what a volunteer community can feasibly review. Only a small fraction of posts ever receive a published note, and notes that do appear arrive, on average, many hours after a post begins to circulate-long after much of the viral diffusion has already occurred and many users have already been exposed to it (6). This latency problem is particularly consequential because misinformation diffuses fastest in its earliest hours (8).</p>
+<p>The emergence of large language models (LLMs), which can evaluate claims and generate text almost instantly, opens a potential path to addressing this bottleneck. Although earlier LLMs had limited success at fact-checking (9), evidence suggests that current models can identify false and misleading claims as well as, or better than, a professional fact-checker (10). Thus, LLMs may be able to help satisfy the need for large-scale, in-the-moment provisioning of Community Notes.</p>
+<p>Accordingly, X recently introduced a feature allowing &quot;AI Note Writers&quot; to submit AI-generated Community Notes (11, 12). Importantly, some AI Note Writers are operated internally by X while others are developed independently by external individuals or organizations (we ourselves have developed two AI Note Writers). Once submitted, AI-generated notes follow the same process as human-written notes: they are evaluated by human contributors and become publicly visible only if rated as helpful by contributors who have historically disagreed in their evaluations of other notes. When Community Notes participants rate proposed notes, whether a note is AI-generated is disclosed alongside the note text in the rating interface. Once a note reaches &quot;Currently Rated Helpful&quot; status and is displayed on X, however, AI-generated and human-generated notes are displayed identically beneath the post: both carry the standard &quot;Community Notes&quot; label with no visible authorship information in the default view. AI authorship is only disclosed in the note detail panel, which readers must actively open; there, AI-authored notes include the disclaimer: &quot;Proposed by an experimental AI contributor responding to requests for a note. Like all contributors, AIs can make mistakes-verify accuracy.&quot; Human-authored notes carry no equivalent disclaimer (see Extended Data Fig. S1).</p>
+<p>Here, we evaluate the promise and perils of the introduction of AI Note Writers by analyzing all Community Notes proposed on X between September 2025 (when AI note generation was introduced) and May 2026, complemented by an audit of our own admitted AI Note Writer to observe the note-production process from the inside and a preregistered survey experiment to causally identify whether revealing AI authorship changes belief updating.</p>
+<p>Until recently, Community Notes could only be submitted by human volunteers enrolled in the program. Beginning in September 2025,foot_0 X expanded Community Notes by allowing developers and users to create AI-powered note writers capable of drafting proposed notes on platform content. Our dataset comprises 311,225 English-language notes indicating that an initial claim is misleading (68,978 AI-written and 242,247 human-written) proposed on 244,213 distinct posts between September 1, 2025, and May 12, 2026 (see Extended Data Fig. S2). AI note volume grew substantially during the sample period, consistent with the progressive roll out described in (11) and confirming that AI is already a major contributor to the Community Notes ecosystem. By May 2026, AI-generated notes account for 50.4% of all proposed notes and 56.3% of the notes that achieve Helpful status and therefore become visible on the platform.</p>
+<h3>AI-generated notes are of good quality and reduce beliefs and diffusion</h3>
+<p>One structural feature distinguishes AI from human note production. AI Note Writers can currently generate notes only for posts included in the candidate set provided by X, which primarily consists of posts for which users have explicitly requested a Community Note. Human contributors, by contrast, can propose a note on any public post.</p>
+<p>Focusing on posts for which both a human contributor and an AI Note Writer proposed a note (to avoid the effect of selection and restriction to AI Note Writers), we find that AI notes are longer on average (196 vs. 166 characters; 𝑝 &lt; 0.001) and cite more sources (2.1 vs. 1.6 hyperlinks; 𝑝 &lt; 0.001). They are more likely to cite at least one high-quality source (48% vs. 29%; 𝑝 &lt; 0.001) or a fact-checking website (8.1% vs. 3.8%; 𝑝 &lt; 0.001) (Fig 1A). AI-generated notes rely more heavily on traditional news media, whereas human-written notes more frequently cite platform-native or user-generated sources, including other posts on X, and YouTube and TikTok videos (Fig 1B). AI notes are also submitted faster than human notes: measured from the moment a post actually becomes eligible for a note rather than from when it was first posted (see Methods), AI notes arrive on average 1.7 hours after becoming eligible (median 0.2 hours), compared with 7.0 hours (median 3.0 hours) for human contributors (𝑝 &lt; 0.001). Overall, these results indicate important advantages in speed and content compared to human notes.</p>
+<p>We then turn to note helpfulness. In Community Notes, helpfulness can be measured at two distinct but related levels. First, individual contributors rate notes as Helpful, Somewhat Helpful, or Not Helpful. These individual ratings constitute the inputs to the Community Notes ranking algorithm, which aggregates ratings while accounting for disagreement across raters. Second, each note receives a note-level status based on this aggregation procedure. Notes that satisfy the algorithm&#x27;s helpfulness criteria are assigned a Currently Rated Helpful status and are displayed publicly alongside the underlying post on X. We find that the share of notes reaching Helpful status is not statistically different among posts on which both an AI and a human proposed a note (21.6% vs. 22.3%; 𝑝 = 0.073; Fig 1C). We find similar results when we address selection issues by restricting the sample to cases in which the same rater evaluated both an AI-written and a human-written note attached to the same post. This within-post, within-rater design holds constant both the underlying content being corrected and stable differences across raters in their propensity to assign favorable ratings. Within this matched sample of 1,426,544 ratings, we again find no significant difference between AI-written notes and human-written notes (65.1% helpful ratings vs. 64.7%; p = 0.43; Fig 1C).</p>
+<p>Once a note is deemed Helpful and becomes visible to all users through Community Notes, the associated post experiences a sharp decline in repost activity relative to the control group of posts for which a note was proposed but never reached Helpful status. The reduction is very similar for AI notes (79%, 95% CI [76%, 82%]) and human notes (77%, 95% CI [72%, 81%]) (Fig 1D).</p>
+<p>These estimates are consistent with prior causal evidence on Community Notes (6, 7) (although larger in magnitude, and not as cleanly causally identified) and suggest that both AI-generated and human-generated notes are similarly effective at reducing post diffusion. Importantly, the identity of the note author (human vs. AI) is not visible for most users unless they click on the note to access additional details. Thus, this lack of difference in post decline after receiving a note is likely more an indication of the note&#x27;s quality than the user&#x27;s attitude regarding AI-generated notes.</p>
+<p>To isolate the causal effect of AI author disclosure-and evaluate whether AI authorship reduces credibility-we recruited 800 American participants from CloudResearch Connect and showed each participant a real X post (randomly sampled from a set of 50 posts). Participants were randomly assigned to one of two fact-checking conditions: (A) a Community Note written by a human contributor or (B) a Community Note generated by an AI model. In addition, the source of the note (human or AI) was either disclosed or concealed (see Methods). Participants evaluated the accuracy of the post before and after viewing the Community Note indicating that the post was inaccurate. We found no significant difference in belief change between human-attributed and AI-attributed Community Notes (𝛽 = -0.034, 𝑝 = .210): participants reduced their accuracy ratings to a similar degree regardless of whether the note was attributed to a human contributor or an AI system (Fig. 1E). Revealing the source of the note, by contrast, significantly dampened belief updating: relative to participants who saw an unattributed note, those told who (or what) had written it reduced their accuracy ratings less (𝛽 = 0.050, 𝑝 = .017). The interaction between authorship and disclosure was null (𝛽 = -0.010, 𝑝 = .821), indicating that this disclosure effect was similar regardless of whether the revealed author was human or AI. Partisanship, by contrast, was itself a significant predictor of belief updating: Republican-leaning participants corrected their accuracy ratings less than Democrat-leaning participants (𝛽 = 0.069, 𝑝 = .039), consistent with prior evidence of asymmetric responsiveness to fact checks across the partisan divide. This partisan gap widened, marginally, when the source was revealed (𝛽 = 0.092, 𝑝 = .065). Neither of the remaining interactions reached significance: partisanship did not moderate the (null) authorship effect (𝛽 = -0.023, 𝑝 = .605), and the three-way interaction was indistinguishable from zero (𝛽 = 0.002, 𝑝 = .985). Overall, then, we find no evidence of any effects on belief updating of whether the note was AI or human generated.</p>
+<h3>AI-generated notes are highly concentrated and avoid political and polarized content</h3>
+<p>While it is encouraging that AI notes are faster and better sourced without any cost to helpfulness or impact on users, examining the pattern of AI note writing nonetheless raises important concerns.</p>
+<p>First, AI-note generation is extremely concentrated: During our sample period, AI-generated notes were written by only 27 distinct users, whereas human-authored notes were written by 72,636 users. This concentration is also reflected in the number of notes submitted per user: AI-note authors submitted an average of 2,555 notes each, with a median of 687, while human contributors submitted an average of 3.3 notes each, with a median of 1 (Fig 2A). Even more importantly, the eight accounts operated directly by X are responsible for 45.2% of all proposed notes as of May 2026. Community Notes was initially presented as a decentralized, human-driven, crowd-based system, but note production is now becoming increasingly AI-driven and concentrated.</p>
+<p>Second, we find that AI Note Writers are systematically less likely than humans to cover controversial topics, including politics and elections, gender and identity, and religion and spirituality (Fig 2B). Such topics, although of high societal importance, are those for which reaching the cross-rater agreement required for the bridging algorithm to award a note with &quot;Currently Rated Helpful&quot; status may be particularly difficult (13). To shed light on why AI Note Writers are avoiding controversial topics, we conducted a systematic study using our own AI Note Writer (see Methods). We collected a sample of 1,245 posts eligible for Community Notes and used an identical LLM-fact checking approach (same prompt, model, etc across posts) to assess the veracity of each post and generate a note for the 210 posts identified as false. We then evaluated each note using X&#x27;s automated evaluator, which assigns a predicted helpfulness score to a note by estimating whether the proposed note addresses the post&#x27;s central claim without expressing opinion or speculation. This predicted helpfulness score is used during the initial qualification phase of new AI Note Writers, where the AI Note Writer has to submit notes in test mode to determine their eligibility for admission to the Community Notes AI Note Writer program (see Methods). X&#x27;s official documentation also recommends using this predicted helpfulness score more generally when creating AI notes, arguing that notes with higher scores are substantially more likely to be rated Helpful. Notably, the predicted helpfulness score explicitly does not assess the factual accuracy of the proposed note, but rather evaluates the proposed note&#x27;s relevance to the original claim and its perceived neutrality.</p>
+<p>Using our AI Note Writer to hold the note-generating process constant, we find that notes written in response to more politically or culturally polarized topics (see Methods; measured by the extent to which people on opposing sides would disagree about the facts, irrespective of the evidence presented) or posts about politics receive systematically lower predicted helpfulness scores (𝑝 &lt; 0.01) (Fig 2C). Crucially, this penalty is not explained by those notes being less accurate or more opinion-laden: controlling for an independent opinion score and an independent accuracy score from an LLM judge blind to our own assessments (see Methods), both political topic and polarization remain strongly significant, negative predictors of X&#x27;s own claim opinion score, essentially unchanged from their uncontrolled estimates (𝑝 &lt; 0.001). The note&#x27;s independently judged accuracy is not itself a significant predictor of claim opinion score (𝑝 = 0.78): X&#x27;s predicted-helpfulness evaluator does not appear to track actual note accuracy, reinforcing that the political/polarization penalty reflects the topic itself rather than note quality. This matters because an AI Note Writer seeking to maximize the probability that its notes ultimately reach Helpful status would likely optimize for predicted helpfulness -and in doing so, learn to avoid highly polarized or controversial posts, because these are the posts for which cross-rater agreement is more difficult to achieve. The recently released source code of X&#x27;s own Community Writer shows how this type of selection can arise (12). Its production rejector asks an LLM to estimate the probability that a proposed note will be judged Helpful by raters, including raters who frequently disagree politically, and explicitly instructs the model to favor notes that readers on both sides of a disagreement would accept. The prompt used internally by X&#x27;s eight company-owned AI Note Writer accounts explicitly describes accuracy as &quot;necessary but not sufficient.&quot; An unwillingness to evaluate politically contentious posts represents a severe limitation of the potential impact of AI Note Writers.</p>
+<h3>Which future for the Community Notes system?</h3>
+<p>AI Note Writers seem to be able to produce sufficiently high-quality Community Notes more quickly and at a greater scale than human contributors. Furthermore, users appear to respond to AI-generated corrections much as they do to human-generated ones, both in terms of belief updating and reductions in reposting. Scaling fact-checking with AI thus creates substantial opportunities.</p>
+<p>But AI notes also come with three important challenges.</p>
+<p>First, scaling through AI may substantially change who produces Community Notes. AI note production is already highly concentrated, with X&#x27;s internally operated Community Writer accounting for a large fraction of proposed AI notes, submitting approximately 800 notes per day. This concentration partly reflects a simple economic constraint: producing notes at scale is not free. Our own bot costs approximately $0.8 per candidate note. An independently operated AI Note Writer reports a figure in the same order of magnitude (14). In the absence of direct rewards for producing notes, it is unclear who, other than the platform itself, would have incentives to operate AI writers at such scale. Because of this, Community Notes-a system championed by supporters such as Elon Musk and Mark Zuckerberg as an alternative to professional fact-checkers precisely because it decentralizes fact-checking-could in fact end up becoming highly centralized.</p>
+<p>Second, scaling AI Note Writers raises a fundamental question about what a fact-checking system should optimize for. X&#x27;s architecture rewards AI writers according to whether their notes are judged Helpful by a diverse group of users via the bridging algorithm. AI Note Writers must receive consistently high predicted helpfulness scores to earn the right to submit notes at all, and then once they start posting, the number of notes they are allowed to submit per day increases as more of their submitted notes become &quot;Currently Rated Helpful&quot; based on human ratings. Because the bridging algorithm used by Community Notes requires agreement across contributors who have historically disagreed, this creates strong incentives for AI writers to produce notes that can achieve cross-group consensus. This is an attractive property for a system intended to provide broadly trusted contextual information, but it has the consequence of punishing notes that are accurate but written on contentious topics. As AI systems optimize for creating notes that get rated as helpful, they will learn to systematically favor fact-checking claims on which consensus on the fact-check is easiest to obtain, rather than claims for which corrective information is most needed. This will exacerbate Community Notes&#x27; existing tendency to under-provision fact-checks on important political posts (13).</p>
+<p>Finally, as AI dramatically reduces the cost of producing candidate notes, the main humaninduced bottleneck will likely shift from note production to note evaluation (as is the case in many AI-assisted processes). AI Note Writers currently cannot rate notes: human contributors remain responsible for determining which notes are ultimately displayed. Yet despite the large increase in the number of AI-generated notes, the number of active human raters has remained broadly stable (see Extended Data Fig. S3). This implies that the rapid expansion of AI-generated notes is not being matched by a comparable increase in human evaluation capacity, potentially intensifying the evaluation bottleneck as AI production continues to scale. Without solving the problem of provisioning ratings, the increase in note provision will not translate into notes being displayed to users. A tempting solution to this problem might be to allow AI models to also rate the helpfulness of the notes, for example by predicting the likelihood that a diverse group of humans would have rated the note as helpful. Beyond the complete centralization and loss of democratization that this could cause, using predicted helpfulness ratings could also be disastrous if the predictions merely focus on features such as the note&#x27;s tone or topic, rather than the actual factual veracity of the note.</p>
+<p>In sum, AI provides a powerful way to scale the generation of notes in crowd-based fact-checking systems such as Community Notes. But preserving the distinctive value of such systems will require more than scaling note production. It will also require maintaining sufficient human evaluation capacity, preserving meaningful decentralization in who produces information, and ensuring that optimizing for consensus does not progressively substitute for the underlying objective of improving the accuracy of information.</p>
+<h3>Methods</h3>
+<h3>Observational data</h3>
+<p>We downloaded all publicly available Community Notes data from X (https://x.com/i/ communitynotes/download-data). The notes file provides note text, note type, author participant identifier, and the target post identifier. We exclude notes classified as Not Misleading, which indicate that a post does not require a corrective Community Note. These notes are not eligible to become Currently Rated Helpful and, unlike notes identifying misleading content, cannot be proposed by AI contributors. The noteStatusHistory file records the creation timestamp and the current and historical helpfulness status of each note (&quot;Currently Rated Helpful,&quot; &quot;Needs More Ratings,&quot; or &quot;Currently Rated Not Helpful&quot;). The userEnrollment file identifies whether each participant enrolled via the standard volunteer pathway or the API pathway (enrollmentState = apiEarnedIn). Community Notes requests are identified from the batSignals file, which records separately when a post became eligible to AI Note Writers (apiXlFeedEligibleAtMillis) and to human Top Writers (noteRequestFeedEligibleAtMillis). Time from eligibility signal to note is computed, for each note, against its own author type&#x27;s signal (AI notes against apiXlFeedEligibleAtMillis, human notes against noteRequestFeedEligibleAtMillis), restricted to notes for which that signal is available. The ratings files identify, for every (rater, note) pair, the helpfulness level (HELPFUL, SOMEWHAT HELPFUL, or NOT HELPFUL) that the rater assigned to that note. The list of accounts operated by X has been derived from https://github. com/xai-org/community-writer/blob/main/ACCOUNTS.md Note-level text features are computed as follows. Note length is the number of characters after removing all URLs (matched by the regular expression https?://\S+). Link count is the number of URLs in the raw note text. Language of the note is detected with langid and we retain only English-language notes. Topic categories were defined using https://huggingface.co/ ychuai/community-notes-topic-classifier. High-quality URLs are defined following (15) as URLs with a quality score greater than 0.8.</p>
+<p>The topic coverage-selection estimates come from a pooled logistic regression on tweets AI is eligible to write a note on. For each tweet we construct two binary outcomes-whether an AI note was ever proposed on it, and whether a human note was ever proposed on it-and stack them into one tweet-by-author-type panel. We then regress this outcome on an author-type indicator (AI vs. human) fully interacted with tweet topic, log follower count of the posting user (standardized), an indicator for whether the tweet contains an image or video, and indicators for whether the posting user leans Republican or Democrat, plus month fixed effects. Standard errors are clustered by tweet.</p>
+<p>The topic coefficients plotted in Fig 2B are the author-type × topic interaction terms. We extract the number of reposts for a stratified sample of posts using the official X API, from four disjoint strata defined by the crossing of note authorship (AI vs. human) and outcome (the note eventually became helpful vs. never did). In total, we obtained usable engagement data for 9,629 posts. For each sampled post, we record hourly repost counts over the 36 hours following its posting time, which we use to construct an hourly engagement panel for the diffusion and difference-indifferences analysis. We estimate the effect of a note becoming Helpful on log(reposts + 1) using the Callaway and Sant&#x27;Anna estimator for staggered-adoption difference-in-differences, separately for AI-and human-authored notes, comparing posts whose note becomes Helpful (treated) against posts whose note was proposed but never reaches Helpful status (never-treated).</p>
+<h3>Survey experiment</h3>
+<p>We conducted a pre-registered survey experiment to evaluate how participants respond to factchecks generated by AI compared with those written by human contributors to X&#x27;s Community Notes program, and whether these evaluations depend on whether the source of the fact-check is disclosed. The study was pre-registered on AsPredicted (https://aspredicted.org/26sq4j. pdf). We recruited 800 U.S. adults through CloudResearch Connect.</p>
+<p>Participants were first shown a social media post from X and asked to evaluate its accuracy on a 10-point Likert scale. Following this initial evaluation, participants were randomly assigned to one of the experimental conditions described below. In the AI disclosure condition, participants were told: &quot;After seeing the post, we will show you a fact-check of the post, generated by a large language model (LLM), and ask you again for your evaluation of the post.&quot; In the human disclosure condition, participants were told: &quot;After seeing the post, we will show you a fact-check of the post, written by a member of X&#x27;s Community Notes program, and ask you again for your evaluation of the post. Contributors to Community Notes are X users who sign up to write and rate notes.&quot; In for less than 0.2% of all AI-generated notes submitted to the program, we excluded their notes from the main analysis to avoid any potential bias. The bot developed by T.R. was subsequently used in an empirical test conducted in September and October 2026. During this period, we collected, on a daily basis, posts for which our AI Note Writer was eligible to propose a note. For each post, we used Grok 4.6 to generate a veracity score ranging from 0 to 100 and a polarization score ranging from 0 to 100 (see Prompt 1 below). For posts identified as likely false, Grok 4.6 then drafted the note text itself from the supporting evidence (see Prompt 2 below). Before submitting a note, we evaluate it using X&#x27;s official evaluator: the note is first submitted in test mode, and we retrieve its ClaimOpinion, HarassmentAbuse, and UrlValidity ratings (high, medium, or low).</p>
+<p>We separately scored all 210 drafted notes with an independent LLM judge (Google Gemini 3 Flash, via OpenRouter, with live web search enabled), blind to our own veracity and polarization assessments and to X&#x27;s own evaluator output. For each note, the judge was given the post (including any image or video description) and the drafted note text, and asked to produce two independent 0-100 scores: an opinion score, reflecting how much the note expresses opinion or speculation rather than a verifiable claim, and a quality score, reflecting how accurate and well-supported the note&#x27;s claim appears based on the judge&#x27;s own live search (see Prompt 3 below). We then regressed X&#x27;s own continuous claim opinion score (the real-time evaluator probe score underlying the ClaimOpinion bucket and the predicted-helpfulness result above) separately on political content and on polarization, each controlling for the independent opinion score and quality score. First, inspect the replies to this post to identify credible reasons why the claim may be true or false (for example a corrected number, the original source, a date, a missing context). Treat the replies only as leads: they can be wrong, biased or coordinated. Then ALWAYS run your own independent web search to verify every point yourself, seeking out the MOST RECENT, up-to-date information available, and base your score and your sources only on what you verified there. Never cite a reply (or any post on X) as a source. TIME-SENSITIVITY: if the claim is about a specific recent event and you cannot find sources recent enough to actually cover that event (your best evidence clearly predates it, or only covers an earlier, different situation), treat this as uncertain (score 50) and set &quot;checkable&quot; to false -it is better to write no note than to judge a recent claim against outdated information. This does NOT apply to general, time-insensitive claims that do not hinge on a recent event (for example long-debunked claims like &quot;the earth is flat&quot;): for those, score and write normally regardless of how old the best sources are.</p>
+<p>Also list the sources that support your assessment. Rules for the sources: -Prefer primary documents (official statistics, court filings, the original report or video) and broadly trusted, non-partisan outlets (wire services such as Reuters/AP/AFP, established fact-checkers such as PolitiFact, Snopes, AFP Fact Check, Lead Stories, FactCheck.org) that people on both sides of the political spectrum accept. -Prefer the most recent reporting available, especially for a time-sensitive claim; a source that only covers an earlier or different event does not verify a recent one. -Give at least one source. If further INDEPENDENT sources (different publishers) exist, include them (up to 3 in total); never pad the list. -Each must be a deep link to the exact page that shows the evidence, free to read (no paywall or login), and must be a URL you actually saw in your search results. Never construct or guess a URL.</p>
+<p>Respond in valid JSON only, with this exact shape: &quot;veracity score&quot;: integer 0-100, where0 = definitely false,100 = definitely true,50 = uncertain or not a fact-checkable claim¿, &quot;checkable&quot;: true if the post makes a concrete claim that can be verified, else false, &quot;polarization&quot;: integer 0-100: how politically or culturally polarised the topic is, i.e. how likely people on different sides would disagree about the facts here regardless of evidence;0 = neutral topic, &quot;reasoning&quot;: &quot;a few sentences justifying the score, naming the specific point where the post is wrong&quot;, &quot;sources&quot;: [ &quot;url&quot;: &quot;deep link&quot;, &quot;publisher&quot;: &quot;publisher name&quot;, &quot;supports&quot;: &quot;one line: what this page shows&quot; ] PROMPT 2 Below is a post on X that has been researched and assessed as likely false or misleading, along with the supporting evidence. Your task is to write a Community Note that corrects it. Your note will be graded against two of X&#x27;s real Community Notes rating criteria, so it MUST satisfy both: -&quot;Directly addresses the post&#x27;s claim&quot;: identify the MOST CENTRAL claim in the post -the one that, if corrected, would most change how a reader understands the post&#x27;s overall message.</p>
+<p>This is NOT necessarily the claim that&#x27;s easiest to cite a precise number or date for. If the post bundles several false or misleading statements together, pick whichever one is most load-bearing to the post&#x27;s point (e.g. who did something and what they actually did, rather than a secondary count or date on an otherwise-true claim), using the evidence below to judge which correction would most change a reader&#x27;s takeaway. Make your note correct ONLY that one claim, as precisely and completely as the evidence supports -don&#x27;t pad it with additional true-but-tangential facts once that correction is made.</p>
+<p>-&quot;Opinion or speculation&quot;: the note must contain ZERO personal opinion, speculation, hedging (e.g. &quot;might&quot;, &quot;could&quot;, &quot;likely&quot;, &quot;probably&quot;, &quot;seems&quot;, &quot;arguably&quot;, &quot;appears to&quot;, &quot;suggests&quot;), rhetorical questions, or reactions to the post. State the correction as a plain, verifiable, declarative fact only.</p>
+<p>Never use mocking, sarcastic, accusatory, or inflammatory language toward the post&#x27;s author or anyone mentioned in the post; describe the correction neutrally and clinically, focused only on the facts. Write in a way that would be found trustworthy by people on both sides of the political spectrum, citing sources that would be trusted broadly.</p>
+<p>The answer MUST be short, like a post on X (280 characters maximum, not counting URLs). The note should not include any sort of wasted characters e.g. [Source] when listing a URL. Just state the URL directly in the text.</p>
+<p>Each note MUST include at least one URL/link source. Nothing else counts as a source other than a URL/link. Each note MUST NOT use any hashtags (#). Keep a professional tone with no hashtags, emojis, etc. CRITICAL -LINK VALIDITY: Every URL in the note MUST be a real, currently-live page that is publicly accessible without a login or paywall. This is extremely important: X&#x27;s raters check that cited links resolve, and a dead, invented, or gated link makes the whole note fail. Each URL MUST be a direct, deep link to the specific page that substantiates the correction -the exact article, report, primary document, or fact-check that debunks Score the DRAFTED NOTE on two independent 0-100 scales: 1. &quot;opinion score&quot;: how much the note expresses opinion, speculation, or editorializing rather than stating a verifiable, checkable claim about the post.0 = the note states only verifiable facts relevant to the post with no editorializing;100 = the note is mostly opinion or speculation rather than a checkable claim.</p>
+<p>2. &quot;quality score&quot;: how accurate and well-supported does the note&#x27;s central claim about the post appear to be? 0 = the note&#x27;s claim is clearly wrong or unsupported;100 = the note&#x27;s claim is clearly correct and well-supported.</p>
+<p>Respond in valid JSON only, with this exact shape: &quot;opinion score&quot;: integer 0-100, &quot;quality score&quot;: integer 0-100, &quot;reasoning&quot;: &quot;one or two sentences justifying both scores&quot;</p>
+<h3>Community Notes</h3>
+<p>Thomas Renault, Mohsen Mosleh, David Rand * * Corresponding author. Email: dgr7@cornell.edu This PDF file includes:</p>
+<h3>Supplementary Text</h3>
+<p>Figures S1-S3 the undisclosed condition, participants were simply told: &quot;After seeing the post, we will show you a fact-check of the post, and ask you again for your evaluation of the post,&quot; without revealing the source of the fact-check.</p>
+<p>The experiment crosses two factors: the authorship of the fact-check and whether this authorship is disclosed. The first factor distinguishes between fact-checks generated by an AI system and those written by human contributors to X&#x27;s Community Notes program. The second factor distinguishes between revealed-authorship conditions, in which the source of the fact-check is explicitly identified, and hidden-authorship conditions, in which no information about the source is provided. After viewing the fact-check, participants again evaluated the accuracy of the post using the same 10point Likert scale. The change between the pre-treatment and post-treatment accuracy ratings serves as our primary measure of the persuasive effect of the fact-check.</p>
+<h3>AI Note Writer evaluation and empirical implementation</h3>
+<p>X provides an automated evaluation system for AI Note Writers that assesses proposed notes before they are submitted for human evaluation. The system evaluates three dimensions: ClaimOpinion, which assesses whether the note addresses the central claim without introducing opinion or speculation; UrlValidity, which assesses the validity of the cited URLs; and HarassmentAbuse, which assesses whether the note contains abusive or harassing content.</p>
+<p>The evaluation API returns a continuous claim opinion score alongside categorical evaluations (high, medium, or low) used during the qualification process. To qualify, an AI Note Writer is evaluated on its 50 most recent test notes. At least 30% must receive a high rating on ClaimOpinion, no more than 30% may receive a low rating, and at least 95% and 98% must receive a high rating on UrlValidity and HarassmentAbuse, respectively. Meeting these thresholds makes the writer eligible for admission, subject to the platform&#x27;s selection process. Once admitted, its notes can be rated by human Community Notes contributors, whose evaluations ultimately determine whether a note achieves Helpful status.</p>
+<p>For this study, we developed our own AI Note Writers and gained admission to the program after submitting 50 notes in test mode. One author (D.R.) created a bot in February 2026, while another author (T.R.) created a bot in September 2026. Although the two bots together accounted</p>
+<h3>Figure 1 :</h3>
+<p>Figure 1: AI-versus human-written Community Notes: characteristics, source usage, helpfulness, and effects on diffusion and belief updating. Panels A-D are restricted to posts for which both an AI and a human proposed a note (35,791 notes), except where noted. (A) Characteristics. Group means with 95% confidence intervals; time to note uses all posts with an available eligibility signal. (B) Source usage. Citation rate per 1,000 links cited, by domain, for AI-and human-written notes. (C) Helpfulness. Share of AI-and human-written notes reaching Currently Rated Helpful status and Individual ratings received by AI-and human-written notes. (D) Effect on diffusion. Post diffusion for posts receiving a helpful note written by an AI (left) or a human (right). (E) Survey experiment. Coefficients, with 95% confidence intervals clustered by headline, from the pre-registered experiment.</p>
+<h3>Figure 2 :</h3>
+<p>Figure 2: AI-versus human-written Community Notes: concentration, coverage selection, and the political-avoidance mechanism. (A) Concentration. Distribution of notes proposed per contributor, by author type. (B) Coverage. Differential selection into AI versus human note coverage: topic coefficients from a pooled logistic regression, restricted to tweets AI is eligible to write a note on. 59,640 posts, 81,796 notes (AI: 37,256, human: 44,540). (C) X&#x27;s internal evaluator. Among notes drafted and evaluated by our own AI Note Writer, share rated in the top (&quot;High&quot;) category by X&#x27;s internal note evaluator by whether the underlying post is political (left) and by whether its polarization score is at or above this sample&#x27;s median (right). 𝑛 = 210 evaluated drafts.</p>
+<h3>PROMPT 1 Below</h3>
+<p>is a post on X. Research it using web search and assess whether the central, concrete, fact-checkable claim in the post is true. If the post makes no concrete fact-checkable claim (e.g. it&#x27;s an opinion, joke, or prediction about the future), treat it as uncertain (score 50) and set &quot;checkable&quot; to false. If the claim depends on the content of an image or video that you cannot actually see (only a description or preview frame may be given), treat it as uncertain (score 50). [POST WITH CONTEXT DESCRIPTION] the claim -so a reader can click it once and immediately see the supporting evidence.</p>
+<h3>3</h3>
+<p>Do NOT cite a website homepage, a section front, a search-results page, or a generic landing page. Use only specific URLs that appear verbatim in the research and evidence below; never guess, shorten, or construct a deep URL from memory. If the evidence below contains no specific citable page URL, respond with &quot;NOT ENOUGH EVIDENCE TO WRITE A GOOD COMMUNITY NOTE.&quot; rather than falling back to a homepage. If, despite the evidence below, you cannot find a solid, citable source to back a confident correction, respond only with &quot;NOT ENOUGH EVIDENCE TO WRITE A GOOD COMMUNITY NOTE.&quot;. Otherwise, write the note directly -don&#x27;t preface it with anything like &quot;Community Note:&quot;. [POST WITH CONTEXT DESCRIPTION] Research and evidence: &quot;&#x27; [RESEARCH AND EVIDENCE FROM PROMPT 1] &quot;&#x27; S7 PROMPT You are an independent fact-checking reviewer. You will be shown a post from X (formerly Twitter) -including a description of any image or video attached to it, and of any post it quotes or replies to -its posting date, and a Community Note drafted about it. You have live web search available for this task -use it to verify the note&#x27;s central claim against current, reliable sources before scoring &quot;quality score&quot;, and briefly say what you found (or didn&#x27;t find) in &quot;reasoning&quot;. POST DATE: [POST DATE] POST (with any image/video description and quoted/replied-to context): [CONTEXT DESCRIPTION] DRAFTED NOTE: [DRAFTED NOTE]</p>
+<h3>Figure S3 :</h3>
+<p>Figure S3: Rater supply has not kept pace with note production. Weekly time series, May 2025-May 2026, by rating timestamp (B, C, D) or note timestamp (A); the dashed line marks September 2025, when AI Note Writers were introduced. (A) Total number of notes proposed that week, by both human and AI contributors combined. (B) Average number of ratings received per note. (C) Number of distinct raters active that week. (D) Number of new raters per week, proxied by each rater&#x27;s first-ever observed rating in the data.</p>
+<h3>Figure S1 :</h3>
+<p>Examples of published Community Notes, by author type. (A) A note authored by a human volunteer contributor. (B) A note authored by an AI model. Both appear identically beneath the post in the default view. AI authorship is disclosed only in the note detail panel (shown here), where the note includes the disclaimer: &quot;Proposed by an experimental AI contributor responding to requests for a note. Like all contributors, AIs can make mistakes-verify accuracy.&quot; Figure S2: Daily number of notes proposed by human contributors (blue), X-operated AI accounts (red), and other AI note writers (orange).</p>
+<p>The program was launched in a test phase on July 1,</p>
+<p>The first AI-written note published outside the test phase appeared in September 2025. See https://x.com/CommunityNotes/status/1940132205486915917.</p>
+<h3>References</h3>
+<p>C. Martel, D. G. Rand, Misinformation warning labels are widely effective: A review of warning effects and their moderating features. Current Opinion in psychology 54, 101710 (2023).</p>
+<p>G. Pennycook, D. G. Rand, Fighting misinformation on social media using crowdsourced judgments of news source quality. Proceedings of the national academy of sciences 116 (7), 2521-2526 (2019).</p>
+<p>J. Allen, A. A. Arechar, G. Pennycook, D. G. Rand, Scaling up fact-checking using the wisdom of crowds. Science advances 7 (36), eabf4393 (2021).</p>
+<p>C. Martel, J. Allen, G. Pennycook, D. G. Rand, Crowds can effectively identify misinformation at scale. Perspectives on Psychological Science 19 (2), 477-488 (2024).</p>
+<p>S. Wojcik, et al., Birdwatch: Crowd wisdom and bridging-based ranking can help address misinformation. arXiv preprint arXiv:2210.15723 (2022).</p>
+<p>Y. Chuai, et al., Community-based fact-checking reduces the spread of misleading posts on X (formerly Twitter). Nature Communications 17 (1), 4070 (2026).</p>
+<p>I. Slaughter, A. Peytavin, J. Ugander, M. Saveski, Community notes reduce engagement with and diffusion of false information online. Proceedings of the National Academy of Sciences 122 (38), e2503413122 (2025).</p>
+<p>S. Vosoughi, D. Roy, S. Aral, The spread of true and false news online. Science 359 (6380), 1146-1151 (2018).</p>
+<p>M. R. DeVerna, K.-C. Yang, H. Y. Yan, F. Menczer, Large Language Models Require Curated Context for Reliable Political Fact-Checking-Even with Reasoning and Web Search, in Find- ings of the Association for Computational Linguistics: ACL 2026 (2026), pp. 29338-29360.</p>
+<p>T. Renault, M. Mosleh, H. Lin, G. Pennycook, D. Rand, Fact-checking using AI. Working Paper (2026).</p>
+<p>H. Li, et al., Scaling human judgment in community notes with LLMs. arXiv preprint arXiv:2506.24118 (2025).</p>
+<p>B. Miller, et al., Community-Driven API and AI Writer Design for Openly Scaling Community Notes. arXiv preprint arXiv:2609.40067 (2026).</p>
+<p>P. Bouchaud, P. Ramaciotti, Community Notes undermoderate polarizing content by design creating risks in electoral processes. Science Advances 12 (27), eaee6932 (2026).</p>
+<p>N. Young, Post on the cost of AI-generated Community Notes, X (formerly Twitter), https: //x.com/NathanpmYoung/status/2057584022336016875, social media post, accessed October 8, 2026.</p>
+<p>H. Lin, et al., High level of correspondence across different news domain quality rating sets. PNAS nexus 2 (9), pgad286 (2023).</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
