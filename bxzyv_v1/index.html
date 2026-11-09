@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: A systematic review of implicit statistical
+learning in schizophrenia spectrum disorders</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+A systematic review of implicit statistical learning in schizophrenia
+spectrum disorders
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.24
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to fix</span></a><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>During the testing phase, participants are presented with some
+sequences that follow the same rules as the learning sequences
+(grammatical sequences) and some sequences that violate them
+(ungrammatical sequences).</p>
+</blockquote>
+<blockquote>
+<p>The inclusion criteria were 1) original research studies, 2) written
+in English, and 3) participants were adults diagnosed with a
+schizophrenia spectrum disorder based on the International
+Classification of Diseases (ICD) or The Diagnostic and Statistical
+Manual of Mental Disorders (DSM) criteria.</p>
+</blockquote>
+<blockquote>
+<p>We excluded reviews and meta-analyses as well as studies where
+participants had a known history of neurological disorders or dual
+psychiatric diagnoses.</p>
+</blockquote>
+<blockquote>
+<p>While all SRT-based studies in this review required active,
+response-based engagement throughout, the grammar learning and
+perceptual paradigms also included passive exposure phases in which
+participants were typically instructed to observe stimuli before a
+subsequent active test phase.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 46 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 46 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 46 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>This systematic review examined current findings on implicit statistical learning (ISL) in schizophrenia spectrum disorders and the factors that influence performance. We aimed to update and expand the existing literature by including various ISL tasks, such as serial reaction time, artificial grammar learning, or transitional probabilities. We also considered several ISL moderators related to the characteristics of these tasks, as well as a host of potential clinical and cognitive correlates. We searched PubMed, Scopus, PsycINFO, and MEDLINE Complete for original studies published in English involving adults diagnosed with schizophrenia spectrum disorders. Twenty-one studies published between 1992 and 2025 met the inclusion criteria. We extracted relevant data including study information and design, sample characteristics, ISL task type and characteristics, and main outcomes. Study quality was assessed using the Newcastle-Ottawa Assessment Scale. Findings were heterogeneous, with studies reporting both intact and impaired ISL. The most frequently reported outcome with the largest aggregate patient sample showed that ISL was preserved in comparison to healthy controls. Seven studies reported ISL deficits, and the rest reported mixed or condition-specific findings. The most promising moderators included task and stimulus type. Disorganized symptomatology and working memory span consistently correlated with ISL performance. In contrast, antipsychotic dosage, overall symptomatology, illness duration, or explicit memory did not show consistent associations with ISL.</p>
+<h3>1. Introduction</h3>
+<p>Implicit statistical learning (ISL) describes our ability to learn the rules of patterned stimuli in the environment (Christiansen, 2019). The term &quot;statistical learning&quot; was originally introduced by (Saffran et al., 1996) emphasizing the importance of experience-independent mechanisms in language acquisition. Their study showed that 8-month-old infants can segment words from fluent speech based solely on statistical relationships between neighboring speech sounds. In 2006, the authors of an artificial grammar learning experiment adopted the term ISL (Conway &amp; Christiansen, 2006). They stated that ISL refers to the ability to automatically detect and internalize statistical patterns and regularities in environmental input without deliberate effort.</p>
+<p>ISL is typically measured using behavioral experimental paradigms that expose participants to structured sequences of stimuli and later test whether they have become sensitive to the statistical regularities embedded in those sequences. These paradigms usually involve an incidental exposure phase followed by an indirect test of learning such as reaction time differences, familiarity judgments, or prediction tasks (Jenkins et al., 2024).</p>
+<p>One of the most widely used methods is the Serial Reaction Time (SRT) task, where participants view a neutral target stimulus that appears at one of four locations and are required to quickly and accurately press the key that corresponds spatially to the location of the stimulus (Adini et al., 2015; Green et al., 1997). Without the participants&#x27; knowledge, the stimulus location is altered in successive trials according to a fixed underlying sequence, which should slow the response time. The reaction time difference between sequence and random trials measures implicit sequence learning. In probabilistic paradigms, random stimuli are presented throughout the entire test rather than at the end (Horan et al., 2008).</p>
+<p>Other ISL tasks in common use include artificial grammar learning or transitional probabilities tasks; these tend to include passive exposure phases succeeded by a reflectionbased test phase. The artificial grammar learning task, for example, first presents participants with many sequences of stimuli that, unbeknownst to them, conform to certain rules and thus contain predictable statistical regularities. During the testing phase, participants are presented with some sequences that follow the same rules as the learning sequences (grammatical sequences) and some sequences that violate them (ungrammatical sequences). Different responses to grammatical sequences compared to ungrammatical ones can serve as evidence that the participant learned at least some rules or statistical regularities (Danion et al., 2001; Hsieh et al., 2004). Importantly, ISL is likely not a unitary ability; correlations among ISL tasks tend to be low (Gebauer &amp; Mackintosh, 2007) and performance may further depend on factors like the sensory modality or type of utilized stimuli (Christiansen, 2019; Siegelman &amp; Frost, 2015).</p>
+<p>One of the central issues in ISL research has been the distinction between implicit and explicit learning. This was first prominently established in the context of amnesia, where patients with severe deficits in explicit (declarative) memory demonstrated a relatively preserved capacity to acquire new skills and habits implicitly (Cohen &amp; Squire, 1980). This dissociation supported the view that implicit and explicit memory are subserved by at least partially separable systems (Amodio, 2025). In clinical populations, ISL tasks offer a way to test whether procedural, rule-based, or sequence learning remains intact despite deficits in explicit memory.</p>
+<p>In the psychiatric population, research on ISL initially focused on schizophrenia, where early studies using the SRT task suggested alterations in ISL (Green et al., 1997).</p>
+<p>Subsequent research extended these paradigms to other clinical populations, including developmental disorders such as dyslexia and autism (Bell et al., 2025), as well as ADHD (Richards et al., 2020; Rosas et al., 2010) and mood disorders (Pedersen et al., 2009), with mixed findings.</p>
+<p>In schizophrenia spectrum disorders, patients often show robust and consistent deficits in explicit learning (Cornelis et al., 2022; Geana et al., 2022) and memory (Aleman et al., 1999; Cirillo &amp; Seidman, 2003; Hannaoui et al., 2025), whereas their performance on implicit tasks seems to be more variable (Danion et al., 2001; Horan et al., 2008). It has been suggested that intact aspects of implicit learning may partly explain why, despite explicit memory deficits, many patients retain a degree of everyday functional competence, since abilities such as recognizing typical patterns of social interaction or the pragmatics of language are thought to be learned largely automatically (Danion et al., 2001; Horan et al., 2008). Conversely, impaired ISL could contribute to difficulties in social and functional domains that rely on automatically acquired knowledge (Couture, 2006). However, direct evidence linking ISL performance to functional or social outcomes remains limited and inconsistent; at least one study found no significant association between implicit learning and social or rehabilitation outcomes in schizophrenia (Woonings et al., 2003).</p>
+<h3>1.1. Aims</h3>
+<p>The main aim of this systematic review was to examine the current data on ISL in schizophrenia spectrum disorders and the factors which influence the performance. To the best of our knowledge, the latest systematic review and meta-analysis on ISL in this population focused only on the SRT task, including studies published by 2006 (Siegert et al., 2008). Our goal was to update this information and to expand it to other tasks such as artificial grammar learning or transitional probabilities. We also sought to consider potential moderating factors related to ISL task characteristics, as in the sensory modality and other characteristics of the utilized stimuli. Of clinical factors, we considered symptomatology, illness duration and phase, and medication. Finally, we probed potential cognitive correlates, particularly in working memory and other explicit memory systems.</p>
+<h3>2. Methods</h3>
+<p> &gt;Methods</p>
+<h3>2.1. Search strategy and study selection</h3>
+<p>We searched four main databases: Pubmed, SCOPUS, PsycINFO and Medline Complete with the keywords schizo* OR psychotic OR psychosis and &quot;statistical learning&quot; OR &quot;implicit learning&quot; in combination. We supplemented the database search by reviewing the reference lists of articles meeting our inclusion criteria (backward reference search). The inclusion criteria were 1) original research studies, 2) written in English, and 3) participants were adults diagnosed with a schizophrenia spectrum disorder based on the International Classification of Diseases (ICD) or The Diagnostic and Statistical Manual of Mental Disorders (DSM) criteria. We excluded reviews and meta-analyses as well as studies where participants had a known history of neurological disorders or dual psychiatric diagnoses.</p>
+<p>Articles resulting from the initial database searches were imported into the Covidence software (Veritas Health Innovation Ltd, Melbourne, Australia), where duplicate records were removed and studies were further screened. Two researchers performed this task (KK and MV) and, in case of disagreement, a third independent researcher (BK) evaluated the study. Full copies of articles identified by the search were obtained for data synthesis. A flowchart of the selection process is presented in Figure 1, following PRISMA guidelines.</p>
+<p>The review protocol was registered with PROSPERO (Registration number: https://www.crd.york.ac.uk/PROSPERO/view/CRD420251051011).</p>
+<h3>2.2. Study quality and risk of bias</h3>
+<p>Study quality and risk of bias were assessed according to the adapted Newcastle-Ottawa Scale (NOS) for observational studies by two independent reviewers (MV and BK).</p>
+<p>The NOS evaluates methodological quality across three broad domains: (1) selection of study groups, (2) comparability of groups, and (3) ascertainment of exposure or outcome, depending on the study design. Within these domains, studies are awarded a series of points (or &quot;stars&quot;) based on predefined criteria, such as the representativeness of the sample, adequacy of control selection, adjustment for confounding variables, and the reliability of outcome or exposure assessment. Higher scores indicate better methodological quality and lower risk of bias. The quality score of a given study was based on a score of six as a cut-off point to distinguish high from low quality studies.</p>
+<h3>2.3. Data extraction</h3>
+<p>We extracted the following data from the selected articles: study information (authors, year, country, and design), sample characteristics (number of participants, sex, age, education, diagnosis, and control group), ISL task type and characteristics, and main outcomes. Where available, we also extracted information about the clinical characteristics of the patient group, including in illness duration and phase, medication, and symptomatology.</p>
+<p>Cognitive correlates of interest included working memory and explicit memory.. The findings are presented as a narrative analysis and all studies selected from the database searches were summarized in table form and organized in alphabetical order.</p>
+<h3>3. Results</h3>
+<p>Initially, we identified 169 studies (69 Scopus, 58 PubMed, 34 PsycINFO and 8 MEDLINE), of which 72 were identified as duplicates. Of the 97 studies that were further screened, we included 21, all published between 1992 and 2025 (Figure 1). The characteristics of the final selected articles are shown in Table 1.</p>
+<h3>3.1. Sample characteristics</h3>
+<p>The included studies varied considerably in sample size, ranging from 10 patients (Hsieh et al., 2004; Reiss et al., 2006) up to 63 (Chiu et al., 2005). Most samples consisted of individuals with a primary diagnosis of schizophrenia, though some studies included broader or mixed diagnostic groups, such as schizoaffective disorder: Marvel (2005), Marvel (2007), Orlov (2021), and Valton (2019). The patient age across studies ranged from 28.3 years (Pedersen et al., 2008, a first-episode sample) to 45.0 years (Marvel et al., 2005), with a mean of 34.2 years (SD = 5.0). Years of education were reported in 16 of the 21 studies, with a mean of 13.1 years (SD = 1.3, range: 11.2-16.0), the lowest in Stevens et al. (2002; M = 11.2) and the highest in Exner et al. (2006; M = 16.0).</p>
+<p>Overall symptomatology was reported in only seven studies (Coman et al., 2010; Hinc et al., 2025; Orlov et al., 2021; Pedersen et al., 2008; Reiss et al., 2006; Schwartz et al., 2003; Valton et al., 2019), with a mean of 69.5 on the Positive and Negative Symptom Scale (PANSS) (Kay et al., 1987) (SD = 17.7), ranging from 50.9 (Valton et al., 2019) to 105.1 (Coman et al., 2010). The remaining studies reported only some of the subscale scores (positive, negative, general) or did not report standardized symptom severity measures at all, limiting the ability to characterize clinical severity consistently. Illness duration was reported in 14 of the 21 studies, with a mean of 11.2 years (SD = 5.2) across these studies, ranging from 1.5 years (Exner et al., 2006) to 19.7 years (Green et al., 1997). Information about patients&#x27; medication was reported in all studies except for two (Chiu et al., 2005, Fernandez et al., 202). Nine studies reported mean daily doses in chlorpromazine equivalents, which averaged 459 mg/day across studies (SD = 221; range 180-955). Most patients were treated predominantly with second-generation antipsychotics.</p>
+<h3>3.2. Study quality and risk of bias</h3>
+<p>The total scores ranged from 2 to 8 stars, demonstrating varying degrees of methodological rigor. The highest quality was observed in Chrobak (2017), Exner (2006), Fernandez (2021), Horan (2008), and Stevens (2002), which each achieved a top score of 8 stars, indicating a low risk of bias. Across the selection domain, case definition adequacy (Q1) and case representativeness (Q2) were virtually universal strengths across the majority of studies, supported by the consistent use of clinical diagnostic criteria and chart diagnoses. Conversely, weaknesses in control selection and definition (Q3 and Q4) were particularly evident in lower-scoring studies, such as Orlov (2021), which earned the lowest score of 2 stars, and Green (1997), scoring 3 stars. These lower scores were further driven by a failure to adjust for primary confounding variables like age and sex under Comparability, as well as incomplete exposure measurement. However, comparability was a strength in higherscoring papers, with eight studies earning the maximum two stars by matching cases and controls on key demographic variables. While exposure ascertainment protocols (Q5 and Q6) remained largely consistent across moderate-to high-quality studies, a critical methodological limitation across all 21 included studies was the complete failure to document or account for non-response rates (Q7), with zero studies receiving a star for this criterion. If the authors stated that they used diagnostic criteria and chart diagnosis, it was sufficient to receive a star for Q1. For comparability, many studies matched cases and controls on age and sex, thus receiving two stars for comparability. NOS: In order to increase the reliability of this assessment and to ensure the highest level of assessed comparability by two reviewers, the NOS criteria were specified to the following manner:</p>
+<p>Q1 -Clearly described selection and definition of patients, with their diagnosis defined by either DSM-III, DSM-III-R, DSM-IV, DSM-IV-TR or DSM-V; or according to the ICD-10 or ICD-11 criteria. Ideally includes the anamnesis, medication and specifics regarding patients&#x27; inclusion and exclusion criteria; Q2 -Representativeness of the cases; Q3 -Clearly described selection and definition of controls. The sample excludes hospital staff and in/patients treated with other psychiatric disorders. ; Q4 -A clear definition of controls, ideally including details on psychiatric history and anamnesis; Comparability -The sample is matched at least either through age, or sex, but ideally by both and it is clearly stated how. Alternatively, the sample must be comparable. ; Q5 -Clear diagnostic history, status and criteria stated. Assessment tools such as SCID or standardized interviewing methods administered as part of the study; Q6 -Ideally, case and controls are assessed with the same assessment tools; Q7 -Non-Response rate.</p>
+<h3>3.3. Implicit statistical learning assessments</h3>
+<p> &gt;Implicit statistical learning assessments</p>
+<h3>3.3.1. Sequence learning</h3>
+<p>The most frequently used paradigm was the SRT task or its variants, which were employed in 13 (57%) of the 21 included studies. Specifically, 12 studies used the standard SRT paradigm (Adini et al., 2015; Chrobak et al., 2017; Coman et al., 2010; Exner, Boucsein et al., 2006; Exner, Weniger et al., 2006; Green et al., 1997; Hinc et al., 2025; Marvel et al., 2005 Marvel et al., , 2007;; Pedersen et al., 2008; Reiss et al., 2006; Stevens et al., 2002), while one study used the Alternating SRT task (Schwartz et al., 2003). Together, these sequence-learning paradigms accounted for nearly two thirds of the included studies, indicating a strong predominance of research on the implicit acquisition of sequential regularities.</p>
+<p>Most studies that used SRT operationalized ISL as a sequence-specific reaction time effect, typically calculated as the difference in reaction times between sequenced and random task blocks or as the performance decrement following the introduction of a random sequence. One study quantified ISL as the overall improvement in reaction time from the beginning to the end of training, reflecting general skill acquisition rather than sequencespecific learning (Coman et al., 2010). In addition, Marvel and colleagues (2005, 2007) incorporated performance indices based on both median reaction times and the proportion of correct responses across task blocks.</p>
+<h3>3.3.2. Grammar learning</h3>
+<p>The second most common approach comprised grammar-based paradigms (19%).</p>
+<p>Three studies used artificial grammar learning (Chiu et al., 2005; Horan et al., 2008; Hsieh et al., 2004), and one study used a finite-state grammar paradigm (Danion et al., 2001). Among the studies employing artificial grammar paradigms, ISL was predominantly assessed using accuracy-based measures of grammatical classification. Two studies used familiarity judgments, requiring participants to indicate whether letter strings or color patterns appeared familiar, with learning quantified as the proportion of correct acceptances and rejections of grammatical and non-grammatical stimuli (Chiu et al., 2005; Horan et al., 2008). One study used explicit grammatical judgments to calculate overall classification accuracy and also examined endorsement rates as a function of chunk strength (Hsieh et al., 2004). The finitestate grammar task reported the percentages of strings classified as grammatical or nongrammatical as an indicator of ISL (Danion et al., 2021).</p>
+<h3>3.3.3. Other implicit statistical learning assessments</h3>
+<p>Other studies utilized a variety of paradigms assessing different aspects of ISL, including the Weather Prediction Task (Fernandez et al., 2021), a language-learning task (Orlov et al., 2021), lexical and semantic priming (Schmand et al., 1992) and a visual statistical learning task (Valton et al., 2019).</p>
+<h3>3.4. Implicit statistical learning outcomes</h3>
+<p>Of the 21 included studies, eight reported preserved ISL in individuals diagnosed with schizophrenia spectrum disorders (N = 314), showing comparable performance to healthy controls (Adini et al., 2015; Coman et al., 2010; Danion et al., 2001; Horan et al., 2008; Marvel et al., 2007; Orlov et al., 2021; Schmand et al., 1992; Valton et al., 2019). Seven studies identified significant impairments in ISL in patients, N = 218 (Chrobak et al., 2017; Exner, Boucsein et al., 2006; Exner, Weniger et al., 2006; Green et al., 1997; Hinc et al., 2025; Pedersen et al., 2008; Schwartz et al., 2003), whereas six studies (N = 191 patients) reported mixed or condition-specific findings, such as deficits restricted to specific task components, reduced magnitude of learning, or differences depending on clinical characteristics or experimental conditions (Chiu et al., 2005; Fernandez et al., 2021; Hsieh et al., 2004; Marvel et al., 2005; Reiss et al., 2006; Stevens et al., 2002).</p>
+<h3>3.5. Moderating factors and correlates</h3>
+<p> &gt;Moderating factors and correlates</p>
+<h3>3.5.1. Task type and characteristics</h3>
+<p>All studies that reported significant ISL impairments in patients used the SRT task or its variants (Chrobak et al., 2017; Exner, Boucsein et al., 2006; Exner, Weniger et al., 2006; Green et al., 1997; Hinc et al., 2025; Pedersen et al., 2008; Schwartz et al., 2003). Studies reporting preserved performance or mixed effects used a mix of ISL measures, including also the SRT task. We noted a near-complete absence of investigations in the auditory or tactile domains, disallowing an assessment of sensory modality as a potential moderator of ISL performance in schizophrenia spectrum disorders. Stimulus type did emerge as one of the moderators of ISL performance: two independently reported but methodologically similar studies from the same research group found a selective deficit for color-pattern material with relatively preserved learning of letter-string material (Chiu et al., 2005; Hsieh et al., 2004).</p>
+<h3>3.5.2. Clinical characteristics</h3>
+<p>Regarding symptomatology, findings were mixed across symptom dimensions.</p>
+<p>Disorganized symptoms were the most consistently associated with ISL performance. Chiu et al. (2005) reported that disorganization was negatively correlated with ISL, and Exner, Boucsein et al. (2006) found that sequence-specific ISL deficits were significantly related to disorganized symptom ratings during the acute episode, with implicit learning improving over a 20-month follow-up after disorganization improved. Negative symptoms were correlated with response accuracy in Schwartz et al. (2003), a relationship that remained significant after controlling for working memory, while positive symptoms showed no independent relationship once working memory was accounted for. In contrast, several studies found no significant association between overall symptom severity and ISL performance, whether assessed via PANSS (Reiss et al., 2006), SAPS/SANS (Exner, Weniger et al., 2006; Marvel et al., 2005; Pedersen et al., 2008), or CPRS/SANS ratings (Schmand et al., 1992).</p>
+<p>Two studies included only first-episode patients (Pedersen et al., 2008; Exner, Weniger, et al., 2006), one examined patients during an acute episode of early-course illness and again at remission (Exner, Boucsein, et al., 2006), two recruited patients in symptomatic remission (Chrobak et al., 2017; Hinc et al., 2025), and the remaining studies included patients with longer duration of the disorder (e.g., Coman et al., 2010; Green et al., 1997; Horan et al., 2008; Valton et al., 2019). Illness duration, chronicity, or age of onset showed no significant relationship with ISL performance in Green et al. (1997), Marvel et al. (2007), Schwartz et al. (2003), and Pedersen et al. (2008).</p>
+<p>For antipsychotic medication dosage, no significant association with ISL performance was found in the majority of studies that tested this relationship: neither chlorpromazine equivalents nor daily olanzapine dose correlated with ISL (Chrobak et al., 2017; Exner et al., 2006; Marvel et al., 2005; Pedersen et al., 2008; Schwartz et al., 2003), and medication dosage was similarly unrelated to striatal BOLD activation during an ISL task (Reiss et al., 2006). Stevens et al. (2002) found that ISL outcomes depended on medication type, with patients receiving olanzapine performing comparably to healthy controls, in contrast to those receiving classic neuroleptics.</p>
+<h3>3.5.3. Cognitive correlates</h3>
+<p>Working memory span emerged as an important predictor of ISL performance, supported by the three studies that probed the relationship. Schwartz et al. (2003) found that working memory span predicted response speed during the early phase of sequence learning in both patients and controls. Similarly, Fernandez et al. (2021) found that Digit Span performance was associated with whether patients developed automaticity on the Weather Prediction Task, and that overall cognitive ability predicted maximum accuracy specifically among those patients who did develop automaticity. Additionally, Danion and colleagues (2001) found that patients&#x27; performance in the learning phase of the ISL task was significantly and negatively correlated with performance on the backward Digit Span task.</p>
+<p>Eight studies also administered a standardized neuropsychological measure of explicit memory alongside the ISL paradigm, independent of the task-embedded knowledge of the learned sequence. Most of these studies found evidence of explicit memory impairment in patients compared to healthy controls. Chiu et al. (2005), Exner, Boucsein at al. (2006) and Hsieh et al. (2004) reported significant deficits on subtests of the Wechsler Memory Scale -Revised (WMS-R); Schmand et al. (1992) found impaired performance on Rey&#x27;s Verbal Learning Test; Horan et al. (2008) reported lower scores on the Hopkins Verbal Learning Test -Revised. Danion et al. (2001) reported a similar pattern across WMS-R logical memory and the Rivermead Behavioral Memory Test, with the exception of the verbal paired associates subtest, on which patients performed comparably to controls.</p>
+<p>In contrast, only two studies found no explicit memory deficit in patients. Exner, Weniger et al. (2006) found no differences on any measure of intellectual, attentional, or visual memory performance.</p>
+<p>Similarly, Pedersen et al. (2008) found that first-episode patients performed similarly to controls on the Auditory Verbal Learning Test.</p>
+<p>Six of these studies directly tested the relationship between implicit and explicit performance within the same patient group. Danion et al. (2001) found no significant correlation between artificial grammar learning performance and any of the administered explicit memory measures. Several other studies similarly reported no correlation between ISL and explicit memory in schizophrenia patients (Hsieh et al., 2004; Marvel et al., 2005; Pedersen et al., 2008; Horan et al., 2008). Only Exner, Boucsein and colleagues (2006) found a significant positive correlation between the SRT task and logical memory.</p>
+<h3>4. Discussion</h3>
+<p>The main goal of this systematic review was to examine the current data on ISL in schizophrenia spectrum disorders and the factors that influence performance. It extends the review of Siegert and colleagues from 2008 by including paradigms beyond the SRT and examining moderating factors of ISL performance and its clinical and cognitive correlates.</p>
+<p>Our findings suggest heterogeneous outcomes as studies report both intact and impaired ISL in individuals diagnosed with schizophrenia spectrum disorders. The most frequently reported outcome with the largest aggregate patient sample across studies showed that ISL was preserved in patients as compared to healthy controls. Seven studies reported deficits in ISL and the rest reported mixed or condition-specific findings.</p>
+<p>Most studies used visual and visual-motor paradigms to assess ISL. Only one included study examined ISL across modalities using an audiovisual associative languagelearning task (Orlov et al., 2021). This prevalence of visual paradigms may constrain the generalizability of available findings: ISL shows partial modality specificity in psychiatrically healthy samples, with early processing differences observed between the visual, auditory, and tactile domains (Christiansen, 2019; Siegelman &amp; Frost, 2015). Future investigators may wish to examine potential modality-or stimulus-specific effects given also the extensive sensory processing deficits observed in schizophrenia spectrum disorders.</p>
+<p>Impairments in early-stage visual processing, occurring as early as the retina and visual pathways, may destabilize the bottom-up visual signal needed for accurate perceptual representation (Adámek et al., 2022 (Adámek et al., , 2024)). Auditory sensory processing shows a parallel pattern, where impaired basic auditory processes, such as tone matching, may contribute to overall cognitive deficits (Javitt &amp; Sweet, 2015). The need to comprehensively examine the contribution of basic sensory processing is further underscored by a series of studies demonstrating a selective deficit for color-pattern material (Chiu et al., 2005; Hsieh et al., 2004). The authors suggested that this deficit may be explained by early processes like sensory gating or perceptual priming, which may be more sensitive to the greater complexity of the color patterns compared with letter strings, for which learning was relatively preserved.</p>
+<p>Of the reviewed studies, 57% used the SRT task or its variants to measure ISL. Most operationalized ISL as a sequence-specific reaction time effect, with two studies by Marvel and colleagues (2005, 2007) considering also the proportion of correct responses across task blocks. The second most common approach, represented by 19% of the reviewed literature, used grammar-based paradigms like the artificial grammar learning task. Among these, ISL was predominantly assessed using accuracy-based measures of grammatical classification.</p>
+<p>Other ISL measures such as the transitional probabilities task were vastly under-represented, with only single instances across the reviewed studies.</p>
+<p>While all SRT-based studies in this review required active, response-based engagement throughout, the grammar learning and perceptual paradigms also included passive exposure phases in which participants were typically instructed to observe stimuli before a subsequent active test phase. Notably, all studies that reported impaired ISL performance in patients diagnosed with schizophrenia spectrum disorders used some form of SRT tasks (Chrobak et al., 2017; Exner, Boucsein et al., 2006; Exner, Weniger et al., 2006; Green et al., 1997; Hinc et al., 2025; Pedersen et al., 2008; Schwartz et al., 2003). However, as no study varied exposure mode inside a single task type, it is not possible to determine whether active engagement itself might increase sensitivity to detecting an ISL deficit, or whether the SRT paradigms are simply more sensitive to sequence-learning impairment for other reasons such as their reliance on motor sequencing. Additionally, Adini et al. (2015) and Marvel et al. (2007) both reported largely preserved performance using SRT, indicating that task type alone does not seem to fully determine the outcome. It might be possible that other factors such as task duration, number of practice sessions, or particular demands of the sequence structure used within the SRT could impact the performance. Lastly, a few studies have questioned the psychometric properties of the SRT paradigm itself suggesting poor testretest reliability (Oliveira et al., 2024) and construct validity (Trofimova et al., 2020) implying that the effect of the task may partly reflect rapid, temporary adaptation rather than ISL.</p>
+<p>Besides ISL paradigms and engagement of the participants, we also examined the role of clinical characteristics in the performance. Symptom severity showed a selective pattern across studies. Rather than overall symptomatology, it was specifically disorganized symptoms that were repeatedly associated with poorer ISL performance (Chiu et al., 2005; Exner, Boucsein, et al., 2006), while positive and negative symptoms were largely unrelated to performance once other factors were accounted for (Adini et al., 2015; Marvel et al., 2005; Pedersen et al., 2008; Reiss et al., 2006; Schmand et al., 1992). Illness phase and chronicity did not emerge as consistent moderators of ISL outcomes: impaired and preserved performance were reported in both first-episode and chronic samples (e.g., Pedersen et al., 2008; Green et al., 1997 vs. Coman et al., 2010; Valton et al., 2019). The only study to follow the same patients over time suggested that clinical state, rather than illness duration, may be the more relevant factor, as ISL deficits present during an acute episode had largely resolved at a 20-month follow-up alongside a reduction in disorganized symptoms (Exner, Boucsein, et al., 2006). Antipsychotic dosage also showed no relationship with ISL performance in any of the studies that examined it. However, medication type may matter: in the one study that compared drug classes, patients treated with olanzapine performed comparably to healthy controls, whereas those on classic neuroleptics showed reduced ISL (Stevens et al., 2002).</p>
+<p>A more reliable predictor of ISL performance seemed to be working memory. Several studies found a significant association between a working memory task and ISL (Danion et al., 2001; Fernandez et al., 2021; Schwartz et al., 2003). Working memory may be needed early in training as it does not seem to be related to the ultimate magnitude of ISL, but to the efficiency of the transition, meaning how quickly or reliably patients can enter an automatized mode of responding. For instance, in a three-stage model proposed by Anderson, (1982; Tenison et al., 2016), the earliest declarative stage of skill acquisition is characterized by high working memory demands, as task-relevant information must be actively maintained and rehearsed. In contrast, later stages involve a progressive shift toward procedural, automatized performance with minimal working memory involvement. Such findings suggest that deficits in working memory may not impair ISL itself, but rather delay or reduce the efficiency of automaticity. Therefore, working memory could be targeted in cognitive training, possibly enhancing the active maintenance and rehearsal in declarative stage in patients with schizophrenia spectrum disorders (Hinc et al., 2025; Kurtz et al., 2001).</p>
+<p>In contrast, most studies which also measured explicit memory reported no correlation between ISL and explicit memory in patients (Hsieh et al., 2004; Marvel et al., 2005; Pedersen et al., 2008; Horan et al., 2008). A possible explanation might be that long-term declarative memory, as assessed by instruments such as the WMS-R or HVLT, generally measures retrieval after a delay, a function different from how efficiently a person processes information while a task is actively underway. Thus, whether a patient can accurately recall certain information seems to have no obvious association with how quickly an automatized response to a statistical regularity emerges in real time.</p>
+<p>Altogether, our results point to diverse ISL performance in schizophrenia spectrum disorders shaped by task characteristics and specific symptom dimensions or domain-general cognitive abilities, rather than unified results across included studies. The most promising moderators included task and stimulus type, although both will require further targeted evidence. Disorganized symptomatology and working memory emerged as consistent correlates, with further evidence needed for the effects of clinical state or antipsychotic medication type. On the other hand, antipsychotic dosage, overall symptomatology, illness duration and phase, and other explicit memory skills did not seem to consistently relate to ISL. Further evidence remains needed to assess the extent to which the available findings generalize outside of the visual modality, or to tests such as the transitional probabilities task.</p>
+<p>However, several limitations of the included studies limit the conclusions that can be drawn from this review. First, sample sizes varied considerably, with some studies including as few as 10 patients (Hsieh et al., 2004; Reiss et al., 2006). Moreover, the studies were mostly cross-sectional. With the exception of Exner, Boucsein et al. (2006), which followed patients longitudinally across an acute episode and 20-month remission, no study assessed the same patients at more than one point in time. Furthermore, reporting of clinical and demographic variables was inconsistent across studies. Finally, the methodological quality of the included studies varied considerably, with the weaker studies showing shortcomings mainly in control selection and in adjustment for confounders such as age and sex. As study quality was not used to weight or exclude studies, outcomes classified as preserved, impaired, or mixed ISL carry equal weight despite different risk of bias.</p>
+<p>Word count (total): cca 4900</p>
+<h3>Acknowledgments</h3>
+<p>Supported by the Ministry of Health of the Czech Republic in cooperation with the Czech Health Research Council under project No. NW25J-04-00057.</p>
+<p>CRediT authorship contribution statement K. Knížková -Investigation, Methodology, Data Curation, Formal analysis, Writing -Original Draft, M. Večeřová -Investigation, Methodology, Data Curation, Writing -Original Draft, K. Horníková -Writing -Review &amp; Editing, M. Rodriguez -Conceptualization, Supervision, B. Keřková -Conceptualization, Funding acquisition, Project administration, Supervision, Validation, Writing -Review &amp; Editing.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Flow diagram of study selection process</p>
+<h3>Table 1.</h3>
+<p>Studies reported in alphabetical order on implicit statistical learning in schizophrenia spectrum disorders.</p>
+<h3>Table 2.</h3>
+<p>Quality score based on Newcastle -Ottawa Quality Assessment Scale.</p>
+<h3>References</h3>
+<p>Adámek, P., Grygarová, D., Jajcay, L., Bakštein, E., Fürstová, P., Juríčková, V., Jonáš, J., Langová, V., Neskoroďana, I., Kesner, L., &amp; Horáček, J. (2024). The Gaze of Schizophrenia Patients Captured by Bottom-up Saliency. Schizophrenia, 10(1), 21. https://doi.org/10.1038/s41537-024-00438-4</p>
+<p>Adámek, P., Langová, V., &amp; Horáček, J. (2022). Early-stage visual perception impairment in schizophrenia, bottom-up and back again. Schizophrenia, 8(1), 27. https://doi.org/10.1038/s41537-022-00237-9</p>
+<p>Adini, Y., Bonneh, Y. S., Komm, S., Deutsch, L., &amp; Israeli, D. (2015). The time course and characteristics of procedural learning in schizophrenia patients and healthy individuals. Frontiers in Human Neuroscience, 9. https://doi.org/10.3389/fnhum.2015.00475</p>
+<p>Aleman, A., Hijman, R., De Haan, E. H. F., &amp; Kahn, R. S. (1999). Memory Impairment in Schizophrenia: A Meta-Analysis. American Journal of Psychiatry, 156(9), 1358- 1366. https://doi.org/10.1176/ajp.156.9.1358</p>
+<p>Amodio, D. M. (2025). A learning and memory account of impression formation and updating. Nature Reviews Psychology, 4(6), 417-432. https://doi.org/10.1038/s44159- 025-00445-x</p>
+<p>Anderson, J. R. (1982). Acquisition of cognitive skill. Psychological Review, 89(4), 369-406. https://doi.org/10.1037/0033-295X.89.4.369</p>
+<p>Bell, R. R., Thomas, H. R., Saffran, J. R., &amp; Eigsti, I.-M. (2025). A systematic review of statistical learning in autism spectrum disorder. Molecular Autism, 17(1), 2. https://doi.org/10.1186/s13229-025-00697-7</p>
+<p>Chiu, M.-J., Liu, K., Hsieh, M. H., &amp; Hwu, H.-G. (2005). Dual-modality impairment of implicit learning of letter-strings versus color-patterns in patients with schizophrenia. Behavioral and Brain Functions, 1(1), 23. https://doi.org/10.1186/1744-9081-1-23</p>
+<p>Christiansen, M. H. (2019). Implicit Statistical Learning: A Tale of Two Literatures. Topics in Cognitive Science, 11(3), 468-481. https://doi.org/10.1111/tops.12332</p>
+<p>Chrobak, A. A., Siuda-Krzywicka, K., Siwek, G. P., Tereszko, A., Janeczko, W., Starowicz- Filip, A., Siwek, M., &amp; Dudek, D. (2017). Disrupted implicit motor sequence learning in schizophrenia and bipolar disorder revealed with ambidextrous Serial Reaction Time Task. Progress in Neuro-Psychopharmacology and Biological Psychiatry, 79, 169-175. https://doi.org/10.1016/j.pnpbp.2017.06.025</p>
+<p>Cirillo, M. A., &amp; Seidman, L. J. (2003). Verbal Declarative Memory Dysfunction in Schizophrenia: From Clinical Assessment to Genetics and Brain Mechanisms. Neuropsychology Review, 13(2), 43-77. https://doi.org/10.1023/A:1023870821631</p>
+<p>Cohen, N. J., &amp; Squire, L. R. (1980). Preserved Learning and Retention of Pattern-Analyzing Skill in Amnesia: Dissociation of Knowing How and Knowing That. Science, 210(4466), 207-210. https://doi.org/10.1126/science.7414331</p>
+<p>Coman, H., Nemeş, B., Nica, S., Rusu, I., Herţa, D., &amp; Cosman, D. (2010). Reaction time and implicit learning in patients with multiple-episode schizophrenia. Journal of Cognitive and Behavioral Psychotherapies, 10(2), 135-144.</p>
+<p>Conway, C. M., &amp; Christiansen, M. H. (2006). Statistical Learning Within and Between Modalities: Pitting Abstract Against Stimulus-Specific Representations. Psychological Science, 17(10), 905-912. https://doi.org/10.1111/j.1467- 9280.2006.01801.x</p>
+<p>Cornelis, C., De Picker, L. J., Coppens, V., Morsel, A., Timmers, M., Dumont, G., Sabbe, B. G. C., Morrens, M., &amp; Hulstijn, W. (2022). Impaired Sensorimotor Adaption in Schizophrenia in Comparison to Age-Matched and Elderly Controls. Neuropsychobiology, 81(2), 127-140. https://doi.org/10.1159/000518867</p>
+<p>Couture, S. M. (2006). The Functional Significance of Social Cognition in Schizophrenia: A Review. Schizophrenia Bulletin, 32(Supplement 1), S44-S63. https://doi.org/10.1093/schbul/sbl029</p>
+<p>Danion, J.-M., Meulemans, T., Kauffmann-Muller, F., &amp; Vermaat, H. (2001). Intact Implicit Learning in Schizophrenia. American Journal of Psychiatry, 158(6), 944-948. https://doi.org/10.1176/appi.ajp.158.6.944</p>
+<p>Exner, C., Boucsein, K., Degner, D., &amp; Irle, E. (2006). State-dependent implicit learning deficit in schizophrenia: Evidence from 20-month follow-up. Psychiatry Research, 142(1), 39-52. https://doi.org/10.1016/j.psychres.2005.09.019</p>
+<p>Exner, C., Weniger, G., Schmidt-Samoa, C., &amp; Irle, E. (2006). Reduced size of the pre- supplementary motor cortex and impaired motor sequence learning in first-episode schizophrenia. Schizophrenia Research, 84(2-3), 386-396. https://doi.org/10.1016/j.schres.2006.03.013</p>
+<p>Fernandez, V. G., Asarnow, R., Hodges, M., &amp; Nuechterlein, K. H. (2021). Linguistic and neurocognitive correlates of probabilistic classification learning in schizophrenia. Schizophrenia Research: Cognition, 26, 100209. https://doi.org/10.1016/j.scog.2021.100209</p>
+<p>Geana, A., Barch, D. M., Gold, J. M., Carter, C. S., MacDonald, A. W., Ragland, J. D., Silverstein, S. M., &amp; Frank, M. J. (2022). Using Computational Modeling to Capture Schizophrenia-Specific Reinforcement Learning Differences and Their Implications on Patient Classification. Biological Psychiatry: Cognitive Neuroscience and Neuroimaging, 7(10), 1035-1046. https://doi.org/10.1016/j.bpsc.2021.03.017</p>
+<p>Green, M. F., Kern, R. S., Williams, O., McGurk, S., &amp; Kee, K. (1997). Procedural Learning in Schizophrenia: Evidence from Serial Reaction Time. Cognitive Neuropsychiatry, 2(2), 123-134. https://doi.org/10.1080/135468097396360</p>
+<p>Hannaoui, N., Boisvert, M., &amp; Potvin, S. (2025). Understanding episodic memory in schizophrenia: A functional neuroimaging meta-analysis. Psychiatry Research: Neuroimaging, 352, 112022. https://doi.org/10.1016/j.pscychresns.2025.112022</p>
+<p>Hinc, A. C., Selek, S., Sungur, I., Keskin, K., Yazici, F., Erata, M. C., Erdogan, Y., Yilmaz, A., Kitis, O., Eker, M. C., &amp; Gonul, A. S. (2025). The effect of implicit learning on functional connectivity in schizophrenia. Frontiers in Psychiatry, 16, 1600449. https://doi.org/10.3389/fpsyt.2025.1600449</p>
+<p>Horan, W. P., Green, M. F., Knowlton, B. J., Wynn, J. K., Mintz, J., &amp; Nuechterlein, K. H. (2008). Impaired implicit learning in schizophrenia. Neuropsychology, 22(5), 606- 617. https://doi.org/10.1037/a0012602</p>
+<p>Hsieh, M. H., Liu, K., Liu, S.-K., Chiu, M.-J., Hwu, H.-G., &amp; Chen, A. C. N. (2004). Memory impairment and auditory evoked potential gating deficit in schizophrenia. Psychiatry Research: Neuroimaging, 130(2), 161-169. https://doi.org/10.1016/j.pscychresns.2002.12.001</p>
+<p>Javitt, D. C., &amp; Sweet, R. A. (2015). Auditory dysfunction in schizophrenia: Integrating clinical and basic features. Nature Reviews Neuroscience, 16(9), 535-550. https://doi.org/10.1038/nrn4002</p>
+<p>Jenkins, H. E., Leung, P., Smith, F., Riches, N., &amp; Wilson, B. (2024). Assessing processing- based measures of implicit statistical learning: Three serial reaction time experiments do not reveal artificial grammar learning. PLOS ONE, 19(9), e0308653. https://doi.org/10.1371/journal.pone.0308653</p>
+<p>Kay, S. R., Fiszbein, A., &amp; Opler, L. A. (1987). The Positive and Negative Syndrome Scale (PANSS) for Schizophrenia. Schizophrenia Bulletin, 13(2), 261-276. https://doi.org/10.1093/schbul/13.2.261</p>
+<p>Marvel, C. L., Schwartz, B. L., Howard, D. V., &amp; Howard, J. H. (2005). Implicit learning of non-spatial sequences in schizophrenia. Journal of the International Neuropsychological Society, 11(6), 659-667. https://doi.org/10.1017/S1355617705050861</p>
+<p>Marvel, C. L., Turner, B. M., O&#x27;Leary, D. S., Johnson, H. J., Pierson, R. K., Ponto, L. L. B., &amp; Andreasen, N. C. (2007). The neural correlates of implicit sequence learning in schizophrenia. Neuropsychology, 21(6), 761-777. https://doi.org/10.1037/0894- 4105.21.6.761</p>
+<p>Oliveira, C. M., Hayiou-Thomas, M. E., &amp; Henderson, L. M. (2024). Reliability of the serial reaction time task: If at first you don&#x27;t succeed, try, try, try again. Quarterly Journal of Experimental Psychology, 77(11), 2256-2282. https://doi.org/10.1177/17470218241232347</p>
+<p>Orlov, N. D., Sanderson, J., Muqtadir, S. A., Kalpakidou, A. K., Michalopoulou, P. G., Lu, J., &amp; Shergill, S. S. (2021). The effect of training intensity on implicit learning rates in schizophrenia. Scientific Reports, 11(1), 6511. https://doi.org/10.1038/s41598-021- 85686-5</p>
+<p>Pedersen, A., Küppers, K., Behnken, A., Kroker, K., Schöning, S., Baune, B. T., Rist, F., Arolt, V., &amp; Suslow, T. (2009). Implicit and explicit procedural learning in patients recently remitted from severe major depression. Psychiatry Research, 169(1), 1-6. https://doi.org/10.1016/j.psychres.2008.06.001</p>
+<p>Reiss, J. P., Campbell, D. W., Leslie, W. D., Paulus, M. P., Ryner, L. N., Polimeni, J. O., Foot, B. J., &amp; Sareen, J. (2006). Deficit in schizophrenia to recruit the striatum in implicit learning: A functional magnetic resonance imaging investigation. Schizophrenia Research, 87(1-3), 127-137. https://doi.org/10.1016/j.schres.2006.04.027</p>
+<p>Richards, K. L., Karvelis, P., Lawrie, S. M., &amp; Seriès, P. (2020). Visual statistical learning and integration of perceptual priors are intact in attention deficit hyperactivity disorder. PLOS ONE, 15(12), e0243100. https://doi.org/10.1371/journal.pone.0243100</p>
+<p>Rosas, R., Ceric, F., Tenorio, M., Mourgues, C., Thibaut, C., Hurtado, E., &amp; Aravena, M. T. (2010). ADHD children outperform normal children in an artificial grammar implicit learning task: ERP and RT evidence. Consciousness and Cognition, 19(1), 341-351. https://doi.org/10.1016/j.concog.2009.09.006</p>
+<p>Saffran, J. R., Aslin, R. N., &amp; Newport, E. L. (1996). Statistical Learning by 8-Month-Old Infants. Science, 274(5294), 1926-1928. https://doi.org/10.1126/science.274.5294.1926</p>
+<p>Schmand, B., Brand, N., &amp; Kuipers, T. (1992). Procedural learning of cognitive and motor skills in psychotic patients. Schizophrenia Research, 8(2), 157-170. https://doi.org/10.1016/0920-9964(92)90032-Z</p>
+<p>Schwartz, B. L., Howard, D. V., Howard, J. H., Hovaguimian, A., &amp; Deutsch, S. I. (2003). Implicit learning of visuospatial sequences in schizophenia. Neuropsychology, 17(3), 517-533. https://doi.org/10.1037/0894-4105.17.3.517</p>
+<p>Siegelman, N., &amp; Frost, R. (2015). Statistical learning as an individual ability: Theoretical perspectives and empirical evidence. Journal of Memory and Language, 81, 105-120. https://doi.org/10.1016/j.jml.2015.02.001</p>
+<p>Siegert, R. J., Weatherall, M., &amp; Bell, E. M. (2008). Is implicit sequence learning impaired in schizophrenia? A meta-analysis. Brain and Cognition, 67(3), 351-359. https://doi.org/10.1016/j.bandc.2008.02.005</p>
+<p>Stevens, A., Schwarz, J., Schwarz, B., Ruf, I., Kolter, T., &amp; Czekalla, J. (2002). Implicit and explicit learning in schizophrenics treated with olanzapine and with classic neuroleptics. Psychopharmacology, 160(3), 299-306. https://doi.org/10.1007/s00213- 001-0974-1</p>
+<p>Tenison, C., Fincham, J. M., &amp; Anderson, J. R. (2016). Phases of learning: How skill acquisition impacts cognitive processing. Cognitive Psychology, 87, 1-28. https://doi.org/10.1016/j.cogpsych.2016.03.001</p>
+<p>Trofimova, O., Mottaz, A., Allaman, L., Chauvigné, L. A. S., &amp; Guggisberg, A. G. (2020). The &quot;implicit&quot; serial reaction time task induces rapid and temporary adaptation rather than implicit motor learning. Neurobiology of Learning and Memory, 175, 107297. https://doi.org/10.1016/j.nlm.2020.107297</p>
+<p>Valton, V., Karvelis, P., Richards, K. L., Seitz, A. R., Lawrie, S. M., &amp; Seriès, P. (2019). Acquisition of visual priors and induced hallucinations in chronic schizophrenia. Brain, 142(8), 2523-2537. https://doi.org/10.1093/brain/awz171</p>
+<p>Woonings, F. M. J., Appelo, M. T., Kluiter, H., Slooff, C. J., &amp; Van Den Bosch, R. J. (2003). Learning (potential) and social functioning in schizophrenia. Schizophrenia Research, 59(2-3), 287-296. https://doi.org/10.1016/S0920-9964(02)00163-9</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
