@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Maladaptive Precision: A Channel-Specific
+Predictive-Processing Framework for the Neurodevelopmental Consequences
+of Early Life Adversity</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Maladaptive Precision: A Channel-Specific Predictive-Processing
+Framework for the Neurodevelopmental Consequences of Early Life
+Adversity
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.22
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>You cited 1 article in the RetractionWatch database.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 149 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Attwell, D., Laughlin, S.B., 2001. An energy budget for signaling in the
+grey matter of the brain. Journal of Cerebral Blood Flow &amp;
+Metabolism 21, 1133-1145. <a href="https://doi.org/10.1097/00004647-200110000-00001" class="uri">https://doi.org/10.1097/00004647-200110000-00001</a>
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/0696DDEC91F6E5BA528FD34350EF96" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 149 references with DOIs. You cited 1 article in the
+RetractionWatch database.</p>
+<p>Check if you are aware of the retraction, correction, or expression
+of concern for each reference, and consider whether it still supports
+your claims.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+RW Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mataix-Cols, D., Fernández de la Cruz, L., Monzani, B., Rosenfield, D.,
+Andersson, E., Pérez-Vigil, A., et al., 2017. D-cycloserine augmentation
+of exposure-based cognitive behavior therapy for anxiety,
+obsessive-compulsive, and posttraumatic stress disorders: A systematic
+review and meta-analysis of individual participant data. JAMA Psychiatry
+74, 501-510. <a href="https://doi.org/10.1001/jamapsychiatry.2016.3955" class="uri">https://doi.org/10.1001/jamapsychiatry.2016.3955</a>
+</td>
+<td style="text-align:left;">
+Correction
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 149 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>• Early adversity biases precision in specific channels, not as a global gain.</p>
+<p>• Precision-only and maladaptive-prior accounts make dissociable predictions.</p>
+<p>• Sensitive-period brakes and self-confirming sampling can stabilize calibration.</p>
+<p>• The ACC is proposed as a hub within a distributed precision circuit.</p>
+<p>• Supportive input predicts faster precision re-tuning, not a mirror image of harm.</p>
+<h3>1. Introduction: The Predicting Brain and the Developing Brain</h3>
+<p> &gt;Introduction: The Predicting Brain and the Developing Brain</p>
+<h3>1.1 The Brain as a Prediction Machine</h3>
+<p>One increasingly influential perspective in cognitive neuroscience conceptualizes the brain not as a passive, stimulus-driven processor of external information, but as a proactive, hypothesis-testing organ that continuously generates and updates predictions about the world (Clark, 2013; Friston, 2010). This view is most formally articulated within predictive coding and predictive processing frameworks, which have been applied to perception, action, cognition, and psychopathology (Hohwy, 2013; Rao and Ballard, 1999). These frameworks are neither new nor uncontested (Section 3.3), and they should not be treated as universally applicable explanatory models. Rather, they provide an integrative lens through which specific developmental processes may be re-examined, including how early experiences shape expectations, regulatory systems, and adaptive responses to environmental demands.</p>
+<p>We use predictive processing (PP) as the general term for this family of theories, and reserve predictive coding for the specific hierarchical, message-passing implementation in which each cortical level predicts the activity of the level below and forwards only the residual prediction error (Rao and Ballard, 1999). At its core, PP holds that the brain constructs and continuously refines a generative model of the world to infer the causes of its sensory input, minimizing prediction error, the discrepancy between what is predicted and what is sensed (Friston, 2010). Perception is then not a bottom-up reconstruction of reality from raw sense data, but a model-driven process in which sensory input primarily serves to correct predictions (Clark, 2013).</p>
+<h3>1.2 Early Life as a Period of Calibration</h3>
+<p>If the brain is a prediction machine, its foundational models are not fixed at birth but are calibrated by experience. Early life, particularly the period from conception to two years of age, is marked by unparalleled neuroplasticity, during which environmental exposures shape emerging structural and functional architecture (Van den Bergh et al., 2020; Van den Bergh et al., 2024). This plasticity is not uniform in time: it is organized into critical and sensitive periods that open and close on different schedules in different neural systems, and whose closure is actively regulated (Hensch, 2005; Knudsen, 2004). From a dynamicsystems perspective, development is an emergent property of the reciprocal coupling of organism and environment; early caregiver-infant interactions establish stable yet flexible &quot;attractor states&quot; that canalize long-term trajectories (Montirosso et al., 2020; Provenzi et al., 2018). The statistical regularities, affective tone, and predictability of the early environment provide the foundational &quot;training data&quot; for the brain&#x27;s generative models. Calibration is not limited to adversity: the developing brain is experience-expectant and depends on structured, supportive input to organize adaptively (Greenough et al., 1987; Nelson and Gabard-Durnam, 2020). Section 2 sets out these developmental foundations before the computational account is introduced, because they determine why early calibration matters disproportionately and why it can persist.</p>
+<h3>1.3 Thesis Statement</h3>
+<p>This article bridges PP and developmental psychopathology by proposing a framework for the lasting impact of ELA, a broad construct spanning prenatal stress and perinatal complications through neglectful or abusive caregiving (Chertoff et al., 2026). Although our title concerns adversity, we treat ELA as one pole of a broader early-life environment that ranges from depriving to supportive, because the same predictive machinery is calibrated across this whole range. We argue that ELA does not simply inflict increased risk; it calibrates a predictive architecture toward survival in an environment experienced as hostile, unpredictable, or unsupportive. The framework makes two claims of graded strength: 1.</p>
+<p>Core (parsimonious) claim: altered precision weighting. ELA primarily recalibrates how much each prediction error counts: assigning high precision (gain) to potentialthreat signals and to predictable input that would normally be attenuated, while assigning low precision to evidence that disconfirms expectations of threat or signals benign novelty. This claim requires no commitment to the content of highlevel beliefs.</p>
+<p>2. Stronger (optional) claim: maladaptive priors. Under sustained adversity, these precision biases can become entrenched as rigid, pessimistic content priors about the self, others, and the world. This claim is more explanatorily ambitious and correspondingly more demanding empirically, because it attributes specific belief content to the developing system.</p>
+<p>PP accounts have been applied to psychopathology and, in particular, to autism, where atypical precision has been proposed as a core computational feature (Lawson et al., 2014; Van de Cruys et al., 2014). What we add is fourfold. First, we argue that ELA-related precision dysregulation is channel-specific and biased rather than global, and we commit to this specificity in an explicit mapping from dimensions of early experience to predicted precision channels (Section 4.4, Table 2). Second, we specify behavioral, computational, and neural signatures that would distinguish altered precision from altered priors (Section 4.3, Table 1). Third, we anchor the calibration in developmental mechanisms (sensitive periods, plasticity brakes, and individual differences in susceptibility; Section 2) and in a distributed circuit in which the anterior cingulate cortex (ACC) is proposed as a hub for allocating gain across channels (Section 5). Fourth, we hold the account to a symmetry constraint, in which the same machinery is calibrated by supportive as well as adverse input, with an asymmetric prediction of its own (Section 7.2).</p>
+<p>Two scope statements frame what follows. The framework&#x27;s primary domain is threat vigilance and affective learning and decision-making under uncertainty; extensions to other outcomes are secondary and are flagged as such, and Section 7.3 states the processes the framework does not claim to explain. Its evidential basis is the published literature reviewed here. Prenatal-anxiety findings from two longitudinal cohorts, published individually and synthesized through the present lens in a companion paper (Van den Bergh and Frasch, 2026), are used as illustrations of compatibility, not as independent tests, because the same findings partly motivated the framework.</p>
+<h3>2. Developmental Foundations: Why Early Calibration Matters and Why It Persists</h3>
+<p> &gt;Developmental Foundations: Why Early Calibration Matters and Why It Persists</p>
+<h3>2.1 Critical and Sensitive Periods, and Two Kinds of Experience</h3>
+<p>The influence of experience on the developing brain is not constant over time but concentrated in windows of heightened plasticity. In a critical period, a circuit needs a specific, species-typical input to develop typically, and missing that input has lasting consequences; a sensitive period is a wider window in which experience shapes development strongly but does not dictate it (Gabard-Durnam and McLaughlin, 2020; Knudsen, 2004; Nelson and Gabard-Durnam, 2020). Greenough et al. (1987) linked such windows to two kinds of plasticity. Experience-expectant plasticity relies on input that every member of the species can count on, such as patterned sensory stimulation and contingent social interaction, and for which the brain is prepared in advance. Experiencedependent plasticity stores what is particular to an individual&#x27;s environment: how sensitive the caregiving is, and how much threat, deprivation, or unpredictability the child meets (Chertoff et al., 2026; Teicher and Samson, 2016).</p>
+<p>This distinction matters for the present account. An input counts as experience-expectant only if the brain is prepared for it as a normal part of development, and most forms of adversity fail this test. Adversity therefore acts mainly as an experience-dependent input to calibration rather than as an expected signal shaping circuits through canonical criticalperiod mechanisms (Chertoff et al., 2026; Gabard-Durnam and McLaughlin, 2020). Deprivation is the partial exception: it is the absence of expected input, a violation of the expectable environment (Nelson and Gabard-Durnam, 2020), and we accordingly predict a different precision profile for deprivation than for threat (Table 2). In PP terms, experienceexpectant input supplies the structured statistics from which usable generative models and adaptive precision estimates are built; experience-dependent input tunes those estimates to the particular statistics of an individual&#x27;s environment.</p>
+<p>Windows differ between systems: sensory systems have early windows, whereas amygdala-prefrontal circuitry, the ACC, and association cortex mature later and remain plastic into adolescence, a second sensitive period for threat, reward, and control (Chertoff et al., 2026; Gee et al., 2013; Larsen and Luna, 2018). Prenatally, maternal signals reach the fetus through biological channels (maternal cortisol and placental corticotropin-releasing hormone, maternal heart rate and circadian rhythms, uterine blood flow, and maternal movement and voice), and fetal responses to changes in maternal psychophysiological state are measurable from mid-gestation (DiPietro et al., 2008; Van den Bergh et al., 2020). Timing within gestation also matters: in the Leuven cohort, maternal anxiety at 12 to 22 weeks of gestation, rather than later in pregnancy, was associated with impulsivity and poorer endogenous cognitive control in adolescence (Mennes et al., 2006; Van den Bergh et al., 2005), a period of intense neuronal migration and early cortical organization. We therefore expect different precision channels to be calibrated in different windows, a commitment made explicit in the window column of Table 2.</p>
+<h3>2.2 Plasticity Gates and Their Relation to Precision</h3>
+<p>The opening and closure of plasticity windows are regulated by identifiable mechanisms: the maturation of parvalbumin-positive inhibitory interneurons and the resulting excitation-inhibition balance, the formation of perineuronal nets that stabilize synapses, and epigenetic and neuro-glial &quot;brakes&quot; that restrict later remodeling (Hensch, 2005; Takesian and Hensch, 2013; see Chertoff et al., 2026, for a review). Two observations link these gates directly to precision. First, the neuromodulators proposed to set precision (Section 5.4) also gate developmental plasticity: catecholamine depletion prevents experience-dependent ocular-dominance plasticity during the visual critical period (Kasamatsu and Pettigrew, 1976), and the cholinergic brake Lynx1 limits plasticity in adult cortex (Morishita et al., 2010). Second, adversity can shift window timing. Early stress has been associated with accelerated maturation of amygdala-prefrontal connectivity in previously institutionalized children (Gee et al., 2013; see Callaghan and Tottenham, 2016, for the stress-acceleration hypothesis), environmental factors influence the pace of brain development more generally (Tooley et al., 2021), and in mice early-life stress induces precocious critical-period timing with premature perineuronal-net formation (Poplawski et al., 2024).</p>
+<p>Together these findings suggest a specific developmental hypothesis: precision set-points are learned from the statistics of the environment while the relevant window is open, under the control of neuromodulatory systems that are themselves gates on plasticity, and are stabilized when the brakes engage. If adversity also accelerates closure, the set-point would be fixed earlier, from a shorter and more adverse sample of experience, and with less opportunity for later correction.</p>
+<h3>2.3 Biological Embedding</h3>
+<p>Experience becomes biologically embedded through lasting molecular and physiological changes (Berens et al., 2017; Lupien et al., 2009). ELA alters DNA methylation of stressregulatory genes such as the glucocorticoid receptor gene NR3C1, a molecular memory of the early environment (Berens et al., 2017), and can recalibrate the hypothalamic-pituitaryadrenal (HPA) axis toward hyper-responsive or blunted reactivity, with consequences for glucocorticoid-receptor-dense regions such as the hippocampus, amygdala, and prefrontal cortex (Lupien et al., 2009; McEwen, 2012). Prenatally, embedding begins in utero: maternal stress signals reach the fetus through the maternal-placental-fetal interface, where placental regulation, for example of the glucocorticoid-inactivating enzyme 11β-HSD2, partly determines fetal exposure (Van den Bergh et al., 2020). We speak of developmental &quot;signs&quot; rather than only &quot;scars&quot;: the same machinery embeds supportive caregiving, whose marks are as durable but adaptive (Nelson and Gabard-Durnam, 2020; Van den Bergh et al., 2024).</p>
+<h3>2.4 Why Calibration Persists</h3>
+<p>Plasticity explains why early experience can change neural function; it does not by itself explain why an adaptation persists after the conditions that elicited it have changed. We propose three complementary mechanisms, the third of which is specific to the predictive account.</p>
+<p>1. Structural stabilization. Once plasticity brakes engage (Section 2.2), set-points learned during the window become harder to revise, so a calibration acquired early is carried forward by circuit structure.</p>
+<p>2. Molecular and physiological memory. Epigenetic marks and recalibrated HPA setpoints (Section 2.3) maintain an altered internal milieu that continues to bias neuromodulatory tone, and hence precision, in later life.</p>
+<h3>3. Self-confirming sampling.</h3>
+<p>A system that assigns low precision to disconfirming evidence discounts exactly the evidence that would retune it. Under active inference, it also selects actions, such as avoidance and reduced exploration, that make such evidence less likely to be sampled at all (Friston, 2010; Lloyd et al., 2022). The calibration thereby protects itself: the information needed to revise it is either down-weighted or never collected.</p>
+<p>The third mechanism explains why calibration can persist in objectively safe later environments without assuming explicit negative beliefs, and it locates the developmental mismatch central to the developmental origins of health and disease (DOHaD) framework: calibration that fitted the early environment becomes costly when later environments diverge from it (Chertoff et al., 2026; Ellison, 2005). Persistence is not permanence: adolescence reopens windows for threat, reward, and control systems (Larsen and Luna, 2018), and the self-confirming loop can be broken by interventions that force highprecision disconfirming evidence (Section 7.4).</p>
+<h3>2.5 Individual Differences in Susceptibility</h3>
+<p>Individuals exposed to similar early conditions follow markedly different trajectories: some show little lasting impact, some recover after an initial disruption, some develop difficulties only later, and some remain chronically impaired (Bonanno et al., 2023; Rutter, 2012). The framework should therefore not be read deterministically. Differentialsusceptibility and biological-sensitivity-to-context models propose that some individuals are more responsive to environmental input for better and for worse (Belsky et al., 2007; Belsky and Pluess, 2009; Boyce and Ellis, 2005), and that sensitivity may itself be shaped prenatally (Pluess and Belsky, 2011; Hartman et al., 2023). Gene-environment interactions contribute: genotype moderates the association between childhood maltreatment and later antisocial behavior (Byrd and Manuck, 2014; Caspi et al., 2002), dopamine-related genotypes moderate sensitivity to rearing environments (Bakermans-Kranenburg and van IJzendoorn, 2011), and a polygenic score for fasting insulin moderates the association between early adversity and childhood impulsivity (Batra et al., 2021a). Sex, timing, and the availability of buffering relationships further moderate outcomes (Chertoff et al., 2026; Del Giudice et al., 2011).</p>
+<p>PP offers a computational translation of susceptibility: a higher plasticity of precision estimates, for example a faster adaptation of estimated volatility and hence of learning rates (Behrens et al., 2007; Mathys et al., 2011), predicts stronger calibration toward threat under adversity and faster calibration toward safety under support, a testable crossover (Section 7.2). Resilience is correspondingly read as preserved flexibility of precision allocation (Bonanno et al., 2023; Kalisch et al., 2024).</p>
+<h3>3. The Architecture of Prediction: A Primer on Predictive Processing</h3>
+<p> &gt;The Architecture of Prediction: A Primer on Predictive Processing</p>
+<h3>3.1 Core Principles</h3>
+<h3>3.1.1 Generative Models and Priors</h3>
+<p>The brain does not perceive the world directly; it constructs an internal generative model to infer the hidden causes of sensory signals (Friston, 2010). Two terms are often used interchangeably and should be kept apart. The generative model is the full causal model: its structure (which hidden states exist and how they cause one another and the sensory input), the likelihood mapping from states to signals, and the expectations over states. A prior is a narrower object, the expectation over a particular hidden state at a particular level before new evidence arrives, for example that light comes from above, or that danger is imminent. A child can therefore hold an accurate, well-structured generative model of a caregiving environment and still differ from other children in specific priors within it, or in the precision assigned to particular signals. Higher-level social expectations shaped by repeated caregiving experiences resemble what attachment theory describes as internal working models of self, others, and relationships (Bowlby, 1982; Bretherton, 1992; Tottenham and Vannucci, 2025).</p>
+<h3>3.1.2 Prediction and Prediction Error</h3>
+<p>The generative model issues top-down predictions that cascade down the hierarchy (Rao and Ballard, 1999). Predictions are compared with bottom-up input; their discrepancy, the prediction error, is propagated upward, and the system minimizes prediction error by updating the model. Because only unpredicted input is passed forward, this is an efficient coding scheme (Friston, 2010).</p>
+<h3>3.1.3 Precision Weighting</h3>
+<p>Not all prediction errors are treated equally; their influence on belief updating is scaled by their precision, the brain&#x27;s estimate of their reliability (formally, the inverse variance) (Feldman and Friston, 2010). Precision acts as a gain control on prediction-error units: a precise error drives rapid updating, whereas an imprecise error is discounted and existing beliefs are preserved. This gain control is widely regarded as a mechanism of attention (Feldman and Friston, 2010), and it lets the brain balance reliance on priors against updating from new evidence. One point of formal discipline should be stated at the outset: precision is not categorically separate from belief, because precision estimates are themselves beliefs about the reliability of signals. The distinction maintained throughout is between content priors (expectations about latent causes and outcomes) and precision expectations (estimates of the reliability of evidence and predictions). Precision weighting is the pivot of our framework: it is the component we argue is most directly recalibrated by early adversity.</p>
+<h3>3.2 A Hierarchical and Embodied Framework</h3>
+<p>Low levels of the hierarchy predict simple sensory features; higher levels predict increasingly abstract regularities such as object identities, event sequences, social intentions, and the self (Hohwy, 2013). Under active inference, action is integrated into the predictive cycle: motor commands are predictions about the sensory consequences of movement, and the body moves to fulfill them (Friston, 2010; Seth and Friston, 2016). Action thus also determines which evidence is sampled, which is why avoidance can maintain a calibration (Section 2.4).</p>
+<h3>3.3 Nuances, Critiques, and Empirical Status</h3>
+<p>Despite its reach, PP faces serious critiques, the most consequential being potential unfalsifiability (Bowman et al., 2023). Because the content of priors and the settings of precision are not directly observable, a PP model can often be tuned post hoc to explain almost any outcome (Bowman et al., 2023; Kwisthout et al., 2017). Many applications operate in an &quot;as-if&quot; mode, borrowing the mathematics of Bayesian inference to describe behavior without committing to biological implementation (Hodson et al., 2024; Mangalam, 2025).</p>
+<p>The empirical status of the framework&#x27;s core claims is mixed, and the distinction between them matters here. The general claims that the brain is sensitive to prediction and that expectation modulates neural responses are well supported. The specific architectural commitments of predictive coding, distinct prediction and prediction-error units with precision implemented as their gain, have more modest support (Hodson et al., 2024; Walsh et al., 2020). Expectation suppression in sensory cortex is less robust and less clearly separable from repetition suppression and attention than early accounts assumed (Feuerriegel et al., 2021); some findings run opposite to simple prediction-error accounts, for example repetition effects unmodulated by expectation (Song et al., 2025; Taylor et al., 2024); and expected input is sometimes perceived more readily rather than suppressed, a tension PP accounts must resolve (Press et al., 2020). PP is better supported as a computational-level account of learning and inference under uncertainty, where modelbased studies estimate precision-like parameters such as learning rates and volatility (Behrens et al., 2007; Mathys et al., 2014), than as a settled account of cortical microcircuitry.</p>
+<p>Our framework is built to rest on the better-supported level: its central constructs (channel-specific precision, volatility-dependent learning rates, prediction-error gain) are estimable from behavior with hierarchical Bayesian models, and its neural claims are stated as hypotheses. Grounding PP in ELA research also narrows the falsifiability problem, which bites hardest when priors and precision are free parameters of an adult brain considered without its history. The ELA literature supplies measurable developmental conditions, with documented associations with, and in animal, quasiexperimental, and intervention designs causal influence on, neurodevelopment. This does not vindicate PP; it constrains otherwise free parameters, which allows the framework to commit to the discriminating predictions of Section 4.3, the channel mapping of Section 4.4, and the boundary conditions of Section 7.3.</p>
+<h3>4. Hypothesis: ELA Recalibrates Precision and, More Strongly, May Instantiate Maladaptive Priors</h3>
+<p>Supplementary Table S1 summarizes the framework by PP component, including the experience-expectant or positive-input interpretation of each component, which captures the symmetry principle that the same component is calibrated by all early input.</p>
+<h3>4.1 The Core Claim: Dysregulation of Precision Weighting</h3>
+<p>ELA disrupts the capacity to allocate precision flexibly and adaptively. We distinguish two facets: • Over-precision of potential-threat and predictable input (hypervigilance).</p>
+<p>Having &quot;learned&quot; that the environment is dangerous or hard to predict, the system assigns high precision to any signal that might indicate threat, and fails to attenuate precision for repetitive, predictable input that should become irrelevant. Threataligned prediction errors are amplified, capturing attention and driving updating in a self-reinforcing loop (Adams et al., 2013; Sterzer et al., 2018).</p>
+<p>• Under-precision of disconfirming or positive evidence (inflexible updating). The system assigns low precision to prediction errors that would contradict a threatbiased model; unexpected positive events (kindness, success, safety) are treated as noise (Sterzer et al., 2018).</p>
+<p>A finding that appears to contradict the hypervigilance profile sharpens it. Model-based fMRI in a birth cohort followed to adulthood links ELA to reduced expected-value and reward-prediction-error signaling in striatum, ventromedial prefrontal cortex (vmPFC), and ACC (Sacu et al., 2024), and adults with more adverse childhood experiences explore less and underweight recent reward feedback in a foraging task (Lloyd et al., 2022). Adolescents exposed to early stress likewise learn stimulus-outcome contingencies more slowly and update them less well after a reversal (Harms et al., 2018). The evidence is not one-sided: in a probabilistic learning task, maltreated adolescents showed not only greater choice variability but also biased beliefs about the likelihood of reward (Hanson et al., 2017), a priors-type effect, which indicates that the two mechanisms distinguished in Section 4.3 can co-occur. Reduced reward-prediction-error encoding is not what a globally hyper-responsive system would show. We therefore make the reconciliation explicit: under a limited precision budget, chronic over-weighting of threat-aligned channels is purchased at the cost of under-weighting reward-and value-related channels. ELA neither raises nor lowers responsiveness globally; it reallocates gain across channels. This is a testable commitment: within individuals, threat-channel gain and reward-channel encoding should be inversely related, and interventions that reduce threat-channel gain should partially restore reward-prediction-error encoding. A globally elevated or globally blunted gain profile in the same individuals would count against it.</p>
+<p>This dual bias is a form of maladaptive meta-learning: the system has learned a biased rule for how to learn from future evidence (Nussenbaum and Hartley, 2024). Precision in this sense is signal-and level-specific, not one global parameter: sensory precision for repeated input, affective-salience precision for threat-related cues, attentional precision for neutral or ambiguous stimuli, and interoceptive precision for bodily signals. The ELA profile we propose is biased toward particular signals rather than globally elevated, which distinguishes it from the global over-weighting proposed for autism (Section 7.1).</p>
+<h3>4.2 The Stronger Claim: Formation of Maladaptive Priors</h3>
+<p>Under sustained adversity, precision biases may consolidate into rigid, pessimistic content priors: exteroceptive priors (social interactions predicted as rejecting; ambiguity predicted to resolve negatively), interoceptive priors (a baseline expectation of high arousal and distress; Barrett et al., 2016), and priors about the self (ineffective, unworthy, or culpable, particularly where a child infers their own inadequacy as the cause of a caregiver&#x27;s behavior). A high-confidence prior resists updating and can manufacture confirming evidence: a person who strongly predicts rejection may perceive a neutral expression as scornful. Physically abused children, for example, show broadened perceptual categories for anger (Pollak and Kistler, 2002), a finding that could reflect either a shifted prior or altered precision on ambiguous facial cues, and is therefore exactly the kind of result the tests in Section 4.3 are designed to adjudicate.</p>
+<p>We flag explicitly that the priors claim is the framework&#x27;s strong form. Published ERP studies of infants and children prenatally exposed to maternal anxiety report enhanced processing of repeated standard tones (van den Heuvel et al., 2015), of fearful relative to happy vocalizations (Otte et al., 2015), and of neutral relative to valenced pictures (van den Heuvel et al., 2018), and related work reports altered auditory and attentional responses after prenatal anxiety or depression (De Asis-Cruz et al., 2020; Harvison et al., 2009; Hennessey et al., 2024; Hunter et al., 2012; Luotonen et al., 2022; Maria et al., 2020). These studies did not test PP; read through a PP lens, they can be accommodated by altered precision without requiring explicit negative priors (see Van den Bergh and Frasch, 2026, for a synthesis with adult follow-up data). The priors claim should therefore be advanced only where data warrant the additional commitment, and tested against precision-only alternatives rather than assumed. A recent computational study supports this developmental specificity: using a Bayesian foraging model, Zhang et al. (2026, preprint) found that early-life unpredictability, but not lifelong traumatic experience, predicted altered uncertainty-driven decision-making in adulthood.</p>
+<h3>4.3 Distinguishing Precision from Priors</h3>
+<p>Behaviorally, a child with high precision on threat and low precision on safety and a child with pessimistic priors about safety will both show threat-biased decisions. The two accounts are nonetheless distinguishable, because they locate the bias in different terms of the belief update. In a simple Gaussian update, the change in a belief μ after a prediction error δ is Δμ = [πδ / (πδ + πμ)] δ, where πδ is the precision of the evidence and πμ the precision of the current belief. The precision-only account places the ELA effect in π δ , separately for particular channels and for evidence of particular valence; the priors account places it in the starting value of μ (and, in its rigid form, in a high πμ). These locations make different quantitative predictions, which are summarized in Table 1 and can be estimated trial by trial with hierarchical Bayesian or reinforcement-learning models (Mathys et al., 2011 (Mathys et al., , 2014)). The last row answers a question central to any clinical use of the framework. Under the precision-only account, retuning precision should improve inference even in a person whose early expectations were negative, because those expectations are continuously reestimated from evidence once evidence is weighted appropriately. Under the priors account, retuning precision leaves pessimistic beliefs intact until enough disconfirming evidence has accumulated. Existing findings are suggestive but not decisive: reduced value and reward-prediction-error signaling (Sacu et al., 2024) and underweighting of reward feedback (Lloyd et al., 2022) are effects on evidence weighting, as the precision account predicts, whereas biased beliefs about reward likelihood in maltreated adolescents (Hanson et al., 2017) are a priors-type effect; none of these studies compared the two accounts on the same data. The prenatal-anxiety literature supplies a second illustration from adolescence and adulthood. In the Leuven prenatal cohort, higher maternal anxiety at 12 to 22 weeks of gestation was associated with impulsive responding on an encoding task but not with differences in stopping an ongoing response at age 14 to 15 ( Van den Bergh et al., 2005), with poorer performance at age 17 on tasks requiring endogenous integration and control of task parameters but not on prepotent-response inhibition or visual orienting (Mennes et al., 2006), with less efficient decision making and an enlarged frontal P2a component on a gambling task requiring endogenous control, but not on a Go/Nogo task requiring exogenous control, in 17-year-old boys (Mennes et al., 2009), and with altered BOLD responses during endogenous cognitive control at age 20 (Mennes et al., 2020). Externally cued control is scaffolded by precise prediction errors supplied by the task, whereas endogenous control depends on the system&#x27;s own precision estimates over goals and outcomes; a selective difference in the latter is what a channelspecific precision bias predicts (Van den Bergh and Frasch, 2026). Neither illustration was designed as a test; the decisive studies would fit both accounts to the same trial-by-trial data.</p>
+<h3>4.4 From Adversity Dimensions to Precision Channels</h3>
+<p>A falsifiable framework must also state which dimensions of early experience bias which channels, in which direction. Treating &quot;ELA&quot; as one exposure would purchase explanatory coverage at the price of falsifiability, because prenatal maternal anxiety, physical threat, deprivation, environmental unpredictability, and rigidly invariant input differ in timing, severity, controllability, sensory statistics, and social content. Dimensional models distinguish threat from deprivation as separable exposures with distinct neurodevelopmental consequences (McLaughlin et al., 2020; Sheridan and McLaughlin, 2014), and the unpredictability of parental and environmental signals has emerged as a third, separable calibrator of developing circuits (Davis and Glynn, 2024; Glynn and Baram, 2019). Volatility estimation supplies the computational bridge: the brain tracks how quickly contingencies change and adjusts learning rates and precision accordingly (Behrens et al., 2007), a process estimable at the individual level with the Hierarchical Gaussian Filter (Mathys et al., 2011 (Mathys et al., , 2014)). Each row of Table 2 commits to a channel, a direction, a developmental window, a measurable index, and an observation that would count against it; the rows are hypotheses, not summaries of established findings, and individual susceptibility (Section 2.5) is expected to moderate each of them. The chaotic arm is supported by the unpredictability literature reviewed above (Davis and Glynn, 2024; Glynn and Baram, 2019); the rigid arm, in which over-predictable input yields over-precise priors and reduced exploration, is a theoretical extrapolation that has not been tested directly in human development.</p>
+<h3>5. Neural Implementation: A Distributed Precision Circuit with the ACC as a Hub</h3>
+<p>Precision dysregulation is unlikely to reside in one region. We propose that it is implemented by a distributed circuit and that the ACC is a hub within it, and we separate two claims that differ in evidential strength. The first, well supported, is that the ACC performs computations central to precision: it tracks surprise and volatility, signals errors, and computes the expected value of control (Behrens et al., 2007; Shenhav et al., 2013).</p>
+<p>The second, more specific and so far untested, is that ELA-related alterations of the ACC mediate the precision changes proposed here. Developmental evidence that ACC structure and function are altered after adversity exists (Cohen et al., 2006; Sacu et al., 2024; Teicher and Samson, 2016), but mediation has not been demonstrated, and it is stated below as a hypothesis with a test.</p>
+<p>We privilege the ACC for three reasons. It integrates the variables that a gain-allocation decision requires (volatility, value, and the cost of control) (Behrens et al., 2007; Shenhav et al., 2013); together with the orbitofrontal cortex (OFC) it provides prominent top-down input to the locus coeruleus, an anatomical route by which cortical estimates of uncertainty and value can set noradrenergic gain (Aston-Jones and Cohen, 2005); and it matures late, giving it a long window for calibration (Section 2.1). Its divisions also differ: the dorsal ACC and anterior midcingulate cortex (aMCC) track volatility, surprise, and the expected value of control, whereas subgenual and perigenual divisions, with the vmPFC, track affective value and autonomic outflow. Sections 5.1 and 5.2 concern primarily the dorsal division, and predictions for the two should not be interchanged.</p>
+<h3>5.1 The ACC in Error Monitoring and Bayesian Inference</h3>
+<p>The dorsal ACC (dACC) responds robustly to errors, whether detected internally or signaled by negative feedback (Holroyd et al., 2004), positioning it to compute and broadcast prediction errors. Its activity tracks trial-by-trial Bayesian surprise (unsigned prediction error) independently of valence, implicating it in detecting volatility and signaling when the generative model is failing (Behrens et al., 2007; Hayden et al., 2011). ACC error signals are modulated by value: single neurons in primates fire more strongly when a larger predicted reward is lost (Amiez et al., 2006; Kennerley et al., 2006), and the dACC integrates reward over longer timescales, providing a filtered history of outcomes needed to update value-based expectations (Seo and Lee, 2007).</p>
+<h3>5.2 Hypothesized ACC Dysfunction in ELA: Biased Gain Allocation</h3>
+<p>We hypothesize biased ACC gain allocation rather than global hyper-responsiveness: chronic early stress and unpredictability re-allocate the ACC&#x27;s limited gain toward unsigned surprise and threat-aligned error signaling, and away from signed reward prediction errors and expected value. A persistently amplified surprise signal, reporting that the world model is inadequate even in safe contexts, could drive rumination; the same reallocation predicts the reduced expected-value and reward-prediction-error encoding in ACC, vmPFC, and striatum observed after ELA (Sacu et al., 2024). The claim requires distinguishing what a bare &quot;hyper-responsive ACC&quot; conflates (signed versus unsigned errors, threat versus reward domains, task-evoked reactivity versus model-derived parameters, tonic versus phasic activity, developmental stage), and it is falsified by uniformly elevated or uniformly blunted ACC responses across these dimensions in the same individuals. Mediation can be tested longitudinally, by measuring early exposure, later ACC volatility and gain-allocation signals, and later precision parameters in the same individuals, and causally, by manipulating ACC activity in animal models during and after the relevant window.</p>
+<h3>5.3 Other Nodes and Their Distinct Contributions</h3>
+<p>The ACC is one node, and several others make contributions it does not. Table 3 states the contribution we attribute to each node and, for circuit comparison, the prediction that would favor a precision bias originating at that node rather than at the ACC.  (Behrens et al., 2007; Shenhav et al., 2013) Smaller ACC volume in adults with early life stress (Cohen et al., 2006); reduced expected-value signaling (Sacu et al., 2024) Bias expressed across stimulus classes and scaling with volatility and control demands; an inverse threatreward gain relation Amygd ala</p>
+<p>Assigns salience and associability to threatrelevant cues, a local precision on cueoutcome learning (Li et al., 2011) Altered development and accelerated maturation of amygdalaprefrontal connectivity (Gee et al., 2013; Lupien et al., 2009); CRHexpressing amygdala neurons drive adversityinduced anhedonia in rats (Bolton et al., 2018) Bias confined to threatrelevant stimulus classes and present even when volatility is low; amygdala associability signals predict the bias better than ACC volatility signals</p>
+<h3>Anterio r insula</h3>
+<p>Generates interoceptive predictions and prediction errors and weights them by precision (Barrett and Anxiety is linked to altered interoceptive prediction signals (Paulus and Stein, 2006); increased dyspnoea perception in adults prenatally exposed to</p>
+<p>Bias specific to bodily signals (e.g., respiratory load, heartbeat), dissociable from exteroceptive threat bias Node Proposed computational contribution Evidence of alteration after early adversity Distinguishing prediction Simmons, 2015; Seth, 2013) maternal stress (von Leupoldt et al., 2017)</p>
+<p>OFC Represents task states, including states that must be inferred when they are not signaled, the &quot;cognitive map&quot; over which predictions are made (Rudebeck and Murray, 2014; Wilson et al., 2014) Altered OFC morphology after physical abuse (Hanson et al., 2010); prenatal anxiety-related deficits in endogenous control attributed to OFC-linked circuitry (Mennes et al., 2006) Deficits appear when the relevant state is hidden or must be maintained endogenously, not when it is cued (content of the model rather than gain on evidence) vmPFC Represents value and safety; supports extinction recall and the regulation of threat responses (Hiser and Koenigs, 2018) Reduced value signaling (Sacu et al., 2024); altered amygdala-mPFC coupling (Gee et al., 2013) Bias appears as a failure to retrieve learned safety rather than as excess gain on new threat evidence Ventral striatu m and dopami nergic midbrai n Reward prediction errors; precision over policies and the balance of exploration and exploitation (Section 5.5)</p>
+<p>Blunted ventral striatum development with emotional neglect (Hanson et al., 2015); altered striatal dopamine function (Egerton et al., 2016; Pruessner et al., 2004) Bias appears in action selection and exploration (policy precision) with intact perceptual weighting Thalam us (pulvin ar, mediod orsal)</p>
+<p>Gates the precision of signals passed between cortical areas and supports switching between task contexts under uncertainty (Halassa and Kastner, 2017; Kanai et al., 2015; Rikhye et al., 2018) Direct developmental evidence after adversity is limited</p>
+<p>Bias appears as failure to switch the context in which evidence is weighted, with intact within-context learning Hippoc ampus Context and episodic memory underpinning Stress-sensitive development of both Context-inappropriate generalization of Node Proposed computational contribution Evidence of alteration after early adversity Distinguishing prediction and cerebel lum generative models; forward models of the consequences of action (Lupien et al., 2009; Wang et al., 2014) structures (Lupien et al., 2009; Wang et al., 2014) learned threat (hippocampus); impaired prediction of action consequences (cerebellum)</p>
+<p>This decomposition makes the ACC hypothesis falsifiable at the circuit level. If ELA-related biases are confined to threat cues and are independent of volatility, an amygdala-based account fits better; if they are specific to bodily signals, an insula-based account fits better; if they appear only when task states are hidden, the OFC is implicated in the content of the model rather than in gain. The ACC hypothesis predicts a bias that spans stimulus classes, scales with volatility and control demands, and shows the inverse threat-reward relation of Section 4.1.</p>
+<h3>5.4 The Noradrenergic and Cholinergic Substrate of Precision</h3>
+<p>Precision weighting, gain control on prediction-error units, is widely proposed to be set by noradrenaline from the locus coeruleus (LC-NE) and acetylcholine from the basal forebrain (Feldman and Friston, 2010). A computational division of labor has been proposed in which acetylcholine signals expected uncertainty and noradrenaline unexpected uncertainty (Yu and Dayan, 2005), and human pharmacology supports distinct roles: noradrenergic antagonism alters learning about unexpected changes, cholinergic antagonism alters the attribution of uncertainty to chance versus contextual change (Marshall et al., 2016), and the β-adrenergic antagonist propranolol reduces learning rates and the influence of volatility on belief updating and pupil-linked arousal (Lawson et al., 2021). These systems mature across the early sensitive periods during which ELA exerts its effects, gate developmental plasticity (Section 2.2), and are engaged by chronic early stress (Lupien et al., 2009). We therefore propose a concrete chain: ELA alters LC-NE and basal-forebrain cholinergic development, which biases precision set-points while plasticity windows are open, producing the hypervigilant, poorly attenuating phenotype of Section 4.1. To our knowledge, developmental neurochemistry has not yet been tied to computational precision estimates in ELA cohorts, which is itself a testable gap.</p>
+<h3>5.5 Dopamine: Prediction Errors, Precision over Policies, and Early Adversity</h3>
+<p>Dopamine requires separate treatment, because dopaminergic signaling and precision weighting are distinct constructs that interact. Phasic dopamine activity encodes reward prediction errors (Schultz et al., 1997), a signal that precision then scales. Within active inference, dopamine has additionally been proposed to encode the precision of beliefs about policies, that is, the confidence with which actions are expected to achieve preferred outcomes (FitzGerald et al., 2015; Friston et al., 2012), and dopaminergic midbrain responses in humans track the expected certainty of desired outcomes (Schwartenbeck et al., 2015). Dopaminergic antagonism also impairs the use of uncertainty estimates for fast, adaptive responding (Marshall et al., 2016). Dopamine thus enters the framework at two points: as a generator of the reward-prediction-error signals whose gain we propose ELA reallocates, and as a candidate substrate of policy precision, which governs exploration and avoidance.</p>
+<p>Early adversity alters mesocorticolimbic dopamine in ways that fit the gain-reallocation claim. In humans, low reported early parental care was associated with greater stressinduced ventral striatal dopamine release in a small PET study (Pruessner et al., 2004), childhood adversity has been associated with greater amphetamine-induced ventral striatal dopamine release (Oswald et al., 2014) and with elevated presynaptic striatal dopamine function in young adulthood (Egerton et al., 2016), and emotional neglect predicts blunted ventral striatal development in adolescence (Hanson et al., 2015; see Novick et al., 2018, for a review of reward processing after early stress). In animals, prenatal restraint stress alters the development of the dopaminergic system (Baier et al., 2012; Pallarés and Antonelli, 2017); early-life stress primes the ventral tegmental area toward lifelong stress susceptibility through the developmental transcription factor Otx2, an effect mimicked by juvenile but not adult Otx2 knockdown and reversed by its overexpression (Peña et al., 2017); and adversity-induced anhedonia in rats depends on aberrant engagement of amygdala corticotropin-releasing-hormone neurons by rewarding experience (Bolton et al., 2018). Read together, these findings suggest sensitized dopaminergic responses to stress and threat alongside blunted reward-related responses, the dopaminergic counterpart of the reallocation in Section 4.1, rather than a uniform increase or decrease.</p>
+<p>Two predictions follow. Computationally, ELA should lower policy precision for rewardseeking actions, reducing exploration and favoring avoidance (consistent with Lloyd et al., 2022), a parameter separable from perceptual learning rates (Table 3). Causally, the animal manipulations above can be combined with computational phenotyping: juvenile Otx2 knockdown in the ventral tegmental area, or partial silencing of amygdala corticotropin-releasing hormone, should shift learning-rate asymmetries and exploration parameters in probabilistic reversal and foraging tasks in the predicted directions, and their reversal should normalize them. Such experiments would also test whether dopaminergic and noradrenergic contributions to the ELA phenotype dissociate, as pharmacological work in healthy adults suggests (Marshall et al., 2016).</p>
+<h3>6. A Network-Level Perspective: Disrupted Functional Gradients After Adversity</h3>
+<p>Functional connectivity gradients characterize the brain&#x27;s macroscale organization: continuous axes that reduce the connectome to a low-dimensional, functionally meaningful space (Huntenburg et al., 2018; Margulies et al., 2016). The &quot;model-error&quot; and &quot;model-precision&quot; labels used below are interpretive constructions of this framework, not established identities of the gradients.</p>
+<p>• The &quot;model-error&quot; gradient (G1): a hierarchy from transmodal association cortex (e.g., the default mode network, DMN) to unimodal sensory and motor cortex. Its transmodal apex corresponds to regions initiating abstract top-down predictions, its unimodal end to regions processing bottom-up input and generating prediction errors (Huntenburg et al., 2018; Margulies et al., 2016).</p>
+<p>• A &quot;model-precision&quot; axis (relating to G2/G3): distinguishes networks that represent the content of predictions and errors (DMN, sensory networks) from attentional networks, salience and frontoparietal control, hypothesized to modulate precision (Huntenburg et al., 2018).</p>
+<p>We hypothesize that ELA perturbs the normative development of these gradients, because a brain adapting to chronic threat must prioritize reactive sensory monitoring over abstract, long-range prediction. ELA may compress the model-error gradient, operationalized as reduced G1 range and dispersion, reduced eccentricity of transmodal regions, reduced alignment with a normative template, and delayed developmental expansion, each computable and anchored in documented normative maturation of cortical gradients (Dong et al., 2021; Paquola et al., 2019). On the model-precision axis, ELA is predicted to shift the balance toward the salience network at the expense of the frontoparietal control network, a systems-level mechanism for hypervigilance, and to compromise coordination between isocortex and the subcortical nodes of Table 3.</p>
+<p>Because the most costly elements of brain networks are the most vulnerable to abnormal development (Bullmore and Sporns, 2012), a tilt toward a chronically engaged salience system at the expense of long-range integration is also consistent with network economy. Direct evidence from prenatal-exposure cohorts so far concerns connectivity rather than gradients: in 28-year-old offspring from the Leuven cohort, higher maternal anxiety at 12 to 22 weeks of gestation was associated with weaker functional connectivity of the medial prefrontal cortex with the left inferior frontal gyrus, without differences in global network measures (Turk et al., 2023). Gradient analyses of such longitudinal data would test the present hypothesis directly.</p>
+<h3>7. Implications, Predictions, Scope, and Future Directions</h3>
+<p> &gt;Implications, Predictions, Scope, and Future Directions</p>
+<h3>7.1 Reframing Psychopathology through a PP Lens</h3>
+<p>The framework supports a transdiagnostic reframing stated in terms of precision first; the profiles below differ in which signals are over-or under-weighted, and the ELA profile we propose is the biased, threat-confirming variant.</p>
+<p>• Depression: over-precise negative expectations about self, world, and future, such that positive prediction errors are assigned low precision and ignored (Badcock et al., 2017; Kube et al., 2020).</p>
+<p>• Anxiety disorders: chronically high uncertainty with imprecise priors about safety, compensated by up-regulated precision on bottom-up prediction errors, yielding hypervigilance, arousal, and worry (Adams et al., 2013; Sterzer et al., 2018).</p>
+<p>• Autism spectrum disorder (ASD): an informative contrast rather than an ELA outcome. Early accounts proposed a global, inflexible over-weighting of predictionerror precision (Lawson et al., 2014; Van de Cruys et al., 2014), later reframed around the balance between priors and sensory evidence (Pellicano and Burr, 2012; Van de Cruys et al., 2017). Recent computational work found no chronic distortion in how priors or sensory evidence were weighted, but a reduced ability to adjust learning to a volatile environment (Arthur et al., 2023). This differs from the ELA model, in which precision is selectively biased toward threat-relevant channels.</p>
+<h3>7.2 Testable Predictions</h3>
+<p>The framework yields falsifiable predictions designed to discriminate the precision-only account from the priors account (Table 1), to test the channel mapping (Table 2), and to locate the bias in the circuit (Table 3). They extend paradigms already used to test PP (Hodson et al., 2024; Walsh et al., 2020).</p>
+<p>• Behavioral and computational: in probabilistic-learning tasks, individuals with ELA histories should show faster learning from negative and slower learning from positive feedback, with the asymmetry persisting in stable environments (precision account) rather than decaying from a shifted baseline (priors account). A priorsspecific signature would be valenced bias in baseline expectations before evidence arrives.</p>
+<p>• Neuroimaging: ELA should predict greater ACC and insula responses to unexpected negative outcomes and smaller ventral striatal and ACC responses to unexpected positive outcomes. Because the key quantity is the precision-weighted prediction error, not raw activation, the sharpest tests use model-based fMRI to estimate precision and prediction-error signals directly; resting-state data should show the gradient alterations of Section 6.</p>
+<p>• Electrophysiology: prediction-error indices (MMN, FRN) should be modulated by ELA history, with enhanced amplitudes to threatening deviants. The prenatalanxiety findings reviewed in Section 4.2 motivate a sharper, pre-registered prediction: reduced repetition suppression for predictable standards and enhanced responses to threat-related auditory input, tested against non-predictive (attention or arousal) alternatives (Song et al., 2025; Taylor et al., 2024).</p>
+<p>• Individual differences: a measure of precision plasticity (Section 2.5) should moderate the association between early experience and later precision parameters in opposite directions for adverse and supportive environments, a crossover rather than a uniform vulnerability effect.</p>
+<p>• Symmetry and supportive input: a &quot;mirror signature&quot; for supportive input would be unfalsifiable, because any inverse of any adversity effect would confirm it, so we specify an asymmetry. Supportive, structured early environments are predicted to confer faster precision re-tuning when volatility changes: after a contingency reversal, supportively reared individuals should re-normalize learning rates more quickly than both adversity-exposed and average-environment comparisons (Nelson and Gabard-Durnam, 2020). The one positive-valence datum in the prenatal literature points the same way: higher maternal mindfulness during pregnancy was associated with smaller infant N250 responses to repeated standards and larger P150 amplitudes, the opposite of the association with maternal anxiety on the same stimuli (van den Heuvel et al., 2015).</p>
+<h3>7.3 Scope and Boundary Conditions</h3>
+<p>A framework that could accommodate every consequence of ELA would not be falsifiable.</p>
+<p>We therefore state what this one does not explain and what would count against it.</p>
+<p>Primary and secondary domains. The core domain is threat vigilance and affective learning and decision-making under uncertainty, where precision-like parameters are estimable and the cited evidence is concentrated. Applications to mood, conduct, and risk-taking (Section 7.1) are secondary and depend on that core.</p>
+<p>Processes outside the framework. (i) Effects of biologically proximal insults that act directly on neural tissue or on the plasticity machinery itself (malnutrition, teratogens, hypoxic or preterm brain injury) are predicted to produce general reductions in processing capacity rather than channel-specific biases; recent developmental reviews distinguish these biologically proximal exposures from psychological adversity (Chertoff et al., 2026).</p>
+<p>(ii) Global intellectual impairment after severe deprivation is not a precision bias and is not explained here, although the framework predicts that deprivation-related differences in social and linguistic channels should be dissociable from it. (iii) Somatic outcomes of ELA, such as cardiometabolic disease, are outside the framework except where they feed back on neural computation (Section 7.5).</p>
+<p>Observations that would count against the framework. The core claim would be disconfirmed if ELA-related differences were fully explained by global arousal or attention, without channel specificity; if precision-like parameters showed no association with ELA once baseline expectations (priors) were modeled; if threat, deprivation, and unpredictability produced indistinguishable computational profiles, contrary to</p>
+<p>Table 2; or if supportive environments yielded only the inverse of adversity effects without a re-tuning advantage. 7.4 Therapeutic Implications Read through this framework, intervention is recalibration, and the distinction of Section 4.3 determines what should change and how change should be measured. The proposals below are hypotheses about mechanism, not claims of efficacy.</p>
+<p>Exposure-based CBT. The inhibitory-learning account casts the violation of fearful expectancies as the active ingredient of exposure (Craske et al., 2014); in precision terms, its techniques make disconfirming evidence precise. Maximizing expectancy violation increases the prediction error to be weighted; removing safety behaviors removes the avoidance policies that prevent disconfirming evidence from being sampled (Section 2.4); and varying stimuli and contexts prevents the new learning from being assigned precision only in the treatment context. Cognitive techniques that target expectations address the content priors of Section 4.2 (Kube et al., 2020). The framework predicts that patients whose profile is dominated by evidence weighting (Table 1) should benefit most from exposure, whereas those with shifted baseline expectations should require additional work on content, and that successful treatment should normalize learning-rate asymmetries, a mechanistic outcome measure that can be added to symptom measures (Huys et al., 2016).</p>
+<h3>Pharmacological augmentation.</h3>
+<p>The framework links candidate agents to the precision mechanisms of Section 5.4. D-cycloserine, an NMDA-receptor partial agonist given to enhance consolidation of new learning, produces a small augmentation of exposurebased therapy in an individual-participant meta-analysis (Mataix-Cols et al., 2017). βadrenergic blockade with propranolol reduces learning rates and the influence of volatility on updating in healthy adults (Lawson et al., 2021), and given after reactivation of a fear memory it attenuated later fear responses in a proof-of-concept study (Kindt et al., 2009). Because noradrenergic, cholinergic, and dopaminergic agents leave distinct computational fingerprints (Marshall et al., 2016), pharmacological effects can be assessed with the same computational assays proposed for diagnosis, and the framework predicts that noradrenergic agents should act on precision-weighting signatures rather than on baseline expectations. No such trial has yet been conducted in ELA-exposed patients with computational endpoints.</p>
+<h3>Caregiving and dyadic interventions.</h3>
+<p>For young children, the most direct recalibration is a change in the caregiving signal itself. Attachment and Biobehavioral Catch-up, which trains caregivers to respond contingently and predictably, improved attachment organization among maltreated children in a randomized trial (Bernard et al., 2012), and Chertoff et al. (2026) identify parent-child synchrony and co-regulation as modifiable routes by which a supportive environment can reset regulatory systems during sensitive periods. The framework predicts that such interventions should act through the predictability channel of Table 2 and should be most effective while the relevant windows remain open.</p>
+<p>Other approaches. Real-time fMRI neurofeedback targeting the amygdala has been piloted in combat-related PTSD (Zotev et al., 2018) and could be adapted to train precision-linked ACC or amygdala signals; no ELA-specific trial exists. Mindfulness-based training of precision on distressing interoceptive signals is a possibility we note but do not rest any claim on, because it has not been tested as a mechanism in ELA populations.</p>
+<h3>7.5 A Future Direction: Energetic and Metabolic Constraints on Precision</h3>
+<p>The framework is stated at the information level. An energy-level reading is worth developing separately, keeping two levels of description apart. The first is the energetic cost of neural computation: signaling and wiring are shaped by energetic economy (Attwell and Laughlin, 2001; Bullmore and Sporns, 2012), most of the brain&#x27;s energy budget is committed to ongoing signaling (Jamadar et al., 2025), and chronic over-precision may be a costly operating point. The second is the physiological regulation of energy availability. The HPA axis is one regulator (Section 2.3); insulin is another, and it also acts as a neuromodulator in the central nervous system, influencing neuronal signaling, synaptic plasticity, and reward-related behavior (Kullmann et al., 2016). Insulin enhances striatal dopamine release through cholinergic interneurons (Stouffer et al., 2015), and brain insulin resistance alters dopamine turnover and produces anxiety-and depression-like behavior in mice (Kleinridders et al., 2015). Developmental adversity is linked to this system: prenatal psychosocial stress has been associated with insulin resistance in young adults (Entringer et al., 2008), and a polygenic score for fasting insulin moderates the association between early adversity and childhood impulsivity, with enrichment for dopamine D2 receptor signaling (Batra et al., 2021a). Early adversity also programs insulin signaling, a neuroendocrine pathway beyond the glucocorticoid system (Batra et al., 2021b), and an expression-based polygenic score for the mesocorticolimbic insulin-receptor gene network moderates the association between early adversity and metabolic syndrome in adult women (Jaramillo-Ospina et al., 2025), which points to brain insulin signaling as a source of individual differences in the long-term effects of adversity. Insulin signaling therefore offers an experimentally tractable link between early conditions, metabolic regulation, and the reward computations of Section 5.5. The first testable question is whether metabolic state (e.g., insulin sensitivity) moderates precision and reward-learning parameters in ELA-exposed individuals.</p>
+<p>Any energetic extension must also be discriminated from accounts that already formalize cost-constrained inference: the Expected Value of Control theory, which places a costbenefit computation over control signals in the ACC (Shenhav et al., 2013); resourcerational analysis (Lieder and Griffiths, 2020); and an energy-information trade-off derived within predictive coding (Huang et al., 2024). Because no biologically serious account assumes unlimited energy, raw metabolic cost or allostatic load would not discriminate an energetic account from a precision-only one; the discriminating evidence would be a specific trade-off in which inferential accuracy is sacrificed to conserve energy under metabolic constraint. A network-level formalization of this direction has been proposed by the first author (Frasch, 2026); it is not developed here, and none of the present claims depends on it.</p>
+<h3>8. Conclusion</h3>
+<p>We have argued that early experience calibrates the developing brain&#x27;s predictive architecture, and that the most parsimonious and testable locus of that calibration is precision weighting, the gain placed on different classes of prediction error. Calibration occurs within sensitive periods whose brakes, together with self-confirming sampling of evidence, can stabilize it beyond the conditions that produced it, and susceptibility to it varies between individuals. Under adversity the system over-weights potential threat and predictable input and under-weights disconfirming evidence; that these biases consolidate into pessimistic priors is a stronger, optional claim, and we have specified the signatures that would distinguish the two. The ACC is proposed as a hub allocating gain across channels within a distributed circuit whose other nodes make distinct, testable contributions. The framework states its boundaries, treats supportive input as calibrating the same machinery, and points to interventions aimed not merely at changing beliefs but at recalibrating the processes that weight the evidence for them.</p>
+<p>Figure caption Chaotic input is predicted to bias precision toward potential threat with persistently high learning rates, and, only as a possible downstream consequence under sustained adversity, rigid threat-related priors (Section 4.2). Rigidly invariant input is predicted to yield over-precise priors and reduced exploration. The figure is a conceptual hypothesis, not a summary of established findings; the rigid arm in particular is a theoretical extrapolation (Section 4.4).</p>
+<p>Acknowledgements. The authors used generative AI tools (ChatGPT and Claude) to assist with literature organization, drafting, and language editing, and to produce the vector graphic of Figure 1 from the authors&#x27; theoretical specification; all scientific claims and interpretations were developed, verified, and approved by the authors.</p>
+<p>Funding. This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors. BRHVdB was supported by FWO-Vlaanderen SBO project S003524N and by COST Action CA22114, funded by the European Cooperation in Science and Technology.</p>
+<h3>Competing interests.</h3>
+<p>The authors declare no competing interests.</p>
+<p>Author contributions. M.G.F. conceptualized the paper and wrote the first draft. B.R.H.V.d.B. critically evaluated it and contributed to the theoretical refinement and alignment with the companion empirical paper. Both authors critically revised the manuscript and approved the final version.</p>
+<h3>Maladaptive Precision: A Channel-Specific Predictive-Processing Framework for the Neurodevelopmental Consequences of Early Life Adversity</h3>
+<p>Martin G. Frasch, Bea R.H. Van den Bergh Table S1. Impact of early experience on predictive-processing components.</p>
+<h3>PP component</h3>
+<p>Normative function</p>
+<p>Hypothesized impact of ELA Experienceexpectant / positive-input interpretation Key neural substrates Resulting manifestation Generative models (priors) Encapsulate learned regularities to generate topdown predictions Stronger claim only: rigid, pessimistic content priors (e.g., &quot;the world is dangerous&quot;) Predictable, responsive caregiving instills flexible, broadly benign priors; structured input is required to form usable models at all Medial PFC, OFC, hippocampus Adversity: negative cognitive bias, threat expectation; support: secure expectations, flexible models Prediction error (PE) Signal mismatch between prediction and input Biased processing: exaggerated response to threat-aligned PE; blunted response to disconfirming PE Rich, contingent input provides informative PE that drives learning ACC, insula, amygdala, sensory cortices Adversity: hypervigilance, failure to learn from positive evidence; support: balanced learning Precision weighting Modulates gain on PE according to estimated reliability Chronic overestimation of volatility and threat; underattenuation of predictable input Predictable environments teach adaptive attenuation of precision for safe, known input ACC, thalamus, locus coeruleus (NE), basal forebrain (ACh) Adversity: anxiety, inability to disengage; support: flexible attention, efficient filtering Active inference Action samples or changes input to minimize PE Avoidance policies that prevent disconfirming evidence A secure base supports exploratory action that tests and updates models Striatum and dopaminergic midbrain, motor cortex, cerebellum Adversity: withdrawal, reduced exploration; support: curiosity, adaptive exploration</p>
+<p>The table includes a column for the experience-expectant or positive-input interpretation, capturing the symmetry principle that the same component is calibrated by all early input (main text, Sections 1.3 and 7.2). Abbreviations: ACC, anterior cingulate cortex; ACh, acetylcholine; NE, noradrenaline; OFC, orbitofrontal cortex; PE, prediction error; PFC, prefrontal cortex.</p>
+<h3>Figure 1</h3>
+<p>Figure1places these dimensions on a single hypothesized continuum of environmental predictability. Its middle region, structured variability with learnable statistics, is the condition under which precision is expected to be calibrated most flexibly; chaotic input and rigidly invariant input form the two extremes. The figure is a conceptual hypothesis. The chaotic arm is supported by the unpredictability literature reviewed above(Davis and Glynn, 2024; Glynn and Baram, 2019); the rigid arm, in which over-predictable input yields over-precise priors and reduced exploration, is a theoretical extrapolation that has not been tested directly in human development.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Early-life calibration of precision along a hypothesized continuum of environmental predictability.The horizontal axis orders early environments by the statistical structure of their signals, from chaotic (high entropy, no learnable regularity) through structured variability (fluctuation with rhythm and repair, learnable variance) to rigid invariance (low variance, over-predictable). The curve depicts the hypothesized flexibility of precision calibration, highest for structured variability. Prenatally, the relevant signals are maternal physiological signals that reach the fetus (e.g., cortisol and placental corticotropin-releasing hormone, heart rate and circadian rhythms, movement and voice); postnatally, they are features of caregiving (sensitivity, contingency, rhythm, and repair). Chaotic input is predicted to bias precision toward potential threat with persistently high learning rates, and, only as a possible downstream consequence under sustained adversity, rigid threat-related priors (Section 4.2). Rigidly invariant input is predicted to yield over-precise priors and reduced exploration. The figure is a conceptual hypothesis, not a summary of established findings; the rigid arm in particular is a theoretical extrapolation (Section 4.4).</p>
+<h3>Table 1.</h3>
+<p>Signatures that discriminate the precision-only account from the maladaptivepriors account. Both mechanisms may operate together; the signatures are intended for model comparison, in which each account is fitted to the same data.</p>
+<h3>Table 2.</h3>
+<p>Predicted mapping from dimensions of early experience to precision channels. LR = learning rate; HGF = Hierarchical Gaussian Filter; MMN = mismatch negativity; FRN = feedback-related negativity; LPP = late positive potential.</p>
+<h3>Table 3.</h3>
+<p>Nodes of a distributed precision circuit: computational contribution, evidence after early adversity, and the prediction that distinguishes each node&#x27;s contribution.</p>
+<h3>References</h3>
+<p>Adams, R.A., Stephan, K.E., Brown, H.R., Frith, C.D., Friston, K.J., 2013. The computational anatomy of psychosis. Frontiers in Psychiatry 4, 47. https://doi.org/10.3389/fpsyt.2013.00047</p>
+<p>Amiez, C., Joseph, J.P., Procyk, E., 2006. Reward encoding in the monkey anterior cingulate cortex. Cerebral Cortex 16, 1040-1055. https://doi.org/10.1093/cercor/bhj046</p>
+<p>Arthur, T., Vine, S., Buckingham, G., Brosnan, M., Wilson, M., Harris, D., 2023. Testing predictive coding theories of autism spectrum disorder using models of active inference. PLOS Computational Biology 19, e1011473. https://doi.org/10.1371/journal.pcbi.1011473</p>
+<p>Aston-Jones, G., Cohen, J.D., 2005. An integrative theory of locus coeruleus- norepinephrine function: Adaptive gain and optimal performance. Annual Review of Neuroscience 28, 403-450. https://doi.org/10.1146/annurev.neuro.28.061604.135709</p>
+<p>Attwell, D., Laughlin, S.B., 2001. An energy budget for signaling in the grey matter of the brain. Journal of Cerebral Blood Flow &amp; Metabolism 21, 1133-1145. https://doi.org/10.1097/00004647-200110000-00001</p>
+<p>Badcock, P.B., Davey, C.G., Whittle, S., Allen, N.B., Friston, K.J., 2017. The depressed brain: An evolutionary systems theory. Trends in Cognitive Sciences 21, 182-194. https://doi.org/10.1016/j.tics.2017.01.005</p>
+<p>Baier, C.J., Katunar, M.R., Adrover, E., Pallarés, M.E., Antonelli, M.C., 2012. Gestational restraint stress and the developing dopaminergic system: An overview. Neurotoxicity Research 22, 16-32. https://doi.org/10.1007/s12640-011-9305-4</p>
+<p>Bakermans-Kranenburg, M.J., van IJzendoorn, M.H., 2011. Differential susceptibility to rearing environment depending on dopamine-related genes: New evidence and a meta- analysis. Development and Psychopathology 23, 39-52. https://doi.org/10.1017/S0954579410000635</p>
+<p>Barrett, L.F., Quigley, K.S., Hamilton, P., 2016. An active inference theory of allostasis and interoception in depression. Philosophical Transactions of the Royal Society B 371, 20160011. https://doi.org/10.1098/rstb.2016.0011</p>
+<p>Barrett, L.F., Simmons, W.K., 2015. Interoceptive predictions in the brain. Nature Reviews Neuroscience 16, 419-429. https://doi.org/10.1038/nrn3950</p>
+<p>Batra, A., Chen, L.M., Wang, Z., Parent, C., Pokhvisneva, I., Patel, S., Levitan, R.D., Meaney, M.J., Silveira, P.P., 2021a. Early life adversity and polygenic risk for high fasting insulin are associated with childhood impulsivity. Frontiers in Neuroscience 15, 704785. https://doi.org/10.3389/fnins.2021.704785</p>
+<p>Batra, A., Latsko, M.S., Portella, A.K., Silveira, P.P., 2021b. Early adversity and insulin: Neuroendocrine programming beyond glucocorticoids. Trends in Endocrinology and Metabolism 32, 1031-1043. https://doi.org/10.1016/j.tem.2021.09.003</p>
+<p>Behrens, T.E.J., Woolrich, M.W., Walton, M.E., Rushworth, M.F.S., 2007. Learning the value of information in an uncertain world. Nature Neuroscience 10, 1214-1221. https://doi.org/10.1038/nn1954</p>
+<p>Belsky, J., Bakermans-Kranenburg, M.J., van IJzendoorn, M.H., 2007. For better and for worse: Differential susceptibility to environmental influences. Current Directions in Psychological Science 16, 300-304. https://doi.org/10.1111/j.1467-8721.2007.00525.x Belsky, J., Pluess, M., 2009. Beyond diathesis stress: Differential susceptibility to environmental influences. Psychological Bulletin 135, 885-908. https://doi.org/10.1037/a0017376</p>
+<p>Berens, A.E., Jensen, S.K.G., Nelson, C.A., 2017. Biological embedding of childhood adversity: From physiological mechanisms to clinical implications. BMC Medicine 15, 135. https://doi.org/10.1186/s12916-017-0895-4</p>
+<p>Bernard, K., Dozier, M., Bick, J., Lewis-Morrarty, E., Lindhiem, O., Carlson, E., 2012. Enhancing attachment organization among maltreated children: Results of a randomized clinical trial. Child Development 83, 623-636. https://doi.org/10.1111/j.1467- 8624.2011.01712.x</p>
+<p>Bolton, J.L., Molet, J., Regev, L., Chen, Y., Rismanchi, N., Haddad, E., Yang, D.Z., Obenaus, A., Baram, T.Z., 2018. Anhedonia following early-life adversity involves aberrant interaction of reward and anxiety circuits and is reversed by partial silencing of amygdala corticotropin-releasing hormone gene. Biological Psychiatry 83, 137-147. https://doi.org/10.1016/j.biopsych.2017.08.023</p>
+<p>Bonanno, G.A., Chen, S., Galatzer-Levy, I.R., 2023. Resilience to potential trauma and adversity through regulatory flexibility. Nature Reviews Psychology 2, 663-675. https://doi.org/10.1038/s44159-023-00233-5</p>
+<p>Bowlby, J., 1982. Attachment and loss: Vol. 1. Attachment (2nd ed.). Basic Books. (Original work published 1969)</p>
+<p>Bowman, H., Collins, D.J., Nayak, A.K., Cruse, D., 2023. Is predictive coding falsifiable? Neuroscience and Biobehavioral Reviews 154, 105404. https://doi.org/10.1016/j.neubiorev.2023.105404</p>
+<p>Boyce, W.T., Ellis, B.J., 2005. Biological sensitivity to context: I. An evolutionary- developmental theory of the origins and functions of stress reactivity. Development and Psychopathology 17, 271-301. https://doi.org/10.1017/S0954579405050145</p>
+<p>Bretherton, I., 1992. The origins of attachment theory: John Bowlby and Mary Ainsworth. Developmental Psychology 28, 759-775. https://doi.org/10.1037/0012-1649.28.5.759</p>
+<p>Bullmore, E., Sporns, O., 2012. The economy of brain network organization. Nature Reviews Neuroscience 13, 336-349. https://doi.org/10.1038/nrn3214</p>
+<p>Byrd, A.L., Manuck, S.B., 2014. MAOA, childhood maltreatment, and antisocial behavior: Meta-analysis of a gene-environment interaction. Biological Psychiatry 75, 9-17. https://doi.org/10.1016/j.biopsych.2013.05.004</p>
+<p>Callaghan, B.L., Tottenham, N., 2016. The stress acceleration hypothesis: Effects of early- life adversity on emotion circuits and behavior. Current Opinion in Behavioral Sciences 7, 76-81. https://doi.org/10.1016/j.cobeha.2015.11.018</p>
+<p>Caspi, A., McClay, J., Moffitt, T.E., Mill, J., Martin, J., Craig, I.W., Taylor, A., Poulton, R., 2002. Role of genotype in the cycle of violence in maltreated children. Science 297, 851- 854. https://doi.org/10.1126/science.1072290</p>
+<p>Chertoff, M., Frasch, M.G., Cánepa, E.T., Metz, G.A.S., Antonelli, M.C., Fisher, S.D., Van den Bergh, B.R.H., 2026. The future of brain health: From developmental insights to clinical translation. Translational Psychiatry. Advance online publication. https://doi.org/10.1038/s41398-026-04482-9</p>
+<p>Clark, A., 2013. Whatever next? Predictive brains, situated agents, and the future of cognitive science. Behavioral and Brain Sciences 36, 181-204. https://doi.org/10.1017/S0140525X12000477</p>
+<p>Cohen, R.A., Grieve, S., Hoth, K.F., Paul, R.H., Sweet, L., Tate, D., Gunstad, J., Stroud, L., McCaffery, J., Hitsman, B., Niaura, R., Clark, C.R., McFarlane, A., Bryant, R., Gordon, E., Williams, L.M., 2006. Early life stress and morphometry of the adult anterior cingulate cortex and caudate nuclei. Biological Psychiatry 59, 975-982. https://doi.org/10.1016/j.biopsych.2005.12.016</p>
+<p>Craske, M.G., Treanor, M., Conway, C.C., Zbozinek, T., Vervliet, B., 2014. Maximizing exposure therapy: An inhibitory learning approach. Behaviour Research and Therapy 58, 10-23. https://doi.org/10.1016/j.brat.2014.04.006</p>
+<p>Davis, E.P., Glynn, L.M., 2024. Annual Research Review: The power of predictability: Patterns of signals in early life shape neurodevelopment and mental health trajectories. Journal of Child Psychology and Psychiatry 65, 508-534. https://doi.org/10.1111/jcpp.13958</p>
+<p>De Asis-Cruz, J., Krishnamurthy, D., Zhao, L., Kapse, K., Vezina, G., Andescavage, N., Limperopoulos, C., 2020. Association of prenatal maternal anxiety with fetal regional brain connectivity. JAMA Network Open 3, e2022349. https://doi.org/10.1001/jamanetworkopen.2020.22349</p>
+<p>Del Giudice, M., Ellis, B.J., Shirtcliff, E.A., 2011. The adaptive calibration model of stress responsivity. Neuroscience and Biobehavioral Reviews 35, 1562-1592. https://doi.org/10.1016/j.neubiorev.2010.11.007</p>
+<p>DiPietro, J.A., Costigan, K.A., Nelson, P., Gurewitsch, E.D., Laudenslager, M.L., 2008. Fetal responses to induced maternal relaxation during pregnancy. Biological Psychology 77, 11- 19. https://doi.org/10.1016/j.biopsycho.2007.08.008</p>
+<p>Dong, H.-M., Margulies, D.S., Zuo, X.-N., Holmes, A.J., 2021. Shifting gradients of macroscale cortical organization mark the transition from childhood to adolescence. Proceedings of the National Academy of Sciences 118, e2024448118. https://doi.org/10.1073/pnas.2024448118</p>
+<p>Egerton, A., Valmaggia, L.R., Howes, O.D., Day, F., Chaddock, C.A., Allen, P., Winton- Brown, T.T., Bloomfield, M.A.P., Bhattacharyya, S., Chilcott, J., Lappin, J.M., Murray, R.M., McGuire, P., 2016. Adversity in childhood linked to elevated striatal dopamine function in adulthood. Schizophrenia Research 176, 171-176. https://doi.org/10.1016/j.schres.2016.06.005</p>
+<p>Ellison, P.T., 2005. Evolutionary perspectives on the fetal origins hypothesis. American Journal of Human Biology 17, 113-118. https://doi.org/10.1002/ajhb.20097</p>
+<p>Entringer, S., Wüst, S., Kumsta, R., Layes, I.M., Nelson, E.L., Hellhammer, D.H., Wadhwa, P.D., 2008. Prenatal psychosocial stress exposure is associated with insulin resistance in young adults. American Journal of Obstetrics and Gynecology 199, 498.e1-498.e7. https://doi.org/10.1016/j.ajog.2008.03.006</p>
+<p>Feldman, H., Friston, K.J., 2010. Attention, uncertainty, and free-energy. Frontiers in Human Neuroscience 4, 215. https://doi.org/10.3389/fnhum.2010.00215</p>
+<p>Feuerriegel, D., Vogels, R., Kovács, G., 2021. Evaluating the evidence for expectation suppression in the visual system. Neuroscience and Biobehavioral Reviews 126, 368-381. https://doi.org/10.1016/j.neubiorev.2021.04.002</p>
+<p>FitzGerald, T.H.B., Dolan, R.J., Friston, K., 2015. Dopamine, reward learning, and active inference. Frontiers in Computational Neuroscience 9, 136. https://doi.org/10.3389/fncom.2015.00136</p>
+<p>Frasch, M.G., 2026. Causal thinking in physiology: A search for vertically organizing principles. The Journal of Physiology. Advance online publication. https://doi.org/10.1113/JP290762</p>
+<p>Friston, K., 2010. The free-energy principle: A unified brain theory? Nature Reviews Neuroscience 11, 127-138. https://doi.org/10.1038/nrn2787</p>
+<p>Friston, K.J., Shiner, T., FitzGerald, T., Galea, J.M., Adams, R., Brown, H., Dolan, R.J., Moran, R., Stephan, K.E., Bestmann, S., 2012. Dopamine, affordance and active inference. PLOS Computational Biology 8, e1002327. https://doi.org/10.1371/journal.pcbi.1002327</p>
+<p>Gabard-Durnam, L., McLaughlin, K.A., 2020. Sensitive periods in human development: Charting a course for the future. Current Opinion in Behavioral Sciences 36, 120-128. https://doi.org/10.1016/j.cobeha.2020.09.003</p>
+<p>Gee, D.G., Gabard-Durnam, L.J., Flannery, J., Goff, B., Humphreys, K.L., Telzer, E.H., Hare, T.A., Bookheimer, S.Y., Tottenham, N., 2013. Early developmental emergence of human amygdala-prefrontal connectivity after maternal deprivation. Proceedings of the National Academy of Sciences 110, 15638-15643. https://doi.org/10.1073/pnas.1307893110</p>
+<p>Glynn, L.M., Baram, T.Z., 2019. The influence of unpredictable, fragmented parental signals on the developing brain. Frontiers in Neuroendocrinology 53, 100736. https://doi.org/10.1016/j.yfrne.2019.01.002</p>
+<p>Greenough, W.T., Black, J.E., Wallace, C.S., 1987. Experience and brain development. Child Development 58, 539-559. https://doi.org/10.2307/1130197</p>
+<p>Halassa, M.M., Kastner, S., 2017. Thalamic functions in distributed cognitive control. Nature Neuroscience 20, 1669-1679. https://doi.org/10.1038/s41593-017-0020-1</p>
+<p>Hanson, J.L., Chung, M.K., Avants, B.B., Shirtcliff, E.A., Gee, J.C., Davidson, R.J., Pollak, S.D., 2010. Early stress is associated with alterations in the orbitofrontal cortex: A tensor- based morphometry investigation of brain structure and behavioral risk. Journal of Neuroscience 30, 7466-7472. https://doi.org/10.1523/JNEUROSCI.0859-10.2010</p>
+<p>Hanson, J.L., Hariri, A.R., Williamson, D.E., 2015. Blunted ventral striatum development in adolescence reflects emotional neglect and predicts depressive symptoms. Biological Psychiatry 78, 598-605. https://doi.org/10.1016/j.biopsych.2015.05.010</p>
+<p>Hanson, J.L., van den Bos, W., Roeber, B.J., Rudolph, K.D., Davidson, R.J., Pollak, S.D., 2017. Early adversity and learning: Implications for typical and atypical behavioral development. Journal of Child Psychology and Psychiatry 58, 770-778. https://doi.org/10.1111/jcpp.12694</p>
+<p>Harms, M.B., Shannon Bowen, K.E., Hanson, J.L., Pollak, S.D., 2018. Instrumental learning and cognitive flexibility processes are impaired in children exposed to early life stress. Developmental Science 21, e12596. https://doi.org/10.1111/desc.12596</p>
+<p>Hartman, S., Belsky, J., Pluess, M., 2023. Prenatal programming of environmental sensitivity. Translational Psychiatry 13, 161. https://doi.org/10.1038/s41398-023-02461-y Harvison, K.W., Molfese, D.L., Woodruff-Borden, J., Weigel, R.A., 2009. Neonatal auditory evoked responses are related to perinatal maternal anxiety. Brain and Cognition 71, 369- 374. https://doi.org/10.1016/j.bandc.2009.06.004</p>
+<p>Hayden, B.Y., Heilbronner, S.R., Pearson, J.M., Platt, M.L., 2011. Surprise signals in anterior cingulate cortex: Neuronal encoding of unsigned reward prediction errors driving adjustment in behavior. Journal of Neuroscience 31, 4178-4187. https://doi.org/10.1523/JNEUROSCI.4652-10.2011</p>
+<p>Hennessey, E.-M.P., Swales, D.A., Markant, J., Hoffman, M.C., Hankin, B.L., Davis, E.P., 2024. Maternal anxiety during pregnancy predicts infant attention to affective faces. Journal of Affective Disorders 344, 104-114. https://doi.org/10.1016/j.jad.2023.09.031</p>
+<p>Hensch, T.K., 2005. Critical period plasticity in local cortical circuits. Nature Reviews Neuroscience 6, 877-888. https://doi.org/10.1038/nrn1787</p>
+<p>Hiser, J., Koenigs, M., 2018. The multifaceted role of the ventromedial prefrontal cortex in emotion, decision making, social cognition, and psychopathology. Biological Psychiatry 83, 638-647. https://doi.org/10.1016/j.biopsych.2017.10.030</p>
+<p>Hodson, R., Mehta, M., Smith, R., 2024. The empirical status of predictive coding and active inference. Neuroscience and Biobehavioral Reviews 157, 105473. https://doi.org/10.1016/j.neubiorev.2023.105473</p>
+<p>Hohwy, J., 2013. The predictive mind. Oxford University Press.</p>
+<p>Holroyd, C.B., Nieuwenhuis, S., Yeung, N., Cohen, J.D., 2004. Dorsal anterior cingulate cortex shows fMRI response to internal and external error signals. Nature Neuroscience 7, 497-498. https://doi.org/10.1038/nn1238</p>
+<p>Huang, Z.-Y., Zhou, R., Huang, M., Zhou, H.-J., 2024. Energy-information trade-off induces continuous and discontinuous phase transitions in lateral predictive coding. Science China Physics, Mechanics &amp; Astronomy 67, 260511. https://doi.org/10.1007/s11433-024- 2341-2</p>
+<p>Hunter, S.K., Mendoza, J.H., D&#x27;Anna, K., Zerbe, G.O., McCarthy, L., Hoffman, M.C., Freedman, R., Ross, R.G., 2012. Antidepressants may mitigate the effects of prenatal maternal anxiety on infant auditory sensory gating. The American Journal of Psychiatry 169, 616-624. https://doi.org/10.1176/appi.ajp.2012.11091365</p>
+<p>Huntenburg, J.M., Bazin, P.-L., Margulies, D.S., 2018. Large-scale gradients in human cortical organization. Trends in Cognitive Sciences 22, 21-31. https://doi.org/10.1016/j.tics.2017.11.002</p>
+<p>Huys, Q.J.M., Maia, T.V., Frank, M.J., 2016. Computational psychiatry as a bridge from neuroscience to clinical applications. Nature Neuroscience 19, 404-413. https://doi.org/10.1038/nn.4238</p>
+<p>Jamadar, S.D., Behler, A., Deery, H., Breakspear, M., 2025. The metabolic costs of cognition. Trends in Cognitive Sciences 29, 541-555. https://doi.org/10.1016/j.tics.2024.11.010</p>
+<p>Jaramillo-Ospina, A.M., Elgbeili, G., Patel, S.H., Pokhvisneva, I., Silveira, P.P., 2025. Brain insulin receptor gene network shapes risk for metabolic disease after early-life stress in women. Communications Biology 8, 1372. https://doi.org/10.1038/s42003-025-08750-0</p>
+<p>Kalisch, R., Russo, S.J., Müller, M.B., 2024. Neurobiology and systems biology of stress resilience. Physiological Reviews 104, 1205-1263. https://doi.org/10.1152/physrev.00042.2023</p>
+<p>Kanai, R., Komura, Y., Shipp, S., Friston, K., 2015. Cerebral hierarchies: Predictive processing, precision and the pulvinar. Philosophical Transactions of the Royal Society B 370, 20140169. https://doi.org/10.1098/rstb.2014.0169</p>
+<p>Kasamatsu, T., Pettigrew, J.D., 1976. Depletion of brain catecholamines: Failure of ocular dominance shift after monocular occlusion in kittens. Science 194, 206-209. https://doi.org/10.1126/science.959850</p>
+<p>Kennerley, S.W., Walton, M.E., Behrens, T.E.J., Buckley, M.J., Rushworth, M.F.S., 2006. Optimal decision making and the anterior cingulate cortex. Nature Neuroscience 9, 940- 947. https://doi.org/10.1038/nn1724</p>
+<p>Kindt, M., Soeter, M., Vervliet, B., 2009. Beyond extinction: Erasing human fear responses and preventing the return of fear. Nature Neuroscience 12, 256-258. https://doi.org/10.1038/nn.2271</p>
+<p>Kleinridders, A., Cai, W., Cappellucci, L., Ghazarian, A., Collins, W.R., Vienberg, S.G., Pothos, E.N., Kahn, C.R., 2015. Insulin resistance in brain alters dopamine turnover and causes behavioral disorders. Proceedings of the National Academy of Sciences 112, 3463- 3468. https://doi.org/10.1073/pnas.1500877112</p>
+<p>Knudsen, E.I., 2004. Sensitive periods in the development of the brain and behavior. Journal of Cognitive Neuroscience 16, 1412-1425. https://doi.org/10.1162/0898929042304796</p>
+<p>Kube, T., Schwarting, R., Rozenkrantz, L., Glombiewski, J.A., Rief, W., 2020. Distorted cognitive processes in major depression: A predictive processing perspective. Biological Psychiatry 87, 388-398. https://doi.org/10.1016/j.biopsych.2019.07.017</p>
+<p>Kullmann, S., Heni, M., Hallschmid, M., Fritsche, A., Preissl, H., Häring, H.-U., 2016. Brain insulin resistance at the crossroads of metabolic and cognitive disorders in humans. Physiological Reviews 96, 1169-1209. https://doi.org/10.1152/physrev.00032.2015</p>
+<p>Kwisthout, J., Bekkering, H., van Rooij, I., 2017. To be precise, the details don&#x27;t matter: On predictive processing, precision, and level of detail of predictions. Brain and Cognition 112, 84-91. https://doi.org/10.1016/j.bandc.2016.02.008</p>
+<p>Larsen, B., Luna, B., 2018. Adolescence as a neurobiological critical period for the development of higher-order cognition. Neuroscience and Biobehavioral Reviews 94, 179- 195. https://doi.org/10.1016/j.neubiorev.2018.09.005</p>
+<p>Lawson, R.P., Bisby, J., Nord, C.L., Burgess, N., Rees, G., 2021. The computational, pharmacological, and physiological determinants of sensory learning under uncertainty. Current Biology 31, 163-172.e4. https://doi.org/10.1016/j.cub.2020.10.043</p>
+<p>Lawson, R.P., Rees, G., Friston, K.J., 2014. An aberrant precision account of autism. Frontiers in Human Neuroscience 8, 302. https://doi.org/10.3389/fnhum.2014.00302</p>
+<p>Li, J., Schiller, D., Schoenbaum, G., Phelps, E.A., Daw, N.D., 2011. Differential roles of human striatum and amygdala in associative learning. Nature Neuroscience 14, 1250- 1252. https://doi.org/10.1038/nn.2904</p>
+<p>Lieder, F., Griffiths, T.L., 2020. Resource-rational analysis: Understanding human cognition as the optimal use of limited computational resources. Behavioral and Brain Sciences 43, e1. https://doi.org/10.1017/S0140525X1900061X</p>
+<p>Lloyd, A., McKay, R.T., Furl, N., 2022. Individuals with adverse childhood experiences explore less and underweight reward feedback. Proceedings of the National Academy of Sciences 119, e2109373119. https://doi.org/10.1073/pnas.2109373119</p>
+<p>Luotonen, S., Railo, H., Acosta, H., Huotilainen, M., Lavonius, M., Karlsson, L., Karlsson, H., Tuulari, J.J., 2022. Auditory mismatch responses to emotional stimuli in 3-year-olds in relation to prenatal maternal depression symptoms. Frontiers in Neuroscience 16, 868270. https://doi.org/10.3389/fnins.2022.868270</p>
+<p>Lupien, S.J., McEwen, B.S., Gunnar, M.R., Heim, C., 2009. Effects of stress throughout the lifespan on the brain, behaviour and cognition. Nature Reviews Neuroscience 10, 434-445. https://doi.org/10.1038/nrn2639</p>
+<p>Mangalam, M., 2025. The myth of the Bayesian brain. European Journal of Applied Physiology 125, 2643-2677. https://doi.org/10.1007/s00421-025-05855-6</p>
+<p>Margulies, D.S., Ghosh, S.S., Goulas, A., Falkiewicz, M., Huntenburg, J.M., Langs, G., Bezgin, G., Eickhoff, S.B., Castellanos, F.X., Petrides, M., Jefferies, E., Smallwood, J., 2016. Situating the default-mode network along a principal gradient of macroscale cortical organization. Proceedings of the National Academy of Sciences 113, 12574-12579. https://doi.org/10.1073/pnas.1608282113</p>
+<p>Maria, A., Nissilä, I., Shekhar, S., Kotilahti, K., Tuulari, J.J., Hirvi, P., Huotilainen, M., Heiskala, J., Karlsson, L., Karlsson, H., 2020. Relationship between maternal pregnancy- related anxiety and infant brain responses to emotional speech: A pilot study. Journal of Affective Disorders 262, 62-70. https://doi.org/10.1016/j.jad.2019.10.047</p>
+<p>Marshall, L., Mathys, C., Ruge, D., de Berker, A.O., Dayan, P., Stephan, K.E., Bestmann, S., 2016. Pharmacological fingerprints of contextual uncertainty. PLOS Biology 14, e1002575. https://doi.org/10.1371/journal.pbio.1002575</p>
+<p>Mataix-Cols, D., Fernández de la Cruz, L., Monzani, B., Rosenfield, D., Andersson, E., Pérez-Vigil, A., et al., 2017. D-cycloserine augmentation of exposure-based cognitive behavior therapy for anxiety, obsessive-compulsive, and posttraumatic stress disorders: A systematic review and meta-analysis of individual participant data. JAMA Psychiatry 74, 501-510. https://doi.org/10.1001/jamapsychiatry.2016.3955</p>
+<p>Mathys, C., Daunizeau, J., Friston, K.J., Stephan, K.E., 2011. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience 5, 39. https://doi.org/10.3389/fnhum.2011.00039</p>
+<p>Mathys, C.D., Lomakina, E.I., Daunizeau, J., Iglesias, S., Brodersen, K.H., Friston, K.J., Stephan, K.E., 2014. Uncertainty in perception and the Hierarchical Gaussian Filter. Frontiers in Human Neuroscience 8, 825. https://doi.org/10.3389/fnhum.2014.00825</p>
+<p>McEwen, B.S., 2012. Brain on stress: How the social environment gets under the skin. Proceedings of the National Academy of Sciences 109, 17180-17185. https://doi.org/10.1073/pnas.1121254109</p>
+<p>McLaughlin, K.A., Colich, N.L., Rodman, A.M., Weissman, D.G., 2020. Mechanisms linking childhood trauma exposure and psychopathology: A transdiagnostic model of risk and resilience. BMC Medicine 18, 96. https://doi.org/10.1186/s12916-020-01561-6</p>
+<p>Mennes, M., Stiers, P., Lagae, L., Van den Bergh, B., 2006. Long-term cognitive sequelae of antenatal maternal anxiety: Involvement of the orbitofrontal cortex. Neuroscience and Biobehavioral Reviews 30, 1078-1086. https://doi.org/10.1016/j.neubiorev.2006.04.003</p>
+<p>Mennes, M., Van den Bergh, B., Lagae, L., Stiers, P., 2009. Developmental brain alterations in 17 year old boys are related to antenatal maternal anxiety. Clinical Neurophysiology 120, 1116-1122. https://doi.org/10.1016/j.clinph.2009.04.003</p>
+<p>Mennes, M., Stiers, P., Lagae, L., Van den Bergh, B.R.H., 2020. Antenatal maternal anxiety modulates the BOLD response in 20-year-old men during endogenous cognitive control. Brain Imaging and Behavior 14, 830-846. https://doi.org/10.1007/s11682-018-0027-6</p>
+<p>Montirosso, R., Provenzi, L., Tronick, E. (Eds.), 2020. Risk and protective factors associated with early adversity and development: Evidence from human and animal research. Frontiers Media.</p>
+<p>Morishita, H., Miwa, J.M., Heintz, N., Hensch, T.K., 2010. Lynx1, a cholinergic brake, limits plasticity in adult visual cortex. Science 330, 1238-1240. https://doi.org/10.1126/science.1195320</p>
+<p>Nelson, C.A., Gabard-Durnam, L.J., 2020. Early adversity and critical periods: Neurodevelopmental consequences of violating the expectable environment. Trends in Neurosciences 43, 133-143. https://doi.org/10.1016/j.tins.2020.01.002</p>
+<p>Novick, A.M., Levandowski, M.L., Laumann, L.E., Philip, N.S., Price, L.H., Tyrka, A.R., 2018. The effects of early life stress on reward processing. Journal of Psychiatric Research 101, 80-103. https://doi.org/10.1016/j.jpsychires.2018.02.002</p>
+<p>Nussenbaum, K., Hartley, C.A., 2024. Understanding the development of reward learning through the lens of meta-learning. Nature Reviews Psychology 3, 424-438. https://doi.org/10.1038/s44159-024-00304-1</p>
+<p>Oswald, L.M., Wand, G.S., Kuwabara, H., Wong, D.F., Zhu, S., Brasic, J.R., 2014. History of childhood adversity is positively associated with ventral striatal dopamine responses to amphetamine. Psychopharmacology 231, 2417-2433. https://doi.org/10.1007/s00213- 013-3407-z</p>
+<p>Otte, R.A., Donkers, F.C.L., Braeken, M.A.K.A., van den Heuvel, M.I., Winkler, I., Van den Bergh, B.R.H., 2015. Multimodal processing of emotional information in 9-month-old infants II: Prenatal exposure to maternal anxiety. Brain and Cognition 95, 107-117. https://doi.org/10.1016/j.bandc.2014.12.001</p>
+<p>Pallarés, M.E., Antonelli, M.C., 2017. Prenatal stress and neurodevelopmental plasticity: Relevance to psychopathology. Advances in Experimental Medicine and Biology 1015, 117-129. https://doi.org/10.1007/978-3-319-62817-2_7</p>
+<p>Paquola, C., Bethlehem, R.A.I., Seidlitz, J., Wagstyl, K., Romero-Garcia, R., Whitaker, K.J., et al., 2019. Shifts in myeloarchitecture characterise adolescent development of cortical gradients. eLife 8, e50482. https://doi.org/10.7554/eLife.50482</p>
+<p>Paulus, M.P., Stein, M.B., 2006. An insular view of anxiety. Biological Psychiatry 60, 383- 387. https://doi.org/10.1016/j.biopsych.2006.03.042</p>
+<p>Pellicano, E., Burr, D., 2012. When the world becomes &#x27;too real&#x27;: A Bayesian explanation of autistic perception. Trends in Cognitive Sciences 16, 504-510. https://doi.org/10.1016/j.tics.2012.08.009</p>
+<p>Peña, C.J., Kronman, H.G., Walker, D.M., Cates, H.M., Bagot, R.C., Purushothaman, I., Issler, O., Loh, Y.-H.E., Leong, T., Kiraly, D.D., Goodman, E., Neve, R.L., Shen, L., Nestler, E.J., 2017. Early life stress confers lifelong stress susceptibility in mice via ventral tegmental area OTX2. Science 356, 1185-1188. https://doi.org/10.1126/science.aan4491</p>
+<p>Pluess, M., Belsky, J., 2011. Prenatal programming of postnatal plasticity? Development and Psychopathology 23, 29-38. https://doi.org/10.1017/S0954579410000623</p>
+<p>Pollak, S.D., Kistler, D.J., 2002. Early experience is associated with the development of categorical representations for facial expressions of emotion. Proceedings of the National Academy of Sciences 99, 9072-9076. https://doi.org/10.1073/pnas.142165999</p>
+<p>Poplawski, J., Montina, T., Metz, G.A.S., 2024. Early life stress shifts critical periods and causes precocious visual cortex development. PLOS ONE 19, e0316384. https://doi.org/10.1371/journal.pone.0316384</p>
+<p>Press, C., Kok, P., Yon, D., 2020. The perceptual prediction paradox. Trends in Cognitive Sciences 24, 13-24. https://doi.org/10.1016/j.tics.2019.11.003</p>
+<p>Provenzi, L., Guida, E., Montirosso, R., 2018. Preterm behavioral epigenetics: A systematic review. Neuroscience and Biobehavioral Reviews 84, 262-271. https://doi.org/10.1016/j.neubiorev.2017.08.020</p>
+<p>Pruessner, J.C., Champagne, F., Meaney, M.J., Dagher, A., 2004. Dopamine release in response to a psychological stress in humans and its relationship to early life maternal care: A positron emission tomography study using [11C]raclopride. Journal of Neuroscience 24, 2825-2831. https://doi.org/10.1523/JNEUROSCI.3422-03.2004</p>
+<p>Rao, R.P.N., Ballard, D.H., 1999. Predictive coding in the visual cortex: A functional interpretation of some extra-classical receptive-field effects. Nature Neuroscience 2, 79- 87. https://doi.org/10.1038/4580</p>
+<p>Rikhye, R.V., Gilra, A., Halassa, M.M., 2018. Thalamic regulation of switching between cortical representations enables cognitive flexibility. Nature Neuroscience 21, 1753-1763. https://doi.org/10.1038/s41593-018-0269-z</p>
+<p>Rudebeck, P.H., Murray, E.A., 2014. The orbitofrontal oracle: Cortical mechanisms for the prediction and evaluation of specific behavioral outcomes. Neuron 84, 1143-1156. https://doi.org/10.1016/j.neuron.2014.10.049</p>
+<p>Rutter, M., 2012. Resilience as a dynamic concept. Development and Psychopathology 24, 335-344. https://doi.org/10.1017/S0954579412000028</p>
+<p>Sacu, S., Dubois, M., Hezemans, F.H., Aggensteiner, P.-M., Monninger, M., Brandeis, D., Banaschewski, T., Hauser, T.U., Holz, N.E., 2024. Early-life adversities are associated with lower expected value signaling in the adult brain. Biological Psychiatry 96, 948-958. https://doi.org/10.1016/j.biopsych.2024.04.005</p>
+<p>Schultz, W., Dayan, P., Montague, P.R., 1997. A neural substrate of prediction and reward. Science 275, 1593-1599. https://doi.org/10.1126/science.275.5306.1593</p>
+<p>Schwartenbeck, P., FitzGerald, T.H.B., Mathys, C., Dolan, R., Friston, K., 2015. The dopaminergic midbrain encodes the expected certainty about desired outcomes. Cerebral Cortex 25, 3434-3445. https://doi.org/10.1093/cercor/bhu159</p>
+<p>Seo, H., Lee, D., 2007. Temporal filtering of reward signals in the dorsal anterior cingulate cortex during a mixed-strategy game. Journal of Neuroscience 27, 8366-8377. https://doi.org/10.1523/JNEUROSCI.2369-07.2007</p>
+<p>Seth, A.K., 2013. Interoceptive inference, emotion, and the embodied self. Trends in Cognitive Sciences 17, 565-573. https://doi.org/10.1016/j.tics.2013.09.007</p>
+<p>Seth, A.K., Friston, K.J., 2016. Active interoceptive inference and the emotional brain. Philosophical Transactions of the Royal Society B 371, 20160007. https://doi.org/10.1098/rstb.2016.0007</p>
+<p>Shenhav, A., Botvinick, M.M., Cohen, J.D., 2013. The expected value of control: An integrative theory of anterior cingulate cortex function. Neuron 79, 217-240. https://doi.org/10.1016/j.neuron.2013.07.007</p>
+<p>Sheridan, M.A., McLaughlin, K.A., 2014. Dimensions of early experience and neural development: Deprivation and threat. Trends in Cognitive Sciences 18, 580-585. https://doi.org/10.1016/j.tics.2014.09.001</p>
+<p>Song, B.B., Sommer, W., Maurer, U., 2025. Discrete repetition effects for visual words compared to faces and animals, but no modulation by expectation: An event-related potential study. European Journal of Neuroscience 61, e70047. https://doi.org/10.1111/ejn.70047</p>
+<p>Sterzer, P., Adams, R.A., Fletcher, P., Frith, C., Lawrie, S.M., Muckli, L., Petrovic, P., Uhlhaas, P., Voss, M., Corlett, P.R., 2018. The predictive coding account of psychosis. Biological Psychiatry 84, 634-643. https://doi.org/10.1016/j.biopsych.2018.05.015</p>
+<p>Stouffer, M.A., Woods, C.A., Patel, J.C., Lee, C.R., Witkovsky, P., Bao, L., Machold, R.P., Jones, K.T., de Vaca, S.C., Reith, M.E.A., Carr, K.D., Rice, M.E., 2015. Insulin enhances striatal dopamine release by activating cholinergic interneurons and thereby signals reward. Nature Communications 6, 8543. https://doi.org/10.1038/ncomms9543</p>
+<p>Takesian, A.E., Hensch, T.K., 2013. Balancing plasticity/stability across brain development. Progress in Brain Research 207, 3-34. https://doi.org/10.1016/B978-0-444-63327-9.00001- 1</p>
+<p>Taylor, J., Rousselet, G., Sereno, S., 2024. Can prediction error explain predictability effects on the N1 during picture-word verification? Imaging Neuroscience 2. https://doi.org/10.1162/imag_a_00131</p>
+<p>Teicher, M.H., Samson, J.A., 2016. Annual Research Review: Enduring neurobiological effects of childhood abuse and neglect. Journal of Child Psychology and Psychiatry 57, 241-266. https://doi.org/10.1111/jcpp.12507</p>
+<p>Tooley, U.A., Bassett, D.S., Mackey, A.P., 2021. Environmental influences on the pace of brain development. Nature Reviews Neuroscience 22, 372-384. https://doi.org/10.1038/s41583-021-00457-5</p>
+<p>Tottenham, N., Vannucci, A., 2025. Attachment as prediction: Insights from cognitive and developmental neuroscience. Current Directions in Psychological Science 34, 195-206. https://doi.org/10.1177/09637214251313714</p>
+<p>Turk, E., van den Heuvel, M.I., Sleurs, C., Billiet, T., Uyttebroeck, A., Sunaert, S., Mennes, M., Van den Bergh, B.R.H., 2023. Maternal anxiety during pregnancy is associated with weaker prefrontal functional connectivity in adult offspring. Brain Imaging and Behavior 17, 595-607. https://doi.org/10.1007/s11682-023-00787-1</p>
+<p>Van de Cruys, S., Evers, K., Van der Hallen, R., Van Eylen, L., Boets, B., de-Wit, L., Wagemans, J., 2014. Precise minds in uncertain worlds: Predictive coding in autism. Psychological Review 121, 649-675. https://doi.org/10.1037/a0037665</p>
+<p>Van de Cruys, S., Van der Hallen, R., Wagemans, J., 2017. Disentangling signal and noise in autism spectrum disorder. Brain and Cognition 112, 78-83. https://doi.org/10.1016/j.bandc.2016.08.004</p>
+<p>Van den Bergh, B.R.H., Antonelli, M.C., Stein, D.J., 2024. Current perspectives on perinatal mental health and neurobehavioral development: Focus on regulation, coregulation and self-regulation. Current Opinion in Psychiatry 37, 237-250. https://doi.org/10.1097/YCO.0000000000000932</p>
+<p>Van den Bergh, B.R.H., Frasch, M.G., 2026. Maternal anxiety during pregnancy and offspring information processing across development: A theory-guided predictive- processing reappraisal of two longitudinal cohorts. arXiv 2608.24983 (preprint). https://doi.org/10.48550/arXiv.2608.24983</p>
+<p>Van den Bergh, B.R.H., Mennes, M., Oosterlaan, J., Stevens, V., Stiers, P., Marcoen, A., Lagae, L., 2005. High antenatal maternal anxiety is related to impulsivity during performance on cognitive tasks in 14-and 15-year-olds. Neuroscience and Biobehavioral Reviews 29, 259-269. https://doi.org/10.1016/j.neubiorev.2004.10.010</p>
+<p>Van den Bergh, B.R.H., van den Heuvel, M.I., Lahti, M., Braeken, M., de Rooij, S.R., Entringer, S., Hoyer, D., Roseboom, T., Räikkönen, K., King, S., Schwab, M., 2020. Prenatal developmental origins of behavior and mental health: The influence of maternal stress in pregnancy. Neuroscience and Biobehavioral Reviews 117, 26-64. https://doi.org/10.1016/j.neubiorev.2017.07.003</p>
+<p>van den Heuvel, M.I., Donkers, F.C.L., Winkler, I., Otte, R.A., Van den Bergh, B.R.H., 2015. Maternal mindfulness and anxiety during pregnancy affect infants&#x27; neural responses to sounds. Social Cognitive and Affective Neuroscience 10, 453-460. https://doi.org/10.1093/scan/nsu075</p>
+<p>van den Heuvel, M.I., Henrichs, J., Donkers, F.C.L., Van den Bergh, B.R.H., 2018. Children prenatally exposed to maternal anxiety devote more attentional resources to neutral pictures. Developmental Science 21, e12612. https://doi.org/10.1111/desc.12612</p>
+<p>von Leupoldt, A., Mangelschots, E., Niederstrasser, N.G., Braeken, M., Billiet, T., Van den Bergh, B.R.H., 2017. Prenatal stress exposure is associated with increased dyspnoea perception in adulthood 28 years later. European Respiratory Journal 50, 1700642. https://doi.org/10.1183/13993003.00642-2017</p>
+<p>Walsh, K.S., McGovern, D.P., Clark, A., O&#x27;Connell, R.G., 2020. Evaluating the neurophysiological evidence for predictive processing as a model of perception. Annals of the New York Academy of Sciences 1464, 242-268. https://doi.org/10.1111/nyas.14321</p>
+<p>Wang, S.S.-H., Kloth, A.D., Badura, A., 2014. The cerebellum, sensitive periods, and autism. Neuron 83, 518-532. https://doi.org/10.1016/j.neuron.2014.07.016</p>
+<p>Wilson, R.C., Takahashi, Y.K., Schoenbaum, G., Niv, Y., 2014. Orbitofrontal cortex as a cognitive map of task space. Neuron 81, 267-279. https://doi.org/10.1016/j.neuron.2013.11.005</p>
+<p>Yu, A.J., Dayan, P., 2005. Uncertainty, neuromodulation, and attention. Neuron 46, 681- 692. https://doi.org/10.1016/j.neuron.2005.04.026</p>
+<p>Zhang, Y., Chen, Y., Chen, X.R., Harhen, N.C., Glynn, L.A., Davis, E.P., Baram, T.Z., Risbrough, V.B., Stout, D.A., Bornstein, A.M., 2026. A specific computational role for early- life unpredictability, and not lifelong traumatic experience, in decision-making under uncertainty. bioRxiv. https://doi.org/10.64898/2026.06.01.729407 (preprint, not peer- reviewed)</p>
+<p>Zotev, V., Phillips, R., Misaki, M., Wong, C.K., Wurfel, B.E., Krueger, F., Feldner, M., Bodurka, J., 2018. Real-time fMRI neurofeedback training of the amygdala activity with simultaneous EEG in veterans with combat-related PTSD. NeuroImage: Clinical 19, 106- 121. https://doi.org/10.1016/j.nicl.2018.04.010</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
