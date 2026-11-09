@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: CoBra: A Corpus of German Bracketing Paradox
+Phrases</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+CoBra: A Corpus of German Bracketing Paradox Phrases
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.23
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>16</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="na">Not applicable <span class="n">(16)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 18 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 18 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 18 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>This paper introduces CoBra, a Corpus of German Bracketing Paradox Phrases, and describes its construction. It characterizes Co-Bra as a specialized linguistic resource that can be used both as a source of attested examples for theoretical work on adjective-compound modification and as an experimentally grounded dataset, in which each phrase is linked to the aggregated results of five psycholinguistic experiments on adjective attachment. It explains how these envisioned uses informed the compilation process. CoBra comprises 913 attested adjective-compound phrases drawn from sources published between 1822 and 2026, and is freely available for academic use.</p>
+<h3>1 Introduction</h3>
+<p>Bracketing paradoxes are adjective-nominal compound constructions in which the morphosyntactic structure of the compound does not transparently correspond to the semantic scope of the modifying adjective. They have long posed a challenge for theories of word formation and modification in German (Abramov, 1992; Bär, 2007; Beard, 1991; Behaghel, 1923; Bergmann, 1980; Burkhardt, 1999; Fabricius-Hansen, 1993; Haider, 2011; Härtl, 2015;  Institut für Deutsche Sprache (IDS) Mannheim, n.d.; Maienborn, 2020 Maienborn, , 2021;; Meinunger, 2014; Sternefeld, 2003; Wustmann, 1912). Despite sustained theoretical interest, empirical work on the phenomenon has relied primarily on small, often-repeated sets of canonical examples drawn from the theoretical literature itself, rather than on systematically sampled, attested language data. This paper introduces the Corpus of German Bracketing Paradox Phrases (CoBra), a resource compiled to address this gap. CoBra comprises 913 attested adjective-compound phrases, drawn from a wide range of genres and registers and spanning publication dates from 1822 to 2026. The phrases are further linked to the aggregated judgments of five psycholinguistic experiments probing adjective attachment, semantic compatibility, and the effect of sentential context. This combination of attested corpus data and controlled experimental measurement distinguishes CoBra from existing resources for the study of German compounding.</p>
+<h3>2 The Bracketing Paradox Phenomenon</h3>
+<p>Nominal compounding is a highly productive feature of German word formation, and adjective-compound sequences are ubiquitous in written and spoken discourse. The rightmost element of a compound is its head, determining grammatical gender and core meaning. The elements to the left of the head are modifiers. When a prenominal adjective combines with such a compound, standard grammar requires it to agree morphologically with the head noun (Burkhardt, 1999; Eisenberg et al., 2016; Fabricius-Hansen, 1993).</p>
+<p>When the adjective&#x27;s scope does not match this agreement pattern, the result is what is known as a bracketing paradox (Abramov, 1992; Bär, 2007; Behaghel, 1923; Bergmann, 1980; Burkhardt, 1999; Fabricius-Hansen, 1993; Haider, 2011; Härtl, 2015;  Institut für Deutsche Sprache (IDS) Mannheim, n.d.; Maienborn, 2020 Maienborn, , 2021;; Meinunger, 2014; Sternefeld, 2003; Wustmann, 1912). Here, the term is restricted to adjective-nominal-compound sequences, rather than to the morphological phenomenon in which structural boundaries conflict with phonological or semantic constraints (Härtl, 2013; Müller, 2003; Newell, 2021; Osborne &amp; Gross, 2021; Spencer, 1988).</p>
+<p>Consider illegales Aufenthaltsgesetz &#x27;illegal residence act&#x27;. Morphologically, illegales agrees with the compound via its head, Gesetz (&#x27;act&#x27;, singular neuter) rather than the non-head Aufenthalt (&#x27;residence&#x27;, singular masculine). Semantically, however, the phrase supports two readings, given in (1) and (2). In (1), the adjective scopes over the compound head, in line with its surface morphosyntax. In (2) the adjective scopes over the non-head constituent. The two readings share an identical surface structure and prosodic pattern. The only difference is in the semantic bracketing.</p>
+<p>(1) Canonical interpretation: illegales Aufenthaltsgesetz &#x27;illegal act [regulating] residence&#x27; (2) Bracketing paradox interpretation illegales Aufenthaltsgesetz &#x27;act [regulating] illegal residence&#x27; Despite this apparent irregularity, such constructions are pervasive across registers and interpreted effortlessly by native speakers, even though individual phrases vary considerably in perceived acceptability (Pryslopska &amp; von der Malsburg, 2024).</p>
+<h3>3 Existing Resources and the Case for a Dedicated Corpus</h3>
+<p>A bracketing paradox is not a surface feature that improved part-of-speech tagging or a larger language model could straightforwardly capture. It is a mismatch between the morphological structure of a compound and the semantic scope of the adjective modifying it: identifying an instance requires a judgment about meaning, not merely about form. For this reason, systematic corpus-based study of the phenomenon has so far been limited (Dima et al., 2017; Pryslopska &amp; von der Malsburg, 2024). Dima et al. (2017) took a step toward closing this gap with a corpus-based model of semantic plausibility for German bracketing paradoxes. However, their work had several shortcomings: the model was built on a small set of items; the empirical validation was based on very few annotators; and the data was not released as a standalone resource. CoBra extends this line of work into a large-scale, publicly available, annotated corpus with linked experimental judgments. Three general-purpose German corpora could, in principle, be searched for Bracketing paradox candidates: • the Deutsches Referenzkorpus (Kupietz et al., 2023; Leibniz-Institut für Deutsche Sprache, 2025), a multi-billion-word corpus of written German covering a wide range of text types; • the Tübingen Treebank of Written German (TüBa-D/Z; Telljohann et al. ( 2015)), a syntactically annotated newspaper corpus; • the corpora produced by the Corpora from the Web initiative (Schäfer, 2015; Schäfer &amp; Bildhauer, 2012), large web-crawled collections of German text.</p>
+<p>Each of these corpora is several orders of magnitude larger than Co-Bra and could, by virtue of size alone, be expected to contain bracketing paradoxes. However, none carries the annotation needed to retrieve them: identifying a bracketing paradox requires a semantic judgment about which noun in a compound an adjective modifies, a property that no amount of syntactic or morphological tagging captures. Nor does any existing resource link attested bracketing paradox phrases to experimental judgments about their interpretation. Researchers wishing to study the phenomenon empirically have therefore relied on one of two strategies: manually curated example sets drawn from the theoretical literature, or ad hoc searches within general corpora. Neither strategy supports systematic, replicable study at scale.</p>
+<p>These limitations motivated the design criteria for CoBra. The corpus contains attested phrases only, collected from real language use rather than constructed for the purpose of illustration. It offers broad coverage of genre, register, and publication date, rather than reliance on a single text type. It contains human and large language model-supported annotations for morphosyntactic agreement and semantic category, to support fine-grained analysis. Lastly, it is linked to controlled experimental data, so that annotated properties and experimental results can be examined together. The following sections describe how these criteria were implemented.</p>
+<h3>4 Corpus Design and Compilation</h3>
+<p>CoBra comprises 913 phrases, divided into three types that reflect different degrees of structural ambiguity and compositionality: bracketing paradoxes (3), ambiguous constructions (4), and canonical constructions (5). This three-way distinction supports fine-grained analysis of the relationship between morphological structure and modification pattern within the corpus.</p>
+<p>(3) Bracketing paradox phrase: fettiges Haarshampoo &#x27;shampoo for oily hair&#x27; (4) Ambiguous phrase: geltende Rechtsnormen &#x27;applicable legal standards&#x27; (5) Canonical phrase: rapides Waldsterben &#x27;rapid forest die-off&#x27; Bracketing paradoxes form the largest subset.</p>
+<p>Each phrase consists of an adjective and a compound noun written as a single orthographic word. Where a phrase as cited in the source contained more than one noun or adjective, each combination was entered as a separate item, so as to preserve a clear mapping between individual constituents and compounds. For example, palästinensische Ärzte-und Apothekervereinigung (&#x27;Palestinian Medical and Pharmaceutical Association&#x27;) is recorded as two entries, one for each compound: palästinensische Ärztevereinigung (&#x27;Palestinian Medical Association&#x27;) and palästinensische Apothekervereinigung (&#x27;Palestinian Pharmaceutical Association&#x27;). Similarly, roter, feinkörniger Sandstein (&#x27;red, fine-grained sandstone&#x27;) is recorded as two entries, one for each adjective: roter Sandstein (&#x27;red sandstone&#x27;) and feinkörniger Sandstein (&#x27;fine-grained sandstone&#x27;).</p>
+<p>While most compounds are spelled without an internal break, a small group of 15 unique compounds contains a hyphen (Table 1). For six of these compounds, the hyphen is likely unrelated to the bracketing paradox phenomenon itself: it marks a borrowed word (Hummus, Plateau, Sound), a proper name (Diana, Moulin-Rouge), or an abbreviation (DDR), all of which are conventionally hyphenated when compounded in German regardless of any structural ambiguity. One further compound, S-Bahnfahrer, contains a hyphen because S-Bahn is itself a lexicalized, fixed form and its hyphenation has no bearing on the adjective&#x27;s attachment site.</p>
+<p>A further 6 items feature complex adjectival modification (Table 2). However, they owe their surface complexity to independent patterns rather than to the bracketing paradox phenomenon. In frisch gepresster, gut erhaltene, and schnell wachsende, a manner or degree adverb specifies how the process denoted by the participle occurred (how recently, how well, how fast). In blau unterfütterte, the first element is a color adjective specifying a resulting property of that process (the color of the lining), similarly to English resultative compounds such as blue-lined. In rein äußeres, rein functions as a restrictive particle (&#x27;merely&#x27;, &#x27;purely&#x27;) rather than a degree adverb, modifying the relational adjective äußer-(&#x27;outer&#x27;). In all five cases, modification is internal to the adjectival phrase</p>
+<p>The sixth item, CO2 neutrale Antriebstechnologie, is similar to the hyphenated nouns (e.g. DDR-Linguistik). CO2 is a fixed technical element forming a single complex adjective, CO2-neutral.</p>
+<p>The phrases in CoBra were collected between 2021 and 2026 from a wide range of written, spoken, and digital sources (Figure 1). The original source materials span publication years from 1822 to 2026; where no publication date could be established, the corresponding date field was left empty. The sampling strategy prioritized attested bracketing paradox phrases while maintaining diversity of genre and register. Most sources originate from Germany (831), with a smaller number from Austria (6) and Switzerland (12), based on the author and publication source. For 64 phrases the country of origin could not be determined. The sources are split into 10 categories: lin-   , 2001) and Digitales Wörterbuch der deutschen Sprache (Digitales Wörterbuch der deutschen Sprache (DWDS), 2023). Further written sources come from published media (5.4%): newspapers and magazines, both national, regional, and specialized trade publications (e.g., Die Zeit, Gießener Allgemeine, Ärzteblatt, and Braut), books (3.5%), both originally written in German and translated editions, and peer-reviewed scientific articles from fields other than linguistics (1.2%).</p>
+<p>Texts from public institutions (4.2%) comprise official, governmental, and academic sources, such as universities and research institutes (e.g., Universität Wien, Leibniz-Institut für Deutsche Sprache), governmental bodies (e.g., Land Baden-Württemberg, Bundesamt für Bevölkerungsschutz und Katastrophenhilfe), organizations (e.g., Bundesinstitut für Berufsbildung, Bundeszentrale für politische Bildung), and municipal or city publications (e.g., Berlin, Landratsamt Alb-Donau-Kreis). Legal documents, such as court decisions and statutes, are included in the same category.</p>
+<p>The corpus also includes commercial and everyday print material: product advertisements (8.1%), comprising descriptions of items, food packaging, and product categories, drawn from both online and print media; and posters and stickers (2.3%), originating primarily from Baden-Württemberg, including advertisements for events, billboards, school posters, and posters announcing changes to train schedules.</p>
+<p>The second-largest source category is web-based text (17.3%), including forum posts, blogs, reviews, and personal or institutional websites. Spoken materials (1.6%), including podcasts, talks, and songs, represent the only category not derived from written text.</p>
+<p>Together, these categories form a heterogeneous, multi-genre dataset that reflects a broad range of registers and communicative contexts.</p>
+<h3>5 Composition and Annotation</h3>
+<p>The corpus contains 969 unique nouns across 804 unique compounds. Compound nouns were split manually into their head (N2) and non-head (N1) constituents and are recorded along with the compounds in the corpus. The most frequently repeated nouns were Energie &#x27;energy&#x27; ( 27), Sprache &#x27;language&#x27; (21), Geschichte &#x27;history&#x27; ( 16), and Buch &#x27;book&#x27; (15). There are 586 unique adjectives in the corpus, recorded as part of the phrase and in their base form. The most frequent, deutsch &#x27;German&#x27;, occurs 31 times, followed by erneuerbar &#x27;renewable&#x27;, evangelisch &#x27;evangelical&#x27;, and groß &#x27;big&#x27;, each occurring 9 times.</p>
+<p>In addition to the manual collection of phrases and the manual splitting of compounds into head and non-head constituents, each phrase was annotated for semantic category and for morphosyntactic agreement between the adjective and the compound. Nearly all phrases (97.5%) are further linked to psycholinguistic data from five experiments on adjective attachment.</p>
+<h3>5.1 Semantic Annotation</h3>
+<p>Adjectives and compound constituent nouns were semantically annotated using GermaNet (Hamp &amp; Feldweg, 1997; Henrich &amp; Hinrichs, 2010; Hundsnurscher &amp; Splett, 1982), a lexical-semantic resource for German modeled on the design of WordNet (Miller, 1995).</p>
+<p>For each lemma, all matching GermaNet synsets were retrieved and their semantic classes collected. Items not covered by GermaNet (105 adjectives and 28 nouns) were annotated with the assistance of Claude Sonnet 5 (Anthropic, 2026), a large language model prompted with a manually annotated set of 100 items as guidance. The model was instructed to assign each lemma a single category reflecting its most likely sense, rather than return multiple candidates. All resulting annotations were manually validated by the author. CoBra represents all GermaNet adjective and noun semantic classes, in either non-head (N1) or head (N2) position in the compound (Figure 2). Many lemmas were polysemous (mean polysemy = 1.7): 51.1% of nouns (495/969, mean polysemy = 1.8 ) and 25.6% of adjectives (150/586, mean polysemy = 1.4) had between two and eight semantic classes. Therefore, the category counts shown in Figure 2 exceed the number of unique nouns and adjectives, since a single lemma with multiple GermaNet senses contributes to more than one bar.</p>
+<h3>5.2 Morphosyntactic Annotation</h3>
+<p>The morphosyntactic agreement between the non-head compound noun constituent (N1) and the adjective in each phrase was annotated by two coders: a German native speaker and the author. The agreement between the two annotators was 95.5%, with a Cohen&#x27;s Kappa of 0.99. Where the two annotators diverged, a third annotator, also a native speaker of German, resolved the disagreement. Morphosyntactic match was annotated by comparing the adjective&#x27;s surface inflection with the non-head noun of the compound, rather than with the head noun it is grammatically required to agree with. In (1) illegales Aufenthaltsgesetz &#x27;illegal residence act&#x27;, the inflection on illegales is compatible with a singular neuter noun, matching the head noun Gesetz. The non-head noun Aufenthalt is masculine, and therefore it is not a morphosyntactic match for the adjective, and the phrase was annotated accordingly. By contrast, in internationaler Bestsellerautor &#x27;international bestseller author&#x27;, the adjective&#x27;s masculine inflection matches not only the head noun Autor but also the non-head noun Bestseller, which is likewise masculine. Such phrases were annotated as an adjective-N1 match.</p>
+<p>A further source of matches arises when the head noun is feminine. The feminine singular and plural adjective endings coincide in German (e.g., strong nominative -e), an adjective inflected to agree with a feminine head noun is also compatible with a plural reading of the non-head noun. This is the case even where the non-head noun&#x27;s compound-internal form, though recorded as singular in the corpus, is formally identical to its plural via the linking element. For example, in landwirtschaftliche Maschinenfabrik &#x27;agricultural machinery factory&#x27; and bevorstehende Unwetterlage &#x27;upcoming severe weather conditions&#x27;, the non-head noun&#x27;s surface form within the compound coincides with its plural. Such phrases were, therefore, also annotated as morphosyntactically matching.</p>
+<p>The singular form of each compound was annotated rather than the form as attested. Two considerations motivated this choice. First, working with a single canonical form reduces variance introduced by number marking, which is orthogonal to the morphosyntactic match. Second, it simplifies the annotation task itself, since annotators need not track separate judgments for singular and plural variants of the same compound.</p>
+<p>Overall, in 385 of the 913 phrases (42.2%), the adjective is morphosyntactically compatible with the non-head constituent.</p>
+<h3>5.3 Psycholinguistic data</h3>
+<p>CoBra is linked to the aggregated results of five psycholinguistic experiments from Prysłopska and von der Malsburg (2026). Experiments 1-3 tested adjective-noun phrases in isolation. Experiments 4 and 5 embedded a subset of phrases in a supportive carrier sentence (see Figure 3). The full methods, analyses, and discussion are reported in Prysłopska and von der Malsburg (2026). Here, I summarize the design and headline findings of each experiment as they pertain to the corpus data.</p>
+<p>(a) Experiment 1: acceptability rating of the adjective with the non-head noun, head noun, and whole compound (b) Experiment 4: acceptability rating of the whole compound embedded in a carrier sentence (c) Experiment 2: forced-choice attachment: non-head, head, or unclear (d) Experiment 5: forced-choice attachment, sentence-embedded (e) Experiment 3: independent yes/no/unclear attachment judgment for each noun Experiment 1 collected acceptability ratings for each phrase in three conditions: the adjective with the whole compound, with the non-head noun alone, and with the head noun alone. Ratings of the isolated adjective-noun pairs were reliable positive predictors of whole-compound acceptability, with the head noun carrying substantially more weight than the non-head noun; morphosyntactic agreement between the adjective and the non-head noun had no reliable effect.</p>
+<p>Experiment 2 recorded which noun in the compound the adjective modified (non-head, head, or unsure). Attachment preferences formed a graded rather than categorical distribution: 19% of items received predominantly non-head attachment, 35% mixed attachment, and 46% predominantly head attachment. Attachment choices followed the semantic compatibility ratings from Experiment 1. Non-head attachment was more likely the better the adjective fit the non-head noun and the worse it fit the head noun. Morphosyntactic congruence contributed little to the interpretive preference.</p>
+<p>Experiment 3 had participants judge attachment for each compound constituent independently rather than make a forced choice. This allowed identifying concurrent attachment to both nouns. Concurrent attachment was most likely when semantic compatibility with both nouns was high, indicating that some phrases support simultaneous rather than competing interpretations, consistent with the compound as a whole being modified.</p>
+<p>Experiments 4 and 5 tested a subset (204 phrases) embedded in a carrier sentence. Experiment 4 replicated the acceptability-rating task of Experiment 1. Sentential context raised ratings overall but did not disproportionately benefit phrases with a Bracketing paradox interpretation. Experiment 5 replicated the forced-choice attachment task of Experiment 2. Sentential context did not shift attachment preferences, though it substantially increased the rate of &#x27;unclear&#x27; responses relative to the bare-phrase task.</p>
+<p>Taken together, the five experiments indicate that adjective attachment in these constructions is governed primarily by the semantic compatibility between the adjective and each constituent noun. Morphosyntactic agreement between the adjective and the non-head noun played at most a marginal and inconsistent role, and sentential context affected perceived acceptability but not the preferred attachment site.</p>
+<h3>6 Metadata and Availability</h3>
+<p>The corpus is available as a comma-separated file with UTF-8 file encoding at OSF. Each phrase in the corpus is annotated with 36 columns containing linguistic properties, experimental results, sources, and additional metadata. The columns are described in Appendix A. It is licensed for non-commercial, research-focused use, with attribution required in any publication that draws on the resource. CoBra may be used freely for academic purposes.</p>
+<h3>7 Limitations</h3>
+<p>As with any corpus, several compromises were required in the construction of CoBra, and these should be taken into account by prospective users. First, the frequency distribution of adjectives and nouns in the corpus is uneven: the most frequent adjective, deutsch occurs more than three times as often as the next frequent one, while many items occur only once. This imbalance reflects the frequency of Bracketing paradox-prone combinations in natural language use, but frequency-based analyses should be interpreted with this skew in mind.</p>
+<p>The second limitation concerns the sources. Examples drawn from the theoretical literature are over-represented, since this literature was the most efficient initial source of confirmed instances of the phenomenon. This may bias the corpus towards examples that have historically attracted linguists&#x27; attention, rather than towards the full range of bracketing paradoxes attested in unselected language use, such as natural speech. Moreover, some sources are no longer available, either because they were online and have since been deleted or because they were seasonal advertisements that were later removed For such phrases, the SOURCE and ACCESSED columns document where and when they were found.</p>
+<p>Third, semantic annotation for items not covered by GermaNet was carried out with the assistance of large language models. This subset is modest (17.9% of adjectives and 2.9% of nouns) and, unlike the GermaNet-covered majority, each item was assigned a single category. While all such annotations were manually validated, users should treat this subset with appropriate caution, particularly for downstream applications that are sensitive to annotation error.</p>
+<p>Lastly, a small number of phrases added to the corpus after the completion of the psycholinguistic experiments (23 phrases) have not been tested experimentally, and should not be treated as equivalent in evidential status to the experimentally validated majority of the corpus.</p>
+<h3>8 Summary and conclusion</h3>
+<p>This paper introduced CoBra, a freely available corpus of 913 attested German adjective-compound phrases with Bracketing paradox potential. It outlined the key decisions made during its compilation and annotation. To date, no comparable resource exists. CoBra fills a gap between theoretical discussions of bracketing paradoxes, which rely on small sets of recurring examples, and large general-purpose corpora, which do not allow these constructions to be systematically identified and compared. The corpus&#x27; heterogeneity further supports analyses that reflect actual language use.</p>
+<p>CoBra is well suited to projects on German nominal compounding and adjective attachment. It covers attested phrases from a range of genres, registers, and historical periods, which supports analyses that go beyond idealized examples. The corpus is annotated for morphosyntactic and semantic features, which supports fine-grained analysis of the relationship between compound structure and adjective modification patterns. It also links nearly all phrases to judgments from five psycholinguistic experiments, so that annotated properties and experimental results can be examined in tandem.</p>
+<p>The corpus can be extended in several directions. Semantic annotation could be enriched with event-modification readings following Larson (1998), which would show how far the event structure of deverbal and agentive head nouns accounts for variation in attachment. Adding Austrian and Swiss material would make regional variation testable, as at present the corpus relies on predominantly German sources. Experiments with stimuli balanced by GermaNet category could test whether the semantic classes of the adjective and the two nouns predict attachment systematically. Finally, although CoBra contains no frequency information, phrase frequencies and adjective-noun association measures from large corpora could be related to the attachment preferences.</p>
+<p>In sum, CoBra provides documented, annotated, and experimentally tested data for the systematic study of bracketing paradoxes and related phenomena. It can serve as a shared starting point for linguistic, psycholinguistic, and computational research on complex nominal modification, and for replication and extension of the work presented here.</p>
+<h3>9 Appendix A. Structure of the corpus</h3>
+<p>Each phrase in the corpus is annotated with 36 columns containing linguistic properties, experimental results, sources, and additional metadata. The columns are described in Table 3. The lexical data is recorded in six columns. The unique phrase identifier PHRASE_ID, the adjective and nominal compound phrase PHRASE, the compound itself COMPOUND as well as its&#x27; constituent nouns: non-head noun N1 and head noun N2. Lastly, the base form of the adjective is recorded as well as ADJECTIVE. The grammatical gender of the nouns is recorded in the columns N1_GENDER and N2_GENDER, respectively.</p>
+<p>The results of the semantic annotation are recorded in three columns in the corpus: ADJ_CATEGORY holds the GermaNet semantic category of the adjective, while N1_CATEGORY and N2_CATEGORY hold the corresponding categories for the non-head and head noun of the compound, respectively.</p>
+<p>The outcome of the morphosyntactic annotation is recorded in a single column, MORPH_MATCH, which holds a binary value indicating whether the adjective and the non-head constituent are morphosyntactically compatible.</p>
+<p>The results of the five linked experiments are recorded in 17 columns. The SENTENCE column holds the carrier sentence in which the phrase was embedded in Experiments 4 and 5. AN1N2_PHRASE and AN1N2_SENTENCE hold the compound&#x27;s acceptability rating from Experiment 1 (bare phrase) and Experiment 4 (sentence-embedded), respectively. AN1 and AN2 hold the corresponding ratings for the adjective with the non-head and head noun in isolation, from Experiment 1.</p>
+<p>Attachment results from Experiments 2, 3, and 5 are recorded separately for the non-head and head noun. The columns N1_PHRASE, N2_PHRASE, and UNCLEAR_PHRASE hold the number of non-head and head noun attachments from Experiment 2&#x27;s forced-choice task. N1_SENTENCE, N2_SENTENCE, and UNCLEAR_SENTENCE hold the corresponding counts from Experiment 5&#x27;s sentence-embedded replication of that task. Experiment 3 asked participants to judge attachment to each noun independently rather than choose between them. Therefore, its results are recorded as separate &#x27;yes&#x27;, &#x27;no&#x27;, and &#x27;unclear&#x27; response counts for each noun. For the non-head noun: N1_YES_PHRASE, N1_NO_PHRASE, and N1_UNCLEAR_PHRASE. For the head noun: N2_YES_PHRASE, N2_NO_PHRASE, and N2_UNCLEAR_PHRASE.</p>
+<p>The data source information is recorded in the remaining columns. Two columns contain data about the phrase source: The SOURCE column contains a longer description of the source; the SOURCE_ID column a shorter source ID. The date of creation (if known) and the date of last access to the source are contained in the columns DATE and ACCESSED, respectively. Country of origin (Germany, Switzerland, Austria, or unclear) is recorded in the COUNTRY column. Finally, the source category is recorded in SOURCE_TYPE.</p>
+<h3>Figure 1 :</h3>
+<p>Figure 1: Distribution of source types in CoBra. Bars are ordered by frequency, labels show raw counts.</p>
+<h3>Figure 2 :</h3>
+<p>Figure2: GermaNet semantic category distribution in CoBra. A: noun constituents, non-head and head combined (969 unique nouns; 1,791 category counts). B: adjectives (586 unique adjectives; 836 category counts). Bars are ordered by frequency within each panel; labels show raw counts, which exceed the number of unique items because polysemous lemmas contribute to more than one category.</p>
+<h3>Figure 3 :</h3>
+<p>Figure 3: Trial procedure in each of the five linked experiments.</p>
+<h3>Table 1 :</h3>
+<p>Compound nouns spelled with a hyphen (15 unique compounds, 17 phrase entries).</p>
+<h3>Table 2 :</h3>
+<p>Phrases with complex adjectival modification.</p>
+<h3>Table 3 :</h3>
+<p>Corpus column descriptions (36 columns).</p>
+<h3>References</h3>
+<p>Abramov, B. (1992). Nochmals zur &quot;reitenden Artilleriekaserne&quot; -Ist se- mantisches Beziehen eines Attributs auf die desubstantivische Bes- timmungskomponente des zusammengesetzten Substantivs akzept- abel? In R. Grosse, G. Lerchner, &amp; M. Sehröder (Eds.), Beiträge zur Phraseologie -Wortbildung -Lexikologie. Festschrift für Wolfgang Fleischer zum 70. Geburtstag (pp. 133-139). Lang.</p>
+<p>Anthropic. (2026). Claude sonnet 5 [Accessed 23 September 2026]. https: //www.anthropic.com</p>
+<p>Bär, J. A. (2007). Kürze als grammatisches Problem: determinative Ver- schränkungen. In Sprachliche Kürze. Konzeptuelle, strukturelle und pragmatische Aspekte (pp. 310-338). de Gruyter. https://doi.org/ 10.1515/9783110204346.310</p>
+<p>Beard, R. (1991). Decompositional composition: The semantics of scope am- biguities and &#x27;bracketing paradoxes&#x27;. Natural Language and Linguis- tic Theory, 9(2), 195-229. https://doi.org/10.1007/bf00134676</p>
+<p>Behaghel, O. (1923). Deutsche syntax: Eine geschichtliche darstellung. 1, die wortklassen und wortformen; a: Nomen, pronomen [Bayerische Staatsbibliothek, BSB-ID 991027374419707356, URN: urn:nbn:de:bvb:12- bsb11023508-7]. Winter. https://mdz-nbn-resolving.de/urn:nbn:de: bvb:12-bsb11023508-7</p>
+<p>Bergmann, R. (1980). Verregnete Feriengefahr und Deutsche Sprachwis- senschaft. Zum Verhältnis von Substantivkompositum und Adjek- tivattribut. Sprachwissenschaft, 5(3), 234-265.</p>
+<p>Burkhardt, A. (1999). Gut erhaltene Knochenfunde beim Urmenschen. Zu einigen typischen Attributfehlern in der deutschen Gegenwartssprache. Sprachreport, 15(2), 2-10.</p>
+<p>Digitales Wörterbuch der deutschen Sprache (DWDS). (2023). Sprachlogik [Accessed: 2025-11-05].</p>
+<p>Dima, C., Ma, J., Bücking, S., Buscher, F., Herdtfelder, J., Lukassek, J., Pryslopska, A., Hinrichs, E. W., De Kok, D., &amp; Maienborn, C. (2017). A corpus-based model of semantic plausibility for German bracketing paradoxes. CDH, 64-70.</p>
+<p>Eisenberg, P., Peters, J., Gallmann, P., Fabricius-Hansen, C., Nübling, D., Fritz, T. A., &amp; Fiehler, R. (2016). Duden -Die Grammatik: unent- behrlich für richtiges Deutsch (A. Wöllstein &amp; Dudenredaktion, Eds.; 9th ed.). Dudenverlag.</p>
+<p>Fabricius-Hansen, C. (1993). Nominalphrasen mit Kompositum als Kern. In Beiträge zur Geschichte der Deutschensprache und Literatur (pp. 193- 243, Vol. 115). Max Niemeyer Verlag. https://doi.org/doi:10.1515/ bgsl.1993.1993.115.193</p>
+<p>Haider, H. (2011). Grammatische Illusionen-Lokal wohlgeformt-global de- viant. Zeitschrift für Sprachwissenschaft, 30(2), 223-257. https://doi.org/10.1515/zfsw.2011.009</p>
+<p>Hamp, B., &amp; Feldweg, H. (1997). Germanet -a lexical-semantic net for ger- man. Proceedings of the ACL Workshop on Automatic Information Extraction and Building of Lexical Semantic Resources for NLP Ap- plications. https://aclanthology.org/W97-0802/</p>
+<p>Härtl, H. (2013). Arguments of non-heads. In H. Härtl (Ed.), Interfaces of morphology: A festschrift for Susan Olsen (pp. 163-177). Akademie Verlag. https://doi.org/10.1524/9783050063799.163</p>
+<p>Härtl, H. (2015). Situationsargumente von Nicht-Köpfen: Verb-Nomen-Komposita im Zusammenspiel von Morphologie, Syntax und Pragmatik. In Sit- uationsargumente im Nominalbereich (pp. 159-184). De Gruyter. https://doi.org/0.1515/9783110432893-006</p>
+<p>Henrich, V., &amp; Hinrichs, E. (2010). GernEdiT -The GermaNet Editing Tool. In N. Calzolari, K. Choukri, B. Maegaard, J. Mariani, J. Odijk, S. Piperidis, M. Rosner, &amp; D. Tapias (Eds.), Proceedings of the seventh conference on international language resources and evaluation (lrec 2010) (pp. 2228-2235). https://aclanthology.org/L10-1180/</p>
+<p>Hundsnurscher, F., &amp; Splett, J. (1982). Semantik der Adjektive des Deutschen: Analyse der semantischen Relationen. VS Verlag für Sozialwissenschaften Wiesbaden. https://doi.org/10.1007/978-3-322-87624-9</p>
+<p>Institut für Deutsche Sprache (IDS) Mannheim. (n.d.). Saure Gurkenfabrik- Bezugnahme auf Ersteinheiten von Komposita [&quot;Grammatik in Fra- gen und Antworten&quot;. Grammatisches Informationssystem grammis.]. https://doi.org/10.14618/grammatikfragen</p>
+<p>Klosa-Kückelhaus, A., &amp; Auberle, A. (2001). Duden: Richtiges und gutes Deutsch: Wörterbuch der sprachlichen Zweifelsfälle: Grammatische und stilistische Fragen, Formulierungshilfen und Erläuterungen zum Sprachgebrauch (Dudenredaktion, Ed.; 5th ed.). Dudenverlag.</p>
+<p>Kupietz, M., Lüngen, H., &amp; Diewald, N. (2023). Das gesamtkonzept des deutschen referenzkorpus dereko. vom design bis zur verwendung und darüber hinaus. In A. Deppermann, C. Fandrych, M. Kupietz, &amp; T. Schmidt (Eds.), Korpora in der germanistischen sprachwissenschaft. mündlich, schriftlich, multimedial. jahrbuch des instituts für deutsche sprache 2022 (pp. 1-28). De Gruyter.</p>
+<p>Larson, R. K. (1998). Events and modification in nominals. Proceedings of Semantics and Linguistic Theory (SALT) VIII, 145-168. https://doi.org/10.3765/salt.v8i0.2803</p>
+<p>Leibniz-Institut für Deutsche Sprache. (2025). Deutsches referenzkorpus / archiv der korpora geschriebener gegenwartssprache 2025-i-rc1: Ko- rpus der geschriebenen deutschen gegenwartssprache [Release vom 31.01.2025].</p>
+<p>Maienborn, C. (2020). Wider die Klammerparadoxie: Kombinatorische Illu- sionen beim Adjektivbezug auf NN-Komposita. Zeitschrift für Sprach- wissenschaft, 39(2), 149-200. https://doi.org/10.1515/zfs-2020-2009</p>
+<p>Maienborn, C. (2021). Von katholischen Kirchenoberhäuptern, ambulanten Versorgungsaufträgen und vierstöckigen Hausbesitzern: Auflösung eines grammatischen Trugbildes [Gesamtsitzung am 18. Juli 2020].</p>
+<p>In Heidelberger Akademie der Wissenschaften (Ed.), Jahrbuch 2020 (pp. 34-42). https://doi.org/10.11588/diglit.61621.12</p>
+<p>Meinunger, A. (2014). Grammatische Illusionen und sprachliche Realitäten- Bemerkungen zum Sprachvermögen. In Skandal im Sprachbezirk (pp. 239- 265). Peter Lang.</p>
+<p>Miller, G. A. (1995). Wordnet: A lexical database for english. Communica- tions of the ACM, 38(11), 39-41.</p>
+<p>Müller, S. (2003). Solving the bracketing paradox: An analysis of the mor- phology of German particle verbs. Journal of Linguistics, 39(2), 275- 325. https://doi.org/10.1017/s0022226703002032</p>
+<p>Newell, H. (2021). Bracketing paradoxes resolved. The Linguistic Review, 38(3), 443-482. https://doi.org/10.1515/tlr-2021-2072</p>
+<p>Osborne, T., &amp; Gross, T. (2021). Bracketing paradoxes: A dependency gram- mar analysis in terms of morph catenae. Poznan Studies in Contem- porary Linguistics, 57 (3), 397-428. https://doi.org/10.1515/psicl- 2021-0016</p>
+<p>Pryslopska, A., &amp; von der Malsburg, T. (2024). Severe storm warnings for four-story homeowners: Towards a processing model of bracketing paradoxes. In L. K. Samuelson, S. L. Frank, M. Toneva, A. Mackey, &amp; E. Hazeltine (Eds.), Proceedings of the 46th annual conference of the cognitive science society (Vol. 46). https://escholarship.org/uc/ item/93z854zx</p>
+<p>Prysłopska, A., &amp; von der Malsburg, T. (2026). Scaling up the bracketing paradox: Semantic and morphosyntactic evidence from nominal com- pounds [In preparation].</p>
+<p>Schäfer, R. (2015). Processing and querying large web corpora with the COW14 architecture. Challenges in the Management of Large Cor- pora (CMLC-3), 28. https://ids-pub.bsz-bw.de/frontdoor/deliver/ index/docId/3826/file/cmlc3-proceedings_2015.pdf#page=35</p>
+<p>Schäfer, R., &amp; Bildhauer, F. (2012). Building large corpora from the web us- ing a new efficient tool chain. Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC&#x27;12), 486- 493.</p>
+<p>Spencer, A. (1988). Bracketing paradoxes and the English lexicon. Language, 64(4), 663-682. https://doi.org/10.2307/414563</p>
+<p>Sternefeld, W. (2003). Klammerparadoxien: Gibt es sie wirklich? https://www.sternefeld.info/downloads/Klammerparadoxe.pdf</p>
+<p>Telljohann, H., Hinrichs, E. W., Kübler, S., Zinsmeister, H., &amp; Beck, K. (2015). Stylebook for the tübingen treebank of written german (tüba- d/z) (tech. rep.). Department of Linguistics (Seminar für Sprachwis- senschaft), Eberhard Karls Universität Tübingen.</p>
+<p>Wustmann, G. (1912). Allerhand Sprachdummheiten: Kleine deutsche Gram- matik des Zweifelhaften, des Falschen und des Hässlichen; ein Hil- fsbuch für alle die sich öffentlich der deutschen Sprache bedienen (R. Wustmann, Ed.; 6th ed.). Verlag von Karl J. Trübner. https : //www.gutenberg.org/files/69894/69894-h/69894-h.htm</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
