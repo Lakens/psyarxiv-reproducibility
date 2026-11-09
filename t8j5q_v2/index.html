@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Do thoughts actually drive symptoms? Testing
+cognitive theories of posttraumatic stress with natural language
+processing in daily diaries</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Do thoughts actually drive symptoms? Testing cognitive theories of
+posttraumatic stress with natural language processing in daily diaries
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.21
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 2 references with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>All papers that appeared to involve live data collection contained an
+ethics approval statement.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, and it was present:</p>
+<blockquote>
+<p>Participants were recruited from two sources.</p>
+</blockquote>
+<blockquote>
+<p>Remaining participants were trauma-exposed outpatients from the Stony
+Brook University Hospital system.</p>
+</blockquote>
+<blockquote>
+<p>To be eligible, participants had to have elevated PTSD symptoms (PTSD
+checklist for the DSM-5 [PCL] 47 scores &gt; 12).</p>
+</blockquote>
+<blockquote>
+<p>During the initial session, participants were consented and trained
+on the daily diary protocol, which consisted of recording a video diary
+on their personal smart device and completing a brief self-report survey
+of PTSD symptom severity each day.</p>
+</blockquote>
+<blockquote>
+<p>For these recordings, participants were trained to discuss
+emotionally relevant topics related to their day. 50 They could select
+their own topics or follow example prompts (e.g., “tell me about the
+worst part of your day,” “describe when you felt most happy today”).</p>
+</blockquote>
+<blockquote>
+<p>Although our sample we showed results were robust across two distinct
+populations (WTC responders and general outpatients), participants were
+disproportionately White and male.</p>
+</blockquote>
+<blockquote>
+<p>Participants were randomly selected.</p>
+</blockquote>
+<p>Ethics approval statement:</p>
+<blockquote>
+<p>Study procedures were approved by the Stony Brook University
+institutional review board.</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 77 references with DOIs. You cited 2 references with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bollen J, Ten Thij M, Breithaupt F, et al. Historical language records
+reveal a surge of cognitive distortions in recent decades. Proc Natl
+Acad Sci. 2021;118(30):e2102061118. <a href="doi:10.1073/pnas.2102061118" class="uri">doi:10.1073/pnas.2102061118</a>
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/46534B2E9A1627F851479D2B2CCA00" target="_blank">link</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Eichstaedt JC, Smith RJ, Merchant RM, et al. Facebook language predicts
+depression in medical records. Proc Natl Acad Sci.
+2018;115(44):11203-11208. <a href="doi:10.1073/pnas.1802331115" class="uri">doi:10.1073/pnas.1802331115</a>
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/E27AE001A8509989BC8D86413A9424" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 77 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 77 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+For a script that did not run through, <code>table$error_message</code>
+is its error, short (at most 300 characters): the error line of its
+output, which names a package that is not there, with the address it
+asked for when it needed the internet, or the time limit it reached;
+<code>table$reason</code> sorts it into a kind. A timeout means “still
+running at the cutoff”, not a failure, so raise <code>timeout</code> for
+legitimately long-running (e.g. Bayesian) scripts.
+<code>dependency_unavailable</code> means the script’s own package could
+not be installed from live CRAN, the CRAN Archive, or a named GitHub/URL
+source — an infrastructure limitation, not a defect in the paper’s code,
+so unlike <code>errored</code>/<code>timed_out</code> it does
+<strong>not</strong> force the traffic light red. The full stdout/stderr
+of every run is kept in the result’s <code>run_results</code> (the
+report shows it in per-script dropdowns, capped for readability). The
+traffic light reflects the STATIC readiness signals by default, but an
+execution error (<code>errored</code>/<code>timed_out</code>) does
+recolour it to red — a script that crashes on its own analysis is a
+genuine reproduction failure. A script that fails with
+<code>could not find function</code> is run once more with the
+<code>library()</code> calls the project’s other scripts make added at
+its top (or the one package that exports the function, or magrittr for
+<code>%&gt;%</code>), and a script that then runs is reported as
+reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Cognitive theories are among the leading conceptualizations of posttraumatic stress disorder (PTSD). The core perspective shared by these theories is that distorted thinking (e.g., &quot;no one can be trusted&quot;) is involved in maintaining symptoms. However, the proximal mechanisms linking cognition and PTSD symptoms remains unclear due to two major methodological limitations: 1) lack of research on cognition-symptom dynamics at the daily level, and 2) reliance on self-reported thought distortions, which is a method ill-suited for capturing biases that people often do not have insight into or are outside of their awareness. The present study helps address these limitations in a sample of trauma-exposed patients (N=510) who completed daily video diaries and symptom ratings for 90 days (n=30,958 days). We used two natural language processing techniques to assess cognitive distortions from the diary transcripts: a lexica-based and large language model (LLM) approach. We then established the day-to-day sequencing of cognitive distortion and symptom fluctuations using dynamic structural equation models. Across the lexical and LLM models, distorted thinking did not predict worsening symptoms (s=-.02-.01). Instead, worsening symptoms predicted more distorted thinking (s=.03-.07). Also, symptoms and cognitive distortions tended to fluctuate together (s=.08-.41). The current findings suggest that cognitive distortions do not precede PTSD symptoms as many theories have assumed, but may instead be a consequence or correlate of them. If replicated, our results could help refine cognitive and related models of PTSD.</p>
+<p>Cognitive theories are a leading conceptualization of posttraumatic stress disorder (PTSD). The core hypothesis shared by these models is that distorted thinking provokes and maintains symptoms over time. Cognitive distortions include biases such as catastrophizing (e.g., &quot;if I go back there, I&#x27;ll completely lose control&quot;) or overgeneralizing (e.g., &quot;the world is fundamentally unsafe&quot;). Although the specifics vary across theories, distortion-symptom mechanisms can be distilled into three basic temporal patterns. The most widely recognized of these is the hypothesis that cognition is a proximal precipitant of PTSD symptoms (i.e., cognitive vulnerability). [1] [2] [3] [4] That is, when people engage in maladaptive cognitive processes, these thoughts lead to symptoms like avoidance, hyperarousal, dysphoria, or re-experiencing. This hypothesized sequence of thoughts to symptoms is the reason cognitions are a primary target in many frontline PTSD treatments. [5] [6] [7] [8] Two other temporal patterns connecting cognitive distortions to PTSD symptoms are possible but have received less attention. A second mechanism is the reverse of cognitive vulnerability, such that symptoms lead to cognitive distortions (i.e., cognitive reactivity). 9, 10 Cognitive reactivity could reflect various processes including mood-congruent attentional and interpretive biases 11 or maladaptive appraisals about symptoms themselves (e.g., &quot;my intrusions are a sign of going crazy&quot;). 12, 13 Finally, a third mechanism may be that symptoms and cognitive distortions are elicited by same situations (i.e., cognition-symptom coactivation) rather than one driving the other. 14, 15 The mechanisms underlying these three temporal patterns are not necessarily mutually exclusive, and are intertwined with other behavioral responses, but they nonetheless form the foundation of cognitive theories. 14, 15</p>
+<h3>Empirical evidence supports an association between PTSD and cognitive distortions.</h3>
+<p>Cross-sectional research consistently shows that people diagnosed with PTSD and those with more severe symptoms endorse more distorted thinking (e.g., catastrophizing, personalization). 12, 16, 17 Longitudinal studies suggest that the severity of distorted thinking before or shortly after trauma exposure predicts the likelihood of developing PTSD weeks or months later. [18] [19] [20] [21] Results from treatment studies are more mixed, with results showing changes in cognitive distortions precede symptom changes (but not vice versa), changes in distortions both predict and follow changes in symptoms, cognition and symptoms change concurrently, and that cognitive changes do not predict symptom changes at all. 5, 6, [22] [23] [24] [25] Thus, the bulk of evidence suggests that distorted thinking relates to PTSD, but the relative strength of each mechanism is unclear or whether cognitive vulnerability is, in fact, as prominent as theories would suggest.</p>
+<p>Methodological limitations have hindered a more definitive test of mechanisms proposed by cognitive theories. 26 Two are especially relevant: First, all longitudinal studies to date have included only a small number of time points (i.e., &lt; 4) separated by weeks or months rather than ambulatory assessment or daily diary designs, which increases the influence of recall bias and misses short-term dynamics between thoughts and symptoms. 27, 28 Indeed, processes at a short time scale are considered especially important to understand according to cognitive theories, which posit that thoughts triggered by everyday reminders of the trauma event and its sequelae elicit symptoms and prolong PTSD. 2, 15 The only study that examined such short-term dynamics with an ambulatory assessment design found re-experiencing symptoms and cognitive distortions tracked together within a day, consistent with coactivation mechanisms. 29 However, because this study focused only on concurrent associations, the temporal order of cognitive distortions and symptoms at short time scales remains unknown.</p>
+<p>The second limitation to date is that cognitive distortions in PTSD have only been measured with self-report surveys. One problem with this method is that the survey items are often very similar or even identical to PTSD symptom criteria. Most obviously, criterion D2 in the DSM for PTSD is &quot;persistent exaggerated negative beliefs about oneself, the world, and others,&quot; 30 which is essentially the same as cognitive distortion survey items like &quot;the world is a dangerous place&quot; or &quot;there is something wrong with me as a person.&quot; 13 Such overlapping content can blur the distinction between predictor and outcome, limiting our ability to infer mechanistic relationships. Another more fundamental problem is that self-report questionnaires are simply an ill-suited method for the construct because cognitive distortions are, by definition, automatic and often occur outside of conscious awareness. 31 Moreover, people often lack insight into their biases, [32] [33] [34] especially when they become ingrained beliefs as is often the case in PTSD. 4, 35, 36 A method that overcomes these problems with self-report measures is to assess cognitive distortions directly from the language people use when describing their unique experiences, with natural language processing. 37 In particular, people&#x27;s responses to open-ended prompts may reveal subtle or implicit thinking patterns that they may have limited awareness of 38, 39 and would be missed by a self-report distortions measure. This feature makes analyzing cognitive distortions from language a uniquely strong fit to the construct. 40 Further, because it is an entirely distinct method from a questionnaire, it is unconfounded with reported symptoms. Two modeling approaches can be applied to measure cognitive distortions from natural language: 41 1) Lexical models that count the frequency of certain words or short phrases associated with thought distortions, and 2) zero-shot estimation with large language models (LLMs), which involves prompting an LLM to assess cognitive distortions from text without task-specific training. 42, 43 Reinforcing the value of this method for testing cognitive theory, cross-sectional work has shown language-based measures of cognitive distortions have strong associations with internalizing psychopathology (e.g., depression). [44] [45] [46] Despite this potential, language-based assessments of cognitive distortions have not yet been used to understand PTSD maintenance mechanisms. A strong test of cognitive theories could benefit from tracking cognitive distortions measured from language and symptom dynamics at a short time scale that matches the hypothesized processes.</p>
+<h3>Present study</h3>
+<p>This study capitalized on a unique dataset to address limits of prior work and rigorously test the three basic mechanisms proposed by cognitive theories: cognitive vulnerability, cognitive reactivity, and cognition-symptom coactivation. We studied a sample of trauma-exposed patients with elevated PTSD symptoms who completed daily video diaries and symptom ratings for 90 days. From these diaries, we measured daily cognitive distortions using two natural language processing approaches: a lexical model and zero-shot prompting of an LLM. Using dynamic structural equation models, we established the temporal order of cognitive distortions detected from language and day-to-day symptom fluctuations. These models allowed us to compare the strength of these mechanisms head-to-head, at the daily level, for the first time.</p>
+<h3>Methods</h3>
+<h3>Participants and procedure</h3>
+<p>This was secondary analysis of data from a project aiming to develop tools for automated monitoring of PTSD symptom severity. Study procedures were approved by the Stony Brook University institutional review board. Data was collected between 2022 and 2025. Participants were recruited from two sources. Majority (71%) were World Trade Center disaster responders recruited from the Stony Brook World Trade Center Health Program. Remaining participants were trauma-exposed outpatients from the Stony Brook University Hospital system. To be eligible, participants had to have elevated PTSD symptoms (PTSD checklist for the DSM-5 [PCL] 47 scores &gt; 12).</p>
+<p>A subclinical symptom threshold was chosen to ensure a range of symptom severity were represented. Due to the study protocol&#x27;s complexity, individuals with cognitive impairment were ineligible (Montreal Cognitive Assessment 48 (MoCA) score &lt; 18).</p>
+<p>Diverse trauma exposures were represented; all WTC responders had WTC-related exposures, and the general outpatients reported exposure to a range of qualifying traumatic events (see Table 1 for complete breakdown).</p>
+<p>Participation involved an in-person laboratory session followed by a 90-day daily diary protocol. During the initial session, participants were consented and trained on the daily diary protocol, which consisted of recording a video diary on their personal smart device and completing a brief self-report survey of PTSD symptom severity each day. Participants received $5 per post (i.e., survey and video).</p>
+<p>Analyses included 510 participants, with a total of 30,958 days (average days per person = 80.0, SD = 18.5). Demographics and descriptives for study variables are in Table 1.</p>
+<h3>Measures</h3>
+<p>Daily PTSD symptoms. PTSD symptom severity was assessed using 8 items adapted from the PCL-5. 47 This scale has been validated for use in ambulatory assessment settings and did not include cognitive symptoms. 49 Participants rated symptom severity on a scale from 1 (&quot;not at all&quot;) to 5 (&quot;extremely&quot;). Total PTSD symptom severity was calculated by averaging all items.</p>
+<h3>Daily cognitive distortions.</h3>
+<p>Cognitive distortions were assessed from language in the daily video diaries. For these recordings, participants were trained to discuss emotionally relevant topics related to their day. 50 They could select their own topics or follow example prompts (e.g., &quot;tell me about the worst part of your day,&quot; &quot;describe when you felt most happy today&quot;). Recordings were required to be 3-10 minutes long. Audio from the videos was transcribed using Whisper 51 and cognitive distortions were scored from the resulting text. The average per-video word count was 635.90 (SD=278.68).</p>
+<p>We assessed cognitive distortions with two modeling approaches: lexical and zero-shot models. Lexical models were developed to detect words and phrases indexing 12 cognitive distortions related to depression. 52 Word spans were selected to be common expressions that capture the core of each distortion type. Cognitive distortion definitions and corresponding word spans are in Table 2. Multiple studies support the validity of these models, with prior work showing the lexical-based distortions are higher in people with depression. 44, 52 For our analyses, we calculated an overall cognitive distortions score by indexing the number of distortion types present in each transcript.</p>
+<p>Zero-shot models involved scoring cognitive distortions using an LLM without taskspecific training (i.e., using just what was learned from the base training data). Specifically, we prompted GPT-5.1 (2025-12-31) to rate the overall prominence of 12 cognitive distortions (same types scored by the lexical models) in each diary text from 0 (not at all present) to 10 (present in most of the transcript). Full prompt is in Table S1. Prior work has shown a zero-shot approach can detect clinical constructs from daily diaries with high levels of accuracy (e.g., convergent rs &gt; .50). [53] [54] [55] [56] Affect and emotional tone. In robustness analyses, language-based affect and sentiment measures derived from the daily diary transcripts were included as covariates. We used established lexical models for positive and negative tone 38, 57 as well as affective valence and arousal. 58</p>
+<h3>Analytic plan</h3>
+<p>Our analyses used dynamic structural equation modeling (DSEM), 59 conducted in Mplus (Version 8.11). 60 DSEM combines multilevel models with time series analysis to estimate within-person temporal dynamics. With DSEM, each daily variable (i.e., cognitive distortions and PTSD symptoms) is decomposed into between-person and within-person latent variables.</p>
+<p>Between-person variables reflect each person&#x27;s average level of cognitive distortions and symptoms, whereas within-person variables capture fluctuations in distorted thinking and symptoms from their average levels on a given day.</p>
+<p>At the within-person level, we estimated temporal paths representing cognitive vulnerability, cognitive reactivity, and cognition-symptom coactivation. Model set-up is shown in Figure 1. Paths were modeled as random effects, which allows the strength of dynamics to vary across people. Cognitive vulnerability is the lagged association between cognitive distortions and changes in next-day symptoms. Cognitive reactivity is the lagged association between symptoms and changes in next-day cognitive distortions. Finally, cognition-symptom coactivation is the correlation between changes in cognitive distortions and symptoms on the same day. To ensure the lagged effects capture predicted change in next-day symptoms or cognitive distortions, autoregressive paths were estimated as random effects. At the betweenperson level, random intercepts for cognitive distortions and symptoms were correlated, which is akin to a cross-sectional association between distorted thinking and symptom severity. Separate models were estimated for lexical and zero-shot distortion scores.</p>
+<p>DSEMs assume there are equal intervals between measurement occasions, but this was not always the case in our sample due to occasional missing days of data (due to e.g., incomplete surveys). We accommodated for this by coding missing days and modeling the missingness with full information techniques. 59 DSEM uses Bayesian Markov Chain Monte Carlo (MCMC), meaning point estimates are drawn from the posterior distribution of values generated for that parameter. Because there are no p-values with this approach, parameters are tested based on whether zero is within their 95% credibility interval (CrI).</p>
+<h3>Results</h3>
+<h3>Variability in cognitive distortions and symptoms</h3>
+<p>There was substantial within-person variability in cognitive distortions and symptoms.</p>
+<p>Intraclass correlation coefficients (ICCs) indicated that there is more within-person (versus between-person) variance in distortions (ICClexical = .27; ICCzero-shot = .41), whereas there is slightly more between-person variance in symptoms (ICC = .61). In other words, these results suggest cognitive distortions are more situation-dependent, while PTSD symptoms are more trait-like.</p>
+<p>Figure 2 depicts the dynamic interplay of distortions and symptoms for three randomly selected participants. These plots show both how much these variables fluctuate from day-to-day and that those fluctuations appear to track with one another.</p>
+<h3>Validity of language-based cognitive distortion measures</h3>
+<p>Given the novelty of this application of language-based cognitive distortions, we also evaluated their validity in several ways. First, we compared the language-based scores to human ratings. Seven trained research assistants rated the overall presence of cognitive distortions in a subset of 165 transcripts. Interrater reliability was adequate, with a two-way mixed absolute ICC of .62. Human ratings were strongly correlated with both the lexical (r = .31; 95% CrI [.17, .44]) and zero-shot scores (r = .68; 95% CrI [.60, .78]), further supporting their validity.</p>
+<p>Second, we examined convergent validity between the two language-based methods.</p>
+<p>There was clear evidence of convergence at both the between (r = .56; 95% CrI [.50, .63]) and within-person levels (r = .20; 95% CrI [.18, .20]), indicating they measure similar constructs.</p>
+<p>Third, we replicated well-established cross-sectional associations between cognitive distortions and PTSD symptoms. At the between-person level, overall severity of distortions and symptoms were strongly correlated, for both language models (rlexical = .32; 95% CrI [.23, .40]; rzero-shot = .61; 95% CrI [.55, .67]).</p>
+<p>Finally, we more closely evaluated the content validity of zero-shot scores because this method has not been applied to cognitive distortions before. Specifically, we examined GPT&#x27;s rationale for ratings. Rationales were obtained during the scoring procedure by requesting GPT provide a brief explanation justifying the score, citing specific phrases from the transcript (full prompt in Table S1). Rationales are not direct evidence for how GPT made ratings, but are &quot;posthoc&quot; explanations generated by the model that can aid interpretability. 61, 62 Exemplars are shown in Table 2. The rationales also showcase the potential value of GPT&#x27;s contextual reasoning to obtain more accurate scores than is possible with simple word or phrase counts. In particular, the rationales for low scores suggest an ability to differentiate general distress or superficial signs of distorted thinking from &quot;true&quot; distortions. More examples are in Table S2.</p>
+<h3>Dynamic models testing cognitive theory</h3>
+<p>The lexical and zero-shot DSEM results were highly consistent with each other. Results for the within-person level testing the three mechanisms are in Figure 1. Contrary to the cognitive vulnerability hypothesis, cognitive distortions did not predict next-day symptoms in either model. Instead, results were consistent with cognitive reactivity, such that worsening symptoms predict more next-day cognitive distortions (βlexical=.03; βzero-shot=.07). There was also support for cognition-symptom coactivation, with the strongest associations being between same-day cognitive distortions and symptoms (βlexical=.08; βzero-shot=.41).</p>
+<p>Although not of focal interest to our study, it is worth noting that the autoregressive paths (shown in Figure 1) suggest there is less day-to-day &quot;spill-over&quot; in cognitive distortions (βlexical=.06; βzero-shot=.13) compared to symptoms (β=.30).</p>
+<h3>Sensitivity analyses</h3>
+<p>We conducted two sets of sensitivity analyses. First, we tested the specificity of our results. It is possible that the effects of cognitive distortion variables on symptoms were driven by expressions of negative emotions rather than distorted thinking per se. We tested this possibility with DSEMs estimating the unique associations between distortions and symptoms over and above language-based measures of positive and negative tone as well as emotional valence and arousal. In these models, distortions and an emotion variable were included as simultaneous predictors of same-day symptoms at the within-person level, and of overall symptoms at the between-person level. No lagged paths were included for a maximally conservative test focusing on the strongest associations in our main analyses (i.e., within-and between-person covariance). Results were unambiguous; cognitive distortions (both lexical and zero-shot) predicted symptoms over and above emotion language, at both within-and betweenperson levels. Moreover, the magnitude of association with symptoms changed very little after adjusting for emotional language (average  decrease within-person = .01; between-person = .05). Full results are in Table S3-S4. These findings reinforce that our main results speak to the unique role of cognitive distortions--not just emotions--in PTSD symptom maintenance.</p>
+<p>Second, we tested the generalizability of results across populations. For these analyses, we estimated the main DSEMs separately for WTC responders versus the general traumaexposed outpatients. Full results are in Table S5. Overall, both lexical and zero-shot results were virtually identical in each population. The average difference in within-person effect sizes of interest was .02. Results found to be credibly different from zero in our main analyses with the combined sample replicated in each population separately. 1</p>
+<h3>Discussion</h3>
+<p>This study provided an unprecedented test of cognitive theories in PTSD. In a head-to-head comparison of candidate mechanisms, at a timescale matching the hypothesized processes, and with cognitive distortion measures that can detect automatic, implicit thinking patterns, we find no evidence that distorted thoughts precipitate symptoms. Instead, our results suggest that cognitive distortions are the consequence or correlate of symptoms. If replicated, these findings can help articulate a more precise model for understanding and treating PTSD. 1 The only exception was that the 95% CrI for lexical cognitive reactivity included zero in the general outpatient sample. However, this discrepancy is likely due to reduced precision of the relatively small sample size (n = 146 vs. 364), and we consider the effect to have been replicated because the point estimate fell within the CrI for cognitive reactivity in the WTC responder sample.</p>
+<p>Our principal finding is that a central hypothesis of many cognitive theories--that thoughts lead to symptoms--is not supported once key methodological limitations are addressed. While surprising, these results do help make sense of the mixed evidence for cognitive vulnerability in the literature to date. [63] [64] [65] The only real consistent finding has been that there is some association between PTSD and cognitive distortions when measured cross-sectionally or at weekly and monthly intervals. 12, [16] [17] [18] [19] [20] [21] Indeed, we replicated these results in our study, finding strong correlations between symptoms and distortions at the between-person level. Yet, when we zoomed into day-to-day symptom-distortion dynamics, we were able to clarify which short-term mechanisms are likely driving these cross-sectional and long-term associations found in prior work.</p>
+<p>The strongest dynamic found was symptom-cognition coactivation. Previous ambulatory assessment studies of self-report cognitive distortions and depression suggested coactivation and cognitive vulnerability may be at play. [66] [67] [68] However, implications for cognitive theories were unclear because overlapping scale content and shared rater biases muddied the distinction between constructs. By assessing cognitive distortions in natural language, there was less opportunity for a methodological confound with symptom expression. Not only are the language-based measures an entirely different method from a self-report survey, but we showed they are not simply picking up on emotional language, reinforcing the distinctiveness from symptoms. All told, this method allowed for more conclusive evidence that distortions track with trauma-related distress, while not predicting future symptoms. This could indicate cognitive distortions are a symptom of PTSD, which would align with the DSM-5 definition that includes negative cognitions as a criterion. 30 Alternatively, this could imply cognitive distortions are merely an epiphenomenon of symptoms. Although our results alone cannot adjudicate these interpretations, they provide a solid empirical foundation to inform ongoing efforts to define the core pathology of PTSD.</p>
+<p>According to our results, cognitive reactivity may be a key mechanism underpinning PTSD. This account for the role of distortions has been primarily studied in relation to depression, 10, 63, 69, 70 and here we find it may extend to trauma-related symptoms. There are several explanations for why symptoms would lead to cognitive distortions rather than the other way around. One possibility is that distress activates mood-congruent attentional and interpretive biases. 11 Another possibility is that many traumatized people have persistent, negatively biased cognitions, but these thoughts are usually corrected through effortful processing. When symptoms worsen though, regulating distress may deplete cognitive resources needed to correct thinking biases, leading to increases in cognitive distortions. 64 Yet another possibility is that symptoms trigger distorted thoughts directly, as people often have maladaptive appraisals of symptoms (e.g., &quot;I should be able to handle my reactions better&quot;). 71, 72 Investigating these explanations for cognitive reactivity in PTSD will be a productive direction for future research.</p>
+<h3>Implications</h3>
+<p>Our study presents an unprecedented test of mechanisms proposed by cognitive theories of PTSD. If the findings replicate, our theories must be updated. Namely, cognitive theories must be able to account for the observed coactivation and cognitive reactivity effects, and the primary role of cognitive vulnerability revised to reflect the absence of evidence for it. Another consideration for theory development our study underscores are that the time scale of cognitionsymptom processes is underspecified in current models. This issue limits the models&#x27; utility because it renders the core claims about mechanisms difficult to falsify. For example, we examined the daily timescale because processes are described as reactions to everyday events, but perhaps cognitions trigger symptoms on the order of seconds, minutes, or hours. Whether cognitive vulnerability (or any other mechanism) unfolds day-to-day versus minute-to-minute not only has vastly different conceptual implications, but it also dictates the appropriate study design. 73, 74 Specifying the timescale of processes will make cognitive theories more precise, testable, and ultimately useful for understanding PTSD.</p>
+<p>Research wise, a top priority is to evaluate whether our results replicate. Another natural next step is to determine whether the findings generalize beyond PTSD. Cognitive theory is widely accepted as a generic framework that explains most psychopathology. 65, 75, 76 According to a generic cognitive model, various psychological dysfunctions result from distorted thinking, but disorders are distinguished by specific situational triggers and thought content. 75 For example, social anxiety would relate to self-conscious thought content whereas health anxiety relates to health-related content. Assessing distortions from open-ended narratives enable a true test of the generic cognitive model by separately analyzing thought content from biased processing. Models in our study assessed distorted thought processes, and core content domains (e.g., self-consciousness, health) could be assessed with zero-shot or another language-based method like topic modeling. 77 With these methods, it becomes feasible to test whether a) all psychopathology symptoms are driven by cognitive processes and b) thought content differentiates disorders.</p>
+<p>Our results may also have significant clinical implications. Frontline psychotherapies for PTSD--and many other psychiatric disorders--include interventions designed to reduce symptoms by changing thoughts. [78] [79] [80] If our results replicate and cognitions are actually a consequence or correlate rather than cause of symptoms, then this could help explain the limited efficacy of our frontline cognitive treatments. [81] [82] [83] Importantly, another implication is that we could potentially improve PTSD treatment by targeting cognitive reactivity (with e.g., mindfulness-based therapies) instead. 84, 85</p>
+<h3>Limitations</h3>
+<p>Limitations of our study should be considered. One limitation is that results may not generalize to all trauma-exposed populations. Although our sample we showed results were robust across two distinct populations (WTC responders and general outpatients), participants were disproportionately White and male. Analyses should be replicated in samples with greater racial and gender diversity to ensure generalizability of results. Another limitation is that we cannot directly compare our results to prior work because we did not have self-report cognitive distortion measures. Of course, our motivation for using language-based measures was to address shortcomings of self-reported cognition, so the lack of self-reports is also a strength.</p>
+<p>Nevertheless, studies with both types of distortion measures administered in the same sample would allow for more direct connections to existing literature.</p>
+<h3>Conclusion</h3>
+<p>Despite being the dominant paradigm in PTSD theory and treatment, there have been gaps in knowledge about the maintenance mechanisms proposed by cognitive models. Our study begins to address this gap by applying novel methodologies uniquely suited to test the central hypotheses of cognitive theories. If replicated, our results call for a revision of cognitive theories in PTSD and suggest a path forward for redesigning treatment to be more effective. Note. WTC = World Trade Center; PTSD = posttraumatic stress disorder. Trauma type was assessed by the Life Events Checklist for the DSM-5 (LEC-5), 86 and includes both actual/witnessed events. LEC-5 was only administered to the general outpatient sample, all WTC responders had WTC-related trauma exposures. Symptom scores range from 1-5; lexical distortions range from 0-9; zero-shot distortions range from 0-10. will never end, will be horrible, will go wrong Strong worst-case thinking such as &quot;something&#x27;s gonna happen, and I&#x27;m gonna go into like respiratory arrest and I&#x27;m gonna die&quot; indicates exaggeration of negative outcomes beyond available evidence.</p>
+<h3>Dichotomous thinking</h3>
+<p>Thinking that an inherently continuous situation can only fall into two categories.</p>
+<p>only, the worst, nobody Repeated all-or-nothing statements: &quot;really nothing... good,&quot; &quot;everything... is bad,&quot; and &quot;I don&#x27;t feel happy at all&quot; show black-and-white thinking.</p>
+<h3>Disqualifying the positives</h3>
+<p>Unreasonably discounting positive experiences great but, not that great, fine yet Positive moments are acknowledged (&quot;I felt happy when my daughter said, &#x27;Let&#x27;s go to IHOP.&#x27;&quot; ; &quot;My daughter helps me&quot;; &quot;My boys are good&quot;), but later dismissed: &quot;Anything that cheered me today? Not really.&quot; and &quot;What happened today you can feel thankful for? Not much.&quot;</p>
+<h3>Emotional reasoning</h3>
+<p>Thinking that something is true based on how one feels, ignoring the evidence to the contrary.</p>
+<p>because I feel, but I feel, still feels Strongly present: &quot;I know everything is fine... but... you can&#x27;t shake that feeling.&quot; The speaker treats anxiety as evidence that situations are unsafe or unmanageable (crowds, neighborhoods), and concludes the day is &quot;shot&quot; based largely on feeling nervous rather than external evidence.</p>
+<h3>Fortune telling</h3>
+<p>Making predictions, usually negative ones, about the future. I will not, he will not, you will not Multiple definitive negative predictions: &quot;they&#x27;re going to deport me,&quot; &quot;they&#x27;re going to send a military ship on me,&quot; &quot;I&#x27;m going to lose&quot; Social Security and Medicare, &quot;they&#x27;re going to freaking find me,&quot; and &quot;now we&#x27;re going to suffer.&quot;</p>
+<h3>Labeling and mislabeling</h3>
+<p>Labeling yourself or others while discounting evidence that could lead to less disastrous conclusions.</p>
+<p>a completely, he never, I am a Frequent global labels: &quot;He&#x27;s a real jerk,&quot; &quot;This idiot takes care of the house,&quot; &quot;He&#x27;s such an idiot,&quot; &quot;He&#x27;s... paranoid... gullible,&quot; &quot;Even though my son is a pain in the ass,&quot; and calling the cat a &quot;little brat.&quot;</p>
+<h3>Magnification and minimization</h3>
+<p>Magnifying negative aspects or minimizing positive aspects worst, best, the only thing Amplifies negatives with hyperbole: &quot;hurting bodywide,&quot; &quot;I can&#x27;t even freaking breathe,&quot; &quot;burning burning burning,&quot; and &quot;My cough is killing me.&quot;</p>
+<h3>Mental filtering</h3>
+<p>Paying too much attention to negative details instead of the whole picture if I only, nothing right, completely wrong</p>
+<p>Focus is almost exclusively on negative details: conflict with son, screaming, chasing, family disagreements, service dog issues, and the repeated &#x27;Don&#x27;t have ...&#x27; refrain. Broader context or any positives are largely ignored.</p>
+<h3>Mindreading</h3>
+<p>Believing you know what others are thinking.</p>
+<p>she will not believe, they will know, everyone will think Frequent assumptions about others&#x27; thoughts/intentions: &quot;he enjoys the pain he caused me,&quot; &quot;he had no concern for my health or safety at any point,&quot; &quot;he just came back to mess me up more,&quot; and the Tinder date &quot;trying to take my things.&quot;</p>
+<h3>Overgeneralizing</h3>
+<p>Making sweeping negative conclusions based on a few examples I am always, no one ever, all the time Sweeping conclusions from specific experiences: &quot;none of us are ever happy,&quot; &quot;every generation in my family,&quot; &quot;my entire family is screwed up,&quot; and &quot;my life has been... nothing but a waste&quot; generalize across people and time.</p>
+<h3>Personalization</h3>
+<p>Believing others are behaving negatively because of oneself, without considering more plausible or external explanations for behavior.</p>
+<p>all my fault, because of me, I caused Strong self-blame without clear evidence in the transcript: &quot;I might have been the cause of their mother&#x27;s death&quot; and &quot;I might have killed my wife and my daughter because I went to ground zero and brought something home,&quot; attributing others&#x27; illnesses primarily to his actions.</p>
+<h3>Should statements</h3>
+<p>Having a fixed idea on how you and/or others should behave.</p>
+<p>should, ought, have to Explicit prescriptive rules: &quot;things should be different,&quot; &quot;you don&#x27;t say their work here was done,&quot; and &quot;Don&#x27;t say anything. Say I&#x27;m here for you. Boom. That&#x27;s all.&quot; These set rigid expectations for how events or others &quot;should&quot; be or behave.</p>
+<p>Note. Lexical models were developed in previous work. GPT rationales were obtained by asking for rationale in the scoring prompt. Note. All paths were estimated as random slopes. Autoregressive paths are shown in grey and are not of focal interest to this study. All intercepts and slopes were freely estimated at the between-person level. Subscript it refers to variable measured at time t for person i. Double-headed arrow = covariance, single-headed arrow = regression path. Results are standardized slope coefficients with 95% credibility intervals. Bolded and underlined coefficients are credibly different from zero. Note. Participants were randomly selected. PCL = daily version of the Posttraumatic Stress Disorder Checklist; lexical = lexical model of cognitive distortions; zero-shot = cognitive distortion ratings made by prompting GPT using a zero-shot approach. All scores were standardized within-person to put them on a common scale.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Within-person level of dynamic structural equation model testing hypothesized mechanisms</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Time series plots of cognitive distortions and symptoms for three participants.</p>
+<h3>Table 1.</h3>
+<p>Demographics and descriptive statistics for study variables</p>
+<h3>Table 2.</h3>
+<p>Cognitive distortion definitions and correspondence to language model output</p>
+<h3>References</h3>
+<p>Ehlers A, Clark DM. A cognitive model of posttraumatic stress disorder. Behav Res Ther. 2000;38(4):319-345. doi:10.1016/S0005-7967(99)00123-0</p>
+<p>Foa EB, Kozak MJ. Emotional processing of fear: Exposure to corrective information. Psychol Bull. 1986;99(1):20-35. doi:10.1037/0033-2909.99.1.20</p>
+<p>Resick PA, Monson CM, Chard KM. Cognitive Processing Therapy for PTSD: A Comprehensive Manual. Guilford Publications; 2016.</p>
+<p>Beck JG, Jacobs-Lentz J, Jones JM, Olsen SA, Clapp JD. Understanding posttrauma cognitions and beliefs. In: Facilitating Resilience and Recovery Following Trauma. Guilford Publications; 2014:167-190.</p>
+<p>Alpert E, Shotwell Tabke C, Cole TA, Lee DJ, Sloan DM. A systematic review of literature examining mediators and mechanisms of change in empirically supported treatments for posttraumatic stress disorder. Clin Psychol Rev. 2023;103:102300. doi:10.1016/j.cpr.2023.102300</p>
+<p>Cooper AA, Clifton EG, Feeny NC. An empirical review of potential mediators and mechanisms of prolonged exposure therapy. Clin Psychol Rev. 2017;56:106-121. doi:10.1016/j.cpr.2017.07.003</p>
+<p>Zalta AK. Psychological Mechanisms of Effective Cognitive-Behavioral Treatments for PTSD. Curr Psychiatry Rep. 2015;17(4):23. doi:10.1007/s11920-015-0560-6</p>
+<p>Schnyder U, Ehlers A, Elbert T, et al. Psychotherapies for PTSD: what do they have in common? Eur J Psychotraumatology. 2015;6(1):28186. doi:10.3402/ejpt.v6.28186</p>
+<p>Shahar G, Noyman G, Schnidel-Allon I, Gilboa-Schechtman E. Do PTSD symptoms and trauma-related cognitions about the self constitute a vicious cycle? Evidence for both cognitive vulnerability and scarring models. Psychiatry Res. 2013;205(1-2):79-84. doi:10.1016/j.psychres.2012.07.053</p>
+<p>Teasdale JD. Cognitive Vulnerability to Persistent Depression. Cogn Emot. 1988;2(3):247- 274. doi:10.1080/02699938808410927</p>
+<p>Cohen RT, Kahana MJ. A memory-based theory of emotional disorders. Psychol Rev. 2022;129(4):742-776. doi:10.1037/rev0000334</p>
+<p>Gómez De La Cuesta G, Schweizer S, Diehle J, Young J, Meiser-Stedman R. The relationship between maladaptive appraisals and posttraumatic stress disorder: a meta- analysis. Eur J Psychotraumatology. 2019;10(1):1620084. doi:10.1080/20008198.2019.1620084</p>
+<p>Foa EB, Ehlers A, Clark DM, Tolin DF, Orsillo SM. The Posttraumatic Cognitions Inventory (PTCI): Development and validation. Psychol Assess. 1999;11(3):303-314. doi:10.1037/1040-3590.11.3.303</p>
+<p>Foa EB, Steketee G, Rothbaum BO. Behavioral/cognitive conceptualizations of post- traumatic stress disorder. Behav Ther. 1989;20(2):155-176. doi:10.1016/S0005- 7894(89)80067-X</p>
+<p>Ehlers A, Steil R. Maintenance of Intrusive Memories in Posttraumatic Stress Disorder: A Cognitive Approach. Behav Cogn Psychother. 1995;23(3):217-249. doi:10.1017/S135246580001585X</p>
+<p>Mitchell R, Brennan K, Curran D, Hanna D, Dyer KFW. A Meta-Analysis of the Association Between Appraisals of Trauma and Posttraumatic Stress in Children and Adolescents. J Trauma Stress. 2017;30(1):88-93. doi:10.1002/jts.22157</p>
+<p>McIlveen R, Curran D, Mitchell R, DePrince A, O&#x27;Donnell K, Hanna D. A Meta-Analytic Review of the Association Between Alienation Appraisals and Posttraumatic Stress Disorder Symptoms in Trauma-Exposed Adults. J Trauma Stress. 2020;33(5):720-730. doi:10.1002/jts.22530</p>
+<p>Seligman MEP, Allen AR, Vie LL, et al. PTSD: Catastrophizing in Combat as Risk and Protection. Clin Psychol Sci. 2019;7(3):516-529. doi:10.1177/2167702618813532</p>
+<p>Beierl ET, Böllinghaus I, Clark DM, Glucksman E, Ehlers A. Cognitive paths from trauma to posttraumatic stress disorder: a prospective study of Ehlers and Clark&#x27;s model in survivors of assaults or road traffic collisions. Psychol Med. 2020;50(13):2172-2181. doi:10.1017/S0033291719002253</p>
+<p>Colak M, Sireli O. Mediator role of cognitive distortions in the relationship between posttraumatic stress disorder symptoms and peritraumatic stress levels. J Affect Disord. 2025;379:282-288. doi:10.1016/j.jad.2025.03.042</p>
+<p>O&#x27;Donnell ML, Elliott P, Wolfgang BJ, Creamer M. Posttraumatic appraisals in the development and persistence of posttraumatic stress symptoms. J Trauma Stress. 2007;20(2):173-182. doi:10.1002/jts.20198</p>
+<p>Persons JB, Marker CD, Bailey EN. Changes in affective and cognitive distortion symptoms of depression are reciprocally related during cognitive behavior therapy. Behav Res Ther. 2023;166:104338. doi:10.1016/j.brat.2023.104338</p>
+<p>Murphy JW, Warren M, Smith DL, Pridgen S, Held P. Negative posttraumatic cognitions and cognitive emotion regulation strategies as predictors of PTSD symptom change during an intensive outpatient program for PTSD. Cogn Behav Ther. Published online March 18, 2025:1-11. doi:10.1080/16506073.2025.2481312</p>
+<p>Kumpula MJ, Pentel KZ, Foa EB, et al. Temporal Sequencing of Change in Posttraumatic Cognitions and PTSD Symptom Reduction During Prolonged Exposure Therapy. Behav Ther. 2017;48(2):156-165. doi:10.1016/j.beth.2016.02.008</p>
+<p>Brown LA, Belli GM, Asnaani A, Foa EB. A Review of the Role of Negative Cognitions About Oneself, Others, and the World in the Treatment of PTSD. Cogn Ther Res. 2019;43(1):143-173. doi:10.1007/s10608-018-9938-1</p>
+<p>Cohen ZD, Barnes-Horowitz NM, Forbes CN, Craske MG. Measuring the active elements of cognitive-behavioral therapies. Behav Res Ther. 2023;167:104364. doi:10.1016/j.brat.2023.104364</p>
+<p>Shiffman S, Stone AA, Hufford MR. Ecological Momentary Assessment. Annu Rev Clin Psychol. 2008;4(1):1-32. doi:10.1146/annurev.clinpsy.3.022806.091415</p>
+<p>Trull TJ, Ebner-Priemer U. The Role of Ambulatory Assessment in Psychological Science. Curr Dir Psychol Sci. 2014;23(6):466-470. doi:10.1177/0963721414550706</p>
+<p>Canty AR, Windsor TD, Nixon RDV. Using experience sampling methodology (ESM) to improve our understanding of day-to-day intrusion frequency and related distress in survivors of trauma. J Behav Ther Exp Psychiatry. 2024;82:101921. doi:10.1016/j.jbtep.2023.101921</p>
+<p>American Psychiatric Association. Diagnostic and Statistical Manual of Mental Disorders : DSM-5-TR. American Psychiatric Association Publishing; 2022.</p>
+<p>Beck AT, Haigh EAP. Advances in Cognitive Theory and Therapy: The Generic Cognitive Model. Annu Rev Clin Psychol. 2014;10(1):1-24. doi:10.1146/annurev-clinpsy-032813- 153734</p>
+<p>Wilson TD, Dunn EW. Self-Knowledge: Its Limits, Value, and Potential for Improvement. Annu Rev Psychol. 2004;55(1):493-518. doi:10.1146/annurev.psych.55.090902.141954</p>
+<p>Pronin E. Perception and misperception of bias in human judgment. Trends Cogn Sci. 2007;11(1):37-43. doi:10.1016/j.tics.2006.11.001</p>
+<p>Pronin E, Kugler MB. Valuing thoughts, ignoring behavior: The introspection illusion as a source of the bias blind spot. J Exp Soc Psychol. 2007;43(4):565-578. doi:10.1016/j.jesp.2006.05.011</p>
+<p>Cahill SP, Foa EB. Psychological theories of PTSD. In: Handbook of PTSD: Science and Practice. The Guilford Press; 2007:55-77.</p>
+<p>Resick PA, Schnicke MK. Cognitive processing therapy for sexual assault victims. J Consult Clin Psychol. 1992;60(5):748-756. doi:10.1037/0022-006X.60.5.748</p>
+<p>Girard JM, Yermol DA, Salah AA, Cohn JF. Computational Analysis of Expressive Behavior in Clinical Assessment. Annu Rev Clin Psychol. 2026;22(1):49-75. doi:10.1146/annurev-clinpsy-081423-024140</p>
+<p>Tausczik YR, Pennebaker JW. The Psychological Meaning of Words: LIWC and Computerized Text Analysis Methods. J Lang Soc Psychol. 2010;29(1):24-54. doi:10.1177/0261927X09351676</p>
+<p>Gawronski B, Bodenhausen GV. Associative and propositional processes in evaluation: An integrative review of implicit and explicit attitude change. Psychol Bull. 2006;132(5):692- 731. doi:10.1037/0033-2909.132.5.692</p>
+<p>Stade EC, Ungar L, Havaldar S, Ruscio AM. Perseverative thinking is associated with features of spoken language. Behav Res Ther. 2023;165:104307. doi:10.1016/j.brat.2023.104307</p>
+<p>Sage A, Keppens J, Yannakoudakis H. A Survey of Cognitive Distortion Detection and Classification in NLP. arXiv. Preprint posted online 2025. doi:10.48550/ARXIV.2508.09878</p>
+<p>Brickman J, Gupta M, Oltmanns JR. Large Language Models for Psychological Assessment: A Comprehensive Overview. Adv Methods Pract Psychol Sci. 2025;8(3):25152459251343582. doi:10.1177/25152459251343582</p>
+<p>Girard JM, Jun D, Ong DC, Liebenthal E, Baker JT. Sentiment Analysis of Naturalistic Speech Using Open-Weight Large Language Models. Affect Sci. 2026;7(2):166-180. doi:10.1007/s42761-025-00352-7</p>
+<p>Bathina KC, Ten Thij M, Lorenzo-Luaces L, Rutter LA, Bollen J. Individuals with depression express more distorted thinking on social media. Nat Hum Behav. 2021;5(4):458- 466. doi:10.1038/s41562-021-01050-7</p>
+<p>Varadarajan V, Mahwish S, Liu X, et al. Capturing Human Cognitive Styles with Language: Towards an Experimental Evaluation Paradigm. arXiv. Preprint posted online 2025. doi:10.48550/ARXIV.2502.13326</p>
+<p>A. Rutter L, Edinger A, Lorenzo-Luaces L, ten Thij M, Valdez D, Bollen J. Anxiety and Depression are Associated with More Distorted Thinking on Social Media: A Longitudinal Multi-Method Study. Cogn Ther Res. 2025;49(4):712-720. doi:10.1007/s10608-025-10580-7</p>
+<p>Blevins CA, Weathers FW, Davis MT, Witte TK, Domino JL. The Posttraumatic Stress Disorder Checklist for DSM-5 (PCL-5): Development and Initial Psychometric Evaluation. J Trauma Stress. 2015;28(6):489-498. doi:10.1002/jts.22059</p>
+<p>Nasreddine ZS, Phillips NA, Bédirian V, et al. The Montreal Cognitive Assessment, MoCA: A Brief Screening Tool For Mild Cognitive Impairment. J Am Geriatr Soc. 2005;53(4):695- 699. doi:10.1111/j.1532-5415.2005.53221.x</p>
+<p>Ruggero CJ, Schuler K, Waszczuk MA, et al. Posttraumatic stress disorder in daily life among World Trade Center responders: Temporal symptom cascades. J Psychiatr Res. 2021;138:240-245. doi:10.1016/j.jpsychires.2021.04.002</p>
+<p>Ringwald WR, Feltman S, Schwartz HA, et al. Day-to-day dynamics of facial emotion expressions in posttraumatic stress disorder. J Affect Disord. 2025;380:331-339. doi:10.1016/j.jad.2025.03.109</p>
+<p>Radford A, Kim JW, Xu T, Brockman G, McLeavey C, Sutskever I. Robust Speech Recognition via Large-Scale Weak Supervision. arXiv. Preprint posted online 2022. doi:10.48550/ARXIV.2212.04356</p>
+<p>Bollen J, Ten Thij M, Breithaupt F, et al. Historical language records reveal a surge of cognitive distortions in recent decades. Proc Natl Acad Sci. 2021;118(30):e2102061118. doi:10.1073/pnas.2102061118</p>
+<p>Ringwald WR, Taxali A, Angstadt M, Vize C, Sripada C, Wright AGC. Large language models for depression assessment from brief daily diaries. PsyArXiv. Preprint posted online January 6, 2026. doi:10.31234/osf.io/2qgmk_v1</p>
+<p>Fisher H, Jaffe NM, Rahimi-Eichi H, et al. Measuring activation during behavioral activation therapy: a proof-of-concept study using smartphone sensors and LLM-derived ratings in adolescents with anhedonia. NPP-Digital Psychiatry Neurosci. 2025;3(1):24. doi:10.1038/s44277-025-00045-w</p>
+<p>Kaliosis P, Ganesan AV, Kjell ONE, et al. A Systematic Evaluation of Large Language Models for PTSD Severity Estimation: The Role of Contextual Knowledge and Modeling Strategies. arXiv. Preprint posted online 2026. doi:10.48550/ARXIV.2602.06015</p>
+<p>Ringwald WR, Taxali A, Angstadt M, Vize CE, Sripada C, Wright AGC. Scalable, context- sensitive psychiatric assessment with large language models and brief diaries. Psychol Med. 2026;56:e231. doi:10.1017/S0033291726105261</p>
+<p>Boyd RL, Ashokkumar A, Seraj S, Pennebaker JW. The Development and Psychometric Properties of LIWC-22. University of Texas at Austin; 2022.</p>
+<p>Preoţiuc-Pietro D, Schwartz HA, Park G, et al. Modelling Valence and Arousal in Facebook posts. In: Proceedings of the 7th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis. Association for Computational Linguistics; 2016:9-15. doi:10.18653/v1/W16-0404</p>
+<p>Asparouhov T, Hamaker EL, Muthén B. Dynamic Structural Equation Models. Struct Equ Model Multidiscip J. 2018;25(3):359-388. doi:10.1080/10705511.2017.1406803</p>
+<p>Muthén B, Muthén LK. Mplus: Statistical Analysis with Latent Variables. User&#x27;s Guide. Published online 2025.</p>
+<p>Lipton ZC. The mythos of model interpretability. Commun ACM. 2018;61(10):36-43. doi:10.1145/3233231</p>
+<p>Huang S, Mamidanna S, Jangam S, Zhou Y, Gilpin LH. Can Large Language Models Explain Themselves? A Study of LLM-Generated Self-Explanations. arXiv. Preprint posted online October 17, 2023:arXiv:2310.11207. doi:10.48550/arXiv.2310.11207</p>
+<p>Scher CD, Ingram RE, Segal ZV. Cognitive reactivity and vulnerability: Empirical evaluation of construct activation and cognitive diatheses in unipolar depression. Clin Psychol Rev. 2005;25(4):487-510. doi:10.1016/j.cpr.2005.01.005</p>
+<p>Beevers CG. Cognitive vulnerability to depression: A dual process model. Clin Psychol Rev. 2005;25(7):975-1002. doi:10.1016/j.cpr.2005.03.003</p>
+<p>Mathews A, MacLeod C. Cognitive Vulnerability to Emotional Disorders. Annu Rev Clin Psychol. 2005;1:167-195. doi:10.1146/annurev.clinpsy.1.102803.143916</p>
+<p>Wenze SJ, Gunthert KC, Forand NR. Influence of dysphoria on positive and negative cognitive reactivity to daily mood fluctuations. Behav Res Ther. 2007;45(5):915-927. doi:10.1016/j.brat.2006.08.010</p>
+<p>Wenze SJ, Gunthert KC, Forand NR. Cognitive Reactivity in Everyday Life as a Prospective Predictor of Depressive Symptoms. Cogn Ther Res. 2010;34(6):554-562. doi:10.1007/s10608-010-9299-x</p>
+<p>Marian Ş, Sava FA. Identifying Central Negative Thoughts Using Experience Sampling and Network Analysis. Cogn Ther Res. 2023;47(5):707-719. doi:10.1007/s10608-023-10400-w</p>
+<p>Segal ZV, Kennedy S, Gemar M, Hood K, Pedersen R, Buis T. Cognitive Reactivity to Sad Mood Provocation and the Prediction of Depressive Relapse. Arch Gen Psychiatry. 2006;63(7):749. doi:10.1001/archpsyc.63.7.749</p>
+<p>Lau MA, Segal ZV, Williams JMG. Teasdale&#x27;s differential activation hypothesis: implications for mechanisms of depressive relapse and suicidal behaviour. Behav Res Ther. 2004;42(9):1001-1017. doi:10.1016/j.brat.2004.03.003</p>
+<p>Gómez de La Cuesta G, Schweizer S, Diehle J, Young J, Meiser-Stedman R. The relationship between maladaptive appraisals and posttraumatic stress disorder: a meta- analysis. Eur J Psychotraumatology. 2019;10(1):1620084. doi:10.1080/20008198.2019.1620084</p>
+<p>Ehlers A, Clark DM. A cognitive model of posttraumatic stress disorder. Behav Res Ther. 2000;38(4):319-345. doi:10.1016/S0005-7967(99)00123-0</p>
+<p>Kaurin A, King KM, Wright AGC. Studying personality pathology with ecological momentary assessment: Harmonizing theory and method. Personal Disord. 2023;14(1):62- 72. doi:10.1037/per0000596</p>
+<p>Langener AM, Stulp G, Jacobson NC, et al. It&#x27;s All About Timing: Exploring Different Temporal Resolutions for Analyzing Digital-Phenotyping Data. Adv Methods Pract Psychol Sci. 2024;7(1):25152459231202677. doi:10.1177/25152459231202677</p>
+<p>Beck AT, Haigh EAP. Advances in Cognitive Theory and Therapy: The Generic Cognitive Model. Annu Rev Clin Psychol. 2014;10(1):1-24. doi:10.1146/annurev-clinpsy-032813- 153734</p>
+<p>Barlow DH. Unified Protocol for Transdiagnostic Treatment of Emotional Disorders: Workbook. Oxford University Press, USA; 2011.</p>
+<p>Eichstaedt JC, Smith RJ, Merchant RM, et al. Facebook language predicts depression in medical records. Proc Natl Acad Sci. 2018;115(44):11203-11208. doi:10.1073/pnas.1802331115</p>
+<p>Brewin CR, Holmes EA. Psychological theories of posttraumatic stress disorder. Clin Psychol Rev. 2003;23(3):339-376. doi:10.1016/S0272-7358(03)00033-3</p>
+<p>Dalgleish T. Cognitive Approaches to Posttraumatic Stress Disorder: The Evolution of Multirepresentational Theorizing. Psychol Bull. 2004;130(2):228-260. doi:10.1037/0033- 2909.130.2.228</p>
+<p>Zalta AK. Psychological Mechanisms of Effective Cognitive-Behavioral Treatments for PTSD. Curr Psychiatry Rep. 2015;17(4):560. doi:10.1007/s11920-015-0560-6</p>
+<p>Steenkamp MM, Litz BT, Hoge CW, Marmar CR. Psychotherapy for Military-Related PTSD: A Review of Randomized Clinical Trials. JAMA. 2015;314(5):489. doi:10.1001/jama.2015.8370</p>
+<p>Steenkamp MM, Litz BT, Marmar CR. First-line Psychotherapies for Military-Related PTSD. JAMA. 2020;323(7):656. doi:10.1001/jama.2019.20825</p>
+<p>Herzog P, Kaiser T. Is it worth it to personalize the treatment of PTSD? -A variance-ratio meta-analysis and estimation of treatment effect heterogeneity in RCTs of PTSD. J Anxiety Disord. 2022;91:102611. doi:10.1016/j.janxdis.2022.102611</p>
+<p>Longmore RJ, Worrell M. Do we need to challenge thoughts in cognitive behavior therapy? Clin Psychol Rev. 2007;27(2):173-187. doi:10.1016/j.cpr.2006.08.001</p>
+<p>Hayes SC, Follette VM, Linehan M. Mindfulness and Acceptance: Expanding the Cognitive- Behavioral Tradition. Guilford Press; 2004.</p>
+<p>Weathers FW, Blake DD, Schnurr PP, Kaloupek DG, Marx BP, Keane TM. The Life Events Checklist for DSM-5 (LEC-5). Published online 2013.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
