@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Beyond Belief Updating: A Framework for
+Self-Belief Formation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Beyond Belief Updating: A Framework for Self-Belief Formation
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.21
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to fix</span></a><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>This way, we found that participants were less willing to update
+their beliefs in response to disconfirming feedback once a belief was
+established, and that this resistance was linked to the level of
+confidence built up during formation (Schröder et al., 2025).</p>
+</blockquote>
+<blockquote>
+<p>Feedback was presented as percentiles relative to a reference group
+of 350 university students who were previously tested according to the
+cover story (e.g., “You were better than 38% of the reference
+participants”).</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 80 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 80 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 80 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+For a script that did not run through, <code>table$error_message</code>
+is its error, short (at most 300 characters): the error line of its
+output, which names a package that is not there, with the address it
+asked for when it needed the internet, or the time limit it reached;
+<code>table$reason</code> sorts it into a kind. A timeout means “still
+running at the cutoff”, not a failure, so raise <code>timeout</code> for
+legitimately long-running (e.g. Bayesian) scripts.
+<code>dependency_unavailable</code> means the script’s own package could
+not be installed from live CRAN, the CRAN Archive, or a named GitHub/URL
+source — an infrastructure limitation, not a defect in the paper’s code,
+so unlike <code>errored</code>/<code>timed_out</code> it does
+<strong>not</strong> force the traffic light red. The full stdout/stderr
+of every run is kept in the result’s <code>run_results</code> (the
+report shows it in per-script dropdowns, capped for readability). The
+traffic light reflects the STATIC readiness signals by default, but an
+execution error (<code>errored</code>/<code>timed_out</code>) does
+recolour it to red — a script that crashes on its own analysis is a
+genuine reproduction failure. A script that fails with
+<code>could not find function</code> is run once more with the
+<code>library()</code> calls the project’s other scripts make added at
+its top (or the one package that exports the function, or magrittr for
+<code>%&gt;%</code>), and a script that then runs is reported as
+reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>From early childhood, we form self-beliefs about where we belong, what we are good at, or who loves us. Despite extensive psychological research on self-beliefs, the fundamental question of how they initially form has received surprisingly little attention. Existing work on self-belief updating overlooks two critical limitations. First, it treats self-related learning as arising from isolated events, ignoring that self-beliefs typically emerge from sequences of meaningfully connected experiences. Second, because updating paradigms operate in familiar domains, participants already hold precise prior beliefs intertwined with established motives and emotional states making it impossible to study belief formation from a genuinely uninformed starting point. We propose that studying novel experiential domains addresses both problems: individuals enter such domains with neutral, imprecise self-beliefs, enabling formation of &quot;artificial&quot; self-beliefs through repeated feedback in a controlled setting. As a concrete implementation, we introduce the Learning Of Own Performance (LOOP) task, in which participants form beliefs about their abilities in a novel performance domain. Extensions of this approach could illuminate broader aspects of self-belief formation, including personality and identity. This Perspective bridges psychology, computational neuroscience, and sociology around a foundational question: how do we come to think about ourselves the way we do?</p>
+<h3>Introduction</h3>
+<p>Beliefs about &quot;who we are&quot; are fundamental to human existence. The topic of self-belief is, unsurprisingly, one of psychology&#x27;s most intensively studied areas (Oyserman, 2007). While beliefs about who we are in terms of our preferences, abilities, or attitudes tend to be conscious, people are rather poor at knowing how they arrived at that knowledge (Hogg &amp; Vaughan, 2017; Kube &amp; Rozenkrantz, 2021; Markus &amp; Wurf, 1987; Nisbett &amp; Wilson, 1977). The same contrast applies to psychological research on self-beliefs. This literature is vast, covering questions about the nature and function of self-beliefs, their effects on affect, behavior, and cognition, and traces their developmental origins, malleability, accessibility, cultural embeddedness, neural bases, and clinical implications. Yet a mechanistic description of how self-beliefs are initially formed is missing. Current approaches offer insight into updating specific, pre-existing beliefs about discrete self-related events, such as how likely it is that I will catch a given disease (Sharot, 2011).</p>
+<p>They do not, however, explain the formation of self-beliefs, that is, how someone comes to think of themselves as &#x27;a generally healthy person&#x27;. As we will argue, the distinction between belief updating and belief formation has significant conceptual and empirical implications. In this Perspective, we present a new framework to guide the investigation of self-belief formation and show how this conceptual turn reshapes one of psychology&#x27;s most key questions: how people come to believe who they are.</p>
+<h3>What are self-beliefs, and what makes them unique?</h3>
+<p>Beliefs can be described as subjective representations of aspects of the world and of aspects of oneself (Connors &amp; Halligan, 2014; Stephens &amp; Graham, 2004) (see Figure 1). Beliefs about aspects of the world include, for example, semantic knowledge, stereotypes, political attitudes, religious beliefs, or everyday social knowledge. Although such world-beliefs may overlap with beliefs about oneself (e.g., the belief &quot;Academics are bad at practical tasks&quot; may overlap with the belief &quot; I am not a hands-on person&quot;), the object of the belief is located in the external world. On the other hand, self-beliefs are oriented internally and range from beliefs about one&#x27;s physical constitution (Eil &amp; Rao, 2011) to beliefs about one&#x27;s identity (Stets &amp; Serpe, 2013), personality (Korn et al., 2012), or ability (Müller-Pinzler et al., 2019), all referring to questions about &#x27;who one is&#x27;.</p>
+<h3>Insert Figure 1 about here</h3>
+<p>In this Perspective, we focus on the dynamics of self-belief formation. Self-beliefs are not fixed, immutable properties that a person simply possesses. Rather, self-beliefs are the accumulated product of a lifetime of learning. We conceptualize them as context-dependent, motivated, and emotionally valenced templates through which people construe themselves (Markus &amp; Wurf, 1987; Müller-Pinzler et al., 2022). These are dynamic representations of the self that are continuously shaped by one&#x27;s own actions and their outcomes, by the reactions of others, and by the broader social world one inhabits. Crucially, this process never arrives at a fixed endpoint.</p>
+<p>Self-beliefs are perpetually recalibrated in response to new experiences and social feedback. In this way, they function as both the product and the scaffold of self-related learning and thereby constitute an ever-evolving interpretive foundation that shapes how incoming information about the self is processed, and from which new self-beliefs continue to form. What sets self-belief formation apart from belief formation in general is that the self is not a neutral object to be learned about, but an agent with stakes in the conclusions it reaches.</p>
+<h3>Psychology of self-beliefs: when, what and why</h3>
+<p>Self-beliefs have been intensively studied across nearly every field of psychology (Oyserman, 2007), including developmental, educational, social, personality, cognitive, and clinical psychology. Each subfield brings its own conceptual vocabulary, methods, and theoretical commitments. Despite this breadth, the questions these traditions have asked converge on several recurring themes: When do self-beliefs emerge, and do they change across the lifespan?</p>
+<p>What kinds of self-beliefs matter most for behavior, learning, and mental health? Why do some self-beliefs persist in the face of contradicting evidence? In surveying what psychology has learned, we aim not to be comprehensive, but to show that one foundational question cuts across all of these traditions without having been answered, namely how, at the level of specific, moment-to-moment learning episodes, do self-beliefs emerge?</p>
+<p>Research in developmental psychology has shown that children develop self-beliefs from an early age, which are initially quite rudimentary and become more differentiated as they grow older. A necessary prerequisite for the formation of self-beliefs is the ability to perceive one&#x27;s own body and mind as separate from others -and thus to distinguish oneself from others or the world (Lewis, 1990; Steinbeis, 2016). At around the age of 18 months, when children pass the mirror self-recognition test (Amsterdam, 1972; Lewis &amp; Brooks-Gunn, 1979), children begin to distinguish whether events have their cause in the environment or themselves (Gweon &amp; Schulz, 2011). Later in life, from about the age of 6 years until about the age of 12, children acquire the ability to consider social feedback and develop an understanding of &quot;right&quot; and &quot;wrong&quot; (Shavelson et al., 1976). This understanding of valence is an important prerequisite for the formation of beliefs about one&#x27;s abilities and associated self-efficacy beliefs. Adolescence is the stage in which more sophisticated self-beliefs form through interactions with others (Bong &amp; Clark, 1999; Rosenberg, 1979; Shavelson et al., 1976), a process that coincides with the emergence of higher-order generalizations about the self, for example, reasoning from the mastery of various school subjects to the conclusion that one is smart (Harter, 1990). In educational psychology, academic self-beliefs, often used interchangeably with self-concept are examined as judgments of one&#x27;s ability in a given domain (Bong &amp; Skaalvik, 2003; Marsh &amp; Craven, 1997; Skaalvik &amp; Skaalvik, 2010). Here, school is a particularly relevant phase of self-belief formation as children receive academic comparison feedback on their performance for the first time (Marsh, 1990). With increasing experiences of feedback situations, children align their selfbeliefs to how they are perceived by their peers, parents, and teachers (Skaalvik &amp; Skaalvik, 2002).</p>
+<p>In line with this, research in social psychology has shown that self-beliefs do not form in isolation but are actively shaped by the social world. According to Social Identity Theory (Tajfel, 1978), beliefs about who we are emerge in part through social categorization: people define themselves by their group memberships, and even arbitrary group assignment can generate genuine selfbeliefs about one&#x27;s characteristics and standing (Tajfel et al., 1971). Social comparison processes add a further mechanism whereby people come to understand their own abilities, opinions, and traits by evaluating themselves relative to others (Festinger, 1954). Over time, these comparisons are consolidated through reflected appraisals: people internalize how others perceive them, and these perceptions become part of their self-belief (Mead, 1934), a process that becomes particularly consequential during adolescence, when identity begins to stabilize (Crocetti, 2018; Erikson, 1968; Marcia, 1966). Together, these traditions establish that the social environment is not merely a backdrop against which self-beliefs are formed, but a constitutive element of the formation process itself. Personality psychology occupies an interesting position with respect to self-beliefs. The most widely used measures in this tradition are self-report scales such as the Big Five which do not capture personality traits directly but rather what people believe about their own personality (Paulhus &amp; Vazire, 2007). This distinction deserves emphasis. Big Five dimensions (neuroticism, openness, extraversion, agreeableness, conscientiousness; (Goldberg, 1990; McCrae &amp; Costa, 1999)) describe stable regularities in personality traits that can in principle be measured through self-reports or behavioral observation, but a person&#x27;s Big Five personality profile and their self-belief about these dimensions are not necessarily identical. Someone can behave consistently in extraverted ways while believing themselves to be introverted, and the two sources of evidence often diverge (Vazire &amp; Mehl, 2008).</p>
+<p>Research within personality psychology has established that such self-beliefs about one&#x27;s personality are shaped by cultural norms (Wehrle &amp; Fasbender, 2019) and guide how people process self-related information (Oyserman et al., 2012). Yet personality psychology has paid more attention to personality traits as behavioral constructs than to how people come to hold the very beliefs that self-report scales are designed to measure. Clinical psychology and behavioral psychotherapy have established that dysfunctional self-beliefs are central to the development and maintenance of virtually all mental disorders (Rief et al., 2015), including major depression (Rief and Joormann 2019; Beck 1979), PTSD (Gallagher et al., 2020), social anxiety disorder (Hofmann 2007; Clark and Wells 1995), chronic pain (Atlas &amp; Wager, 2012; Büchel, 2023; Wager et al., 2013), and personality disorders (Poggi et al., 2019). While the emergence of dysfunctional self-beliefs is acknowledged in biographical anamnesis and patient-specific case formulation, clinical approaches do not trace their formation mechanistically but focus primarily on how such beliefs can be modified once established, for example through cognitive restructuring, exposure, or narrative techniques. Finally, cognitive psychology offers the most mechanistically precise account of how people view and evaluate themselves in the moment.</p>
+<p>Research on metacognition has shown that confidence, i.e. the momentary self-belief that one&#x27;s current actions or judgments are correct, reflects a real-time evaluation of one&#x27;s own cognitive processes and contributes directly to task performance (Balsdon &amp; Philiastides, 2024; Fleming &amp; Daw, 2017; Schulz et al., 2023). Such local metacognitive evaluations have been extended to broader behavioral domains such as global metacognition which involves assessing one&#x27;s own performance across contexts and which can contribute to stable self-beliefs about ability (Fleming, 2024 (Fleming, , 2026;; Händel et al., 2020; Rouault et al., 2019; Seow et al., 2021). Importantly, this relationship is bidirectional: local confidence judgments shape global self-beliefs, but global self-beliefs in turn constrain how local performance is interpreted (Van Marcke et al., 2024). This local-to-global architecture provides a promising mechanistic framework for understanding how self-beliefs about ability might accumulate across individual episodes of self-evaluation.</p>
+<p>Taken together, these fields have assembled a rich picture of what self-beliefs are, when they emerge, or how they vary across individuals and contexts. Yet they share a notable structural gap: while each tradition acknowledges that self-beliefs are formed at some point, none has provided a moment-to-moment account of the learning dynamics through which a person arrives at a belief about themselves. Without such an account, we cannot explain why two people exposed to similar feedback arrive at very different self-beliefs, or why once formed beliefs may prove resistant to revision. In the following sections, we argue that this gap is addressable, but only by distinguishing belief formation from belief updating, and by studying the formation process under conditions where it can be directly observed.</p>
+<h3>From belief updating to the formation of self-beliefs</h3>
+<p>Research in psychology and behavioral neuroscience has been dedicated to the question of how people adjust their existing beliefs about themselves in response to new information, that is, how they update their self-beliefs. The most widely used paradigm for studying this process draws on trial-by-trial feedback (Sharot et al., 2011;  see Figure 2, top panel): participants estimate the probability of experiencing an adverse or desirable life event (e.g., &quot;I think the likelihood of suffering from cancer during my lifetime is 40%&quot;), are then given the objective base rate for that event, and are finally allowed to adjust their original expectation. The procedure continues across a series of independent events (e.g., dying in a car accident, being the victim of a crime). The difference between a participant&#x27;s initial estimate and the objective base rate constitutes a prediction error: if the participant estimates their cancer risk at 40% but learns that the base rate is 30%, the prediction error is 10 percentage points. By comparing initial expectations, objective base rates, and revised expectations across trials, one can measure how participants use these prediction errors to update their beliefs, for instance, in the form of trial-wise learning rates (Eil &amp; Rao, 2011; Kuzmanovic et al., 2016; Lockwood &amp; Klein-Flügge, 2021; Zhang et al., 2020). A learning rate reflects the proportion of the prediction error that is incorporated into the revised estimate: revising from 40% to 35% would correspond to a learning rate of 0.5 when the prediction error is 10 percentage points.</p>
+<p>A parallel line of work on metacognition points to the level on which self-beliefs are formed, not merely updated. This research shows that beliefs about one&#x27;s general competence or ability are not simply read off from single-trial performance. Instead, they emerge from integrating local evaluations over time into more global self-beliefs (Fleming &amp; Daw, 2017; Rouault et al., 2019; Seow et al., 2021; Wittmann et al., 2016). This global metacognitive layer, the sense of &#x27;how good am I, in general, at this?&#x27;, is where we argue self-belief formation takes place. These paradigms have proven productive for quantifying how people revise their self-beliefs in response to new evidence, but by design, they cannot address how such beliefs form in the first place. It is precisely this question that exposes two structural limitations inherent to the updating approach:</p>
+<p>The first concerns connectedness. In the classic belief-updating paradigm, each trial presents a different, unrelated life event. Participants estimate the likelihood of experiencing a car accident, a diagnosis, a divorce: events that belong to different domains, with no explicit opportunity to &quot;connect the dots&quot; in terms of meaning (see Figure 2). Each update is thus a self-contained adjustment of a single estimate. Because the trials are disconnected, the updates cannot accumulate into a belief about oneself. Such a global self-belief is a generalization across experiences that share a common referent and relies precisely on the kind of integrative processes that metacognition research has identified as the basis of global self-evaluations. The belief updating paradigm cannot produce this structure.</p>
+<p>The second limitation concerns the status of prior beliefs. In belief updating studies, participants arrive with well-established beliefs about the events they are asked to evaluate, grounded in lived experience and previous learning episodes. The paradigm is built around on these priors: it studies updating because participants already hold pre-existing probability estimates of life events, and tracks how these are revised. Importantly, these prior beliefs are charged emotionally, often linked to feedback on one&#x27;s efforts, abilities, and personality in the past (Tracy &amp; Robins, 2004).</p>
+<p>Likewise, initial expectations in well-known domains such as health status, intelligence, or risk of robbery are already shaped by personal motives. (see Box 1). To understand how self-beliefs emerge, we need a setting in which participants lack strong priors, where formation rather than mere updating becomes possible, and where participants enter the task with minimal motivational and emotional investment.</p>
+<h3>Insert Figure 2 about here</h3>
+<h3>Belief formation</h3>
+<p>What, precisely, do we mean by belief formation? Consider a child entering first grade: although they understand in a general sense that people can be better or worse at schoolwork than others, they have little sense of where they will stand among their classmates (Martinot et al., 2025). This is precisely the state in which belief formation begins. We conceptualize belief formation as a learning process through which a person, starting from a relatively uninformed state, develops increasingly differentiated beliefs about a specific domain of experience. At the outset, the person can draw on pre-existing global beliefs, such as self-esteem, and on whatever specific beliefs they have already formed about related domains, to generate an initial estimate for the new one.</p>
+<p>Belief formation is the process by which that imprecise first estimate becomes something more defined. This happens gradually, as the person accumulates experiences within the domain, with each graded worksheet, each word of praise or correction from the teacher, and each glance at how classmates are doing adds another piece of information. Across many such experiences, the child&#x27;s estimate of where they stand becomes more specific and more certain, until it settles into a belief such as &quot;I am good at math&quot; or &quot;school is not really my thing. &quot;</p>
+<h3>Learning about the self is affected</h3>
+<p>Crucially, this accumulation is not a neutral tallying of evidence. Each new experience is processed by a person who brings prior knowledge, motives, and emotions to the situation, and these factors substantially shape what is learned (Müller-Pinzler et al., 2022; Zamfir &amp; Dayan, 2022).</p>
+<p>First and foremost, any specific self-belief is contextualized by one&#x27;s personal learning history, that is, the worldviews, knowledge, and experiences a person has acquired across their lifetime, as well as self-perceived characteristics such as trait anxiety, self-esteem, or optimism. Together, specific prior and global beliefs anchor the belief formation process and constrain what any resulting posterior belief can look like. This means that any information encountered in daily life can only be processed through the lens of one&#x27;s global beliefs and a situation-specific prior (see Figure 3). Accordingly, even if people assume they can evaluate information in an unbiased way (Kube &amp; Rozenkrantz, 2021), research shows that information is rarely perceived &quot;objectively&quot; (Loewenstein, 2006; Sharot &amp; Garrett, 2016). Social approval, smiles, touches, compliments, or critique exert their effects only through subjective representations of the &quot;objective&quot; information.</p>
+<p>Beyond the beliefs that anchor how information is processed, emotional states and motives play an important role (Elder et al., 2021; Sedikides &amp; Gregg, 2008; Sedikides &amp; Hepper, 2009; Sharot &amp; Garrett, 2016). They are not merely background conditions, but rather are already part of self-beliefs themselves (Bromberg-Martin &amp; Sharot, 2020; Cogliati Dezza et al., 2022). Moreover, they are activated situationally by incoming information (Müller-Pinzler et al., 2022) and thereby shape how that information is processed (Müller-Pinzler et al., 2015; Stolz et al., 2020). Specifically, the person&#x27;s cognitive strategies, appraisals of the situation, allocation of attention, and current arousal determine how &quot;objective&quot; information is translated into a subjective representation and ultimately integrated into the self-belief formation process.</p>
+<p>Taken together, as self-beliefs are formed over successive, connected experiences, learning about the self is affected in a twofold way: by the specific and global beliefs that anchor the interpretation of new information, and by the emotional states and personal motives that shape attention, appraisal, and the subjective representation of incoming information (see Box 1). Thus, we refer to such self-beliefs as affected beliefs -beliefs that are both shaped by, and imbued with, affect (Müller-Pinzler et al., 2022).</p>
+<h3>Insert Figure 3 about here</h3>
+<h3>Constructing artificial beliefs to study self-belief formation</h3>
+<p>To investigate how self-beliefs are formed, it would be desirable to sidestep the confounding influence of strong prior beliefs. With this goal in mind, we propose that one possibility is to construct artificial self-beliefs and then examine the underlying computations through which people arrive at them. By &quot;artificial&quot;, we mean that the self-belief in question concerns a relatively novel domain of experience, as alluded to above: a belief about an ability, trait, or identity that the person has had little or no occasion to think about before. Although no domain is entirely free of prior expectations, the domain should ideally be as unrelated as possible to other specific and global beliefs a person already holds. Pre-existing beliefs will still inform the initial prior, but their influence should be far weaker than in domains where people hold firm beliefs. We developed the Learning Of Own Performance (LOOP) task (Czekalla et al., 2021 (Czekalla et al., , 2026;; Müller-Pinzler et al., 2019 , 2022) precisely to put this approach into practice. The task is built around the construction of artificial self-beliefs: participants learn about their ability in two novel domains (e.g., estimating the weights of animals and the heights of buildings), for which they hold no meaningful prior. By repeatedly performing the task and receiving performance feedback, the artificial belief about one&#x27;s ability takes shape. (see Figure 2; lower panel). In each trial, participants provide an expectation of their performance as a measure of the evolving self-belief, then estimate the specific property and finally receive feedback expressed as a percentile rank. The feedback sequence is manipulated so that participants receive predominantly positive feedback in one domain and predominantly negative feedback in the other; a cover story ensures they remain unaware of this manipulation (Czekalla et al., 2021 (Czekalla et al., , 2026;; Müller-Pinzler et al., 2019 , 2022). Over the course of the task, participants integrate isolated pieces of performance feedback across trials and form a coherent belief about their ability in each domain (Müller-Pinzler et al., 2022). That said, the LOOP task captures belief formation within a given performance domain. Whether domain-specific learning generalizes to broader global self-beliefs remains an open question that future work could address by pairing LOOP with pre-and post-assessment of global selfperception.</p>
+<p>Self-belief formation as realized in the LOOP task thus differs from classic belief updating tasks in two important respects. First, the trials are inherently connected and allow participants to integrate feedback across trials into a cumulative self-belief, rather than arriving at a set of disconnected probability estimates. Second, participants begin the task without strong preconceptions about their ability in these novel domains: before the first trial, performance expectations cluster around the 50th percentile and are accompanied by low confidence, which rises as the task progresses (Schröder et al., 2025), indicating that new self-beliefs are formed rather than pre-existing beliefs being revised. Because the ability to estimate the weights of animals or the heights of buildings carries little inherent relevance beyond the general wish to perform well, the task is relatively motivationally neutral compared with domains participants have already encountered. Poor performance therefore does not threaten global self-esteem to the same degree as failure in a domain culturally linked to intelligence or social worth (Chestnut et al., 2018). This makes the LOOP task also particularly suitable for studying self-belief formation in samples prone to fear of negative evaluation, who might otherwise avoid or be differently engaged in identity-relevant tasks.</p>
+<h3>What artificial self-beliefs can reveal?</h3>
+<p>Since its development, the LOOP task has been applied to a range of questions about how selfbeliefs form and why this process differs between individuals. A first insight the LOOP task affords is that the mechanistic approach makes the belief formation process directly observable: by modeling trial-by-trial updates as a function of prediction errors, individual process variables such as learning rates become quantifiable. This revealed that self-belief formation is not a symmetric accumulation of evidence. Participants weighted negative prediction errors more heavily than positive ones when learning about their own performance, a negativity bias that was specific to self-related learning and absent when learning about another person&#x27;s performance (Müller-Pinzler et al. 2019; Müller-Pinzler et al. 2022). The asymmetry in how individual feedback signals are integrated means that the beliefs formed are systematically biased. How strongly this bias operates depends not only on what is being learned about, but on who is learning and the emotions they bring to the process.</p>
+<p>A second insight concerns the emotional and motivational processes that unfold during learning itself. We found that emotional states arising during the task, such as pride and embarrassment, were related to biased learning about one&#x27;s own performance, suggesting that self-belief formation is shaped by the affect that incoming feedback elicits, and vice versa (Müller-Pinzler et al., 2022). Similarly, causal attributions, i.e., how participants explain their successes and failures during the task, shaped self-belief formation: internal attributions of failure led to more pronounced negative self-belief formation (Mayer et al., 2026). Both findings illustrate how motives and emotional states are not merely background factors but active determinants of the self-belief that emerges. These findings lay the groundwork for applying the paradigm to clinical questions. We were able to examine self-belief formation in individuals diagnosed with depression and comorbid social anxiety disorder, finding that reduced learning from positive feedback might be a mechanism underlying the formation of maladaptive self-beliefs in this group (Czekalla et al., 2026); see Figure 4). In a further application, extending the task to include beliefs about another person&#x27;s performance alongside one&#x27;s own, we found that narcissistic personality traits were associated with systematic biases in both self-and other-related belief formation: individuals with higher narcissistic traits showed reduced learning from negative self-related feedback, which is consistent with self-enhancement as a mechanism for maintaining a grandiose self-image. They also experienced stronger pride, which in turn was linked to reduced learning from negative feedback about others, suggesting that devaluing others, in the sense of actively constructing others as inferior to oneself, serves as a second route to the same goal (Matthiesen et al., under review). Finally, artificially constructed self-beliefs can be used to study not only how beliefs form but also how they are subsequently revised. Once a self-belief has been established, the paradigm can introduce disconfirming feedback to examine how readily it is revised and what moderates that process. This way, we found that participants were less willing to update their beliefs in response to disconfirming feedback once a belief was established, and that this resistance was linked to the level of confidence built up during formation (Schröder et al., 2025).</p>
+<p>Taken together, these applications show how artificially constructed self-beliefs make it possible to study self-belief formation largely independently of individual learning histories, while still capturing how motives, emotions, and individual differences shape the beliefs that emerge.</p>
+<h3>Insert Figure 4 about here</h3>
+<h3>Future Directions</h3>
+<p>The idea of constructing artificial beliefs to study self-belief formation has the potential to extend beyond the domain of ability. Most directly, it could be applied to personality beliefs such as a person&#x27;s sense of being an anxious, empathic or a sociable person (Flechsenhar et al., 2022). The most theoretically significant extension, however, may be to identity. Decades of research in the identity development tradition, from Marcia&#x27;s (1966) influential framework of identity statuses to contemporary work on how adolescents and emerging adults construct self-related beliefs (Crocetti, 2018; Luyckx et al., 2014), has established that identity is actively formed rather than discovered (Schwartz et al., 2011). What this tradition has not provided, however, is a processlevel, experimentally tractable account of the learning mechanisms through which specific identity beliefs crystallize. This is precisely the kind of account that the artificial belief formation approach is designed to produce. Applying this methodology to identity formation would require identifying novel identity domains in which prior experiences are minimal, and tracing how identity self-beliefs emerge from repeated, connected feedback. Identity formation, like selfbelief formation in the context of ability, does not occur in a vacuum: prior experiences, knowledge, historical and contextual information, and global beliefs about the self provide the blueprint from which novel identity-related information is evaluated and integrated. It is emotionally charged and motivationally laden in ways that would make their examination difficult. Thus, to isolate the basic working principles of identity formation from these influences as neatly as possible, the challenge would be to find novel and neutral identity domains to serve as suitable entry points. We believe this is a promising direction for future work, one that would connect the experimental precision of the LOOP paradigm to some of the oldest questions in the psychology of the self: the riddle of &quot;who we are&quot; (Oyserman, 2007) or how we became what we are today.</p>
+<h3>Conclusion</h3>
+<p>Beliefs about the self are constructed, not given. They emerge from sequences of connected experiences, shaped at every step by prior knowledge, emotional states, and personal motives.</p>
+<p>The artificial belief formation approach makes this construction process experimentally accessible for the first time. By situating participants in a novel performance domain where no meaningful prior exists, the LOOP task creates the conditions under which belief formation, rather than mere updating, can be observed directly. Modeling trial-by-trial learning then makes the underlying process quantifiable: how individual pieces of feedback are weighted, how confidence accumulates, how affect and motivation bend the trajectory of an emerging self-belief. What results is not just a snapshot of what someone believes, but a mechanistic account of how they came to believe it. This is what artificial self-beliefs can reveal, and what we believe makes this approach a productive path forward for understanding one of psychology&#x27;s most fundamental questions. Exemplary depiction of the classic belief updating task (Sharot et al., 2011). Top right: Information space. At the beginning of an experiment, all potential fragments of information are displayed as grey. After the full trial sequence, many positive and negative prediction errors have been processed, but the resulting beliefs remain isolated from one another. Bottom right: Beliefs across trials. Hypothetical belief updates about experiencing different negative events in the future. Since each trial encompasses only one belief, each belief is updated only once. B. Belief formation. Left: Trial structure. An exemplary depiction of the Learning-Of-Own-Performance task (Müller-Pinzler et al., 2019 , 2022). Feedback was presented as percentiles relative to a reference group of 350 university students who were previously tested according to the cover story (e.g., &quot;You were better than 38% of the reference participants&quot;).</p>
+<p>Presenting estimation accuracy using percentiles ensures that participants never discover how close their actual performance was to the &quot;correct&quot; answer. Top right: As in A, grey dots represent unsampled information at the outset. After twenty trials within each condition, many positive and negative prediction errors have been processed.</p>
+<p>Within this task&#x27;s design, these fragments are integrated during the process of belief formation. Connected dots symbolize the formed self-belief about the ability to be good in estimating the heights of houses (blue house) or below average in estimating the weights of animals (red fish). Bottom right: Beliefs across trials. Hypothetical course of beliefs about one&#x27;s ability to estimate the heights of houses and weights of animals. For these two domains, feedback information is accumulated gradually across trials, converging toward stable self-beliefs.</p>
+<h3>Figure 3: Affected belief formation.</h3>
+<p>A common assumption in social cognition research is that individuals integrate information into their beliefs in a way that tends toward an accurate representation of reality (see (Vazire, 2010) for critique to this assumption). This account, however, overlooks several factors that affect how &quot;objective&quot; information is perceived and interpreted: prior beliefs (both global and specific) anchor the formation process, while motives and emotional states shape the cognitive strategies, appraisals, allocation of attention, and arousal states through which information becomes subjective representation. As a result, motives and emotions color the entire process of belief formation, often producing systematically biased self-beliefs. Importantly, multiple motives are at work simultaneously in both cases, e.g. self-enhancement, self-verification, and accuracy motives can all influence the same belief-formation process (see Box 1) and which tendency dominates depends not on prior belief valence alone but on the broader motivational context and the perceived stakes of the situation (Swann &amp; Bosson, 2010). The point the figure is intended to make is not that different people follow qualitatively different motivational strategies, but that prior beliefs, emotional states, and motives collectively determine the subjective representation of &#x27;objective&#x27; information and thereby shape the beliefs that set the anchor for the next presentation.</p>
+<p>Acknowledgments S.K. discloses support for the research of this work from Funder [German Research Foundation: Project-ID 541063275 -TRR 418] and Funder [German Research Foundation: KR 3803/11-1; 3803/14-1]. L.M.P. discloses support for MU 4373/1-1]</p>
+<h3>Box 1: The influence of motives and emotional states on belief formation</h3>
+<p>Motives and emotional states play an important role in the extent to which information is sought, reinterpreted, or taken note of at all. Ultimately, they thus influence how beliefs are formed. At least four different types of motives are distinguished in the psychological literature that can impact self-belief formation. First, people have a strong tendency to view themselves in a positive way (Hepper et al., 2010). This self-enhancement motive leads people to seek favorable evaluations and process information with a positivity bias, which includes updating beliefs more strongly after favorable than unfavorable outcomes (Eil &amp; Rao, 2011; Korn et al., 2012; Sharot et al., 2011) or attributing success to personal effort while dismissing negative feedback (Kelley, 1973; Miller &amp; Ross, 1975). Second, people are motivated to maintain internal consistency (selfverification motive) by aligning how others perceive them with their own self-beliefs (Swann, 1983), even if it means rejecting positive feedback that conflicts with their self-view. Third, people may also seek accurate self-information to make reliable predictions and reduce uncertainty (Bromberg-Martin &amp; Sharot, 2020; Wurf &amp; Markus, 1991), but this accuracy motive can conflict with the self-verification motive. Fourth, people can be motivated to improve themselves (Maslow, 1954). This self-improvement motive may be linked to a negativity bias, particularly in contexts where self-improvement is the primary goal, such as skill acquisition, meaning that negative feedback is processed more readily than positive feedback to refine self-beliefs and enhance abilities (Sedikides &amp; Hepper, 2009). Although the systematic evidence for these motivational influences draws largely on belief updating paradigms, there is good reason to expect these dynamics to operate even more strongly during the formation of genuinely new self-beliefs, when uncertainty is highest and the personal stakes of arriving at an accurate selfassessment are greatest.</p>
+<p>Emotional states and self-related information processing influence each other recursively, as emotions like fear of failure or embarrassment bias attention toward negative cues (Christianson, 2014; Kaspar &amp; König, 2012), reinforcing negative self-beliefs and perpetuating those emotional states while, conversely, positive emotions such as pride consolidate positive self-views in a similarly self-sustaining loop (Müller-Pinzler et al., 2022). Emotional states also interact with motives. For example, individuals driven by self-enhancement seek positive feedback to boost pride (Williams &amp; DeSteno, 2008), but may avoid performance situations to minimize the risk of negative feedback and embarrassment (Apsler, 1975; Feinberg et al., 2012). During the formation of self-beliefs, unlike in isolated updating trials, these motivational and emotional dynamics unfold over time and interact with one another, making them integral to the formation process itself rather than mere background factors.</p>
+<h3>Figure 1 :</h3>
+<p>Figure 1: Beliefs about the world (external) vs. beliefs about the self (internal).</p>
+<h3>Figure 2 :</h3>
+<p>Figure 2: Processes of self-belief updating versus self-belief formation. A. Self-belief updating. Left: Trial structure.</p>
+<h3>Figure 4 :</h3>
+<p>Figure 4: Interindividual differences in belief formation. Prior beliefs, emotional states, and motives impact process of belief formation, which can lead to significant interindividual differences in self-beliefs even when individuals are confronted with identical feedback. The figure illustrates this with two people, one with a strong positive prior belief about their presenting ability (upper panel) and one with a weak or negative prior (lower panel), but with each receiving the same mixed feedback after a research talk. The person with positive prior presenting ability self-beliefs is more likely to experience pride and to weight audience reactions in a self-confirming direction. The person with negative prior presenting ability self-beliefs is more likely to experience embarrassment, to attend selectively to negative cues, and to attribute positive signals externally (&#x27;others may just be polite&#x27;), resulting in a posterior belief (&#x27;I am not good at presenting&#x27;) that diverges markedly from the first person&#x27;s interpretation of the same event.</p>
+<h3>References</h3>
+<p>Amsterdam, B. (1972). Mirror self-image reactions before age two. Developmental Psychobiology, 5(4), 297-305.</p>
+<p>Apsler, R. (1975). Effects of embarrassment on behavior toward others. Journal of Personality and Social Psychology, 32(1), 145-153.</p>
+<p>Atlas, &amp; Wager, T. D. (2012). How expectations shape pain. Neuroscience Letters, 520(2), 140- 148.</p>
+<p>Balsdon, T., &amp; Philiastides, M. G. (2024). Confidence control for efficient behaviour in dynamic environments. Nature Communications, 15(1), 9089.</p>
+<p>Beck, A. T. (1979). Cognitive Therapy of Depression. Guilford Press.</p>
+<p>Bong, M., &amp; Clark, R. E. (1999). Comparison between self-concept and self-efficacy in academic motivation research. Educational Psychologist, 34(3), 139-153.</p>
+<p>Bong, M., &amp; Skaalvik, E. M. (2003). Academic Self-Concept and Self-Efficacy: How Different Are They Really? Educational Psychology Review, 15(1), 1-40.</p>
+<p>Bromberg-Martin, E. S., &amp; Sharot, T. (2020). The Value of Beliefs. Neuron, 106(4), 561-565.</p>
+<p>Büchel, C. (2023). The role of expectations, control and reward in the development of pain persistence based on a unified model. eLife, 12. https://doi.org/10.7554/eLife.81795</p>
+<p>Chestnut, E. K., Lei, R. F., Leslie, S.-J., &amp; Cimpian, A. (2018). The Myth That Only Brilliant People Are Good at Math and Its Implications for Diversity. Education Sciences, 8(2), 65.</p>
+<p>Christianson, S. A. (2014). The Handbook of Emotion and Memory: Research and Theory (S. A. Christianson, Ed.). Taylor &amp; Francis.</p>
+<p>Clark, D. M., &amp; Wells, A. (1995). A cognitive model of social phobia. In R.G. Heimberg, M. Liebowitz, D. Hope, F. Schneier (Ed.), Social phobia: Diagnosis, assessment, and treatment (pp. 69-93). Guilford.</p>
+<p>Cogliati Dezza, I., Maher, C., &amp; Sharot, T. (2022). People adaptively use information to improve their internal states and external outcomes. Cognition, 228, 105224.</p>
+<p>Connors, M. H., &amp; Halligan, P. W. (2014). A cognitive account of belief: a tentative road map. Frontiers in Psychology, 5, 1588.</p>
+<p>Crocetti, E. (2018). Identity dynamics in adolescence: Processes, antecedents, and consequences. The European Journal of Developmental Psychology, 15(1), 11-23.</p>
+<p>Czekalla, N., Schröder, A., Mayer, A., Stierand, J., Stolz, D., Kube, T., Korn, C., Wilhelm-Groch, I., Klein, J. P., Paulus, F., Krach, S., &amp; Müller-Pinzler, L. (2026). Aberrant insula activity to negative and reduced learning from positive feedback underlie maladaptive self-beliefs in depression. In Transl. Psychiatry.</p>
+<p>Czekalla, N., Stierand, J., Stolz, D. S., Mayer, A. V., Voges, J. F., Rademacher, L., Paulus, F. M., Krach, S., &amp; Müller-Pinzler, L. (2021). Self-beneficial belief updating as a coping mechanism for stress-induced negative affect. Scientific Reports, 11(1), 17096.</p>
+<p>Eil, D., &amp; Rao, J. M. (2011). The Good News-Bad News Effect: Asymmetric Processing of Objective Information about Yourself. American Economic Journal: Microeconomics, 3(2), 114-138.</p>
+<p>Elder, J., Davis, T., &amp; Hughes, B. L. (2021). Learning About the Self: Motives for coherence and positivity constrain learning from self- relevant feedback. PsyArXiv. https://doi.org/10.31234/osf.io/etz56</p>
+<p>Erikson, E. H. (1968). Identity: Youth and crisis. WW Norton.</p>
+<p>Feinberg, M., Willer, R., &amp; Keltner, D. (2012). Flustered and faithful: embarrassment as a signal of prosociality. Journal of Personality and Social Psychology, 102(1), 81-97.</p>
+<p>Festinger, L. (1954). A theory of social comparison processes. Human Relations; Studies Towards the Integration of the Social Sciences, 7(2), 117-140.</p>
+<p>Flechsenhar, A., Kanske, P., Krach, S., Korn, C., &amp; Bertsch, K. (2022). The (un)learning of social functions and its significance for mental health. Clinical Psychology Review, 98(102204), 102204.</p>
+<p>Fleming, S. M. (2024). Metacognition and confidence: A review and synthesis. Annual Review of Psychology, 75(1), 241-268.</p>
+<p>Fleming, S. M. (2026). Towards an integrative neuroscience of metacognition. Nature Reviews. Neuroscience, 27(11), 789-806.</p>
+<p>Fleming, S. M., &amp; Daw, N. D. (2017). Self-evaluation of decision-making: A general Bayesian framework for metacognitive computation. Psychological Review, 124(1), 91-114.</p>
+<p>Gallagher, M. W., Long, L. J., &amp; Phillips, C. A. (2020). Hope, optimism, self-efficacy, and posttraumatic stress disorder: A meta-analytic review of the protective effects of positive expectancies. Journal of Clinical Psychology, 76(3), 329-355.</p>
+<p>Goldberg, L. R. (1990). An alternative &quot;description of personality&quot;: the big-five factor structure. Journal of Personality and Social Psychology, 59(6), 1216-1229.</p>
+<p>Gweon, H., &amp; Schulz, L. (2011). 16-month-olds rationally infer causes of failed actions. Science (New York, N.Y.), 332(6037), 1524.</p>
+<p>Händel, M., de Bruin, A. B. H., &amp; Dresel, M. (2020). Individual differences in local and global metacognitive judgments. Metacognition and Learning, 15(1), 51-75.</p>
+<p>Harter, S. (1990). Developmental differences in the nature of self-representations: Implications for the understanding, assessment, and treatment of maladaptive behavior. Cognitive Therapy and Research, 14(2), 113-142.</p>
+<p>Hepper, E. G., Gramzow, R. H., &amp; Sedikides, C. (2010). Individual Differences in Self-Enhancement and Self-Protection Strategies: An Integrative Analysis. Journal of Personality, 78(2), 781- 814.</p>
+<p>Hofmann, S. G. (2007). Cognitive factors that maintain social anxiety disorder: a comprehensive model and its treatment implications. Cognitive Behaviour Therapy, 36(4), 193-209.</p>
+<p>Hogg, M. A., &amp; Vaughan, G. M. (2017). Social Psychology (8th ed.). Pearson.</p>
+<p>Kaspar, K., &amp; König, P. (2012). Emotions and personality traits as high-level factors in visual attention: a review. Frontiers in Human Neuroscience, 6, 1-14.</p>
+<p>Kelley, H. H. (1973). The process of causal attribution. American Psychologist, 38(February), 107- 128.</p>
+<p>Korn, C. W., Prehn, K., Park, S. Q., Walter, H., &amp; Heekeren, H. R. (2012). Positively biased processing of self-relevant social feedback. The Journal of Neuroscience: The Official Journal of the Society for Neuroscience, 32(47), 16832-16844.</p>
+<p>Kube, T., &amp; Rozenkrantz, L. (2021). When Beliefs Face Reality: An Integrative Review of Belief Updating in Mental Health and Illness. Perspectives on Psychological Science: A Journal of the Association for Psychological Science, 16(2), 247-274.</p>
+<p>Kuzmanovic, B., Jefferson, A., &amp; Vogeley, K. (2016). The role of the neural reward circuitry in self- referential optimistic belief updates. NeuroImage, 133, 151-162.</p>
+<p>Lewis, M. (1990). Self-knowledge and social development in early life. In L. A. Pervin (Ed.), Handbook of personality: Theory and research , (pp (Vol. 738, pp. 277-300). The Guilford Press, xiv.</p>
+<p>Lewis, M., &amp; Brooks-Gunn, J. (1979). Mirror Representations of Self. In M. Lewis &amp; J. Brooks-Gunn (Eds.), Social Cognition and the Acquisition of Self (pp. 29-68). Springer US.</p>
+<p>Lockwood, P. L., &amp; Klein-Flügge, M. C. (2021). Computational modelling of social cognition and behaviour-a reinforcement learning primer. Social Cognitive and Affective Neuroscience, 16(8), 761-771.</p>
+<p>Loewenstein, G. (2006). Social science. The pleasures and pains of information. Science, 312(5774), 704-706.</p>
+<p>Luyckx, K., Teppers, E., Klimstra, T. A., &amp; Rassart, J. (2014). Identity processes and personality traits and types in adolescence: directionality of effects and developmental trajectories. Developmental Psychology, 50(8), 2144-2153.</p>
+<p>Marcia, J. E. (1966). Development and validation of ego-identity status. Journal of Personality and Social Psychology, 3(5), 551-558.</p>
+<p>Markus, H. R., &amp; Wurf, E. (1987). The Dynamic Self-Concept: A Social Psychological Perspective. Annual Review of Psychology, 38(1), 299-337.</p>
+<p>Marsh, H. W. (1990). A multidimensional, hierarchical model of self-concept: Theoretical and empirical justification. Educational Psychology Review, 2(2), 77-172.</p>
+<p>Marsh, H. W., &amp; Craven, R. (1997). Academic self-concept: Beyond the dustbowl. Handbook of Classroom Assessment: Learning, Achievement, and Adjustment., 545, 131-198.</p>
+<p>Martinot, P., Colnet, B., Breda, T., Sultan, J., Touitou, L., Huguet, P., Spelke, E., Dehaene-Lambertz, G., Bressoux, P., &amp; Dehaene, S. (2025). Rapid emergence of a maths gender gap in first grade. Nature, 643(8073), 1020-1029.</p>
+<p>Maslow, A. H. (1954). The instinctoid nature of basic Needs1. Journal of Personality, 22(3), 326- 347.</p>
+<p>Matthiesen M, Mayer AV, Schröder A, Klein JP, Wilhelm I, Stolz DS, Paulus FM, Müller-Pinzler L, Krach S, Czekalla N. (n.d.). Self-enhancement and devaluation of others during belief formation are linked to narcissistic traits. Under Review.</p>
+<p>Mayer, A. V., Schröder, A., Stolz, D. S., Czekalla, N., Paulus, F. M., Krach, S., Kube, T., &amp; Müller- Pinzler, L. (2026). Causal attributions shape the formation of novel ability self-beliefs. Communications Psychology, 4(1). https://doi.org/10.1038/s44271-026-00479-8</p>
+<p>McCrae, R. R., &amp; Costa, P. T., Jr. (1999). A Five-Factor theory of personality. Handbook of Personality: Theory and Research., 2nd Ed., 2, 139-153.</p>
+<p>Mead, G. H. (1934). Mind, self, and society. University of Chicago Press.</p>
+<p>Miller, D. T., &amp; Ross, M. (1975). Self-serving biases in the attribution of causality: Fact or fiction? Psychological Bulletin, 82(2), 213-225.</p>
+<p>Müller-Pinzler, L., Czekalla, N., Mayer, A. V., Schröder, A., Stolz, D. S., Paulus, F. M. :., &amp; Krach, S. (2022). Neurocomputational mechanisms of affected beliefs. Communications Biology, 5(1), 1241.</p>
+<p>Müller-Pinzler, L., Czekalla, N., Mayer, A. V., Stolz, D. S., Gazzola, V., Keysers, C., Paulus, F. M., &amp; Krach, S. (2019). Negativity-bias in forming beliefs about own abilities. Scientific Reports, 9(1), 14416.</p>
+<p>Müller-Pinzler, L., Gazzola, V., Keysers, C., Sommer, J., Jansen, A., Frässle, S., Einhäuser, W., Paulus, F. M., &amp; Krach, S. (2015). Neural pathways of embarrassment and their modulation by social anxiety. NeuroImage, 119, 252-261.</p>
+<p>Nisbett, R. E., &amp; Wilson, T. D. (1977). Telling more than we can know: Verbal reports on mental processes. Psychological Review, 84(3), 231-259.</p>
+<p>Oyserman, D. (2007). Self-Concept and Identity. In Blackwell Handbook of Social Psychology: Intraindividual Processes (pp. 499-517). Blackwell Publishers Inc.</p>
+<p>Oyserman, D., Elmore, K., &amp; Smith, G. (2012). Self, self-concept, and identity. In M. R. Leary &amp; J. P. Tangney (Eds.), Handbook of self and identity (pp. 69-104). Guilford Press.</p>
+<p>Paulhus, D. L., &amp; Vazire, S. (2007). The self-report method. Handbook of Research Methods in Personality Psychology, 1, 224-239.</p>
+<p>Poggi, A., Richetin, J., &amp; Preti, E. (2019). Trust and Rejection Sensitivity in Personality Disorders. Current Psychiatry Reports, 21(8), 69.</p>
+<p>Rief, W., Glombiewski, J. A., Gollwitzer, M., Schubö, A., Schwarting, R., &amp; Thorwart, A. (2015). Expectancies as core features of mental disorders. Current Opinion in Psychiatry, 28(5), 378-385.</p>
+<p>Rief, W., &amp; Joormann, J. (2019). Revisiting the Cognitive Model of Depression: The Role of Expectations. Clinical Psychology in Europe, 1(1), 1-19.</p>
+<p>Rosenberg, M. (1979). Conceiving The Self. Basic Books.</p>
+<p>Rouault, M., Dayan, P., &amp; Fleming, S. M. (2019). Forming global estimates of self-performance from local confidence. Nature Communications, 10(1), 1-11.</p>
+<p>Schröder, A., Czekalla, N., Mayer, A. V., Zhang, L., Stolz, D. S., Korn, C. W., Diekelmann, S., Luebber, F., Paulus, F. M., Müller-Pinzler, L., &amp; Krach, S. (2025). Initial expectations and confidence affect the formation of novel self-beliefs and their revision. Open Mind, 9, 1576-1596.</p>
+<p>Schulz, L., Fleming, S. M., &amp; Dayan, P. (2023). Metacognitive computations for information search: Confidence in control. Psychological Review. https://doi.org/10.1037/rev0000401</p>
+<p>Schwartz, S. J., Luyckx, K., &amp; Vignoles, V. L. (Eds.). (2011). Narrative identity. In Handbook of identity theory and research (pp. 99-115). Springer.</p>
+<p>Sedikides, C., &amp; Gregg, A. P. (2008). Self-Enhancement: Food for Thought. Perspectives on Psychological Science: A Journal of the Association for Psychological Science, 3(2), 102- 116.</p>
+<p>Sedikides, C., &amp; Hepper, E. G. D. (2009). Self-Improvement. Social and Personality Psychology Compass, 3, 899-917.</p>
+<p>Seow, T. X. F., Rouault, M., Gillan, C. M., &amp; Fleming, S. M. (2021). How Local and Global Metacognition Shape Mental Health. Biological Psychiatry, 90(7), 436-446.</p>
+<p>Sharot, T. (2011). The optimism bias. In Current Biology (Vol. 21, Issue 23, pp. R941-R945). Cell Press. https://doi.org/10.1016/j.cub.2011.10.030</p>
+<p>Sharot, T., &amp; Garrett, N. (2016). Forming Beliefs: Why Valence Matters. Trends in Cognitive Sciences, 20(1), 25-33.</p>
+<p>Sharot, T., Korn, C. W., &amp; Dolan, R. J. (2011). How unrealistic optimism is maintained in the face of reality. Nature Neuroscience, 14(11), 1475-1479.</p>
+<p>Shavelson, R. J., Hubner, J. J., &amp; Stanton, G. C. (1976). Self-Concept: Validation of Construct Interpretations. Review of Educational Research, 46(3), 407-441.</p>
+<p>Skaalvik, E. M., &amp; Skaalvik, S. (2002). Internal and External Frames of Reference for Academic Self- Concept. Educational Psychologist, 37(4), 233-244.</p>
+<p>Skaalvik, E. M., &amp; Skaalvik, S. (2010). Teacher self-efficacy and teacher burnout: A study of relations. Teaching and Teacher Education, 26(4), 1059-1069.</p>
+<p>Steinbeis, N. (2016). The role of self-other distinction in understanding others&#x27; mental and emotional states: neurocognitive mechanisms in children and adults. Philosophical Transactions of the Royal Society of London. Series B, Biological Sciences, 371(1686), 20150074.</p>
+<p>Stephens, G. L., &amp; Graham, G. (2004). Reconceiving delusion. International Review of Psychiatry , 16(3), 236-241.</p>
+<p>Stets, J. E., &amp; Serpe, R. T. (2013). Identity Theory. In J. DeLamater &amp; A. Ward (Eds.), Handbook of Social Psychology (pp. 31-60). Springer Netherlands.</p>
+<p>Stolz, D. S., Müller-Pinzler, L., Krach, S., &amp; Paulus, F. M. (2020). Internal control beliefs shape positive affect and associated neural dynamics during outcome valuation. Nature Communications, 11(1), 1230.</p>
+<p>Swann, W. B. (1983). Self-verification: Bringing social reality into harmony with the self. In J. G. Suls A (Ed.), Psychological perspectives on the self (Vol. 2, pp. 33-66). Erlbaum.</p>
+<p>Swann, W. B., &amp; Bosson, J. K. (2010). Self and identity. In S. T. Fiske, D. T. Gilbert, &amp; G. Lindzey (Eds.), Handbook of social psychology (pp. 589-628). John Wiley &amp; Sons, Inc.</p>
+<p>Tajfel, H. (1978). Differentiation Between Social Groups: Studies in the Social Psychology of Intergroup Relations (H. Tajfel, Ed.). European Association of Experimental Social Psychology by Academic Press.</p>
+<p>Tajfel, H., Billig, M. G., Bundy, R. P., &amp; Flament, C. (1971). Social categorization and intergroup behaviour. European Journal of Social Psychology, 1(2), 149-178.</p>
+<p>Tracy, J. L., &amp; Robins, R. W. (2004). TARGET ARTICLE: &quot;Putting the Self Into Self-Conscious Emotions: A Theoretical Model.&quot; Psychological Inquiry, 15(2), 103-125.</p>
+<p>Van Marcke, H., Denmat, P. L., Verguts, T., &amp; Desender, K. (2024). Manipulating prior beliefs causally induces under-and overconfidence. Psychological Science, 35(4), 358-375.</p>
+<p>Vazire, S. (2010). Who knows what about a person? The self-other knowledge asymmetry (SOKA) model. Journal of Personality and Social Psychology, 98(2), 281-300.</p>
+<p>Vazire, S., &amp; Mehl, M. R. (2008). Knowing me, knowing you: the accuracy and unique predictive validity of self-ratings and other-ratings of daily behavior. Journal of Personality and Social Psychology, 95(5), 1202-1216.</p>
+<p>Wager, T. D., Atlas, L. Y., Lindquist, M. a., Roy, M., Woo, C.-W., &amp; Kross, E. (2013). An fMRI-based neurologic signature of physical pain. The New England Journal of Medicine, 368(15), 1388-1397.</p>
+<p>Wehrle, K., &amp; Fasbender, U. (2019). Self-Concept. In V. Zeigler-Hill &amp; T. K. Shackelford (Eds.), Encyclopedia of Personality and Individual Differences (pp. 1-5). Springer International Publishing.</p>
+<p>Williams, L. A., &amp; DeSteno, D. (2008). Pride and perseverance: the motivational role of pride. Journal of Personality and Social Psychology, 94(6), 1007-1017.</p>
+<p>Wittmann, M. K., Kolling, N., Faber, N. S., Scholl, J., Nelissen, N., &amp; Rushworth, M. F. S. (2016). Self-other mergence in the frontal cortex during cooperation and competition. Neuron, 91(2), 482-493.</p>
+<p>Wurf, E., &amp; Markus, H. (1991). Possible selves and the psychology of personal growth. Perspectives in Personality, Vol. 3: Part A: Self and Emotion; Part B: Approaches to Understanding Lives., 3(461), 39-62.</p>
+<p>Zamfir, E., &amp; Dayan, P. (2022). Interactions between attributions and beliefs at trial-by-trial level: Evidence from a novel computer game task. PLoS Computational Biology, 18(9), e1009920.</p>
+<p>Zhang, L., Lengersdorff, L., Mikus, N., Gläscher, J., &amp; Lamm, C. (2020). Using reinforcement learning models in social neuroscience: frameworks, pitfalls and suggestions of best practices. Social Cognitive and Affective Neuroscience, 15(6), 695-707.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
