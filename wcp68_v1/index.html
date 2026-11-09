@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Coupled social dilemmas reveal positive
+cross-game transfer in humans and contrasting cue use in tested GPT
+agents</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Coupled social dilemmas reveal positive cross-game transfer in humans
+and contrasting cue use in tested GPT agents
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.21
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>2</b><span>fine</span></a><a class="count na" href="#na"><b>12</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Effect
+Sizes in t-tests and F-tests</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 1 t-test and/or F-test where effect sizes are not reported.
+Check these tests in the table below, and consider adding effect
+sizes.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>We recommend checking the sentences below, and add any missing effect
+sizes.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+For player i in round t and game g ∈ {P D, SD}, let C g i,t ∈ {0, 1}
+denote cooperation, let p g i,t = Pr(C g i,t = 1) denote the cooperation
+probability, and let η g i,t denote the latent choice index, or log-odds
+of cooperation.
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating that effect sizes are often
+not reported:</p>
+<ul>
+<li>Peng, C.-Y. J., Chen, L.-T., Chiang, H.-M., &amp; Chiang, Y.-C.
+(2013). The Impact of APA and AERA Guidelines on Effect Size Reporting.
+Educational Psychology Review, 25(2), 157–209. <a href="doi:%5B10.1007/s10648-013-9218-2" class="uri">doi:[10.1007/s10648-013-9218-2</a>](<a href="https://doi.org/10.1007/s10648-013-9218-2" class="uri">https://doi.org/10.1007/s10648-013-9218-2</a>).</li>
+</ul>
+<p>For educational material on reporting effect sizes:</p>
+<ul>
+<li><a href="https://matthewbjane.quarto.pub/guide-to-effect-sizes-and-confidence-intervals/">Guide
+to Effect Sizes and Confidence Intervals</a></li>
+</ul>
+</div>
+<div class="callout-tip" title="All detected and assessed stats" collapse="true">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Sentence
+</th>
+<th style="text-align:left;">
+Effect Size
+</th>
+<th style="text-align:left;">
+Reported Test
+</th>
+<th style="text-align:left;">
+Test Type
+</th>
+<th style="text-align:left;">
+d Coherence
+</th>
+<th style="text-align:left;">
+d Assumption
+</th>
+<th style="text-align:left;">
+d Coherence Note
+</th>
+<th style="text-align:left;">
+eta Coherence
+</th>
+<th style="text-align:left;">
+eta Assumption
+</th>
+<th style="text-align:left;">
+eta Coherence Note
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+For player i in round t and game g ∈ {P D, SD}, let C g i,t ∈ {0, 1}
+denote cooperation, let p g i,t = Pr(C g i,t = 1) denote the cooperation
+probability, and let η g i,t denote the latent choice index, or log-odds
+of cooperation.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+t = 1
+</td>
+<td style="text-align:left;">
+t-test
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable t(df)=value found.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 11 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p = .685
+</td>
+<td style="text-align:left;">
+Across all 25 rounds, PD cooperation in the all-human PD+SD condition
+was statistically indistinguishable from the PD-only control (∆ =
+-0.029, p = .685).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .749
+</td>
+<td style="text-align:left;">
+The same null held in the last 10 rounds (∆ = +0.016, p = .749) and last
+5 rounds (∆ = +0.030, p = .546; Fig. 2A-B; SI Section 4A, Table S5).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .546
+</td>
+<td style="text-align:left;">
+The same null held in the last 10 rounds (∆ = +0.016, p = .749) and last
+5 rounds (∆ = +0.030, p = .546; Fig. 2A-B; SI Section 4A, Table S5).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .339
+</td>
+<td style="text-align:left;">
+Within the mixed condition, the difference between bot-facing and
+human-facing choices was small and not reliable in PD (∆ = 0.019, 95% CI
+[-0.014, 0.053], p = .339), but reliable in SD (∆ = 0.063, 95% CI
+[0.030, 0.096], p &lt; .001; Fig. 2E; SI Section 6, Table S14).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .110
+</td>
+<td style="text-align:left;">
+The previous-round PD cue was smaller (odds ratio = 1.18, 95% CI [1.00,
+1.39], p = .047), and the previous-round SD cue was not reliable after
+we included both PD cues (odds ratio = 1.14, 95% CI [0.97, 1.34], p =
+.110; Fig. 3A-B; SI Section 1, Table S4; SI Section 4A, Table S5).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .280
+</td>
+<td style="text-align:left;">
+In all human choices, the mixed-condition interactions with cue use were
+not reliable in PD (previous PD cue × mixed: OR = 0.79, p = .280;
+previous SD cue × mixed: OR = 1.02, p = .907) or SD (same-round PD cue ×
+mixed: OR = 0.78, p = .266; previous PD cue × mixed: OR = 1.02, p =
+.937; previous SD cue × mixed: OR = 1.08, p = .692).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .907
+</td>
+<td style="text-align:left;">
+In all human choices, the mixed-condition interactions with cue use were
+not reliable in PD (previous PD cue × mixed: OR = 0.79, p = .280;
+previous SD cue × mixed: OR = 1.02, p = .907) or SD (same-round PD cue ×
+mixed: OR = 0.78, p = .266; previous PD cue × mixed: OR = 1.02, p =
+.937; previous SD cue × mixed: OR = 1.08, p = .692).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .266
+</td>
+<td style="text-align:left;">
+In all human choices, the mixed-condition interactions with cue use were
+not reliable in PD (previous PD cue × mixed: OR = 0.79, p = .280;
+previous SD cue × mixed: OR = 1.02, p = .907) or SD (same-round PD cue ×
+mixed: OR = 0.78, p = .266; previous PD cue × mixed: OR = 1.02, p =
+.937; previous SD cue × mixed: OR = 1.08, p = .692).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .937
+</td>
+<td style="text-align:left;">
+In all human choices, the mixed-condition interactions with cue use were
+not reliable in PD (previous PD cue × mixed: OR = 0.79, p = .280;
+previous SD cue × mixed: OR = 1.02, p = .907) or SD (same-round PD cue ×
+mixed: OR = 0.78, p = .266; previous PD cue × mixed: OR = 1.02, p =
+.937; previous SD cue × mixed: OR = 1.08, p = .692).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .692
+</td>
+<td style="text-align:left;">
+In all human choices, the mixed-condition interactions with cue use were
+not reliable in PD (previous PD cue × mixed: OR = 0.79, p = .280;
+previous SD cue × mixed: OR = 1.02, p = .907) or SD (same-round PD cue ×
+mixed: OR = 0.78, p = .266; previous PD cue × mixed: OR = 1.02, p =
+.937; previous SD cue × mixed: OR = 1.08, p = .692).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .506
+</td>
+<td style="text-align:left;">
+GPT SD cooperation also did not predict next-round PD cooperation once
+we controlled for previous PD behavior (OR = 1.04, p = .506; Fig. 4A-B;
+SI Section 1, Table S4; SI Section 5A, Tables S7-S8; SI Section 7C,
+Tables S23-S24, and Fig. S9).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="fine">Fine <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>All papers that appeared to involve live data collection contained an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 31 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(12)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, and it was present:</p>
+<blockquote>
+<p>The resulting archetypes-steadfast cooperators, conditional
+cooperators, game switchers, and persistent defectors-provide an
+intuitive map of heterogeneity in the participant pool (SI Section 8 and
+Fig. S10).</p>
+</blockquote>
+<blockquote>
+<p>Participants were recruited through Prolific using a nonprobability,
+opt-in sample.</p>
+</blockquote>
+<blockquote>
+<p>The experiment was conducted online during September and October
+2024, the experimental app was developed using oTree (33), and
+participants were recruited through the Prolific platform (34).</p>
+</blockquote>
+<blockquote>
+<p>Participants provided informed consent before participation.</p>
+</blockquote>
+<blockquote>
+<p>All participants had a Prolific approval rate of at least 98%.</p>
+</blockquote>
+<blockquote>
+<p>Approved Prolific submissions took a median of 30.6 minutes.</p>
+</blockquote>
+<blockquote>
+<p>We linked oTree behavioral data to Prolific demographic and payment
+records by participant ID, removed direct identifiers before analysis,
+and retained valid online groups with complete scheduled 25-round
+records.</p>
+</blockquote>
+<blockquote>
+<p>Demographic information from Prolific was available for all 430
+analyzed participants.</p>
+</blockquote>
+<blockquote>
+<p>Participants were 18-79 years old (mean = 30.78, SD = 9.94), and 223
+were female and 207 were male.</p>
+</blockquote>
+<blockquote>
+<p>Prolific demographics, SVO categories, and condition balance are
+reported in SI Section 1, Table S2.</p>
+</blockquote>
+<blockquote>
+<p>After the game, participants completed self-assessment items, the
+15-item SVO slider measure (35), and survey items measuring conformity
+(36) and horizontal/vertical individualismcollectivism (37).</p>
+</blockquote>
+<blockquote>
+<p>B: In two-stage rounds, participants were paired, saw the current
+opponent’s previous-round PD and SD choices before choosing a PD
+strategy, then saw those previous cues plus the same-round PD outcome
+before choosing an SD strategy with the same opponent.</p>
+</blockquote>
+<p>Ethics approval statement:</p>
+<blockquote>
+<p>The experiment received ethical approval from the Ethics Committee of
+the University of Konstanz (IRB statement 29/2023) and was preregistered
+on Open Science Framework (OSF) (32).</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 33 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 33 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 33 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+For a script that did not run through, <code>table$error_message</code>
+is its error, short (at most 300 characters): the error line of its
+output, which names a package that is not there, with the address it
+asked for when it needed the internet, or the time limit it reached;
+<code>table$reason</code> sorts it into a kind. A timeout means “still
+running at the cutoff”, not a failure, so raise <code>timeout</code> for
+legitimately long-running (e.g. Bayesian) scripts.
+<code>dependency_unavailable</code> means the script’s own package could
+not be installed from live CRAN, the CRAN Archive, or a named GitHub/URL
+source — an infrastructure limitation, not a defect in the paper’s code,
+so unlike <code>errored</code>/<code>timed_out</code> it does
+<strong>not</strong> force the traffic light red. The full stdout/stderr
+of every run is kept in the result’s <code>run_results</code> (the
+report shows it in per-script dropdowns, capped for readability). The
+traffic light reflects the STATIC readiness signals by default, but an
+execution error (<code>errored</code>/<code>timed_out</code>) does
+recolour it to red — a script that crashes on its own analysis is a
+genuine reproduction failure. A script that fails with
+<code>could not find function</code> is run once more with the
+<code>library()</code> calls the project’s other scripts make added at
+its top (or the one package that exports the function, or magrittr for
+<code>%&gt;%</code>), and a script that then runs is reported as
+reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Cooperation across social settings requires deciding whether to reciprocate a partner&#x27;s helpful behavior or exploit it when incentives change. We examined this tension in an online experiment with 430 participants playing a Prisoner&#x27;s Dilemma (PD), either alone or followed by a Snowdrift game (SD), where defection pays more against a sufficiently likely cooperator. We also placed programmed bots-computer-controlled players following a fixed rule-in some groups. By programming them to cooperate in PD and reciprocate their partner&#x27;s PD action in SD, we created a consistent source of cooperation and reciprocity. This allowed us to ask whether humans also cooperated more with one another. Humans cooperated more in SD after their partner cooperated in PD, even when observed partner behavior made defection the better immediate material response. This pattern is consistent with reciprocity, although choices do not identify beliefs or motives. Human-human cooperation was higher in groups containing bots; coupling alone produced no detected increase in mean PD cooperation. Separate experiments with GPT language-model agents asked whether frequent cooperation was accompanied by similar responses across games. Despite high PD cooperation, partner PD cooperation predicted less GPT cooperation in SD in the primary pooled analysis. This association varied across configurations and did not generally indicate payoff-maximizing choices. Simulations using fitted human response rules illustrated the possible effects of alternative bot policies. These findings reveal responses to cooperative partners across contexts that overall cooperation rates can obscure.</p>
+<h3>Introduction</h3>
+<p>Like the individuals who participate in them, social interactions do not exist in isolation, and encounters vary in strategic form. Business partners may cooperate in both commercial and civic settings, teammates may coordinate across distinct tasks, and neighbors may work together on separate public goods. In each case, one potentially cooperative encounter exists alongside another, but the balance among cooperation, coordination, and free-riding can differ. This ecology-of-games perspective motivates models of interacting, rather than isolated, games in which behavior in one setting can alter cooperation in another (1) (2) (3).</p>
+<p>Repeated-game research shows how people condition on prior actions, reciprocity, and reputation (7) (8) (9) (10) (11) (12) (13). Related work on multiple one-shot exchanges shows how simple partnerdirected heuristics can support cooperation (14). Coupled dilemmas ask what happens when information travels between settings with different strategic logics. Consider two familiar cases. In a shared project or costly agreement, mutual cooperation is best for the group, yet each person can gain by letting others bear the cost. This is the logic of a Prisoner&#x27;s Dilemma (PD). In a task that must be completed, such as clearing a blocked path or handling an urgent problem, someone has to contribute. Once another person is already doing so, withholding effort can reflect anti-coordination as well as selfishness. In a Snowdrift game (SD), unilateral cooperation can prevent the worst outcome, while defection can exploit another&#x27;s contribution (15) (16) (17) (18) (19).</p>
+<p>Experiments also show that behavior can spill across games. An efficient coordination-game precedent can increase later PD cooperation when action labels remain descriptively similar (4). People can carry heuristics across simultaneous games played with different opponents (5). Concurrent donation games can raise or reduce cooperation depending on partner structure (6). Closest theoretically, Salahshour (3) models a PD followed by a different game, including SD, with second-game behavior conditional on the first action. The present experiment tests the stage-resolved PD-to-SD sign in human behavior and compares that cue use with GPT agents.</p>
+<p>How social information carries across these contrasting settings is increasingly consequential as artificial agents enter social systems (20). Bots and language-model agents can serve as teammates (21), simulated participants (22), or strategic partners (23), changing what people observe and how cooperative the local environment appears (24, 25). For language-model agents, apparent continuity across encounters depends on the interaction history supplied in context, making the transfer of information between distinct tasks especially salient. Experimental work further shows that model behavior can change when trust-game choices carry actual rather than hypothetical incentives (26), and that tested early language models can produce context-sensitive completions resembling altruistic behavior (27). These findings motivate studying artificial agents in coupled social settings, while also cautioning that high aggregate cooperation does not establish human-like use of cross-context information (28, 29).</p>
+<p>In such coupled dilemmas, two contrasting possibilities follow. Under a narrow payoffmaximizing account, behavior in one setting is useful mainly as evidence about what a partner is likely to do in another. The actor should then choose the best material response, even when this means exploiting a partner who appears likely to cooperate. For example, after directly seeing a colleague stay late to keep a shared project on track, a separate urgent task may arise that either person can handle. A narrowly strategic focal person might expect the same colleague to step in again and therefore withhold effort. Such a rule can be locally advantageous, but it gives cross-context information a trust-limiting role. Under a reciprocal or norm-based account, by contrast, observed cooperation is not only a forecast of future action. It can create social credit, while defection can invite punishment, so behavior in one context becomes a basis for rewarding or withholding cooperation in another. In the same workplace example, the focal person could instead treat the colleague&#x27;s earlier willingness to help as a reason to share the later burden, even when letting the colleague handle it would bring a personal benefit. Cross-context information can then support moralized reciprocity rather than only strategic best response. This possibility fits broader models in which agents act on perceived or socially transformed payoffs rather than objective material payoffs alone (30, 31).</p>
+<p>Distinguishing these alternatives requires a setting in which the same cooperative cue points toward opposing social and material responses. We examine these alternatives in a controlled online experiment involving humans and parallel GPT-agent simulations. Human participants played either a repeated Prisoner&#x27;s Dilemma alone, a coupled Prisoner&#x27;s Dilemma and Snowdrift game, or the same coupled game in mixed groups with cooperative bots. The programmed bots followed a simple cooperative rule, allowing us to test whether their stable behavior was associated with cooperation among humans elsewhere in the group. The GPT simulations served a different purpose. Unlike the fixed-rule bots, GPT agents made prompted choices, allowing us to ask whether high aggregate cooperation also produced the human direction of cross-game cue use. The central question is whether behavior in one dilemma transfers into another as positive social information, as a material cue for best response, or not at all. The results show that humans display positive cross-game transfer, cooperative bots are associated with elevated human-human cooperation under the specific bot rule, and the pooled tested GPT configurations, despite high aggregate cooperation in the Prisoner&#x27;s Dilemma, show an opposite PD-to-SD association that varies across configurations.</p>
+<h3>Results</h3>
+<h3>Theory: when the same cue implies exploitation or reciprocity</h3>
+<p>We use two standard social dilemmas. In the Prisoner&#x27;s Dilemma (PD), mutual cooperation is best for the pair, but each player can gain by defecting against a cooperator. In the Snowdrift game (SD), unilateral cooperation still produces a positive outcome for both players, but a player can gain by defecting when the other player cooperates. We denote cooperation by C and defection by D. The entries below give the payoff to the focal player first and the partner second:</p>
+<p>The coupled design, in which a pair plays a PD followed by an SD, turns a familiar question into a sharper test. Suppose a partner cooperates in the PD stage and the focal player then chooses its strategy in the SD stage. Under a narrow material best-response account, the partner&#x27;s PD cooperation is useful because it helps predict what the partner is likely to do next. If it raises the expectation that the partner will cooperate in SD, then exploiting that likely cooperator can be materially attractive. Under a reputational or norm-based account, the same cooperative PD action can instead function as positive social information. The partner&#x27;s earlier cooperation may give the focal player a reason to cooperate in SD, for example because the focal player treats the partner as having earned cooperative treatment.</p>
+<p>The Snowdrift game makes these two interpretations point in opposite directions. With our SD payoffs, the material advantage of cooperating is 1 -3q, where q is the expected probability that the partner will cooperate. Cooperation is materially attractive only when q &lt; 1/3. Above that threshold, an expected cooperator is materially exploitable. Thus, if a partner&#x27;s PD cooperation only raises the expectation that the partner will cooperate again in SD, best response predicts less SD cooperation. If the focal player treats the same PD action as positive social information, reputational transfer predicts more SD cooperation.</p>
+<p>The Reputational Coupling Model, introduced in Methods, makes this logic explicit without claiming that we observe private beliefs. A partner&#x27;s action may change the focal player&#x27;s strategic expectation q, the perceived probability that the partner will cooperate, and may also carry positive or negative social information across games, summarized by a transfer cue r. These channels are not separately identified from choices in this design. The model is therefore a diagnostic framework for sign predictions, not a structural decomposition of beliefs and social valuation.</p>
+<p>We test this contrast with the PD-to-SD transfer coefficient, β P D→SD . The transfer coefficient β P D→SD measures the fitted change in the focal player&#x27;s SD cooperation when the partner cooperated rather than defected in the same-round PD, holding fixed the previous-round PD and SD cues that were already visible before the SD choice. A positive value has the sign predicted by positive reciprocity. A zero value indicates no detectable transfer. A negative value means that a cooperative PD cue predicts less SD cooperation. It aligns with strategic anti-coordination only when the cue raises expected partner-SD cooperation and choices respond to the resulting material incentive. Behavior alone does not establish those conditions or uniquely identify the underlying mechanism. We arrange the four observed transfer coefficients, β x→y , into a transfer matrix, B: PD-to-PD, SD-to-PD, PD-to-SD, and SD-to-SD. Methods provides the full notation, the logit/sigmoid formulation, and the derivation linking the conceptual model to the fitted transfer coefficients, β x→y.</p>
+<p>We also use behavioral simulation models, specified in Methods, to ask whether the estimated cue effects can reproduce the observed dynamics and compare alternative artificial-partner rules in counterfactual experiments. The Dynamic Logistic Transfer Simulation Model fits the observed transfer coefficients directly and uses them to generate predicted choice trajectories and simulated bot-policy comparisons. The Anchored Latent-State Transfer Simulation Model is a two-stage simulation model. It first assigns PD choices from visible prior cues, then approximates the expected partner-SD cooperation probability, q, and tests whether the residual partner-PD cue still has the sign predicted by reputational transfer. These simulations strengthen the behavioral test, but they still do not separately identify private expectations, reputational credit, or psychological parameters. The experimental information sequence, diagnostic framework, Snowdrift threshold, and primary human-GPT coefficient contrast are summarized in Fig. 1A-E.</p>
+<h3>Experimental design and guiding questions</h3>
+<p>In the PD-only control (PD-only; 26 groups, 156 humans), six participants played 25 rounds of a repeated Prisoner&#x27;s Dilemma. In the two-stage conditions, each round contained a PD stage followed by a Snowdrift stage with the same opponent. One two-stage condition used six humans (all-human PD+SD; 25 groups, 150 humans). The mixed condition used four humans and two bots (mixed human-bot PD+SD; 31 groups, 124 humans plus two programmed bots per intended group). Before each PD choice in the two-stage conditions, participants saw the current opponent&#x27;s previous-round choices in both games. Before each SD choice, those previous-round cues remained visible and participants additionally saw the same-round PD outcome with that opponent, including both PD choices and payoffs.</p>
+<p>Participants played with the same opponent in both stages of a given round, but pairings were reshuffled across rounds. Because of this reshuffling, the design measures responses to visible behavioral cues about the current opponent rather than stable long-run partner reputation.</p>
+<p>The preregistered experiment (32) asked whether coupling two dilemmas changed cooperation relative to a PD-only control, whether adding cooperative bots changed cooperation in mixed groups, and whether individual differences predicted cooperation. We organize those questions around the paper&#x27;s central test. First, did the coupled PD+SD environment change cooperation dynamics? Second, did the cooperative bot rule merely add cooperative bot encounters, or was human-human cooperation also elevated in mixed groups? Third and most importantly, how did participants use the information shown to them across games? If the PD cue was used only to forecast the partner&#x27;s SD action and maximize material payoffs, then a partner who seemed likely to cooperate would make SD defection more attractive. If actions also carried reputational or norm-based meaning, the same cooperative PD cue should increase SD cooperation. The stage-resolved PD-to-SD sign test reported below adapts the preregistered H3 question. Its preregistration status and the complementary preregistered proxy are reported in SI Section 2 and SI Section 4B. Finally, we asked whether the GPT-agent simulations analyzed here showed the same pattern of transfer as humans (SI Section 7C, Table S23, and Table S24).</p>
+<p>The results show that the all-human PD+SD condition did not raise average PD cooperation relative to the PD-only control, but it changed the decline pattern. Mixed groups showed elevated human cooperation, including human-human cooperation under the specific cooperative bot rule studied here. The key result is that humans showed positive PD-to-SD transfer, whereas the GPT agents did not reproduce the human pattern. Model specifications and supporting estimates are reported in SI Section 1, Table S4.</p>
+<h3>Coupling slowed decline but did not raise mean PD cooperation</h3>
+<p>Relative to the PD-only control, the all-human PD+SD condition did not show higher average PD cooperation. Across all 25 rounds, PD cooperation in the all-human PD+SD condition was statistically indistinguishable from the PD-only control (∆ = -0.029, p = .685). The same null held in the last 10 rounds (∆ = +0.016, p = .749) and last 5 rounds (∆ = +0.030, p = .546; Fig. 2A-B; SI Section 4A, Table S5).</p>
+<p>The time course differed more than the mean. Cooperation declined fastest in the PD-only control (odds ratio per round = 0.941, p &lt; .001). Decline was shallower in the all-human PD+SD PD stage (odds ratio = 0.969, p &lt; .001) and in both mixed-condition stages (PD: odds ratio = 0.983, p = .007; SD: odds ratio = 0.985, p = .013). The PD-only decline was steeper than each two-stage series (all slope-comparison p &lt; .001; Fig. 2A-C; SI Section 4A, Table S5).</p>
+<h3>Mixed groups showed elevated human cooperation under cooperative bot exposure</h3>
+<p>Both mixed-vs-all-human contrasts were significant. Relative to the all-human PD+SD condition, the mixed condition showed higher cooperation in PD (∆ = 0.183, p &lt; .001) and in SD (∆ = 0.137, p = .002; Fig. 2C-D; SI Section 1, Table S4; SI Section 4A, Table S5). This establishes the overall mixed-condition elevation, but it does not by itself identify the mechanism. The key question is whether bots merely added cooperative encounters, or whether their presence made the human cue environment more cooperative.</p>
+<p>The human-only decomposition argues against a purely mechanical interpretation. Restricting the analysis to human choices, raw cooperation toward human opponents was higher in mixed groups than in all-human groups (Fig. 2E; SI Section 6, Tables S15-S16, and Fig. S5). Allhuman human-human cooperation was 0.432 in PD and 0.439 in SD. Among mixed-condition human-human choices without immediately preceding bot exposure, cooperation was 0.592 in PD and 0.525 in SD. Among mixed-condition human-human choices after recent bot exposure, cooperation was 0.601 in PD and 0.558 in SD. Raw human-bot cooperation was also high (0.633 in PD and 0.612 in SD), but the adjusted human-bot coefficient was not reliable (SI Section 1, Table S4; SI Section 6, Tables S15-S16).</p>
+<p>A second observed-data check asked whether humans cooperated more with bots than with human opponents in both games, or mainly in one stage. Within the mixed condition, the difference between bot-facing and human-facing choices was small and not reliable in PD (∆ = 0.019, 95% CI [-0.014, 0.053], p = .339), but reliable in SD (∆ = 0.063, 95% CI [0.030, 0.096], p &lt; .001; Fig. 2E; SI Section 6, Table S14). Thus, humans did not simply cooperate more with bots everywhere. The clearest direct bot-opponent difference appeared in the Snowdrift stage, consistent with bots changing the second-stage reciprocity environment.</p>
+<p>A human-choice-only logistic model confirmed the human-human component. Adjusting for stage, round, previous partner cue history, the added same-round PD cue before SD choices, and group-clustered uncertainty, mixed human-human choices without recent bot exposure remained more cooperative than all-human human-human choices (log-odds coefficient = 0.315, OR = 1.37, 95% CI [1.04, 1.80], p = .024; Fig. 2F; SI Section 1, Table S4; SI Section 6, Table S15). The coefficient was similar and numerically larger for human-human choices following recent bot exposure (coefficient = 0.442, OR = 1.56, 95% CI [1.19, 2.03], p = .001; Fig. 2F; SI Section 6, Table S15). The two coefficients were not compared directly. These effects remained positive in a demographic/SVO/residence-adjusted check, a group-mean bootstrap comparison, and a participant-plus-group random-intercept model (SI Section 6, Table S17; SI Section 7C, Table S21). When we refit the model after omitting one group at a time (leave-one-group-out), the mixed human-human effect was positive in most refits, but a few omitted groups noticeably changed the estimate. We therefore report this analysis in SI Section 7C, Table S22 as a check for influential groups rather than as the main uncertainty interval.</p>
+<h3>Humans used cross-game information</h3>
+<p>We next asked how participants read the information shown to them. In plain terms, did they treat PD and SD as separate games, using only the cue that belonged to the current stage, or did they let information travel across stages? Cross-game information use means that an opponent&#x27;s cooperation in one game helps predict the focal player&#x27;s cooperation in the other game.</p>
+<p>Pooling human choices from both two-stage conditions, the all-human PD+SD condition and the mixed human-bot PD+SD condition, participants used both within-game and cross-game cues. These models exclude the PD-only control, which had no SD stage, and we analyze the GPT experiment data separately. In the PD stage, cooperation depended on the opponent&#x27;s previous-round PD choice (odds ratio = 1.73, 95% CI [1.46, 2.04], p &lt; .001) and previous-round SD choice (odds ratio = 1.40, 95% CI [1.21, 1.62], p &lt; .001), controlling for mixed-condition status and round (Fig. 3A-B; SI Section 4A, Table S5). In the SD stage, the previous-round PD and SD cues remained visible, and participants also saw the same-round PD choices. Conditional on that prior visible history, cooperation depended strongly on the opponent&#x27;s same-round PD choice (odds ratio = 1.93, 95% CI [1.62, 2.31], p &lt; .001). The previous-round PD cue was smaller (odds ratio = 1.18, 95% CI [1.00, 1.39], p = .047), and the previous-round SD cue was not reliable after we included both PD cues (odds ratio = 1.14, 95% CI [0.97, 1.34], p = .110; Fig. 3A-B; SI Section 1, Table S4; SI Section 4A, Table S5).</p>
+<p>The cue-strength pattern is informative in two ways (Fig. 3C). First, participants weighted PD-derived cues more strongly than SD-derived cues. This was true even before PD choices, where the previous-round SD action was temporally more recent than the previous-round PD action but carried the weaker coefficient. Second, the strongest single cue effect appeared before SD choices, where participants used the immediately preceding PD behavior to choose their SD strategy.</p>
+<p>Bot presence raised baseline cooperation more clearly than it amplified cue-use slopes. In all human choices, the mixed-condition interactions with cue use were not reliable in PD (previous PD cue × mixed: OR = 0.79, p = .280; previous SD cue × mixed: OR = 1.02, p = .907) or SD (same-round PD cue × mixed: OR = 0.78, p = .266; previous PD cue × mixed: OR = 1.02, p = .937; previous SD cue × mixed: OR = 1.08, p = .692). The same conclusion held when we restricted the analysis to human-human decisions. All-human and mixed human-human interactions both showed positive cue use, but mixed human-human cue slopes were not reliably larger than all-human slopes (SI Section 4C, Table S6). We do not treat human responses to bot cues as directly comparable to human responses to human cues because bot actions were generated by the programmed bot rule. After the first round, bot cue histories were generally visible, but bot PD cooperation was fixed by design and bot SD variation came from the mirroring rule rather than from an independent decision process. We therefore treat bot effects as changes in the cue environment and baseline human cooperation, not as evidence that bots strengthened every cue coefficient. This is the first of two behavioral signatures of cross-game transfer reported here. Partner PD cooperation predicted focal behavior in the subsequent Snowdrift stage, conditional on the included visible cues.</p>
+<h3>Positive human PD-to-SD transfer is consistent with reciprocity</h3>
+<p>The diagnostic result is the central entry of the Transfer Matrix, B: the PD-to-SD transfer coefficient, β P D→SD . The transfer coefficient β P D→SD is the fitted log-odds change in focal SD cooperation when the same-round partner PD cue changes from defection to cooperation, conditional on the previous-round PD and SD cues that were also visible before SD, condition, and round. In humans, the transfer coefficient β P D→SD was positive (β P D→SD = 0.658, 95% CI [0.480, 0.835]; OR = 1.93, 95% CI [1.62, 2.31]; p &lt; .001; SI Section 1, Table S4; SI Section 4A, Table S5). In probability terms, focal SD cooperation in the all-human PD+SD condition rose from 0.354 after partner PD defection to 0.552 after partner PD cooperation. In the mixed condition, it rose from 0.461 to 0.605 (SI Section 5B, Table S9, and Fig. S2).</p>
+<p>This positive PD-to-SD transfer coefficient, β P D→SD , becomes theoretically informative when combined with the Snowdrift payoff calculation in Methods. Let q D denote the observed probability that the partner cooperated in SD after defecting in the same-round PD, and let q C denote the same probability after cooperating in PD. These partner-cooperation probabilities, q D and q C , describe partner behavior, not the focal player&#x27;s transfer coefficient, β P D→SD . In the all-human condition, q D = 0.314 and q C = 0.604; in the mixed condition, q D = 0.375 and q C = 0.639 (Fig. 3D; SI Section 5B, Table S9, and Fig. S2). With the SD payoffs, the material advantage of cooperation, ∆π SD (q), is ∆π SD (q) = 1 -3q (Eq. 4), so the PD cue changes the material incentive by ∆π SD (q C ) -∆π SD (q D ) = -3(q C -q D ). This quantity is negative in both conditions, at -0.870 in the all-human condition and -0.792 in the mixed condition. Under this one-stage material-payoff benchmark, a simple exploitation response would point toward less focal SD cooperation. The fitted human transfer coefficient moved in the opposite direction, with β P D→SD &gt; 0 in the Reduced-Form Transfer Model (Eq. 5). The sign is therefore consistent with positive reciprocal transfer dominating that benchmark, while the design does not separately identify expectations, social valuation, or motives.</p>
+<p>The full same-round PD outcome shows why this transfer is substantively richer than a single cue coefficient. Humans carried the relational pattern of the immediate PD encounter into the SD stage. Mutual PD cooperation produced the highest SD cooperation (CC, 0.713, cluster-bootstrap 95% CI [0.659, 0.762]). Being exploited after cooperating produced a lower rate (CD, 0.493, 95% CI [0.446, 0.540]). Exploiting a cooperative partner was lower still (DC, 0.397, 95% CI [0.352, 0.448]), and mutual defection produced the lowest SD cooperation (DD, 0.302, 95% CI [0.261, 0.347]; Fig. 3E; SI Section 5D, Table S11, and Fig. S4).</p>
+<p>This ordered profile was not only own-action consistency. Among focal players who cooperated in PD, partner PD cooperation raised SD cooperation by 0.220 (95% CI [0.158, 0.280]). Among focal players who defected in PD, the corresponding partner effect was smaller but still positive (0.096, 95% CI [0.046, 0.143]; Fig. 3F; SI Section 5D, Table S12). A model-adjusted OwnPD × PartnerPD specification gave the same qualitative result (SI Section 5D, Table S13). Thus, human transfer was relational rather than merely individual. People did not only repeat their own PD action, but responded to what had just happened between the two players.</p>
+<p>The later SD-to-next-PD association is weaker and should be read more cautiously. SD cooperation predicted next-round PD cooperation in the standard stage-resolved model (OR = 1.81, p &lt; .001), but the within-person centered version weakened this result. Deviations around a participant&#x27;s own SD average were not reliable. We therefore treat it as a cross-game association among participants or contexts, not as strong evidence that one SD cooperative act caused the same person to cooperate more in the next PD round (SI Section 4A, Table S5; SI Section 5A, Table S8; SI Section 7C, Table S20).</p>
+<h3>Pooled tested GPT configurations showed negative PD-to-SD transfer</h3>
+<p>The GPT agents in these experiments often cooperated at high rates, especially in PD, as shown by the GPT overlays and mean markers in Fig. 2A-D and consistent with evidence that particular LLM configurations can cooperate in repeated games (28, 29), but their aggregate pattern already raises a puzzle. GPT PD cooperation was higher than human PD cooperation in every parallel condition (Fig. 2). Yet the same agents often cooperated much less in SD than in PD. This is surprising if high PD cooperation is interpreted as a general cooperative disposition, because the SD stage is not simply a harsher cooperation problem. It uses a closely related payoff scale, but changes the strategic meaning of facing a likely cooperator. The Transfer Matrix, B, clarifies this contrast behaviorally. The diagnostic PD-to-SD transfer coefficient, β P D→SD , reversed. After we included the current opponent&#x27;s previous-round PD and SD cues, that opponent&#x27;s same-round PD cooperation predicted lower SD cooperation by the focal GPT agent (β P D→SD = -1.036, 95% CI [-1.225, -0.846]; OR = 0.355, 95% CI [0.294, 0.429]; p &lt; .001). By contrast, the SD-to-SD transfer coefficient, β SD→SD , was positive. The opponent&#x27;s previous-round SD cooperation predicted substantially higher focal GPT SD cooperation (β SD→SD = 1.181, OR = 3.26, p &lt; .001). GPT SD cooperation also did not predict next-round PD cooperation once we controlled for previous PD behavior (OR = 1.04, p = .506; Fig. 4A-B; SI Section 1, Table S4; SI Section 5A, Tables S7-S8; SI Section 7C, Tables S23-S24, and Fig. S9).</p>
+<p>This does not show that GPT agents lack any particular internal social state. It shows that their observed pattern of transfer was not human-like. Nor does the negative pooled coefficient identify a general best-response mechanism. In the all-GPT condition, observed partner SD cooperation was q D = 0.275 after partner PD defection and q C = 0.239 after cooperation, both below the 1/3 threshold. In the mixed GPT-droid condition, it changed from q D = 0.285 to q C = 0.678. The negative focal association therefore aligned with the one-stage material-payoff benchmark in the mixed-droid condition, but not in the all-GPT condition (SI Section 5B, Table S9). Family-by-temperature checks were also heterogeneous. Several temperature-0 cells had no partner-PD defection cue, and one cell had only a single defection cue. Among cells with substantial cue variation, the clearest negative association appeared for GPT-3.5 Turbo at temperature 1 (Fig. 4B-C; SI Section 7C, Table S24, and Fig. S9; prompt and response-coding details in SI Section 9A). The robust comparison is therefore descriptive. The pooled tested GPT configurations did not reproduce the positive human PD-to-SD association, and aggregate cooperation alone would have hidden that difference in cue use.</p>
+<p>The full PD-outcome profile likewise differed. In the GPT experiment data, SD cooperation was 0.321 after CC (cluster-bootstrap 95% CI [0.292, 0.346]), 0.454 after CD (95% CI [0.419, 0.484]), 0.256 after DC (95% CI [0.228, 0.283]), and 0.340 after DD (95% CI [0.232, 0.503]; Fig. 4D; SI Section 5D, Table S11, and Fig. S4). The GPT outcome counts were highly imbalanced, especially because CC dominated the GPT data, so we interpret the non-CC comparisons cautiously. Conditional partner effects did not show the human pattern. The raw partner-PD effect was negative among GPT focal PD cooperators (-0.133, 95% CI [-0.176, -0.091]) and imprecise among GPT focal PD defectors (-0.084, 95% CI [-0.252, 0.030]; SI Section 5D, Table S12). The primary pooled result is the sign contrast between the positive human and negative GPT PD-to-SD coefficients. The GPT association is sensitive to configuration and specification. Model-adjusted partner-PD marginal effects conditional on focal PD action were positive but imprecise (0.022, 95% CI [-0.113, 0.125], for focal cooperators; 0.057, 95% CI [-0.097, 0.208], for focal defectors; Table S13).</p>
+<h3>Fitted choice models captured conditional behavioral patterns</h3>
+<p>The preceding analyses estimate cue effects directly, but cue coefficients alone do not show whether the same choice rule captures the observed round-by-round pattern. We therefore fit two choice models, specified in Methods. The first model implements the reduced-form transfer structure as a generative choice rule. The second asks whether the PD-to-SD result survives after we approximate the strategic expectation channel more explicitly.</p>
+<h3>Dynamic Logistic Transfer Simulation Model</h3>
+<p>The Dynamic Logistic Transfer Simulation Model asks whether the observed cue coefficients, own-action persistence, and round effects capture the main choice trajectories. The model maps stage-specific logistic equations to cooperation probabilities using cue histories and own-action states recorded in the observed sequence, together with round and the mixed-group environment (Fig. 5A). Figure 5B is therefore a conditional fit check rather than a recursively generated trajectory. In separate fivefold held-out SD-choice checks fit and evaluated within the human and GPT datasets, cross-game terms and own-action persistence improved prediction for humans.</p>
+<p>For GPT choices, most improvement came from adding the previous-round same-game SD cue (Fig. 5B-C; SI Section 7A, Table S18, and Fig. S6).</p>
+<h3>Counterfactual bot-policy simulations</h3>
+<p>The human experiment used one particular cooperative bot rule. Bots cooperated in PD and mirrored the human partner&#x27;s same-round PD choice in SD. This raises a more specific question. How would human cooperation change under alternative bot rules? We used counterfactual simulations to shed light on this question.</p>
+<p>For this policy comparison, we fit a compact variant of the choice model to human behavior in the all-human PD+SD condition only. The PD equation used the partner&#x27;s previous PD and SD choices, the focal player&#x27;s previous PD choice, and round. The SD equation used the partner&#x27;s same-round PD choice and previous SD choice, the focal player&#x27;s same-round PD choice, and round. We then simulated 800 25-round groups under each artificial-partner rule. The no-bot reference uses six simulated humans, randomly paired into three human-human pairs each round. The mixed counterfactuals use four simulated humans plus two bots, paired each round so that two humans faced bots and two humans faced another human. Bots followed the rule shown in the left-hand chips. Simulated humans always followed the fixed all-human response model. We report simulated human cooperation only, while bot actions enter as opponent actions and visible cues (SI Section 7B, Table S19, and Fig. S7).</p>
+<p>Under the fixed fitted response rule, the simulations predict the highest human cooperation with always-cooperative bots and the experiment-matched mirroring rule, weaker cooperation with random bots, and lower cooperation with always-defect bots (Fig. 5D). The white diamonds show the observed all-human and mixed-condition cooperation rates. The horizontal bars show the counterfactual simulations. The experiment-matched mirroring counterfactual lies below the observed mixed-condition diamond. Because the simulation transports an all-human response rule to bot-generated cue histories, that discrepancy may reflect omitted condition effects, model misspecification, sampling variation, or limits of the transport assumption. It does not identify an additional mechanism.</p>
+<h3>Anchored Latent-State Transfer Simulation Model</h3>
+<p>The Dynamic Logistic Transfer Simulation Model estimates total cue effects. As a predictive robustness check, the Anchored Latent-State Transfer Simulation Model first estimates partner SD cooperation from the visible history available before the same-round partner-PD cue and then includes that cue separately when predicting focal SD cooperation. Excluding the cue preserves its predictive coefficient, but also means that qt omits any expectation shift caused by that cue. The remaining coefficient therefore combines cue-induced strategic expectations with any additional social value. The model sequence is summarized in Fig. 6A and detailed in Methods. It is not a decomposition of beliefs and reputational transfer.</p>
+<p>The Anchored Latent-State Transfer Simulation Model retained a positive partner-PD coefficient in humans (ρ res = 0.530, 95% CI [0.373, 0.687]), whereas the corresponding GPT coefficient was imprecise and spanned both signs (ρ res = 0.280, 95% CI [-0.392, 0.953]; Fig. 6B; SI Section 5C, Table S10, and Fig. S3). A sensitivity model that included artificial-opponent status yielded a negative GPT coefficient. Because decision makers were not shown opponent type, we designate the visible-information model as the primary specification. These results show predictive robustness of the human sign and uncertainty in the primary GPT specification. They do not isolate a belief-adjusted social-value parameter. The negative GPT loading on the predicted material contrast further cautions against reading this model as evidence of payoff-responsive best response.</p>
+<h3>Robustness and secondary analyses</h3>
+<p>We assessed the main results under alternative model specifications (SI Section 1, Table S4). Human PD-to-SD transfer remained positive in rounds-6-25 and late-round restrictions, humanhuman-only analyses, and random-intercept multilevel models (SI Section 7C, Tables S20-S21, and Fig. S8). The mixed-condition human-human effects stayed positive in demographic, SVO, and residence-adjusted models, group-mean bootstrap checks, and a participant-plus-group random-intercept model. We also refit the model while omitting one group at a time because a small number of groups noticeably changed the estimate (SI Section 6, Table S17; SI Section 7C, Tables S21-S22). We estimated a negative GPT PD-to-SD coefficient in the primary transfer matrix, in the self-consistency-adjusted model, in all narrow round windows, and within both all-GPT and mixed-droid conditions (SI Section 7C, Tables S20 and S23-S24, and Fig. S9). One broad rounds-6-25 pooled restriction attenuated to near zero, and family-by-temperature checks were heterogeneous.</p>
+<h3>Individual differences</h3>
+<p>Post-game measures included self-assessment items, the 15-item Social Value Orientation (SVO) slider, and survey items on conformity and horizontal/vertical individualism-collectivism to test preregistered individual-difference predictions (SI Section 3C). A one-standard-deviation increase in SVO angle predicted higher overall cooperation (b = 0.089, 95% CI [0.064, 0.113], p &lt; .001), whereas competition orientation predicted lower cooperation (b = -0.031, 95% CI [-0.059, -0.003], p = .031; SI Section 4A, Table S5). Thus, prosocial orientation predicted cooperation across the coupled game environment, while competitive orientation pulled in the opposite direction.</p>
+<p>A separate post-experiment self-assessment asked participants to reconstruct their own behavior. Mean discrepancies in conditional self-reports were generally near zero, whereas participants overestimated overall PD cooperation by about five percentage points (SI Section 8).</p>
+<p>Finally, exploratory behavioral clustering summarized each participant&#x27;s cue use, stage-specific cooperation, time trends, and within-round consistency. The resulting archetypes-steadfast cooperators, conditional cooperators, game switchers, and persistent defectors-provide an intuitive map of heterogeneity in the participant pool (SI Section 8 and Fig. S10).</p>
+<h3>Discussion</h3>
+<p>Coupled dilemmas reveal the direction in which cooperation moves across games. Cooperative PD behavior predicted more human cooperation in the following Snowdrift stage, even though observed partner behavior made defection materially attractive under the one-stage Snowdrift payoff benchmark.</p>
+<p>This interpretation keeps the claim focused. We use a payoff feature of the Snowdrift game. When the expected partner-SD cooperation probability, q, exceeds 1/3, defection pays more. The human PD-to-SD transfer coefficient, β P D→SD , has the opposite sign, and the full PD-outcome analysis shows an ordered human profile. These patterns are consistent with positive reciprocity rather than simple strategic exploitation, while choices alone do not identify private beliefs, moral valuation, or motives.</p>
+<p>The fitted choice models provide a compact account of the observed conditional patterns. The Dynamic Logistic Transfer Simulation Model captures the observed trajectories when evaluated on recorded histories and simulates alternative bot rules under a fixed fitted response rule. The Anchored Latent-State Transfer Simulation Model shows that partner PD cooperation still predicts higher focal SD cooperation in humans after adjustment for the cue environment predictable before the same-round PD cue. In GPT agents, the corresponding focal-SD effect is ambiguous under the visible-information adjustment. These fitted quantities show that the human pattern is not confined to a single reduced-form regression. Human-human cooperation was higher in groups containing cooperative bots than in allhuman groups. Under the fixed fitted all-human response rule, cooperative and mirroring bot policies increased simulated human cooperation, random bots produced smaller changes, and always-defect bots reduced cooperation (Fig. 5D). These observed associations and modelconditional comparisons suggest that cooperative, easy-to-interpret artificial partners can support a more cooperative social environment.</p>
+<p>The GPT comparison shows why aggregate cooperation is insufficient. The GPT agents in these experiments often cooperated more than humans in PD (Fig. 2A-D), but the pooled PD-to-SD cue had the opposite sign. That association was heterogeneous across configurations and did not generally follow realized Snowdrift best response. The pattern inferred from the coupled game therefore differed even when overall cooperation looked high. Evaluations of artificial agents should test not only how often agents cooperate, but whether they use cooperative behavior in one setting as human-like social information in another.</p>
+<p>In conclusion, coupled dilemmas can show whether cooperation transfers across contexts as positive social information or produces a contrasting cue response. Humans showed the positive-transfer pattern. The pooled tested GPT configurations did not, although their responses were heterogeneous. Mixed groups with cooperative, predictable bots showed elevated human cooperation, including human-human cooperation.</p>
+<h3>Materials and Methods</h3>
+<h3>Ethics, recruitment, and sample</h3>
+<p>Participants were recruited through Prolific using a nonprobability, opt-in sample. The experiment received ethical approval from the Ethics Committee of the University of Konstanz (IRB statement 29/2023) and was preregistered on Open Science Framework (OSF) (32). The experiment was conducted online during September and October 2024, the experimental app was developed using oTree (33), and participants were recruited through the Prolific platform (34). Participants provided informed consent before participation. All participants had a Prolific approval rate of at least 98%. The participation fee was set on a £6/hour basis and ranged from £2.43 to £3.99. Approved Prolific submissions took a median of 30.6 minutes. The performance-based game bonus averaged £1.04 (range £0.34-£2.00; one point = £0.01).</p>
+<p>We linked oTree behavioral data to Prolific demographic and payment records by participant ID, removed direct identifiers before analysis, and retained valid online groups with complete scheduled 25-round records. Timeout or invalid choices within otherwise retained records were coded as missing and omitted from choice models requiring observed A/B decisions. SI Section 1, Tables S1-S2 report the data sources, inclusion criteria, exclusions, anonymization, condition balance, and missing-choice handling.</p>
+<p>Demographic information from Prolific was available for all 430 analyzed participants. Participants were 18-79 years old (mean = 30.78, SD = 9.94), and 223 were female and 207 were male. Participants resided in 34 countries. The largest residence groups were South Africa (n = 168), Poland (n = 48), the United Kingdom (n = 44), Portugal (n = 31), and Hungary (n = 29). Prolific demographics, SVO categories, and condition balance are reported in SI Section 1, Table S2.</p>
+<h3>Experimental design</h3>
+<p>Participants played 25 repeated rounds in one of three conditions: a PD-only control, an allhuman two-stage PD+SD condition, or a mixed human-bot PD+SD condition. The human sample included N = 430 participants in 82 session groups: 26 PD-only groups (156 humans), 25 all-human PD+SD groups (150 humans), and 31 mixed groups (124 humans plus programmed bots). The PD payoff structure was R = 3, T = 5, P = 1, S = 0. The SD payoff structure was R = 3, T = 5, P = 0, S = 1. Instructions described &quot;multiple rounds&quot; rather than disclosing the finite 25-round horizon. Choice screens displayed the current round number. Participants answered payoff-comprehension questions before grouping, and those who did not pass did not enter the main task.</p>
+<p>In two-stage rounds, participants played both PD and SD with the same opponent within a round, and pairings reshuffled across rounds. Before choosing in PD, participants saw the current opponent&#x27;s previous-round PD and SD choices. Before choosing their SD strategy, participants continued to see those previous-round cues and also saw the current opponent&#x27;s same-round PD choice.</p>
+<h3>Human-bot procedure</h3>
+<p>The mixed condition used four humans and two programmed bots per intended six-player group. At the start of each round, two humans were paired with bots and the remaining humans were paired with each other. Each pair then played both the PD and SD stages of that round together.</p>
+<p>Bots cooperated in the PD stage. In the SD stage, a bot mirrored the human partner&#x27;s same-round PD choice. It cooperated in SD after a human PD cooperation and defected in SD after a human PD defection. If the relevant human PD choice was unavailable because of timeout or missing action, the bot chose randomly. The participant instructions described anonymous random pairing and did not explicitly label whether the current opponent was a bot or a human.</p>
+<h3>Human measures</h3>
+<p>After the game, participants completed self-assessment items, the 15-item SVO slider measure (35), and survey items measuring conformity (36) and horizontal/vertical individualismcollectivism (37). The control condition also included a five-item neutralization scale (38).</p>
+<h3>GPT experiment data</h3>
+<p>We also analyzed parallel GPT-agent simulations with the same PD-only, all-agent PD+SD, and mixed agent-droid PD+SD conditions. The GPT experiment data contained 533 simulation sessions and 137,400 decision rows across GPT-3.5 Turbo, GPT-4o, and GPT-4o mini at temperatures 0 and 1. GPT droids used the same broad rule as the human-condition bots: cooperate in PD and mirror the opponent&#x27;s same-round PD action in SD. The GPT experiments included the main behavioral task, but no SVO survey was included in the GPT experiments. We report the prompts, procedural differences, and response-coding procedures in SI Section 9A.</p>
+<h3>Statistical models</h3>
+<p>Between-condition comparisons and mixed-group effects used group-level summaries or groupclustered uncertainty because the persistent session group was the independent social-environment unit. Trial-level cue-use models estimated associations with logistic generalized estimating equations and participant-clustered uncertainty. Group-level summaries and participant-plusgroup random-intercept specifications provided social-group-level checks. GPT models clustered by simulation session. GEE models used Statsmodels&#x27; independence working correlation and robust sandwich standard errors without a finite-cluster correction. Models used complete cases for the variables in each specification. Human PD-stage models included previous-round opponent PD cooperation, previous-round opponent SD cooperation, condition, and round. Human SDstage models included same-round opponent PD cooperation, previous-round opponent PD cooperation, previous-round opponent SD cooperation, condition, and round.</p>
+<p>The human-choice-only bot model restricted the outcome to human decisions in the twostage human conditions. Predictors were interaction category (all-human human-human; mixed human-human without recent bot exposure; mixed human-human after recent bot exposure; mixed human-bot), stage, round, visible previous partner cues, same-round PD cues for SD choices, and group-clustered uncertainty. Recent bot exposure means the participant faced a bot in the immediately preceding round in either stage.</p>
+<h3>Mathematical model summary</h3>
+<p>The theoretical model, transfer estimates, and simulation models use the same binary-choice scale. For player i in round t and game g ∈ {P D, SD}, let C g i,t ∈ {0, 1} denote cooperation, let p g i,t = Pr(C g i,t = 1) denote the cooperation probability, and let η g i,t denote the latent choice index, or log-odds of cooperation. We map the index to a probability with the sigmoid function, (</p>
+<p>This is the two-action softmax form used in stochastic choice models. The model assigns higher probability to the action with the larger latent value while allowing heterogeneous and noisy choices (39) (40) (41).</p>
+<h3>Diagnostic Reputational Coupling Model</h3>
+<p>The Diagnostic Reputational Coupling Model is the conceptual model behind the sign test. It writes the latent choice index as</p>
+<p>Here α g i is player i&#x27;s baseline tendency to cooperate in game g; q g i,j,t is the expected probability that opponent j will cooperate in game g; ∆π g (q) is the material payoff advantage of cooperation over defection; θ g i is the weight on that material incentive; r i,j,t is the cross-game transfer cue; ρ g i is the weight on that cue; γ g i captures own-action persistence; and τ t = (t -13)/12 is centered round. The model does not estimate the expected cooperation probability, q g i,j,t , or the cross-game transfer cue, r i,j,t , as directly observed mental states. We use it to define the behavioral diagnostic: whether a cooperative cue moves behavior in the direction predicted by material best response or in the direction predicted by positive cross-game transfer.</p>
+<p>In the Snowdrift game, if q is the probability that the opponent cooperates, then cooperation yields expected payoff 3q + 1(1 -q) = 1 + 2q, whereas defection yields 5q. Thus the material payoff advantage of cooperation is</p>
+<p>Cooperation is materially favored only when q &lt; 1/3. This makes the same-round PD cue diagnostic before the SD decision. If partner PD cooperation mainly indicates that the partner is likely to cooperate in SD, the material best response pushes toward defection. If it carries positive social information, the transfer channel pushes toward cooperation.</p>
+<h3>Reduced-Form Transfer Model</h3>
+<p>Because choices alone do not separately identify q g i,j,t , r i,j,t , θ g i , and ρ g i , the empirical tests estimate reduced-form cue effects. Let O x j,t ∈ {0, 1} denote an observed opponent cue from source game x, where 1 denotes cooperation, and let W i,j,t collect controls such as round, condition, own-action persistence, and other visible cues. For destination game y, we estimate logit(p y i,t ) = a y + β x→y O x j,t + κ y⊤ W i,j,t.</p>
+<p>(</p>
+<p>The coefficient β x→y is the fitted log-odds change in focal cooperation in destination game y when the observed partner cue from source game x changes from defection to cooperation, holding the controls fixed. For the central PD-to-SD test, O x j,t is the partner&#x27;s same-round PD action and W i,j,t includes the previous-round PD and SD cues that were also visible before the SD choice.</p>
+<p>The transfer coefficient, β x→y , is linked to the conceptual model because the latent choice index, η g i,t , equals logit(p g i,t ). If a partner PD cue changes the focal player&#x27;s expected probabilities of partner SD cooperation and transfer-cue values from (q 0 , r 0 ) after partner defection to (q 1 , r 1 ) after partner cooperation, then the reduced-form PD-to-SD transfer coefficient, β P D→SD , corresponds to the net movement of the latent index:</p>
+<p>The approximation sign marks the mapping from a reduced-form coefficient to the conceptual model. The second line is exact algebra. The strategic sign interpretation requires θ SD &gt; 0.</p>
+<p>If partner PD cooperation raises perceived partner SD cooperation, the strategic term is then negative. Neither q 1 -q 0 nor θ SD is separately identified here, so a positive β P D→SD is consistent with a positive transfer component dominating under those assumptions, not an empirical decomposition.</p>
+<h3>Transfer Matrix</h3>
+<p>We summarize cross-game cue use with the Transfer Matrix,</p>
+<p>Rows denote the destination game and columns the source cue. The PD row uses previousround opponent PD and SD cues. The SD row uses the same-round opponent PD cue and previous-round opponent SD cue, with previous-round PD controlled. The matrix therefore mixes lagged and same-round sources. Its entries are not temporally symmetric or comparable as causal transfers. The central behavioral diagnostic is β P D→SD.</p>
+<h3>Dynamic Logistic Transfer Simulation Model</h3>
+<p>The Dynamic Logistic Transfer Simulation Model asks whether a compact generative version of the reduced-form transfer equations can reproduce the observed choice trajectories and support counterfactual bot-policy comparisons. For PD choices, it uses logit(p P D i,t ) = α P D + β P D→P D O P D j,t-1 + β SD→P D O SD j,t-1 where M i indicates the mixed human-bot condition.</p>
+<p>For SD choices, it uses logit(p SD i,t ) = α SD + β P D→SD O P D j,t + λ SD P D O P D j,t-1</p>
+<p>Choices are then generated as Bernoulli draws from the fitted probabilities. Opponent type is used to assign the realized policy in mixed-group simulations, but it is not used as a direct predictor of human choice because decision makers in the experiment did not have access to that information. Additional fitting, prediction, and counterfactual-policy details for the Dynamic Logistic Transfer Simulation Model are reported in SI Sections 7A-7B, Tables S18-S19, and Figs. S6-S7. The mathematical specification is in SI Section 11.</p>
+<h3>Anchored Latent-State Transfer Simulation Model</h3>
+<p>The Anchored Latent-State Transfer Simulation Model follows the q/r notation but does not identify its latent channels. It first assigns PD choices from the visible-information PD model in Eq. 8. It then estimates partner-SD cooperation from information available before the same-round partner-PD cue, where X q i,j,t includes visible previous-round cues, self-known previous behavior, round, mixedcondition status, and GPT model/temperature indicators where relevant.</p>
+<p>It excludes artificialopponent status because decision makers did not observe it. It also excludes the same-round partner-PD cue, O P D j,t , so that this cue can enter the focal SD-choice equation separately. Consequently, ρ res below retains both any expectation shift caused by O P D j,t and any additional social-value association. It must not be interpreted as a belief-adjusted reputational parameter. The model converts the first-stage prediction into the Snowdrift material contrast, and then models focal SD cooperation as logit(p SD,anc i,t ) = α + θ ∆π ˆ︃ ∆π SD i,j,t + ρ res O P D j,t + χC P D i,t +λ P D O P D j,t-1 + λ SD O SD j,t-1 + γ SD C SD i,t-1 + ζ ⊤ W i,j,t.</p>
+<p>Here θ ∆π loads the predicted material contrast and ρ res is the remaining same-round partner-PD predictive coefficient. Because qSD i,j,t excludes that cue, ρ res is not adjusted for the full cue-induced expectation environment. Results for the Anchored Latent-State Transfer Simulation Model are reported in SI Section 5C, Table S10, and Fig. S3. Full derivations are in SI Section 11.</p>
+<p>We report additional analyses in the SI: transfer matrices, the analytical Snowdrift check, and the own-action association index in SI Section 5A, Eq. S3, and Tables S7-S8; empirical best-response checks in SI Section 5B, Table S9, and Fig. S2; environment-adjusted residual PD-cue models in SI Section 5C, Table S10, and Fig. S3; full PD-outcome checks in SI Section 5D, Tables S11-S13, and Fig. S4; the human-only bot decomposition in SI Section 6, Tables S14-S17, and Fig. S5; prediction, counterfactual, and robustness checks in SI Sections 7A-7C, Tables S18-S24, and Figs. S6-S9; calibration analyses and behavioral archetypes in SI Section 8, with clustering diagnostics in Fig. S10; GPT dataset composition, model-specific trajectories, and prompt/response-coding details in SI Section 9, Tables S25-S26, and Fig. S11; and the figure index and resampling/simulation procedures in SI Section 10, Tables S27-S28.</p>
+<h3>AI assistance</h3>
+<p>AI was not used to design the experiment or the questionnaires. We acknowledge assistance from OpenAI&#x27;s ChatGPT and Codex (GPT-5.5, GPT-5.6 Sol, and GPT-6 Astra) with analysis code, plotting code, writing and language edits, manuscript review, and consistency checks. We also acknowledge Anthropic&#x27;s Claude for manuscript review. The authors reviewed, edited, and verified the AI-assisted material and take full responsibility for the manuscript content.   S17. Human-bot and GPT-droid observations are included only when the focal decision maker is human or GPT, respectively. Model-by-model GPT composition is reported in SI Section 9, Table S25. Leave-one-group summaries for F are reported in SI Section 7C, Table S22. P D → P D S D → P D P D → S D S D → S D -1.0 -0.5 0.0 0.5 1.0 Transfer coefficient (log odds) A Human GPT -2 -1 0 GPT PD-to-SD effect (log odds) Primary Self-consist. R6-25 R1-5 R6-10 R11-15 R16-25 All-GPT Mixed+droid B 3.5 T0 3.5 T1 4o T0 4o T1 4m T0 4m T1 -0.2 0.0 0.2 0.4 0.6 Raw SD difference (PD C vs D) n=1 x no PD-D cue C CC CD DC DD 0.2 0.3 0.4 0.5 0.6 0.7 0.8 Focal SD cooperation D Human GPT</p>
+<h3>Acknowledgments</h3>
+<p>We thank the participants who took part in the study. This work is supported by funding from Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under Germany&#x27;s Excellence Strategy -EXC 2117-422037984 and DFG project no. 462886202, the Deutsche Forschungsgemeinschaft Gottfried Wilhelm Leibniz Prize 2022 584/22 (I.C.), the Max Planck Society, the European Union&#x27;s Horizon 2020 Research and Innovation Programme under the Marie Sklodowska-Curie Grant agreement no. 860 949, the Struktur-und Innovations fonds fuer die Forschung of the State of Baden-Wuerttemberg, the Path Finder European Innovation Council Work Programme no. 101098722, the Office of Naval Research grant N0001419-1-2556 and Small Project Grant (S23-32) from the Center for the Advanced Study of Collective Behavior.</p>
+<h3>Data and Code Availability</h3>
+<p>The reproducibility package contains the processed human and GPT datasets and analysis code (42). Its Figshare DOI is reserved and not yet active.</p>
+<h3>Fig 1.</h3>
+<p>Fig.1. Experimental design and diagnostic logic of coupled dilemmas. PD denotes the Prisoner&#x27;s Dilemma and SD denotes the Snowdrift game. A: We ran three conditions: a PD-only control, an all-human PD+SD condition, and a mixed human-bot PD+SD condition. B: In two-stage rounds, participants were paired, saw the current opponent&#x27;s previous-round PD and SD choices before choosing a PD strategy, then saw those previous cues plus the same-round PD outcome before choosing an SD strategy with the same opponent. Pairings were reshuffled before the next round. C: Observed cues can shift cooperation through strategic expectations and through reputational transfer, but the empirical test relies on fitted sign patterns rather than direct measurement of beliefs. D: Cooperation in the Snowdrift game has material advantage 1 -3q, where q is the expected partner-SD cooperation probability, and therefore becomes materially disadvantageous when q &gt; 1/3. E: The primary PD-to-SD transfer coefficient, β P D→SD , for humans and GPT agents, conditional on the other visible cues included in the reduced-form model.</p>
+<h3>Fig 2.</h3>
+<p>Fig 2. Human cooperation dynamics, GPT overlay, and observed human-only bot decomposition. A-C: Panels A, B, and C show, respectively, the PD-only control, the all-human/all-GPT PD+SD condition, and the mixed human-bot/GPT-droid PD+SD condition. Human trajectories are solid, GPT-agent trajectories are dashed, orange denotes PD, and teal denotes SD. Pointwise error bars are omitted from A-C for visibility. The dashed GPT trajectories are pooled means across GPT model families and temperatures, with model-specific trajectories shown in SI Section 9, Fig S11. D: Human group-level means are shown with pooled GPT simulation-session means as open diamonds. Error bars show bootstrap intervals over groups or GPT simulation sessions. E: Human choices are separated into human-human and human-bot interaction categories. F: Primary and covariate-adjusted logistic coefficients are shown for mixed-condition human-human cooperation. Group-mean probability contrasts are reported separately in SI Section 6, TableS17. Human-bot and GPT-droid observations are included only when the focal decision maker is human or GPT, respectively. Model-by-model GPT composition is reported in SI Section 9, TableS25. Leave-one-group summaries for F are reported in SI Section 7C, TableS22.</p>
+<h3>FFig. 3 .Fig 4 .Fig 5.</h3>
+<p>Fig 3. Human transfer diagnostics. A-B: Model-adjusted cooperation surfaces for the PD and SD stages in the two human PD+SD conditions. The SD-stage estimates condition on the previous-round PD and SD cues that remained visible before SD as well as the same-round PD cue. C: Primary human cue-use odds ratios are shown from the reduced-form transfer models, with PD-derived cues in orange and SD-derived cues in teal. Values above one indicate that cooperation in the source cue predicts higher focal cooperation in the destination game. D: Partner PD cooperation raised the partner&#x27;s observed SD cooperation above the q = 1/3 Snowdrift best-response threshold. E: Focal SD cooperation is shown after the full same-round PD outcome, where CC, CD, DC, and DD denote focal-partner PD outcomes, with cluster-bootstrap 95% confidence intervals. F: Partner-PD effects are shown separately among focal PD cooperators and focal PD defectors.</p>
+<h3>Fig 6.</h3>
+<p>Anchored Latent-State Transfer Simulation Model.A: Visible prior history informs the PD-stage logit and a cross-fitted model of partner SD cooperation, qt . The same-round partner-PD cue is excluded from qt and entered separately in the focal SD model. B: Material-contrast loading and the remaining partner-PD coefficient are shown for humans and tested GPT configurations. Because the cue is excluded from qt , this coefficient is predictive rather than a belief-adjusted social-value parameter. C: Average cross-fitted partner-SD cooperation probability, qt , by round. D: Observed and fitted focal SD cooperation after CC, CD, DC, and DD, with focal action listed first.</p>
+<h3>References</h3>
+<p>Long, N. E. (1958). The local community as an ecology of games. American Journal of Sociology, 64 (3), 251-261. https://doi.org/10.1086/222468.</p>
+<p>Wang, Z., Kokubo, S., Jusup, M., &amp; Tanimoto, J. (2015). Universal scaling for dilemma strength in evolutionary games. Physics of Life Reviews, 14, 1-30. https://doi.org/10.1016/j.plrev.2015.04.033.</p>
+<p>Salahshour, M. (2022). Interaction between games give rise to the evolution of moral norms of cooper- ation. PLoS Computational Biology, 18 (9), e1010429. https://doi.org/10.1371/journal.pcbi.1010429.</p>
+<p>Knez, M., &amp; Camerer, C. (2000). Increasing cooperation in Prisoner&#x27;s Dilemmas by establishing a precedent of efficiency in coordination games. Organizational Behavior and Human Decision Processes, 82 (2), 194-216. https://doi.org/10.1006/obhd.2000.2882.</p>
+<p>Bednar, J., Chen, Y., Liu, T. X., &amp; Page, S. E. (2012). Behavioral spillovers and cognitive load in multiple games: An experimental study. Games and Economic Behavior, 74 (1), 12-31. https://doi.org/10.1016/j.geb.2011.06.009.</p>
+<p>Rossetti, C. S. L., Hauser, O. P., &amp; Hilbe, C. (2025). Dynamics of cooperation in concurrent games. Nature Communications, 16, 1524. https://doi.org/10.1038/s41467-025-56083-7.</p>
+<p>Axelrod, R., &amp; Hamilton, W. D. (1981). The evolution of cooperation. Science, 211 (4489), 1390-1396.</p>
+<p>Nowak, M. A. (2006). Five rules for the evolution of cooperation. Science, 314 (5805), 1560-1563.</p>
+<p>Rand, D. G., &amp; Nowak, M. A. (2013). Human cooperation. Trends in Cognitive Sciences, 17 (8), 413-425.</p>
+<p>Nowak, M. A., &amp; Sigmund, K. (1998). Evolution of indirect reciprocity by image scoring. Nature, 393, 573-577.</p>
+<p>Nowak, M. A., &amp; Sigmund, K. (2005). Evolution of indirect reciprocity. Nature, 437, 1291-1298.</p>
+<p>Panchanathan, K., &amp; Boyd, R. (2004). Indirect reciprocity can stabilize cooperation without the second-order free rider problem. Nature, 432, 499-502.</p>
+<p>Wedekind, C., &amp; Milinski, M. (2000). Cooperation through image scoring in humans. Science, 288 (5467), 850-852.</p>
+<p>Johnson, T., &amp; Smirnov, O. (2013). Cooperate with equals: A simple heuristic for social exchange. In R. Hertwig, U. Hoffrage, &amp; the ABC Research Group (Eds.), Simple Heuristics in a Social World (pp. 135-170). Oxford University Press. https://doi.org/10.1093/acprof:oso/9780195388435.003.0005.</p>
+<p>Doebeli, M., &amp; Hauert, C. (2005). Models of cooperation based on the Prisoner&#x27;s Dilemma and the Snowdrift game. Ecology Letters, 8 (7), 748-766.</p>
+<p>Fehr, E., &amp; Gächter, S. (2002). Altruistic punishment in humans. Nature, 415, 137-140.</p>
+<p>Rockenbach, B., &amp; Milinski, M. (2006). The efficient interaction of indirect reciprocity and costly punishment. Nature, 444, 718-723.</p>
+<p>Raihani, N. J., &amp; Bshary, R. (2019). Punishment: one tool, many uses. Evolutionary Human Sciences, 1, e12.</p>
+<p>Power, E. A., &amp; Raihani, N. J. (2021). No good deed goes unpunished: the social costs of prosocial behaviour. Evolutionary Human Sciences, 3, e40.</p>
+<p>Rahwan, I., Cebrian, M., Obradovich, N., Bongard, J., Bonnefon, J.-F., Breazeal, C., et al. (2019). Machine behaviour. Nature, 568, 477-486.</p>
+<p>McKee, K. R., Tacchetti, A., Bakker, M. A., Balaguer, J., Campbell-Gillingham, L., Everett, R., &amp; Botvinick, M. (2023). Scaffolding cooperation in human groups with deep reinforcement learning. Nature Human Behaviour, 7, 1787-1796. https://doi.org/10.1038/s41562-023-01686-7.</p>
+<p>Aher, G. V., Arriaga, R. I., &amp; Kalai, A. T. (2023). Using large language models to simulate multiple humans and replicate human subject studies. Proceedings of the 40th International Conference on Machine Learning, 202, 337-371.</p>
+<p>Shanahan, M., McDonell, K., &amp; Reynolds, L. (2023). Role-play with large language models. Nature, 623, 493-498.</p>
+<p>Harrell, A., &amp; Traeger, M. L. (2025). Reputation-based reciprocity in human-bot and human-human networks. PNAS Nexus, 4 (5), pgaf150. https://doi.org/10.1093/pnasnexus/pgaf150.</p>
+<p>Harrell, A., &amp; Traeger, M. (2025). Evidence of spillovers from (non)cooperative human-bot to human-human interactions. iScience, 28 (8), 113006.</p>
+<p>Johnson, T., &amp; Obradovich, N. (2024). Measuring an artificial intelligence language model&#x27;s trust in humans using machine incentives. Journal of Physics: Complexity, 5 (1), 015003. https://doi.org/10.1088/2632-072X/ad1c69.</p>
+<p>Johnson, T., &amp; Obradovich, N. (2025). Testing for completions that simulate altruism in early language models. Nature Human Behaviour, 9, 1861-1870. https://doi.org/10.1038/s41562-025- 02258-7.</p>
+<p>Akata, E., Schulz, L., Coda-Forno, J., Oh, S. J., Bethge, M., &amp; Schulz, E. (2025). Play- ing repeated games with large language models. Nature Human Behaviour, 9, 1380-1390. https://doi.org/10.1038/s41562-025-02172-y.</p>
+<p>Lorè, N., &amp; Heydari, B. (2024). Strategic behavior of large language models and the role of game structure versus contextual framing. Scientific Reports, 14, 18490.</p>
+<p>Salahshour, M. (2025). Perceptual rationality: An evolutionary game theory of perceptually rational decision-making. Royal Society Open Science, 12 (10), 251125. https://doi.org/10.1098/rsos.251125.</p>
+<p>Salahshour, M., &amp; Couzin, I. D. (2025). Evolution of altruistic rationality provides a so- lution to social dilemmas via rational reciprocity. Physical Review Research, 7 (3), 033211. https://doi.org/10.1103/sz5b-j75y.</p>
+<p>Salahshour, M., Bhargava, S., Johnson, T., &amp; Couzin, I. (2024, September 4). Social Norms in Interacting Games. OSF. https://osf.io/82nej/.</p>
+<p>Chen, D. L., Schonger, M., &amp; Wickens, C. (2016). oTree-An open-source platform for laboratory, online, and field experiments. Journal of Behavioral and Experimental Finance, 9, 88-97.</p>
+<p>Palan, S., &amp; Schitter, C. (2018). Prolific.ac-A subject pool for online experiments. Journal of Behavioral and Experimental Finance, 17, 22-27.</p>
+<p>Murphy, R. O., Ackermann, K. A., &amp; Handgraaf, M. J. J. (2011). Measuring social value orientation. Judgment and Decision Making, 6 (8), 771-781.</p>
+<p>Mehrabian, A., &amp; Stefl, C. A. (1995). Basic temperament components of loneliness, shyness, and conformity. Social Behavior and Personality, 23 (3), 253-264.</p>
+<p>Triandis, H. C., &amp; Gelfand, M. J. (1998). Converging measurement of horizontal and vertical individualism and collectivism. Journal of Personality and Social Psychology, 74 (1), 118-128.</p>
+<p>Sykes, G. M., &amp; Matza, D. (1957). Techniques of neutralization: A theory of delinquency. American Sociological Review, 22, 664-670.</p>
+<p>Luce, R. D. (1959). Individual Choice Behavior: A Theoretical Analysis. Wiley.</p>
+<p>McFadden, D. (1974). Conditional logit analysis of qualitative choice behavior. In P. Zarembka (Ed.), Frontiers in Econometrics (pp. 105-142). Academic Press.</p>
+<p>Train, K. E. (2009). Discrete Choice Methods with Simulation (2nd ed.). Cambridge University Press.</p>
+<p>Salahshour, M., Bhargava, S., Johnson, T., &amp; Couzin, I. D. (2026). Data and code for &quot;Coupled social dilemmas reveal positive cross-game transfer in humans and contrasting cue use in tested GPT agents.&quot; Figshare. https://doi.org/10.6084/m9.figshare.34599360. DOI reserved.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
