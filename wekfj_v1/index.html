@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: THE POWER OF NARROW TRAITS FRAMEWORK</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+THE POWER OF NARROW TRAITS FRAMEWORK
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.23 · DOI 10.6084/m9.figshare.34881282
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to fix</span></a><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>13</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>For example, participants completed tasks more often when at home and
+not moving.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 2 references with comments in PubPeer.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>We found 1 replication for 1 original you cited.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(13)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 123 references with DOIs. You cited 2 references with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Salganik, M. J., Lundberg, I., Kindel, A. T., Ahearn, C. E., Al-Ghoneim,
+K., Almaatouq, A., Altschul, D. M., Brand, J. E., Carnegie, N. B.,
+Compton, R. J., Datta, D., Davidson, T., Filippova, A., Gilroy, C.,
+Goode, B. J., Jahani, E., Kashyap, R., Kirchner, A., McKay, S., . . .
+McLanahan, S. (2020). Measuring the predictability of life outcomes with
+a scientific mass collaboration. Proceedings of the National Academy of
+Sciences, 117(15), 8398- 8403. <a href="https://doi.org/10.1073/pnas.1915006117" class="uri">https://doi.org/10.1073/pnas.1915006117</a>
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/1D95172E858E991FF0C4DF4AB5CFBD" target="_blank">link</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Soto, C. J. (2019). How replicable are links between personality traits
+and consequential life outcomes? The Life Outcomes of Personality
+Replication Project. Psychological Science, 30(5), 711-727. <a href="https://doi.org/10.1177/0956797619831612" class="uri">https://doi.org/10.1177/0956797619831612</a>
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/7613DC7756A1F876DCECA642AEA2E2" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 123 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 123 references with DOIs. We found 1 replication for 1
+original you cited.</p>
+<p>Check if you are aware of the replication studies, and cite them
+where appropriate.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Replication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mõttus, R., Kandler, C., Bleidorn, W., Riemann, R., &amp; McCrae, R. R.
+(2017). Personality traits below facets: The consensual validity,
+longitudinal stability, heritability, and utility of personality
+nuances. Journal of Personality and Social Psychology, 112(3), 474-490.
+<a href="https://doi.org/10.1037/pspp0000100" class="uri">https://doi.org/10.1037/pspp0000100</a>
+</td>
+<td style="text-align:left;">
+Mõttus, R., Sinick, J., Terracciano, A., Hřebíčková, M., Kandler, C.,
+Ando, J., Mortensen, E. L., Colodro-Conde, L., &amp; Jang, K. L. (2019).
+Personality characteristics below facets: A replication and
+meta-analysis of cross-rater agreement, rank-order stability,
+heritability, and utility of personality nuances. Journal of Personality
+and Social Psychology, 117(4), e35–e50.
+<a href="https://doi.org/10.1037/pspp0000202" target="_blank">doi:10.1037/pspp0000202</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Broad traits predict consequential life outcomes but are ill-suited to causal inference, whereas single narrow, behaviorally measured traits are more interpretable causally but predict weakly.</p>
+<p>The space of narrow traits is also so large that choosing among them is challenging. I propose the Power of Narrow Traits (PNT) framework to address both challenges. In a specific person, the causal effect of a narrow trait (e.g., talkativeness) on a specific outcome (e.g., social capital) accumulates across the situations in which the trait can be expressed as a state (e.g., talking) and in which that state influences the outcome, with situations described by their features. In its basic form, four factors multiply at each point of the feature space: (a) how often per year the person encounters such situations, (b) over how many years, (c) how strongly the trait translates into the state there, and (d) how strongly that state causally affects the outcome. These contributions are then summed over the situations the person encounters. The decomposition clarifies when narrow traits should be consequential, which traits to measure for a given outcome, why the same trait level leads to an outcome for some people but not for others, and how interventions can be tailored to each person&#x27;s trait and situational profile. I formalize the framework, illustrate it with worked examples, relate it to existing theories, and derive six empirical predictions. PNT thus provides a unifying structure for future work on stable individual differences and life outcomes.</p>
+<h3>[div-01]</h3>
+<p>consistency of notation, equations, and citations. I checked all AI-generated content and take full responsibility for the manuscript.</p>
+<h3>The Power of Narrow Traits (PNT) Framework: How Behavior Accumulates Across Situations into Life Outcomes</h3>
+<p>Personality traits and cognitive abilities are among the most robust correlates of consequential life outcomes. For example, personality traits are associated with subjective wellbeing (Anglim et al., 2020; Soto, 2019), mental and physical health (Jokela et al., 2013; McGeehan et al., 2026), educational attainment (Duckworth et al., 2019; Poropat, 2009), income (Denissen et al., 2018), and interpersonal outcomes such as divorce (Roberts et al., 2007) and social status (Grosz, van Aert, &amp; Back, 2024). Similar evidence exists for cognitive abilities (e.g., Brown et al., 2021; Calvin et al., 2017; Grosz, van Aert, &amp; Back, 2024). These associations might carry substantial societal stakes. For example, Cuijpers and colleagues (2010) estimated that the excess societal costs associated with the highest quartile of neuroticism amount to approximately $1.39 billion per million inhabitants per year, roughly 2.5 times the combined excess costs of all common mental disorders in the same population. Such findings, together with the observation that many people want to change their own personality (Hudson &amp; Roberts, 2014), motivate an active literature on personality change interventions intended to improve lives through targeted modification of broad personality traits (e.g., Bleidorn et al., 2019; Haehner et al., 2024; Stieger et al., 2021).</p>
+<p>However, research on the consequences of individual differences confronts two profound methodological challenges that limit its ability to move from association to causal inference. The first challenge concerns a trade-off between predictive validity and causal interpretability.</p>
+<p>Although broad measures of personality and intelligence predict life outcomes reasonably well, they are composite variables rather than unidimensional traits (e.g., Grosz, 2026; Revelle, 2024; van der Maas et al., 2014). Thus, the consistency assumption of causal inference, which requires that all underlying versions of a given treatment level yield the same potential outcome, is often violated (e.g., Cole &amp; Frangakis, 2009; Junker &amp; Grosz, 2026; VanderWeele, 2009). The reason is that the same composite score can reflect different configurations of lower-order components with potentially distinct causal effects. For example, the same conscientiousness score can reflect greater Organization or greater Productiveness, which may have different health effects (Junker &amp; Grosz, 2026). The opacity of broad measures not only violates the consistency assumption but also makes it difficult to identify appropriate confounders, mediators, and colliders in observational studies, further complicating causal estimation (Grosz, 2026; Wysocki et al., 2022). When one shifts to single narrower or behavioral measures, above all single-occasion task measures, predictive validity typically drops substantially (Bagaini et al., 2025; Boon-Falleur et al., 2022; Eisenberg et al., 2019; Epstein, 1979; Paap et al., 2024; Wennerhold &amp; Friese, 2020).</p>
+<p>The drop concerns single measures: a single narrow trait rarely out-predicts a single broad domain, even though a regression on many narrow items out-predicts a regression on the few domain scores they compose (Mõttus et al., 2017; Seeboth &amp; Mõttus, 2018; Stewart et al., 2022).</p>
+<p>Narrower and behavioral measures are nevertheless better suited to causal inference in two respects. They satisfy the consistency assumption, and they are more amenable to manipulation than trait levels because they are closer to the concrete behavior. The dilemma is that the broad measures with the strongest predictive power are the least suitable for causal inference and intervention, whereas the narrow, behaviorally anchored measures of single narrow traits that are better suited have weaker associations with outcomes.</p>
+<p>The second challenge concerns the proliferation of narrow traits. Because life circumstances vary widely and interact with genetic, biological, and developmental differences to produce innumerable specific behavioral tendencies, there are essentially countless narrow traits one could assess (e.g., Condon et al., 2020; Mõttus et al., 2017; Revelle et al., 2011).</p>
+<p>Public-domain item banks already hold more than 3,000 personality items, and their counterparts for cognitive abilities have grown from 60 to roughly 1,000 items within a decade (Condon &amp; Revelle, 2014; Dworak et al., 2021; Goldberg et al., 2006), while new constructs and measures accumulate at a rate of thousands per year (Anvari et al., 2025). The most systematic proposal to date is the six-step procedure of Condon et al. (2020), which screens candidate items on content and item statistics, retest reliability, cross-rater agreement, and generalizability, and ends with post hoc evaluations of predictive utility. Such screening yields curated, non-redundant pools.</p>
+<p>For example, the 100 Nuances of Personality comprises 198 items (Henry &amp; Mõttus, 2025).</p>
+<p>However, such screening cannot tell a researcher which of the surviving traits are likely to have a substantial causal effect on a given outcome. The prospect of an unguided choice among thousands of candidates deters some researchers from studying narrow traits at all. Researchers who nevertheless study narrow traits often select them by intuition or convention. This practice risks under-sampling of the tendencies that matter most for the outcome at hand.</p>
+<p>To address both challenges, I propose the Power of Narrow Traits (PNT) framework. Its central claim is that, in a specific person, the causal effect of a narrow trait (e.g., talkativeness) on a specific outcome (e.g., well-being, longevity, or income) accumulates across the situations in which the trait can be expressed as a state and in which that state influences the outcome. The state can be a behavior (e.g., talking), but also an affect (e.g., anxiety), a cognition (e.g., ruminating), or a desire (e.g., desire for social status). In the framework&#x27;s basic form, four factors are multiplied at each configuration of situation features: (a) how often per year the person encounters situations with those features, (b) over how many years the trait is expressed in them, (c) how strongly the trait translates into the state there (trait expressivity), and (d) the average causal effect of the expressed state on the outcome there. These contributions are then summed over all the situations the person encounters. Extensions of this basic form cover diminishing returns, outcomes that return to a set point, interactions among behaviors and among narrow traits, and trait-driven situation selection (see Extensions).</p>
+<p>The contribution of the PNT framework is to formalize a multiplicative decomposition that (a) reconciles the predictive-causal dilemma, (b) provides an operational criterion for choosing which narrow traits to measure for a given outcome and population, (c) yields tractable chains of causal effects that differ from the predictions of broad-trait and interactionist accounts, and (d) motivates tailored, situation-aware interventions. The PNT framework is deliberately a coarse-grained model in the sense of Smaldino (2020): it reproduces qualitative patterns (orderings, contrasts, and the conditions under which trait-outcome effects appear or vanish) rather than exact effect sizes. The values in the examples that follow are therefore order-ofmagnitude calibrations rather than parameter estimates. That said, the framework&#x27;s main purpose is to serve as a template from which fine-grained, empirically calibrated models (instances) can be built for a specific narrow trait, outcome, and population by estimating their components.</p>
+<h3>The Power of Narrow Traits (PNT) Framework The Idea in One Example</h3>
+<p>Consider two employees, Nora and Ben, who are equally good at quantitative reasoning: both score one standard deviation above the mean. Nora is a portfolio analyst. In a typical year she makes about 1,700 decisions that involve quantities, with about $6,000 at stake in the average decision. Ben is a communications manager. He makes about as many quantitative decisions, 1,500 a year, but with about $700 at stake in the average one. In every such decision, better quantitative reasoning improves the result a little. Suppose that one standard deviation of the ability is worth 0.1% of the amount at stake, through sounder valuations, avoided errors, and the evaluations and raises that follow. Over 10 years, the arithmetic is simple. Nora earns 10 years × 1,700 decisions × $6,000 × 0.1% ≈ $102,000 more than a colleague of average ability in her position would earn. Ben earns 10 × 1,500 × $700 × 0.1% ≈ $10,500 more. The same trait, expressed equally in every decision and with the same effect per dollar at stake, is ten times as consequential for Nora as for Ben, and the entire difference lies in the situations the two encounter.</p>
+<p>Four quantities did all the work: how many relevant situations the person encounters per year (1,700 or 1,500 decisions), over how many years (10), how strongly the trait shows in what the person does in each situation (here, equally in every decision), and what one instance of that behavior does to the outcome (here, 0.1% of the stakes, so that it depends on a feature of the situation). Multiplying the four gives the trait&#x27;s effect on the outcome for that person. The PNT framework is the general statement of this arithmetic. Because the four factors multiply and three of them depend on the situations the person encounters, two consequences follow. First, the same trait can be powerful for one person and inert for another, so that population averages can conceal large effects. Second, the narrow traits worth measuring for a given outcome can be found by starting from the situations that produce the outcome, rather than chosen by intuition.</p>
+<h3>Core Definitions</h3>
+<p>Here in the main text, I define core parameters used in the PNT framework. Table 1 provides a glossary of all parameters. In the main text, the arguments of a parameter are dropped once they are clear from context: f stands for f(x | p), β for β(n, x), γ for γ(x, Y | p), S for S(n, x, p), and z for z(p). The equations and Table 1 keep the full notation. The average decision quality at a given stake (cancels out in Box 1)</p>
+<p>Trait expressivity: the degree to which individual differences in narrow trait n translate into differences in the expressed state in situations with features x 1.0 unit per SD, the same at any stake</p>
+<h3>Narrow Trait</h3>
+<p>A narrow trait, denoted n, is a specific individual-difference characteristic with high temporal stability. Narrow personality traits are often referred to as personality nuances that are more specific than facets and much more specific than domains in standard personality inventories (Condon et al., 2020; Mõttus et al., 2017). That said, &quot;narrow trait&quot; is not limited to personality nuances. It also includes specific cognitive abilities and other temporally stable individual differences.</p>
+<p>Examples of narrow traits include talkativeness as a nuance within the extraversion domain, reactive aggression as a nuance within the agreeableness domain, quantitative reasoning as a specific cognitive ability (often classified under fluid intelligence depending on the model), exercise adherence as a nuance within the conscientiousness domain, and rejection sensitivity as a nuance within the neuroticism domain. These examples deliberately span a range of cultural generality, and PNT applies uniformly across this range. Basic tendencies such as talkativeness, reactive aggression, and rejection sensitivity are expressed in situations that occur in most cultural contexts. Characteristic adaptations such as quantitative reasoning and exercise adherence are expressed in situations that exist only where technology or institutions create them (e.g., McCrae &amp; Costa, 2008). Culture thus enters PNT through the situations it makes available and how often they occur (see Prediction 1), not as a situation feature itself.</p>
+<p>A person p has a score on narrow trait n. For convenience, I denote the person&#x27;s standardized score as z(p), representing the number of standard deviations p deviates from the sample mean. The index n is omitted because the equations treat one narrow trait at a time.</p>
+<p>Where several traits enter jointly, the trait is indexed.</p>
+<h3>Situation Features and Exposure</h3>
+<p>Each narrow trait n has an associated region X(n, Y) of the space of situation features in which n can be expressed as a state and that state has a non-negligible causal effect on the outcome Y. A situation is described by a vector of features, denoted x, that determine the affordances, demands, and constraints it presents (Gibson, 1977; Rauthmann et al., 2015).</p>
+<p>Features can be continuous or ordered (how many people are present, how much money is at stake, how strongly a setting discourages conversation) or present versus absent (whether a decision involves quantities at all). The PNT framework does not commit to any particular taxonomy of situation features. It does require that the features be scored on the situation itself rather than on how the focal person perceives it, and that they be as narrow as the trait, as explained below.</p>
+<p>Researchers may draw on existing taxonomies such as DIAMONDS (Rauthmann et al., 2014) or CAPTION (Parrigon et al., 2017), domain-specific feature sets tailored to the trait of interest, or bottom-up feature sets derived empirically for the trait-outcome link at hand. Which features matter, and over which range, depends on the narrow trait, the state through which it is expressed, and the outcomes under investigation. For talkativeness, for example, the region X(n, Y) comprises the situations in which social interaction is possible and verbal behavior can unfold. Within this region, narrower features such as the number of people present, how familiar they are, and how far the activity permits conversation plausibly shift both how strongly talkativeness translates into the state and how strongly that state causes the outcome of interest. Breakfast with family members, commuting on public transit alongside strangers, and waiting with peers for a university lecture to start are points in this feature space: they differ in the familiarity of those present, their number, and the openness of the activity to conversation. Which part of the space belongs to X(n, Y) depends on the outcome. For subjective well-being, all three plausibly lie inside it. For the number of new friendships formed, situations in which everyone present is already a close tie, such as breakfast with family members, contribute nothing, because no new tie can result.</p>
+<p>The region is thus indexed by trait and outcome jointly. This is also what keeps the problem tractable: parts of the feature space can often be excluded on theoretical grounds before any parameter is estimated.</p>
+<p>Situation features are scored by criteria that do not depend on the focal person&#x27;s construal, so that exposure tracks situation contact rather than situation perception. Two kinds of criteria qualify. The first are observable cues: who is present, where, and doing what (Johns, 2006; Rauthmann et al., 2015; Saucier et al., 2007), which can be counted and coded. The second are psychological characteristics rated by observers or by consensus rather than by the focal person alone, for example how much a situation offers an opportunity to gain status (cf. Rauthmann et al., 2014). The existing dimensional taxonomies were developed as measures of situation perception. Used as features here, their dimensions must be scored by others or from coded cues, because self-scored features would confound exposure with construal. Either way, the features must be as narrow as the trait. A narrow trait is expressed in response to specific affordances, and a broad situation dimension averages over affordances that differ in whether they make the state possible and consequential, which blurs trait expressivity and the causal effect of the expressed state on the outcome in the same way that a broad trait blurs the effects of its components. Narrowness is required on both sides.</p>
+<p>For each person p, there is a long-run exposure density f(x | p): integrated over any range of feature values, it gives the expected number of objectively scorable instances per year that person p encounters with features in that range. Integrating over all of X(n, Y) gives N(p), the number of relevant situations the person encounters per year, and f(x | p)/N(p) is the distribution of the person&#x27;s situations over the features. A representative sample of the person&#x27;s situations, each scored on the features, estimates the distribution, and the number of instances per year scales it (see Measurement of Expressivity and Exposure).</p>
+<h3>Life Outcome</h3>
+<p>A life outcome Y is, formally, a person-level variable, realized over a time horizon T, on which the expressed state has a well-defined causal effect and which is not itself an aggregate of that state. Whether such a variable counts as a life outcome involves a further judgment about which end states matter. That judgment is normative rather than formal (Wessels et al., 2016).</p>
+<p>Outcomes span the individual, interpersonal, and institutional domains (Ozer &amp; Benet-Martínez, 2006; Wilmot et al., 2025), from daily well-being and survival to age 80 through relationship satisfaction to annual income, and can be continuous, binary, or time-to-event. They can be more or less distal from the expressed state: ruminating affects daily well-being within a single step, whereas exercising affects mortality only through mediators such as cardiorespiratory fitness and cardiovascular risk (Wessels et al., 2016). Outcomes can also differ in how the causal effect is distributed across instances: accruing through countless small contributions or turning on a handful of consequential ones.</p>
+<h3>Equations</h3>
+<h3>Effect on the Expressed State</h3>
+<p>In a situation with features x, the state through which narrow trait n is expressed by person p is modeled as where α(x) is the average state level in situations with features x, β(n, x) is the trait expressivity at x (how strongly individual differences in the narrow trait are translated into differences in the expressed state in situations with those features), and ε captures residual variation from unmodeled factors.</p>
+<p>In words, a person&#x27;s state in a situation is the state an average person shows there, plus a deviation that grows with the person&#x27;s trait level at a rate set by how much the situation lets the trait show, plus noise. The term &quot;state&quot; encompasses behavior (e.g., speaking, exercising) as well as affect, cognitions, and desires (e.g., ruminating, experiencing pride, suppressing an impulse, wanting to impress). Behavior is the paradigmatic case. Where a trait is a capacity (e.g., quantitative reasoning) rather than a tendency (e.g., talkativeness), the state is the momentary performance in which the capacity is exercised (e.g., the quality of a quantitative decision, as in Box 1), and S is its level on the dimension that is causally relevant to Y.</p>
+<p>Trait expressivity β(n, x) is trait-and situation-specific: it varies across the feature space, within and beyond X(n, Y). It is zero in two cases: where the state cannot occur at all, because the situation does not afford it, and where the situation fixes the state at the same level for everyone, so that the state occurs but does not vary with the trait. In the second case α can be substantial even though β is zero. Note that situations outside X(n, Y) may nonetheless have substantial β, if the state is expressed there but has no consequence for Y. Situational strength is itself a feature, or a combination of features, along which β is expected to decline: classical and recent accounts suggest that β is smaller in strong situations than in weak situations, because strong situations constrain decision-making freedom and limit the range of individually differentiated behavior (Judge &amp; Zapata, 2015; Meyer et al., 2010; Mischel, 1977). The evidence is less clear-cut than the claim&#x27;s currency suggests (Cooper &amp; Withey, 2009), although a rigorous recent test supports it for cooperative behavior (Li et al., 2025; see Text S5). The framework is agnostic on the precise form of β and treats it as an empirically estimated function. Estimating it requires pooling instances with similar features, either by assuming a functional form (β linear in a feature, say, estimated as a trait × feature interaction) or by smoothing across neighboring feature values. How much β varies across the feature space is itself an empirical question. In everyday experience-sampling data, situational differences in trait-state slopes have been modest relative to individual differences in situation-state contingencies (Kuper et al., 2024).</p>
+<p>Where β is roughly constant over X(n, Y), variation in PNT contributions across the feature space is carried by f and γ, as in Box 1.</p>
+<h3>Box 1</h3>
+<p>The PNT Decomposition in Practice: Quantitative Reasoning and Income Scenario. Consider the effect of quantitative reasoning-a specific cognitive ability (Schneider &amp; McGrew, 2018)-on cumulative labor-market income over 10 years. I compare two employees, Nora and Ben, matched on trait level (both z = +1) but working in different occupational niches. The relevant situations are quantitative decisions at work, and the situation feature x is the amount at stake in a decision, in dollars, which is scored from the decision itself.</p>
+<p>Quantifying the four factors. Exposure as a distribution over the feature f(x | p). Both make a similar number of quantitative decisions per year, but the stakes differ. Nora, a portfolio analyst, makes about N ≈ 1,700 decisions per year with stakes that are lognormally distributed with a median of about $1,900 and a mean of m ≈ $6,000, so she handles roughly $10.2 million of stakes per year.</p>
+<p>Ben, a communications manager, makes about N ≈ 1,500 decisions per year with a median of about $230 and a mean of m ≈ $700, roughly $1.05 million per year.</p>
+<p>Time horizon T. 10 years for both.</p>
+<h3>Trait expressivity β(n, x).</h3>
+<p>A 1-SD advantage yields the same increment in decision quality whatever the stakes: β ≈ 1.0 quality units per decision per SD, constant in x.</p>
+<h3>Within-situation causal efficacy γ(x, Y | p).</h3>
+<p>The earnings consequence of a quality unit grows with the stakes: γ(x) ≈ κ × x with κ = 0.001, that is, one quality unit changes cumulative income by 0.1% of the amount at stake: $0.05 for a $50 task and $50 for a $50,000 valuation, where a sound valuation or an avoided costly error feeds into evaluations, advancement, and compensation.</p>
+<p>Putting the four factors together. Applying Equation 3: with β constant and γ = κ × x, the average of β × γ over a person&#x27;s decisions is β × κ × m, so ΔY = T × β × κ × N × m × z.</p>
+<p>For Nora, ΔY ≈ 10 × 1.0 × 0.001 × 1,700 × $6,000 ×1 ≈ $102,000.</p>
+<p>For Ben, ΔY ≈ 10 × 1.0 × 0.001 × 1,500 × $700 ×1 ≈ $10,500.</p>
+<p>For Nora, this is roughly a 10% gain in annual earnings per SD, which is conservative relative to the ≈18% average per-SD return to numeracy among prime-age workers in OECD countries (Hanushek et al., 2015). Exposure is estimated without classifying any decision: a sample of each person&#x27;s decisions with their stakes recorded gives m, and the number of decisions per year gives N. and Quantitative Reasoning Figure 1 plots ΔY (in U.S. dollars) as a function of the total stakes of quantitative decisions handled per year, N × m, the only quantity on which Ben and Nora differ. Because γ is linear in the stakes, ΔY is a straight line through the origin for each trait level; at z = 1, it is 0.1% of each year&#x27;s stakes, accumulated over 10 years.</p>
+<p>What this illustrates. Despite identical trait levels, Nora&#x27;s trait-attributable income exceeds Ben&#x27;s tenfold, driven entirely by the stakes of the decisions she encounters. The contrast is carried by γ, not β: the ability is expressed about equally in small and large decisions, but only the latter carry appreciable earnings stakes.</p>
+<h3>Note.</h3>
+<p>For illustration, β is constant and γ linear in the stakes, the state is linear in trait level, and effects are additive across situations. Calibration details and the assumptions relaxed in the Extensions are given in the online supplement (Text S1).</p>
+<p>In Equation 1, β(n, x) is not person-specific: it describes the average slope with which individual differences in n translate into the state in situations with features x. The framework can accommodate person-specific expressivity by allowing person-specific slopes β(n, x, p) = β(n, x) + η(n, x, p), where η captures person p&#x27;s deviation from the population slope. Like the other person-specific parameters in Table 1, η is defined counterfactually, as the amount by which person p&#x27;s state in situations with features x would change per SD of the trait, over and above the population slope. Because each person has a single trait value, η cannot be estimated from that person&#x27;s data alone. Individual differences in situation-state contingencies (Bauditz et al., 2026; Kuper et al., 2022 Kuper et al., , 2024) ) constrain it without identifying it for any single person, and between subgroups it can be estimated directly as differences in β (e.g., across countries; Kuper et al., 2026). For readability, the equations below use the population slope β(n, x); substituting β(n, x, p) yields the fully person-specific form.</p>
+<p>Equations 2 and 3 below use only the slope β but not the average state level α, because α is trait-independent: under their assumptions it is shared by a person and their mean-level (z = 0) counterfactual and cancels from the trait-attributable deviation. It re-enters once exposure itself depends on the trait, as in the selection extension, or once the outcome depends nonlinearly on cumulated state, as under the diminishing returns extension. I return to both extensions below.</p>
+<h3>Effect on Outcome</h3>
+<p>In a situation with features x, the expressed state S(n, x, p) produces an effect on the outcome Y. Let γ(x, Y | p) denote the person-specific average causal effect of a unit increase in S on Y in one instance of a situation with features x. The effect need not materialize within the situation. It includes consequences that unfold later, through mediators (exercising affects mortality through fitness; see Life Outcome), through others&#x27; memories and reactions (Back et al., 2011), and through the person&#x27;s own later reflection on the episode. The qualifier withinsituation therefore refers to where the state is expressed, not to when its consequences occur. In some settings γ will be homogeneous across persons. In many settings γ varies across persons for biological, contextual, or structural reasons (e.g., Bryan et al., 2021; Denissen et al., 2018; Wenzel et al., 2025). Because γ is the effect of a single instance of the expressed state, it is typically very small in absolute terms (see Box 1) and cannot be read off any one instance.</p>
+<p>Estimating it requires aggregating the state-outcome relationship across many instances or many persons, as discussed below under Estimating the Within-Situation Causal Efficacy, and, like β, pooling instances with similar features. The talkativeness example introduced earlier shows why β and γ must be carried as separate functions of the features. Talkativeness is expressed most fully among familiar others, as at breakfast with family members, less fully among waiting peers, and least among commuting strangers, where norms discourage unsolicited conversation: β declines as the people present become less familiar. The per-instance effect on forming a new friendship plausibly runs in the opposite direction: γ rises as they become less familiar, because only a new tie can become a new friendship. Box 1 presents a complementary case, in which β is roughly constant across the feature space and the entire contrast is carried by γ.</p>
+<p>Assuming additive cumulation of within-situation effects over the time horizon T (in years) across which outcome Y is defined, the expected contribution of person p&#x27;s standardized score z on narrow trait n to outcome Y is</p>
+<p>In words, the trait&#x27;s contribution to the outcome is the person&#x27;s trait level times a coefficient, the Power of the Narrow Trait n for outcome Y in person p: the difference between the person&#x27;s expected outcome and the outcome the same person would have at the mean trait level, per SD of z (derivation in Text S2). This coefficient multiplies the four factors at each point of the feature space and sums over the situations the person encounters: where N(p) is the number of relevant situations person p encounters per year, Ex | p[•] is the average over those situations, that is, over the person&#x27;s distribution of situations across the features, and the integral in the second line runs over the region X(n, Y), with f(x | p) equal to N(p) times that distribution.</p>
+<p>In words, the power of a narrow trait is years × relevant situations per year × the average, over the situations the person encounters, of how strongly the trait shows in the state times what one unit of the state does to the outcome.</p>
+<p>The first line of Equation 3 is how the coefficient is estimated in practice: β × γ is averaged over a representative sample of the person&#x27;s situations and multiplied by N(p) and T.</p>
+<p>The second line writes the same quantity as an integral over the feature space, the form on which the extensions below build. Where β × γ is approximately linear in the features, only the means of the features over the person&#x27;s situations matter, as in Box 1; where it is not, the shape of the exposure distribution matters as well.</p>
+<p>Because the factors multiply, even a trait that is strongly expressed (high β) and highly consequential per instance (high γ) has negligible power when the situations that afford it are rare (low N(p)). Thus, the same trait can be powerful for one person, population, or outcome and inert for another (see Box 1). The same arithmetic explains the appeal of broad traits: a domain pools narrow traits that are expressed across many regions of the feature space, so its summed exposure is large even when no single component is powerful.</p>
+<h3>Population-Average Effect on Outcome</h3>
+<p>The population-average PNT is obtained by taking expectations over persons:</p>
+<p>In words, the population-average power of a narrow trait is the average of its person-specific power over the persons in the population. Equation 5 when the same trait-driven state promotes the outcome in some regions of the feature space but undermines it in others, PNT is positive for a person whose niche is dominated by the former and negative for a person whose niche is dominated by the latter, as when a trait raises income in jobs whose demands it matches and lowers it in jobs whose demands it does not (Denissen et al., 2018). A near-zero population-average PNT is therefore ambiguous between three very different realities: (a) a trait that matters little for anyone; (b) one that matters substantially but only for a small, same-direction subgroup (dilution); or (c) one that matters greatly in opposing directions across the niches the average pools over (cancellation). Distinguishing them requires disaggregating by situational niche.</p>
+<h3>Extensions</h3>
+<p>The basic PNT equations (Equations 2 and 3) assume additive cumulation of withinsituation effects, linear expression of narrow traits in the state, and situation exposure f given exogenously as an input. None of these assumptions is strictly necessary.</p>
+<p>Four extensions are worth noting briefly. These extensions complicate the equations but not the substantive claims: relaxing additivity or exogenous exposure alters the magnitude and shape of trait-outcome effects, not the four factors that govern them.</p>
+<h3>Diminishing Returns</h3>
+<p>Outcomes might depend on the cumulation of states with diminishing returns. For example, the effect of an exercise adherence nuance on all-cause mortality is governed by a saturating relationship between cumulative weekly physical activity and mortality risk reduction (Han et al., 2026; Stamatakis et al., 2025). In such cases, the additive aggregation can be replaced with a saturating function g(•) applied to the absolute aggregated state input and differenced against the mean-level counterfactual:</p>
+<p>In words, Equation 6says that the outcome depends on the total amount of the state the person accumulates, through a function g that flattens as the total grows. The trait&#x27;s effect is the difference between the outcome produced by the total the person accumulates and the outcome produced by the total the same person would accumulate at the mean trait level. In this form, the per-instance efficacy γ reappears as the local slope g′(•) rather than as a separate factor, and the additive form is recovered as the linear case. 1 The PNT decomposition remains informative because the ordering of persons on the cumulative input is preserved under monotone transformations, even though the magnitude of the trait-outcome effect varies systematically across the dose-response curve (see Box 2).</p>
+<p>1 A parallel refinement applies to the temporal aggregation itself: for outcomes whose current state depends more strongly on recent than on distant behavior, such as body weight, cardiorespiratory fitness, and glycemic control, γ(x, Y | p) can be replaced with a time-weighted kernel γ(x, Y | p, t) integrated over T, yielding an effective γ that down-weights older behavior. The refinement is unnecessary for inherently cumulative outcomes (e.g., lifetime earnings), where the additive form already captures the relevant aggregation.</p>
+<h3>Box 2</h3>
+<h3>Illustrating Diminishing Returns: Effects of a Personality Change Intervention on an Exercise Adherence Nuance</h3>
+<p>Scenario. Consider a personality change intervention (cf. Allemand &amp; Flückiger, 2022) that raises the conscientiousness nuance &quot;following through on planned exercise sessions even when tired or inconvenienced&quot; by 1 SD. I apply it to two otherwise identical 50-year-old women who enter at different trait levels: Judith moves from z = -1 to 0, Lara from z = +1 to +2. The outcome is 20-year all-cause mortality probability.</p>
+<p>Quantifying the four factors. Exposure f(x | p). The relevant situations are planned exercise opportunities, described by one feature, x: how costly fatigue or competing demands make initiation at that opportunity, from 0 (no cost) to 1 (high cost). Both women encounter about 5 opportunities per week, N ≈ 260 per year, spread roughly evenly over the range of x.</p>
+<p>Time horizon T. 20 years.</p>
+<h3>Trait expressivity β(n, x).</h3>
+<p>The nuance makes a difference only where initiation is costly: one SD more adds no moderate-to-vigorous physical activity (MVPA) at an opportunity that costs nothing to start (x = 0) and about 12 minutes at the costliest opportunities (x = 1), that is, β(n, x) ≈ 12 × x minutes per opportunity per SD. Averaged over the opportunities encountered, which are spread evenly over x, so that the mean x is 0.5, this is 6 minutes per opportunity, or 30 min/week. With the mean-level person at 30 min/week of MVPA from these opportunities, Judith moves from 0 to 30 min/week and Lara from 60 to 90, the same +30 min/week increment.</p>
+<h3>Within-situation causal efficacy γ(x, Y | p): applying the saturating extension.</h3>
+<p>Because MVPAmortality associations saturate with weekly dose (Han et al., 2026; Stamatakis et al., 2025), I replace the linear γ with the marginal slope of a saturating function of weekly MVPA D, g(D) = 0.25 × [1 -exp(-D / 75)], calibrated so that moving from 0 to ≈ 150 min/week yields a ≈ 22% relative hazard reduction (Koemel et al., 2026; Stamatakis et al., 2025). The 20-year mortality probability at D = 0 is ≈ 0.15.</p>
+<p>Putting the factors together. N, the distribution of x, β(n, x), T, and the +1 SD increment are identical for both women; only γ-the slope of g at each woman&#x27;s current MVPA level-differs.</p>
+<p>Judith&#x27;s 20-year mortality probability falls from 0.150 to 0.138 (-1.2 percentage points), Lara&#x27;s from 0.129 to 0.124 (-0.6 points): the same intervention yields about twice the benefit for Judith, because she begins in the steep region of the dose-response curve. Figure 2 traces both trajectories along the dose-response curve: the arrows have identical horizontal length (+30 min/week), but Judith&#x27;s traverses the steep region while Lara&#x27;s lies in the flattening shoulder, and the projected mortality reductions (vertical bars) differ twofold.</p>
+<h3>What this illustrates.</h3>
+<p>The trait maps linearly onto behavior (+30 min/week per SD), but behavior maps onto the outcome through the saturating g, so γ is not a fixed coefficient but the slope of g at the behavior a person already produces, which itself depends on z.</p>
+<h3>Note.</h3>
+<p>Values are illustrative order-of-magnitude calibrations, not parameter estimates, and g(•) is stylized; calibration details are in the online supplement (Text S1).</p>
+<h3>Outcome Trajectory Classes</h3>
+<p>The baseline form cumulates within-situation effects additively across the time window T, which fits monotonically nondecreasing outcomes most directly. Wessels et al.&#x27;s (2016) remaining trajectory classes call for different aggregation operators over time: single-switch binary outcomes such as mortality for a hazard-rate form, reversible binary outcomes such as marital status for a state-transition form, and freely varying outcomes such as well-being for a time-weighted kernel that down-weights more distant behavior (the device already introduced in Footnote 1 for recency-dependent outcomes). In each case the four ingredients (f, T, β, γ) remain the only quantities required, and only the rule by which within-situation effects are summed over time changes. These reformulations are compatible with the decomposition but each adds estimation burden.</p>
+<h3>Interactions Among Situations and Traits</h3>
+<p>The basic equation is additive in two respects. First, it integrates within-situation effects across the situations in which a trait is expressed. Second, when several narrow traits bear on an outcome, it implicitly sums their separate contributions. For some outcomes neither additivity holds, because the effect of a behavior depends on what else the person does, whether in another situation or as the expression of another trait. Across situations, joint analyses of sleep, physical activity, and nutrition suggest that the three behaviors interact synergistically in their association with all-cause mortality, with combinations producing risk reductions that exceed what any single behavior achieves in isolation (Stamatakis et al., 2025; see also Han et al., 2026). Across traits, behavioral tendencies can compensate for or facilitate one another: a high level on one narrow trait can substitute for a low level on another (sub-additive), or two tendencies can be jointly more consequential than their separate effects would imply (super-additive). For instance, conscientiousness and interest seem to partly compensate in producing academic effort and achievement (e.g., Bareis et al., 2024; Trautwein et al., 2015). In both cases the contribution of one behavior is conditional on another, and both are absorbed by letting γ(x, Y | p) depend on the joint behavioral configuration rather than on a single behavior in isolation. When the interacting behaviors occur in situations with different features, γ generalizes to γ(x, x′, Y | p). When they are driven by different narrow traits, γ generalizes to an analogous cross-trait term. The corresponding aggregation then turns from additive to bilinear.</p>
+<h3>Situation Selection</h3>
+<p>The basic equation takes situation exposure f as an exogenous input. In reality, however, exposure is itself partly a consequence of narrow traits, because individuals actively shape the distribution of situations they encounter (e.g., Kuper, Breitmoser, et al., 2025; Rauthmann et al., 2015; Trappes et al., 2022; Wagerman &amp; Funder, 2009; Xi &amp; Jackson, 2026). For example, the effect of the narrow trait talkativeness on accumulated social capital might be driven by both within-situation trait expression and trait-driven differential exposure. Trappes et al. (2022) define three mechanisms by which individuals shape their fit with their environments (niche choice, niche conformance, and niche construction), and Kuper, Breitmoser, and colleagues (2025) map these mechanisms across disciplines. Two of them bear on exposure. Niche choice refers to the individual selecting into environments that fit their tendencies (e.g., a more talkative student joining more student clubs). Niche construction refers to the individual changing the properties of environments they already inhabit (e.g., a more talkative student turning a quiet study group into a lively one). Choice changes which situations the person enters. It typically raises f in trait-congruent regions of the feature space and lowers it elsewhere. Trait-congruent regions are those in which the trait is readily expressed (higher β) or its expression pays (higher γ). Construction changes the features of the situations the person already occupies, which moves them to another point of the feature space (the study group made lively moves from the quiet to the lively part), so construction also shifts f, typically toward traitcongruent regions.</p>
+<p>A dynamic extension of PNT accommodates both mechanisms by treating the situation exposure density f as a function of the narrow-trait level z rather than as a fixed input: where f₀(x | p) is the person&#x27;s baseline exposure density that would obtain in the absence of trait-driven choice and construction, and λ(x) is a composite trait-to-exposure slope that aggregates over both.</p>
+<p>In words, each SD of the trait adds λ(x) situations per year at feature configuration x, or removes them where λ is negative, and exposure cannot fall below zero. λ is positive where situation selection is trait-congruent (e.g., talkative people selecting situations in which they can talk), but can also be negative where it is trait-incongruent. For example, people high in self-control avoid tempting situations (Ent et al., 2015; see Text S4 and Figure S1).</p>
+<p>Paap et al. (2024) go further, conjecturing that such environment-shaping strategies, rather than in-themoment control, account for most individual differences in making choices that serve long-term goals. If so, trait self-control pays off less through resisting temptation (β) than through avoiding or removing it (λ). Substituting Equation 7 into the difference from which Equation 2 was derived (for details, see Text S2) yields ΔY(n, Y | p) = T × ∫ₓ [ γ(x, Y | p) × ( f(x | p, z) × S(n, x, p) -f₀(x | p) × α(x) ) ] dx, (8) where S(n, x, p) is the expressed state of Equation 1 taken in expectation (ε has mean zero) and f(x | p, z) is given by Equation 7. In words, the trait&#x27;s contribution is now the sum, over the situations the person actually encounters, of what each instance of the state does to the outcome, minus the same sum for a person of average trait level, who encounters different situations. Once α no longer cancels, the zero point of the state matters: S = 0 must be the level at which an instance contributes nothing to Y. For most states this is the natural zero (saying nothing in a conversation yields no social capital), but not for all: exerting no self-control in a tempting situation means yielding, which harms Y. Such a state is scaled to the no-contribution zero instead, so that the person who yields has a negative S, and Equations 8 and 9 then hold as written (Text S4, Figure S1).</p>
+<p>Where exposure is positive, expanding f × S separates the deviation into two channels:</p>
+<p>In words, Equation 9splits this contribution into a direct expression channel and a selection-andconstruction channel. The first channel is linear in z and recovers Equation 2 when λ = 0. The second channel is the change in exposure (λz) times efficacy (γ) times the state level the person produces in the situations gained or forgone (α + βz). It reinforces the direct channel where λ and α + βz share a sign and opposes it where they differ. The approach case is trait-congruent selection (λ &gt; 0) into situations in which the state benefits Y (α + βz ≥ 0). In this case, the selection-and-construction channel carries the sign of z. High-z persons gain exposure to situations that pay, and low-z persons forgo it, so selection amplifies on both sides. On the high side, the quadratic part of this channel (λβγz²) adds to its linear part (λαγz), so advantages accelerate super-linearly. On the low side, the quadratic part offsets the linear part, so disadvantages deepen without accelerating. Because exposure cannot fall below zero, the low side is bounded by full withdrawal, whereas the high side is unbounded. The avoidance case, trait-incongruent selection (λ &lt; 0) away from situations in which the state harms Y (α + βz ≤ 0), is the mirror image: high-z persons shed harmful exposure and low-z persons accumulate it, so disadvantages accelerate on the low side and the withdrawal bound lies on the high side (Text S4, Figure S1). For regions of the feature space that only persons above the mean enter (f₀ ≈ 0), setting α ≈ 0 leaves only the quadratic part. This one-sided special case is worked through in Text S1. Box 3 works through the two-sided case for talkativeness and social capital. Figure 3 plots ΔY (in SDs) as a function of z, decomposed into the direct channel (blue area; linear and symmetric about the origin) and the selection-and-construction channel (yellow area; two-sided but asymmetric, widening over wider trait ranges). What this illustrates. The trait&#x27;s effect splits into a direct channel and a selection-and-construction channel, and for Lucy the second is the larger of the two. Because it is quadratic in z, it is asymmetric: it amplifies Lucy&#x27;s advantage super-linearly but deepens Mary&#x27;s disadvantage less than linearly. This pattern holds for trait-congruent selection into situations in which the state benefits the outcome, as here. With trait-incongruent selection away from harmful situations it is mirrored</p>
+<h3>Implications of the PNT Framework</h3>
+<h3>Empirical Predictions</h3>
+<p>As a template, the PNT framework is not refuted by any single observation, because it is close to definitional that a trait&#x27;s effect is carried by its manifestations in situations. In addition, departures from the basic form, such as non-additive aggregation, diminishing returns, and traitdependent exposure, are absorbed by the proposed extensions or, where none fits, by new ones Prediction 1: Exposure-dependent group differences. The causal effect of n on Y differs across groups (occupations, sexes, cultures) that meet the outcome-relevant situations at different rates, in proportion to T × ∫ₓ (f × β × γ) dx within each group. Even where β and γ are comparable, PNT differs when the outcome-relevant situations are rare in one group and frequent in another. At the extreme, exposure approaches zero, as for quantitative reasoning where languages lack exact-number systems (Frank et al., 2008) or for exercise adherence where exertion is embedded in subsistence labor rather than scheduled as a distinct activity. The relevance of a narrow trait for an outcome thus depends on the group&#x27;s situational ecology.</p>
+<p>Differences in r(n, Y) track differences in the causal effect only if confounding and scaling are comparable across groups. The alternative is the interactionist account (Judge &amp; Zapata, 2015; Tett &amp; Burnett, 2003), which ties validity to situational strength and trait relevance and has no term for how often situations occur. The discriminating implication is that groups meeting the same kinds of situations (comparable β and γ) at different rates still differ, especially in regions of the feature space where β × γ is large (Box 1). Suggestive evidence exists: in a community sample in which men engaged in more of the risk behaviors sampled (gambling, risky driving, risky investments), and thus met the decision situations that generate negative outcomes more often, heuristics-and-biases performance predicted those outcomes more strongly in men (r = -.32) than in women (r = -.10; Toplak et al., 2017). Demographic categories only proxy exposure, however (Beck &amp; Jackson, 2022; Text S3).</p>
+<p>Prediction 2: PNT weights are person-and group-specific. How much a trait counts depends on the person&#x27;s situation exposure: a trait&#x27;s weight in a composite of narrow traits that predicts Y is its PNT coefficient. Thus, composites with person-specific PNT weights out-predict fixed-weight composites of the same traits in samples with heterogeneous exposure. Groups differ as well: people who differ in parenthood, occupation, health, relationship status, or cultural context can differ systematically in f, β, and γ (e.g., for occupations, Denissen et al., 2018; for β across countries, Kuper et al., 2026; on the group-specificity of principles more generally, Kuper, Breitmoser, et al., 2025). Because the three factors multiply, their group differences can reinforce or offset one another, so that a narrow trait with large PNT for one group can have near-zero PNT for another, and weights estimated in one group transfer to another only after re-weighting by the target group&#x27;s f (and, where β and γ differ as well, re-estimating them). The alternative is a purely statistical account that estimates item-or nuance-level weights by penalized regression, with no structural interpretation and no mechanism for re-weighting across persons or groups.</p>
+<p>The discriminating implication is that PNT names what must be re-estimated (at a minimum f) and predicts a gain from person-specific weighting and from f-re-weighting that grows with the heterogeneity of f. The test is an out-of-sample comparison of person-specific PNT weights, fixed weights, and broad-trait scores in heterogeneous samples, and a cross-group validation of transferred versus f-re-weighted weights.</p>
+<p>Prediction 3: Narrow-trait change drives outcome change. Changing a narrow trait changes the outcome in proportion to the trait&#x27;s PNT coefficient. A broad trait is a composite of narrow traits (Grosz, 2026; Revelle, 2024; van der Maas et al., 2014), so broad-trait change moves the outcome by the PNT-weighted sum of the changes in its components. The alternative is the common-cause account, on which the broad trait causes both its components and the outcome: outcome change then follows change in the broad trait regardless of which components moved, and change in a single component with the broad trait held constant leaves the outcome unchanged.</p>
+<h3>Prediction 4: Profile-tailored interventions outperform. An intervention that selects its</h3>
+<p>targets from each participant&#x27;s exposure (f) and efficacy (γ) profile produces larger gains than a content-matched intervention that delivers the same targets to everyone. The alternative is generic personalization: a tailored intervention engages the person more and therefore works better, whatever the basis of the tailoring, such as change goals (Stieger et al., 2021) or characteristics that predict adherence (Haehner et al., 2026). On this account, the advantage of Prediction tasks augmented with these measures reduce out-of-sample error more than added broad-trait or demographic predictors do, because they address two of the three sources of irreducible error identified by Lundberg et al. (2024), unmeasured and imperfectly measured features, but not the third, consequential intervening events. The alternative is that life outcomes are inherently stochastic rather than under-measured (cf. Liou et al., 2023; Salganik et al., 2020), so that these predictors reduce error no more than any comparably sized set of added features.</p>
+<p>The test is the Fragile Families Challenge paradigm (Salganik et al., 2020) with augmented predictor sets and Lundberg et al.&#x27;s error decomposition (Text S3).</p>
+<p>Prediction 6: Nonlinearities are located in dose and horizon, not in the trait. PNT predicts that a trait&#x27;s effect on a cumulative outcome grows in proportion to T and N(p), and Anvari et al. (2023) demand that such accumulation arguments name the mechanisms that could stop the accumulation. PNT specifies where such mechanisms act. Two examples follow, and in both cases the nonlinearity lies outside the trait: First, under diminishing returns (Equation 6), the outcome depends on the cumulative dose of the state, ∫ₓ f × (α + βz) dx, through a function that flattens as the dose grows, so the effect flattens at lower z for persons with higher exposure (cf.</p>
+<p>Box 2), and no flattening in z remains once the cumulative dose is held constant. Second, for outcomes that return to a set point, such as well-being (Luhmann et al., 2012), only recent behavior matters, so the effect stops growing once T exceeds the span over which behavior still counts (Footnote 1). For cumulative outcomes such as earnings it keeps growing (see Outcome Trajectory Classes). Whether an effect keeps growing with T thus depends on the outcome, not on the trait. The alternative is a trait-level dose-response account on which the effect flattens or reverses beyond a particular value of z, the same for everyone whatever their exposure (Brown et al., 2021; Le et al., 2011). The discriminating test requires the cumulative dose to be measured separately from z (e.g., device-measured physical activity over years) and effects compared across horizons within persons (Text S3).</p>
+<h3>Measurement of Expressivity and Exposure</h3>
+<p>The PNT framework implies that trait-outcome studies should assess not only the trait and the outcome but also the frequency of relevant situations, trait expressivity, and the effect of the expressed state on the outcome to clarify when and why a trait leads to an outcome.</p>
+<p>Concretely, the framework proposes a three-step measurement pipeline. First, specify the outcome Y, the target population, and the relevant time window T. Second, enumerate potentially relevant candidate narrow traits and their associated situation regions X(n, Y). This can be done using taxonomic and behavioral resources such as trait taxonomies (e.g., Ashton et al., 2004; Bainbridge et al., 2022; Henry &amp; Mõttus, 2025), situation taxonomies (Parrigon et al., 2017; Rauthmann et al., 2014), and occupational task databases (e.g., O*NET, 2024). Third, for each candidate narrow trait, measure and estimate the PNT components: population-average situation exposure (e.g., from diary or census data), trait expressivity (e.g., from experience sampling), and within-situation efficacy (e.g., from longitudinal, quasi-experimental, or ideally experimental designs). Because assessment over the full horizon T is rarely feasible, the parameters can be measured in a random sample of time intervals and extrapolated over T (Wessels et al., 2016). Candidate traits are then ranked by their expected PNT, and components whose variation does not materially change the implied effect can be fixed at default values, concentrating measurement effort where it matters.</p>
+<p>Implementing this third step in practice involves measuring both trait expression and situation frequency at the level of specific situation features. Narrow-trait inventories typically present items detached from situational anchors (&quot;I am talkative&quot;). One way to assess trait expressivity might be to explicitly situate items (cf. the frame-of-reference tradition; Holtrop et al., 2014), with each item identifying a recurring configuration of situation features and asking about typical behavior in situations of that kind (&quot;In informal conversations with friends or family, I tend to speak frequently and at length&quot;). To capture not only expression but also exposure, each expressivity item should be paired with a brief situation-frequency item (&quot;How often do you have informal conversations with friends or family in a typical week?&quot;). The expressivity item provides an estimate of β, the frequency item provides an estimate of f, and together they yield the f × β contribution of situations with those features to person-specific PNT at the item-pair level. This conditioning logic descends from the if-then-signature tradition (Mischel &amp; Shoda, 1995; Mischel et al., 2002) and from behavior-anchored measurement (Buss &amp; Craik, 1983; Chapman &amp; Goldberg, 2017; Jackson et al., 2010). PNT extends it by aggregating across situation features and frequencies.</p>
+<p>Whereas situated items provide a static, retrospective route to β and f, experience sampling provides a dynamic, momentary one. Multi-week smartphone-based protocols (Harari &amp; Gosling, 2023; Mestdagh et al., 2023) combined with brief situation-coding items can generate the joint distribution of f and S. Multilevel dynamic structural equation models provide statistical tools for this route (Asparouhov et al., 2018). From a single experience-sampling protocol, they estimate person-specific average levels of situational experience and behavior, person-specific situation-state contingencies as random slopes (which constrain η), and the state-to-subsequentsituation paths that inform the selection extension (for an application across 25 trait-situation pairs, see Xi &amp; Jackson, 2026).</p>
+<p>An important caveat applies to both static situated items and momentary experience sampling: self-reports remain self-reports and inherit response-style and social-desirability biases (e.g., Baird et al., 2017; Leising et al., 2025). Furthermore, participants&#x27; self-reports of which situations they encounter reflect not only the situations they actually faced, but also how they interpreted those situations (e.g., Wessels et al., 2016). Because personality shapes interpretation (Rauthmann et al., 2015), self-reported exposure to situations with given features and the psychological experience of those situations are systematically entangled, with evidence that the construal component may be the larger of the two (Bauditz et al., 2026; Kuper et al., 2026).</p>
+<p>PNT-oriented designs should therefore, wherever feasible, supplement self-reports with otherreports from interaction partners or with mobile-sensed behavioral and situational indicators. The converse caveat applies to observer-based measures: where a trait is expressed largely in affect or cognition (e.g., ruminating), other-reports and behavioral coding might register little of the state and underestimate β. For the estimation of f in particular, objective situational indicators (location or audio data, calendar records, or observer-coded experience-sampling annotations) are preferable, as they permit situation contact and situation construal to be disentangled.</p>
+<h3>Estimating the Within-Situation Causal Efficacy</h3>
+<p>Estimating γ poses a distinctive challenge. By construction, γ is the effect of a single instance of the expressed state, which is typically a small fraction of an outcome event or of a standard deviation of the outcome (Boxes 1-3) and too small to reliably detect in any single instance. It becomes estimable only after the within-situation state-outcome relationship has been aggregated, across the many instances of situations with similar features that one person encounters over time or across many persons who differ in how much trait-relevant state expression they produce. The target of estimation is the average per-instance slope of the outcome on the state, which, multiplied by expressivity and scaled by exposure and time, reproduces the causal effect of n on Y (Equation 3).</p>
+<p>Confounding is the central obstacle to estimating γ. The quantity of the state a person expresses in situations with given features is not randomly assigned: it covaries with other states, with stable dispositions, and with features of the situations the person occupies, each of which can affect Y through paths that bypass the focal state. Regressing the outcome on the aggregated state therefore conflates γ with the effects of these correlated causes. The cleanest estimates of γ accordingly come from designs that sever this dependence: experimental manipulation of the state in situations with given features (e.g., Schmiedek &amp; Neubauer, 2020), or natural and quasiexperiments that supply exogenous variation in the state or at least in situational exposure (Grosz, Ayaita, et al., 2024). Purely observational and longitudinal designs identify γ only under strong assumptions about measured confounding (see Scope, Limitations, and Open Questions).</p>
+<h3>Intervention Design and Strategy</h3>
+<p>The consistency problem recurs on the intervention side. A broad-trait intervention moves a mix of narrow traits (Olaru et al., 2024), and outcome change is the PNT-weighted sum of their changes, so identical broad-trait interventions can yield different outcome change (Junker &amp; Grosz, 2026; Prediction 3). The case for broad-trait targets, their breadth of consequences (Bleidorn et al., 2019), holds only when many outcomes are to be moved at once and the components&#x27; effects point the same way. Even then, a trial identifies the effect of the intervention package, not of the trait: because the mix of narrow traits moved is unknown, the effect can neither be attributed to a component nor be expected to transfer to another intervention on the same broad trait. The PNT framework therefore directs intervention programs to the narrow traits with the largest PNT for the outcome and population at stake.</p>
+<p>The PNT framework distinguishes three levers. Trait-level interventions shift z and thus the state wherever the trait is expressed. Each SD of change moves the expected outcome by the PNT coefficient (Equation 2), plus the selection channel where λ ≠ 0 (Equation 9). They are favored when f, β, and γ are high across a wide region of the feature space, as for aspects of anxiety or impulsivity that recur across life domains and bear on well-being or longevity, respectively. Situated behavioral interventions change the state in situations with one or a few targeted feature configurations, holding z and exposure constant. Each unit of state change moves the expected outcome by T × f × γ, regardless of β. They are favored when f × γ is concentrated in a small region of the feature space and the targeted behavior is specifiable and cue-triggered, as when implementation intentions target medication adherence (Gollwitzer, 1999). Situation-selection interventions change f directly rather than through z, helping people seek out situations in which each instance&#x27;s contribution to the outcome, γ × S, is positive (social engagement for loneliness, niche-picking in career development; cf.</p>
+<p>Box 1) and avoid or reshape those in which it is negative (stimulus control in addiction treatment). They are favored when this per-instance contribution varies sharply across the feature space, people can control their exposure, and changing the trait or the within-situation state is impractical.</p>
+<p>Which lever yields the largest gain thus depends on estimable parameters that vary across traits, outcomes, and persons, and levers can be combined when none suffices alone. In particular, because f and γ vary across persons, a lever can pay off for one participant but not for another, a difference that sample averages conceal.</p>
+<p>Smartphone-based personality change interventions typically tailor content to participants&#x27; change goals, not to measured exposure and efficacy (e.g., Stieger et al., 2021). The most fine-grained study to date shows that the situational context of a prompt predicts adherence and momentary affect (Haehner et al., 2026). For example, participants completed tasks more often when at home and not moving. Furthermore, the best situation differed between strategies; for example, emotional-support tasks worked even under stress, whereas skill-building tasks were disliked then.</p>
+<p>These are conditions of receptiveness, which govern how much state change</p>
+<h3>Relationship to Existing Frameworks and Theories</h3>
+<p>The ideas that went into the PNT framework are not new. Psychologists have long noted that small, situation-bound behavioral effects can accumulate into substantial long-run consequences (e.g., Abelson, 1985; Funder &amp; Ozer, 2019). Decision-theoretic work in personnel psychology has recognized early that the effects of individual differences depend on contextual conditions (Brogden, 1949; Cronbach &amp; Gleser, 1965). Interactionist work has developed the concepts of situational strength and situational affordances (e.g., Gibson, 1977; Jones, 2003; Judge &amp; Zapata, 2015; Li et al., 2025) and systematic characterizations of situations (e.g., Parrigon et al., 2017; Rauthmann et al., 2014). And the &quot;heterogeneity revolution&quot; in behavioral science has emphasized that effects are person-and context-specific (Beck et al., in press; Bryan et al., 2021).</p>
+<p>Closest to the present proposal is the neo-Lewinian analysis of Liou et al. ( 2023  S3). Even under ideal measurement, however, a narrow trait&#x27;s PNT accounts only for the part of an outcome that runs through its states. Total predictability also depends on causes that bypass those states and is capped by exogenous intervening events.</p>
+<p>Beyond this neo-Lewinian framing, PNT connects to several more specific traditions, each of which it absorbs as a component rather than competes with: The SORKC model (Wessels et al., 2016) supplies the response-consequence contingency and proximal/distal structure of γ. PERSOC (Back et al., 2011) supplies the account of how γ arises for interpersonal outcomes, where the state affects the outcome through interaction partners&#x27; perceptions and reactions. The cognitive-affective personality system (Mischel &amp; Shoda, 1995), the Dynamics of Personality Approach (Quirin et al., 2020 (Quirin et al., , 2023)), and functional-field and expectancy × value accounts (Feather, 1982; Wood, 2021; Wood et al., 2025; Wood et al., 2015) supply candidate generative models of β. Finally, the situational-strength (Judge &amp; Zapata, 2015; Li et al., 2025; Mischel, 1977) and situational-affordance (Gibson, 1977; Jones, 2003) literatures specify what β represents and when it is large. Text S5 develops each of these comparisons. The PNT framework combines these traditions and formalizes a step they describe only verbally: the rule by which within-episode consequences aggregate over situations and time into long-run outcomes.</p>
+<h3>Scope, Limitations, and Open Questions</h3>
+<p>The PNT framework is bounded by several assumptions and leaves several questions open. First, it assumes that the situations in which the state is expressed can be meaningfully described by features. For many states this is straightforward. For diffuse affective states or generalized mood it is not, and extending PNT to non-situational domains will require further work, perhaps through integration with distinct-emotions research (Mercadante et al., 2025). A related open problem is how finely β and γ should be allowed to vary with the features. A functional form that is too rigid hides variation that matters, whereas one that is too flexible cannot be estimated from the situations a person encounters.</p>
+<p>Second, narrow-trait levels are treated as stable over T. For outcomes that cumulate over decades, within-person change can be substantial (Bleidorn et al., 2022), including change that feeds back from a person&#x27;s own states through reflection (Wrzus &amp; Roberts, 2017). That said, in the pooled estimates of the largest test to date, Big Five change never predicted outcomes more strongly than the paired static level (Wright &amp; Jackson, 2023; see Prediction 3). Integrating PNT × z(t) over time is straightforward in principle but requires longitudinal estimation of z trajectories.</p>
+<p>Third, γ is the framework&#x27;s hardest component to estimate (see Estimating the Within-Situation Causal Efficacy). Experiments remedy confounding but face two further difficulties.</p>
+<p>First, manipulating one behavior typically perturbs other behaviors, attention, and contextual cues (fat-handedness; Eronen, 2020). Second, self-reported outcomes are susceptible to demand effects (Corneille &amp; Lush, 2023). The PNT framework does not dissolve these problems, but it localizes them to within-situation state-outcome links of narrow traits, which are more amenable to manipulation than trait-outcome links of broad traits. Its γ tests are likely most informative for extrapsychological outcomes (income, academic achievement, social status, objectively measured health).</p>
+<p>Finally, the framework is silent on the origins of individual differences in its components (why persons differ in f, β, or γ), which require theories about genetic and environmental influences, development, socialization, and selection. Of the features, sources, and outcomes of individuality distinguished by Kuper, Breitmoser, et al. (2025), PNT addresses the outcomes and takes the rest as given, which is also a programmatic commitment to start from outcomes rather than traits. The guiding question thus becomes &quot;why do people differ on this outcome, and which narrow traits are most powerful in producing it?&quot; rather than &quot;what does this trait predict?&quot; This shift directly counters the effect-size magnification that Gandhi et al. (2024) document when researchers fix on a predictor rather than an outcome (Watts, 2017). Starting from an outcome and working backward through the decomposition specifies, in order, which situations are most consequential, which narrow traits are expressed in them, and which within-situation states carry the largest causal effects, then guides measurement and intervention accordingly.</p>
+<h3>Conclusion</h3>
+<p>The PNT framework formalizes a rule by which within-situation effects aggregate over Second, a trait shapes an outcome through the states it produces in the situations a person encounters. Therefore, the leverage for causal inference and intervention lies in those states and situations rather than in the trait in the abstract. The PNT framework thereby turns a set of longrecognized but loosely connected intuitions into a structure that is precise enough to explain trait-outcome links once its components are estimated, to test in its calibrated instances, and to intervene on.</p>
+<h3>Figure 1</h3>
+<p>Figure 1 Trait-Attributable Income as a Function of the Total Stakes of Quantitative Decisions per Year below assumes standard regularity conditions, no confounding (no common cause of trait and outcome) or other source of noncausal association (e.g., selection into the sample on trait and outcome, reverse causation), and a person-specific coefficient PNT(n, Y | p) that does not vary systematically with trait level.</p>
+<p>Traitdriven situation selection violates the last assumption by construction (see Extensions). Under these assumptions, the observed correlation between a narrow-trait measure and an outcome in a sample is, to first order, proportional to the population-average PNT:r(n, Y) ≈ PNT(n, Y) × SD(z) / SD(Y),(5)with corrections for measurement error in the narrow-trait measure and restrictions on the range of z in the sample. PNT quantifies the trait&#x27;s causal effect rather than the observed correlation, so a discrepancy between r and PNT (rescaled into correlation units) that such biases induce is not a deficiency of the framework (see Empirical Predictions; TextS3). The framework treats the person-specific coefficient PNT(n, Y | p) as primary and the population average PNT(n, Y) as derived (Equation 4; cf. Beck et al., in press), and the distinction is consequential. Because f and γ vary across persons, a narrow trait with substantial PNT for one person can have near-zero PNT for another (Box 1). PNT can even differ in sign:</p>
+<h3>Figure 2</h3>
+<p>Figure 2 Identical Trait Increments Yield Unequal Mortality Reductions</p>
+<p>Sided Situation Selection: Talkativeness and Accumulated Social CapitalScenario. Consider the narrow trait talkativeness, expressed in everyday conversational situations (seminars, shared meals, chats while commuting), with outcome Y the accumulated social capital of a person&#x27;s supportive network over T = 10 years, in SDs. Conversational situations occupy a region of the feature space within which α, β, and γ are treated as roughly constant, so exposure enters only through N, the number of situations in the region; f₀ and λ below are its baseline value and its change per SD. I compare Lucy (z = +1) and Mary (z = -1), each against a mean-level (z = 0) counterfactual. Because everyone encounters conversational situations, selection runs in both directions: Lucy enters them more often than average and contributes more within them; Mary enters them less often and contributes less.Quantifying the factors.A mean-level person encounters roughly f₀ ≈ 3,000 such situations per year and makes about α ≈ 1 substantive conversational contribution per situation. Each additional SD of talkativeness adds about λ ≈ 1,000 situations per year, concentrated in the part of the region most open to conversation, and β ≈ 0.3 contributions per situation, and each contribution adds about γ ≈ 0.00005 SD of social capital.Putting the factors together. For Lucy, the direct channel gives T × f₀ × β × γ × z = 0.45 SD and the selection channel T × λ × γ × z × (α + βz) = 0.65 SD, for +1.10 SD in total. For Mary, the channels give -0.45 and -0.35 SD, for -0.80 SD. Selection thus amplifies in both directions, but asymmetrically: the channel&#x27;s quadratic part (λβγz², always positive) adds to its linear part on the high side but offsets it on the low side, so Lucy&#x27;s advantage exceeds Mary&#x27;s disadvantage in magnitude.</p>
+<h3>Figure 3</h3>
+<p>Figure 3 Direct and Selection Channels of Social-Capital Accumulation by Talkativeness Level see Scope, Limitations, and Open Questions).</p>
+<h3>(</h3>
+<p>An instance of the framework, in contrast, is refutable. In an instance, a trait, outcome, population, situation region X(n, Y), and aggregation rule are specified in advance, and f, β, and γ are estimated independently. One can therefore test whether the effect composed from the components of an instance reproduces the trait&#x27;s causally identified effect, which is what van Dongen et al. (2025) require of a theory that explains a phenomenon. Beyond this, the framework makes at least six predictions on which rival accounts predict otherwise. These predictions, too, are stated for instances. Text S3 states each in full and what a failure would and would not refute.</p>
+<p>tailoring does not depend on the heterogeneity of f and γ. The discriminating implications are that the advantage of f-and γ-based tailoring over tailoring on another basis grows with the heterogeneity of f and γ, vanishes when both are homogeneous, and remains after adjusting for the amount of state change each arm achieves. Because receptiveness and payoff multiply, PNT further predicts that the absolute gain from f-and γ-based targets is larger when adherence is also optimized, a positive interaction that generic personalization does not predict. The test is a preregistered randomized trial that crosses PNT-tailoring with tailoring on change goals or adherence predictors, with the content-matched non-tailored arm as the reference cell and baseline heterogeneity in f and in a proximal proxy of γ measured (see Intervention Design and Strategy). Prediction 5: PNT-prescribed measures reduce irreducible prediction error. PNT prescribes two kinds of measures that conventional prediction studies omit: for the outcome in question, how often each person encounters the situations that produce it (exposure) and what the person does in those situations (the states; see Measurement of Expressivity and Exposure).</p>
+<h3>a</h3>
+<p>prompt produces. f and γ govern what each unit of state change does to the outcome, and the two multiply. Selecting targets from each participant&#x27;s f and γ should therefore add to whattailoring on receptiveness achieves (Prediction 4; for related arguments, seeBeck et al., in press;Kuper, Juchem, et al., 2025; Modersitzki et al., 2026). Because person-specific γ for a distal outcome cannot be estimated within a trial, such tailoring must rely on a proximal proxy: the person-specific effect of the targeted state on a short-term precursor of the outcome (momentary well-being after social behavior, weekly activity minutes), combined with population estimates of how the precursor transmits to the outcome (TextS5). PNT is a natural basis for the adaptive designs to whichRebele et al. (2021) point as a way to sequence trait-regulation interventions: sequential multiple assignment randomized trials(Almirall et al., 2012) and just-in-time adaptive interventions(Nahum-Shani et al., 2018). PNT specifies both whatHaehner et al. (2026) call targeting and tailoring: targets are selected from each participant&#x27;s f and γ, prompts are timed to instances of high-payoff situations, and targets are updated as z shifts over the course of the intervention.</p>
+<p>), who extendLewin&#x27;s (1936) model, B = f(P, E₁) + e in their notation, by noting that behaviors enacted over time yield life outcomes, L = f(B, E₂) + e, and therefore, by substitution, L = f(P, E₁, E₂) + e, with f left unspecified. Their model gives four reasons why life outcomes are hard to predict: P and E are dynamic and plural, they interact, error is substantial, and low base rates and range restriction attenuate observed associations. PNT accepts these reasons but specifies, for a given narrow trait, the part of that function that runs through behavior. The four factors in Equation 3 (situation exposure frequency, time horizon, trait expressivity, and within-situation causal efficacy) are a formal account of where a narrow trait&#x27;s effect on an outcome comes from, complementary to Liou et al.&#x27;s account of why observed prediction is bounded. Because PNT prescribes measures that conventional prediction studies omit, it treats part of that bound as a measurement gap rather than as inherent (Prediction 5; Text situations and time into life outcomes, with every term of that rule explicit and estimable.</p>
+<p>It specifies exactly what information is lost when researchers work at the trait-outcome level and exactly what additional measurement is required. Two lessons stand out: First, the field has long measured traits and outcomes but has left unmeasured the rate at which outcome-relevant situations occur. Yet this rate is often decisive and varies sharply across persons and groups.</p>
+<h3>Table 1</h3>
+<p>Glossary of Parameters in the PNT Framework</p>
+<h3>Table 1</h3>
+<p>Glossary of Parameters in the PNT Framework</p>
+<h3>References</h3>
+<p>Abelson, R. P. (1985). A variance explanation paradox: When a little is a lot. Psychological Bulletin, 97(1), 129-133. https://doi.org/10.1037/0033-2909.97.1.129</p>
+<p>Allemand, M., &amp; Flückiger, C. (2022). Personality change through digital-coaching interventions. Current Directions in Psychological Science, 31(1), 41-48. https://doi.org/10.1177/09637214211067782</p>
+<p>Almirall, D., Compton, S. N., Gunlicks-Stoessel, M., Duan, N., &amp; Murphy, S. A. (2012). Designing a pilot sequential multiple assignment randomized trial for developing an adaptive treatment strategy. Statistics in Medicine, 31(17), 1887-1902. https://doi.org/10.1002/sim.4512</p>
+<p>Anglim, J., Horwood, S., Smillie, L. D., Marrero, R. J., &amp; Wood, J. K. (2020). Predicting psychological and subjective well-being from personality: A meta-analysis. Psychological Bulletin, 146(4), 279-323. https://doi.org/10.1037/bul0000226</p>
+<p>Anthropic. (2026). Claude [Large language model]. https://claude.ai.</p>
+<p>Anvari, F., Alsalti, T., Oehler, L. A., Marion, Z., Hussey, I., Elson, M., &amp; Arslan, R. C. (2025). A fragmented field: Construct and measure proliferation in psychology. Advances in Methods and Practices in Psychological Science, 8(3), Article 25152459251360642. https://doi.org/10.1177/25152459251360642</p>
+<p>Anvari, F., Kievit, R. A., Lakens, D., Pennington, C. R., Przybylski, A. K., Tiokhin, L., Wiernik, B. M., &amp; Orben, A. (2023). Not all effects are indispensable: Psychological science requires verifiable lines of reasoning for whether an effect matters. Perspectives on Psychological Science, 18(2), 503-507. https://doi.org/10.1177/17456916221091565</p>
+<p>Ashton, M. C., Lee, K., Perugini, M., Szarota, P., de Vries, R. E., Di Blas, L., Boies, K., &amp; De Raad, B. (2004). A six-factor structure of personality-descriptive adjectives: Solutions from psycholexical studies in seven languages. Journal of Personality and Social Psychology, 86(2), 356-366. https://doi.org/10.1037/0022-3514.86.2.356</p>
+<p>Asparouhov, T., Hamaker, E. L., &amp; Muthén, B. (2018). Dynamic structural equation models. Structural Equation Modeling: A Multidisciplinary Journal, 25(3), 359-388. https://doi.org/10.1080/10705511.2017.1406803</p>
+<p>Back, M. D., Baumert, A., Denissen, J. J. A., Hartung, F.-M., Penke, L., Schmukle, S. C., Schönbrodt, F. D., Schröder-Abé, M., Vollmann, M., Wagner, J., &amp; Wrzus, C. (2011). PERSOC: A unified framework for understanding the dynamic interplay of personality and social relationships. European Journal of Personality, 25(2), 90-107. https://doi.org/10.1002/per.811</p>
+<p>Bagaini, A., Liu, Y., Bajrami, A., Son, G., Tisdall, L., &amp; Mata, R. (2025). Assessing the reliability of task-based measures of risk preference: A systematic review and meta- analysis of test-retest reliability. Psychonomic Bulletin &amp; Review. Advance online publication. https://doi.org/10.3758/s13423-025-02725-2</p>
+<p>Bainbridge, T. F., Ludeke, S. G., &amp; Smillie, L. D. (2022). Evaluating the Big Five as an organizing framework for commonly used psychological trait scales. Journal of Personality and Social Psychology, 122(4), 749-777. https://doi.org/10.1037/pspp0000395</p>
+<p>Baird, B. M., Lucas, R. E., &amp; Donnellan, M. B. (2017). The role of response styles in the assessment of intraindividual personality variability. Journal of Research in Personality, 69, 170-179. https://doi.org/10.1016/j.jrp.2016.06.015</p>
+<p>Bareis, A., Spengler, M., Rieger, S., Gladstone, J. R., Yang, J. S., Nagengast, B., Trautwein, U., &amp; Wigfield, A. (2024). Examining the conscientiousness × interest compensation (CONIC) model with similar constructs in high school and college students. Journal of Research in Personality, 110, Article 104462. https://doi.org/10.1016/j.jrp.2024.104462</p>
+<p>Bauditz, S. C., Gander, F., Grob, A., Traut, A. C., Uhlich, M., Hess, U., &amp; Ziegler, M. (2026). Construal and contact in person-situation relations: Evidence from controlled and naturalistic designs. European Journal of Personality. Advance online publication. https://doi.org/10.1177/08902070261449352</p>
+<p>Beck, E. D., &amp; Jackson, J. J. (2022). A mega-analysis of personality prediction: Robustness and boundary conditions. Journal of Personality and Social Psychology, 122(3), 523-553. https://doi.org/10.1037/pspp0000386</p>
+<p>Beck, E. D., Phan, L. V., Modersitzki, N., Lee, C. J., Long, E. U., Nissen, A. T., &amp; Lewis, C. (in press). Personality is a person-specific complex, nonlinear dynamic system. Advances in Experimental Social Psychology. https://github.com/emoriebeck/home/raw/master/static/files/Beck-2026-aesp.pdf</p>
+<p>Bleidorn, W., Hill, P. L., Back, M. D., Denissen, J. J. A., Hennecke, M., Hopwood, C. J., Jokela, M., Kandler, C., Lucas, R. E., Lüdtke, O., Orth, U., Wagner, J., Wrzus, C., Zimmermann, J., &amp; Roberts, B. W. (2019). The policy relevance of personality traits. American Psychologist, 74(9), 1056-1067. https://doi.org/10.1037/amp0000503</p>
+<p>Bleidorn, W., Schwaba, T., Zheng, A., Hopwood, C. J., Sosa, S. S., Roberts, B. W., &amp; Briley, D. A. (2022). Personality stability and change: A meta-analysis of longitudinal studies. Psychological Bulletin, 148(7-8), 588-619. https://doi.org/10.1037/bul0000365</p>
+<p>Boon-Falleur, M., Bouguen, A., Charpentier, A., Algan, Y., Huillery, É., &amp; Chevallier, C. (2022). Simple questionnaires outperform behavioral tasks to measure socio-emotional skills in students. Scientific Reports, 12, Article 22236. https://doi.org/10.1038/s41598- 022-26832-5</p>
+<p>Brogden, H. E. (1949). When testing pays off. Personnel Psychology, 2(2), 171-183. https://doi.org/10.1111/j.1744-6570.1949.tb01397.x</p>
+<p>Brown, M. I., Wai, J., &amp; Chabris, C. F. (2021). Can you ever be too smart for your own good? Comparing linear and nonlinear effects of cognitive ability on life outcomes. Perspectives on Psychological Science, 16(6), 1337-1359. https://doi.org/10.1177/1745691620964122</p>
+<p>Bryan, C. J., Tipton, E., &amp; Yeager, D. S. (2021). Behavioural science is unlikely to change the world without a heterogeneity revolution. Nature Human Behaviour, 5(8), 980-989. https://doi.org/10.1038/s41562-021-01143-3</p>
+<p>Buss, D. M., &amp; Craik, K. H. (1983). The act frequency approach to personality. Psychological Review, 90(2), 105-126. https://doi.org/10.1037/0033-295X.90.2.105</p>
+<p>Calvin, C. M., Batty, G. D., Der, G., Brett, C. E., Taylor, A., Pattie, A., Čukić, I., &amp; Deary, I. J. (2017). Childhood intelligence in relation to major causes of death in 68 year follow-up: Prospective population study. BMJ, 357, Article j2708. https://doi.org/10.1136/bmj.j2708</p>
+<p>Chapman, B. P., &amp; Goldberg, L. R. (2017). Act-frequency signatures of the Big Five. Personality and Individual Differences, 116, 201-205. https://doi.org/10.1016/j.paid.2017.04.049</p>
+<p>Cole, S. R., &amp; Frangakis, C. E. (2009). The consistency statement in causal inference: A definition or an assumption? Epidemiology, 20(1), 3-5. https://doi.org/10.1097/EDE.0b013e31818ef366</p>
+<p>Condon, D. M., &amp; Revelle, W. (2014). The international cognitive ability resource: Development and initial validation of a public-domain measure. Intelligence, 43, 52-64. https://doi.org/10.1016/j.intell.2014.01.004</p>
+<p>Condon, D. M., Wood, D., Mõttus, R., Booth, T., Costantini, G., Greiff, S., Johnson, W., Lukaszewski, A., Murray, A., Revelle, W., Wright, A. G. C., Ziegler, M., &amp; Zimmermann, J. (2020). Bottom up construction of a personality taxonomy. European Journal of Psychological Assessment, 36(6), 923-934. https://doi.org/10.1027/1015- 5759/a000626</p>
+<p>Cooper, W. H., &amp; Withey, M. J. (2009). The strong situation hypothesis. Personality and Social Psychology Review, 13(1), 62-72. https://doi.org/10.1177/1088868308329378</p>
+<p>Corneille, O., &amp; Lush, P. (2023). Sixty years after Orne&#x27;s American Psychologist article: A conceptual framework for subjective experiences elicited by demand characteristics. Personality and Social Psychology Review, 27(1), 83-101. https://doi.org/10.1177/10888683221104368</p>
+<p>Cronbach, L. J., &amp; Gleser, G. C. (1965). Psychological tests and personnel decisions (2nd ed.). University of Illinois Press.</p>
+<p>Cuijpers, P., Smit, F., Penninx, B. W., de Graaf, R., ten Have, M., &amp; Beekman, A. T. (2010). Economic costs of neuroticism: A population-based study. Archives of General Psychiatry, 67(10), 1086-1093. https://doi.org/10.1001/archgenpsychiatry.2010.130</p>
+<p>Denissen, J. J. A., Bleidorn, W., Hennecke, M., Luhmann, M., Orth, U., Specht, J., &amp; Zimmermann, J. (2018). Uncovering the power of personality to shape income. Psychological Science, 29(1), 3-13. https://doi.org/10.1177/0956797617724435</p>
+<p>Duckworth, A. L., Taxer, J. L., Eskreis-Winkler, L., Galla, B. M., &amp; Gross, J. J. (2019). Self- control and academic achievement. Annual Review of Psychology, 70, 373-399. https://doi.org/10.1146/annurev-psych-010418-103230</p>
+<p>Dworak, E. M., Revelle, W., Doebler, P., &amp; Condon, D. M. (2021). Using the International Cognitive Ability Resource as an open source tool to explore individual differences in cognitive ability. Personality and Individual Differences, 169, Article 109906. https://doi.org/10.1016/j.paid.2020.109906</p>
+<p>Eisenberg, I. W., Bissett, P. G., Enkavi, A. Z., Li, J., MacKinnon, D. P., Marsch, L. A., &amp; Poldrack, R. A. (2019). Uncovering the structure of self-regulation through data-driven ontology discovery. Nature Communications, 10, Article 2319. https://doi.org/10.1038/s41467-019-10301-1</p>
+<p>Ent, M. R., Baumeister, R. F., &amp; Tice, D. M. (2015). Trait self-control and the avoidance of temptation. Personality and Individual Differences, 74, 12-15. https://doi.org/10.1016/j.paid.2014.09.031</p>
+<p>Epstein, S. (1979). The stability of behavior: I. On predicting most of the people much of the time. Journal of Personality and Social Psychology, 37(7), 1097-1126. https://doi.org/10.1037/0022-3514.37.7.1097</p>
+<p>Eronen, M. I. (2020). Causal discovery and the problem of psychological interventions. New Ideas in Psychology, 59, Article 100785. https://doi.org/10.1016/j.newideapsych.2020.100785</p>
+<p>Feather, N. T. (Ed.). (1982). Expectations and actions: Expectancy-value models in psychology. Erlbaum.</p>
+<p>Frank, M. C., Everett, D. L., Fedorenko, E., &amp; Gibson, E. (2008). Number as a cognitive technology: Evidence from Pirahã language and cognition. Cognition, 108(3), 819-824. https://doi.org/10.1016/j.cognition.2008.04.007</p>
+<p>Funder, D. C., &amp; Ozer, D. J. (2019). Evaluating effect size in psychological research: Sense and nonsense. Advances in Methods and Practices in Psychological Science, 2(2), 156-168. https://doi.org/10.1177/2515245919847202</p>
+<p>Gandhi, L., Manning, B. S., &amp; Duckworth, A. L. (2024). Effect size magnification: No variable is as important as the one you&#x27;re thinking about-while you&#x27;re thinking about it. Current Directions in Psychological Science, 33(6), 347-354. https://doi.org/10.1177/09637214241268222</p>
+<p>Gibson, J. J. (1977). The theory of affordances. In R. E. Shaw &amp; J. Bransford (Eds.), Perceiving, acting, and knowing: Toward an ecological psychology (pp. 67-82). Erlbaum.</p>
+<p>Goldberg, L. R., Johnson, J. A., Eber, H. W., Hogan, R., Ashton, M. C., Cloninger, C. R., &amp; Gough, H. G. (2006). The international personality item pool and the future of public- domain personality measures. Journal of Research in Personality, 40(1), 84-96. https://doi.org/10.1016/j.jrp.2005.08.007</p>
+<p>Gollwitzer, P. M. (1999). Implementation intentions: Strong effects of simple plans. American Psychologist, 54(7), 493-503. https://doi.org/10.1037/0003-066X.54.7.493</p>
+<p>Grosz, M. P. (2026). Why the Big Five personality traits are composites, not common causes: Implications for measurement, prediction, and causal inference. Psychological Review. Advance online publication. https://doi.org/10.1037/rev0000637</p>
+<p>Grosz, M. P., Ayaita, A., Arslan, R. C., Buecker, S., Ebert, T., Müller, S. R., Rieger, S., Zapko- Willmes, A., &amp; Rohrer, J. M. (2024). Natural experiments: Missed opportunities for causal inference in psychological science. Advances in Methods and Practices in Psychological Science, 7(1), Article 25152459231218610. https://doi.org/10.1177/25152459231218610</p>
+<p>Grosz, M. P., van Aert, R. C. M., &amp; Back, M. D. (2024). A meta-analytic reassessment of the effects of personality traits, cognitive abilities, and physical characteristics on the attainment of social status. Psychological Bulletin, 150(10), 1221-1260. https://doi.org/10.1037/bul0000446</p>
+<p>Haehner, P., Wright, A. J., &amp; Bleidorn, W. (2024). A systematic review of volitional personality change research. Communications Psychology, 2, Article 115. https://doi.org/10.1038/s44271-024-00167-5</p>
+<p>Haehner, P., Wright, A. J., Lubczyk, T., Andrae, R., Asselmann, E., Buecker, S., Hopwood, C. J., &amp; Bleidorn, W. (2026). Tailoring personality interventions: How timing, context, and strategies influence proximal intervention outcomes. Journal of Personality and Social Psychology, 131(5), 844-865. https://doi.org/10.1037/pspp0000597</p>
+<p>Han, H., Hu, J., Lee, D. H., Zhang, Y., Giovannucci, E., Stampfer, M. J., Hu, F. B., Hu, Y., &amp; Sun, Q. (2026). Physical activity types, variety, and mortality: Results from two prospective cohort studies. BMJ Medicine, 5(1), Article e001513. https://doi.org/10.1136/bmjmed-2025-001513</p>
+<p>Hanushek, E. A., Schwerdt, G., Wiederhold, S., &amp; Woessmann, L. (2015). Returns to skills around the world: Evidence from PIAAC. European Economic Review, 73, 103-130. https://doi.org/10.1016/j.euroecorev.2014.10.006</p>
+<p>Harari, G. M., &amp; Gosling, S. D. (2023). Understanding behaviours in context using mobile sensing. Nature Reviews Psychology, 2(12), 767-779. https://doi.org/10.1038/s44159- 023-00235-3</p>
+<p>Henry, S., &amp; Mõttus, R. (2025). The 100 nuances of personality: Development of a comprehensive, non-redundant personality item pool [Preprint]. PsyArXiv. https://doi.org/10.31234/osf.io/zgwna_v2</p>
+<p>Holtrop, D., Born, M. P., de Vries, A., &amp; de Vries, R. E. (2014). A matter of context: A comparison of two types of contextualized personality measures. Personality and Individual Differences, 68, 234-240. https://doi.org/10.1016/j.paid.2014.04.029</p>
+<p>Hudson, N. W., &amp; Roberts, B. W. (2014). Goals to change personality traits: Concurrent links between personality traits, daily behavior, and goals to change oneself. Journal of Research in Personality, 53, 68-83. https://doi.org/10.1016/j.jrp.2014.08.008</p>
+<p>Jackson, J. J., Wood, D., Bogg, T., Walton, K. E., Harms, P. D., &amp; Roberts, B. W. (2010). What do conscientious people do? Development and validation of the Behavioral Indicators of Conscientiousness (BIC). Journal of Research in Personality, 44(4), 501-511. https://doi.org/10.1016/j.jrp.2010.06.005</p>
+<p>Johns, G. (2006). The essential impact of context on organizational behavior. Academy of Management Review, 31(2), 386-408. https://doi.org/10.5465/amr.2006.20208687</p>
+<p>Jokela, M., Batty, G. D., Nyberg, S. T., Virtanen, M., Nabi, H., Singh-Manoux, A., &amp; Kivimäki, M. (2013). Personality and all-cause mortality: Individual-participant meta-analysis of 3,947 deaths in 76,150 adults. American Journal of Epidemiology, 178(5), 667-675. https://doi.org/10.1093/aje/kwt170</p>
+<p>Jones, K. S. (2003). What is an affordance? Ecological Psychology, 15(2), 107-114. https://doi.org/10.1207/S15326969ECO1502_1</p>
+<p>Judge, T. A., &amp; Zapata, C. P. (2015). The person-situation debate revisited: Effect of situation strength and trait activation on the validity of the Big Five personality traits in predicting job performance. Academy of Management Journal, 58(4), 1149-1179. https://doi.org/10.5465/amj.2010.0837</p>
+<p>Junker, L., &amp; Grosz, M. P. (2026). Consistency: A critical but often overlooked requirement for causal inference in psychological research. Advances in Methods and Practices in Psychological Science. https://doi.org/10.1177/25152459261503257</p>
+<p>Koemel, N. A., Biswas, R. K., Ahmadi, M. N., Teixeira-Pinto, A., Hamer, M., Rezende, L. F. M., Mitchell, J., Leech, R. M., Sawan, M., Allman-Farinelli, M., Dumuid, D., Bauman, A., Maher, C., Barrett, S., Chow, C., Gibson, A. A., Raubenheimer, D., Hocking, S. L., Williams, K., . ..</p>
+<p>Stamatakis, E. (2026). Minimum combined sleep, physical activity, and nutrition variations associated with lifeSPAN and healthSPAN improvements: A population cohort study. eClinicalMedicine. https://doi.org/10.1016/j.eclinm.2025.103741</p>
+<p>Kuper, N., Breil, S. M., Horstmann, K. T., Roemer, L., Lischetzke, T., Sherman, R. A., Back, M. D., Denissen, J. J. A., &amp; Rauthmann, J. F. (2022). Individual differences in contingencies between situation characteristics and personality states. Journal of Personality and Social Psychology, 123(5), 1166-1198. https://doi.org/10.1037/pspp0000435</p>
+<p>Kuper, N., Breitmoser, Y., Caspers, B., Dammhahn, M., Gadau, J., Kaiser, M. I., Kandler, C., Kroh, M., Krüger, O., Kurtz, J., Lemola, S., Rauthmann, J. F., Richter, S. H., Voelcker- Rehage, C., &amp; Back, M. D. (2025). An interdisciplinary linked-lives approach to individual differences in social behaviour. Nature Human Behaviour, 9, 2012-2026. https://doi.org/10.1038/s41562-025-02301-7</p>
+<p>Kuper, N., Gardiner, G., Baranski, E., Funder, D. C., Rauthmann, J. F., &amp; Members of the International Situations Project. (2026). Cultural differences in the Personality Triad: The interplay of personality traits, situation characteristics, and behavioral states around the world. Journal of Personality and Social Psychology, 130(5), 1002-1046. https://doi.org/10.1037/pspp0000581</p>
+<p>Kuper, N., Juchem, C. M., Allemand, M., Kroencke, L., Olaru, G., Stieger, M., Wrzus, C., &amp; Haehner, P. (2025). Leveraging personality dynamics for volitional personality change interventions [Preprint]. PsyArXiv. https://doi.org/10.31234/osf.io/zu6v9_v1</p>
+<p>Kuper, N., von Garrel, A. S., Wiernik, B. M., Phan, L. V., Modersitzki, N., &amp; Rauthmann, J. F. (2024). Distinguishing four types of Person × Situation interactions: An integrative framework and empirical examination. Journal of Personality and Social Psychology, 126(2), 282-311. https://doi.org/10.1037/pspp0000473</p>
+<p>Le, H., Oh, I.-S., Robbins, S. B., Ilies, R., Holland, E., &amp; Westrick, P. (2011). Too much of a good thing: Curvilinear relationships between personality traits and job performance. Journal of Applied Psychology, 96(1), 113-133. https://doi.org/10.1037/a0021016</p>
+<p>Leising, D., Borgstede, M., Burger, J., Zimmermann, J., Bäckström, M., Oltmanns, J., Freyer, N., Wiedenroth, A., Knischewski, P., &amp; Connelly, B. (2025). Why do judgments on different person-descriptive attributes correlate with one another? A conceptual analysis with relevance for most psychometric research. Collabra: Psychology, 11(1), Article 133683. https://doi.org/10.1525/collabra.133683</p>
+<p>Lewin, K. (1936). Principles of topological psychology (F. Heider &amp; G. M. Heider, Trans.). McGraw-Hill. https://doi.org/10.1037/10019-000</p>
+<p>Li, R., Balliet, D., Thielmann, I., &amp; de Vries, R. E. (2025). Revisiting situational strength: Do strong situations restrict variance in behaviors? Journal of Personality and Social Psychology, 129(3), 551-575. https://doi.org/10.1037/pspi0000475</p>
+<p>Liou, G., Bailey, D., Baldwin, C., Duckworth, A. L., &amp; Tay, L. (2023). Why life outcomes are hard to predict [Preprint]. PsyArXiv. https://doi.org/10.31234/osf.io/7q2rx</p>
+<p>Luhmann, M., Hofmann, W., Eid, M., &amp; Lucas, R. E. (2012). Subjective well-being and adaptation to life events: A meta-analysis. Journal of Personality and Social Psychology, 102(3), 592-615. https://doi.org/10.1037/a0025948</p>
+<p>Lundberg, I., Brown-Weinstock, R., Clampet-Lundquist, S., Pachman, S., Nelson, T. J., Yang, V., Edin, K., &amp; Salganik, M. J. (2024). The origins of unpredictability in life outcome prediction tasks. Proceedings of the National Academy of Sciences, 121(24), Article e2322973121. https://doi.org/10.1073/pnas.2322973121</p>
+<p>McCrae, R. R., &amp; Costa, P. T. (2008). The five-factor theory of personality. In O. P. John, R. W. Robins, &amp; L. A. Pervin (Eds.), Handbook of personality: Theory and research (3rd ed., pp. 159-181). Guilford Press.</p>
+<p>McGeehan, M., Sutin, A. R., Gallagher, S., Terracciano, A., Turiano, N. A., Ahern, E., Kirwan, E. M., Luchetti, M., Graham, E. K., &amp; O&#x27;Súilleabháin, P. S. (2026). Personality and mortality risk: A systematic review and meta-analysis of longitudinal data. Journal of Personality and Social Psychology, 130(4), 786-813. https://doi.org/10.1037/pspp0000577</p>
+<p>Mercadante, E. J., Weidman, A. C., &amp; Tracy, J. L. (2025). Let&#x27;s get together: Toward an integration of personality psychology and distinct emotions research. Perspectives on Psychological Science, 20(6), 1065-1080. https://doi.org/10.1177/17456916251349819</p>
+<p>Mestdagh, M., Verdonck, S., Piot, M., Niemeijer, K., Kilani, G., Tuerlinckx, F., Kuppens, P., &amp; Dejonckheere, E. (2023). m-Path: An easy-to-use and highly tailorable platform for ecological momentary assessment and intervention in behavioral research and clinical practice. Frontiers in Digital Health, 5, Article 1182175. https://doi.org/10.3389/fdgth.2023.1182175</p>
+<p>Meyer, R. D., Dalal, R. S., &amp; Hermida, R. (2010). A review and synthesis of situational strength in the organizational sciences. Journal of Management, 36(1), 121-140. https://doi.org/10.1177/0149206309349309</p>
+<p>Mischel, W. (1977). The interaction of person and situation. In D. Magnusson &amp; N. S. Endler (Eds.), Personality at the crossroads: Current issues in interactional psychology (pp. 333-352). Erlbaum.</p>
+<p>Mischel, W., &amp; Shoda, Y. (1995). A cognitive-affective system theory of personality: Reconceptualizing situations, dispositions, dynamics, and invariance in personality structure. Psychological Review, 102(2), 246-268. https://doi.org/10.1037/0033- 295X.102.2.246</p>
+<p>Mischel, W., Shoda, Y., &amp; Mendoza-Denton, R. (2002). Situation-behavior profiles as a locus of consistency in personality. Current Directions in Psychological Science, 11(2), 50-54. https://doi.org/10.1111/1467-8721.00166</p>
+<p>Modersitzki, N., Phan, L. V., McDonald, S., Wright, A. G., &amp; Renner, K.-H. (2026). Personality psychology is getting personal: Advancing the field through personalization. European Journal of Personality, 40(2), 435-455. https://doi.org/10.1177/08902070251316915</p>
+<p>Mõttus, R., Kandler, C., Bleidorn, W., Riemann, R., &amp; McCrae, R. R. (2017). Personality traits below facets: The consensual validity, longitudinal stability, heritability, and utility of personality nuances. Journal of Personality and Social Psychology, 112(3), 474-490. https://doi.org/10.1037/pspp0000100</p>
+<p>Nahum-Shani, I., Smith, S. N., Spring, B. J., Collins, L. M., Witkiewitz, K., Tewari, A., &amp; Murphy, S. A. (2018). Just-in-time adaptive interventions (JITAIs) in mobile health: Key components and design principles for ongoing health behavior support. Annals of Behavioral Medicine, 52(6), 446-462. https://doi.org/10.1007/s12160-016-9830-8</p>
+<p>Olaru, G., Stieger, M., Rüegger, D., Kowatsch, T., Flückiger, C., Roberts, B. W., &amp; Allemand, M. (2024). Personality change through a digital-coaching intervention: Using measurement invariance testing to distinguish between trait domain, facet, and nuance change. European Journal of Personality, 38(2), 141-157. https://doi.org/10.1177/08902070221145088</p>
+<p>O*NET. (2024). O*NET 29.2 Database. National Center for O*NET Development. https://www.onetcenter.org/database.html</p>
+<p>Ozer, D. J., &amp; Benet-Martínez, V. (2006). Personality and the prediction of consequential outcomes. Annual Review of Psychology, 57, 401-421. https://doi.org/10.1146/annurev.psych.57.102904.190127</p>
+<p>Paap, K. R., Anders-Jefferson, R. T., Balakrishnan, N., &amp; Majoubi, J. B. (2024). The many foibles of Likert scales challenge claims that self-report measures of self-control are better than performance-based measures. Behavior Research Methods, 56(2), 908-933. https://doi.org/10.3758/s13428-023-02089-2</p>
+<p>Parrigon, S., Woo, S. E., Tay, L., &amp; Wang, T. (2017). CAPTION-ing the situation: A lexically- derived taxonomy of psychological situation characteristics. Journal of Personality and Social Psychology, 112(4), 642-681. https://doi.org/10.1037/pspp0000111</p>
+<p>Poropat, A. E. (2009). A meta-analysis of the five-factor model of personality and academic performance. Psychological Bulletin, 135(2), 322-338. https://doi.org/10.1037/a0014996</p>
+<p>Quirin, M., Malekzad, F., Paudel, D., Knoll, A. C., &amp; Mirolli, M. (2023). Dynamics of personality: The Zurich model of motivation revived, extended, and applied to personality. Journal of Personality, 91(4), 928-946. https://doi.org/10.1111/jopy.12805</p>
+<p>Quirin, M., Robinson, M. D., Rauthmann, J. F., Kuhl, J., Read, S. J., Tops, M., &amp; DeYoung, C. G. (2020). The dynamics of personality approach (DPA): 20 tenets for uncovering the causal mechanisms of personality. European Journal of Personality, 34(6), 947-968. https://doi.org/10.1002/per.2295</p>
+<p>Rauthmann, J. F., Gallardo-Pujol, D., Guillaume, E. M., Todd, E., Nave, C. S., Sherman, R. A., Ziegler, M., Jones, A. B., &amp; Funder, D. C. (2014). The Situational Eight DIAMONDS: A taxonomy of major dimensions of situation characteristics. Journal of Personality and Social Psychology, 107(4), 677-718. https://doi.org/10.1037/a0037250</p>
+<p>Rauthmann, J. F., Sherman, R. A., &amp; Funder, D. C. (2015). Principles of situation research: Towards a better understanding of psychological situations. European Journal of Personality, 29(3), 363-381. https://doi.org/10.1002/per.1994</p>
+<p>Rebele, R. W., Koval, P., &amp; Smillie, L. D. (2021). Personality-informed intervention design: Examining how trait regulation can inform efforts to change behavior. European Journal of Personality, 35(4), 623-645. https://doi.org/10.1177/08902070211016251</p>
+<p>Revelle, W. (2024). The seductive beauty of latent variable models: Or why I don&#x27;t believe in the Easter Bunny. Personality and Individual Differences, 221, Article 112552. https://doi.org/10.1016/j.paid.2023.112552</p>
+<p>Revelle, W., Wilt, J., &amp; Condon, D. M. (2011). Individual differences and differential psychology: A brief history and prospect. In T. Chamorro-Premuzic, S. von Stumm, &amp; A. Furnham (Eds.), The Wiley-Blackwell handbook of individual differences (pp. 3-38). Wiley-Blackwell.</p>
+<p>Roberts, B. W., Kuncel, N. R., Shiner, R., Caspi, A., &amp; Goldberg, L. R. (2007). The power of personality: The comparative validity of personality traits, socioeconomic status, and cognitive ability for predicting important life outcomes. Perspectives on Psychological Science, 2(4), 313-345. https://doi.org/10.1111/j.1745-6916.2007.00047.x</p>
+<p>Salganik, M. J., Lundberg, I., Kindel, A. T., Ahearn, C. E., Al-Ghoneim, K., Almaatouq, A., Altschul, D. M., Brand, J. E., Carnegie, N. B., Compton, R. J., Datta, D., Davidson, T., Filippova, A., Gilroy, C., Goode, B. J., Jahani, E., Kashyap, R., Kirchner, A., McKay, S., . . . McLanahan, S. (2020). Measuring the predictability of life outcomes with a scientific mass collaboration. Proceedings of the National Academy of Sciences, 117(15), 8398- 8403. https://doi.org/10.1073/pnas.1915006117</p>
+<p>Saucier, G., Bel-Bahar, T., &amp; Fernandez, C. (2007). What modifies the expression of personality tendencies? Defining basic domains of situation variables. Journal of Personality, 75(3), 479-504. https://doi.org/10.1111/j.1467-6494.2007.00446.x</p>
+<p>Schmiedek, F., &amp; Neubauer, A. B. (2020). Experiments in the wild: Introducing the within- person encouragement design. Multivariate Behavioral Research, 55(2), 256-276. https://doi.org/10.1080/00273171.2019.1627660</p>
+<p>Schneider, W. J., &amp; McGrew, K. S. (2018). The Cattell-Horn-Carroll theory of cognitive abilities. In D. P. Flanagan &amp; E. M. McDonough (Eds.), Contemporary intellectual assessment: Theories, tests, and issues (4th ed., pp. 73-163). Guilford Press.</p>
+<p>Seeboth, A., &amp; Mõttus, R. (2018). Successful explanations start with accurate descriptions: Questionnaire items as personality markers for more accurate predictions. European Journal of Personality, 32(3), 186-201. https://doi.org/10.1002/per.2147</p>
+<p>Smaldino, P. E. (2020). How to translate a verbal theory into a formal model. Social Psychology, 51(4), 207-218. https://doi.org/10.1027/1864-9335/a000425</p>
+<p>Soto, C. J. (2019). How replicable are links between personality traits and consequential life outcomes? The Life Outcomes of Personality Replication Project. Psychological Science, 30(5), 711-727. https://doi.org/10.1177/0956797619831612</p>
+<p>Stamatakis, E., Koemel, N. A., Biswas, R. K., Ahmadi, M. N., Allman-Farinelli, M., Trost, S. G., Inan-Eroglu, E., del Pozo Cruz, B., Bin, Y. S., Postnova, S., Duncan, M. J., Dumuid, D., Brown, H., Maher, C., Fontana, L., Simpson, S., &amp; Cistulli, P. A. (2025). Minimum and optimal combined variations in sleep, physical activity, and nutrition in relation to all- cause mortality risk. BMC Medicine, 23, Article 111. https://doi.org/10.1186/s12916-024- 03833-x</p>
+<p>Stewart, R. D., Mõttus, R., Seeboth, A., Soto, C. J., &amp; Johnson, W. (2022). The finer details? The predictability of life outcomes from Big Five domains, facets, and nuances. Journal of Personality, 90(2), 167-182. https://doi.org/10.1111/jopy.12660</p>
+<p>Stieger, M., Flückiger, C., Rüegger, D., Kowatsch, T., Roberts, B. W., &amp; Allemand, M. (2021). Changing personality traits with the help of a digital personality change intervention. Proceedings of the National Academy of Sciences, 118(8), Article e2017548118. https://doi.org/10.1073/pnas.2017548118</p>
+<p>Tett, R. P., &amp; Burnett, D. D. (2003). A personality trait-based interactionist model of job performance. Journal of Applied Psychology, 88(3), 500-517. https://doi.org/10.1037/0021-9010.88.3.500</p>
+<p>Toplak, M. E., West, R. F., &amp; Stanovich, K. E. (2017). Real-world correlates of performance on heuristics and biases tasks in a community sample. Journal of Behavioral Decision Making, 30(2), 541-554. https://doi.org/10.1002/bdm.1973</p>
+<p>Trappes, R., Nematipour, B., Kaiser, M. I., Krohs, U., van Benthem, K. J., Ernst, U. R., Gadau, J., Korsten, P., Kurtz, J., Schielzeth, H., Schmoll, T., &amp; Takola, E. (2022). How individualized niches arise: Defining mechanisms of niche construction, niche choice, and niche conformance. BioScience, 72(6), 538-548. https://doi.org/10.1093/biosci/biac023</p>
+<p>Trautwein, U., Lüdtke, O., Nagy, N., Lenski, A., Niggli, A., &amp; Schnyder, I. (2015). Using individual interest and conscientiousness to predict academic effort: Additive, synergistic, or compensatory effects? Journal of Personality and Social Psychology, 109(1), 142-162. https://doi.org/10.1037/pspp0000034</p>
+<p>van der Maas, H. L. J., Kan, K.-J., &amp; Borsboom, D. (2014). Intelligence is what the intelligence test measures. Seriously. Journal of Intelligence, 2(1), 12-15. https://doi.org/10.3390/jintelligence2010012</p>
+<p>VanderWeele, T. J. (2009). Concerning the consistency assumption in causal inference. Epidemiology, 20(6), 880-883. https://doi.org/10.1097/EDE.0b013e3181bd5638</p>
+<p>van Dongen, N., van Bork, R., Finnemann, A., Haslbeck, J. M. B., van der Maas, H. L. J., Robinaugh, D. J., de Ron, J., Sprenger, J., &amp; Borsboom, D. (2025). Productive explanation: A framework for evaluating explanations in psychological science. Psychological Review, 132(2), 311-329. https://doi.org/10.1037/rev0000479</p>
+<p>Wagerman, S. A., &amp; Funder, D. C. (2009). Personality psychology of situations. In P. J. Corr &amp; G. Matthews (Eds.), The Cambridge handbook of personality psychology (pp. 27-42). Cambridge University Press.</p>
+<p>Watts, D. J. (2017). Should social science be more solution-oriented? Nature Human Behaviour, 1(1), Article 0015. https://doi.org/10.1038/s41562-016-0015</p>
+<p>Wennerhold, L., &amp; Friese, M. (2020). Why self-report measures of self-control and inhibition tasks do not substantially correlate. Collabra: Psychology, 6(1), Article 9. https://doi.org/10.1525/collabra.276</p>
+<p>Wenzel, M., Kaurin, A., Ringwald, W. R., Tüscher, O., Kubiak, T., &amp; Wright, A. G. C. (2025). Unraveling the link between neuroticism and well-being in daily life: The role of event occurrence, event appraisals, affective reactivity, and affective recovery. Journal of Personality and Social Psychology. Advance online publication. https://doi.org/10.1037/pspp0000584</p>
+<p>Wessels, N. M., Zimmermann, J., &amp; Leising, D. (2016). Toward a shared understanding of important consequences of personality. Review of General Psychology, 20(4), 426-436. https://doi.org/10.1037/gpr0000088</p>
+<p>Wilmot, M. P., Wiernik, B. M., &amp; Ones, D. S. (2025). Mapping domains of life success: Insights from meta-analytic criterion profile analysis. Psychological Bulletin, 151(6), 767-818. https://doi.org/10.1037/bul0000476</p>
+<p>Wood, D. (2021). Formally representing how psychological processes shape actions and one another using functional fields. In D. Wood, S. J. Read, P. D. Harms, &amp; A. Slaughter (Eds.), Measuring and modeling persons and situations (pp. 565-615). Elsevier. https://doi.org/10.1016/B978-0-12-819200-9.00019-3</p>
+<p>Wood, D., Adanu, E. K., &amp; Harms, P. D. (2025). Expectancy × value models of the relations between demographic, psychological, and situational factors and speeding behavior. Journal of Safety Research, 93, 135-147. https://doi.org/10.1016/j.jsr.2025.02.012</p>
+<p>Wood, D., Tov, W., &amp; Costello, C. (2015). What a ____ thing to do! Formally characterizing actions by their expected effects. Journal of Personality and Social Psychology, 108(6), 953-976. https://doi.org/10.1037/pspp0000030</p>
+<p>Wright, A. J., &amp; Jackson, J. J. (2023). Do changes in personality predict life outcomes? Journal of Personality and Social Psychology, 125(6), 1495-1518. https://doi.org/10.1037/pspp0000472</p>
+<p>Wrzus, C., &amp; Roberts, B. W. (2017). Processes of personality development in adulthood: The TESSERA framework. Personality and Social Psychology Review, 21(3), 253-277. https://doi.org/10.1177/1088868316652279</p>
+<p>Wysocki, A. C., Lawson, K. M., &amp; Rhemtulla, M. (2022). Statistical control requires causal justification. Advances in Methods and Practices in Psychological Science, 5(2), Article 25152459221095823. https://doi.org/10.1177/25152459221095823</p>
+<p>Xi, M., &amp; Jackson, J. J. (2026). The Dynamic Contingency Model: Integrating competing theories of personality processes [Manuscript submitted for publication]. Washington University in St. Louis. https://osf.io/tkj4s/</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
