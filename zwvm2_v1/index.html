@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: What Is a Wrong Answer Worth? The Out-of-Sample
+Value of the Chosen Option in Multiple-Choice Tests</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+What Is a Wrong Answer Worth? The Out-of-Sample Value of the Chosen
+Option in Multiple-Choice Tests
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.21
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>13</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>Figures by subject are reported for the default fit only.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 1 non-significant p value that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p = .83
+</td>
+<td style="text-align:left;">
+Whether the option’s gain is larger in harder tests depends on the
+measure and the specification: as declared (ω c without priors) it is,
+but in bits with priors mean proportion correct was not associated with
+the gain overall (p = .83), and in grade 8 the association went the
+other way.
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 4 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(13)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 49 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 49 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 49 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+For a script that did not run through, <code>table$error_message</code>
+is its error, short (at most 300 characters): the error line of its
+output, which names a package that is not there, with the address it
+asked for when it needed the internet, or the time limit it reached;
+<code>table$reason</code> sorts it into a kind. A timeout means “still
+running at the cutoff”, not a failure, so raise <code>timeout</code> for
+legitimately long-running (e.g. Bayesian) scripts.
+<code>dependency_unavailable</code> means the script’s own package could
+not be installed from live CRAN, the CRAN Archive, or a named GitHub/URL
+source — an infrastructure limitation, not a defect in the paper’s code,
+so unlike <code>errored</code>/<code>timed_out</code> it does
+<strong>not</strong> force the traffic light red. The full stdout/stderr
+of every run is kept in the result’s <code>run_results</code> (the
+report shows it in per-script dropdowns, capped for readability). The
+traffic light reflects the STATIC readiness signals by default, but an
+execution error (<code>errored</code>/<code>timed_out</code>) does
+recolour it to red — a script that crashes on its own analysis is a
+genuine reproduction failure. A script that fails with
+<code>could not find function</code> is run once more with the
+<code>library()</code> calls the project’s other scripts make added at
+its top (or the one package that exports the function, or magrittr for
+<code>%&gt;%</code>), and a script that then runs is reported as
+reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Right/wrong scoring of multiple-choice items discards information about which wrong option was chosen. IRT models that use the choice date from 1972, but evidence on its value has come mostly in sample, one test at a time. We compared option-level and right/wrong models on predicting the option chosen in held-out responses (log-loss, in bits) across 116 Item Response Warehouse tables (110 Brazilian), 469 TIMSS and PIRLS tests and 121 Czech exam forms. In the warehouse, modeling the chosen option gained 15.4 millibits per response over the 2PL, 1.36 times the gain from estimating item discrimination. Of the option&#x27;s gain, 84% came from which wrong option was chosen, where right/wrong models use only distractor popularity; the rest, on whether the answer was right, was about a fifth of discrimination&#x27;s gain. The gain was positive in all 116 warehouse tables, in 119 of 121 Czech forms and, with priors on both models, in 463 of 469 TIMSS and PIRLS tests; relative to discrimination, it ranged from 0.8 (Czech exams) to 1.5 (ENEM). By our declared measure, the gain peaked in the lowest ability deciles in most tables; per wrong answer, the choice improved prediction over distractor popularity most in the top decile.</p>
+<h3>[div-01]</h3>
+<p>The distractors are part of the item too (Thissen et al., 1989). Operational scoring usually discards the choice: the response is coded 0 or 1 and modeled with a binary item response model, such as the one-, two-or three-parameter logistic model (1PL, 2PL, 3PL). A review by Gierl et al. (2017) found comparatively little research on distractors.</p>
+<p>This paper asks what the discarded information is worth. We do not ask whether optionlevel models fit better in sample (with more parameters they usually will), but whether they predict the option chosen in responses they have not seen better than binary models do (Section 1.4).</p>
+<h3>1.2 • What is known</h3>
+<p>Item response models that use the choice date from Bock (1972), whose nominal response model gives every option its own response function. Bock reported that scoring all the options was substantially more precise than right/wrong scoring for test-takers below median ability and about as precise above it. Thissen (1976) found more information in the lower half of the scale when wrong responses to the Raven Progressive Matrices were modeled (as summarized by Haberman et al., 2019). Thissen and Steinberg (1984) added a latent &quot;don&#x27;t know&quot; category whose responses spread over the options in estimated proportions, and Thissen et al. (1989) showed how such models serve item analysis. Suh and Bolt (2010) introduced the nested logit model: a 2PL, 3PL or four-parameter logistic model (4PL) for the correct response and, given an incorrect response, a nominal model among the distractors, a structure that Bolt et al. (2012) present as a natural way to evaluate what distractor selection adds to scoring. De Ayala and Sava-Bolesta (1999) and DeMars (2003) studied how many examinees the nominal model needs.</p>
+<p>How much the choice adds has mostly been measured in sample and one test at a time. Haberman et al. (2019) analyzed an international language assessment (12,123 examinees; 29 listening and 39 reading items with four options) against a 2PL whose wrong-answer probability is split over distractors in fixed proportions. Modeling the distractors lowered the in-sample perresponse log-penalty by .004 to .005, nearly twice the .002 gained by estimating item slopes (a ratio of about 1.7 to 1.9), while reliability rose by less than .01. In the Swedish admission test SweSAT, Ramsay et al. (2020) found that optimal scoring of all options improved their measures of score performance by about as much again as the step from sum scoring to optimal binary scoring. In reasoning tests, nested logit models raised reliability over their binary counterparts: by a reported .029 (3PL against 3PL nested; the paper&#x27;s point estimates imply .021) in the last series of the Standard Progressive Matrices (Myszkowski &amp; Storme, 2018), and by .018 (2PL against 2PL nested) in a 20-item recruitment test, where they also outperformed the nominal model (Storme et al., 2019). In a financial literacy test, Storme et al. (2026) report that a nested logit model gives ability estimates more strongly associated with external validity criteria than conventional binary scoring. De Ayala (1989) compared adaptive tests based on the nominal model and on the 3PL with empirical data and an external criterion. García-Pérez (2014) argued that the higher information of polytomous models for multiple-choice items can be an artifact of estimation error or of inadequate option response functions. Out-of-sample prediction is the natural answer: extra information that is an artifact should not help predict responses the model has not seen. Drasgow et al. (1995) warned early against overfitting artifacts and evaluated four option-level models in five tests with separate calibration and cross-validation samples of about 3,000, but they assessed fit, not the gain over binary models. Wallmark et al. (2024) compared a monotone multiple-choice model with the nominal model by log-likelihood on held-out test-takers of the SweSAT, and Kreitchmann et al. (2018) compared a multiple-choice model with omissions with the 3PL used to score TIMSS Advanced by item fit in a held-out half. Each studied one assessment. Neither measured the predictive gain over a binary model. In a special issue on one Raven dataset (Myszkowski, 2020), Bürkner (2020) compared only binary models by approximate leave-one-out crossvalidation (LOOCV), because his software, brms, did not yet support models with distractors in the required form. Jin et al. (2022) found that a nominal model with a mixture of random guessing was preferred to the nominal model by the widely applicable information criterion (WAIC) and by LOOCV in all five analyses of a single mathematics exam.</p>
+<p>Outside psychometrics, Ghosh et al. (2021) extended knowledge-tracing models to predict the option chosen. An et al. (2022) found that training such models to predict the option as well as correctness improved their prediction of correctness in data from Brazil&#x27;s national high school exam (ENEM 2019) and EdNet. Fei et al. (2026) fitted nominal models to 189 language models answering 31,554 items from 14 benchmarks, with five-fold cross-validation over cells.</p>
+<p>There, Bock&#x27;s nominal model did not improve the prediction of correctness over the 2PL, but it did improve the prediction of the option chosen. None of the studies above with human testtakers measured the option&#x27;s out-of-sample gain over right/wrong scoring across many tests.</p>
+<h3>1.3 • The yardstick and the warehouse</h3>
+<p>The InterModel Vigorish (IMV) expresses the predictive gain of one model over another as the relative change in the weight of a coin whose expected log-likelihood matches each model&#x27;s mean held-out log-likelihood (Domingue, Rahal, et al., 2025). Applied to dichotomous models in 89 datasets of the Item Response Warehouse (IRW), it gave a mean IMV of 0.006 for 1PL → 2PL and of 0.00016 for 2PL → 3PL (Domingue et al., 2024). The same paper warns that the IMV is biased toward more complex models when evaluated in sample. Kanopka and Domingue (Kanopka, 2023, Ch. 3) extended the IMV to categorical outcomes with ω c , which applies to any model of categorical responses, ordered or not. Domingue, Kanopka, et al. (2025) compared polytomous models on every dichotomization of the response, of which correct against incorrect is one. Stenhaug and Domingue (2022) distinguish two prediction tasks, held-out responses of known persons and held-out persons; we use both.</p>
+<p>The IRW (Domingue, Braginsky, et al., 2025) now has a nominal branch that keeps the option each person chose (Domingue, 2026). In its multiple-choice tables with a known chance level, an IRW vignette found that the 3PL lower asymptote improved out-of-sample prediction of correctness (IMV 2PL → 3PL positive in 11 of 11 tables, 8 of them from ENEM, on one heldout split and with fits that predate mirt&#x27;s fix of the prior (Appendix A); Item Response Warehouse, 2026). Nominal models have been fitted across the warehouse before: Nalbandyan et al. (2026) used them in 245 IRW datasets of polytomous responses to quantify the degree of category ordering. What the wrong options of keyed multiple-choice items add to prediction, the question of this paper, was not part of that work.</p>
+<h3>1.4 • This study</h3>
+<p>This study compares option-level and right/wrong models out of sample with one design and the IRW&#x27;s yardstick across many tests: 116 tables of the warehouse (110 of them Brazilian) and, as replications outside it, 469 Trends in International Mathematics and Science Study (TIMSS) and Progress in International Reading Literacy Study (PIRLS) tests and 121 forms of the Czech national exams. It asks:  R1 (how much): How much does modeling the chosen option improve held-out prediction over binary models?  R² (where): Where on the ability scale is that gain largest?  R3 (choice and ability): How does the choice among wrong options relate to ability? Because binary models predict which wrong option is chosen only from distractor popularity (Section 3.2), we answer R1 for the option chosen and for correctness alone. We also compare the gain, in bits, with that from estimating item discrimination, as Haberman et al. (2019) did in sample (exploratory; Section 3.4). We answer R3 with the spread of choices among wrong options by rest-score decile and with an external criterion for ability.</p>
+<p>We then ask which model predicts best, whether the gain holds for test-takers unseen in calibration and how many test-takers are needed before it pays. The assumption that random guessers spread evenly over the options is tested by a model comparison (Section 5). The primary measures of R1 to R3 and some secondary analyses were planned before the main run; the rest were added afterwards and are exploratory (Section 3.10).</p>
+<h3>2 • Data</h3>
+<h3>2.1 • The warehouse tables</h3>
+<p>We used version 5.0 of the nominal branch of the IRW (Domingue, 2026), frozen on 18 October 2026, in which each table holds one row per person and item with the option chosen and the scored response (0 or 1). ENEM (Exame Nacional do Ensino Médio), Brazil&#x27;s national high school exam, is used for university admission. The warehouse holds one table per year and area (human sciences, natural sciences, languages and mathematics) from 2013 to 2025: 52 tables, each with about one million test-takers and items with five options. ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos) certifies the completion of schooling for youth and adults at two levels: 56 tables, from 2018 to 2025 without 2021, two levels and four areas, with four options per item and between 17,997 and 874,787 test-takers per table.</p>
+<p>The warehouse gives the public microdata of Brazil&#x27;s Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP) as the source of both families (INEP, n.d.-a, n.d. -b). The other 8 tables are listed in Appendix C. In ENEM, the four areas of a year are answered by the same people; the meta-analysis models them by year (Appendix B). Table C1 (Appendix C) gives the items, test-takers and proportion correct by family.</p>
+<p>Of the 140 tables of version 5.0, 4 were never candidates and 20 were skipped by inclusion rules fixed before this study; Section S2 of the Online Resource gives the rules and the preprocessing. For each ENEM and ENCCEJA table we drew a pool of test-takers by hashing their identifiers (about 30,000 per ENEM table and between 18,000 and 56,000 per ENCCEJA table); the other tables were used whole. From each table we drew 10 samples of up to 3,000 persons (between 1,469 and 3,000).</p>
+<h3>2.2 • Outside the warehouse</h3>
+<p>We repeated the analysis with the TIMSS 2019 and TIMSS 2023 databases, grades 4 and 8, and the PIRLS 2021 database, grade 4 (Fishbein et al., 2021 (Fishbein et al., , 2024 (Fishbein et al., , 2025)), with a country-bysubject test as the table (Appendix C). The data are used for research under the terms of the International Association for the Evaluation of Educational Achievement (IEA) and are not redistributed.</p>
+<p>We also repeated the main analysis on the Czech national exams, whose per-item data, with the option each student marked, are published by the Centrum pro zjišťování výsledků vzdělávání (CZVV, also known as CERMAT; CZVV, n.d.-a, n.d.-b). A table is a form that every student of a sitting takes (Appendix C). Test booklets and keys are protected by CZVV&#x27;s terms of use, and no item or key is reproduced here.</p>
+<h3>3 • Method</h3>
+<h3>3.1 • Models and fitting</h3>
+<p>All models were fitted in mirt 1.47 (Chalmers, 2012), unidimensional, with expected a posteriori (EAP) ability estimates under a standard normal prior: Rasch and 2PL; 3PL, with lognormal(0, 1) and Beta(5, 17) priors on the slope and lower asymptote (Table A1); the nominal response model (Bock, 1972); the nested logit without guessing (2PLNRM; Suh &amp; Bolt, 2010); and, on 5 of the 10 samples per table (all 10 in the 12 ENEM tables of 2013 to 2015) with the same folds, the nested logit with guessing (3PLNRM), with the same priors as the 3PL. The 3PL and the 3PLNRM were fitted with mirt&#x27;s expectation-maximization (EM) algorithm under those priors, which stops below the posterior maximum while reporting convergence because mirt takes the derivatives of the prior on the lower asymptote with respect to the asymptote rather than its logit (Xiao, 2026; corrected in the development version 1.48.2); we then polished each fit to the posterior mode reached from mirt&#x27;s solution, and the figures for these two models are at that mode unless marked otherwise (Appendix A). The posterior can have more than one mode.</p>
+<p>The chance-filter check (Section S10.5) and the per-database gaps between the 3PLNRM and the nominal model in Section S8 keep mirt&#x27;s fits.</p>
+<p>Nominal models were fitted by marginal maximum likelihood with the category slopes parametrized directly (a1 fixed at 1, all slopes free relative to a reference distractor, the first in text order): mirt&#x27;s default a1•ak parametrization, the same model, stopped below the maximum while reporting convergence (Appendix A gives the problem and the checks). In the warehouse tables, with between about 1,150 and 2,400 training responses per item, the nominal model was fitted without priors. Where items had fewer than about 1,000 responses (the sample-size curve, TIMSS and PIRLS), maximum likelihood overfitted or did not exist for some items, and we report posterior modes under the priors of Table A1. The threshold between the two regimes was chosen after looking at the results (Section 6). A few secondary checks use the default parametrization (Table S1).</p>
+<h3>3.2 • Option probabilities from binary models</h3>
+<p>To compare binary and option-level models on the same outcome, a binary model must predict the option chosen. We split its predicted probability of a wrong answer over the distractors in proportion to their shares among wrong answers in the training data, as in the 2PL with noninformative distributions of Haberman et al. (2019) and in Fei et al. (2026). Binary and option-level models then predict the same outcomes and can be compared with any loss on them, and Rasch → 2PL changes only the probability of the key, so on the option scale it measures the value of discrimination alone.</p>
+<h3>3.3 • Prediction tasks</h3>
+<p>Held-out responses. In each sample, every observed person-by-item response (cell) was assigned at random to one of five folds. Each model was fitted on four folds (80% of the cells); ability was estimated by EAP from the person&#x27;s training cells; and the held-out cells were predicted. This is the missing-responses task of Stenhaug and Domingue (2022).</p>
+<p>New test-takers. Persons were split into five folds and models were calibrated on 80% of them. For each held-out person, items were split at random into halves S and T; ability was estimated from S only and used to predict the responses in T, and the reverse. We used 3 samples per table (348 samples).</p>
+<h3>Ability against an external criterion.</h3>
+<p>Estimating ability from wrong answers and correlating it with the full-test estimate, which contains those same answers, is circular. In each of 3 samples per table, items were split at random into halves A and B and persons into five folds; models were calibrated on 80% of the persons. Each held-out person was scored on half A by EAP with the sum score, the 2PL, the 3PL, the nominal model, the nested logit without and with guessing, and, using only the items answered incorrectly, the choice among wrong options alone. The criterion was the 2PL ability estimate on half B. As a null, the letters of the wrong options were shuffled. After the first results we added two other criteria with the same scorings of half A: the proportion correct on half B and, in ENEM, the mean 2PL EAP on the two areas the person took on the other test day.</p>
+<h3>3.4 • Measures</h3>
+<h3>Binary IMV (correctness).</h3>
+<p>For each pair of models, the IMV (Domingue, Rahal, et al., 2025) on whether each held-out response was correct. Positive values favor the second model. ω c (which option). The extension of the IMV to categorical outcomes (Kanopka, 2023, Ch. 3), computed on each pair of observed options and averaged over pairs, items and folds (Appendix B).</p>
+<h3>Log-loss in bits.</h3>
+<p>For each held-out response, a model&#x27;s log-loss is -log 2 of the probability it gave to the option actually chosen: 1 bit for a probability of 1/2, 2 bits for 1/4 and 0 for 1. The gain of model b over model a is the drop in mean log-loss, in bits per response; we report millibits (thousandths of a bit). The loss splits exactly into two parts (Appendix B): the loss on whether the response was correct, the only part on which binary models differ from one another (Section 3.2), and, for wrong responses, the loss on which wrong option was chosen.</p>
+<p>Because the parts add up to the total, the gain from the option can be split into correctness and which wrong option, and compared with the gain from discrimination on one scale. Bits were added after the first results. Domingue, Kanopka, et al. (2025) argue that IMVs computed on dichotomizations of a polytomous response can be interpreted interchangeably with ω c ; correct against incorrect is one such dichotomization. But IMVs do not add up, and ω c averages over pairs of options, among them pairs of distractors that the Rasch → 2PL comparison leaves unchanged (Section 3.2), so a ratio between two such values depends on how the pairs are weighted. We compare the option with discrimination in bits only. These are bits of held-out logloss; the bit scale of Wallmark and Wiberg (2026) uses the same unit to build a score scale from the entropy of item responses.</p>
+<h3>3.5 • Aggregation and uncertainty</h3>
+<p>For each table, a measure is the mean over its 10 samples, and its standard error (SE) is the standard deviation over samples divided by √10; a gain is &quot;above two SE&quot; when it is larger than twice that standard error. We pooled tables with a multilevel random-effects meta-analysis (restricted maximum likelihood, REML; metafor; Viechtbauer, 2010), separately by family and for all 116 tables. For the gains in bits we also report the between-table standard deviation, τ, and a 95% prediction interval for a new table, and the ratio of the two gains has its own interval (Appendix B). A meta-regression of ω c 2PL → nominal on the table&#x27;s mean proportion correct, its number of items and its family asks where the option&#x27;s gain is larger.</p>
+<h3>3.6 • Where the information is</h3>
+<p>By ability. Held-out cells were grouped by decile of the 2PL ability estimate. Our declared measure was ω c 2PL → nominal computed on the held-out cells of each decile. We also computed the bits gained per response and, after the first results, per wrong answer, with the 2PL and the 3PL as baselines. Because that gain measures prediction against the distractors&#x27; training shares, not information about ability, we also computed, as exploratory analyses, the Fisher information per wrong answer under the fitted nominal model (below) and the gain per wrong answer that model implies when measured as the empirical one (Section S12).</p>
+<h3>Fisher information.</h3>
+<p>In the nominal model, the information that the choice among distractors adds to that of correctness is a1 2 (1-P K ( θ )) Var ( ak | wrong ), where K is the key: the information about which distractor, weighted by the probability of a wrong answer (Appendix B; cf. Fei et al., 2026). For each table we computed the ratio of option information to correctness information, summed over items and averaged over a standard normal θ, from the nominal parameters of the first fold of each sample, and, by decile of θ, the information per wrong answer, a1 2 Var ( ak | wrong , θ ).</p>
+<h3>By item.</h3>
+<p>We related each item&#x27;s ω c to its proportion correct and to its number of &quot;informative distractors&quot;: wrong options that are the most probable response at some θ between -3 and 3 (the definition of Fei et al., 2026;  the range of θ is ours).</p>
+<h3>3.7 • Choice among wrong options</h3>
+<p>Without any model, on the ENEM and ENCCEJA pools, we recorded by item and decile of the rest score the share of wrong answers that went to the most chosen distractor (chance: 1/(m -1)), for all test-takers and for chance-level scorers: persons whose number correct is not above what Binomial(J, 1/m) gives at the .05 level, with J items.</p>
+<p>Item-level tests of uniformity are in Section S4.</p>
+<h3>3.8 • Sample size</h3>
+<p>In 20 tables (ENEM 2013 (ENEM , 2017 (ENEM , 2021 (ENEM and 2025 in their four areas, and four ENCCEJA tables) we repeated the cell-level design with calibration samples of 250 to 16,000 persons, three times each, and, at N = 250, 500 and 1,000, with priors on both models (Table A1).</p>
+<h3>3.9 • Outside the warehouse TIMSS and PIRLS.</h3>
+<p>We kept the four-option multiple-choice items that IEA scales, used the whole country sample without sampling weights and followed the main design, adding the 2PL and the nominal model with priors (Appendix C). Because ω c depends on the number of held-out cells per item and fold, the comparison with Brazil is made in bits only, and against Brazil&#x27;s figures under the same priors and sample size (500 and 1,000 test-takers in the samplesize curve).</p>
+<h3>Czech national exams.</h3>
+<p>The design was that of the main analysis (Appendix C). The headline figures use the nominal model with a1 fixed at 1, as in the warehouse tables; the fit with the default parametrization is in Section S9.</p>
+<h3>3.10 • Planned and exploratory analyses</h3>
+<p>Before the main run we planned the primary measures: ω c 2PL → nominal and the binary IMV 2PL → nominal for R1; ω c by ability decile for R²; and, for R3, the spread among wrong options by decile and the recovery of ability from wrong answers, which we changed to the external criterion of Section 3.3 before that step was run, because the planned version was circular. The plan, written down before the run but not registered publicly, also listed secondary analyses and a re-run with another seed on part of the tables, which was not done. Analyses outside the plan, among them the bits scale, were added after the first results and are exploratory; the replications outside the warehouse had their criteria fixed before any model was fitted. Table S1 lists each analysis, whether it was planned and the fit it uses.</p>
+<h3>4 • Results</h3>
+<h3>4.1 • R1: how much the chosen option adds to held-out prediction in the warehouse tables</h3>
+<p>Modeling the option improved the held-out prediction of which option was chosen in all 116 tables (Table 1, Figure 1). In ω c , the pooled 2PL → nominal gain was 0.0133 [0.0114, 0.0153]: averaged over pairs of options, items and folds, the coin equivalent to the nominal model&#x27;s held-out predictions weighed 1.3% more than the 2PL&#x27;s (Section 1.3; Appendix B). It was 0.0182 in ENEM, 0.0102 in ENCCEJA and 0.0065 in the other tests, and above two SE in each of the 116 tables. On correctness alone, the gain was a binary IMV of 0.0021  per response, with the diagonal where they are equal. The option&#x27;s gain is above zero by more than two SE in all 116, and 89 of 116 points are above the diagonal. (b) Pooled estimates (multilevel meta-analysis, 95% intervals) by family: discrimination 11.3, 12.2, 10.9 and 8.6 millibits; option 15.4, 18.6, 12.2 and 11.5 (all, ENEM, ENCCEJA, other), that is 1.36, 1.53, 1.12 and 1.34 times discrimination, split into a correctness part and a which-wrong-option part; 84% of the overall gain is which wrong option.</p>
+<p>Nominal model fitted to its maximum. Note. Nominal model fitted to its maximum without priors (Section 3.1). Each row is a separate meta-analysis, so the two parts of the option&#x27;s gain in bits need not add exactly to the total. The two ω c rows weight the comparisons differently (Section 3.4), and we form no ratio between them. All 116 option gains in bits exceeded zero by more than two SE. The ratio&#x27;s interval comes from the bivariate meta-analysis of Appendix B, whose estimates round to the same ratios. Prediction intervals are for a new table; in the other tests, eight tables of different kinds, they describe those tables rather than a population.</p>
+<h3>Against discrimination.</h3>
+<p>Both gains are measured on the option chosen, but discrimination changes only the prediction of correctness; the 2PL predicts which wrong option is chosen from distractor popularity, the same at every ability. In bits, the option gained 15.4 millibits per response against 11.3 for discrimination: 1.36 times as much overall (95% interval 1.24 to 1.48) and 1.53 times in ENEM (1.40 to 1.67). In ENCCEJA the two were comparable (1.12, from 0.97 to 1.30): their difference, +1.3 millibits per response [-0.3, 3.0], is not distinguishable from zero. Table by table, the option exceeded discrimination in 89 of 116 tables (Figure 1a). Of the option&#x27;s gain, 84% came from predicting, when the answer was wrong, which wrong option was chosen (13.0 millibits per response), and 16% from predicting whether the answer was right (2.5 millibits, about a fifth of the gain from discrimination; the parts are pooled separately, Table 1). For comparison, replacing each item&#x27;s proportion correct with the 2PL, a step from popularity to ability on correctness, gained 51.5 millibits per response [44.7, 58.3]; the which-wrong-option gain was a quarter of that (0.25 [0.21, 0.29]; exploratory; Section S16).</p>
+<p>Heterogeneity and calibration size. The gain varied widely between tables (Table 1): τ was 5.5 millibits for the option, with a 95% prediction interval of 4.4 to 26.3 for a new table, and 3.9 for discrimination (3.6 to 19.0). The option&#x27;s prediction interval lay above zero overall and in each family, but that of its difference from discrimination crossed zero in all of them (-6.6 to 14.8 overall): in a new table the option could gain more or less than discrimination (table by table, Section S10.1). The ratio is a property of this design, not of the option alone: it compares two pooled estimates at the calibration size of the warehouse samples (a median of 2,382 training responses per item), and it depends on that size. In the 20 tables of the sample-size curve, without priors, it was 1.16 with 500 test-takers, 1.42 with 1,000 and 1.47 with 3,000 (means over tables), and with 250 the option did not pay (Section 4.7). In simulations (Section S10.7), modeling the option lost 0.7 to 1.3 millibits per response when the distractors carried no information and, with 3,000 test-takers, recovered 79% to 93% of the gain it would have with the true item parameters; its ratio to discrimination ranged from 1.27 to 3.18, depending on the generating values.</p>
+<p>Difficulty and the 3PL. The gain was positive in every year of each of the 12 series (ENEM&#x27;s four areas and ENCCEJA&#x27;s eight level-area combinations), and larger in harder tables: in the meta-regression, ω c 2PL → nominal fell by 0.021 per unit of mean proportion correct (p &lt; .001).</p>
+<p>Against the 3PL, the operational model of ENEM (INEP, 2011 (INEP, , 2012)), the option still added information about which option was chosen: ω c 3PL → nominal 0.0112 [0.0097, 0.0127], above two SE in 116 of 116 tables, and 12.4 millibits per response [11.4, 13.5].</p>
+<p>On correctness, however, the nominal model no longer gained over the 3PL overall (-0.3 millibits [-0.9, 0.3]) and lost to it in ENEM (-1.6 [-2.3, -1.0]); in ENCCEJA it still gained 0.9 [0.3, 1.5]. The 3PL itself predicted correctness better than the 2PL: by 4.1 millibits per response in ENEM [3.6, 4.6], above two SE in 52 of 52 tables, and by 1.6 in ENCCEJA [1.3, 2.0]. The 3PL carries priors and the 2PL does not, so this gain mixes the lower asymptote with regularization (Table A1). Across booklets, which order the same items differently, this gain grew with an item&#x27;s position in all 52 ENEM tables (by more than two SE in 47), and the nominal model&#x27;s standing against the 3PL on correctness fell with position in 51 (by more than two SE in 45), consistent with position effects (Kanopka &amp; Domingue, 2025) that our models do not include. The 3PL already gained in the first 15 items of each test day, where the nominal model trailed it only in natural sciences (Section S14).</p>
+<h3>4.2 • Replication across programs</h3>
+<p>The sign replicated in every program (Table 2). The size did not: the option&#x27;s gain ranged from 0.80 times that from discrimination (Czech exams) to 1.53 times (ENEM), and in TIMSS and PIRLS it depended on the priors.</p>
+<h3>TIMSS and PIRLS.</h3>
+<p>In the 469 country-by-subject tests (a median of 633 responses per item), modeling the chosen option reduced held-out log-loss in 463 tests when both models were fitted with priors, and gained 1.39 times as much as item discrimination in bits (95% CI 1.31 to 1.48; from 1.23 to 1.49 by database, each with its interval above 1), about three quarters of it (74.6%) in which wrong option was chosen. Under the same priors and at the same sample size (500 and 1,000 test-takers), Brazil&#x27;s tables gave 1.16 to 1.35 (means over tables rather than a meta-analysis; ENEM students answer about 45 items, TIMSS and PIRLS students 6 to 15):</p>
+<p>TIMSS and PIRLS fall in that range or slightly above it. Without priors, the nominal model did not converge in 17% of cross-validation folds, and in some its likelihood has no finite maximum; the option then reduced log-loss in 354 tests and gained less than item discrimination in grade 4 and PIRLS (pooled ratio 0.93, 95% CI 0.77 to 1.16).</p>
+<p>Against the replication criteria fixed beforehand, the result held in part. Section S8 gives the criteria, simulations suggesting that these gains are conservative, and what the gain depends on across these tests.</p>
+<h3>Czech national exams.</h3>
+<p>Modeling the chosen option reduced held-out log-loss in 119 of 121 forms. With a1 fixed at 1, the gain was about a third of Brazil&#x27;s with the same fit (5.7 against 15.4 millibits per response) and, pooled, smaller than the gain from item discrimination (0.80 times), with 77% of it from which wrong option was chosen, against 84% in Brazil. Section S9 gives the default fit and the figures by subject.</p>
+<h3>4.3 • Which model predicts best</h3>
+<p>The fair comparison for the nested logit with guessing (3PLNRM), which carries priors, is with the nominal model under priors too. In total log-loss it beat the nominal model with the priors of Table A1 (set B) in 112 of the 116 warehouse tables (111 above two SE; without the fits whose maximum is at infinity, Appendix A, 113 and 111), and the nominal model without priors in 113 (108 above two SE; 109 without those fits). Its whole advantage over the nominal model was in correctness: in which wrong option was chosen the nominal model was better, by more than two SE in 50 of 116 tables. On correctness it also beat the 3PL, in 116 of 116 tables, all above two SE. In the eight other tests, the two tied (5 of 8 tables against the nominal model; against the nominal model with priors, 4, or 5 without those fits), and outside Brazil the 3PLNRM was not the best model (Sections S8 and S9).</p>
+<p>The nested logit without guessing showed the same pattern on a smaller scale (Section S15). The 3PLNRM was fitted on 5 of the 10 samples (all 10 in 12 tables), and against the nominal model without priors its gain mixes the guessing parameter with regularization.</p>
+<h3>4.4 • R²: where the information is</h3>
+<p>By ability. Our declared measure for R², ω c 2PL → nominal by decile of the 2PL ability estimate, was highest in the two lowest deciles in 92 of the 116 tables (ENEM 33 of 52, ENCCEJA 51 of 56, other tests 8 of 8) and in the two highest in the other 24; the decile of the maximum was higher in harder tables (Spearman -.68 with the mean proportion correct; ENEM -.72, ENCCEJA -.40). Per response in bits, the gain was U-shaped and largest in the lowest decile in ENCCEJA (27.3 against 18.1 millibits in the highest) and in the other tests (33.2 against 14.6), and in the highest decile in ENEM (41.8 against 24.4). Per wrong answer, a measure added after the first results, the chosen option improved prediction over overall distractor popularity most in the top decile in all three families (medians; the maximum in 104 of 116 tables), especially in ENEM: from about 26 millibits per wrong answer in the lowest decile to about 119 in the highest, in a U shape with its minimum in the middle (Figure 2a). The two arms of the U come from different wrong options (Figure S7). With each item&#x27;s wrong options ranked by the mean ability of those who chose them in the training data, the largest contribution in the top decile came from the option chosen by the ablest, which drew more wrong answers than its popularity implies in all 116 tables (ENEM: 44.5% against 31.7%; the nominal model predicted 44.3%), and the largest contribution in the lowest decile came from the option chosen by the least able, also in all 116 (partly by construction of the ranking). The 2PL with training shares predicts the same split at every ability; the observed split was closest to it in the middle deciles, where the gain was smallest. The gain per wrong answer is a predictive statement,  Millibits per wrong answer gained by the nominal model in predicting which wrong option was chosen, against the 2PL with overall distractor shares, by decile of the 2PL ability estimate, median over tables with interquartile bands, by family (ENEM: 26.5 in the lowest decile, 119.3 in the highest; all three families are U-shaped). (b) ENEM only, millibits per response with a 2PL and a 3PL baseline: in the lowest decile, from 24 to 8; in the highest, from 42 to 31. The note under the figure gives the declared measure: per response, in ω c , the peak is in deciles 1 or 2 in 92 of 116 tables. Both panels measure prediction, not Fisher information (Section 4.4; Figure S1). Nominal model fitted to its maximum.</p>
+<p>In ENEM, with the 3PL instead of the 2PL as the baseline, the option&#x27;s gain in the lowest decile fell from about 24 to 8 millibits per response, while at the top it fell much less (from about 42 to 31; Figure 2b). In ENCCEJA the lowest decile fell from 27 to 20, and in the other tests it hardly changed.</p>
+<p>Fisher information (Section 3.6). Summed over items, the option added a median of 38% to the information of correctness in ENEM (22% to 76% across tables), 22.5% in ENCCEJA and 19% in the other tests. In ENEM this is the information of a test about 38% longer, relative to the correctness part of the same nominal model. Across tables, this theoretical gain correlated .76 (Spearman) with the empirical gain in the correlation with the other half of the test (Section 4.5).</p>
+<p>Under the fitted nominal model, the Fisher information about ability per wrong answer peaked in the two lowest deciles of a standard normal θ in 96 of 116 tables and never in the two highest, and in ENEM the top decile had 0.61 times the information of the lowest (Figure S1).</p>
+<p>The predictive gain points the other way, and not because of how it is measured: measured in the same way, the fitted model implies almost the same gain per wrong answer at the bottom and at the top of ENEM (92 and 101 millibits), but the observed gain at the bottom was a median of 31% of that, lower in 52 of 52 tables (Section S12). That a wrong answer carries the most information about ability among low-ability test-takers is therefore what the fitted model says, not something the held-out data confirm.</p>
+<h3>By item.</h3>
+<p>An item&#x27;s ω c was larger in harder items and in items with more informative distractors (Spearman -.48 with the proportion correct and +.51 with the number of informative distractors).</p>
+<p>Figure S2 shows one ENEM item without any model.</p>
+<h3>4.5 • R3: how the choice among wrong options relates to ability</h3>
+<p>Low scorers&#x27; choices are concentrated. Among chance-level scorers (a median of 38% of persons per table), a favorite distractor drew a median of 35% of their wrong answers per item in ENEM (chance: 25%) and 47% in ENCCEJA (chance: 33%). The choice became more concentrated as ability rose: the median share of the favorite distractor went from 34% to 47% in ENEM and from 46% to 57% in ENCCEJA. This says that low scorers&#x27; choices are not uniform, not that low scorers do not guess; whether guessers spread evenly over the options is tested in Section 5.</p>
+<h3>Ability, against an external criterion.</h3>
+<p>Table 3 gives the median correlation of each scoring of half A with ability on half B. Scoring the option raised the correlation from .688 (2PL) to .721 (nominal) in ENEM and from .601 to .622 in ENCCEJA, and improved it in 115 of 116 tables. The choice among wrong options alone, without knowing whether the person answered correctly, correlated .492 with the criterion in ENEM and .358 in ENCCEJA, against .033 and .045 with the letters shuffled; it exceeded its null in all 116 tables, and its partial correlation given the number correct (.27 and .22) was positive in all 116. Against right/wrong 3PL scoring. INEP scores ENEM with a 3PL and EAP (INEP, 2011, 2012). Our 3PL uses the same model and estimator, but not INEP&#x27;s item parameters or prior, and scores half a test; the comparison is therefore with right/wrong 3PL scoring, not with the official score. Scoring the option with the nominal model tracked ability better than right/wrong 3PL scoring in 105 of 116 tables (ENEM 43 of 52, ENCCEJA 55 of 56, other 7 of 8; median differences +0.013, +0.019 and +0.014; one of the 105, ENCCEJA 2019 lower secondary mathematics, by +0.00007, within its SE), and with the nested logit with guessing in 113 of 116 (50 of 52, 56 of 56 and 7 of 8; +0.018, +0.021 and +0.014; the table missing for 114, ENEM 2017 natural sciences, is a tie at -0.00001) (Figure S5). With the larger of two per-table standard errors, 83 of the nominal model&#x27;s wins exceeded two SE, and 96 of the 3PLNRM&#x27;s.</p>
+<p>The exception is ENEM mathematics. There the nominal model beat the 3PL in only 6 of 13 years (median -0.001) and never lost by more than two SE: it tied (in natural sciences it lost in 2 of 13 years). The nominal model has no lower asymptote; one possible reason, not tested here, is that the 3PL&#x27;s lower asymptote helps most in mathematics. The 3PLNRM combines both and won in 12 of 13 mathematics years (median +0.006).</p>
+<h3>4.6 • Test-takers unseen in calibration</h3>
+<p>For test-takers unseen in calibration, modeling the option still improved prediction in all 116 tables and in all 348 samples (median ω c 2PL → nominal 0.0175 in ENEM and 0.0091 in ENCCEJA; Figure S3), and the 3PLNRM improved on the 3PL in all 116 tables as well. Their ability came from half of their responses. Compared table by table, the option&#x27;s gain in bits for unseen test-takers was about 92% of its gain on held-out responses of known test-takers, while its gain on correctness was 1.27 times as large.</p>
+<h3>4.7 • How many test-takers are needed</h3>
+<p>Estimated without priors, the option paid in log-loss from about 500 test-takers (19 of 20 tables at N = 500), and on correctness also from about 500 (19 of 20; 20 of 20 at N = 1,000); with 250 and no priors it did not pay, because maximum likelihood overfitted and for some items did not exist (Figure S4). With 250 test-takers and priors on both models, the count depends on the prior set: with set B, the option paid in 14 of 20 tables (not in the 4 ENEM natural sciences tables, nor in 2 of the 4 ENEM mathematics tables); with set A, in 18 of 20 (14 of 16 ENEM and 4 of 4 ENCCEJA tables), with the whole gain in which wrong option was chosen.</p>
+<h3>4.8 • Group gaps</h3>
+<p>In the full 2023 ENEM microdata (500,000 test-takers scored with item parameters calibrated on independent samples; criterion: the official score from the other test day), scoring the option (nested logit with guessing) instead of right/wrong (3PL) raised validity in all four areas and left socioeconomic and racial gaps per unit of validity unchanged (ratio 0.98 to 1.02 across 4 areas and 5 group contrasts). Against simulations without option-level differential functioning (differential distractor functioning; Green et al., 1989; Penfield, 2008; Suh &amp; Bolt, 2011) that reproduce the observed validity, the option did not shift disadvantaged groups uniformly: it placed them slightly higher among low scorers and slightly lower among high scorers; the mean shift, within ±0.03 SD, changed sign with the weighting (Section S7).</p>
+<h3>5 • Robustness</h3>
+<p>Table D1 (Appendix D) lists the robustness checks, and Section S10 gives their details; in none did a result change direction. The mixture of the nominal model with uniform random guessing (Jin et al., 2022) predicted worse than the nested logit with guessing directed to the key in 20 of 20 tests (median 3.6 to 3.7 millibits); sending the ability-independent mass to the key instead of spreading it evenly over the options accounts for most of its gap to the nested logit with guessing (2.3 millibits).</p>
+<h3>6 • Limitations</h3>
+<p>Mostly Brazil. Of the 116 warehouse tables, 110 are Brazilian, and the unit of replication is the program, not the table: outside Brazil the replication rests on TIMSS and PIRLS, which need priors at their sample sizes, and on two Czech exams, where the gain was smaller. We make no claim about multiple-choice tests in general.</p>
+<h3>Specification of the nominal model.</h3>
+<p>The threshold of about 1,000 responses per item between maximum likelihood and priors was chosen after looking at the results, from the sample-size curve, which places the crossing between 400 and 800 responses per item, and from TIMSS 2023 grade 8, with about 760. The priors are not neutral: both sets center the distractor slopes where the nominal model reduces to the 2PL with fixed distractor shares, so they shrink toward the binary baseline, and the prior on the key slope also restricts its sign (Table A1); and the two prior sets in use below the threshold give different counts at N = 250 (Section 4.7).</p>
+<h3>Standard errors.</h3>
+<p>The table-level SE comes from 10 samples that overlap by chance, so it understates the SE relative to the population; with the correction, ω c stays above two SE in the ENEM and ENCCEJA tables (Appendix B).</p>
+<h3>Local dependence.</h3>
+<p>Folds are random over cells, and the halves A and B and S and T are random over items, so a held-out item can share a passage or stimulus with training items of the same person. If the choice of distractor reflects how that person read the shared material, part of the option&#x27;s gain could come from that dependence rather than from ability. The concern is largest in PIRLS, where every item belongs to a passage; we did not run folds that keep a passage together.</p>
+<p>Exploratory comparisons and populations. The 3PL and nested-logit comparisons in the ability analysis are exploratory, our 3PL is not INEP&#x27;s scoring, and our 3PL and 3PLNRM are at the posterior mode reached from mirt&#x27;s solution, which need not be the only mode (Section 3.1). New test-takers come from the same table and year as the calibration sample, so that task does not show that the gain generalizes to other populations. The sample-size thresholds are readings of a curve in 20 tables, not tested cut-offs.</p>
+<p>Group gaps. The analysis of group gaps covers one exam and one year, and the data do not separate whether the tilt it finds reflects option-level differential functioning or model misfit where guessing is common.</p>
+<h3>Unidimensional models.</h3>
+<p>All models are unidimensional. Bolt et al. (2012) raised the possibility that distractor selection reflects a different trait or ability from the one behind the correct response; we did not test it.</p>
+<h3>7 • Discussion</h3>
+<h3>7.1 • What a wrong answer is worth</h3>
+<p>In every program we studied, modeling the chosen option improved its prediction in responses the models had not seen. In bits, the gain was of the order of the gain from estimating item discrimination (1.36 times as large in the warehouse tables), but most of it is information about which mistake is made. On whether the answer is right, it was about a fifth of the gain from discrimination. The size is not a constant: it depends on the calibration sample, and in the Czech exams it was about a third of Brazil&#x27;s and below the gain from discrimination. This is the out-of-sample counterpart of the in-sample comparison that Haberman et al. (2019) made in one language test. It also answers part of the concern that the information of option-level models is an artifact (García-Pérez, 2014): held-out responses confirm that some of it is real, and across tables the promised gain (the Fisher information ratio) and the collected gain (the correlation with the other half of the test) were ordered alike (Spearman .76).</p>
+<p>Against the 3PL, the gain on correctness disappears overall and reverses in ENEM, and in ENEM mathematics the nominal model only ties with the 3PL as an ability estimator. Both results are consistent with one mechanism: in ENEM, a large part of what the option adds at the bottom of the scale is structure that a guessing floor also captures (the 3PL itself gained 4.1 millibits over the 2PL there, more at later booklet positions; Section 4.1). A model with both (the nested logit with guessing) predicted best in the Brazilian tables, also against the nominal model with priors, and tracked ability better than right/wrong 3PL scoring in 113 of 116 tables (Section 4.5).</p>
+<h3>7.2 • Where, and from whom</h3>
+<p>The classical statement is that option scoring helps most below the median (Bock, 1972).</p>
+<p>Our declared measure agrees with it in most tables: ω c by decile peaked in the two lowest deciles in 92 of 116. Per wrong answer, however, the chosen option improved prediction over overall distractor popularity most in the top decile. This is a predictive statement, not Fisher information (Section 4.4).</p>
+<p>Low scorers do not spread their wrong answers uniformly. This does not test the assumption that a latent class of random guessers finds all options equally attractive (Jin et al., 2022), or answers correctly with a fixed probability (Xiao et al., 2026): chance-level scorers are a score group, not that class, and a small uniform class mixed with content-driven responses would produce the same non-uniformity. The model comparison does test it (Section 5): the mixture with uniform random guessing predicted worse than the nested logit with guessing directed to the key in all 20 tests, and most of the gap came from where the ability-independent mass goes.</p>
+<h3>7.3 • For the Item Response Warehouse</h3>
+<p>The comparison can be run on any table that keeps the chosen option, and its inputs are those of the warehouse&#x27;s own yardstick: held-out cells, the IMV and ω c . The analysis also produced an item-and option-level layer for the 116 tables (4,492 items and 20,385 options: option parameters, ω c per item and informative distractors), rebuilt with the nominal model at its maximum, to be released with the code upon publication. For users, the model and its fit matter: mirt&#x27;s default parametrization of the nominal model can stop short of the maximum (Appendix A), and where guessing is common, a model with both a guessing floor and the option predicted better than either alone. These results quantify information; they do not by themselves argue for changing how any exam is scored. Partchev (2020) held that high-stakes scoring rules should be fixed in advance, easy to explain and accepted as fair, and so advised investigating the information in wrong responses in research rather than exploiting it in assessment.</p>
+<h3>7.5 • What comes next</h3>
+<p>Two choices in this study call for a specification fixed in advance: a single prior for samples below about 1,000 responses per item, and folds that respect shared passages. Kanopka and Domingue (2025) noted that their position-sensitive mixture used only a 1PL kernel, a limitation of that work. A nominal kernel is one way to lift it.</p>
+<h3>7.6 • Conclusion</h3>
+<p>Which wrong option a test-taker chooses carries information that right/wrong scoring discards. Measured on responses the models had not seen, that information improved the prediction of the option chosen in every program we studied. In the warehouse tables the gain was of the order of what estimating item discrimination adds, mostly in predicting which mistake was made rather than whether the answer was right. Bock (1972) gave a model to use it. These results measure what it adds to held-out prediction in these programs.</p>
+<h3>Data and code availability</h3>
+<p>The tables are in the nominal branch of the Item Response Warehouse, version 5.0 (Domingue, 2026). The fix. With a1 fixed at 1 and all slopes free except that of the reference distractor, the model is the same (the map between the two sets of slopes is one to one when the key slope is not zero) and mirt reaches the maximum, with the same EM, the same quadrature, the same cap of 2,000 cycles and the same EAP. In the 5,800 folds of the warehouse tables, all fits converged (a median of 63 cycles, at most 841), the training log-likelihood rose by a median of 17 units over the default fit (at most 277), and the 6 folds in which the default fit had degenerated without the convergence flag detecting it disappeared.</p>
+<h3>Checks.</h3>
+<p>In 34 folds an independent optimizer checked the maximum. In 11 folds of 11 tables, the refit came within 0.005 log-likelihood units of the maximum found by an independent EM (the default convergence tolerance of mirt), and the default parametrization started from the refitted solution stayed there and predicted the same (largest difference in the probability of the chosen option, 3.4e-4). In 23 other folds of 22 tables, a quasi-Newton optimizer started from two points reached the same solution, between 0.0002 and 0.011 units above the refit. Out of sample, the refitted model predicted better than the default fit in 104 of the 116 tables (100 by more than two SE; median gain 0.39 millibits per response) and worse in 12 (8 by more than two SE), all by 0.08 millibits or less.</p>
+<h3>With priors.</h3>
+<p>With the priors of Table A1, the default parametrization reaches the posterior mode: in 12 folds of the TIMSS and PIRLS fits, five versions of the fit (an independent optimizer from two starting points, and mirt by default, with a tighter tolerance and from another start) gave the same log-posterior and the same held-out gain.</p>
+<p>The 3PL and the nested logit with guessing. The 3PL and the nested logit with guessing were fitted with mirt&#x27;s EM under the priors of Table A1 (lognormal(0, 1) on a1, Beta(5, 17) on g, mirt&#x27;s expbeta prior). These fits stopped below the posterior maximum while reporting convergence (by 0.5 to 102 log-posterior units in 480 fits of 24 tables), and a tighter tolerance did not change this. The cause is not that of the nominal model. In mirt, up to the current release (1.48) and including the version we used, the log-density of the expbeta prior is correct but its first and second derivatives are taken with respect to g rather than its logit, the parameter the EM updates; the prior then pulls g toward its mode more strongly than intended, and the EM settles at a point that is not the posterior mode. Xiao (2026) documented the error, which is corrected in the development version 1.48.2; we observed the stop independently. We therefore polished every fit of the two models in the main analyses (5,800 fits of the 3PL, 3,200 of the 3PLNRM in the comparison of Section 4.3, 11,600 in the analysis against the other half [all 10 samples, for the standard errors of Section S10.2] and 3,480 for new test-takers) to the posterior mode reached from mirt&#x27;s solution, maximizing mirt&#x27;s log-posterior with the derivatives of the prior taken with respect to the logit of g, and the figures in the main text are at that mode. The posterior can have more than one mode: from other starting points a higher one exists in some fits. No sign changed, and the counts moved in favor of the 3PL and the 3PLNRM. In 8 fits of the psychTools and vocabulary tables the maximum is at infinity, because a distractor was never chosen in the training data; the two counts that this moves are given both ways. The other analyses that use these two models were polished in the same way: 40 fits in the group-gap analysis, 208 for the short form, 100 in the comparison with the mixture with uniform guessing, 3,025 nested logits in the Czech exams and 1,240 fits in 124 TIMSS and PIRLS tests (all 84 of TIMSS 2019 grade 8 and 10 at random from each other database). In TIMSS and PIRLS, polishing moved the 3PLNRM against the nominal model (Section S8). The chance-filter check (Section S10.5) and the per-database gaps between the 3PLNRM and the nominal model in Section S8 keep mirt&#x27;s fits. The guessing vignette cited in Section 1.3 fitted its 3PL in mirt with the same prior before the correction; it reports that, without any prior on g, the 2PL → 3PL gain stayed positive in the three tables where it checked this.</p>
+<p>Table A1. Priors and where they are used. Model Parametrization Priors Used in 3PL and 3PLNRM mirt default lognormal(0, 1) on the slope; Beta(5, 17) on the lower asymptote (mirt&#x27;s expbeta prior; mean .23, the same with four and five options); none on the intercepts or on the distractor parameters of the 3PLNRM all analyses 2PL with prior mirt default lognormal(0, 1) on the slope sample-size curve; TIMSS and PIRLS Nominal, set A default (a1•ak) lognormal(-log(m -1), 1) on a1; N(0, 2) on the distractor slope multipliers ak and on the distractor intercepts; key intercept free sample-size curve; TIMSS and PIRLS Nominal, set B direct (a1 = 1) lognormal(0, 1) on the key slope; N(0, 1) on the distractor slopes; N(0, 2) on the distractor intercepts sample-size curve; check of the 3PLNRM in the warehouse tables Nominal direct (a1 = 1) none (maximum likelihood) warehouse tables; Czech exams</p>
+<p>Note. m is the number of options. Set B is the translation of set A to the direct parametrization; both were fixed before their results were seen. Both center the distractor slopes at the slope of the reference distractor, where the nominal model reduces to a 2PL with fixed distractor shares, so they shrink toward the binary baseline. The prior on the key slope is also a sign restriction: it makes the key more discriminating than the reference distractor. In the warehouse tables it binds in 446 items, and the priors change the prediction by more than two between-sample SE in 88 of the 116 tables; that is why they are not used there.</p>
+<h3>Appendix B • Measures, aggregation and Fisher information</h3>
+<p>ω c . For each item, each observed category k and each other category k′, we keep the heldout responses that fall in {k, k′}, form for each model the normalized probability p k / ( p k + p k ′ ), and compute the binary IMV between the two models on that two-category outcome. Results are averaged over k′ (weighted by the number of responses in each pair) and over k (weighted by the frequency of k) (Kanopka, 2023, Ch. 3). A table&#x27;s ω c is the mean over items within a fold, averaged over the five folds. On 12 warehouse tables (six comparisons each), pooling the heldout cells of the five folds before averaging over items gave the same sign in all 72 comparisons and, except for the nested logit against the nominal model, whose ω c is close to zero, differed by a median of 2% (at most 18%).</p>
+<h3>Log-loss in bits.</h3>
+<p>For a held-out response with chosen option o and key probability p = P(key), the log-loss of the chosen option splits exactly into a correctness part and a &quot;which wrong option&quot; part: where y is 1 if the response is correct.</p>
+<h3>Meta-analysis.</h3>
+<p>Tables were nested in family-year clusters (in &quot;other tests&quot;, each table is its own cluster), 28 clusters for all 116 tables. The four ENEM areas of a year share test-takers, so the year cluster absorbs their common variation. The gains from the option and from discrimination come from the same tables and samples, so the interval of their ratio comes from a bivariate multilevel meta-analysis of the two (sampling covariance from the 10 samples; unstructured random effects by cluster and table; Fieller&#x27;s method).</p>
+<h3>Fisher information.</h3>
+<p>In the mirt parametrization of the nominal model,</p>
+<p>The information of the full option response is I ( θ )= a1 2 Var P ( ak ), and the information of correctness alone is where K is the key.</p>
+<p>Their difference is the information added by the choice among distractors: the information about which distractor, weighted by the probability of a wrong answer (cf. Fei et al., 2026).</p>
+<p>For each table we computed the ratio of option information to correctness information, summed over items and averaged over a standard normal θ, from the nominal parameters of the first fold of each sample. From the same parameters we computed, by decile of θ, a1 2 Var ( ak | wrong , θ ): the Fisher information about θ that a wrong answer carries through the choice among the distractors.</p>
+<h3>Standard errors.</h3>
+<p>The table-level SE comes from 10 samples that overlap by chance in a pool of about 30,000, and relative to the population it is short by a factor of about 1.45 in ENEM (1.25 to 1.73 in ENCCEJA). As with K-fold cross-validation in general, an SE that ignores the overlap between training and test sets is too small (Bengio &amp; Grandvalet, 2004). Even with the SE inflated by that factor, ω c remains above two SE in the 108 ENEM and ENCCEJA tables. In the computer-based residency form the factor is 11.6, and with it ω c stays far from zero (z about 9); in the three small tables the SE only measures the split into folds.</p>
+<h3>Appendix C • The other warehouse tables and the designs outside the warehouse</h3>
+<p>Table C1. The 116 warehouse tables. Family Tables Years Options Usable items per table Test-takers per table Mean proportion correct (median; range) ENEM 52 2013 to 2025 5 43 to 50 980,793 to 1,000,000 .337 (.248 to .497) ENCCEJA 56 2018 to 2025, without 2021 4 28 to 30 17,997 to 874,787 .522 (.277 to .702) Other tests 8 various 3 to 6 16 to 119 1,509 to 723,232 .586 (.514 to .819) Note. Usable items and proportion correct after preprocessing, in the analysis samples. Options: one value per table; item by item after preprocessing, the other tests have 3 to 10 response categories (Figure S7).</p>
+<p>Of the 116 tables, 110 are Brazilian (all ENEM and ENCCEJA tables and the two residency forms). Each ENEM table of the warehouse comes from a one-million-person subsample of its administration, as its documentation states, and holds between 980,793 and 1,000,000 test-takers.</p>
+<p>The other warehouse tables.</p>
+<p>The other 8 tables are the Reading the Mind in the Eyes Test (RMET; Baron-Cohen et al., 2001) and the Multiracial RMET (MRMET; Kim et al., 2024), both from normative data sets; the paper-based (2022) and computer-based (2020) forms of a</p>
+<p>Brazilian medical residency exam (Borges et al., 2024); EdNet reading and listening items (Choi et al., 2020); a vocabulary test (Open Psychometrics, 2018); and 16 ability items distributed with psychTools (Revelle, 2026).</p>
+<p>TIMSS, PIRLS and Czech tables. A table is a country-by-subject test: 469 in all (TIMSS 2019: 84 in grade 8 and 118 in grade 4; TIMSS 2023: 88 and 116; PIRLS 2021: 63), Analysis Planned before the main run Fit of the nominal model Where ( §: main text; S: this supplement) Group gaps no 3PL and nested logit with guessing §4.8, S7 TIMSS and PIRLS no (criteria fixed before fitting) direct, without priors; set A with priors §4.2, S8 What the gain depends on in TIMSS and PIRLS no (criteria fixed before fitting) set A with priors S8 Czech national exams no (criteria fixed before fitting) maximum, no priors; default fit by subject §4.2, S9 Meta-analytic specification; SE of the correlations; doubtful keys; flagged items (criteria fixed before computing); degenerate folds; uniform random guessing no maximum §5, S10 Chance-level filter; disjoint samples; crossed-effects meta-regression no default fit §5, S10 Simulated controls yes for the ENCCEJA and RMET controls in ω c (ran before the main run; rerun with the refitted model); replications 6 to 10, the ENEM table, the generic test, the bits, the oracle and the correlations with true ability were added after the results (exploratory) maximum, no priors §4.1, §5, S10.7</p>
+<p>Gain per wrong answer by ranked wrong option (Figure S7) no (exploratory, after the results) maximum, no priors §4.4, S13 ω c by item: proportion correct and informative distractors yes (secondary) maximum, no priors §4.4 Item position in the ENEM booklets no (exploratory, after the results) maximum, no priors; 3PL at the posterior mode §4.1, S14 Which-wrong-option gain against item prevalence no (exploratory, after the results) maximum, no priors §4.1, S16 Test length yes (secondary) default fit S5 Short form and items saved no maximum, no priors §7.4, S6 Re-run with another seed yes not done §3.10</p>
+<h3>S2 • Inclusion, skipped tables and preprocessing</h3>
+<p>Of the 140 tables of version 5.0, 4 were never candidates (all with fewer than 10 items).</p>
+<p>To the other 136 we applied the inclusion rules of an earlier 12-table analysis of the same nominal branch in the warehouse&#x27;s public repository. A table was skipped if it had fewer than 1,000 test-takers, fewer than 10 usable items, not exactly one keyed option per item, responses not scored 0 or 1, unscored free text, an option set that changed between presentations of an item, or a design so sparse that no respondent answered half of the most-answered items. Twenty tables were skipped (Table S2).</p>
+<p>Table S2. Skipped tables and reasons.</p>
+<p>Reason Tables Fewer than 10 usable items 5 Fewer than 1,000 test-takers 4 Sparse design 4 Option set changes between presentations 2 Responses not scored 0 or 1 2 Unscored free text 2 Not exactly one keyed option per item 1 Total 20</p>
+<p>Non-response codes were treated as missing. Options chosen by fewer than 1% of respondents to an item (other than the key) were pooled into one &quot;rare&quot; category; if the pooled category stayed below 1%, those responses were dropped. Items with fewer than three categories, or answered correctly by everyone or no one, were dropped, as were persons who answered fewer than half of the items. The key was always coded as the last category. For designs in which the median person answered fewer than half of the item bank (the two EdNet tables), we used the 40 most-answered items and the persons who answered at least half of them.</p>
+<p>The samples were drawn with a seed derived from the table name, so that no result depends on the order in which tables were run.</p>
+<h3>S3 • Fitting the models in mirt</h3>
+<p>See Appendix A of the main text, with the priors in its Table A1.</p>
+<h3>S4 • Choice among wrong options: item-level tests</h3>
+<p>In the lowest decile of the rest score, the spread of wrong answers over the wrong options departed from uniform in 96% of ENEM items and 94% of ENCCEJA items (G-test, p &lt; .001).</p>
+<p>Among chance-level scorers, it departed from uniform in 99.7% of ENEM items and 97% of ENCCEJA items. With pools of tens of thousands of test-takers these tests reject uniformity almost always, which is why the main text reports the share of the favorite distractor instead. The planned summary, the effective number of wrong options chosen (D′), was replaced in reporting by these two measures, which are easier to read.</p>
+<h3>S5 • Test length</h3>
+<p>This analysis uses the default fit, and both figures of each comparison come from it. In the ENEM and ENCCEJA tables we repeated the cross-validation with 10 and with 20 items chosen at random (3 samples per table). With 10 items chosen at random, the median ω c 2PL → nominal over the 324 table-samples was 0.0076; with 20 items, 0.0108; with the full test, larger.</p>
+<p>On correctness the option appeared to help slightly more in short tests (median binary IMV 0.0025 over the 324 table-samples with 10 items, against 0.0018 over the 108 table means with the full test); the two medians are over different units, so this is not a paired comparison.</p>
+<h3>S6 • Short form and items saved</h3>
+<p>For each of the 52 ENEM tables, item parameters were calibrated on 10,000 test-takers and the test was given, post hoc, to 10,000 others, with no persons or items shared. A short form drew items from a 22-item half of each test and was scored by EAP; the criteria were the 2PL score on the held-out half and the mean 2PL score on the two areas taken on the other test day.</p>
+<p>With a bank of 22 items and 10 items given, the item selection is close to a fixed short form, and we call it that; De Ayala (1989) compared adaptive tests based on the nominal model and on the 3PL in the same spirit. We also scored linear tests of increasing length and, as a null, repeated everything with the letters of the distractors shuffled. The categorical information of the 3PLNRM was computed with a closed form checked against numerical derivatives, because mirt does not provide it for that model. The nominal model was fitted to its maximum (Section 3.1 of the main text).</p>
+<p>Results. Scored with the 3PLNRM, the short form reached, with a median of 8.4 items, the correlation with the 2PL score on the held-out half that right/wrong 3PL scoring reached with 10 (.696 against .685 after 10 items); with the other test day as criterion, 8.9. The 3PL and the 3PLNRM were fitted with mirt&#x27;s EM under the priors of</p>
+<p>Table A1 of the main text and polished to the posterior mode reached from mirt&#x27;s solution (Appendix A of the main text); with mirt&#x27;s own stopping point, the figures were 8.4 (.696 against .687) and 9.0. In a linear test with the full 45-item area and the other test day as criterion, nominal scoring matched 2PL scoring with 30% fewer items (median of 52 tests), in line with what Fisher information implies (28%), although not test by test (from about 10% in the human sciences to 41% in the natural sciences). Table by table, the measured saving exceeded the one Fisher information implies in 26 tests and fell short in 23, and in 3 (all in human sciences) nominal scoring did not reach the correlation of the 2PL with the full area. With a 22-item half as the test and the other half as criterion, the saving was 24%.</p>
+<p>This 28% compares the nominal model with a separately fitted 2PL; the 38% of Section 4.4 of the main text compares the option&#x27;s information with the correctness part of the same nominal model, and the two are different quantities. With the letters of the distractors shuffled, there was no saving.</p>
+<h3>S7 • Group gaps</h3>
+<p>Data. The full 2023 ENEM microdata: test-takers present in the four areas on both days, the regular booklets of the first administration (2,666,644 persons). Three disjoint calibration samples of 20,000 test-takers and one scoring sample of 500,000 different test-takers. Items: 45 in natural sciences, 45 in human sciences, 40 in languages (without the foreign-language items) and 43 in mathematics. The criterion of each area is the mean official INEP score in the two areas taken on the other test day. Group contrasts (focal against reference): school type, family income, mother&#x27;s education, race, region and sex.</p>
+<h3>Models and scoring.</h3>
+<p>In each area and calibration sample we fitted the 3PL and the nested logit with guessing (3PLNRM) with mirt&#x27;s EM under the priors of Table A1 of the main text (polished to the posterior mode reached from mirt&#x27;s solution; Appendix A of the main text), and scored the 500,000 test-takers by EAP on a grid of 61 points from -4 to 4 with a standard normal prior. Our 3PL orders test-takers almost as the official score of the same area does (Spearman .979 to .992).</p>
+<h3>Measures.</h3>
+<p>For each area, contrast and score: the standardized gap d, the validity r (the correlation with the criterion) and d/r, the gap per unit of validity, which removes the attenuation that measurement error causes in both; the gap at equal criterion, γ, from a regression of the score on a restricted cubic spline of the criterion (5 knots) and the group, divided by r, with ordinary least squares weighting and with weighting by the focal group; and differential prediction in the sense of Cleary, from a regression of the criterion on a spline of the score and the group. Option-level differential functioning is what the literature calls differential distractor functioning (Green et al., 1989; Penfield, 2008; Suh &amp; Bolt, 2011).</p>
+<h3>Simulations.</h3>
+<p>Two simulations without option-level differential functioning that reproduce the observed validity serve as nulls: a generative one, in which ability is drawn from a latent regression on the criterion and the groups and all responses are simulated from the 3PLNRM (validity within -0.004 and +0.003 of the data), and a conditional one, which keeps each response&#x27;s correctness and redraws only the distractor chosen. A permutation of the group label within each contrast (20 times) gives the noise floor of the change in γ/r (standard deviation at most 0.0034).</p>
+<p>Results. Scoring the option raised validity in all four areas (natural sciences .694 to .733, mathematics .694 to .709, human sciences .738 to .741, languages .703 to .708, without the 3,547 test-takers who left a whole area blank). The ratio of d/r under option scoring to d/r under right/wrong scoring was 0.98 to 1.02 across 4 areas and 5 group contrasts (sex is reported separately). Raw gaps widened slightly, as expected from a more valid score (for example, the income gap in natural sciences went from 1.315 to 1.361 standard deviations of the score).</p>
+<p>Against the simulations, the option did not shift disadvantaged groups uniformly: in 20 of 20 area-by-contrast cells it placed them higher among low scorers (the three lowest deciles of the criterion) and lower among high scorers (the three highest); the mean shift, within ±0.03 SD, changed sign with the weighting. The 3PL overpredicted the disadvantaged group on the other day (in natural sciences, income: -0.371 SD of the criterion), and the 3PLNRM overpredicted it less in the 20 cells, which is what its higher precision predicts. For sex, the option placed women higher at equal criterion in natural sciences (about 0.04 SD). The data do not separate whether the tilt reflects option-level differential functioning or model misfit where guessing is common.</p>
+<h3>S8 • TIMSS and PIRLS</h3>
+<p>Design details. Items needed at least 100 responses, tables at least 10 items and persons at least 4 chosen options. Benchmarking participants that are exact copies of their country&#x27;s data were excluded; those with their own samples entered, grouped with their country in the metaanalysis. Omitted responses were excluded and items not reached were treated as not administered.</p>
+<p>Table S3. TIMSS and PIRLS by database (millibits per held-out response; ratio of the option&#x27;s gain to the gain from discrimination).</p>
+<p>Database Tests Log-loss reduced, without / with priors Ratio without priors Ratio with priors Share from which wrong option, without / with priors Median responses per item TIMSS 2019, grade 8 84 81 / 84 1.07 1.23 72.6% / 77.7% 612.5 TIMSS 2023, grade 8 88 71 / 84 1.37 1.49 61.0% / 74.5% 762.5 TIMSS 2019, grade 4 118 76 / 117 0.80 1.48 41.9% / 72.9% 600.5 TIMSS 2023, grade 4 116 87 / 115 0.90 1.38 44.2% / 70.3% 680.25 PIRLS 2021 63 39 / 63 0.52 1.45 12.6% / 78.0% 465 All 469 354 / 463 0.93 [0.77, 1.16] 1.39 [1.31, 1.48] 50.9% / 74.6% 633 Note. Per-database intervals carry a Monte Carlo error of about 0.05 and are not shown; each database&#x27;s interval with priors lies above 1.</p>
+<p>Further detail. Table S3 gives the results by database. The figures without priors (354 of 469 tests; 0.93 times discrimination) are not maximum likelihood estimates: the EM was stopped at 2,000 cycles, and in part of the folds, including some flagged as converged, a slope grows without bound and the likelihood has no finite maximum; taken to the maximum, the gain fell in 8 of 9 tables checked and rose in one. The priors are not neutral either: of the six tests in which the option did not pay with priors, in two (Côte d&#x27;Ivoire, grade 8 mathematics, and Morocco) the key-slope prior forces keys that the data place below the reference distractor, and in 7 tests the nominal model without priors predicted better than with them. In two simulations from a fitted nominal model, the fit with priors recovered 31% and 42% of the gain of the true model and the fit without priors 6% to 7%, so the gains reported are probably conservative. The share of the gain from which wrong option was chosen (70% to 78% by database) was below Brazil&#x27;s under the same priors and sample size (81% to 93%). The nested logit with guessing predicted right or wrong better than the 3PL, but in total log-loss it predicted worse than the nominal model with priors in all five databases (by 0.8 to 5.9 millibits per response with mirt&#x27;s fits). At the posterior mode the gap widened: in TIMSS 2019 grade 8, refitted in full, from 0.8 to 1.7 millibits (1.3 without the items whose maximum is at infinity in some fold), and in 10 random tests of each other database the median change was negative. Unlike in Brazil, with about 600 responses per item and no prior on its distractor parameters, the mode overfits them. Of the 463 tests with a positive gain with priors, 428 exceeded two fold-based SE, and 367 with that SE multiplied by 1.8, the factor by which one replication per table understates it in bits. Against the replication criteria fixed beforehand, the result held in part: in TIMSS 2019 grade 4, 89% of the tests had a positive ω c , against the 90% required; the criterion on the ratio to discrimination was met only with priors; and the share from which wrong option stayed below the 75% required (51% without priors; 74.6% with priors, an exploratory reading). Whether the option&#x27;s gain is larger in harder tests depends on the measure and the specification: as declared (ω c without priors) it is, but in bits with priors mean proportion correct was not associated with the gain overall (p = .83), and in grade 8 the association went the other way. High-performing countries gained less, but gained (12 of the 13 TIMSS 2019 grade 4 tests from countries scoring above 560 points).</p>
+<h3>What the gain depends on.</h3>
+<p>Across the 469 tests, a meta-regression of the gain with priors on both models, in bits, on the number of responses per item, mean proportion correct, items per student, subject, grade, mode, script and the country&#x27;s mean performance, with random effects of country, database and test, was read with decision rules fixed before it was run; one rule, for correlated moderators, was specified after a first look at the coefficients and changed no verdict. The gain grew with the responses per item: +1.53 millibits per standard deviation [1.19, 1.87], about 2.3 per doubling, from +1.51 to +1.59 under other random-effects structures and with the SE multiplied by 1.8 or 2. Within three tests, repeating the analysis with priors on two disjoint halves of the students lowered the gain by 2.3 to 4.7 millibits, which is what the size of the calibration sample predicts. Test difficulty and country performance were too correlated (r = .83) to separate, and mean proportion correct alone had no association (+0.04 [-0.36, 0.44]). The association with items per student is fragile: with the database as a fixed effect it was +0.51 [-0.08, 1.10]. No moderator met the rule for &quot;does not depend on&quot;.</p>
+<h3>S9 • Czech national exams</h3>
+<p>A form entered if it had at least 10 multiple-choice items with a key and at least 1,000 test-takers; the mathematics tests did not, with too few multiple-choice items. The key of each item was derived from the scored responses and matched the published key in 2,206 of 2,215 comparable items. Under CZVV&#x27;s terms of use, test booklets and keys are protected: the data are analyzed for research and not redistributed, and no item or key is reproduced.</p>
+<h3>Both fits.</h3>
+<p>With a1 fixed at 1, modeling the option reduced held-out log-loss in 119 of 121 forms, gained 0.80 times as much as discrimination and drew 77% of its gain from which wrong option was chosen, against 84% in Brazil with the same fit. With the default fit, the count was the same (119 of 121), the gain was smaller than in Brazil with the same fit (5.6 vs 14.9 millibits per response, about a third; about half of Brazil&#x27;s four-option ENCCEJA) and, pooled, smaller than the gain from item discrimination (ratio 0.78, 95% CI 0.67 to 0.96): about as large in the Czech-language tests (1.17, 0.95 to 1.36) and about half as large in the foreign-language tests (0.54, 0.47 to 0.63), where discrimination adds much more. As in Brazil, most of the gain (79%, vs 85% in Brazil with the same fit) came from which wrong option was chosen. Figures by subject are reported for the default fit only.</p>
+<h3>Further detail.</h3>
+<p>With the default fit, per wrong answer the gain was 0.57 of Brazil&#x27;s (95% CI 0.46 to 0.67), in part because the Czech tests are easier. The difference between the schoolleaving exam and the entrance exam is mostly one of subject (Czech against foreign languages), not of exam, and we attribute the smaller size to no cause: the Czech forms are easier, have three or four options and mix formats, and none of these was isolated. With the default fit, the nested logit with guessing predicted correctness better than the nominal model, but lost to it on which wrong option was chosen in 96 of 121 forms, so we do not call it the best model there. The SE is short in 42 forms (16 small ones and 26 whose samples overlap by more than half), so we report no Czech counts above two SE. The mathematics tests, where guessing is most common in Brazil, did not enter.</p>
+<h3>S10 • Robustness details</h3>
+<h3>S10.1 • Meta-analytic specification.</h3>
+<p>With crossed year-by-area random effects, the estimates by family did not change. The intervals widen (up to 3.4 times) only if the four ENEM areas are treated as a sample from a population of possible areas, which answers a question about a new area; with the areas fixed (they are all the areas there are), the intervals are like those of Table 1 of the main text. Adding the sampling correlation between ENEM areas that share testtakers (about .13) changed nothing. With the family as a fixed effect and crossed effects within families, the overall ratio of option to discrimination is 1.33 rather than 1.36. In ENCCEJA, the difference between the option and discrimination, +1.3 millibits per response [-0.3, 3.0], is not distinguishable from zero under any specification, and discrimination exceeded the option by more than two SE in 16 of the 56 ENCCEJA tables (with the unadjusted SE). Across families, with each table&#x27;s SE multiplied by the factor of Appendix B of the main text (Standard errors), the difference favored the option by more than two SE in 75 and discrimination in 18 of the 114 tables with that factor. The meta-regression on difficulty with crossed effects was not redone: with the default fit, its slope was -0.023 (p &lt; .001), against -0.020 with the main specification and the same fit.</p>
+<p>times the gain from discrimination (1.53 with all items as well), and 82% of it, rather than 87%, came from which wrong option was chosen. These items are not neutral: they carry 20% of the option&#x27;s gain and 21% of discrimination&#x27;s, against about 11% and 8% for items of the same difficulty in the null fixed before computing. 23 of the 24 items that INEP dropped from scoring are among those excluded.</p>
+<p>By area, in natural sciences the share from which wrong option fell to 76%, and the ratio to discrimination fell in natural sciences and mathematics; table by table, the share stayed below 80% in 23 of the 52 tables. Excluding every flagged item instead (34% of responses, more than half of them with a sound key), the option kept 79% of its gain per response and was 1.21 times the gain from discrimination, with 71% from which wrong option was chosen.</p>
+<h3>S10.4 • Degenerate folds.</h3>
+<p>With the nominal model at its maximum, no fold degenerated, and the binary IMV 2PL → nominal exceeded two SE in 116 of 116 tables. With the default fit, 6 of 5,800 nominal folds had degenerated without the convergence flag detecting it, in 5 samples of 2 tables, and on average 0.14% of fits per table did not reach convergence (at most 1.6%). S10.5 • Removing chance-level responders. With a chance filter that removes persons scoring significantly below chance (lower binomial tail below .001), on the same samples and with the default fit of the nominal model and mirt&#x27;s fit of the 3PL in both runs, the filter removed a median of 0 persons per sample across tables (at most 1.1 per sample, in one table). None of the five measures changed sign or count: the median difference was 0 SE and the largest 2.4 SE in one table, with an SE that treats the two runs as independent although they share samples. ω c 2PL → nominal remained above zero in 116 of 116 tables. S10.6 • Disjoint samples. The 10 samples per table were drawn independently from the same pool and overlap by chance. With the default fit, we refitted the primary measures on 1,073 blocks with no person repeated, in 113 tables. The estimates came out within 1.1% of the mainanalysis estimates from the same fit in ENEM and ENCCEJA, and ω c 2PL → nominal exceeded two SE in 113 of 113 tables.</p>
+<h3>S10.7 • Simulated controls.</h3>
+<p>We ran simulated data through the same pipeline: the same preprocessing, five folds over cells, the Rasch model, the 2PL and the nominal model at its maximum, and the same measures (Table S4, Figure S6).</p>
+<p>Each condition had 10 replications of 3,000 persons with standard normal ability. In a negative control, correctness was simulated from a 2PL fitted to a real table, and wrong answers were drawn from the item&#x27;s real distractor shares without dependence on ability, so the option carries no information beyond correctness. In a positive control, responses were simulated from a nominal model fitted to its maximum on the same table. We used a hard table with four options (ENCCEJA 2019, upper secondary, mathematics), an easy one (RMET) and an ENEM test (2019 mathematics, 45 items with five options). We also simulated a generic test of 40 four-option items, with distractor slopes drawn from a normal distribution with mean 0 and SD 0.5 or, as a null, all equal. To see how much of the available gain the fitted model recovers, an oracle predicted the held-out responses with the true item parameters, from an EAP estimate computed on each person&#x27;s training responses with those parameters.</p>
+<p>With no information in the distractors, modeling the option lost 0.7 to 1.3 millibits per response, the price of its extra parameters, in all 40 replications (ω c 2PL → nominal from -0.0014 to -0.0003). With information, it gained 8.3 (RMET), 16.4 (ENCCEJA) and 23.8 millibits (ENEM), 1.38, 1.82 and 1.27 times the gain from discrimination, with 74% to 82% of it from which wrong option was chosen. These gains are of the order of those in the real data with the same fit and somewhat above them (7.0, 13.7 and 19.4 millibits; ω c 0.0037, 0.0202 and</p>
+<p>Table S4. Simulated controls: held-out gain in millibits per response (mean over 10 replications; SE in parentheses). Generating model Test Discrimination Option of which: which wrong option Option / discrimination Oracle Recovered 2PL, no information in the distractors ENEM 2019 mathematics 18.62 (0.31) -1.31 (0.04) -0.98 (0.03) 1.76 ENCCEJA 2019 mathematics 8.66 (0.23) -1.00 (0.06) -0.67 (0.04) 1.44 RMET 5.34 (0.10) -0.84 (0.06) -0.65 (0.05) 1.42 Generic, 40 items 7.03 (0.65) -0.72 (0.03) -0.60 (0.03) 1.32 Nominal ENEM 2019 mathematics 18.77 (0.24) 23.81 (0.34) 19.61 (0.29) 1.27 26.68 89% ENCCEJA 2019 mathematics 9.01 (0.21) 16.37 (0.45) 12.10 (0.32) 1.82 18.62 88% RMET 5.98 (0.16) 8.27 (0.24) 6.55 (0.17) 1.38 10.42 79% Generic, 40 items 8.05 (0.66) 25.60 (1.56) 22.67 (1.37) 3.18 27.61 93% Note. Discrimination: Rasch → 2PL. Option: 2PL → nominal. Oracle: the gain over the same fitted 2PL of predictions with the true item parameters, at an EAP estimate computed with those parameters from the person&#x27;s training responses; it includes what the 2PL loses by estimating its own parameters (1.3 to 1.8 millibits in the conditions without information, where the true model is a 2PL). Recovered: option / oracle.</p>
+<h3>S10.8 • Uniform random guessing.</h3>
+<p>In the 20 tables of the sample-size curve (first sample), we fitted the mixture of the nominal model with uniform random guessing of Jin et al. (2022) by marginal maximum likelihood on the training cells and evaluated it on the same held-out cells as the other models. Compared with a fully converged nominal model it improved prediction in 17 of 20 tests (median +0.9 millibits per response), but it predicted worse than the nested logit with guessing directed to the key in all 20 (median 3.7 millibits per response with priors on the latter and 3.6 without). Holding the nested-logit core fixed, sending the abilityindependent mass to the key instead of spreading it evenly over the options accounts for most of that gap (2.3 millibits). When uniform guessing was simulated as the truth, the nested logit without priors showed no such advantage.</p>
+<h3>S10.9 • Three further checks.</h3>
+<p>All three use the default fit. We reproduced that earlier 12-table analysis. Treating an &quot;X&quot; non-response code in one residency form as missing changed no count. On the last series of the Standard Progressive Matrices (Myszkowski &amp; Storme, 2018), which is below the inclusion threshold, the design without priors gave ω c 2PL → nominal 0.0105 (SE 0.0004), although with about 400 responses per item it would need priors and may overfit without them.</p>
+<h3>S11 • The sample-size curve</h3>
+<p>The 20 tables are ENEM 2013 ENEM , 2017 ENEM , 2021 ENEM and 2025 in their four areas and four ENCCEJA tables, with calibration samples of 250 to 16,000 persons drawn from pools of about 30,000, three times each. At the largest sizes the replications overlap (with N = 16,000, two replications share 53% of their persons), so the variation between them is underestimated there.</p>
+<p>A null with no information in the distractors was built by shuffling the chosen option among wrong answers within each item, with the same draws and folds; with the default fit, the real data won in all fits with N = 250 and N = 1,000. The prior sets used at N = 250, 500 and 1,000 are those of Table A1 of the main text. distractors (I -I b ), and information per wrong answer (Var ( ak | wrong )), against θ on the scale of the nominal model; median over tables, with interquartile bands. The vertical line marks the start of the top decile of a standard normal θ. Nominal model fitted to its maximum; parameters from the first fold of each of the 10 samples.</p>
+<h3>S12 • Fisher information per wrong answer</h3>
+<h3>S13 • Additional figures</h3>
+<p>An item. Figure S2 shows one ENEM 2023 mathematics item, without any model.</p>
+<p>Option A (the value obtained without multiplying by the area of the base) rose from 13% of the lowest rest-score decile to 47% of the ninth decile, about twice the key (24%). A was the most chosen option in deciles 7 to 9 (tied with the key in decile 7); the key was the most chosen in deciles 3 to 6 and again in the top decile (49%). The item was chosen as an example, not as a typical one. Figure S5. Ability against right/wrong 3PL scoring. Gain in the correlation with ability on the other half of the test, versus right/wrong 3PL scoring, one dot per table; vertical bars mark medians. (a) Nominal: ahead in 43 of 52 ENEM tables (median +0.013), 55 of 56 ENCCEJA tables (+0.019) and 7 of 8 others (+0.014), 105 in all. (b) Nested logit with guessing: 50 of 52 (+0.018), 56 of 56 (+0.021) and 7 of 8 (+0.014), 113 in all. Hollow circles mark ENEM mathematics (nominal ahead in 6 of 13 years; with guessing, 12 of 13). The counts are descriptive; Section S10.2 gives them with a per-table SE. Nominal model fitted to its maximum; 3PL and 3PLNRM at their posterior mode (Section 4.5 of the main text). 13 (Table S5). Among the areas that open a test day, the nominal model trailed the 3PL in the first 15 positions only in natural sciences (7 of the 9 years since 2017, when it opens the second day); among the areas taken second, in 22 of 26 tables. The which-wrong-option gain also fell with position (by more than two SE in 39 tables, and in 33 with the factor), most in mathematics.</p>
+<p>Positions are those of the booklet, which need not be the order in which each test-taker answered.</p>
+<p>The booklets follow a seating rotation rather than a recorded randomization. Position here does not separate fatigue, time pressure and practice.</p>
+<p>Table S5. Item position in the ENEM booklets and the gains on correctness, by area (13 years each): years in which the slope per 10 positions was more than two SE above zero (2PL → 3PL) or below zero (3PL → nominal), mean slope (millibits per response per 10 positions), and the item-adjusted gain in the first and last 15 positions (the table&#x27;s mean gain plus the mean withinitem deviation in those positions; medians over years). Human sciences Natural sciences Languages Mathematics 2PL → 3PL: years; mean slope 13; +0.78 11; +0.38 12; +0.74 11; +0.56 2PL → 3PL: first 15 positions 2.7 3.1 1.6 5.8 2PL → 3PL: last 15 positions 4.2 4.3 3.0 7.6 3PL → nominal: years; mean slope 12; -0.77 11; -0.54 11; -0.64 11; -1.03 3PL → nominal: first 15 positions 0.1 -0.9 1.3 -3.2 3PL → nominal: last 15 positions -1.2 -2.3 0.0 -5.5</p>
+<h3>S15 • The nested logit without guessing</h3>
+<p>The pattern of the nested logit with guessing in Section 4.3 of the main text held for the nested logit without guessing on a smaller scale: in bits its advantage over the nominal model was 0.50 millibits per response, all of it in correctness, and in which wrong option was chosen the nominal model was better, by more than two SE in 101 of 116 tables.</p>
+<h3>S16 • The which-wrong-option gain against item prevalence</h3>
+<p>Right/wrong models predict which wrong option is chosen from each item&#x27;s distractor shares in the training data, the same at every ability (Section 3.2 of the main text). As a step of the same kind on correctness, we predicted each held-out response from the item&#x27;s proportion correct in the training folds of the same sample and compared it with the Rasch model and the 2PL on the same held-out cells, pooled as in</p>
+<p>Table 1 of the main text. Moving from item prevalence to the 2PL gained 51.5 millibits per response [44.7, 58.3] (ENEM 51.5, ENCCEJA 47.1, other tests 60.2). Moving to the Rasch model instead gained 40.6 [33.7, 47.5]. The whichwrong-option part of the option&#x27;s gain (13.0 millibits) was 0.25 of that [0.21, 0.29] (ENEM 0.31, ENCCEJA 0.21, other tests 0.16; bivariate meta-analysis with a Fieller interval, Appendix B of the main text), although the nominal model&#x27;s ability estimate, unlike the 2PL&#x27;s, also uses the options. With a single proportion correct for the whole test instead of one per item, the step also absorbs item difficulty (138.8 millibits) and the ratio falls to 0.09 [0.08, 0.11]. Exploratory, added after the results.</p>
+<p>Author contributions. S. Rivadeneira Quintero ran the analyses and wrote the manuscript; M. Mazzaferro prepared the ENEM data; S. Rivadeneira Quintero, K. Kanopka and B. W. Domingue contributed to the design; all authors reviewed the manuscript. Funding. The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305D240025 to Stanford University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education. Conflicts of interest. The authors declare no conflicts of interest. Use of AI tools. AI assistants (Claude Code, Codex and Grok) helped write and check the analysis code, search the literature, and draft and edit the text. The authors designed the study, verified all results and take full responsibility for the content.</p>
+<h3>Declarations Appendix A • Fitting the models in mirt</h3>
+<p>The problem. In mirt 1.47, the default parametrization of the nominal model is P k ( θ )∝ exp( a1 ⋅ ak k ⋅ θ + d k ), with the slope multiplier of the reference category fixed at 0 and that of the last category at m -1. In 60 of 60 folds of 12 warehouse tables, checked with an EM of our own (and, in one fold of 8 of them, also with TAM and with mirt itself with a1 fixed at 1), the EM stopped below the maximum while reporting convergence, a median of 24 log-likelihood units below it (at most 87). The cause is the product a1 • ak: the EM enters a valley with a1 very small (0.001 to 0.07) and ak very large, and moves more slowly than the convergence tolerance. This is the parametrization of Thissen et al. (2010), with an overall slope and category scoring values anchored at 0 and m -1. The documentation of mirt warns of the symptom, though not of a stop below the maximum: the nominal model can become numerically unstable when poorly chosen high and low anchor values push ak above 10 in absolute value, and it recommends anchors that keep the estimates between 0 and m -1, chosen on theoretical grounds or by reestimating after convergence (Chalmers, 2026). Because the argument that set the anchors (nominal.highlow) was removed in mirt 1.16, we applied this rule by hand, in two folds of the table of each family where the default fit had stopped furthest below the maximum (68 to 277 log-likelihood units, among the largest gaps in the 5,800 folds described below). The re-anchored default parametrization did not reach the maximum in any of the 6 folds: after up to three reestimations it ended 0.14 to 56 units below it while reporting convergence, and anchors read off the maximum itself did not reach it either. Version 1.48 of mirt adds a warning when the loglikelihood of the last EM cycles may still be increasing; our fits used 1.47, and we did not check whether that warning would flag them. from dozens of countries and 44 test languages. In the Czech exams, a table is a form that every student of a sitting takes: 121 forms from 2013 to 2026, 66 of the school-leaving exam (maturita) in Czech (25), English (26), German (11) and Russian (4), and 55 Czech-language forms of the uniform upper-secondary entrance exam, with 3-or 4-option items. The mathematics tests did not enter, with too few multiple-choice items (Section S9).</p>
+<h3>TIMSS and PIRLS.</h3>
+<p>Each student answers about 2 of 14 blocks per subject, so between 6 and 15 four-option items depending on the database (a median of 12), and the rest is missing by design. We kept the four-option multiple-choice items that IEA scales, used the whole country sample without sampling weights and followed the main design (five folds over the observed cells), adding the 2PL and the nominal model with priors; inclusion rules are in Section S8. The SE of a table comes from its five folds, and tables were pooled with a multilevel metaanalysis with random effects of country, sample and table. Because ω c depends on the number of held-out cells per item and fold (about 120 here, against about 600 in Brazil), the comparison with Brazil is made in bits only, and against Brazil&#x27;s figures under the same priors and sample size (500 and 1,000 test-takers in the sample-size curve). What the gain depends on across these tests is analyzed in Section S8.</p>
+<h3>Czech national exams.</h3>
+<p>The design was that of the main analysis: 5 samples of up to 3,000 test-takers per form, five folds over cells, the same models and measures, and the metaanalysis with forms nested in family-year clusters. The headline figures use the nominal model with a1 fixed at 1, as in the warehouse tables; the fit with the default parametrization is in Section S9.</p>
+<h3>Appendix D • Robustness checks</h3>
+<p>Table D1. Robustness checks. Check Fit What changed Verdict Crossed year-by-area effects; family as a fixed effect maximum Estimates by family unchanged; overall ratio 1.33 instead of 1.36; ENCCEJA difference +1.3 millibits [-0.3, 3.0] under any specification Holds; ENCCEJA &quot;comparable&quot; Per-table SE for the correlations of Section 4.5 maximum Nominal above the 3PL by more than two SE in 83 tables and above the 2PL in 110; 3PLNRM above the 3PL in 96; the nominal model lost to the 3PL by more than two SE in one table (ENEM natural sciences 2017) Direction holds Without the 348 items with an item-rest correlation below .05 maximum Median ω c from 0.0138 to 0.0133; positive in 108 of 108 tables Holds Without the items flagged by INEP&#x27;s key review whose key is also weak (15% of ENEM responses) maximum ENEM gain from 18.6 to 17.1 millibits (92% kept); 1.53 times discrimination, as with all items; these items carry 20% of the option&#x27;s gain, against about 11% for items of the same difficulty Holds; these items carry more than their share Degenerate folds maximum None No effect Mixture with uniform random guessing (Jin et al., 2022), 20 tables maximum Better than the nominal model in 17 of 20 tests (median +0.9 millibits); worse than the nested logit with guessing directed to the key in 20 of 20 (median 3.6 to 3.7 millibits) Guessing directed to the key predicts better Removing persons scoring significantly below chance default nominal and mirt&#x27;s 3PL, in both runs A median of 0 persons removed per sample; no measure changed sign or count Holds Disjoint samples, 113 tables default Estimates within 1.1% of the main estimates from the same fit in ENEM and ENCCEJA; ω c above two SE in 113 of 113 Holds Simulated controls (ENCCEJA 2019 upper secondary mathematics, RMET, ENEM 2019 mathematics and a generic 40-item test; 10 replications of 3,000) maximum With no information in the distractors, the option lost 0.7 to 1.3 millibits per response, with ω c 2PL → nominal from -0.0014 to -0.0003; with data from a nominal model it gained 8.3 to 23.8 millibits in the three tables (1.27 to 1.82 times discrimination), somewhat above the real data with the same fit (7.0 to 19.4), and 25.6 (3.18 times) in the generic test; the fitted model recovered 79% to 93% of the gain with the true item parameters The pipeline finds no gain where there is none and most of the gain where there is one; the ratio to discrimination depends on the items</p>
+<h3>Supplementary Material: What Is a Wrong Answer Worth?</h3>
+<p>The sections below are numbered S1 to S16. Unless a section says otherwise, the nominal model is fitted to its maximum with the direct parametrization of Section 3.1 of the main text; &quot;default fit&quot; means mirt&#x27;s default parametrization, which stopped below the maximum (Appendix A of the main text).</p>
+<h3>S1 • Analyses, whether planned, and the fit each one uses</h3>
+<p>Table S1. Analyses of the paper.</p>
+<p>Analysis Planned before the main run Fit of the nominal model Where ( §: main text; S: this supplement) ω c and binary IMV, 2PL → nominal (R1) yes (primary) maximum, no priors §4.1 Same comparisons from the 3PL; nested logit without guessing yes (secondary) maximum, no priors §4.1, §4.3, S15 Replication by year yes (secondary) maximum, no priors §4.1 Meta-regression on difficulty yes (secondary) maximum, no priors §4.1 Log-loss in bits; option against discrimination no maximum, no priors §4.1, §4.2 ω c by ability decile (R²) yes (primary) maximum, no priors §4.4 Bits by decile, per response and per wrong answer no maximum, no priors §4.4 Fisher information split by ability yes (secondary) maximum, no priors §4.4 Fisher information per wrong answer; the gain per wrong answer that the fitted model implies no maximum, no priors §4.4, S12 Heterogeneity (τ, prediction intervals) and the interval of the ratio no maximum, no priors §4.1 Spread among wrong options by decile (R3) yes (primary; reported as the favorite distractor&#x27;s share and G-tests instead of D′) no model §4.5, S4 Chance-level scorers no no model §4.5, S4 Ability against an external criterion (R3) yes (primary, changed before it was run) maximum, no priors §4.5 3PL and nested-logit scorings of ability no maximum, no priors §4.5 Other criteria for ability (proportion correct on half B; the other test day of ENEM) no maximum, no priors §4.5 Nested logit with guessing in prediction no maximum; and with priors (set B) §4.3 New test-takers no maximum, no priors §4.6 Sample-size curve no maximum; and with priors (sets A and B) §4.7, S11 Null of the sample-size curve no default fit S11</p>
+<h3>S10.2 • Standard errors for the correlations.</h3>
+<p>We recomputed the correlations of Section 4.5 with a standard error per table, from a person bootstrap within folds and from the variation between samples, using the larger of the two. The SE of a difference between two correlations was about 0.005 to 0.006, three quarters of it due to which items fall in each half.</p>
+<p>With the larger of the two standard errors, the nominal model exceeded the 3PL by more than two SE in 83 tables and the 2PL in 110 (the other methods were not rerun with the refitted model); the 3PLNRM exceeded the 3PL in 96 (with mirt&#x27;s fits, about 90, 88 to 91 depending on the method; at the posterior mode only the larger of the two standard errors was recomputed).</p>
+<p>Only one table, ENEM natural sciences 2017, lost by more than two SE (the nominal model against the 3PL). A difference of 0.002 in a single table says nothing on its own. The counts with the 3PL and the 3PLNRM are at the posterior mode reached from mirt&#x27;s solution (Appendix A of the main text), except where marked as mirt&#x27;s fits.</p>
+<h3>S10.3 • Doubtful keys and flagged items.</h3>
+<p>A key with an item-rest correlation below .05 may be wrong, and a nominal model can &quot;find&quot; the right one. Removing the 348 such items (of 4,068 ENEM and ENCCEJA items), the median ω c 2PL → nominal moved from 0.0138 to 0.0133 and stayed positive in all 108 ENEM and ENCCEJA tables.</p>
+<p>ENEM&#x27;s own key-review rule flags an item when a wrong option has a positive biserial correlation. We excluded the flagged items whose key is also weak (item-rest correlation below .05) or is not the most chosen option in the top rest-score decile, a condition we added to the rule (15% of held-out responses; each item classified on the half of examinees not used to measure it), with the criteria fixed before computing. With the nominal model at its maximum, modeling the option still improved prediction in all 52 ENEM tests without these items. Its gain went from 18.6 millibits per response with all items to 17.1 without them (92% kept), it remained 1.53 0.0244 against 0.0032, 0.0172 and 0.0212). In the generic test the option gained 25.6 millibits, 3.18 times the gain from discrimination (89% from which wrong option): about as much as in the ENEM control, with less than half its gain from discrimination, in items whose key slopes varied less (coefficient of variation of the 2PL slopes 0.28, against 0.39 to 0.91 in data simulated from the three tables). The ratio depends on the items as well as on the calibration size (Section 4.1 of the main text); across the 116 warehouse tables it ranged from 0.37 to 3.63. The fitted nominal model recovered 79% (RMET) to 93% (generic test) of the oracle&#x27;s gain: with about 2,400 training responses per item, estimating its parameters cost 2.0 to 3.1 millibits per response, about the same with and without information in the distractors. Its ability estimates correlated more with true ability than those of the 2PL when the distractors carried information (by .007 to .071) and slightly less when they did not (by .0005 to .006). The first five replications of the ENCCEJA and RMET controls are those of an earlier run of these controls, reproduced exactly.</p>
+<p>standard normal θ in 96 of 116 tables and never in the two highest; in ENEM the top decile had 0.61 times the information of the lowest.</p>
+<p>These curves describe the fitted model, not the held-out data. To compare them with the held-out gain per wrong answer, in the ENEM tables we simulated responses from the fitted model and measured the gain per wrong answer as the empirical one is measured (deciles of a 2PL ability estimate, predictions from estimated ability, and the model&#x27;s distractor shares as the baseline). The model implies 92 millibits per wrong answer in the lowest decile and 101 in the highest (medians over tables); the observed medians were 26.5 and 119.3.</p>
+<p>Table by table, the observed gain at the top was a median of 1.18 times what the model implies, but at the bottom it was 31% of it, and lower in 52 of 52 tables. The fitted model places the most information per wrong answer at low ability, where its distractor predictions held up least out of sample: there, the distractor structure that the model fits appears only in part in held-out data, which is consistent with more guessing at low ability, something the nominal model does not include.    A1 of the main text): above zero in 14 of 20 tables at N = 250 (not the 4 ENEM natural sciences tables, nor 2 of the 4 mathematics tables) and in 20 of 20 at 500 and 1,000; with set A, 18 of 20 at N = 250 (Section 4.7 of the main text). Nominal model fitted to its maximum.</p>
+<h3>S14 • Item position in the ENEM booklets</h3>
+<p>ENEM gives the same items in several booklets in different orders and hands the booklets out by seating position so that neighbors differ, which Kanopka and Domingue (2025) treat as random. For each of the 52 ENEM tables, we linked every test-taker in the 10 samples to their booklet in INEP&#x27;s public microdata (INEP, n.d.-b) and each item to its position in that booklet (1 to 45 within the area, with the foreign-language items of languages in positions 1 to 5); every held-out cell was matched, and in the natural sciences and mathematics cells of the first sample of each year the stored correctness agreed with the microdata in all cells. With the fits of the main analysis and no refitting, we regressed each held-out gain on the item&#x27;s position after removing each item&#x27;s mean (one pooled within-item slope per sample) and averaged the slopes over the 10 samples (SE across samples, too small for the reason given in Appendix B of the main text). The 2PL overpredicted correctness more the later an item appeared, by 0.9 percentage points per 10 positions on average (by more than two SE in 51 of 52 tables, also with the SE multiplied by the factor of Appendix B), a position effect in the sense of Kanopka and Domingue (2025).</p>
+<p>It is an average over items: item by item, effects can go both ways, as in their 2014 mathematics test. The 3PL&#x27;s gain over the 2PL on correctness grew with position in all 52 tables (by more than two SE in 47, and in 44 with the factor; mean 0.62 millibits per 10 positions) and was positive in the first 15 positions in all 52, including the 26 tables of areas that open a test day (median ratio of the last 15 to the first 15, 1.4). The nominal model&#x27;s standing against the 3PL on correctness fell with position in 51 of 52 tables (by more than two SE in 45, and in 43 with the factor). In languages, which always opens its test day, the nominal model was not behind the 3PL in the first 15 positions in any of the 13 years; in mathematics, which always follows 45 items of another area on the same day, it was behind from its first 15 positions in all choice response records more than correctness.</p>
+<p>When a test-taker answers incorrectly, the option chosen can reflect partial knowledge, a specific misconception or a guess.</p>
+<p>[0.0019, 0.0022], also above two SE in all 116 tables and below that of discrimination on the same outcome (0.0096 for Rasch → 2PL; Domingue et al., 2024, report a mean of 0.006 for 1PL → 2PL across 89 IRW datasets).</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. The chosen option against item discrimination. (a) Each of the 116 tables: gain from discrimination (Rasch → 2PL, x axis) and from the option (2PL → nominal, y axis), in millibits</p>
+<p>Fisher information: under the fitted nominal model the information about ability carried by a wrong answer is highest at low ability, but that is where the model&#x27;s distractor predictions held up least out of sample (about a third of what the model itself implies). Where the information lies therefore depends on the measure.</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Where modeling the chosen option improves held-out prediction, by ability decile. (a)</p>
+<h3>7.4 •</h3>
+<p>For those who score multiple-choice testsIn an exploratory comparison, option-based scoring tracked ability on the other half of the test better than right/wrong 3PL scoring in most tables, with mathematics as the exception for the nominal model. In ENEM 2023, option-based scoring raised validity without changing socioeconomic and racial gaps per unit of validity. And in a post hoc simulation with real ENEM responses, in a linear test with the full 45-item area and the other test day as criterion, nominal scoring matched 2PL scoring with 30% fewer items (median of 52 tests), in line with what Fisher information implies (28%, against a separately fitted 2PL), although not test by test (from about 10% in the human sciences to 41% in the natural sciences; Section S6; cf. De Ayala, 1989).</p>
+<p>The ENEM microdata used in Sections S7 and S14 of the Online Resource are public (INEP, n.d.-b). SOURCE: IEA&#x27;s Trends in International Mathematics and Science Study -TIMSS 2019 and TIMSS 2023, and IEA&#x27;s Progress in International Reading Literacy Study -PIRLS 2021. Copyright © International Association for the Evaluation of Educational Achievement (IEA). Publisher: TIMSS &amp; PIRLS International Study Center, Lynch School of Education and Human Development, Boston College. The Czech per-item data are published by the Centrum pro zjišťování výsledků vzdělávání (CZVV) at data.cermat.cz; they are not redistributed, and no item or key is reproduced. The analysis code and the item-and option-level layer will be released in a public repository upon publication.</p>
+<h3>Figure</h3>
+<p>FigureS1shows three curves of the fitted nominal model, by family: the information of correctness per item, I b (θ); the information added per item by the choice among the distractors, I ( θ )-I b ( θ ); and the information about θ carried by a wrong answer, Var ( ak | wrong , θ ) in the direct parametrization. Per wrong answer, the information peaked in the two lowest deciles of a</p>
+<h3>Figure S2.</h3>
+<p>Figure S2. One item, without a model. ENEM 2023 mathematics, the water tank item: share choosing each option by rest-score decile. Option A rises from 13% (lowest decile) to 47%</p>
+<h3>Figure S6.</h3>
+<p>Figure S6. Simulated controls through the pipeline of the main analysis (Section S10.7). (a) Held-out gain in millibits per response from item discrimination (Rasch → 2PL) and from the chosen option (2PL → nominal), the latter split into its correctness and which-wrong-option parts, mean over 10 replications of 3,000 persons with ±2 SE; diamonds: the option with the true item parameters (oracle). With no information in the distractors the option loses 0.7 to 1.3 millibits; with information it gains 1.27 to 3.18 times as much as discrimination, depending on the generating values. (b) Each replication, option against discrimination, with the diagonal.</p>
+<h3>Figure S7.</h3>
+<p>Figure S7. Which wrong options carry the gain per wrong answer, by ability decile (Section 4.4 of the main text). Each item&#x27;s wrong options are ranked, in the training cells of each fold, by the mean ability of those who chose them (in the other tests, with 2 to 9 wrong options per item, grouped into first, in between and last). (a) Contribution of each ranked option to the gain per wrong answer (2PL with training shares to nominal) and the net gain of Figure 2a: at the top the gain comes from the option chosen by the ablest (ENEM: +246 millibits), at the bottom from those chosen by the least able (ENEM: +99 and +45). (b) Share of held-out wrong answers going to each ranked option, observed (solid) and as predicted by the 2PL from overall popularity (dashed), the same at every ability. Medians over tests (the medians of the parts need not add to the median net gain). Nominal model fitted to its maximum.</p>
+<h3>Table 1.</h3>
+<p>Out-of-sample gain from modeling the chosen option in the warehouse tables (multilevel meta-analysis; 95% intervals).</p>
+<h3>Table 2.</h3>
+<p>The out-of-sample gain from modeling the chosen option, by program (millibits per held-out response).</p>
+<h3>Table 3.</h3>
+<p>Correlation with ability on the other half of the test (median over tables).</p>
+<h3>Figure S1.</h3>
+<p>Fisher information about ability under the fitted nominal model, by family.Information of correctness per item (I b ), information added per item by the choice among the (ninth decile), about twice the key (24%); in the top decile the key is again the most chosen option (49%).</p>
+<h3>Figure S3.</h3>
+<p>Test-takers unseen in calibration. Gain in log-loss from modeling the option (2PL → nominal), in millibits per response, on held-out responses (x) and for unseen test-takers (y), one dot per table: all 116 above zero in all three samples, 114 below the diagonal, with a median ratio of 0.92. Nominal model fitted to its maximum.</p>
+<h3>Figure S4.</h3>
+<p>How many test-takers. Gain in log-loss from modeling the option, in millibits per held-out response, with calibration samples of 250, 500 and 1,000 test-takers in 20 tables (16 ENEM and 4 ENCCEJA; up to three repetitions), one thin line per table and medians by family.(a) Without priors: no value at N = 250, where the option does not pay; above zero in 19 of 20 tables at N = 500 and in 20 of 20 at 1,000. (b) With priors on both models (set B of Table</p>
+<h3>References</h3>
+<p>An, S., Kim, J., Kim, M., &amp; Park, J. (2022). No task left behind: Multi-task learning of knowledge tracing and option tracing for better student assessment. Proceedings of the AAAI Conference on Artificial Intelligence, 36(4), 4424-4431. https://doi.org/10.1609/aaai.v36i4.20364</p>
+<p>Baron-Cohen, S., Wheelwright, S., Hill, J., Raste, Y., &amp; Plumb, I. (2001). The &quot;Reading the Mind in the Eyes&quot; Test revised version: A study with normal adults, and adults with Asperger syndrome or high-functioning autism. Journal of Child Psychology and Psychiatry, 42(2), 241-251. https://doi.org/10.1111/1469-7610.00715</p>
+<p>Bengio, Y., &amp; Grandvalet, Y. (2004). No unbiased estimator of the variance of K-fold cross- validation. Journal of Machine Learning Research, 5, 1089-1105. https://jmlr.org/papers/v5/grandvalet04a.html</p>
+<p>Bock, R. D. (1972). Estimating item parameters and latent ability when responses are scored in two or more nominal categories. Psychometrika, 37(1), 29-51. https://doi.org/10.1007/BF02291411</p>
+<p>Bolt, D. M., Wollack, J. A., &amp; Suh, Y. (2012). Application of a multidimensional nested logit model to multiple-choice test items. Psychometrika, 77(2), 339-357. https://doi.org/10.1007/s11336-012-9257-5</p>
+<p>Borges, M. C., Santos, L. L., Manso, P. H., Moisés, E. C. D., Coltro, P. S., Fonseca, P. C., Gentil, P. R. A., Santana, R. C., Rodrigues, L. F., Maciel, B. C., &amp; Ricz, H. M. A. (2024). Increased accessibility of computer-based testing for residency application to a hospital in Brazil with item characteristics comparable to paper-based testing: A psychometric study. Journal of Educational Evaluation for Health Professions, 21, Article 32. https://doi.org/10.3352/jeehp.2024.21.32</p>
+<p>Bürkner, P.-C. (2020). Analysing Standard Progressive Matrices (SPM-LS) with Bayesian item response models. Journal of Intelligence, 8(1), Article 5. https://doi.org/10.3390/jintelligence8010005</p>
+<p>Centrum pro zjišťování výsledků vzdělávání. (n.d.-a). Neagregovaná položková data didaktických testů jednotné přijímací zkoušky [Non-aggregated item-level data of the achievement tests of the uniform entrance exam] [Data set]. Retrieved October 23, 2026, from https://data.cermat.cz/data-a-analyticke-vystupy-jednotna-prijimaci-zkouska/ datove-soubory.html</p>
+<p>Centrum pro zjišťování výsledků vzdělávání. (n.d.-b). Neagregovaná položková data maturitní zkoušky [Non-aggregated item-level data of the maturita exam] [Data set].</p>
+<p>Chalmers, R. P. (2012). mirt: A multidimensional item response theory package for the R environment. Journal of Statistical Software, 48(6), 1-29. https://doi.org/10.18637/jss.v048.i06</p>
+<p>Chalmers, R. P. (2026). mirt: Multidimensional item response theory (Version 1.47) [Computer software]. https://doi.org/10.32614/CRAN.package.mirt</p>
+<p>Choi, Y., Lee, Y., Shin, D., Cho, J., Park, S., Lee, S., Baek, J., Bae, C., Kim, B., &amp; Heo, J. (2020). EdNet: A large-scale hierarchical dataset in education. In I. I. Bittencourt, M. Cukurova, K. Muldner, R. Luckin, &amp; E. Millán (Eds.), Artificial intelligence in education: 21st International Conference, AIED 2020, Ifrane, Morocco, July 6-10, 2020, proceedings, part II (Lecture Notes in Computer Science, Vol. 12164, pp. 69-73). Springer. https://doi.org/10.1007/978-3-030-52240-7_13</p>
+<p>De Ayala, R. J. (1989). A comparison of the nominal response model and the three-parameter logistic model in computerized adaptive testing. Educational and Psychological Measurement, 49(4), 789-805. https://doi.org/10.1177/001316448904900403</p>
+<p>De Ayala, R. J., &amp; Sava-Bolesta, M. (1999). Item parameter recovery for the nominal response model. Applied Psychological Measurement, 23(1), 3-19. https://doi.org/10.1177/01466219922031130</p>
+<p>DeMars, C. E. (2003). Sample size and the recovery of nominal response model item parameters. Applied Psychological Measurement, 27(4), 275-288. https://doi.org/10.1177/0146621603027004003</p>
+<p>Domingue, B. W. (2026). IRW_nominal [Data set]. Redivis, Stanford Data Farm. https://doi.org/10.57761/w0qq-cf77</p>
+<p>Domingue, B. W., Braginsky, M., Caffrey-Maffei, L., Gilbert, J. B., Kanopka, K., Kapoor, R., Lee, H., Liu, Y., Nadela, S., Pan, G., Zhang, L., Zhang, S., &amp; Frank, M. C. (2025). An introduction to the Item Response Warehouse (IRW): A resource for enhancing data usage in psychometrics. Behavior Research Methods, 57(10), Article 276. https://doi.org/10.3758/s13428-025-02796-y</p>
+<p>Domingue, B. W., Kanopka, K., Kapoor, R., Pohl, S., Chalmers, R. P., Rahal, C., &amp; Rhemtulla, M. (2024). The InterModel Vigorish as a lens for understanding (and quantifying) the value of item response models for dichotomously coded items. Psychometrika, 89(3), 1034-1054. https://doi.org/10.1007/s11336-024-09977-2</p>
+<p>Domingue, B. W., Kanopka, K., Ulitzsch, E., &amp; Zhang, L. (2025). Implied probabilities of polytomous response functions for model-based prediction and comparison.</p>
+<p>Behaviormetrika, 52(2), 683-705. https://doi.org/10.1007/s41237-025-00262-9</p>
+<p>Domingue, B. W., Rahal, C., Faul, J., Freese, J., Kanopka, K., Rigos, A., Stenhaug, B., &amp; Tripathi, A. S. (2025). The InterModel Vigorish (IMV) as a flexible and portable approach for quantifying predictive accuracy with binary outcomes. PLOS ONE, 20(3), Article e0316491. https://doi.org/10.1371/journal.pone.0316491</p>
+<p>Drasgow, F., Levine, M. V., Tsien, S., Williams, B., &amp; Mead, A. D. (1995). Fitting polytomous item response theory models to multiple-choice tests. Applied Psychological Measurement, 19(2), 143-165. https://doi.org/10.1177/014662169501900203</p>
+<p>Fei, X., Zhang, Y., Carneiro, S. A., &amp; Vazirgiannis, M. (2026). Every wrong answer counts: Option-level psychometrics for LLM multiple-choice benchmarks (arXiv:2608.02966). arXiv. https://arxiv.org/abs/2608.02966</p>
+<p>Fishbein, B., Foy, P., &amp; Yin, L. (2021). TIMSS 2019 user guide for the international database (2nd ed.). Boston College, TIMSS &amp; PIRLS International Study Center. https://timssandpirls.bc.edu/timss2019/international-database/</p>
+<p>Fishbein, B., Taneva, M., &amp; Kowolik, K. (2025). TIMSS 2023 user guide for international database. Boston College, TIMSS &amp; PIRLS International Study Center. https://timss2023.org/data</p>
+<p>Fishbein, B., Yin, L., &amp; Foy, P. (2024). PIRLS 2021 user guide for the international database (2nd ed.). Boston College, TIMSS &amp; PIRLS International Study Center. https://pirls2021.org/data</p>
+<p>García-Pérez, M. A. (2014). Multiple-choice tests: Polytomous IRT models misestimate item information. The Spanish Journal of Psychology, 17, Article e88. https://doi.org/10.1017/sjp.2014.95</p>
+<p>Ghosh, A., Raspat, J., &amp; Lan, A. (2021). Option tracing: Beyond correctness analysis in knowledge tracing. In I. Roll, D. McNamara, S. Sosnovsky, R. Luckin, &amp; V. Dimitrova (Eds.), Artificial intelligence in education: 22nd International Conference, AIED 2021, Utrecht, The Netherlands, June 14-18, 2021, proceedings, part I (Lecture Notes in Computer Science, Vol. 12748, pp. 137-149). Springer. https://doi.org/10.1007/978-3- 030-78292-4_12</p>
+<p>Gierl, M. J., Bulut, O., Guo, Q., &amp; Zhang, X. (2017). Developing, analyzing, and using distractors for multiple-choice tests in education: A comprehensive review. Review of Educational Research, 87(6), 1082-1116. https://doi.org/10.3102/0034654317726529</p>
+<p>Green, B. F., Crone, C. R., &amp; Folk, V. G. (1989). A method for studying differential distractor functioning. Journal of Educational Measurement, 26(2), 147-160. https://doi.org/10.1111/j.1745-3984.1989.tb00325.x</p>
+<p>Haberman, S. J., Liu, Y., &amp; Lee, Y.-H. (2019). Distractor analysis for multiple-choice tests: An empirical study with international language assessment data. ETS Research Report Series, 2019(1), 1-16 (RR-19-39). https://doi.org/10.1002/ets2.12275</p>
+<p>Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira. (n.d.-a). Microdados do Encceja [Data sets].</p>
+<p>Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira. (n.d.-b). Microdados do Enem [Data sets].</p>
+<p>Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira. (2011). Nota técnica: Procedimento de cálculo das notas do Enem. https://download.inep.gov.br/educacao_basica/enem/nota_tecnica/2011/ nota_tecnica_procedimento_de_calculo_das_notas_enem_2.pdf</p>
+<p>Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira. (2012). Entenda a sua nota no Enem: Guia do participante. https://download.inep.gov.br/educacao_basica/enem/guia_participante/2013/ guia_do_participante_notas.pdf</p>
+<p>Item Response Warehouse. (2026, October 30). Guessing in multiple-choice data: Which correction helps out-of-sample? Retrieved October 30, 2026, from https://itemresponsewarehouse.org/vignettes/guessing.html</p>
+<p>Jin, K.-Y., Siu, W.-L., &amp; Huang, X. (2022). Exploring the impact of random guessing in distractor analysis. Journal of Educational Measurement, 59(1), 43-61. https://doi.org/10.1111/jedm.12310</p>
+<p>Kanopka, K. (2023). Computational validity [Doctoral dissertation, Stanford University].</p>
+<p>Stanford Digital Repository. https://purl.stanford.edu/tr545td7650 (Chapter 3: Kanopka, K., &amp; Domingue, B. W., Bookmaking for categorical responses: Extending the InterModel Vigorish to quantify the performance of polytomous item response models.)</p>
+<p>Kanopka, K., &amp; Domingue, B. W. (2025). A position-sensitive mixture item response model. Journal of Educational and Behavioral Statistics, 50(6), 1026-1059. https://doi.org/10.3102/10769986241289399</p>
+<p>Kim, H. A., Kaduthodil, J., Strong, R. W., Germine, L. T., Cohan, S., &amp; Wilmer, J. B. (2024). Multiracial Reading the Mind in the Eyes Test (MRMET): An inclusive version of an influential measure. Behavior Research Methods, 56, 5900-5917. https://doi.org/10.3758/s13428-023-02323-x</p>
+<p>Kreitchmann, R. S., Abad, F. J., &amp; Ponsoda, V. (2018). A two-dimensional multiple-choice model accounting for omissions. Frontiers in Psychology, 9, Article 2540. https://doi.org/10.3389/fpsyg.2018.02540</p>
+<p>Myszkowski, N. (2020). Analysis of an intelligence dataset. Journal of Intelligence, 8(4), Article 39. https://doi.org/10.3390/jintelligence8040039</p>
+<p>Myszkowski, N., &amp; Storme, M. (2018). A snapshot of g? Binary and polytomous item-response theory investigations of the last series of the Standard Progressive Matrices (SPM-LS).</p>
+<p>Intelligence, 68, 109-116. https://doi.org/10.1016/j.intell.2018.03.010</p>
+<p>Nalbandyan, R., Gilbert, J. B., Franco, V. R., &amp; Domingue, B. W. (2026). Signposts on the path from nominal to ordinal scales: Moving from a discrete to a continuous view. Educational and Psychological Measurement. Advance online publication. https://doi.org/10.1177/00131644261440556</p>
+<p>Open Psychometrics. (2018). Answers to the Vocabulary IQ Test [Data set]. Retrieved October 24, 2026, from https://openpsychometrics.org/_rawdata/</p>
+<p>Partchev, I. (2020). Diagnosing a 12-item dataset of Raven matrices: With dexter. Journal of Intelligence, 8(2), Article 21. https://doi.org/10.3390/jintelligence8020021</p>
+<p>Penfield, R. D. (2008). An odds ratio approach for assessing differential distractor functioning effects under the nominal response model. Journal of Educational Measurement, 45(3), 247-269. https://doi.org/10.1111/j.1745-3984.2008.00063.x</p>
+<p>Ramsay, J. O., Wiberg, M., &amp; Li, J. (2020). Full information optimal scoring. Journal of Educational and Behavioral Statistics, 45(3), 297-315. https://doi.org/10.3102/1076998619885636</p>
+<p>Revelle, W. (2026). psychTools: Tools to accompany the &#x27;psych&#x27; package for psychological research (Version 2.6.4) [Computer software]. Northwestern University. https://doi.org/10.32614/CRAN.package.psychTools</p>
+<p>Stenhaug, B. A., &amp; Domingue, B. W. (2022). Predictive fit metrics for item response models. Applied Psychological Measurement, 46(2), 136-155. https://doi.org/10.1177/01466216211066603</p>
+<p>Storme, M., Myszkowski, N., Baron, S., &amp; Bernard, D. (2019). Same test, better scores: Boosting the reliability of short online intelligence recruitment tests with nested logit item response theory models. Journal of Intelligence, 7(3), Article 17. https://doi.org/10.3390/jintelligence7030017</p>
+<p>Storme, M., Myszkowski, N., Camargo, A., &amp; Celik, P. (2026). Improving the measurement of financial literacy by modeling noncorrect responses. European Journal of Psychological Assessment. Advance online publication. https://doi.org/10.1027/1015-5759/a000963</p>
+<p>Suh, Y., &amp; Bolt, D. M. (2010). Nested logit models for multiple-choice item response data. Psychometrika, 75(3), 454-473. https://doi.org/10.1007/s11336-010-9163-7</p>
+<p>Suh, Y., &amp; Bolt, D. M. (2011). A nested logit approach for investigating distractors as causes of differential item functioning. Journal of Educational Measurement, 48(2), 188-205. https://doi.org/10.1111/j.1745-3984.2011.00139.x</p>
+<p>Thissen, D. (1976). Information in wrong responses to the Raven Progressive Matrices. Journal of Educational Measurement, 13(3), 201-214. https://doi.org/10.1111/j.1745- 3984.1976.tb00011.x</p>
+<p>Thissen, D., Cai, L., &amp; Bock, R. D. (2010). The nominal categories item response model. In M. L. Nering &amp; R. Ostini (Eds.), Handbook of polytomous item response theory models (pp. 43-75). Routledge. https://doi.org/10.4324/9780203861264.ch3</p>
+<p>Thissen, D., &amp; Steinberg, L. (1984). A response model for multiple choice items. Psychometrika, 49(4), 501-519. https://doi.org/10.1007/BF02302588</p>
+<p>Thissen, D., Steinberg, L., &amp; Fitzpatrick, A. R. (1989). Multiple-choice models: The distractors are also part of the item. Journal of Educational Measurement, 26(2), 161-176. https://doi.org/10.1111/j.1745-3984.1989.tb00326.x</p>
+<p>Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. https://doi.org/10.18637/jss.v036.i03</p>
+<p>Wallmark, J., Josefsson, M., &amp; Wiberg, M. (2024). Introducing flexible monotone multiple choice item response theory models and bit scales (arXiv:2410.01480). arXiv. https://doi.org/10.48550/arXiv.2410.01480</p>
+<p>Wallmark, J., &amp; Wiberg, M. (2026). The bit scale: A metric score scale for unidimensional item response theory models. Psychometrika, 91(1), 30-46. https://doi.org/10.1017/psy.2025.10071</p>
+<p>Xiao, X. [DoriaXiao]. (2026, October 14). expbeta prior: derivatives taken w.r.t. plogis(par) instead of par (Issue No. 286) [GitHub issue]. GitHub. https://github.com/philchalmers/mirt/issues/286</p>
+<p>Xiao, X., Ulitzsch, E., Zhang, L., Frank, M. C., &amp; Domingue, B. W. (2026). The safety valve: A mixture IRT approach to modeling guessing behavior [Preprint]. PsyArXiv. https://doi.org/10.31234/osf.io/7gtwd_v1</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
