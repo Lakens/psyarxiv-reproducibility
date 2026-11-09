@@ -281,7 +281,7 @@ function section(id, title, lede, draw) {
 }
 function card(parent, title, note, wide) {
   var c = el("div", { class: "card" + (wide ? " wide" : "") });
-  c.appendChild(el("h3", {}, title));
+  if (title) c.appendChild(el("h3", {}, title));
   if (note) c.appendChild(el("p", { class: "note" }, note));
   parent.appendChild(c);
   return c;
@@ -637,50 +637,6 @@ function list(pairs, name, color) {
   return pairs.map(function (q) { return { label: name ? name(q[0]) : q[0], value: q[1], color: color }; });
 }
 
-function drawNumbers(cards) {
-  var box = el("div", { class: "card wide" });
-  cards.appendChild(box);
-  var reds = sum(P.map(function (p) { return p.reds; })), yellows = sum(P.map(function (p) { return p.yellows; }));
-  tiles(box, [
-    { value: fmt(P.length), label: "preprints checked" + (D.preprints_on_psyarxiv ? ", of " + fmt(D.preprints_on_psyarxiv) + " on PsyArXiv" : "") },
-    { value: fmt(P.length * MODS.length), label: "checks run (" + MODS.length + " on each preprint)" },
-    { value: fmt(reds), label: "red lights: to fix", kind: "red" },
-    { value: fmt(yellows), label: "yellow lights: to check", kind: "yellow" },
-    { value: big(total("words")), label: "words read" },
-    { value: fmt(total("paras")), label: "paragraphs" },
-    { value: fmt(total("auth")), label: "authors listed" },
-    { value: fmt(D.counts.countries.length), label: "countries in the affiliations" },
-    { value: fmt(total("refs")), label: "references read" },
-    { value: fmt(total("refdoi")), label: "references with a DOI, looked up in PubPeer, RetractionWatch and FLoRA" },
-    { value: fmt(total("p")), label: "p values found" },
-    { value: fmt(total("pimp")), label: "p values reported imprecisely", kind: "yellow" },
-    { value: fmt(total("nonsig")), label: "non-significant p values" },
-    { value: fmt(total("sc")), label: "t- and F-tests recomputed by StatCheck" },
-    { value: fmt(total("scerr")), label: "tests whose p value does not match", kind: "yellow" },
-    { value: fmt(total("scdec")), label: "of which the conclusion about significance changes", kind: "red" },
-    { value: fmt(total("pow")), label: "power analyses" },
-    { value: fmt(total("prereg")), label: "preregistrations read" },
-    { value: fmt(total("repos")), label: "repositories" },
-    { value: fmt(total("files")), label: "files in the repositories" },
-    { value: bytes(total("bytes")), label: "in those files" },
-    { value: fmt(total("code")), label: "code files" },
-    { value: big(total("loc")), label: "lines of code read" },
-    { value: fmt(total("scr")), label: "scripts run" },
-    { value: fmt(total("ran")), label: "scripts that ran through" },
-    { value: fmt(total("broke")), label: "scripts that did not run through", kind: "red" },
-    { value: fmt(total("dfiles")), label: "data files" },
-    { value: fmt(total("cols")), label: "data columns examined" },
-    { value: fmt(total("dissues")), label: "possible problems in the data", kind: "yellow" },
-    { value: fmt(total("pubpeer")), label: "cited works with comments on PubPeer" },
-    { value: fmt(total("ppcom")), label: "PubPeer comments on them" },
-    { value: fmt(total("repl")), label: "cited works that were replicated (FLoRA)" },
-    { value: fmt(total("retract")), label: "cited works with a retraction notice or correction" },
-    { value: fmt(total("figs")), label: "figures" },
-    { value: fmt(total("eqs")), label: "equations and statistics in the text" },
-    D.waiting ? { value: fmt(D.waiting), label: "preprints waiting to be checked" } : null
-  ]);
-}
-
 function wallOrder(how) {
   var idx = P.map(function (p, i) { return i; });
   var rank = { r: 0, y: 1, i: 2, g: 3, f: 4, n: 5 };
@@ -726,28 +682,6 @@ function drawWall(cards) {
     return { label: m.title, counts: tally(P, function (p) { return L(p, k); }) };
   }).sort(function (a, b) { return (b.counts.r || 0) - (a.counts.r || 0) || (b.counts.y || 0) - (a.counts.y || 0); });
   stack100(c2, rows, LIGHTS.filter(function (l) { return rows.some(function (r) { return r.counts[l.key]; }); }));
-
-  var c3 = card(cards, "Red and yellow lights per preprint", "How many of the " + MODS.length + " checks gave a preprint a red or a yellow light.");
-  var maxF = Math.max(1, maxOf(P.map(function (p) { return p.flags; })));
-  var byF = [];
-  for (var f = 0; f <= maxF; f++) byF.push({ label: String(f), value: count(P, function (p) { return p.flags === f; }) });
-  byF.forEach(function (b) { b.tip = "<b>" + b.label + " checks red or yellow</b><br>" + fmt(b.value) + " preprints (" + pc(b.value, P.length) + ")"; });
-  columns(c3, byF, { xlabel: "checks with a red or yellow light", ylabel: "preprints", every: 1, what: "Checks red or yellow", unit: "Preprints" });
-  var clean = count(P, function (p) { return p.flags === 0; });
-  say(c3, "The median preprint has " + fmt(median(P.map(function (p) { return p.flags; }))) + " checks red or yellow; " +
-      fmt(clean) + " preprints (" + pc(clean, P.length) + ") have none.");
-
-  var c4 = card(cards, "Red lights per preprint", "Only the checks that say: to fix.");
-  var maxR = Math.max(1, maxOf(P.map(function (p) { return p.reds; }))), byR = [];
-  for (var q = 0; q <= maxR; q++) byR.push({ label: String(q), value: count(P, function (p) { return p.reds === q; }), color: C.red });
-  byR.forEach(function (b) { b.tip = "<b>" + b.label + " red lights</b><br>" + fmt(b.value) + " preprints (" + pc(b.value, P.length) + ")"; });
-  columns(c4, byR, { xlabel: "checks with a red light", ylabel: "preprints", every: 1, what: "Red lights", unit: "Preprints" });
-
-  var c5 = card(cards, "How many checks had something to check", "A check that finds nothing to look at (no code, no power analysis) gives no light. This counts the checks that did give one.");
-  var byA = [];
-  for (var a = 0; a <= MODS.length; a++) byA.push({ label: String(a), value: count(P, function (p) { return p.applied === a; }) });
-  byA.forEach(function (b) { b.tip = "<b>" + b.label + " checks</b><br>" + fmt(b.value) + " preprints"; });
-  columns(c5, byA, { xlabel: "checks that had something to check", ylabel: "preprints", every: 2, what: "Checks", unit: "Preprints" });
 }
 
 function drawRelations(cards) {
@@ -758,8 +692,8 @@ function drawRelations(cards) {
   var stats = {};
   keep = keep.filter(function (a) { return keep.some(function (b) { return a !== b && pair(a, b).r !== null; }); });
 
-  var c = card(cards, "Which problems come together",
-    "For each pair of checks, the correlation (φ) between being flagged red or yellow by the one and by the other, counted over the preprints where both checks had something to check. Orange: flagged together more often than chance; blue: less often. Empty: fewer than 10 such preprints.", true);
+  var c = card(cards, "",
+    "For each pair of checks, the correlation (r) between being flagged red or yellow by the one and by the other, counted over the preprints where both checks had something to check. Orange: flagged together more often than chance; blue: less often. Empty: fewer than 10 such preprints.", true);
   function pair(a, b) {
     var key = a + "," + b;
     if (stats[key]) return stats[key];
@@ -775,20 +709,10 @@ function drawRelations(cards) {
     return { fill: s.r === null ? C.surface : diverging(s.r), label: s.r === null ? "" : s.r.toFixed(2).replace(/^(-?)0/, "$1"), dark: s.r !== null && Math.abs(s.r) > 0.6,
              tip: "<b>" + esc(modTitle(a)) + "</b> and <b>" + esc(modTitle(b)) + "</b><br>" +
                   (s.r === null ? "too few preprints where both had something to check (" + s.n + ")" :
-                   "φ = " + s.r.toFixed(2) + "<br>of " + fmt(s.n) + " preprints where both applied: " + fmt(s.fa) + " flagged by the first, " +
+                   "r = " + s.r.toFixed(2) + "<br>of " + fmt(s.n) + " preprints where both applied: " + fmt(s.fa) + " flagged by the first, " +
                    fmt(s.fb) + " by the second, " + fmt(s.both) + " by both") };
   }, { labelW: 230, top: 20, cellH: 28, rowLabel: function (i) { return (i + 1) + "  " + clip(modTitle(keep[i]), 28); },
        colLabel: function (j) { return String(j + 1); }, gap: 2 });
-
-  var c2 = card(cards, "The pairs flagged together most often", "Preprints flagged red or yellow by both checks.");
-  var pairs = [];
-  for (var i = 0; i < keep.length; i++) for (var j = i + 1; j < keep.length; j++) {
-    var s = pair(keep[i], keep[j]);
-    if (s.both) pairs.push({ label: short(keep[i]) + " + " + short(keep[j]), value: s.both,
-                             tip: "<b>" + esc(modTitle(keep[i])) + " + " + esc(modTitle(keep[j])) + "</b><br>" + fmt(s.both) + " preprints flagged by both" });
-  }
-  pairs.sort(function (a, b) { return b.value - a.value; });
-  hbars(c2, pairs.slice(0, 14), { labelW: 250, clip: 40, color: C.yellow, what: "Pair", unit: "Preprints" });
 
   var c3 = card(cards, "One problem, more problems?",
     "For each check: the average number of OTHER checks flagged red or yellow, in preprints this check flagged and in those it did not.");
@@ -829,11 +753,6 @@ function drawTime(cards) {
   timeLine(c, [{ name: "preprints checked", color: C.green, pts: byCheck.map(function (p, i) { return [+p.cdate, i + 1]; }) }],
            { area: true, ylabel: "preprints checked", unit: "preprints checked", when: function (t) { var d = new Date(t); return dayYear(d) + ", " + String(d.getUTCHours()).padStart(2, "0") + ":" + String(d.getUTCMinutes()).padStart(2, "0") + " UTC"; } });
 
-  var c2 = card(cards, "Checked per day", "Preprints checked on each day (UTC).");
-  var perDay = tally(byCheck, function (p) { return p.chk.slice(0, 10); }), days = Object.keys(perDay).sort();
-  columns(c2, days.map(function (d) { return { label: day(toDate(d)), value: perDay[d], tip: "<b>" + dayYear(toDate(d)) + "</b><br>" + perDay[d] + " preprints checked" }; }),
-          { ylabel: "preprints", what: "Day", unit: "Preprints" });
-
   var c3 = card(cards, "When preprints are posted", "The day of the week and the hour (UTC) at which each preprint was published on PsyArXiv. Darker: more preprints.", true);
   var wd = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], cnt = [];
   for (var i = 0; i < 7; i++) { cnt.push([]); for (var h = 0; h < 24; h++) cnt[i].push(0); }
@@ -843,33 +762,6 @@ function drawTime(cards) {
     var v = cnt[i][j];
     return { fill: v ? sequential(0.15 + 0.85 * v / mx) : C.surface, tip: "<b>" + wd[i] + ", " + j + ":00–" + (j + 1) + ":00 UTC</b><br>" + v + " preprints" };
   }, { labelW: 90, cellH: 20, top: 2, bottom: 18, rowLabel: function (i) { return wd[i]; }, bottomLabel: function (j) { return j % 3 ? "" : j + ":00"; }, gap: 2 });
-
-  var c4 = card(cards, "Flags by publication date", "Each dot is a preprint: when it was published, and how many checks flagged it. The line follows the average.");
-  var pub = P.filter(function (p) { return p.date; });
-  scatter(c4, pub.map(function (p) {
-    return { x: +p.date, y: p.flags + (((p.i * 0.618) % 1) - 0.5) * 0.4, color: p.reds ? C.red : C.yellow, href: link(p),
-             tip: paperTip(p, "published " + dayYear(p.date) + "<br>" + p.flags + " checks red or yellow, " + p.reds + " red") };
-  }), { xtime: true, ylabel: "checks red or yellow", line: trend(pub.map(function (p) { return { x: +p.date, y: p.flags }; }), "x", "y"), height: 250 });
-  legend(c4, [{ label: "at least one red light", color: C.red }, { label: "no red light", color: C.yellow }], true);
-
-  var c5 = card(cards, "Metacheck's versions", "The version of Metacheck that checked each preprint. Metacheck changes almost every day; the newer versions check more.");
-  var ver = tally(P, function (p) { return p.mc || "unknown"; });
-  var vs = Object.keys(ver).sort(function (a, b) {
-    var x = a.split(".").map(Number), y = b.split(".").map(Number);
-    for (var i = 0; i < Math.max(x.length, y.length); i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) - (y[i] || 0);
-    return 0;
-  });
-  hbars(c5, vs.map(function (v) {
-    var ps = P.filter(function (p) { return (p.mc || "unknown") === v; });
-    return { label: v, value: ver[v], tip: "<b>Metacheck " + esc(v) + "</b><br>" + ver[v] + " preprints<br>on average " +
-             mean(ps.map(function (p) { return p.flags; })).toFixed(1) + " checks red or yellow" };
-  }), { total: P.length, what: "Version", unit: "Preprints" });
-
-  var c6 = card(cards, "Versions of the preprints", "Which version of the preprint Metacheck checked (the newest when it was checked).");
-  var pv = tally(P, function (p) { return p.v; });
-  columns(c6, Object.keys(pv).sort(function (a, b) { return a - b; }).map(function (v) {
-    return { label: "v" + v, value: pv[v], tip: "<b>Version " + v + "</b><br>" + pv[v] + " preprints" };
-  }), { every: 1, ylabel: "preprints", what: "Version", unit: "Preprints" });
 }
 
 function drawP(cards) {
@@ -925,33 +817,25 @@ function drawP(cards) {
     var imp = count(ps, function (r) { return r.sec === k && r.imp; });
     return { label: SECTION_NAME[k] || k, value: sec[k], tip: "<b>" + esc(SECTION_NAME[k] || k) + "</b><br>" + fmt(sec[k]) + " p values, " + fmt(imp) + " of them imprecise" };
   }), { total: ps.length, labelW: 120, what: "Part", unit: "P values" });
-
-  var c8 = card(cards, "P values per preprint", "Each dot is a preprint (log scale).");
-  strip(c8, vals("p"), { mode: "log1p", label: "p values in the preprint" });
-  say(c8, fmt(count(P, function (p) { return p.p === 0; })) + " preprints report no p value at all.");
-
-  var c9 = card(cards, "Imprecise p values", "The share of a preprint's p values that are reported imprecisely (such as p < .05 where an exact value is possible), for preprints with at least 5 p values.");
-  strip(c9, P.filter(function (p) { return p.p >= 5; }).map(function (p) {
-    return { v: p.pimp / p.p, tip: paperTip(p, p.pimp + " of " + p.p + " imprecise"), href: link(p), color: C.yellow };
-  }), { label: "share imprecise", fmt: function (v) { return Math.round(v * 100) + "%"; }, vfmt: function (v) { return Math.round(v * 100) + "%"; } });
-
-  var c10 = card(cards, "Non-significant p values", "P values above .05, which the check asks to be interpreted with care (absence of evidence is not evidence of absence).");
-  strip(c10, vals("nonsig"), { mode: "log1p", label: "non-significant p values in the preprint", color: C.s2 });
-  say(c10, fmt(total("nonsig")) + " in total; " + share(function (p) { return p.nonsig > 0; }) + " of the preprints report at least one.");
 }
 
 function drawStatcheck(cards) {
   var sc = D.statcheck.map(function (r) { return { rep: r[0], comp: r[1], cmp: r[2], type: r[3], err: r[4], dec: r[5], df1: r[6], df2: r[7], i: r[8] }; });
   var c = card(cards, "Reported against recomputed",
     "Each dot is a t- or F-test. StatCheck recomputes the p value from the test statistic and degrees of freedom. On the line, the two agree; far from it, they do not. Point at a dot to see the test.", true);
+  // the consistent tests with a recomputed p below .001 are left out: they
+  // are many, all fine, and would only form a grey band at the left
+  var tiny = count(sc, function (r) { return !r.err && r.comp < 0.001; });
+  var shown = sc.filter(function (r) { return r.err || r.comp >= 0.001; });
   legend(c, [{ label: "consistent", color: C.grey }, { label: "inconsistent", color: C.yellow }, { label: "inconsistent, and the conclusion about significance changes", color: C.red }], true);
-  scatter(c, sc.map(function (r) {
+  scatter(c, shown.map(function (r) {
     var p = P[r.i];
-    return { x: Math.max(r.comp, 1e-16), y: Math.max(r.rep, 1e-16), z: r.dec ? 2 : r.err ? 1 : 0,
+    return { x: Math.max(r.comp, 1e-4), y: Math.max(r.rep, 1e-4), z: r.dec ? 2 : r.err ? 1 : 0,
              color: r.dec ? C.red : r.err ? C.yellow : C.grey, opacity: r.err ? 0.95 : 0.45, href: p ? link(p) : null,
              tip: (p ? paperTip(p) + "<br>" : "") + esc((r.type || "") + " test") + "<br>reported p " + esc(r.cmp) + " " + fmt(r.rep) +
                   "<br>recomputed p = " + (r.comp < 0.0001 ? r.comp.toExponential(1) : fmt(r.comp)) + (r.dec ? "<br><b>decision error</b>" : r.err ? "<br><b>inconsistent</b>" : "") };
-  }), { xmode: "log", ymode: "log", diag: true, xdom: [1e-16, 1], ydom: [1e-6, 1], xlabel: "recomputed p (log scale; below 10⁻¹⁶ at the left edge)", ylabel: "reported p", height: 340 });
+  }), { xmode: "log", ymode: "log", diag: true, xdom: [1e-4, 1], ydom: [1e-4, 1], xlabel: "recomputed p (log scale; below .0001 at the edge)", ylabel: "reported p", height: 340 });
+  say(c, "Not shown: " + fmt(tiny) + " consistent tests with a recomputed p below .001.");
   tiles(c, [{ value: fmt(sc.length), label: "tests recomputed" },
             { value: fmt(count(sc, function (r) { return r.err; })), label: "inconsistent (" + pc(count(sc, function (r) { return r.err; }), sc.length) + ")", kind: "yellow" },
             { value: fmt(count(sc, function (r) { return r.dec; })), label: "decision errors (" + pc(count(sc, function (r) { return r.dec; }), sc.length) + ")", kind: "red" },
@@ -977,13 +861,18 @@ function drawStatcheck(cards) {
              { value: fmt(none), label: "without one", kind: "yellow" }]);
   hbars(c4, list(D.counts.es_symbols), { labelW: 80, color: C.s1, what: "Effect size", unit: "Times reported" });
 
-  var c5 = card(cards, "Reported d against the d the test implies", "The size of Cohen's d as reported, and as computed from the t value and degrees of freedom (two equal groups), without the sign. Orange: more than 20% apart, worth a second look (or the design is not two equal groups).");
+  var c5 = card(cards, "Reported d against the d the test implies", "The size of Cohen's d as reported, and as computed from the t value and degrees of freedom if the test compares two groups of equal size, without the sign. Metacheck also tries other designs; the colour says which one makes the reported d fit the test.", true);
+  var FIT = { e: { label: "fits: two groups of equal size", color: C.s1 }, p: { label: "fits: within persons (dz)", color: C.s3 },
+              u: { label: "fits: two groups of unequal size", color: C.grey }, x: { label: "fits no design: worth a second look", color: C.s2 } };
+  var fits = ["e", "p", "u", "x"].filter(function (k) { return D.d_pairs.some(function (q) { return (q[3] || "x") === k; }); });
+  legend(c5, fits.map(function (k) { return FIT[k]; }), true);
   scatter(c5, D.d_pairs.map(function (q) {
-    var p = P[q[2]];
+    var p = P[q[2]], f = FIT[q[3] || "x"];
     var dr = Math.abs(q[0]), di = Math.abs(q[1]);
-    return { x: di, y: dr, color: Math.abs(dr - di) > 0.2 * Math.max(di, 0.1) ? C.s2 : C.s1, href: p ? link(p) : null,
-             tip: (p ? paperTip(p) + "<br>" : "") + "reported d = " + q[0] + "<br>implied d = " + q[1] };
-  }), { diag: true, xdom: [0, 3], ydom: [0, 3], xlabel: "d implied by the test (above 3 at the edge)", ylabel: "d reported", height: 280 });
+    return { x: di, y: dr, color: f.color, z: q[3] === "x" ? 1 : 0, href: p ? link(p) : null,
+             tip: (p ? paperTip(p) + "<br>" : "") + "reported d = " + q[0] + "<br>implied d (two equal groups) = " + q[1] + "<br>" + esc(f.label) };
+  }), { diag: true, xdom: [0, 3], ydom: [0, 3], xlabel: "d implied by the test, two equal groups (above 3 at the edge)", ylabel: "d reported", height: 340 });
+  say(c5, "Within-person tests fall on a line at half the height: their dz is about half the d of two groups.");
 }
 
 function drawPower(cards) {
@@ -1047,28 +936,25 @@ function drawOpen(cards) {
     { value: share(function (p) { return p.f_data > 0 || p.dfiles > 0; }), label: "share data" },
     { value: share(function (p) { return p.code > 0; }), label: "share code" },
     { value: share(function (p) { return p.readme > 0; }), label: "have a readme in the repository" },
-    { value: share(function (p) { return p.orcid > 0; }), label: "list an ORCID (as the converted text shows it)" },
-    { value: share(function (p) { return p.email > 0; }), label: "give an email address" },
-    { value: share(function (p) { return p.live > 0; }), label: "collected new data, by their text" },
-    { value: pc(count(P, function (p) { return p.live > 0 && p.ethics > 0; }), count(P, function (p) { return p.live > 0; })), label: "of those mention ethics approval" }
+    { value: share(function (p) { return p.orcid > 0; }), label: "list an ORCID (as the converted text shows it)" }
   ]);
 
   var c3 = card(cards, "Preregistration templates", "The kinds of preregistration the preprints link to.");
   hbars(c3, list(D.counts.prereg_templates), { labelW: 260, clip: 44, what: "Template", unit: "Preregistrations" });
 
-  var c4 = card(cards, "Do open preprints have fewer flags?", "The average number of checks flagged red or yellow, for preprints with and without each. (Sharing code adds checks that can flag it, so this is not a fair race.)");
-  var feats = [["a preregistration", function (p) { return p.prereg > 0; }], ["a repository", function (p) { return p.repos > 0 || p.files > 0; }],
-               ["shared data", function (p) { return p.f_data > 0 || p.dfiles > 0; }], ["shared code", function (p) { return p.code > 0; }],
-               ["a power analysis", function (p) { return p.pow > 0; }], ["a question mark in the title", function (p) { return p.tq; }],
-               ["a colon in the title", function (p) { return p.tc; }], ["more than 5 authors", function (p) { return p.auth > 5; }]];
-  dumbbell(c4, feats.map(function (f) {
-    var yes = P.filter(f[1]), no = P.filter(function (p) { return !f[1](p); });
-    var my = yes.length ? mean(yes.map(function (p) { return p.flags; })) : null, mn = no.length ? mean(no.map(function (p) { return p.flags; })) : null;
-    return { label: "with " + f[0], a: mn, b: my,
-             tipA: "<b>without " + esc(f[0]) + "</b><br>" + no.length + " preprints, on average " + (mn === null ? "–" : mn.toFixed(2)) + " flags",
-             tipB: "<b>with " + esc(f[0]) + "</b><br>" + yes.length + " preprints, on average " + (my === null ? "–" : my.toFixed(2)) + " flags" };
-  }).filter(function (r) { return r.a !== null && r.b !== null; }),
-  [{ label: "without", color: C.grey }, { label: "with", color: C.green }], { xlabel: "checks red or yellow, on average" });
+  var c4 = card(cards, "Which repositories are used", "The preprints that link to each repository website (a preprint can link to several).");
+  var withRepo = count(P, function (p) { return p.repos > 0 || p.files > 0; });
+  hbars(c4, list(D.counts.repo_sites || [], null, C.s1), { labelW: 200, clip: 30, what: "Repository", unit: "Preprints" });
+  say(c4, fmt(withRepo) + " of the " + fmt(P.length) + " preprints link to at least one repository.");
+}
+
+function drawEthics(cards) {
+  var live = count(P, function (p) { return p.live > 0; });
+  var c = card(cards, "", "", true);
+  tiles(c, [
+    { value: share(function (p) { return p.live > 0; }), label: "collected new data, by their text" },
+    { value: pc(count(P, function (p) { return p.live > 0 && p.ethics > 0; }), live), label: "of those mention ethics approval" }
+  ]);
 }
 
 function drawCode(cards) {
@@ -1141,21 +1027,18 @@ function drawRepro(cards) {
 
 function drawData(cards) {
   var withData = P.filter(function (p) { return p.cols > 0; });
-  var c = card(cards, "The data, column by column", "Every column of every data file Metacheck could read.");
+  var c = card(cards, "What is in the data columns?", "Metacheck opens every data file it can read and sorts each column in three ways: the kind of values it holds (numbers, ordered categories, or unordered categories), the role it seems to play in the study (a measured variable, an experimental condition, a participant identifier, or a time), and whether its values vary, are the same in every row, or are all empty.");
   tiles(c, [{ value: fmt(total("dfiles")), label: "data files" }, { value: fmt(total("cols")), label: "columns" },
             { value: fmt(withData.length), label: "preprints with data Metacheck could read" }]);
-  stack100(c, [{ label: "measurement level", counts: obj(D.counts.levels) }],
+  stack100(c, [{ label: "kind of values", counts: obj(D.counts.levels) }],
            [{ key: "ratio", label: "numbers", color: C.s1 }, { key: "ordinal", label: "ordered", color: C.s3 }, { key: "nominal", label: "categories", color: C.s2 }, { key: "unknown", label: "unknown", color: C.na }], { labelW: 130 });
-  stack100(c, [{ label: "what a column is", counts: obj(D.counts.roles) }],
+  stack100(c, [{ label: "role in the study", counts: obj(D.counts.roles) }],
            [{ key: "measure", label: "a measure", color: C.s1 }, { key: "condition", label: "a condition", color: C.s2 }, { key: "identifier", label: "an identifier", color: C.s3 }, { key: "timestamp", label: "a time", color: C.yellow }], { labelW: 130 });
-  stack100(c, [{ label: "content", counts: obj(D.counts.quality) }],
+  stack100(c, [{ label: "do values vary", counts: obj(D.counts.quality) }],
            [{ key: "ok", label: "varies", color: C.fine }, { key: "constant", label: "the same in every row", color: C.yellow }, { key: "empty", label: "empty", color: C.red }], { labelW: 130 });
 
-  var c2 = card(cards, "Possible problems in the data", "What the data check flagged, by kind.");
+  var c2 = card(cards, "Possible data quality issues", "Issues identified inside tabular data files.");
   hbars(c2, list(D.counts.data_issues, null, C.yellow), { labelW: 250, clip: 40, what: "Problem", unit: "Times flagged" });
-
-  var c3 = card(cards, "Columns per preprint", "Each dot is a preprint with data (log scale).");
-  strip(c3, vals("cols", function (p) { return p.cols > 0; }), { mode: "log", label: "data columns" });
 
   var c4 = card(cards, "Missing values", "The average share of missing values in a preprint's columns.");
   strip(c4, P.filter(function (p) { return p.cmiss !== null; }).map(function (p) {
@@ -1300,34 +1183,7 @@ var VARS = [
   ["flags", "checks red or yellow"], ["reds", "checks red"]
 ];
 function drawCorrelations(cards) {
-  var c = card(cards, "Everything against everything",
-    "The rank correlation (Spearman) between every two counts, over all preprints. Orange: the two go up together; blue: one goes up as the other goes down. Point at a square to see the pair; click it to plot the pair below.", true);
-  var cols = VARS.map(function (v) { return P.map(function (p) { return p[v[0]] === undefined ? null : p[v[0]]; }); });
-  legend(c, [{ label: "−1", color: C.s1 }, { label: "0", color: C.mid }, { label: "+1", color: C.s2 }]);
-  var cache = {};
-  function rho(i, j) {
-    var k = i < j ? i + "," + j : j + "," + i;
-    if (!(k in cache)) cache[k] = spearman(cols[i], cols[j]);
-    return cache[k];
-  }
-  var s = grid(c, VARS.length, VARS.length, function (i, j) {
-    if (i === j) return { fill: C.surface, tip: "<b>" + esc(VARS[i][1]) + "</b>" };
-    var r = rho(i, j);
-    return { fill: diverging(r.r), dark: r.r !== null && Math.abs(r.r) > 0.6,
-             tip: "<b>" + esc(VARS[i][1]) + "</b><br>and <b>" + esc(VARS[j][1]) + "</b><br>ρ = " + (r.r === null ? "–" : r.r.toFixed(2)) + " over " + r.n + " preprints",
-             label: r.r !== null && Math.abs(r.r) >= 0.5 ? r.r.toFixed(1).replace(/^(-?)0/, "$1") : "" };
-  }, { labelW: 210, cellH: 19, top: 20, rowLabel: function (i) { return VARS[i][1]; }, colLabel: function (j) { return String(j + 1); }, font: 11, gap: 1 });
-  s.addEventListener("click", function (e) {
-    var t = e.target;
-    if (t.tagName !== "rect") return;
-    var gm = s.geometry, box = s.getBoundingClientRect(), x = (e.clientX - box.left) * gm.w / box.width, y = (e.clientY - box.top) * parseFloat(s.getAttribute("viewBox").split(" ")[3]) / box.height;
-    var j = Math.floor((x - gm.lw) / gm.cw), i = Math.floor((y - gm.top) / gm.ch);
-    if (i >= 0 && j >= 0 && i < VARS.length && j < VARS.length && i !== j) { selX.value = VARS[j][0]; selY.value = VARS[i][0]; plot(); c2.scrollIntoView({ behavior: "smooth", block: "center" }); }
-  });
-  // the numbers of the columns, under the names
-  say(c, VARS.map(function (v, i) { return (i + 1) + " " + v[1]; }).join(" · "));
-
-  var c2 = card(cards, "Make your own chart", "Choose any two counts. Each dot is a preprint; click one to open its report.", true);
+  var c2 = card(cards, "", "Choose any two counts. Each dot is a preprint; click one to open its report.", true);
   var ctl = el("div", { class: "controls" });
   function select(def) {
     var s = el("select", {});
@@ -1411,21 +1267,21 @@ fetch("../data/totals.json", { cache: "no-cache" })
     var up = toDate(D.updated);
     document.getElementById("updated").textContent = fmt(P.length) + " preprints, counted on " + dayYear(up) + ".";
     sectionsBox.innerHTML = "";
-    section("numbers", "In numbers", "Everything Metacheck counted, added up.", drawNumbers);
-    section("lights", "The traffic lights", "Each check gives a preprint a light: red (to fix), yellow (to check), blue (for information), green (fine), or grey when it had nothing to check.", drawWall);
-    section("relations", "How problems relate", "Do the flags of one check come with the flags of another?", drawRelations);
-    section("time", "Over time", "", drawTime);
+    section("open", "Open science", "", drawOpen);
+    section("ethics", "Ethics approval", "", drawEthics);
+    section("lights", "How often does Metacheck spot a potential issue to improve?", "Each check gives a preprint a light: red (to fix), yellow (to check), blue (for information), green (fine), or grey when it had nothing to check.", drawWall);
+    section("relations", "How problems relate", "How strongly do potential issues correlate?", drawRelations);
+    section("time", "Number of converted preprints over time", "", drawTime);
     section("pvalues", "P values", "Every p value Metacheck found in the text.", drawP);
     section("statcheck", "Tests and effect sizes", "", drawStatcheck);
     section("power", "Power analyses", "", drawPower);
-    section("open", "Open science", "", drawOpen);
     section("code", "Code", "The code files in the preprints' repositories.", drawCode);
-    section("repro", "Running the code", "", drawRepro);
+    section("repro", "Computational Reproducibility", "", drawRepro);
     section("data", "Data", "", drawData);
     section("repos", "Repositories", "", drawRepos);
-    section("literature", "The cited literature", "", drawLiterature);
-    section("preprints", "The preprints themselves", "", drawPreprints);
-    section("correlations", "Everything against everything", "", drawCorrelations);
+    section("literature", "References in the preprints", "", drawLiterature);
+    section("preprints", "Information about the preprints", "", drawPreprints);
+    section("correlations", "Make your own chart", "", drawCorrelations);
     section("records", "Records", "", drawRecords);
   })
   .catch(function (err) {

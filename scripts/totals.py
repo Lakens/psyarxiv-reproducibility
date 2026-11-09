@@ -16,6 +16,7 @@ import json
 import math
 import os
 import re
+import urllib.parse
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -66,6 +67,37 @@ MESSAGE_KINDS = [
 ]
 PACKAGE_MISSING = [re.compile(r"there is no package called ['‘’\"]?([A-Za-z0-9._]+)"),
                    re.compile(r"No module named ['\"]([A-Za-z0-9_.]+)")]
+
+
+# Repository websites by their address; a DOI by its prefix
+SITES = {"osf.io": "OSF", "github.com": "GitHub", "researchbox.org": "ResearchBox",
+         "zenodo.org": "Zenodo", "figshare.com": "Figshare", "gitlab.com": "GitLab",
+         "datadryad.org": "Dryad", "psycharchives.org": "PsychArchives",
+         "reshare.ukdataservice.ac.uk": "UK Data Service ReShare", "data.4tu.nl": "4TU.ResearchData",
+         "data.mendeley.com": "Mendeley Data", "ldbase.org": "LDbase"}
+DOI_SITES = {"10.5281": "Zenodo", "10.17605": "OSF", "10.6084": "Figshare", "10.5061": "Dryad",
+             "10.7910": "Dataverse", "10.34894": "Dataverse", "10.23668": "PsychArchives",
+             "10.4121": "4TU.ResearchData", "10.17632": "Mendeley Data", "10.5255": "UK Data Service ReShare"}
+
+
+def repo_site(url):
+    # the website a repository link goes to, such as "OSF"; None when unknown
+    url = urllib.parse.unquote(str(url or "").strip())
+    m = re.search(r"safelinks\.protection\.outlook\.com/\?url=([^&]+)", url)
+    if m:                                   # a link pasted from an Outlook email
+        url = m.group(1)
+    m = re.search(r"(?:^|doi\.org/)(10\.\d{4,9})/", url, re.I)
+    if m:
+        return DOI_SITES.get(m.group(1), "other (DOI " + m.group(1) + ")")
+    host = re.sub(r"^www\.", "", re.sub(r"^[a-z]+://", "", url, flags=re.I).split("/")[0].lower())
+    if not host:
+        return None
+    for h, name in SITES.items():
+        if host == h or host.endswith("." + h):
+            return name
+    if "dataverse" in host:
+        return "Dataverse"
+    return host
 
 
 def num(x):
@@ -235,7 +267,11 @@ def paper_row(i, item, result, acc):
         d = num(r.get("d_reported"))
         di = num(r.get("d_implied_indep_equal_n"))
         if d is not None and di is not None and abs(d) < 10 and abs(di) < 10:
-            acc["d_pairs"].append([round(d, 3), round(di, 3), i])
+            # the design under which metacheck finds the reported d fits the
+            # test: e equal groups, p paired (d_z), u unequal groups, x none
+            fit = {"independent_equal_n": "e", "paired_dz": "p", "paired_drm_r05": "p",
+                   "independent_unequal_n_range": "u"}.get(r.get("d_coherence_assumption"), "x")
+            acc["d_pairs"].append([round(d, 3), round(di, 3), i, fit])
 
     # power
     pw = table(result, "power")
@@ -261,6 +297,13 @@ def paper_row(i, item, result, acc):
     row["files"] = len(repo)
     row["bytes"] = sum(num(r.get("file_size")) or 0 for r in repo)
     row["repos"] = len({r.get("repo_url") for r in repo if r.get("repo_url")})
+    # each repository website once per preprint; also the repositories that
+    # could not be read, which only the summary names
+    m = mods.get("repo_check") or {}
+    urls = {r.get("repo_url") for r in repo if r.get("repo_url")}
+    urls |= set(re.findall(r"https?://[^\s;),]+", str(m.get("summary_text") or "")))
+    for site in {repo_site(u) for u in urls} - {None}:
+        acc["repo_sites"][site].add(base)
     kinds = collections.Counter(r.get("data_type") or "unknown" for r in repo)
     for k in ("data", "code", "materials", "documentation"):
         row["f_" + k] = kinds.get(k, 0)
@@ -269,7 +312,6 @@ def paper_row(i, item, result, acc):
         ext = os.path.splitext(str(r.get("file_name") or ""))[1].lower().lstrip(".")
         if ext and len(ext) <= 6:
             acc["extensions"][ext].add(base)
-    m = mods.get("repo_check") or {}
     names = m.get("naming_issues") if isinstance(m.get("naming_issues"), list) else []
     row["naming"] = len(names)
     for r in names:
@@ -346,8 +388,14 @@ def paper_row(i, item, result, acc):
     row["cmiss"] = round(sum(shares) / len(shares), 4) if shares else None
     issues = data_rows(result) if dat or (mods.get("data_check") or {}).get("report") else []
     row["dissues"] = len(issues)
-    for r in issues:
-        acc["data_issues"][r.get("label") or "other"] += 1
+    # by kind: "check" in metacheck's findings ("label" there names the sheet
+    # of a problem with a whole sheet); results from before the findings list
+    # only have the label, which then is the kind
+    found = (mods.get("data_check") or {}).get("findings")
+    kinds = ([r.get("check") or r.get("label") or "other" for r in found] if isinstance(found, list)
+             else [r.get("label") or "other" for r in issues])
+    for k in kinds:
+        acc["data_issues"][k] += 1
     careless = (mods.get("data_check") or {}).get("careless")
     if isinstance(careless, list):
         row["careless"] = len(careless)
@@ -388,7 +436,7 @@ def main():
            "section_types": C(), "domains": C(), "title_words": C(), "keywords": C(),
            "authors": S(), "countries": C(), "bib_types": C(), "ref_years": C(), "ref_ages": C(),
            "journals": C(), "cited": S(), "cited_info": {}, "es_symbols": C(),
-           "prereg_templates": C(), "extensions": S(), "naming_rules": S(), "languages": S(),
+           "prereg_templates": C(), "extensions": S(), "naming_rules": S(), "languages": S(), "repo_sites": S(),
            "packages": collections.defaultdict(C), "outcomes": C(),
            "outcome_lang": collections.defaultdict(C), "reasons": C(), "message_kinds": C(),
            "missing_packages": C(), "messages": C(), "levels": C(), "quality": C(), "roles": C(),
@@ -448,6 +496,7 @@ def main():
             "prereg_templates": top(acc["prereg_templates"], 15),
             "extensions": [[e, len(b)] for e, b in sorted(acc["extensions"].items(), key=lambda kv: -len(kv[1]))][:TOP],
             "naming_rules": [[r, len(b)] for r, b in sorted(acc["naming_rules"].items(), key=lambda kv: -len(kv[1]))],
+            "repo_sites": [[r, len(b)] for r, b in sorted(acc["repo_sites"].items(), key=lambda kv: -len(kv[1]))],
             "languages": [[l, len(b)] for l, b in sorted(acc["languages"].items(), key=lambda kv: -len(kv[1]))],
             "packages": {lang: top(c, 25) for lang, c in acc["packages"].items() if lang in ("R", "Python")},
             "outcomes": top(acc["outcomes"]),
