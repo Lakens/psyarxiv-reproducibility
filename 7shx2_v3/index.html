@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: What Makes Co-Speech Gestures
+Memorable?</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+What Makes Co-Speech Gestures Memorable?
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.22
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>2</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>2</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>11</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(2)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Marginal Significance</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>You described 1 effect with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>You described effects with terms related to ‘marginally significant’.
+If <em>p</em> values above 0.05 are interpreted as an effect, you
+inflate the alpha level, and increase the Type 1 error rate. If a
+<em>p</em> value is higher than the prespecified alpha level, it should
+be interpreted as a non-significant result.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Section Header
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+The model predicting visual-only HR was marginally significant (p=.06,
+Table .4), indicating that the gesture features examined-including scale
+of movement, which reliably predicts memorability in dance (Ongchoco et
+al., 2022)-do not predict memorability when gesture is presented without
+speech.
+</td>
+<td style="text-align:left;">
+E. Naïve online crowdsourced rating on typicality predicts gesture
+memorability
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate at which
+non-significant p-values are interpreted as marginally significant,
+see:</p>
+<p>Olsson-Collentine A, van Assen MALM, Hartgerink CHJ (2019). “The
+Prevalence of Marginally Significant Results in Psychology Over Time.”
+<em>Psychological Science</em>, <b>30</b>, 576–586.
+<a href="https://doi.org/10.1177/0956797619830326">doi:10.1177/0956797619830326</a>.</p>
+<p>For the list of terms used to identifify marginally significant
+results, see this <a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Exact
+P-Values</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 10 imprecise <em>p</em> values out of 48 detected <em>p</em>
+values.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Reporting <em>p</em> values imprecisely (e.g., <em>p</em> &lt; .05)
+reduces transparency, reproducibility, and re-use (e.g., in <em>p</em>
+value meta-analyses). Best practice is to report exact p-values with
+three decimal places (e.g., <em>p</em> = .032) unless <em>p</em> values
+are smaller than 0.001, in which case you can use <em>p</em> &lt;
+.001.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (e.g., “decreased at the <em>p</em>
+&lt; .05 significance threshold”).</p>
+<div style="max-height:8em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+P-Value
+</th>
+<th style="text-align:left;">
+Text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+We combined these factors in a linear regression (Supplemental Method.3)
+to predict audiovisual memorability, and found a significant model fit
+(adjusted R² =.39, p&lt;.001, AIC=531) with audio-only HR as a
+significant predictor (β=.51, p&lt;.001); visual-only HR was not
+(p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps&gt;.05
+</td>
+<td style="text-align:left;">
+Visual-only HR correlated with audiovisual HR when audio-only HR was
+high (Spearman ρ=.23, p=.01), but not when it was low or medium
+(ps&gt;.05) (Fig. 5).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps&gt;.05
+</td>
+<td style="text-align:left;">
+As expected, the residuals from the 360 stimuli did not correlate with
+visual-only or audio-only HR (ps&gt;.05), suggesting that the multimodal
+residuals capture information beyond the information in either modality.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+The total number of gestures did not predict visual-only HR (p&gt;.05),
+suggesting that more memorable gestures are not simply those containing
+more individual gestures, but rather those containing more information.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Interestingly, when gesture was embedded in speech in the audiovisual
+condition, number of gesture strategies did not predict audiovisual HR
+(p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Speech-unique (β=.13, p=.005) and shared (β=.14, p=.02) strategies
+significantly predicted audiovisual memorability, but gesture-unique
+strategies did not (p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps&gt;.05
+</td>
+<td style="text-align:left;">
+We found no significant correlations with False Discovery Rate
+correction (q&lt;.05, ps&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Using speed-related parameters did not (p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+We found the same results for audiovisual HR (distance-related: adjusted
+R² =.05, p&lt;.001, AIC=687; speedrelated: p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+But audio-only HR predicted audiovisual HR significantly better than
+visual-only HR (Fisher’s z=7.79, p&lt;.001, two-tailed), suggesting that
+variance in speech dominates audiovisual memorability.Nevertheless,
+visual-only and audio-only HRs were uncorrelated (p&gt;.05, Fig.4C),
+suggesting that gesture and speech account for different aspects of
+multimodal memorability.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>The APA manual states: Report exact <em>p</em> values (e.g.,
+<em>p</em> = .031) to two or three decimal places. However, report
+<em>p</em> values less than .001 as <em>p</em> &lt; .001. However, 2
+decimals is too imprecise for many use-cases (e.g., a <em>p</em> value
+meta-analysis), so report <em>p</em> values with three digits.</p>
+<p>American Psychological Association (2020). <em>Publication manual of
+the American Psychological Association</em>, 7 edition. American
+Psychological Association.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(2)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 11 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+We combined these factors in a linear regression (Supplemental Method.3)
+to predict audiovisual memorability, and found a significant model fit
+(adjusted R² =.39, p&lt;.001, AIC=531) with audio-only HR as a
+significant predictor (β=.51, p&lt;.001); visual-only HR was not
+(p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps&gt;.05
+</td>
+<td style="text-align:left;">
+Visual-only HR correlated with audiovisual HR when audio-only HR was
+high (Spearman ρ=.23, p=.01), but not when it was low or medium
+(ps&gt;.05) (Fig. 5).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps&gt;.05
+</td>
+<td style="text-align:left;">
+As expected, the residuals from the 360 stimuli did not correlate with
+visual-only or audio-only HR (ps&gt;.05), suggesting that the multimodal
+residuals capture information beyond the information in either modality.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+The total number of gestures did not predict visual-only HR (p&gt;.05),
+suggesting that more memorable gestures are not simply those containing
+more individual gestures, but rather those containing more information.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Interestingly, when gesture was embedded in speech in the audiovisual
+condition, number of gesture strategies did not predict audiovisual HR
+(p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Speech-unique (β=.13, p=.005) and shared (β=.14, p=.02) strategies
+significantly predicted audiovisual memorability, but gesture-unique
+strategies did not (p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps&gt;.05
+</td>
+<td style="text-align:left;">
+We found no significant correlations with False Discovery Rate
+correction (q&lt;.05, ps&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Using speed-related parameters did not (p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+We found the same results for audiovisual HR (distance-related: adjusted
+R² =.05, p&lt;.001, AIC=687; speedrelated: p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p=.06
+</td>
+<td style="text-align:left;">
+The model predicting visual-only HR was marginally significant (p=.06,
+Table .4), indicating that the gesture features examined-including scale
+of movement, which reliably predicts memorability in dance (Ongchoco et
+al., 2022)-do not predict memorability when gesture is presented without
+speech.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+But audio-only HR predicted audiovisual HR significantly better than
+visual-only HR (Fisher’s z=7.79, p&lt;.001, two-tailed), suggesting that
+variance in speech dominates audiovisual memorability.Nevertheless,
+visual-only and audio-only HRs were uncorrelated (p&gt;.05, Fig.4C),
+suggesting that gesture and speech account for different aspects of
+multimodal memorability.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We could not check 1 repository: <a href="https://osf.io/3jhv8" class="uri">https://osf.io/3jhv8</a> (private).</li>
+<li>We found 16 files in 3 repositories.</li>
+<li>We found 0 README files and 2 repositories without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories-that-could-not-be-checked">Repositories that could
+not be checked</h4>
+<p>These repositories are linked in the paper, but their contents could
+not be retrieved, so nothing below describes them. When the reason is
+that the platform did not answer, running the check again later may
+work.</p>
+<ul>
+<li><a href="https://osf.io/3jhv8" class="uri">https://osf.io/3jhv8</a>:
+private</li>
+</ul>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:left;">
+Error
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/3jhv8" target="_blank">osf.io/3jhv8</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+private
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" target="_blank">osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="files">Files</h4>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Size
+</th>
+<th style="text-align:left;">
+Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/5vnkx/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">example1.mp4</a>
+</td>
+<td style="text-align:left;">
+1.4 MB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/ptbk7/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">example2.mp4</a>
+</td>
+<td style="text-align:left;">
+1.7 MB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/9w8dy/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">1.3.av.unmasked.mp4</a>
+</td>
+<td style="text-align:left;">
+550.9 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/ftw3z/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">5.3.av.unmasked.mp4</a>
+</td>
+<td style="text-align:left;">
+526.2 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/wz74d/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">8.2.av.unmasked.mp4</a>
+</td>
+<td style="text-align:left;">
+568.2 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/7crbz/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">1.3.a.mp4</a>
+</td>
+<td style="text-align:left;">
+213 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/crq7h/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">1.3.v.mp4</a>
+</td>
+<td style="text-align:left;">
+382.7 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/dfyvg/?view_only=4ac185e124fc4c4086ec802996c0ccd5" target="_blank">1.3.av.mp4</a>
+</td>
+<td style="text-align:left;">
+535.3 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/5vnkx/" target="_blank">example1.mp4</a>
+</td>
+<td style="text-align:left;">
+1.4 MB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/ptbk7/" target="_blank">example2.mp4</a>
+</td>
+<td style="text-align:left;">
+1.7 MB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/9w8dy/" target="_blank">1.3.av.unmasked.mp4</a>
+</td>
+<td style="text-align:left;">
+550.9 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/ftw3z/" target="_blank">5.3.av.unmasked.mp4</a>
+</td>
+<td style="text-align:left;">
+526.2 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/wz74d/" target="_blank">8.2.av.unmasked.mp4</a>
+</td>
+<td style="text-align:left;">
+568.2 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/7crbz/" target="_blank">1.3.a.mp4</a>
+</td>
+<td style="text-align:left;">
+213 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/crq7h/" target="_blank">1.3.v.mp4</a>
+</td>
+<td style="text-align:left;">
+382.7 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/dfyvg/" target="_blank">1.3.av.mp4</a>
+</td>
+<td style="text-align:left;">
+535.3 kB
+</td>
+<td style="text-align:left;">
+video
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="readme-files">README Files</h4>
+<p>README files are a way to document the contents and structure of a
+folder, helping users locate the information they need. You can use a
+README to document changes to a repository, and explain how files are
+named. Please consider adding a README to each repository or including
+‘README’ in the name of your overview document.</p>
+<h4 id="file-classification">File Classification</h4>
+<div class="callout-note" title="See how every file was classified and grouped" collapse="true">
+<p><strong>materials</strong> (16 files)</p>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+example1.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+01-example-transformation-performed-by-experimenter/example1.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+example2.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+01-example-transformation-performed-by-experimenter/example2.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.av.unmasked.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+02-example-actor-explanation/1.3.av.unmasked.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5.3.av.unmasked.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+02-example-actor-explanation/5.3.av.unmasked.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8.2.av.unmasked.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+02-example-actor-explanation/8.2.av.unmasked.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.a.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+03-example-stimuli/1.3.a.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.v.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+03-example-stimuli/1.3.v.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.av.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+03-example-stimuli/1.3.av.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+example1.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+01-example-transformation-performed-by-experimenter/example1.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+example2.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+01-example-transformation-performed-by-experimenter/example2.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.av.unmasked.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+02-example-actor-explanation/1.3.av.unmasked.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5.3.av.unmasked.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+02-example-actor-explanation/5.3.av.unmasked.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8.2.av.unmasked.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+02-example-actor-explanation/8.2.av.unmasked.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.a.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+03-example-stimuli/1.3.a.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.v.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+03-example-stimuli/1.3.v.mp4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1.3.av.mp4
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+03-example-stimuli/1.3.av.mp4
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</details>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>All papers that appeared to involve live data collection contained an
+ethics approval statement.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(11)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>We found 3 OSF links, but no registrations.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests detected</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We classified 16 files: 16 materials.</li>
+<li>We found 0 tabular data files and extracted 0 columns from 0 of
+them.</li>
+<li>We grouped the files into 1 study group (ex1). We found no readable
+tabular data files to validate.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="files">Files in the repository</h2>
+<p>Where the files sit within each repository. Each file is followed by
+how it was classified, which study it belongs to; junk files, hidden
+files and empty folders are marked.</p>
+<p><strong>Repository: <a href="https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5" class="uri">https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5</a></strong></p>
+<div style="max-height: 40em; overflow: auto;">
+<pre><code>├── 01-example-transformation-performed-by-experimenter/
+│   ├── example1.mp4                                      📁 materials ex1
+│   └── example2.mp4                                      📁 materials ex1
+├── 02-example-actor-explanation/
+│   ├── 1.3.av.unmasked.mp4                               📁 materials ex1
+│   ├── 5.3.av.unmasked.mp4                               📁 materials ex1
+│   └── 8.2.av.unmasked.mp4                               📁 materials ex1
+└── 03-example-stimuli/
+    ├── 1.3.a.mp4                                         📁 materials ex1
+    ├── 1.3.av.mp4                                        📁 materials ex1
+    └── 1.3.v.mp4                                         📁 materials ex1</code></pre>
+</div>
+<p><strong>Repository: <a href="https://osf.io/uxzve" class="uri">https://osf.io/uxzve</a></strong></p>
+<div style="max-height: 40em; overflow: auto;">
+<pre><code>├── 01-example-transformation-performed-by-experimenter/
+│   ├── example1.mp4                                      📁 materials ex1
+│   └── example2.mp4                                      📁 materials ex1
+├── 02-example-actor-explanation/
+│   ├── 1.3.av.unmasked.mp4                               📁 materials ex1
+│   ├── 5.3.av.unmasked.mp4                               📁 materials ex1
+│   └── 8.2.av.unmasked.mp4                               📁 materials ex1
+└── 03-example-stimuli/
+    ├── 1.3.a.mp4                                         📁 materials ex1
+    ├── 1.3.av.mp4                                        📁 materials ex1
+    └── 1.3.v.mp4                                         📁 materials ex1</code></pre>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, and it was present:</p>
+<blockquote>
+<p>These 20 adult speakers were recruited on the streets of downtown
+Chicago near Mindworks, a public-facing laboratory.</p>
+</blockquote>
+<blockquote>
+<p>We recruited 1338, 1165, and 1545 online participants using Prolific
+for the audiovisual, visual-only, and audio-only experiments,
+respectively.</p>
+</blockquote>
+<blockquote>
+<p>Each stimulus was viewed by about 40 participants, as prior work
+shows that memorability scores can be sufficiently calculated from 40
+viewers (Isola et al., 2014; see Supplemental Table.2.1 for number of
+participants assigned to each speaker).</p>
+</blockquote>
+<blockquote>
+<p>For all online experiments in this study, participants were
+compensated an hourly rate of $8.00 and were allowed to end the
+experiment at any time.</p>
+</blockquote>
+<blockquote>
+<p>During the test phase that followed a page of test instructions, 18
+stimuli from the same speaker (Speaker 1) were presented in 18 trials,
+and participants were asked to rate whether each stimulus was new or old
+on a 5-point Likert scale.</p>
+</blockquote>
+<blockquote>
+<p>Participants were not provided with any context for the speakers’
+explanations and were instructed to memorize the 9 stimuli for an
+upcoming memory test.</p>
+</blockquote>
+<blockquote>
+<p>Participants were told to press the r key when the border turned
+red.</p>
+</blockquote>
+<blockquote>
+<p>After the study phase, participants were shown instructions for the
+test phase, and their memory was tested using 18 old/new memory judgment
+test trials that included the 9 studied stimuli and 9 foil stimuli from
+the same speaker.</p>
+</blockquote>
+<blockquote>
+<p>In each test trial, the stimulus was presented in a looped manner,
+and the participant had to rate the stimulus as “definitely old,”
+“probably old,” “not sure,” “probably new,” or “definitely new.”</p>
+</blockquote>
+<blockquote>
+<p>At the end of the second study-test block, participants filled out a
+demographic survey, rated whether the experiment ran smoothly, and gave
+additional comments, if any.</p>
+</blockquote>
+<blockquote>
+<p>We recruited a new group of 472 online participants on Prolific (221
+female, 204 male, 27 other, see Supplemental Table.8.2 for age
+composition) and asked them to rate 12 attributes on a nine-point Likert
+scale (1=not at all,9=extremely) for gestures in each visual-only
+stimulus.</p>
+</blockquote>
+<blockquote>
+<p>Each trial (rating of 12 attributes on 1 visual-only stimulus)
+contained two attention check questions: (1) participants were asked to
+indicate a computer-generated random number between 1 and 9 (and were
+excluded if they answered any incorrectly), and (2) participants were
+asked whether the speaker in the video stimulus was wearing long sleeves
+(and were excluded if they answered more than half of the trials
+incorrectly).</p>
+</blockquote>
+<blockquote>
+<p>Before the 12 experimental trials, participants filled out a
+demographic survey.</p>
+</blockquote>
+<blockquote>
+<p>Not surprisingly (Revsine et al., 2025), participants were consistent
+in the stimuli they remembered when presented auditorily (Spearman-Brown
+corrected, SBc, ρ=.67, p&lt;.001; Fig. 3B).</p>
+</blockquote>
+<blockquote>
+<p>But participants were also consistent in the stimuli they remembered
+when presented visually (SBc ρ=.49, p&lt;.001, Fig. 3A) and
+audiovisually (SBc ρ=.59, p&lt;.001, Fig. 3C).</p>
+</blockquote>
+<blockquote>
+<p>Between 32% and 45% of the recruited online participants were
+excluded, which aligns with current exclusion rates for online
+experiments.</p>
+</blockquote>
+<blockquote>
+<p>Table.1 shows the number of participants excluded based on each
+exclusion criterion.Number of online participants excluded based on each
+exclusion criterion in the memory test</p>
+</blockquote>
+<p>Ethics approval statement:</p>
+<blockquote>
+<p>All participants consented to participate following the Institutional
+Review Board (IRB) guidelines at University of Chicago (IRB98-056,
+IRB19-1395, applied to all experiments in this study).</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+StatCheck
+</summary>
+<div class="fold">
+<p>No t-tests or F-tests detected.</p>
+<p>The accuracy of StatCheck has only been validated for
+<em>t</em>-tests and <em>F</em>-tests.</p>
+</div>
+</details>
+<details>
+<summary>
+Data Check
+</summary>
+<div class="fold">
+<p>This module classifies repository files and, for tabular data files
+available locally, extracts each column’s type and summary
+statistics.</p>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 41 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 41 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 41 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Wilma A. Bainbridge serves as a consultant for a private AI company under a confidentiality agreement, however that work is unrelated to the current study and began after the current study&#x27;s analyses were completed. The remaining authors declare no competing interests.</p>
+<h3>What Makes Co-Speech Gestures Memorable? I. Introduction</h3>
+<p>Speakers naturally move their hands when they talk--they gesture. These co-speech gestures serve communication by giving listeners access to information, some of which is found exclusively in gesture (Goldin-Meadow, 2003 , 2023). For example, a speaker says, &quot;I ran upstairs,&quot; while producing an upward spiral gesture; only the gesture tells the listener that the stairway is spiral. Co-speech gesture is a unique visual stimulus because it is fully integrated with speech (Congdon et al., 2017; McNeill, 1992) and thus multimodal. It is produced without speakers&#x27; intentional planning (Rauscher et al., 1996), reduces speakers&#x27; cognitive load (Goldin-Meadow et al., 2001; Ping &amp; Goldin-Meadow, 2010), and benefits learning in speakers (Goldin-Meadow et al., 2009) and listeners (Wang et al., 2026; Zhang et al., 2025). These properties make gesture a powerful tool for teaching and learning. However, the mechanisms underlying gesture&#x27;s benefits are poorly understood, limiting its application to educational settings.</p>
+<p>Gesture might affect learning by enhancing memory. Although we know that gesture promotes memory for new vocabulary (So et al., 2012) and that information in speech is better remembered when it occurs with gesture than without it (Church et al., 2007), very little is known about how gesture affects memory. Studies of visual stimuli other than gesture find that certain visual stimuli are more likely to be remembered than others, regardless of who is doing the remembering. Despite individual differences in memory capability and personal experience, as a group, people tend to consistently remember, and forget, particular visual stimuli (Bainbridge et al., 2013; Guo &amp; Bainbridge, 2025; Isola et al., 2011). Such memory consistency across people for a given stimulus is called memorability. Here, we examine whether people display memory consistency for co-speech gestures, presented with speech (gesture+speech audiovisual stimuli) and without it (gesture visual stimuli). Importantly, only one prior study has studied memorability for multimodal stimuli, specifically examining audio and visual features of movie clips at a coarse level (Cohendet et al., 2018). Only one other study has examined memorability for dynamic visual information, focusing on dance movements presented without sound (Ongchoco et al., 2022). The close coupling between gesture and speech allows us to explore multimodal factors that shape memorability of audiovisual stimuli, as in everyday communication.</p>
+<p>Studying memorability of gesture-speech stimuli, whose modalities are tightly integrated before encoding (Murray et al., 2024), can provide insight into the cognitive model of multisensory memory processing. In Baddeley&#x27;s (2020) influential model of working memory, auditory and visual information are processed separately and then integrated in an episodic buffer before being transferred to long-term memory. This account allows for integration of information from separate modalities in the buffer, which could result in new information.</p>
+<p>Importantly, Baddeley&#x27;s model argues that the central executive, including attention, is not necessary for multisensory integration in the episodic buffer; that is, unisensory information can directly contribute to the episodic buffer without the central executive actively selecting and binding unisensory inputs. In contrast, the predictive coding framework (Quak et al., 2015) suggests that attention plays a key role in determining what and how multimodal sensory inputs are combined with existing representations in long-term memory. Memorability is well suited to disentangle the role of attention in memory for multimodal information because it explains variance in memory independent of attention (Wakeland-Hart et al., 2022). If gesture-speech integration is controlled by attention (as per Quak et al.), we would expect no effect of integration on memorability, which captures variance in memory not attention. But if gesture-speech integration takes place in the episodic memory buffer, where attentional control is not necessary, we might expect effects on memorability. Finding that combined gesture-speech memorability exceeds what can be accounted for by gesture and speech memorability alone would provide additional evidence for Baddeley&#x27;s (2020) buffer.</p>
+<p>Memorability is driven by properties intrinsic to the stimulus, as found in thousands of participants remembering and forgetting the same stimuli across retrieval delays (Goetschalckx et al., 2018; Isola et al., 2014; Lin et al., 2021). Moreover, both meaning and form features of visual stimuli affect their memorability. Memorability for object images is driven primarily by semantic features (category, function, etc.; Kramer et al., 2023); memorability for dance movements is driven by form features (scale of movements; Ongchoco et al., 2022). Researchers typically code gesture form and meaning (e.g., McNeill, 1992). But when relating gesture to the speech it accompanies, meaning is the more important construct (Goldin-Meadow, 2003). The speech+gesture stimuli we use offer an opportunity to examine how gesture&#x27;s meaning and form, taken in relation to speech, affect memorability.</p>
+<p>Here, we examined (1) whether certain gestures, presented alone or with speech, are more memorable than others, and, if so, (2) which properties of co-speech gesture (form/meaning) contribute to its memorability. We ran a series of experiments to measure memorability of hundreds of stimuli presented to different participants in three conditions-gesture alone (visualonly), speech alone (audio-only), or gesture+speech together (visual+audio)-and we examined how they relate to each other. To enhance the ecological validity of our stimuli, we used recordings of spontaneously produced gestures during speakers&#x27; explanations of a difficult concept.</p>
+<h3>II. Method</h3>
+<p>II. Method</p>
+<h3>A. Stimuli</h3>
+<p>We created a set of stimuli by video recording 20 naïve participants (whom we call &quot;speakers&quot;; see Supplemental Table .1.1 for information on the speakers and Supplemental Method.1 for methods used to generate and process the video recordings). These 20 adult speakers were recruited on the streets of downtown Chicago near Mindworks, a public-facing laboratory. They first watched videos of children who failed to explain Piagetian conservation problems (Piaget &amp; Szeminska, 1941 /1952), such as believing that liquid volume changes when the shape of a container changes or that the number of items changes when they are arranged differently. Conservation is a particularly informative task for studying speech+gesture integration for three reasons: (1) The cognitive effects of gesture produced on conservation tasks has been extensively studied (Alibali et al., 2014; Church, 1999; Church &amp; Goldin-Meadow, 1986; Goldin-Meadow et al., 1992; Kelly et al., 2002; Kelly &amp; Church, 1997 , 1998; Perry et al., 1992; Ping &amp; Goldin-Meadow, 2010). ( 2) There is an established, reliable coding manual for children&#x27;s explanations of conservation (Church &amp; Goldin-Meadow, 1986); we adapted this manual to code the speakers&#x27; speech and gesture explanations (see Table .2). (3) Explanations of conservation often include meaningful iconic gestures illustrating the spatial relationship between differently shaped containers, which are interpretable even in the absence of speech (ing &amp; Goldin-Meadow, 2008). We can therefore examine the impact of gesture meaning on memorability.</p>
+<p>The speakers then watched a series of demonstrations in which continuous quantities were poured into containers of different shapes. After each demonstration, speakers were video recorded as they explained to an imaginary child that the amount of liquid did not change during the pouring (see Supplemental Fig. 1.1). The speakers produced unscripted speech and gestures as they explained each demonstration (see Fig. 1). We asked speakers to wear face shields to protect their identities and to eliminate communicative cues conveyed through facial expressions and lip movements. Mindworks rewarded each participant with gift credits redeemable for prizes as an incentive upon completion. Overview of the Method for Stimulus Creation and the Memory Test Note. During stimulus creation stage, we video-recorded 20 adults (denoted as &quot;speakers&quot; for clarity) explaining Piagetian liquid conservation problems using unscripted speech and gestures. These audiovisual recordings were processed into visual-only (gesture) and audio-only (speech) stimuli, and we extracted gesture and speech features from them.</p>
+<p>During the memory test stage with new participants, we collected memorability data for each stimulus by running online participants in a study/test recognition memory task, using a between-subjects design.</p>
+<p>We selected 18 10-second explanation snippets from each of the 20 adult speakers. The 10-second duration was chosen because it is sufficient time to capture an entire gesture and to avoid extended speech pauses. Each snippet could start or end in the middle of a sentence, but it contained sensible speech information relevant to conservation. We thus created 360 audiovisual stimuli containing gestures and speech. To obtain a corresponding set of visual-only stimuli with gesture but not speech, we muted the 360 audiovisual stimuli. To obtain a corresponding set of audio-only stimuli with speech but not gesture, we extracted the soundtrack of each audiovisual stimulus and paired it with a neutral-posed (sitting with hands on laps) static image of the speaker who produced the soundtrack. See an example audiovisual stimulus, and its corresponding visual-only and audio-only stimuli at https://osf.io/uxzve/overview?view_only=4ac185e124fc4c4086ec802996c0ccd5.</p>
+<h3>B. Participants</h3>
+<p>We collected online participants&#x27; memories of the stimuli (see Fig. 1) using a betweensubjects design in three separate experiments. We recruited 1338, 1165, and 1545 online participants using Prolific for the audiovisual, visual-only, and audio-only experiments, respectively. To ensure data quality, we only recruited participants who reported being fluent English speakers in the United States and having at least 90% approval rates on at least 50 previous tasks. After applying our exclusion criteria (see Section II.C), we were left with the following number of participants for each experiment: (1) 799 for audiovisual (400 female, 372 male, 27 other; mean age = 40.33, age range = [18,94]); (2) 787 for visual-only (429 female, 329 male, 29 other; mean age = 38.12, age range = [18,78]); (3) 851 for audio-only (452 female, 360 male, 39 other; mean age = 35.90, age range = [18,74]). Each stimulus was viewed by about 40 participants, as prior work shows that memorability scores can be sufficiently calculated from 40 viewers (Isola et al., 2014; see Supplemental Table.2.1 for number of participants assigned to each speaker). Each experiment took approximately sixteen minutes. For all online experiments in this study, participants were compensated an hourly rate of $8.00 and were allowed to end the experiment at any time. All participants consented to participate following the Institutional Review Board (IRB) guidelines at University of Chicago (IRB98-056, IRB19-1395, applied to all experiments in this study).</p>
+<h3>Memory Test Experimental Procedure</h3>
+<p>Note. The zoomed-in pictures on the left are screenshots of two 10-second stimuli from different speakers. The memory test consisted of two blocks with the same study-test design. During the study phase in block 1, nine random stimuli (each 10-seconds long) from a randomly chosen speaker (Speaker 1) were each presented with a 1-second fixation cross in between. During the test phase that followed a page of test instructions, 18 stimuli from the same speaker (Speaker 1) were presented in 18 trials, and participants were asked to rate whether each stimulus was new or old on a 5-point Likert scale. Block 2 was the same as block 1, except that the encoding and testing stimuli came from another randomly chosen speaker (Speaker 2). Participants&#x27; memory test performance was used to measure stimulus memorability. Speakers wore face shields to protect their identities and to eliminate communicative cues conveyed through facial expressions and lip movements.</p>
+<h3>C. Procedure</h3>
+<p>Before proceeding with the online task, participants answered prescreening questions to ensure that the video and sound would play smoothly. In the audiovisual experiment, participants answered a video prescreening question that required them to count and report the number of letters within a digit sequence, and an audio prescreening question that required them to type out a sentence they had heard. Participants could replay the video and audio. Participants in the visual-only experiment answered only the video prescreening question, and participants in the audio-only experiment answered only the audio prescreening question.</p>
+<p>The online task used a study-test paradigm (Fig. 2). Each participant was randomly assigned to observe two speakers in two different study-test blocks of the experiment. During the study phase, 9 stimuli (a random half of stimuli associated with a speaker) were presented in a sequence with a 1-s interstimulus interval during which a fixation cross appeared. Participants were not provided with any context for the speakers&#x27; explanations and were instructed to memorize the 9 stimuli for an upcoming memory test. As an attention check, the border of each stimulus turned red at a random time point during the last three seconds of each trial as the stimulus was playing. Participants were told to press the r key when the border turned red.</p>
+<p>Regardless of whether participants indicated the red border, it disappeared at the end of each trial.</p>
+<p>After the study phase, participants were shown instructions for the test phase, and their memory was tested using 18 old/new memory judgment test trials that included the 9 studied stimuli and 9 foil stimuli from the same speaker. In each test trial, the stimulus was presented in a looped manner, and the participant had to rate the stimulus as &quot;definitely old,&quot; &quot;probably old,&quot; &quot;not sure,&quot; &quot;probably new,&quot; or &quot;definitely new.&quot; An optional break followed the first study-test block. The second study-test block was the same as the first, except that stimuli from another randomly chosen speaker were presented. At the end of the second study-test block, participants filled out a demographic survey, rated whether the experiment ran smoothly, and gave additional comments, if any.</p>
+<p>We chose the study-test paradigm for two reasons: (1) We wanted to test memory within the same speaker&#x27;s gestures to avoid extraneous differences between speakers (e.g., backgrounds, clothes) that might affect participants&#x27; memory. (2) There were not enough stimuli (18/speaker) to serve as targets and fillers in a continuous recognition paradigm (a more commonly used paradigm to test memorability), where participants indicate target repeats within a stimulus sequence containing targets and fillers. Memorability has been shown to be a robust measure across different task parameters (Bainbridge, 2020; Bylinskii et al., 2015; Goetschalckx et al., 2019; Xie et al., 2020), and extends to the study-test paradigm (e.g., Gillies et al., 2023; Goetschalckx et al., 2019; Xie et al., 2020).</p>
+<p>Participants who showed any of the following behaviors were excluded for failing number of participants included 799 787 851</p>
+<p>Note. A participant could satisfy multiple exclusion criteria.</p>
+<p>We calculated stimulus-specific hit rates (HR) and false alarm rates (FAR) for each condition as measures of memory performance. Stimulus-level HR indicates the proportion of participants who judged a stimulus as old (i.e., answered &quot;definitely old&quot; or &quot;probably old&quot;) when they had encoded it before. Stimulus-level FAR indicates the proportion of participants who judged a certain stimulus as old when they had never encountered it before. We did not find consistency across people in their false memorability (FAR; see Supplemental Results.2.1. A-C), although analysis of their response confidence revealed that they were more confident of their responses when they had seen the stimulus (see Supplemental Results.2.1. B). We thus focused solely on HR for this study; HR has been used as the main measure of memorability in previous studies (Guo &amp; Bainbridge, 2024; Isola et al., 2014; Xie et al., 2020). We analyzed factors that impacted memory performance (for HR and FAR) for specific speakers (averaged across stimuli associated with each speaker) but did not find consistency at the speaker level; we conducted no further analyses at this level (See Supplemental Results.2.2).</p>
+<h3>D. Measures of Gesture and Speech Features in Stimuli</h3>
+<p>To determine which aspects of the speech and gestures in the stimuli contributed to gesture memorability, we extracted semantic meaning features and visual form features using expert coding and computational measures (Fig. 1). We also used online crowdsourcing to obtain ratings of the movements, based on a rating task used in a previous study of memorability for dance (Ongchoco et al., 2022).</p>
+<p>Expert-coded semantic meaning of gesture and speech. We adapted a system developed to code children&#x27;s speech and gesture explanations of their beliefs about conservation (Church &amp; Goldin-Meadow, 1986). Table .2 lists the strategies the speakers gave, divided into five types (dimensions, identity, count-equate, add-subtract, actions), with examples of each strategy in gesture and in speech. Two trained experimenters coded independently, focusing on a single modality each time, and discussed disagreements to make final coding decisions. Intercoder reliabilities (IR) for gesture strategies and speech strategies were 80.17% and 80.34%, respectively, established using different stimuli subsets (each subset contained 15% of the 360 stimuli, coming from at least 6 different speakers). When an overarching strategy contained component strategies (e.g., Compensation contains Height-Comparison and Width-Comparison), the overarching strategy was coded rather than the components. The speakers often produced different strategies in speech and gesture within a single explanation (see Church &amp; Goldin-Meadow, 1986); as a result, the speech and gesture strategies within a stimulus may differ. Our experts also coded visual form features in gesture, which predicted memory patterns in gesture (see Supplemental Results.5); however, because we can test gesture form with greater subtlety using motion tracking (see next subsection), we focus on the meaning coding our experts did and not their form coding.</p>
+<p>We operationalized semantic meaning as the number of unique strategies represented in a snippet to capture a measure of informativeness in each modality (see Supplemental Results.4 for analyses suggesting that no single gesture or speech strategy predicted gesture memorability).</p>
+<p>The number of gesture strategies within a stimulus ranged from 0 to 5, and the number of speech strategies within a stimulus ranged from 0 to 4. We counted the number of strategies that appeared uniquely in gesture (i.e., in gesture and not in speech) in each of the 360 stimuli, as well as the number of strategies that appeared uniquely in speech (i.e., in speech and not gesture). We also examined the effects of speech informativeness on gesture memorability because the informativeness of gesture and speech modalities has been shown to be related (Cánovas et al., 2020).</p>
+<p>Gesture responses with more explanatory strategies are likely to contain more individual gestures. To be able to control for gesture quantity in our analyses of gesture informativeness, we had two trained experimenters independently code the total number of gestures (range=[0,16]; IR&gt;80%, established on a subset comprising 7.5% of the 360 stimuli) in each video snippet.</p>
+<p>Gestures separated by a substantial pause, as determined by visual inspection, were coded as distinct gestures. The number of strategies expressed in gesture reflects the number of different types of explanatory strategies (see Table .2). Column 5 illustrates each gesture strategy.</p>
+<p>Computationally extracted visual form features of gesture. For each 10-second video stimulus (≈ 30 fps), we extracted Cartesian coordinate landmarks of the left and right wrists in 29 (evenly-spaced) frames using Google MediaPipe, an open-source computer vision tool that tracks hand movements in the vertical, horizontal, and depth dimensions (Lugaresi et al., 2019).</p>
+<p>The extracted wrist landmarks were meter (unit) estimations of real-world coordinates from the origin (the midpoint of the speakers&#x27; hips).</p>
+<p>Based on the wrist coordinate data, we computed parameters that quantified the visual form features of gestures. For each video stimulus, we measured parameters related to 8 broad categories of features used to characterize the distance, speed, and other aspects of gestures (Table .3). For each form category, we extracted its mean and standard deviation on three dimensions (vertical, horizontal, and depth) for the left, right, and both wrists combined (See Supplemental Method.7). We generated 154 parameters, including 87 distance-related parameters, 45 speed-related parameters, and 22 other parameters.</p>
+<p>Table 3. Definitions of eight categories of gesture visual form parameters extracted computationally from each stimulus Parameters Definition 1. Distance-Related (87) Scale (27) Distance between the furthest gestures Track Length (27) Length of movement, including overlapping back-and-forth movements Distance Between Hands (6) Coordinate difference between wrists Magnitude (27) Net distance of movements (overlapping back-and-forth movements cancel out) 2. Speed-Related (45) Speed (27) Track length divided by time spent moving Acceleration (18) Change in speed divided by time duration 3. Other (22) Direction (9) Net angle of movements Landmark (12) Cartesian coordinates of both wrists Hands Move Together (1) Whether movements of both hands correlate on all directions across time Note. Column 1 indicates the eight categories of gesture form parameters, divided into three overarching types, that we extracted using computer vision. Numbers in parentheses indicate the number of parameters we extracted for each category or type. There are 154 parameters in total across the eight categories. Column 2 indicates the definition of each category. See Supplemental Method 2 for detailed parameters in each category. Naïve online crowdsourced ratings of meaning, form, and other features of gesture. To examine how naïve viewers judged the gesture movements, we collected non-expert judgments of movement-related features for visual-only stimuli. We recruited a new group of 472 online participants on Prolific (221 female, 204 male, 27 other, see Supplemental Table.8.2 for age composition) and asked them to rate 12 attributes on a nine-point Likert scale (1=not at all,9=extremely) for gestures in each visual-only stimulus. The list of gesture-related features was adapted from prior work on dance memorability (Ongchoco et al., 2022): three subjective taste features (beauty, emotion, interest), five movement-related features (simplicity, speed, energy, scale, difficulty to produce), and three memory-related features (typicality, familiarity, subjective memorability judgment).</p>
+<p>We added a 12 th feature, a meaning-related feature (understandability), for this task. Each participant was asked to rate 12 random visual-only stimuli, resulting in an average of fourteen ratings per attribute per visual-only stimulus. The experiment took approximately fifteen minutes.</p>
+<p>To help clarify the 12 features for the participants, antonyms of the features (e.g., understandable versus confusing) were listed, and dictionary definitions of the features were provided in a pop-up window (see Supplemental Method.8). Each trial (rating of 12 attributes on 1 visual-only stimulus) contained two attention check questions: (1) participants were asked to indicate a computer-generated random number between 1 and 9 (and were excluded if they answered any incorrectly), and (2) participants were asked whether the speaker in the video stimulus was wearing long sleeves (and were excluded if they answered more than half of the trials incorrectly). We excluded 45 participants upon applying these exclusion criteria (25 failed criterion (1), 19 failed (2), and 1 failed both), resulting in 472 valid participants. Although all 12 stimuli were new to participants, they might have mistakenly believed they had seen a stimulus before, either because they saw the same speaker or because all speakers gestured about liquid conservation. To minimize familiarity effects on naïve ratings, we excluded 257 trials (but not participants) in which participants reported having previously seen the video, resulting in 5167 valid trials across the 472 valid participants. Before the 12 experimental trials, participants filled out a demographic survey.</p>
+<p>For each visual-only stimulus, we calculated averaged ratings across participants on each of the 12 features, indicating naïve non-experts&#x27; perception of speakers&#x27; gestures. The average feature ratings range from 1 to 9. We removed multicollinear features (|r| &gt; .7), making sure to include scale of movements because this feature significantly predicts memorability of dance moves, a dynamic visual stimulus (Ongchoco et al., 2022) that might show similarities to gesture. We thus analyzed crowdsourced ratings for 6 features: scale of movement, beauty, difficulty to produce, typicality, familiarity, and understandability.</p>
+<h3>II. Results</h3>
+<p>II. Results</p>
+<h3>A. Memorability is found in co-speech gesture</h3>
+<p>Our first question is whether memorability extends to gesture, with speech or without it.</p>
+<p>To determine whether there are consistent memory patterns across people for our gesture and speech stimuli, we tested split-half reliability of hit rate, HR (Supplemental Method.2), for 360 stimuli presented in visual-only (M=.60, SD=.12), audio-only (M=.72, SD=.12), and audiovisual (M=.69, SD=.12) conditions. Not surprisingly (Revsine et al., 2025), participants were consistent in the stimuli they remembered when presented auditorily (Spearman-Brown corrected, SBc, ρ=.67, p&lt;.001; Fig. 3B). But participants were also consistent in the stimuli they remembered when presented visually (SBc ρ=.49, p&lt;.001, Fig. 3A) and audiovisually (SBc ρ=.59, p&lt;.001, Fig. 3C). Certain gestures, presented with or without speech, are better remembered than others across people. This is the first robust evidence that multimodal stimuli show consistent memory patterns across populations.</p>
+<h3>B. Audiovisual memorability goes beyond its audio and visual components</h3>
+<p>To examine whether gesture+speech memorability is predicted by memorability of its unimodal components, we ran Spearman correlations across conditions for all 360 stimuli.</p>
+<p>Stimuli that were memorable in the audiovisual condition were also memorable in the visual-   Spearman Correlation Scatterplots of Visual-Only HR Versus Audiovisual HR at Different Levels of Audio-Only HR Note. Spearman correlation scatterplots of visual-only and audiovisual HRs when the audio-only HR was low (A), medium (B), and high (C). The line in each plot indicates the best-fit line. Visual-only HR did not predict audiovisual HR for the 120 stimuli that had low audio-only HR (A) or the 120 stimuli that had middle audio-only HR (B). Visual-only HR significantly predicted audiovisual HR for the 120 stimuli with high audio-only HR (C). *p&lt; .05.</p>
+<p>We combined these factors in a linear regression (Supplemental Method.3) to predict audiovisual memorability, and found a significant model fit (adjusted R² =.39, p&lt;.001, AIC=531) with audio-only HR as a significant predictor (β=.51, p&lt;.001); visual-only HR was not (p&gt;.05).</p>
+<p>However, the interaction between audio-only HR and visual-only HR was significant (β=.13, p=.05), suggesting that the effect of gesture on audiovisual memory depends on its accompanying speech.</p>
+<p>To explore this interaction, we grouped stimuli into low-, medium-, and high-audio HR tertiles (120 stimuli each) and correlated visual-only and audiovisual HRs within each tertile.</p>
+<p>Visual-only HR correlated with audiovisual HR when audio-only HR was high (Spearman ρ=.23, p=.01), but not when it was low or medium (ps&gt;.05) (Fig. 5). Therefore, memorability of audiovisual (speech+gesture) stimuli is affected by memorability of its visual component (gesture) only if its audio component (speech) is highly memorable.</p>
+<p>Speech memorability influences whether the accompanying gesture is memorable. Feature analysis results in the following sections (III.C-E) are similar when the same analyses are conducted using the 120 stimuli with high-audio HR (see Supplemental Results.6); we therefore focused on the full set of 360 stimuli for the feature analyses.</p>
+<p>We conducted the reverse analysis, grouping stimuli into low-, medium-, and high-visual HR tertiles (120 each). Audio-only HR correlated with audiovisual HR for low (ρ=.46, p&lt;.001), medium (ρ=.71, p&lt;.001) and high (ρ=.60, p&lt;.001) visual-only tertiles. However, the correlation was significantly stronger in medium than low visual-only HR tertiles (Fisher&#x27;s z=-2.98, p=.001, one-tailed); medium and high tertiles did not differ significantly. Therefore, memorability of audiovisual stimuli is more affected by memorability of its audio component (speech) if its visual component (gesture) is more memorable. Thus, gesture memorability also influences whether the accompanying speech is memorable.</p>
+<p>Finally, we wanted to test whether there was a remaining memorability effect of the integrated audiovisual stimuli when taking out its separate audio and visual memorability components. To examine this question, we tested the residuals from the linear regression, which represent the portion of the stimulus&#x27; audiovisual HR that cannot be explained by a linear combination of its visual-only and audio-only HR. A split-half consistency analysis on the residuals (Supplemental Method.2) showed significant cross-participant consistency (360 stimuli: SBc ρ=.31, p=.001, Fig. 3D). As expected, the residuals from the 360 stimuli did not correlate with visual-only or audio-only HR (ps&gt;.05), suggesting that the multimodal residuals capture information beyond the information in either modality. Audiovisual memorability thus reflects a whole that is more than the sum of its unimodal components--integrating auditory and visual information produces new information that participants consistently latch onto.</p>
+<h3>C. Expert-coded semantic meaning features predict gesture memorability</h3>
+<p>What features account for gesture memorability? We focus first on meaning categories coded in gesture (Table .2). Number of gesture strategies positively predicted visual-only HR (Spearman ρ=.17, p&lt;.001), suggesting that more informative gestures (those containing more strategies) were better remembered. The total number of gestures did not predict visual-only HR (p&gt;.05), suggesting that more memorable gestures are not simply those containing more individual gestures, but rather those containing more information.</p>
+<p>Interestingly, when gesture was embedded in speech in the audiovisual condition, number of gesture strategies did not predict audiovisual HR (p&gt;.05). We controlled for the number of gestures and found that the total number of gestures did predict audiovisual HR (Spearman&#x27;s ρ=.12, p=.02), suggesting that participants attend to individual gestures more when gesture is embedded in speech but without extracting more meaning from them.</p>
+<p>Because speech and gesture were produced simultaneously, speech information might have affected information conveyed in gestures. We therefore conducted the same analyses on speech meaning categories. As expected, number of speech strategies positively predicted audiovisual HR (Spearman ρ=.18, p&lt;.001). Number of speech strategies also predicted visualonly HR (Spearman ρ=.19, p&lt;.001), a surprising result given that participants in this condition did not hear speakers&#x27; speech nor see their faces. Informative speech may be related to informative gesture because information is shared across modalities. In fact, number of strategy types conveyed in speech and gesture were positively correlated (Spearman ρ=.23, p&lt;.001).</p>
+<p>We then modeled how much variability in visual-only HR could be accounted for by strategies unique to each modality and shared across modalities. The model fit was significant (adjusted R² =.04, p&lt;.001, AIC=571). Gesture-unique (β=.10, p=.03), speech-unique (β=.09, p=.01), and shared (β=.18, p&lt;.001) strategies each significantly predicted visual-only memorability, even though participants did not hear speech-again suggesting modality links through shared meaning.</p>
+<p>We modeled the same linear regression to predict audiovisual HR, and found a significant model fit (adjusted R² =.02, p=.01, AIC=698). Speech-unique (β=.13, p=.005) and shared (β=.14, p=.02) strategies significantly predicted audiovisual memorability, but gesture-unique strategies did not (p&gt;.05). To the extent that gesture meaning influences audiovisual memorability, it is when gesture and speech convey the same information.</p>
+<h3>D. Computationally extracted visual form features weakly predict gesture memorability</h3>
+<p>We first examined gesture form independent of meaning. We correlated each of the 154 visual form parameters (standardized), extracted using computer vision, with visual-only HR and audiovisual HR. We found no significant correlations with False Discovery Rate correction (q&lt;.05, ps&gt;.05).</p>
+<p>We then asked whether form features that reflect meaningful distinctions on the task predict gesture memorability. Because the dimensions of the containers in the task are crucial for understanding conservation, we examined distance-related form features, contrasting them with speed-related features. We fitted separate linear regressions to predict visual-only and audiovisual HR using 87 distance-related parameters, and we fitted separate linear regressions using 45 speed-related parameters. We used stepwise linear regression to avoid making assumptions about parameter collinearity for two reasons: (1) there are no psychological theories specifying how these parameters are conceptually related within the visual system; (2) we included the same parameters for left, right, and both wrists combined, which are inherently correlated.</p>
+<p>Using distance-related parameters to predict visual-only HR led to significant model fit (adjusted R² =.02, p=.01, AIC=574). Using speed-related parameters did not (p&gt;.05). We found the same results for audiovisual HR (distance-related: adjusted R² =.05, p&lt;.001, AIC=687; speedrelated: p&gt;.05). Gesture lengths and distances, which are related to reasoning about conservation, better predict gesture memorability (with or without speech) than gesture speed and manner, which are not directly related to reasoning about conservation. The finding adds to the gesture literature by reinforcing the practice of focusing on gesture meaning, rather than form, to predict learning (Goldin-Meadow, 2003). See Supplemental Fig. 7.1 for fine-grained results on form in gesture and Supplemental Results.7, Figs.7.2-.3 for comparable analyses of form in speech.</p>
+<p>To explore whether gesture meaning and form together contribute to its memorability, we ran a stepwise linear regression model to predict visual-only HR (logit-transformed) using both number of gesture strategies (a meaning feature; standardized) and 154 visual parameters (all form features, including distance-and speed-related features; standardized) as predictors. We found significant model fit (adjusted R² =.04, p&lt;.001, AIC=568), with number of gesture strategies (β=.09, p&lt;.001) and a distance-related form feature (SDvertical hand distance; β=-.07, p=.02) as significant predictors of visual-only HR. We ran the same regression to predict audiovisual HR. We found several distance-related features (scale, magnitude, distance between hands on vertical/sagittal dimensions) and a direction feature to be significant predictors (adjusted R² =.06, p&lt;.001, AIC=687; Supplemental Table .7.1), but not number of gesture strategies. Only gesture&#x27;s distance-related form features (which are related to meaning) predict both visual-only and audiovisual memorability.</p>
+<h3>E. Naïve online crowdsourced rating on typicality predicts gesture memorability</h3>
+<p>We examined the impact of ratings by non-experts on gesture memorability. Using naïve ratings of visual-only stimuli, we conducted separate linear regressions to predict visual-only and audiovisual HR (see Supplemental Table .8.3 for descriptive statistics). The model predicting visual-only HR was marginally significant (p=.06, Table .4), indicating that the gesture features examined-including scale of movement, which reliably predicts memorability in dance (Ongchoco et al., 2022)-do not predict memorability when gesture is presented without speech.</p>
+<p>The model predicting audiovisual HR was significant (adjusted R² =.03, p=.01, AIC=699). In both models, gesture typicality was the only significant predictor (visual-only: β=.08, p=.02; audiovisual: β=.11, p=.008). We found the same pattern when using naïve ratings of audiovisual stimuli from a separate group, suggesting that the limited predictive power of these naïve ratings was not due to the absence of speech (Supplemental Results.9, Tables.8.1-.2,8.4,9.1).</p>
+<h3>III. Discussion</h3>
+<p>Our study has three central findings. First, we provide the first robust evidence that multimodal stimuli elicit consistent memory patterns across individuals. In other words, the memorability effect extends to multimodal stimuli--in particular, to gestures spontaneously produced with speech. Our findings thus extend memorability to a multimodal behavior naturally produced in everyday settings.</p>
+<p>Second, we show that memorability for multimodal stimuli is explained by distinct contributions of its unimodal information streams. Memorability of gesture+speech is predicted by gesture memorability (on its own) only when the accompanying speech is highly memorable (on its own). Memorability of gesture+speech is also better predicted by speech memorability (on its own) when the accompanying gesture is more memorable (on its own). But memorability for multimodal stimuli is also explained by integrated information across the unimodal streams.</p>
+<p>Participants consistently remembered aspects of the audiovisual stimuli not explained by memory for the visual-only or audio-only versions. Audiovisual memorability thus reflects a whole that is more than the simple combination of its unimodal parts--integrating auditory and visual information produces additional information, reliably remembered across people.</p>
+<p>The fact that gesture-speech memorability goes beyond the independent contributions of gesture memorability and speech memorability provides support for the episodic buffer in Baddeley&#x27;s (2020) model. According to the model, auditory and visual (in this case, speech and gesture) information are processed separately and integrated within the buffer before being transferred to long-term memory. The buffer allows for additional information to be created by providing a stage when information from the individual sensory modalities can be integrated.</p>
+<p>Because memorability explains variance in memory independent of attentional factors (Wakeland-Hart et al., 2022), the fact that memorability for gesture+speech goes beyond its component parts suggests that memory, rather than attention, is central to gesture-speech integration. Under Baddeley&#x27;s (2020) model, working-memory resources are limited and shared across processing modules. When encoding speech on its own, auditory processing receives all available resources, and when encoding gesture on its own, visual processing receives all available resources. During gesture-speech encoding, if the visual module requires fewer resources to process gesture, more resources become available to the auditory module (and vice versa). Because more memorable stimuli require less time and fewer resources to encode (Bainbridge et al., 2026), memorable speech or gesture may reduce a listener&#x27;s cognitive load, leaving more resources available to process the other modality or integrate the two modalities.</p>
+<p>Our findings align with this prediction: gesture memorability predicted gesture-speech memorability only when speech was highly memorable, and speech memorability was more strongly correlated with audiovisual memorability when gesture was more memorable. Hostetter (2011) also found that gesture has the greatest impact on learning and memory when it conveys clear, unambiguous information not present in speech, suggesting that informative gestures, which are likely to be memorable, enhance memory for gesture-speech communication. These findings shed light on how gesture could benefit learning.</p>
+<p>Third, we find that gesture memorability is predicted by its meaning. The number of strategies found uniquely in gesture, as well as the number shared across gesture and speech-but not the number of individual gestures--predict gesture memorability. Moreover, to the extent that visual form features predict memorability, it is the features capturing dimensions relevant to the task that have an impact on memorability, again suggesting that memorability for gesture is based on meaning.</p>
+<p>These findings highlight differences across different types of dynamic visual information.</p>
+<p>Because co-speech gestures are inherently meaningful and convey messages to listeners (e.g., Goldin-Meadow &amp; Sandhofer, 1999), it is not surprising that listeners remember gestures based on semantic meaning, rather than visual form. Nor is it surprising that visual features had an impact on gesture memorability only when highlighting a meaningful strategy. In contrast, dance movements are not necessarily intended to be interpreted semantically, and their memorability is predicted by visual form (movement scale, Ongchoco et al., 2022). However, in narrative-based dance forms-such as Indian classical dances or musical theater choreography-meaning might also contribute to memorability. Future research is needed on dynamic visual stimuli that vary in meaning, and on cases in which the same stimulus affords different levels of meaningful parsing across individuals (e.g., sign language comprehension in fluent signers versus naïve viewers).</p>
+<p>It is, of course, possible that the distance-related form features isolated here are memorable in other contexts. The finding that &quot;typicality&quot; predicts memorability in the naïve ratings study could mean that distance forms are recognizable as typical and therefore memorable regardless of task. To be certain that gesture form impacts memorability only through meaning, we need to conduct our study with tasks that give rise to gestures with different forms.</p>
+<p>Nevertheless, our study provides support for the hypothesis that coding gesture meaning is more important than coding gesture form when assessing gesture&#x27;s impact on cognition (Goldin-Meadow, 2003). And, as our study shows, gesture needs to be coded and analyzed in relation to the speech it accompanies to fully determine its impact.</p>
+<h3>IV. Conclusion</h3>
+<p>Our study investigates the memorability of naturally elicited, multimodal stimuli and demonstrates how the constituent modalities interact to contribute to overall memorability. We also discovered that semantic meaning features are the driving force behind gesture memorability in our task. Visual form features predict gesture memorability only when they reflect the semantics of the task. Interestingly, these visual features become even more important to memorability when the same gestures are presented with speech.</p>
+<p>Overall, this study opens a new direction for examining memory for dynamic, multimodal stimuli and offers a methodological framework for isolating unimodal contributions within complex stimuli. Although decades of work show that gesture supports learning, the gap between gesture and cognitive research limits our understanding of mechanisms linking gesture to its behavioral benefits (see Guo et al., 2025, for review). As a result, despite evidence that gestures aid learning in several domains (e.g., mathematics, conservation, chemistry), we still know little about which gesture properties affect memory and how they do so, making it difficult to harness gesture in classrooms. This study provides the first attempt to probe memory mechanisms underlying gesture&#x27;s benefits. Our results reveal nuanced effects of different gesture properties-particularly in coordination with speech-highlighting the need for further research on cognitive processes that make gesture effective across contexts. Notably, multimodal integration between gesture and speech generates new information not present in either modality alone, which people consistently latch onto and use to enrich representations held in memory. A clearer understanding of these mechanisms will help educators and caregivers use gesture more effectively in real-world environments.</p>
+<h3>Note</h3>
+<p>This work was supported by the National Eye Institute (R01-EY034432 to WAB), the National Science Foundation (BCS-0925595 to SGM), the Norman H. Anderson Research Grant (to XHG),</p>
+<p>Data and codes from this study can be accessed through the Open Science Framework following this link: https://osf.io/3jhv8/ (data and codes will be made available upon publication of the paper).</p>
+<p>Materials will be available upon request.</p>
+<p>and the Center for Gesture, Sign, and Language (to XHG). The authors thank Drs. David A. Gallo, Susan C. Levine, Ruth B. Church, and the BLRB group at the University of Chicago for providing insightful comments; Ed.M. Michelle R. Madlansacay for video recording the liquid conservation problems; Dr. Joan Ongchoco for sharing experimental codes; the following undergraduate research assistants for their help with coding and data collection: Caroline Wang, Rachna Ravishankar, Tanvi Rao, and Noor Zalt; and the MindWorks Team for data collection, including Harrison Heymann, Zen Nguyen, and the following research assistants: Angélique Alexos, Netherlands. This work was not preregistered. Xiaohan (Hannah) Guo served as lead for data curation, formal analysis, investigation, project administration, validation, visualization, and writing the original draft. Wilma A. Bainbridge and Susan Goldin-Meadow served as leads for supervision and served in supporting roles for data curation, formal analysis, investigation, methodology, resources, validation, and visualization. Xiaohan (Hannah) Guo, Wilma A. Bainbridge, and Susan Goldin-Meadow contributed equally to conceptualization and writing and editing the revised versions.</p>
+<h3>Figure 1.</h3>
+<p>Figure 1.</p>
+<p>Figure 2.</p>
+<p>Note. Column 1 indicates the names of the strategies used to explain conservation of continuous quantity, classified into five types. Column 2 indicates the definition of each strategy. Columns 3 and 4 provide examples of each strategy as it appears in speech and gesture, respectively.</p>
+<h3>Figure 3.</h3>
+<p>Figure 3.</p>
+<p>only (ρ=.11, p=.04, Fig.4A) and audio-only (ρ=.60, p&lt;.001, Fig.4B) conditions. But audio-only HR predicted audiovisual HR significantly better than visual-only HR (Fisher&#x27;s z=7.79, p&lt;.001, two-tailed), suggesting that variance in speech dominates audiovisual memorability.Nevertheless, visual-only and audio-only HRs were uncorrelated (p&gt;.05, Fig.4C), suggesting that gesture and speech account for different aspects of multimodal memorability.</p>
+<h3>Figure 4.</h3>
+<p>Figure 4.</p>
+<h3>Figure 5.</h3>
+<p>Figure 5.</p>
+<h3>Table 1.</h3>
+<p>We also excluded participants if they reported technical difficulties or not following instructions. Between 32% and 45% of the recruited online participants were excluded, which aligns with current exclusion rates for online experiments. Table.1 shows the number of participants excluded based on each exclusion criterion.Number of online participants excluded based on each exclusion criterion in the memory test</p>
+<h3>Table 2.</h3>
+<p>Definitions and examples of explanation strategies used in the speakers&#x27; speech and gestures</p>
+<h3>Table 4.</h3>
+<p>Linear regression model statistics of using crowdsourced-rated gesture features on visual-only stimuli to predict gesture memorability</p>
+<h3>References</h3>
+<p>Alibali, M. W., Church, R. B., Kita, S., &amp; Hostetter, A. B. (2014). Embodied knowledge in the development of conservation of quantity: Evidence from gesture. https://www.emerald.com/books/edited-volume/19635/chapter/104600441</p>
+<p>Baddeley, A. (2020). Working memory. In Memory (3rd ed.). Routledge.</p>
+<p>Bainbridge, W. A. (2020). The resiliency of image memorability: A predictor of memory separate from attention and priming. Neuropsychologia, 141, 107408. https://doi.org/10.1016/j.neuropsychologia.2020.107408</p>
+<p>Bainbridge, W. A., Isola, P., &amp; Oliva, A. (2013). The intrinsic memorability of face photographs. Journal of Experimental Psychology: General, 142, 1323-1334. https://doi.org/10.1037/a0033872</p>
+<p>Bainbridge, W. A., Walther, D. B., Fukuda, K., &amp; Goetschalckx, L. (2026). Memorability of visual stimuli and the role of processing efficiency. Nature Reviews Psychology, 5(1), 47-58. https://doi.org/10.1038/s44159-025-00512-3</p>
+<p>Bylinskii, Z., Isola, P., Bainbridge, C., Torralba, A., &amp; Oliva, A. (2015). Intrinsic and extrinsic effects on image memorability. Vision Research, Computational Models of Visual Attention, 116, 165-178. https://doi.org/10.1016/j.visres.2015.03.005</p>
+<p>Cánovas, C. P., Valenzuela, J., Carrión, D. A., Olza, I., &amp; Ramscar, M. (2020). Quantifying the speech-gesture relation with massive multimodal datasets: Informativity in time expressions. PLOS ONE, 15(6), e0233892. https://doi.org/10.1371/journal.pone.0233892</p>
+<p>Church, R. B. (1999). Using gesture and speech to capture transitions in learning. Cognitive Development, 14(2), 313-342.</p>
+<p>Church, R. B., Garber, P., &amp; Rogalski, K. (2007). The role of gesture in memory and social communication. Gesture, 7(2), 137-158. https://doi.org/10.1075/gest.7.2.02bre</p>
+<p>Church, R., &amp; Goldin-Meadow, S. (1986). The mismatch between gesture and speech as an index of transitional knowledge. Cognition, 23(1), 43-71. https://doi.org/10.1016/0010- 0277(86)90053-3</p>
+<p>Cohendet, R., Yadati, K., Duong, N. Q. K., &amp; Demarty, C.-H. (2018). Annotating, understanding, and predicting long-term video memorability. Proceedings of the 2018 ACM on International Conference on Multimedia Retrieval, ICMR &#x27;18, 178-186. https://doi.org/10.1145/3206025.3206056</p>
+<p>Congdon, E. L., Novack, M. A., Brooks, N., Hemani-Lopez, N., O&#x27;Keefe, L., &amp; Goldin- Meadow, S. (2017). Better together: Simultaneous presentation of speech and gesture in math instruction supports generalization and retention. Learning and Instruction, 50, 65- 74.</p>
+<p>Gillies, G., Park, H., Woo, J., Walther, D. B., Cant, J. S., &amp; Fukuda, K. (2023). Tracing the emergence of the memorability benefit. Cognition, 238, 105489. https://doi.org/10.1016/j.cognition.2023.105489</p>
+<p>Goetschalckx, L., Moors, J., &amp; Wagemans, J. (2019). Incidental image memorability. Memory, 27(9), 1273-1282. https://doi.org/10.1080/09658211.2019.1652328</p>
+<p>Goetschalckx, L., Moors, P., &amp; Wagemans, J. (2018). Image memorability across longer time intervals. Memory, 26(5), 581-588. https://doi.org/10.1080/09658211.2017.1383435</p>
+<p>Goldin-Meadow, S. (2003). Hearing gesture: How our hands help us think. Harvard University Press. https://books.google.com/books?hl=en&amp;lr=&amp;id=LCJ5eQdsolsC&amp;oi=fnd&amp;pg=PR9&amp;dq=</p>
+<p>Goldin- Meadow,+S.+(2003).+Hearing+gesture:+How+our+hands+help+us+think.+Belknap+Pre ss+of+Harvard+University+Press.&amp;ots=XPnB8Xod5I&amp;sig=rArl77XzTqgjWPBBuT7Bu</p>
+<p>Goldin-Meadow, S. (2023). Thinking with your hands: The surprising science behind how gestures shape our thoughts. Hachette UK.</p>
+<p>Goldin-Meadow, S., Cook, S. W., &amp; Mitchell, Z. A. (2009). Gesturing Gives Children New Ideas About Math. Psychological Science, 20(3), 267-272. https://doi.org/10.1111/j.1467-9280.2009.02297.x</p>
+<p>Goldin-Meadow, S., Nusbaum, H., Kelly, S. D., &amp; Wagner, S. (2001). Explaining math: Gesturing lightens the load. Psychological Science, 12(6), 516-522. https://doi.org/10.1111/1467-9280.00395</p>
+<p>Goldin-Meadow, S., &amp; Sandhofer, C. M. (1999). Gestures convey substantive information about a child&#x27;s thoughts to ordinary listeners. Developmental Science, 2(1), 67-74. https://doi.org/10.1111/1467-7687.00056</p>
+<p>Goldin-Meadow, S., Wein, D., &amp; Chang, C. (1992). Assessing Knowledge Through Gesture: Using Children&#x27;s Hands to Read Their Minds. Cognition and Instruction, 9(3), 201-219. https://doi.org/10.1207/s1532690xci0903_2</p>
+<p>Guo, X. H., &amp; Bainbridge, W. A. (2025). Visual memory for natural scenes. In Learning and Memory: A Comprehensive Reference, 3rd edition (Eds.: J. Wixted, T. Abel, S. Fusi, M. Rugg, L. Mickes). Elsevier.</p>
+<p>Guo, X. (Hannah), &amp; Bainbridge, W. A. (2024). Children develop adult-like visual sensitivity to image memorability by the age of 4. Journal of Experimental Psychology: General, 153(2), 531-543. https://doi.org/10.1037/xge0001511</p>
+<p>Guo, X. (Hannah), Rosenberg, M. D., Bainbridge, W. A., &amp; Goldin-Meadow, S. (2025). How gesture benefits learning: A working framework for examining attention and memory mechanisms. Annual Review of Developmental Psychology, 7(Volume 7, 2025), 41-63. https://doi.org/10.1146/annurev-devpsych-111323-112334</p>
+<p>Hostetter, A. B. (2011). When do gestures communicate? A meta-analysis. Psychological Bulletin, 137(2), 297-315. https://doi.org/10.1037/a0022128</p>
+<p>Isola, P., Xiao, J., Parikh, D., Torralba, A., &amp; Oliva, A. (2014). What makes a photograph memorable? IEEE Transactions on Pattern Analysis and Machine Intelligence, 36(7), 1469-1482. IEEE Transactions on Pattern Analysis and Machine Intelligence. https://doi.org/10.1109/TPAMI.2013.200</p>
+<p>Isola, P., Xiao, J., Torralba, A., &amp; Oliva, A. (2011). What makes an image memorable? CVPR 2011, 145-152. https://doi.org/10.1109/CVPR.2011.5995721</p>
+<p>Kelly, S. D., &amp; Church, R. B. (1997). Can Children Detect Conceptual Information Conveyed Through Other Children&#x27;s Nonverbal Behavior&#x27;s. Cognition and Instruction, 15(1), 107- 134. https://doi.org/10.1207/s1532690xci1501_4</p>
+<p>Kelly, S. D., &amp; Church, R. B. (1998). A Comparison between Children&#x27;s and Adults&#x27; Ability to Detect Conceptual Information Conveyed through Representational Gestures. Child Development, 69(1), 85-93. https://doi.org/10.1111/j.1467-8624.1998.tb06135.x</p>
+<p>Kelly, S. D., Singer, M., Hicks, J., &amp; Goldin-Meadow, S. (2002). A Helping Hand in Assessing Children&#x27;s Knowledge: Instructing Adults to Attend to Gesture. Cognition and Instruction, 20(1), 1-26. https://doi.org/10.1207/S1532690XCI2001_1</p>
+<p>Kramer, M. A., Hebart, M. N., Baker, C. I., &amp; Bainbridge, W. A. (2023). The features underlying the memorability of objects. Science Advances, 9(17), eadd2981. https://doi.org/10.1126/sciadv.add2981</p>
+<p>Lin, Q., Yousif, S. R., Chun, M. M., &amp; Scholl, B. J. (2021). Visual memorability in the absence of semantic content. Cognition, 212, 104714. https://doi.org/10.1016/j.cognition.2021.104714</p>
+<p>Lugaresi, C., Tang, J., Nash, H., McClanahan, C., Uboweja, E., Hays, M., Zhang, F., Chang, C.- L., Yong, M. G., Lee, J., Chang, W.-T., Hua, W., Georg, M., &amp; Grundmann, M. (2019). MediaPipe: A framework for building perception pipelines (arXiv:1906.08172). arXiv. http://arxiv.org/abs/1906.08172</p>
+<p>McNeill, D. (1992). Hand and Mind. In T. A. Sebeok &amp; J. Umiker-Sebeok (Eds.), Advances in Visual Semiotics. DE GRUYTER. https://doi.org/10.1515/9783110874259.351</p>
+<p>Murray, C. A., Guo, X. H., &amp; Shams, L. (2024). Sensory inputs are encoded in memory after integration with other senses for most individuals. https://osf.io/preprints/psyarxiv/w6m4h</p>
+<p>Ongchoco, J. D. K., Chun, M. M., &amp; Bainbridge, W. A. (2022). What moves us? The intrinsic memorability of dance. Journal of Experimental Psychology: Learning, Memory, and Cognition, No Pagination Specified-No Pagination Specified. https://doi.org/10.1037/xlm0001168</p>
+<p>Perry, M., Church, R. B., &amp; Goldin-Meadow, S. (1992). Is gesture-speech mismatch a general index of transitional knowledge? Cognitive Development, 7(1), 109-122. https://doi.org/10.1016/0885-2014(92)90007-E</p>
+<p>Piaget, J. (1952). The child&#x27;s conception of number (C. Gattegno &amp; FM Hodgson, Trans.) New York. Humanities Press.(Original work published 1941).</p>
+<p>Ping, R., &amp; Goldin-Meadow, S. (2010). Gesturing saves cognitive resources when talking about nonpresent objects. Cognitive Science, 34(4), 602-619. https://doi.org/10.1111/j.1551- 6709.2010.01102.x</p>
+<p>Ping, R. M., &amp; Goldin-Meadow, S. (2008). Hands in the air: Using ungrounded iconic gestures to teach children conservation of quantity. Developmental Psychology, 44(5), 1277-1287. https://doi.org/10.1037/0012-1649.44.5.1277</p>
+<p>Quak, M., London, R. E., &amp; Talsma, D. (2015). A multisensory perspective of working memory. Frontiers in Human Neuroscience, 9, 197. https://doi.org/10.3389/fnhum.2015.00197</p>
+<p>Rauscher, F. H., Krauss, R. M., &amp; Chen, Y. (1996). Gesture, Speech, and Lexical Access: The Role of Lexical Movements in Speech Production. Psychological Science, 7(4), 226-231. https://doi.org/10.1111/j.1467-9280.1996.tb00364.x</p>
+<p>Revsine, C., Goldberg, E., &amp; Bainbridge, W. A. (2025). The memorability of voices is predictable and consistent across listeners. Nature Human Behaviour, 9(4), 758-768. https://doi.org/10.1038/s41562-025-02112-w</p>
+<p>So, W. C., Chen-Hui, C., &amp; Wei-Shan, J. (2012). Mnemonic effect of iconic gesture and beat gesture in adults and children: Is meaning in gesture important for memory recall? Language and Cognitive Processes -LANG COGNITIVE PROCESS, 27, 665-681. https://doi.org/10.1080/01690965.2011.573220</p>
+<p>Wakeland-Hart, C. D., Cao, S. A., deBettencourt, M. T., Bainbridge, W. A., &amp; Rosenberg, M. D. (2022). Predicting visual memory across images and within individuals. Cognition, 227, 105201. https://doi.org/10.1016/j.cognition.2022.105201</p>
+<p>Wang, M. Y., Hocker, K., Chao, A., Guo, X. H., Seccia, A., Berman, M. G., Goldin-Meadow, S., &amp; Leong, Y. C. (2026). Gesture-based instruction enhances neural synchrony and predicts children&#x27;s mathematical learning. Journal of Cognitive Neuroscience, 38(8), 1658-1668.</p>
+<p>Xie, W., Bainbridge, W. A., Inati, S. K., Baker, C. I., &amp; Zaghloul, K. A. (2020). Memorability of words in arbitrary verbal associations modulates memory retrieval in the anterior temporal lobe. Nature Human Behaviour, 4(9), Article 9. https://doi.org/10.1038/s41562- 020-0901-2</p>
+<p>Zhang, I., Guo, X. H., Son, J. Y., Blank, I. A., &amp; Stigler, J. W. (2025). Watching videos of a drawing hand improves students&#x27; understanding of the normal probability distribution. Memory &amp; Cognition, 53(1), 262-281. https://doi.org/10.3758/s13421-024-01526-7</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
