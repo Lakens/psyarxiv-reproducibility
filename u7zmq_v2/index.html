@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Beyond Diagnosis: A Scoping Review of Machine
+Learning and NLP for Multilevel Mental Health Factors in Population
+Crises</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Beyond Diagnosis: A Scoping Review of Machine Learning and NLP for
+Multilevel Mental Health Factors in Population Crises
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.23
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to
+fix</span></span><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We could not check 1 repository: <a href="https://osf.io/9jcs7" class="uri">https://osf.io/9jcs7</a> (private).</li>
+<li>We found 0 files in 1 repository.</li>
+<li>We found 0 README files and 0 repositories without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories-that-could-not-be-checked">Repositories that could
+not be checked</h4>
+<p>These repositories are linked in the paper, but their contents could
+not be retrieved, so nothing below describes them. When the reason is
+that the platform did not answer, running the check again later may
+work.</p>
+<ul>
+<li><a href="https://osf.io/9jcs7" class="uri">https://osf.io/9jcs7</a>:
+private</li>
+</ul>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:left;">
+Error
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/9jcs7" target="_blank">osf.io/9jcs7</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+private
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>README files were found in all repositories.</p>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>We found 1 OSF link, but no accessible registrations. 1 registration
+link could not be accessed (private, embargoed, or withdrawn).</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>An ethics approval statement was detected, based on the following
+text:</p>
+<blockquote>
+<p>This study did not involve human subjects, human data or tissue,
+animal subjects, or primary data collection of any kind, and therefore
+did not require ethics committee approval.</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+Preregistration Check
+</summary>
+<div class="fold">
+<p>The following registration link could not be accessed and may be
+private, embargoed, or withdrawn: <a href="https://osf.io/9jcs7" class="uri">https://osf.io/9jcs7</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 95 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 95 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 95 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Background: Natural disasters, pandemics, armed conflict, and economic upheaval inflict lasting harm on mental wellbeing, yet what determines who recovers and who deteriorates remains poorly understood across crisis types.</p>
+<p>Objectives: This review maps how crisis exposure shapes wellbeing across four crisis typologies, two surveillance modes (NLP-based and survey/administrative), and three impact directions (favorable, adverse, or mixed).</p>
+<p>Eligibility criteria: Peer-reviewed journal articles and conference papers published in English between 2016 and 2026, applying machine learning, NLP, or deep learning methods to a population exposed to one of the four crisis typologies, and reporting at least one measurable mental health outcome.</p>
+<p>PubMed/MEDLINE, Web of Science, Scopus, and IEEE Xplore, supplemented by forward and backward citation searching and targeted keyword searches.</p>
+<p>Factors were charted using the WHO Commission on Social Determinants of Health framework, adapted for the health system where the framework&#x27;s coverage is thinnest. They were sorted into tiers, subgroups, and subdimensions with maximum possible fidelity to the original framework.</p>
+<p>Results: Across 338 code-able determinants, Intermediary Determinants, particularly psychosocial and behavioral-biological factors, accounted for two-thirds of coded determinants, while NLP-based methods proved most effective at capturing structural and contextual signals (e.g., governance, discoursebased constructs) rather than the clinical burden measures that dominate closer to the individual. Favorable, protective constructs were both rarer and less computationally detected than adverse ones, concentrating almost entirely in mastery, self-concept, coping, and social capital. Forty-five factors were set aside as Outcome Measures because they described prior symptoms, diagnoses, or the study&#x27;s own outcome construct, with 8 being circular with the study&#x27;s stated target. Fewer studies examined economic downturns, and conflict studies had almost no NLP presence.</p>
+<p>Conclusions: These findings demonstrate this field has matured methodologically in adverse detection but remains structurally limited in reach. This is most evident in armed conflict contexts and in the surveillance of protective, resilience-oriented signals, highlighting the need for digital phenotyping, expanded NLP coverage, and wider adoption of explainable AI methods.</p>
+<h3>1. Introduction</h3>
+<p>Mental health concerns have reached unprecedented levels, with more than one billion people living with one or more mental disorders (World Health Organization [WHO], 2025a). Given a global count of 727,000 suicides each year among individuals aged 15 to 29 (WHO, 2025b), mental health problems have grown in prominence in the global health and development agenda. Recent longitudinal research indicates that overlapping global crises such as the COVID-19 pandemic, the Russia-Ukraine War, and economic recession result in functional impairments that persist long after these events resolve (Richter et al., 2024). The cumulative psychological toll of recent epidemic crises, including SARS-CoV-1, Ebola, Middle East Respiratory Syndrome (MERS), and the Anthrax threat, has been studied (Esterwood &amp; Saeed, 2020; Xiong et al., 2020). A review of crisis intervention strategies has also shown how intervention causes meaningful and significant improvements in post-traumatic stress disorder (PTSD), anxiety, and depression outcomes (Hu et al., 2025).</p>
+<p>Moreover, understanding why some individuals are less resilient to crisis-induced psychological harm than others has driven a growing body of research in this field across diverse domains. Yet, existing reviews of the factors causing crisis-induced psychological harm have been limited in scope. They focus on single crisis types such as pandemics (Lieneck et al., 2021; Kunzler et al., 2021) and economic turmoil (Stein et al., 2023). They rely on survey-based and epidemiological primary studies, without integrating computational or data-driven methods, which have been shown to enable population-scale, real-time monitoring of mental health during crises (Tušl et al., 2022) and allow early detection of psychological distress signals before clinical presentation, supporting timely intervention during and after crisis events (Shatte et al., 2018).</p>
+<p>To address these gaps, this review treats wellbeing more comprehensively, examining predictive factors across four crisis typologies: natural disasters, pandemics and infectious disease outbreaks, armed conflict and forced displacement, and economic upheavals. This paper adopts a scoping review methodology to systematically map the breadth of evidence across crisis types and wellbeing dimensions. A scoping review is appropriate because the field is heterogeneous in methods, populations, and outcomes, and the aim is to map breadth and identify gaps rather than pool effect sizes (Arksey and O&#x27;Malley, 2005).</p>
+<p>2. A comparative analysis detailing how relevant wellbeing factors shift and differ across various crisis contexts and study modes. 3. An evaluation of computational explainability and ranking methods used to prioritize and order these factors when monitoring population-level wellbeing.</p>
+<p>The paper is organized as follows: Section 2 outlines the methodology used to identify, screen, and chart the included literature. Section 3 introduces the foundational concepts of crisis exposure, mental wellbeing, and the identified taxonomy of factors across crisis contexts. Section 4 presents these factors linking crisis exposure and mental wellbeing across four crisis typologies. Section 5 contrasts the wellbeing outcomes of each crisis studied in this review. Section 6 discusses conclusions, limitations, and future research directions and concludes the review.</p>
+<h3>2. Methods</h3>
+<p>This review followed PRISMA-ScR (Tricco et al., 2018) and the Arksey and O&#x27;Malley (2005) framework as refined by Levac et al. (2010). A preregistered protocol is on OSF (https://osf.io/9jcs7, from 3 July 2026). Using the PCC framework (Peters et al., 2022), this review targets adults and communities exposed to population-scale crises (military, civilian, healthcare worker, refugee, and disaster-survivor populations), aligned with WHO Mental Health Action Plan 2013 -2030 priorities (WHO, 2021).</p>
+<p>Studies were eligible if they applied a machine learning, NLP, deep learning, or spatial modeling method with a predictive, classification, or clustering function; examined one of the four crisis typologies; and reported at least one mental health outcome. We conducted a systematic search of PubMed/MEDLINE, Web of Science, Scopus, and IEEE Xplore on 27 June 2026, combining crisis, method, and outcome term blocks (2016-2026, English only), yielding 7,940 records (Supplement A). Supplementary searching (citation chasing and keyword searches) identified 11 further records (forward citation n=3, backward citation n=3, keyword search n=5; Supplement B). All results are archived in RIS/CSV on OSF.</p>
+<p>The search strategy was structured around three core concepts: crisis exposure, mental health and wellbeing outcome, and computational method. Crisis exposure terms included pandemic, natural disaster, armed conflict, refugee, and economic turmoil. Mental health and wellbeing terms included PTSD, depression, anxiety, and resilience, as well as positive wellbeing terms such as flourishing and life satisfaction. Computational method terms included machine learning, deep learning, natural language processing, and named algorithms such as random forest and support vector machines. Terms within each concept were combined using OR and truncation, and the three concepts were combined using AND; a 2016 to 2026 date limit and English language filter were applied across all databases. Full search strings for all four databases are provided in the Supplements.</p>
+<p>Two reviewers conducted title/abstract and full-text screening independently, resolving disagreements through discussion or referral to a third reviewer. Agreement at full-text screening was κ = 0.904 (6/133 disagreements). Screening is summarized in Figure 1. Findings were synthesized narratively, grouped by crisis typology and analyzed across three areas: the wellbeing and non-wellbeing dimensions of outcomes and their associated factors (5.1), patterns of adverse, favorable, and mixed factors across crisis types (5.2), and computational methods and explainability (5.3). Each factor was classified into named tiers, subgroups, and subdimensions adapted from the WHO CSDH framework (Table 1).</p>
+<p>Given study heterogeneity, meta-analytic pooling was not possible; instead, each study&#x27;s factors were tallied by direction, dimension, crisis typology, and computational method (NLP-based versus survey/administrative), so patterns could be compared within and across these groupings rather than pooled into a single effect size. Studies reported factor prominence on two non-equivalent bases: outcome-linked (e.g., SHAP, permutation importance, regression coefficients), tied to a fitted model predicting a defined outcome and typically accompanied by a performance metric; and frequency-or association-based (e.g., topic/emotion frequency in NLP studies, association-rule support/confidence or causal-forest split weighting in survey studies), reflecting how often or strongly a theme or association appeared with no outcome variable modeled. Findings are compared with two prior non-computational reviews in Section 5.3. Data were extracted using a standardized charting form, piloted on five included studies. Charted variables included bibliographic information, crisis typology, country/setting, study design, data source type, sample size, computational method(s), evidence type (prediction-focused vs. pattern-focused, following Tu et al., 2025), primary outcome(s), and predictive factor classification. Two reviewers charted independently (κ = 0.81) and resolved discrepancies through discussion. 3. Background</p>
+<h3>3.1 The CSDH Framework and Its Adaptation for Crisis Research</h3>
+<p>This review adopts the conceptual framework for action on the social determinants of health developed by Solar &amp; Irwin (2010) for the World Health Organization Commission on Social Determinants of Health. It organizes health inequities along a causal chain moving from socioeconomic and political context through structural determinants to intermediary determinants of health. The framework has since been applied and extended in later work, including a systematic review of disaster health literature (Nomura et al., 2016) and a recent refinement of the original World Health Organization structure using empirical case material (Karatekin et al., 2024 (Karatekin et al., , 2026)).</p>
+<p>The framework organizes crisis determinants into three causal tiers: (1) Structural Determinants (governance, policy, social position) generate a person&#x27;s socioeconomic position and socio-political context, which determine differential exposure to risk, differential vulnerability once exposed, and differential consequences of illness; (2) Bridging Determinants (social cohesion and social capital) carry that structural position down to the individual, or fail to; and (3) Intermediary Determinants (material, psychosocial, behavioral, health-system) convert this into the lived health outcome. CSDH fixes the direction of this pipeline and the four intermediary categories, but leaves open how each subdimension is operationalized, and how finely subdimensions are split.</p>
+<h3>3.2 Fidelity to the Source Framework</h3>
+<p>The present taxonomy proposed in the paper follows the textual authority of Solar &amp; Irwin to guide classification. Every subdimension corresponding to a construct named in the source text, whether stated without qualification or introduced through a hedged example list, was retained faithfully and traced to its originating passage. This procedure follows directed content analysis (Hsieh &amp; Shannon, 2005) and the deductive qualitative content analysis process described by Elo &amp; Kyngäs (2008), in which theory-derived categories are applied to a corpus as predetermined codes .</p>
+<p>The coding scheme draws its subgroups and sub-dimensions from Solar &amp; Irwin&#x27;s (2010) CSDH framework. Under Socioeconomic Position: Age, Occupation, Gender, Education, Race/Ethnicity, and Income are all taken verbatim from the stratifying list in Section 5.5.8. Under Socioeconomic &amp; Political Context: Culture &amp; Societal Values is verbatim from the six-point context list in Section 5.4. Under Material Circumstances: Financial Means, Housing, and Material Work Environment are all verbatim from Section 5.6.1. Under Health System: Access and Responsiveness/System Performance are both verbatim from Section 5.6.4. Under Social Cohesion &amp; Social Capital: Bonding, Bridging, and Linking Social Capital are all verbatim, originally from Szreter &amp; Woolcock (2004) as cited in Solar &amp; Irwin&#x27;s Section 5.6.6, though Linking Social Capital had zero occurrences in the actual corpus.</p>
+<p>Governance, as coded here, consolidates state action across three registers: direct governance and restriction measures, macroeconomic policy, and public policy content. These are combined into a single subdimension because crisis literature items along macroeconomic and public policy lines were too sparse individually to support their own subdimensions and share a common state action character with governance content proper. Epidemiological Conditions has been modified to track the same information for all types of crises, not just epidemics as it did originally. Renamed Contextual and Environmental Conditions, it tracks the crisis&#x27;s objective, measurable scale, case counts, environmental hazard severity, and so on, distinct from the state&#x27;s political response.</p>
+<h3>3.3 Points of Extension</h3>
+<p>Solar &amp; Irwin acknowledge directly that a full characterization of the socioeconomic and political context was beyond the scope of their paper. An earlier draft of the framework had attempted to include every element in a single diagram, and the authors report that this approach was abandoned as unhelpful. The need for extension is greatest precisely where the source framework&#x27;s own coverage is thinnest. The health system discussion, although substantive on financing and equitable access, never engages with psychiatric care, psychological support, or mental health service delivery at any point in the document. This asymmetry follows directly from the framework&#x27;s origins in socioeconomic epidemiology and intersectoral policy rather than clinical or psychological science. This review has followed the CSDH framework with maximum fidelity, taking most of its constructs verbatim. Because the framework provides an overarching structure whose subdimension content is illustrative rather than exhaustive, applying it to a review of crisis literature necessarily surfaces content the source framework does not itself name. This is an expected consequence of applying a general health equity policy framework outside the context of its original construction (Hsieh &amp; Shannon, 2005). Category development followed the taxonomy development method of Nickerson et al. (2013), alternating between testing framework-derived categories against the corpus and defining new categories from corpus content the framework could not accommodate. This mirrors both Karatekin et al. (2026), who refined their agent and power-centered social determinants framework after case material could not be accommodated within its earlier version, and Nomura et al. (2016), who derived 35 disaster health themes from within CSDH&#x27;s existing three-domain structure.</p>
+<p>Rather than developing an original account of trust and reciprocity, Solar &amp; Irwin explicitly adopt Szreter &amp; Woolcock&#x27;s (2004) bonding, bridging, and linking typology, crediting the source and carrying its vocabulary directly into the framework&#x27;s own subdimension labels. This review anchors the psychosocial determinants in Pearlin&#x27;s Stress Process Model (Pearlin et al., 1981) because it provides an empirically validated account of how discrete Life Events and Chronic Strains erode self-concept and elevate psychological distress, mediated by the individual&#x27;s Coping mechanisms and ideals of Mastery and Self Concept. CSDH&#x27;s own text supplies anchors for four of Pearlin&#x27;s five roles in one passage. It is defined as &quot;psychosocial stressors (for example, negative life events and job strain), stressful living circumstances (e.g., high debt) and (lack of) social support, coping styles, etc.&quot;, which covers discrete events and job strain as Life Events, ongoing debt as Chronic Strains, and coping directly. CSDH also anticipates Mastery and Self Concept and Personality Traits, describing how &quot;people perceive the events related to their health as controllable (internal control) or as controlled by others (external control)&quot;. CSDH anchors the Behavioral and Biological subdimension firmly to the body and to conduct, never to relational or cognitive experience. Its definition is entirely physical: smoking, diet, alcohol consumption, and lack of physical exercise, with genetic factors folded in among the biological factors. Nothing in this definition touches relationships or cognition, just as nothing in the Psychosocial definition touches physiology. That asymmetry marks the boundary between the two subdimensions: one is oriented to the person&#x27;s perceived and relational environment; the other to the person&#x27;s physiology and conduct. Figure 2 depicts the taxonomy used throughout the remainder of this review.</p>
+<h3>Bridging Determinants</h3>
+<p>Social cohesion and social capital ties that carry the protection of a favorable structural position down to the individual, or fail to do so</p>
+<h3>Social Cohesion and Social Capital</h3>
+<p>The family, community, and institutional ties available to a person during a crisis</p>
+<p>Bonding Social Capital Close kin-based ties within the immediate household or neighborhood Figure 2 Taxonomy capturing factors impacting mental health, inspired by the CSDH framework Tier/Subgroup/Subdimension Definition Bridging Social Capital Ties extending beyond close kin to community, institutional, or online networks Intermediary Determinants Material, psychosocial, behavioral, biological, and health system pathways, closest to the individual, through which a crisis becomes lived distress or lived resilience Psychosocial Circumstances The emotional, cognitive, and coping-related experience of a crisis Life Events Discrete, unscheduled, undesired occurrences Chronic Strains Enduring, ambient difficulty or uncertainty, including strain located within a specific life role Mastery and Self Concept Stable self-beliefs about control, worth, and meaning Coping Active response to a stressor, encompassing problem-and emotion-focused function Personality Traits Dispositional trait constructs treated as basic psychosocial tendencies Behavioral and Biological Factors The lifestyle choices and physiological traits through which structural social inequities directly translate into individual health outcomes Cumulative Physiological Burden Physiological and general health status burden, including self-rated health and symptom experience Health Behaviors Health-damaging or health-promoting conduct, including substance use, sleep, and treatment seeking Direct Biomarker Panel Physiological measures obtained through laboratory, imaging, or clinical assay Material Circumstances A person&#x27;s financial resources and housing conditions during a crisis Financial Means Financial resources and economic hardship Housing Housing conditions, displacement, and property loss Material Work Environment Physical setting of work or study Health System A person&#x27;s contact with, and receipt of support from, formal health and psychosocial services during a crisis Access Whether healthcare can be physically or logistically reached Responsiveness &amp; System Performance Quality of support once contact is made</p>
+<h3>4. Outcomes of Crises and Relevant Factors Identified Through Computational Methods</h3>
+<p>This section maps the 70 included studies by crisis type, population, computational method, analytical basis, and reported key finding. Associated factors that significantly contribute to mental wellbeing outcomes following crisis exposure can be split into three types: favorable, mixed, and adverse factors. Adverse factors increase the probability of wellbeing deterioration, while favorable factors buffer against it. Mixed or non-monotonic factors may increase the probability in some situations and decrease it in others.</p>
+<h3>4.1 Pandemics and Infectious Disease Outbreaks</h3>
+<p>Of the 23 studies in this category, 11 use NLP or text-based methods (Table 2) and 13 use survey or administrative data (Table 3). Method choice tracks data type: text-based studies predominantly use transformer architectures (BERT, RoBERTa, or fine-tuned variants) for emotion and sentiment classification, while survey-based studies predominantly use tree-based ensembles (random forest, gradient boosting, XGBoost) to rank candidate variables. Populations range from general social media users (Ou et al., 2025; Wu et al., 2023) to specific subgroups such as healthcare workers (Zhou et al., 2022; Elyashar et al., 2021), pregnant women (Nichols et al., 2022; Dhankar &amp; Katz, 2023), and older adults (Xiang et al., 2025). One study (Zhang et al., 2025) combines NLP with clustering and random forest within a single pipeline, an exception to the otherwise clean NLP/survey split.</p>
+<h3>4.2 Economic Upheavals</h3>
+<p>Studies split between sentiment classifiers applied to text (Table 4) and models applied to survey/administrative data (Table 5). Financial instability recurs across the NLP subset but in inconsistent directions, framed as adverse via job loss and panic in one study (Ananthasubramaniam et al., 2024), yet appearing favorable when tied to perceived control and government enablement in another (Karami et al., 2026). In the survey subset, income insecurity and job loss recur as adverse factors (Foremny et al., 2024), but variables such as social contact, work-life balance, religiosity, and independence consistently outpredict financial variables themselves (Bakkeli, 2023; Sheetal et al., 2024).</p>
+<p>Table 4 Summary of NLP-based Economic Upheaval Studies # Study &amp; Model Factors Basis Target 1 Ananthasubramaniam et al. (2024) 53,298 adults, NVDRS suicide narratives RoBERTa classifier Adv: mental health problem following retirement, social or personal problem, forced retirement, financial problem following retirement, long-term unemployment, short-term unemployment reported endorsement frequency retirementrelated suicide mortality across the Great Recession 2 Karami et al. (2026) 166,000 search-engine results on entrepreneurship LDA &amp; PLS regression Adv: loss of control, loss of understanding Fav: feeling in control, motivated, government/technology enablement Mix: opportunity-mindset framing PLS path coefficients wellbeing among small-firm entrepreneurs</p>
+<h3>4.3 Natural Disasters</h3>
+<p>Emotional factors dominate the NLP subset (Table 6), since nearly all target negative emotion or sentiment directly. However, a rare favorable finding (social reconnection and meaning-making distinguishing recovery) breaks that pattern (Britt, Kowalski &amp; Dodson, 2026). In the survey subset, psychosocial-behavioral factors recur most often (Table 7), concentrated heavily in older Japanese earthquake survivors studied across three papers using three different causal ML methods (Shiba et al., 2022 (Shiba et al., , 2023;; Okuzono et al., 2024). Age is the clearest contradiction in this crisis type, favorable in one study and adverse in two others using overlapping populations and methods. Pure sentiment classification yielded no factors (Hossain et al., 2025). Sleep-related factors again produced the single strongest predictors overall (a Ren-style pattern replicated here via Ge et al., 2020), while pre-disaster social baseline outweighed disaster severity itself in one notable exception (Liu et al., 2024).</p>
+<h3>4.4 Armed Conflicts and Forced Displacement</h3>
+<p>This crisis type spans the widest methodological and population range in the review: military cohorts, civilian survivors, first responders, and refugees (Table 8 and Table 9). Clinical and affective outcomes dominate as primary targets (PTSD, depression, anxiety). Across military populations, predeployment symptom burden and social disconnection are the most consistent adverse predictors, while unit cohesion, resilience, and strong social networks are favorable (Papini et al., 2023; Kessler et al., 2024). Among conflict-exposed civilians, coerced loss of personal agency and unmet basic needs are the most distinctive adverse factors (Conrad et al., 2017; Jayawickreme et al., 2020). Among refugees, structural and material conditions such as income, housing, and time since displacement recur as predictors, alongside family contact as a favorable factor (Figueiredo &amp; Ndiaye, 2025; Keller et al., 2026).</p>
+<h3>5. Discussions</h3>
+<p> &gt;Discussions</p>
+<h3>5.1. Factors affecting wellbeing in crises</h3>
+<p>Table 10 displays every CSDH tier down to subdimension level, with direction of effect and the actual terms each subdimension draws on. Across the three tiers, 338 factors were code-able: 81 under Structural Determinants, 33 under Bridging Determinants, and 224 under Intermediary Determinants. A further 45 factors are categorized under the Outcome Measures tier because they measure symptoms, prior diagnoses, or the study&#x27;s own outcome instrument rather than its determinants. Another 5 factors remain Not Coded (Excluded/Uncategorizable).</p>
+<h3>Structural Determinants (n = 81, 53 adverse [Adv], 19 favorable [Fav] &amp; 14 mixed [Mix]).</h3>
+<p>At the tier level, Structural Determinants accounted for 81 of the 338 code-able determinant factors. It sits furthest upstream, defined as the socioeconomic and political conditions of a society that decide who is exposed to a crisis and who has resources to withstand it. This tier splits into two subgroups: Socioeconomic Position and Socioeconomic and Political Context.</p>
+<p>Table 10 Structural Determinants Subgroup/Subdimension n Pan Fin ND AC Adv Fav Mix NLP Sur Socioeconomic Position Occupation 14 6 4 1 3 11 3 6 8 Age 10 2 2 3 3 6 1 3 10 Gender 9 3 1 3 2 7 2 9 Race and Ethnicity 3 3 2 1 3 Education 6 1 2 3 1 4 1 6 Income 4 2 1 1 3 1 4 Subgroup total 46 14 10 10 12 30 11 5 9 37 Socioeconomic and Political Context Governance 12 6 1 5 8 4 10 2 Contextual and Environmental Conditions 16 6 10 9 2 5 11 5 Culture and Societal Values 7 3 1 3 1 2 4 4 3 Subgroup total 35 15 1 16 3 18 8 9 25 10 Tier total 81 29 11 26 15 48 19 14 34 47 Note</p>
+<h3>Socioeconomic Position (n = 46, 30 Adv, 11 Fav, 5 Mix).</h3>
+<p>This refers to an individual&#x27;s economic and social standing within society, captured through markers such as occupation, age, income, education, gender, and race or ethnicity. Occupation was consistently adverse (e.g., forced retirement, unstable employment, work disruption), revealing that job loss and disruption are detrimental to mental health outcomes across contexts. NLP methods also identified related factors in media discourse and news coverage about loss and unemployment, unlike structural markers such as age and gender, which were rarely discussed in this way. It appeared more heavily across pandemic and financial crises (n = 10 combined), showing how both public health restrictions and economic contraction independently cause job losses.</p>
+<p>Age was the second-largest subdimension (n = 10), coded as adverse or favorable depending on the age range. It appeared evenly across all four crisis types and was collected fully through non-NLP demographic fields in surveys rather than through text. Age is not typically self-reported in media discourse the way sentiment or symptom language is. Similarly, Gender was coded as adverse overall, though no consistent direction by gender emerged from this review. Male and female categories were both adverse or favorable depending on context. Like Age, it was captured entirely through non-NLP demographic intake fields.</p>
+<p>Education was predominantly protective (e.g., educational attainment, functional literacy, language skills). It was almost absent from pandemic and financial crisis studies, suggesting that educational attainment was more likely to be investigated in displacement and conflict cohort studies to be profiled against standard baseline demographics. Non-NLP methods, for the same reason as Age and Gender, mainly collected it. Race and Ethnicity and Income remained too small to analyze. However, Financial Means under the Material Circumstances subgroup also captured the same signals as Income.</p>
+<p>Financial Means (n = 15, e.g., financial worries, income insecurity, asset loss), which is under the Intermediary Tier and the Material Circumstances subgroup but is being discussed here, was almost entirely adverse and appeared across all four crisis types in a fairly even distribution. This shows the universal relevance and impact of economic hardship regardless of any crisis context. It was mineable from news coverage of price surges, shortages, and economic shocks.</p>
+<h3>Socioeconomic &amp; Political Context (n = 35, 18 Adv, 8 Fav, 9 Mix).</h3>
+<p>This refers to the governance, policy, and environmental conditions surrounding a person, rather than anything about the individual directly. Governance (n = 12, e.g., government stringency measures, lockdown, misinformation &amp; criticism) was coded as adverse, as it was more often treated as a source of distress than support. It was concentrated in pandemic and natural disaster research (n = 11 combined), where it plays an active intervening role. NLP detected it in 10 of 12 instances, since lockdown orders and government reactions are directly reported in media and social media text.</p>
+<p>Contextual and Environmental Conditions (n = 16) skewed adverse (e.g., number of cases, deaths, severe weather and natural hazards), as case counts, death tolls, and hazard severity are likely to elicit negative mental impacts. This appeared only in pandemic (n = 6) and natural disaster research (n = 10), the two crisis types in which an objective, publicly reported magnitude of the event itself is routinely tracked. They were NLP-dependent, with 11 of 16 instances found by NLP, since case counts and hazard figures appear in both mined news text and structured records such as epidemiological or meteorological data. Culture and Societal Values (n = 7) showed a mixed valence, split across pandemic and armed conflict research, and was well detected by NLP. Armed conflict research also shows a gap that the other three crisis types do not share. It has zero coverage of Governance or Contextual and Environmental Conditions, meaning the political context around conflict has not been studied at all.</p>
+<p>Bridging Determinants (n = 33, 16 Adv, 13 Fav, 4 Mix). At the tier level, Bridging Determinants accounted for 33 of the 338 code-able factors, with 16 coded as adverse. It was the most evenly balanced tier in the taxonomy, as shown in Table 11. Bridging Determinants sit in the middle of the CSDH tier structure and refer to factors that either carry the protection of a favorable structural position down to the individual or fail to do so. This tier contains a single subgroup, Social Cohesion and Social Capital.</p>
+<p>Table 11 Bridging Determinants Subgroup/Subdimension n Pan Fin ND AC Adv Fav Mix NLP Sur Social Cohesion and Social Capital Bonding Social Capital 18 5 2 5 6 9 6 3 2 16 Bridging Social Capital 15 5 2 1 7 7 7 1 3 12 Tier total 33 10 4 6 13 16 13 4 5 28 Note. Pan = Pandemic, Fin = Financial, ND = Natural Disaster, AC = Armed Conflict, Adv = Adverse, Fav = Favorable, Mix = Mixed, NLP = natural language processing-derived coding, Sur = non-NLP (survey, administrative, or clinical instrument coding). Blank crisis-type or direction cells indicate zero items. Bridging Determinants correspond to the Cross-Cutting tier in the coded dataset.</p>
+<h3>Social Cohesion &amp; Social Capital (n = 33, 16 Adv, 13 Fav, 4 Mix).</h3>
+<p>This refers to the family, community, and institutional ties available to a person during a crisis, and is the most evenly balanced subgroup in the taxonomy. Bonding Social Capital (n = 18, e.g., friend/family/peer support, family support, parental involvement) shows this balance: protective ties with close kin buffer against negative outcomes. At the same time, adverse markers such as loss of relatives or living alone are associated with worse outcomes. It was beneficial across all crises, since close kin are affected by the same shocks and can often help each other at the same time.</p>
+<p>Bridging Social Capital (n = 15, e.g., supportive online communities, social network, social inclusion) shows the same balance. Protective community ties buffer against adverse outcomes across crises, whilst absence, exclusion, or isolation causes negative outcomes. Both were captured through NLP and non-NLP methods alike: family and community relationship discussions can also be found in social media discourse.</p>
+<h3>Intermediary Determinants (n = 224, 161 Adv, 40 Fav &amp; 23 Mix).</h3>
+<p>At the tier level, Intermediary Determinants accounted for 224 of the 338 determinant factors. Intermediary Determinants sit closest to the individual and the outcome itself, referring to material circumstances, psychosocial stressors and coping, health behaviors and biology, and contact with the health system through which a crisis becomes lived distress or lived resilience. This tier splits into four subgroups: Psychosocial Circumstances, Behavioral and Biological Factors, Material Circumstances, and Health System, with counts given in Table 12.</p>
+<p>Table 12 Intermediary Determinants Subgroup/Subdimension n Pan Fin ND AC Adv Fav Mix NLP Sur Psychosocial Circumstances Life Events, acute and discrete 42 4 11 27 41 1 10 32 Mastery and Self Concept 29 11 4 4 10 9 15 5 8 21 Chronic Strains, Ambient Threat or Uncertainty 32 17 4 5 6 29 3 11 21 Coping 22 13 1 3 5 11 10 1 5 17 Personality Traits 10 4 6 1 4 5 10 Subgroup total 135 49 9 29 48 91 29 15 34 101 Behavioral and Biological Factors Cumulative Physiological Burden 25 12 2 11 17 3 5 4 21 Health Behaviors 12 7 2 1 2 9 2 1 2 10 Subgroup/Subdimension n Pan Fin ND AC Adv Fav Mix NLP Sur Direct Biomarker Panel 11 5 6 10 1 11 Subgroup total 48 19 2 8 19 36 5 7 6 42 Material Circumstances Financial Means 15 5 3 3 4 14 1 3 12 Housing 14 12 2 13 1 3 11 Material Work Environment 3 3 3 3 Subgroup total 32 8 3 15 6 30 1 1 6 26 Health System Access 8 3 5 4 4 8 Responsiveness and System Performance 1 1 1 1 Subgroup total 9 1 3 5 4 5 9 Tier total 224 77 14 54 77 161 40 23 46 178 Psychosocial Circumstances (n = 135, 91 Adv, 29 Fav, 15 Mix). This refers to the emotional, cognitive, and coping-related experience of a crisis, structured according to Pearlin et al.&#x27;s (1981) stress process model. Life Events (Acute/Discrete) was the largest subdimension (n = 42, e.g., total trauma load, previous trauma, adverse childhood experiences) and was almost entirely adverse, concentrated in armed conflict research (n = 27). The reason for both adversity and concentration is that discrete traumatic exposure, such as combat, displacement, and sexual violence, is a defining feature in conflict and displacement cohort studies. Life events were captured mostly through non-NLP structured trauma checklists (32 of 42), which can only be collected clinically rather than by mining media text.</p>
+<p>Both non-NLP and NLP methods have detected coping mechanisms. Coping mechanisms received the most concentrated attention in pandemic studies, suggesting researchers have explored the psychological impacts of beneficial and adverse coping less thoroughly in other crisis types. Coping is nearly evenly split (11 Adv, 10 Fav) as coping strategies can be coded in either direction depending on whether the strategy itself is adaptive or maladaptive. Mastery and Self Concept was also a favorable subdimension (n = 29, e.g., resilience, coping self-efficacy, sense of coherence), concentrated in pandemic (n = 11) and armed conflict (n = 10) research. Like coping, it was extracted from sentiment-based proxies for resilience and optimism in mined discourse (n = 8). It was a majority-favorable subdimension (15 Fav of 29). Resilience and coping self-efficacy are, by construction, framed as protective resources rather than harms.</p>
+<p>Personality Traits (n = 10, e.g., emotional stability, self-control, optimism, extraversion) was a subdimension in which favorable codes outnumber adverse ones (1 Adv, 4 Fav, 5 Mix). This could also be because protective traits such as optimism and self-control are more common than harmful traits. It was concentrated in natural disaster (n = 6) and pandemic (n = 4) research and was captured entirely through non-NLP methods. Chronic Strains due to ambient threat or uncertainty (n = 32, e.g., fear of coronavirus, uncertainty about pandemic development, worry about infection) were concentrated in pandemic research (n = 17), with a smaller presence in others. Uncertainty or risk of an unresolved threat of infection or aftershock is a more central experience in pandemics than in others; thus, it was ranked as adverse ( 29Adv). In contrast, it leaned toward non-NLP methods (11 of 32 NLP, 34%), since fear and threat language is expressed as readily in mined text as in survey responses.</p>
+<h3>Behavioral &amp; Biological Factors (n = 48, 36 Adv, 5 Fav, 7 Mix).</h3>
+<p>This refers to the lifestyle choices and physiological traits through which structural social inequities directly translate into individual health outcomes. All subdimensions are almost entirely coded as adverse, and almost no item is coded as favorable. This total absence of favorable coding across the subgroup follows directly from how these constructs are defined: a burden, an illness, or a biomarker abnormality has little room to be recorded as a positive outcome in the first place. Moreover, they are captured almost entirely through non-NLP methods (21 of 25, 84%), since self-rated health and diagnosed conditions are typically collected as clinical or survey items rather than mined from open text.</p>
+<p>Cumulative Physiological Burden (n = 25, e.g., self-rated health, hypertension, cancer) was predominantly adverse (17 of 25). It was concentrated in armed conflict research (n = 11) and pandemic research (n = 12). Health Behaviors (n = 12, e.g., smoking, recent testing, sedentary lifestyle, time outdoors, Mediterranean diet adherence) were concentrated in pandemic research (n = 7) and were adverse in 9 of 12 items. This was because maladaptive and health risk behaviors were tracked as a consequence of crisis stress. Some of its discourse surfaced in mined social media text (e.g., leisure-or substance-related language), similar to psychosocial circumstances. Direct Biomarker Panel (n = 11, e.g., BMI, white-matter tract markers, blood-based biomarkers) was captured in only 2 studies exploring the biomarker predictors of mental health.</p>
+<h3>Material Circumstances (n = 32, 30 Adv, 1 Fav, 1 Mix).</h3>
+<p>This refers to a person&#x27;s financial resources and housing conditions during a crisis. Financial Means has been discussed with Income above under Income within the Socioeconomic Position subgroup and Structural Determinants tier. Housing (n = 14, e.g., property loss, relocation, permanent displacement) was equally uniformly adverse. It was almost fully confined to natural disaster research (n = 12, 86%). This is because housing loss is a defining physical consequence of disasters and conflicts, but in a public health restriction or an economic contraction, the home itself typically remains intact. Both Financial Means and Housing were found in media discourse and survey instruments. The material work environment i.e., Material Work Environment subdimension (e.g., housework, working from home, schooling from home) was too small to judge.</p>
+<h3>Health System (n = 9, 4 Adv, 5 Fav, 0 Mix).</h3>
+<p>This refers to a person&#x27;s contact with, and receipt of support from, formal health and psychosocial services during a crisis. It is the only intermediary category in which favorable codes outnumber adverse ones. Access is split evenly (4 Adv, 4 Fav), capturing both the presence and absence of healthcare as substantively meaningful outcomes. Access (n = 8, e.g., medical needs past 30 days, distance to pediatric ICU, distance to alcohol/drug treatment center) appeared only in natural disasters (n = 3) and armed conflict (n = 5) research. It was captured entirely administrative surveys and clinical methods. Responsiveness and System Performance (n=1, e.g., receiving psychological support material) had too few observances to discuss further.</p>
+<p>Outcome Measures (n = 45, 44 Adv, 0 Fav, 1 Mix). These items sit outside the three CSDH determinant tiers because they describe prior diagnoses, current symptoms, or the study&#x27;s own outcome construct rather than a cause of wellbeing. They represent the study&#x27;s output rather than factors leading to it. These items are often symptoms or related outcomes of the very distress or disorder that the study is designed to predict. Eight of these outcomes are circular with the study&#x27;s own target.</p>
+<h3>5.2. What are the explainability or ranking methods to order factors?</h3>
+<p>The analytical basis linking factors to outcomes was recorded for all 69 studies. Non-NLP studies overwhelmingly fit a formal statistical or machine learning ranking: 50 of 51 non-NLP studies use SHAP, feature or variable importance, regression or LASSO coefficients, or a comparable technique, and only one study (Li et al., 2024) reports no ranking basis at all but only has 6 factors. Every SHAP-based study in the corpus, 9 of 9 including the one study combining SHAP and LIME (Bashar et al., 2025), is non-NLP.</p>
+<p>NLP studies show a pattern close to the opposite. Of the 17 NLP studies with a recorded basis, only 5 report a formal statistical measure, limited to correlation (Ou, de Bruijn &amp; Schulz, 2025) or regression and path coefficients (Wu et al., 2023; Bathina et al., 2021; Elyashar et al., 2021; Karami et al., 2026), and none use SHAP, permutation importance, or any tree-based importance measure. Other NLP studies mostly characterize factors through purely descriptive frequency measures, operationalizing importance almost entirely as how often a topic or sentiment appears in the text rather than how strongly it predicts an outcome. Comparison with previous studies Schäfer et al. (2024), Kunzler et al. (2021), and Newnham et al. ( 2022) remain the most relevant prior reviews of crisis mental health, each methodologically sound within its own remit. None includes a computational or machine learning method as an inclusion criterion, and this difference in scope produces a difference in what each review can structurally find. Schäfer et al. restricts to regression models in highincome countries; Kunzler et al. restricts to early pandemic survey data; Newnham et al. explicitly excludes conflict-and violence-related trauma. This review&#x27;s machine learning and NLP inclusion criterion is what surfaces actually impacted populations such as refugees, disaster-exposed civilians, Ugandan and Sri Lankan war survivors, and constructs that regression-based synthesis in high-income cohorts is not designed to reach.</p>
+<p>Moreover, this review coded factors under the CSDH framework, extended by stress process models, to build the organizing taxonomy. This produced 338 determinants sorted into Structural, Bridging, and Intermediary tiers across 24 subdimensions, a resolution none of the three prior reviews approach. Every coded item was then cross-tabulated by crisis typology and by detection modality (NLP vs. non-NLP). This double stratification showed where the burden is concentrated by crisis type and how invisible that burden is to computational detection.</p>
+<p>On age, it proves consistently unstable rather than resolving to one direction. Education diverges between the two prior reviews (Kunzler protective vs. Schäfer largely null), and the present review leans closer to Kunzler, with a favorable tilt. Emotion regulation/psychological flexibility, favorable in Schäfer et al., becomes far more heterogeneous in the present review&#x27;s 29-item Mastery and Self Concept subdimension. Governance, Occupation, Financial Circumstances, Housing, and the biological/behavioral subdimensions were untested by all three prior reviews because each was restricted by a different eligibility axis (high-income countries, early pandemic data, or non-conflict disaster/pandemic exposure), and none stratified by detection method.</p>
+<h3>6. Synthesis, Future Directions, and Limitations</h3>
+<p> &gt;Synthesis, Future Directions, and Limitations</p>
+<h3>6.1. Synthesis of findings</h3>
+<p>Across the evidence base, 338 code-able determinants were charted using the WHO CSDH, with Intermediary Determinants (psychosocial circumstances and behavioral and biological factors chief among them) accounting for 66.3% of the total. In contrast, Structural and Bridging Determinants together account for just over a third.</p>
+<p>Armed conflict is captured almost entirely through structured clinical instruments rather than textbased methods, unlike pandemic and natural disaster research, which has more instances of NLP detection. Armed conflict research also shows zero coverage of governance or environmental conditions, leaving the effects of political context on trauma in conflict settings unexamined. Prior trauma and pre-existing psychiatric burden are the most consistent predictors of later distress, more so than any feature of the conflict exposure itself. This suggests that harm accumulates on prior vulnerability rather than arising fresh from a single event.</p>
+<p>In pandemics, the dominant psychosocial pattern is prolonged, unresolved uncertainty rather than a discrete shock. Coping and resilience constructs are also studied far more heavily here than in any other crisis type, giving pandemic research the most developed evidence base in the review for protective psychosocial mechanisms. In economic upheavals, occupational and income disruption is adverse almost without exception across the available studies, showing how economic disruption itself is the central pathogenic factor in this crisis type. This crisis type is also the least evidenced in the review, with only five studies across both NLP and survey methods combined. Natural disasters show that harm extends well beyond the disaster event itself, driven mainly by prolonged material and residential disruption such as property loss, displacement, and relocation. NLP-based methods capture governance and contextual signals well, with 10 of 12 governance items and over half of contextual items derived from mined text. Structural Determinants carry the highest NLP rate of any tier. The tiers closest to the individual are captured almost entirely through non-NLP clinical or survey instruments. Categories drawn from discourse, such as governance and ethnicity, are NLP-heavy, while every demographic, biomarker, clinical, and administrative factor is drawn from non-NLP sources.</p>
+<p>Fifty of 51 non-NLP studies apply a formal statistical or machine learning ranking to justify their factors. Eleven of 17 NLP studies base their justification on descriptive frequency counts. Rather than fitting formal rankings, these NLP studies mostly operationalize importance as how often a topic or sentiment appears in the text. Only 9 studies overall use SHAP (Table 14), so this field requires wider adoption of explainable AI techniques for more interpretable results.</p>
+<p>Adverseness dominates 6 of the taxonomy&#x27;s subdimensions at 85% or higher. It spans life events, chronic strains, financial means, housing, material work environment, and direct biomarker panel. Favorable signal concentrates almost entirely in mastery, self-concept, and coping constructs, together accounting for 25 of the corpus&#x27;s 72 favorable codes. Six subdimensions, including Life Events, Chronic Strains, and Housing, show zero favorable coding across all methods. Prior symptoms, diagnoses, and the study&#x27;s own outcome construct sit outside the three determinant tiers; eight of these are circular with the study&#x27;s own stated target.</p>
+<h3>6.2. Future Research Directions</h3>
+<p>Computational methods and NLP approaches should be expanded specifically into the crisis types and constructs where they remain structurally absent. They also need to detect protective, not only adverse, constructs. Researchers at the intersection of AI, business, and social economics need to study economic downturns more. Armed conflict is captured almost entirely through structured clinical instruments rather than text-based methods, in contrast to the subdimensions where NLP already dominates in pandemic and natural disaster research. Armed conflict research also shows zero coverage of governance or environmental conditions, leaving the effects of political context on trauma in conflict settings unexamined.</p>
+<p>Digital phenotyping should be used more widely across all crisis types, as its value for tracking behavioral and mental health signals is well established in the clinical literature (Onnela &amp; Rauch, 2016). This involves collecting passive data from phones and wearables, such as movement, screen time, sleep, and typing behavior. This would allow chronic strain and health behavior to be tracked continuously without repeated surveys, which is especially useful in conflict zones or disaster areas where survey access is often limited. The broader contextual and semantic range of large language models (LLMs) makes them more capable of picking up the subtler, less standardized language of mastery, self-concept, and coping. GPT-based models, for example, have already been shown to detect psychological constructs from text more accurately than traditional dictionary-based methods across multiple languages (Rathje et al., 2024). LLMs can also pick up signals from armed conflicts in real time, as demonstrated by their use in detecting human rights violations in social media posts during the Russia-Ukraine war (Nemkova et al., 2023).</p>
+<p>These gaps point toward constructing a knowledge graph that integrates evidence across the CSDH tiers into a unified computational structure, and toward bringing formal explainable AI methods more broadly into crisis mental health research. A graph linking structural determinant data, bridging determinant data, and intermediary outcome data would allow new crisis events to be mapped onto the existing evidence base, identifying at-risk populations and intervention priorities across tiers rather than within a single subgroup in isolation. Moreover, regardless of whether the underlying model is NLP-based, adopting purpose-built explanation methods such as SHAP, LIME, or causal machine learning (rather than relying on frequency counts or a model&#x27;s native feature importance as a stand-in) would raise the evidentiary standard across the field.</p>
+<h3>6.3. Limitations of This Review</h3>
+<p>This review has four main limitations. First, consistent with PRISMA-ScR guidance for scoping reviews, we did not conduct a formal quality or risk-of-bias appraisal, since the review&#x27;s purpose was to map the breadth of the evidence rather than weight it. As a result, this synthesis represents methodologically stronger and weaker studies on equal footing. Second, our characterization of certain factors as the &quot;strongest&quot; predictors reflects how consistently they rank highly across studies, not a pooled effect size: importance scores and odds ratios are not directly comparable across different methods and study designs. This vote-counting approach is standard for scoping reviews and well suited to mapping breadth, but it cannot quantify any single factor&#x27;s contribution relative to others.</p>
+<p>Third, the literature coverage is not exhaustive. The search was supplemented by forward and backward citation searching, consistent with recommended scoping review practice (Levac et al., 2010). Still, some relevant studies may have been missed, particularly those published in non-English venues or in regional computer science conference proceedings not indexed in the four databases searched. Fourth, and most consequentially, this evidence base relies heavily on social media data. Across all four crisis types, included studies drew predominantly on Twitter, Reddit, Weibo, and YouTube, which capture people with internet access and digital literacy rather than the populations a crisis affects most severely, such as older generations or lower-income groups. These biases compound with population gaps that differ by crisis type. Across all four crisis types, low-and middle-income countries are underrepresented relative to high-income contexts.</p>
+<h3>7. Funding Information</h3>
+<p>This study received no specific grant from any funding agency in the public, commercial, or notfor-profit sectors. The authors declare no conflicts of interest.</p>
+<h3>8. Ethics Statement</h3>
+<p>This study did not involve human subjects, human data or tissue, animal subjects, or primary data collection of any kind, and therefore did not require ethics committee approval. All data analyzed were factors and outcomes extracted from previously published, peer-reviewed literature, none of which involved direct contact with, or identifiable information about, any individual research participant.</p>
+<h3>9. Data Availability Statement</h3>
+<p>The coded dataset underlying Tables 10 through 14, including the full factor-level extraction and CSDH taxonomy classification for all included studies, is available from the corresponding author upon reasonable request. All primary sources included in this review are published, peer-reviewed studies, each cited in the reference list and openly accessible through their original publishing venues.</p>
+<h3>10. AI Usage</h3>
+<p>During preparation of this work, the authors used an AI language model (Claude, Anthropic) to assist with reconciling and verifying the numerical taxonomy underlying Tables 10 through 14 against the coded dataset, cross-checking statistics and percentages reported throughout the Discussion and Conclusions, and drafting and revising portions of the Discussion, Future Directions, and Conclusions sections. The authors reviewed, verified, and edited all AI-assisted content and take full responsibility for the accuracy and integrity of the published work.</p>
+<h3>11. Conclusions</h3>
+<p>This scoping review mapped 70 studies applying machine learning, NLP, deep learning, and spatial modeling methods to mental health and resilience outcomes across four population-scale crisis types: pandemics, economic upheavals, natural disasters, and armed conflict or displacement. Current computational systems largely detect distress only once it has produced a structured clinical record, rarely extending to the governance, contextual, and coping constructs this review finds carry the most computationally accessible signal upstream of that record. Crisis mental health research has matured methodologically but not yet diversified in what it measures or whom it reaches. Closing the burden visibility gap, linking structural and contextual signals to individual-level clinical outcomes, expanding the evidence on economic upheavals, extending NLP into armed conflict contexts, and detecting more protective constructs represent the clearest paths toward more equitable computational crisis mental health surveillance.</p>
+<p>Zhou, S., Zhou, S., Mei, A., Phung, K., Ye, Y., Govindswamy, U., Li, Z., Huang, Q., Goodchild, M. F., Hang, Y., &amp; Ye, X. (2026). Revealing time-sensitive latent public health and emotional distress topics in Reddit discourse during the 2025 Southern California wildfires. International Journal of Disaster Risk Reduction, 140, 106167. https://doi.org/10.1016/j.ijdrr.2026.106167 Zhou, Z., Luo, D., Yang, B. X., &amp; Liu, Z. (2022). Machine Learning-Based Prediction Models for Depression Symptoms Among Chinese Healthcare Workers During the Early COVID-19 Outbreak in 2020: A Cross-Sectional Study. Frontiers in Psychiatry, 13, 876995. https://doi.org/10.3389/fpsyt.2022.876995 12. Supplements A. Database Search Strings</p>
+<h3>Database</h3>
+<p>Search string (condensed) Records Scopus TITLE-ABS-KEY ( &quot;pandemic*&quot; OR &quot;epidemic*&quot; OR &quot;natural disaster*&quot; OR &quot;environmental disaster*&quot; OR &quot;armed conflict*&quot; OR &quot;war&quot; OR &quot;wars&quot; OR &quot;wartime&quot; OR &quot;warfare&quot; OR &quot;military deploy*&quot; OR &quot;refugee*&quot; OR &quot;forced displac*&quot; OR &quot;combat exposure&quot; OR &quot;combat veteran*&quot; OR &quot;combat trauma*&quot; OR ( &quot;econom*&quot; W/2 ( &quot;recession&quot; OR &quot;crisis&quot; ) ) OR &quot;financ* crisis&quot; ) AND TITLE-ABS-KEY ( &quot;mental health&quot; OR &quot;psycholog* distress&quot; OR &quot;wellbeing&quot; OR &quot;well-being&quot; OR &quot;depress*&quot; OR &quot;anxi*&quot; OR &quot;PTSD&quot; OR &quot;post-traumatic stress disorder&quot; OR &quot;purposeless*&quot; OR &quot;hopeless*&quot; OR &quot;posttrauma* stress&quot; OR ( ( &quot;mental&quot; OR &quot;psycholog*&quot; ) W/2 &quot;resilien*&quot; ) OR &quot;suicid* ideation&quot; OR &quot;lonel*&quot; OR &quot;social isolat*&quot; OR &quot;eudaimoni*&quot; OR &quot;flourish*&quot; OR &quot;life satisfaction&quot; OR ( ( &quot;meaning&quot; OR &quot;purpose&quot; ) W/2 &quot;life&quot; ) OR ( &quot;social&quot; W/1 ( &quot;wellbeing&quot; OR &quot;well-being&quot; OR &quot;connect*&quot; ) ) ) AND TITLE-ABS-KEY ( &quot;machine learning&quot; OR &quot;deep learning&quot; OR &quot;artificial intelligence&quot; OR &quot;natural language processing&quot; OR &quot;sentiment analys*&quot; OR &quot;text mining&quot; OR &quot;social media analys*&quot; OR &quot;random forest*&quot; OR ( &quot;neural network*&quot; W/5 ( &quot;model*&quot; OR &quot;algorithm*&quot; OR &quot;classif*&quot; OR &quot;predict*&quot; OR &quot;architecture*&quot; ) ) OR &quot;support vector machine*&quot; OR &quot;XGBoost&quot; OR ( &quot;transformer*&quot; W/2 &quot;model*&quot; ) OR &quot;emotion detection&quot; OR &quot;emotion recognition&quot; OR &quot;emotion classif*&quot; OR &quot;affective comput*&quot; ) AND PUBYEAR &gt; 2015 AND PUBYEAR &lt; 2027 AND LANGUAGE ( english ) [Applied filters using graphical interface to limit to 31st June 2026] 3,512 Web of Science TS= ( &quot;pandemic*&quot; OR &quot;epidemic*&quot; OR &quot;natural disaster*&quot; OR &quot;environmental disaster*&quot; OR &quot;armed conflict*&quot; OR &quot;war&quot; OR &quot;wars&quot; OR &quot;wartime&quot; OR &quot;warfare&quot; OR &quot;military deploy*&quot; OR &quot;refugee*&quot; OR &quot;forced displac*&quot; OR &quot;combat exposure&quot; OR &quot;combat veteran*&quot; OR &quot;combat trauma*&quot; OR (&quot;econom*&quot; NEAR/2 (&quot;recession&quot; OR &quot;crisis&quot;)) OR &quot;financ* crisis&quot; ) AND TS= ( &quot;mental health&quot; OR &quot;psycholog* distress&quot; OR &quot;wellbeing&quot; OR &quot;well-being&quot; OR &quot;depress*&quot; OR &quot;anxi*&quot; OR &quot;PTSD&quot; OR &quot;post-traumatic stress disorder&quot; OR 2,776 &quot;purposeless*&quot; OR &quot;hopeless*&quot; OR &quot;posttrauma* stress&quot; OR ((&quot;mental&quot; OR &quot;psycholog*&quot;) NEAR/2 &quot;resilien*&quot;) OR &quot;suicid* ideation&quot; OR &quot;lonel*&quot; OR &quot;social isolat*&quot; OR &quot;eudaimoni*&quot; OR &quot;flourish*&quot; OR &quot;life satisfaction&quot; OR ((&quot;meaning&quot; OR &quot;purpose&quot;) NEAR/2 &quot;life&quot;) OR (&quot;social&quot; NEAR/1 (&quot;wellbeing&quot; OR &quot;well-being&quot; OR &quot;connect*&quot;)) ) AND TS= ( &quot;machine learning&quot; OR &quot;deep learning&quot; OR &quot;artificial intelligence&quot; OR &quot;natural language processing&quot; OR &quot;sentiment analys*&quot; OR &quot;text mining&quot; OR &quot;social media analys*&quot; OR &quot;random forest*&quot; OR (&quot;neural network*&quot; NEAR/5 (&quot;model*&quot; OR &quot;algorithm*&quot; OR &quot;classif*&quot; OR &quot;predict*&quot; OR &quot;architecture*&quot;)) OR &quot;support vector machine*&quot; OR &quot;XGBoost&quot; OR (&quot;transformer*&quot; NEAR/2 &quot;model*&quot;) ) AND PY=( 2016-2026) PubMed/ MEDLINE (pandemic[tiab] OR pandemics[tiab] OR epidemic[tiab] OR epidemics[tiab] OR &quot;natural disaster&quot;[tiab] OR &quot;natural disasters&quot;[tiab] OR &quot;environmental disaster&quot;[tiab] OR &quot;environmental disasters&quot;[tiab] OR &quot;armed conflict&quot;[tiab] OR &quot;armed conflicts&quot;[tiab] OR war[tiab] OR wars[tiab] OR wartime[tiab] OR warfare[tiab] OR &quot;military deployment&quot;[tiab] OR &quot;military deployments&quot;[tiab] OR &quot;military deployed&quot;[tiab] OR &quot;military deploying&quot;[tiab] OR refugee[tiab] OR refugees[tiab] OR &quot;forced displacement&quot;[tiab] OR &quot;forced displacements&quot;[tiab] OR &quot;forcibly displaced&quot;[tiab] OR &quot;combat exposure&quot;[tiab] OR &quot;combat veteran&quot;[tiab] OR &quot;combat veterans&quot;[tiab] OR &quot;combat trauma&quot;[tiab] OR &quot;combat traumas&quot;[tiab] OR &quot;economic recession&quot;[tiab] OR &quot;economic crisis&quot;[tiab] OR &quot;economic crises&quot;[tiab] OR &quot;economies in recession&quot;[tiab] OR &quot;economies in crisis&quot;[tiab] OR &quot;financial crisis&quot;[tiab] OR &quot;financial crises&quot;[tiab]) AND (&quot;mental health&quot;[tiab] OR &quot;psychological distress&quot;[tiab] OR wellbeing[tiab] OR &quot;well-being&quot;[tiab] OR depress*[tiab] OR anxi*[tiab] OR PTSD[tiab] OR &quot;post-traumatic stress disorder&quot;[tiab] OR &quot;posttraumatic stress disorder&quot;[tiab] OR purposeless*[tiab] OR hopeless*[tiab] OR &quot;posttraumatic stress&quot;[tiab] OR &quot;post-traumatic stress&quot;[tiab] OR &quot;mental resilience&quot;[tiab] OR &quot;psychological resilience&quot;[tiab] OR &quot;mental resiliency&quot;[tiab] OR &quot;psychological resiliency&quot;[tiab] OR &quot;suicidal ideation&quot;[tiab] OR &quot;suicide ideation&quot;[tiab] OR lonel*[tiab] OR &quot;social isolation&quot;[tiab] OR &quot;socially isolated&quot;[tiab] OR eudaimonia[tiab] OR eudaimonic[tiab] OR flourish*[tiab] OR &quot;life satisfaction&quot;[tiab] OR &quot;meaning in life&quot;[tiab] OR &quot;purpose in life&quot;[tiab] OR &quot;meaning of life&quot;[tiab] OR &quot;life purpose&quot;[tiab] OR &quot;social wellbeing&quot;[tiab] OR &quot;social well-being&quot;[tiab] OR &quot;social connection&quot;[tiab] OR &quot;social connections&quot;[tiab] OR &quot;social connectedness&quot;[tiab]) AND (&quot;machine learning&quot;[tiab] OR &quot;deep learning&quot;[tiab] OR 1,029 &quot;artificial intelligence&quot;[tiab] OR &quot;natural language processing&quot;[tiab] OR &quot;sentiment analysis&quot;[tiab] OR &quot;sentiment analyses&quot;[tiab] OR &quot;text mining&quot;[tiab] OR &quot;social media analysis&quot;[tiab] OR &quot;social media analyses&quot;[tiab] OR &quot;random forest*&quot;[tiab] OR &quot;neural network*&quot;[tiab] OR &quot;support vector machine*&quot;[tiab] OR XGBoost[tiab] OR &quot;transformer*&quot;[tiab] OR &quot;emotion detection&quot;[tiab] OR &quot;emotion recognition&quot;[tiab] OR &quot;emotion classification&quot;[tiab] OR &quot;emotion classifier&quot;[tiab] OR &quot;affective computing&quot;[tiab]) AND (&quot;2016/01/01&quot;[Date -Publication]: &quot;2026/06/31&quot;[Date -Publication]) AND English[Language]</p>
+<p>IEEE Xplore (( &quot;Abstract&quot;:&quot;pandemic*&quot; OR &quot;Abstract&quot;:&quot;epidemic*&quot; OR &quot;Document Title&quot;:&quot;natural disaster&quot; OR &quot;Abstract&quot;:&quot;natural disaster&quot; OR &quot;Document Title&quot;:&quot;natural disasters&quot; OR &quot;Abstract&quot;:&quot;natural disasters&quot; OR &quot;Document Title&quot;:&quot;environmental disaster&quot; OR &quot;Abstract&quot;:&quot;environmental disaster&quot; OR &quot;Document Title&quot;:&quot;environmental disasters&quot; OR &quot;Abstract&quot;:&quot;environmental disasters&quot; OR &quot;Document Title&quot;:&quot;armed conflict&quot; OR &quot;Abstract&quot;:&quot;armed conflict&quot; OR &quot;Document Title&quot;:&quot;armed conflicts&quot; OR &quot;Abstract&quot;:&quot;armed conflicts&quot; OR &quot;Document Title&quot;:&quot;war&quot; OR &quot;Abstract&quot;:&quot;war&quot; OR &quot;Document Title&quot;:&quot;wars&quot; OR &quot;Abstract&quot;:&quot;wars&quot; OR &quot;Document Title&quot;:&quot;wartime&quot; OR &quot;Abstract&quot;:&quot;wartime&quot; OR &quot;Document Title&quot;:&quot;warfare&quot; OR &quot;Abstract&quot;:&quot;warfare&quot; OR &quot;Document Title&quot;:&quot;military deployment&quot; OR &quot;Abstract&quot;:&quot;military deployment&quot; OR &quot;Document Title&quot;:&quot;military deployments&quot; OR &quot;Abstract&quot;:&quot;military deployments&quot; OR &quot;Abstract&quot;:&quot;refugee*&quot; OR &quot;Document Title&quot;:&quot;forced displacement&quot; OR &quot;Abstract&quot;:&quot;forced displacement&quot; OR &quot;Document Title&quot;:&quot;combat exposure&quot; OR &quot;Abstract&quot;:&quot;combat exposure&quot; OR &quot;Document Title&quot;:&quot;combat veteran&quot; OR &quot;Abstract&quot;:&quot;combat veteran&quot; OR &quot;Document Title&quot;:&quot;combat veterans&quot; OR &quot;Abstract&quot;:&quot;combat veterans&quot; OR &quot;Document Title&quot;:&quot;combat trauma&quot; OR &quot;Abstract&quot;:&quot;combat trauma&quot; OR &quot;Document Title&quot;:&quot;economic recession&quot; OR &quot;Abstract&quot;:&quot;economic recession&quot; OR &quot;Document Title&quot;:&quot;economic crisis&quot; OR &quot;Abstract&quot;:&quot;economic crisis&quot; OR &quot;Document Title&quot;:&quot;financial crisis&quot; OR &quot;Abstract&quot;:&quot;financial crisis&quot; ) AND ( &quot;Document Title&quot;:&quot;mental health&quot; OR &quot;Abstract&quot;:&quot;mental health&quot; OR &quot;Document Title&quot;:&quot;psychological distress&quot; OR &quot;Abstract&quot;:&quot;psychological distress&quot; OR &quot;Document Title&quot;:&quot;wellbeing&quot; OR &quot;Abstract&quot;:&quot;wellbeing&quot; OR &quot;Document Title&quot;:&quot;well-being&quot; OR &quot;Abstract&quot;:&quot;well-being&quot; OR &quot;Abstract&quot;:&quot;depress*&quot; OR &quot;Abstract&quot;:&quot;anxi*&quot; OR &quot;Document Title&quot;:&quot;PTSD&quot; OR &quot;Abstract&quot;:&quot;PTSD&quot; OR &quot;Document Title&quot;:&quot;posttraumatic stress disorder&quot; OR &quot;Abstract&quot;:&quot;post-traumatic stress disorder&quot; OR &quot;Document Title&quot;:&quot;purposelessness&quot; OR &quot;Abstract&quot;:&quot;purposelessness&quot; OR &quot;Document Title&quot;:&quot;hopelessness&quot; OR &quot;Abstract&quot;:&quot;hopelessness&quot; OR &quot;Document Title&quot;:&quot;posttraumatic stress&quot; OR &quot;Abstract&quot;:&quot;posttraumatic stress&quot; OR &quot;Abstract&quot;:&quot;resilien*&quot; OR &quot;Document Title&quot;:&quot;suicidal ideation&quot; OR &quot;Abstract&quot;:&quot;suicidal ideation&quot; OR &quot;Abstract&quot;:&quot;lonel*&quot; OR &quot;Document Title&quot;:&quot;social isolation&quot; OR &quot;Abstract&quot;:&quot;social isolation&quot; OR &quot;Document Title&quot;:&quot;eudaimonia&quot; OR &quot;Abstract&quot;:&quot;eudaimonia&quot; OR &quot;Document Title&quot;:&quot;eudaimonic&quot; OR &quot;Abstract&quot;:&quot;eudaimonic&quot; OR &quot;Abstract&quot;:&quot;flourish*&quot; OR &quot;Document Title&quot;:&quot;life satisfaction&quot; OR &quot;Abstract&quot;:&quot;life satisfaction&quot; OR &quot;Document Title&quot;:&quot;meaning in life&quot; OR &quot;Abstract&quot;:&quot;meaning in life&quot; OR &quot;Document Title&quot;:&quot;purpose in life&quot; OR &quot;Abstract&quot;:&quot;purpose in life&quot; OR &quot;Document Title&quot;:&quot;social wellbeing&quot; OR &quot;Abstract&quot;:&quot;social wellbeing&quot; OR &quot;Document Title&quot;:&quot;social well-being&quot; OR &quot;Abstract&quot;:&quot;social well-being&quot; OR &quot;Document Title&quot;:&quot;social connectedness&quot; OR &quot;Abstract&quot;:&quot;social connectedness&quot; ) AND ( &quot;Document Title&quot;:&quot;machine learning&quot; OR &quot;Abstract&quot;:&quot;machine learning&quot; OR &quot;Document Title&quot;:&quot;deep learning&quot; OR &quot;Abstract&quot;:&quot;deep learning&quot; OR &quot;Document Title&quot;:&quot;artificial intelligence&quot; OR &quot;Abstract&quot;:&quot;artificial intelligence&quot; OR &quot;Document Title&quot;:&quot;natural language processing&quot; OR &quot;Abstract&quot;:&quot;natural language processing&quot; OR &quot;Document Title&quot;:&quot;sentiment analysis&quot; OR &quot;Abstract&quot;:&quot;sentiment analysis&quot; OR &quot;Document Title&quot;:&quot;sentiment analyses&quot; OR &quot;Abstract&quot;:&quot;sentiment analyses&quot; OR &quot;Document Title&quot;:&quot;text mining&quot; OR &quot;Abstract&quot;:&quot;text mining&quot; OR &quot;Document Title&quot;:&quot;social media analysis&quot; OR &quot;Abstract&quot;:&quot;social media analysis&quot; OR &quot;Document Title&quot;:&quot;social media analyses&quot; OR &quot;Abstract&quot;:&quot;social media analyses&quot; OR &quot;Document Title&quot;:&quot;random forest&quot; OR &quot;Abstract&quot;:&quot;random forest&quot; OR &quot;Document Title&quot;:&quot;random forests&quot; OR &quot;Abstract&quot;:&quot;random forests&quot; OR &quot;Abstract&quot;:&quot;neural network*&quot; OR &quot;Document Title&quot;:&quot;support vector machine&quot; OR &quot;Abstract&quot;:&quot;support vector machine&quot; OR &quot;Document Title&quot;:&quot;support vector machines&quot; OR &quot;Abstract&quot;:&quot;support vector machines&quot; OR &quot;Document Title&quot;:&quot;XGBoost&quot; OR &quot;Abstract&quot;:&quot;XGBoost&quot; OR &quot;Abstract&quot;:&quot;transformer*&quot; OR &quot;Document Title&quot;:&quot;emotion detection&quot; OR &quot;Abstract&quot;:&quot;emotion detection&quot; OR &quot;Document Title&quot;:&quot;emotion recognition&quot; OR &quot;Abstract&quot;:&quot;emotion recognition&quot; OR &quot;Document Title&quot;:&quot;emotion classification&quot; OR &quot;Abstract&quot;:&quot;emotion classification&quot; OR &quot;Document Title&quot;:&quot;emotion classifier&quot; OR &quot;Abstract&quot;:&quot;emotion classifier&quot; OR &quot;Document Title&quot;:&quot;emotion classifiers&quot; OR &quot;Abstract&quot;:&quot;emotion classifiers&quot; OR &quot;Document Title&quot;:&quot;affective computing&quot; OR &quot;Abstract&quot;:&quot;affective computing&quot; ) ) [Applied filters using graphical interface to limit to 31st June 2026] B. Supplementary search evidence log (n = 11) # Study Channel Study Mentioned/Query Used 1 Shiba et al.</p>
+<p>(2022) Backward citation Shiba et al. (2023) 2 Kessler et al. (2024) Forward citation Papini et al. (2023) 3 Ge et al. (2020) Forward citation Leightley et al. (2019) 4 Dell et al. (2024) Backward citation Figueiredo &amp; Ndiaye (2025) 5 Taye et al. (2023) Forward citation Prout et al. (2020)</p>
+<h3>Figure 1</h3>
+<p>Figure 1 PRISMA-ScR diagram for this research</p>
+<p>Adv = Adverse; AUC/AUROC = Area Under the Curve; COME-HERE = COVID-19, Mental Health, Resilience, and Selfregulation; Fav = Favourable; GAD-7 = Generalized Anxiety Disorder 7-item scale; HRS = Health and Retirement Study; LASSO = Least Absolute Shrinkage and Selection Operator; OLS = Ordinary Least Squares; PCL-5 = PTSD Checklist for DSM-5; PHQ-9/PHQ-2 = Patient Health Questionnaire; SHAP = SHapley Additive exPlanations; SVM = Support Vector Machine; PTSS = Post Traumatic Stress Syndrome; LR = Logistic Regression; Mix = Mixed; KNN = K-Nearest Neighbors; GBDT = Gradient Boosted Decision Trees; GBDT-LR = Gradient Boosted Decision Trees-Logistic Regression</p>
+<p>Note. Adv = Adverse; Fav = Favorable; GHQ-12 = General Health Questionnaire, 12-item; Mix = Mixed; NVDRS = National Violent Death Reporting System; PPV = Positive Predictive Value; SVM = Support Vector Machine; WHO-5 = WHO-Five Well-Being Index; PLS = Partial Least Squares = Artificial Neural Network; ARL = Association Rule Learning; AutoML = Automated Machine Learning; CRT = Classification and Regression Tree; DSRS = Depression Self-Rating Scale; DT = Decision Tree; GAD = Generalized Anxiety Disorder; GB = Gradient Boosting; GBM = Gradient Boosting Machine; ISAF = International Security Assistance Force; ISI = Insomnia Severity Index; KNN = K-Nearest Neighbors; LASSO = Least Absolute Shrinkage and Selection Operator; LR = Logistic Regression; LRA = Lord&#x27;s Resistance Army (study setting); mRMR = Maximum Relevance Minimum Redundancy; NN = Neural Networks; OLS = Ordinary Least Squares; PRPWPQ = Penn/RESIST/Peradeniya War Problems Questionnaire; RF = RF; RF-CI = RF-Conditional Inference; SHAP = SHapley Additive exPlanations; SVM = Support Vector Machine; PCL = PTSD Checklist; PTSS = Post Traumatic Stress Syndrome; GHQ = General Health Questionnaire.</p>
+<p>. Pan = Pandemic, Fin = Financial, ND = Natural Disaster, AC = Armed Conflict, Adv = Adverse, Fav = Favorable, Mix = Mixed, NLP = natural language processing-derived coding, Sur= survey, administrative, or clinical instrument coding. Blank crisis-type or direction cells indicate zero items.</p>
+<p>Note. Pan = Pandemic, Fin = Financial, ND = Natural Disaster, AC = Armed Conflict, Adv = Adverse, Fav = Favorable, Mix = Mixed, NLP = natural language processing-derived coding, Sur = non-NLP (survey, administrative, or clinical instrument coding). Blank crisis-type or direction cells indicate zero items.</p>
+<h3>Table 2.</h3>
+<p>Summary of NLP-based Pandemic and Epidemic StudiesAdv = Adverse; AUC/AUROC = Area Under the Curve; AUPRC = Area Under Precision-Recall Curve; Fav = Favorable; LDA = Latent Dirichlet Allocation; LR = Logistic Regression; Mix = Mixed; SHAP = SHapley Additive exPlanations; SVM = Support Vector Machine</p>
+<h3>Table 3</h3>
+<p>Summary of Survey and Administrative-Data-Based Studies on Pandemic and Epidemic Mental Health</p>
+<h3>Table 5</h3>
+<p>Summary of Survey and Administrative-Data-Based Studies on Economic Upheaval Studies</p>
+<h3>Table 6</h3>
+<p>Summary of NLP-based Natural Disaster StudiesNone of the studies in this table report a predictive performance metric; targets were characterized through descriptive/exploratory text analysis rather than a fitted classification or regression model.</p>
+<h3>Table 7</h3>
+<p>Summary of Survey and Administrative-Data-based Natural Disaster Studies Note. ¹ Study uses causal machine learning to identify heterogeneous subpopulation effects, so a feature-ranking framework does not apply, nor is a predictive classification/regression model fitted with a performance metric. Note. Adv = Adverse; CNN = Convolutional Neural Network; Fav = Favorable; GRF = Generalized RF; LASSO = Least Absolute Shrinkage and Selection Operator; LSTM = Long Short-Term Memory; Mix = Mixed; OOB = Out-of-Bag; RF = Random Forrest; SHAP = SHapley Additive exPlanations; TMLE = Targeted Maximum Likelihood Estimation.</p>
+<h3>Table 8</h3>
+<p>Summary of NLP-based Armed Conflicts and Forced Displacement Studies</p>
+<h3>Table 9</h3>
+<p>Summary of Survey and Administrative-Data-Based Studies on Armed Conflicts and Forced Displacement</p>
+<h3>Table 14 :</h3>
+<p>Explainability and ranking methods by category and method type</p>
+<h3>References</h3>
+<p>Adepoju, O. E., Xu, L., Chavez, S., Dang, P., Tipton, M., Arguelles, M. P., Buttorff, G. J., &amp; Wong, M. C. (2025). Back-to-Back Climate shocks and the mental health crisis: A Texas-sized surge in depression and anxiety ER visits. The American Journal of Emergency Medicine, 91, 123-131. https://doi.org/10.1016/j.ajem.2025.02.038</p>
+<p>Amro, A., Amro, A. M., Amro, R., &amp; Hamdan, M. (2025). Post-traumatic stress disorder among Al-Quds University students during the 2023 Gaza war: A cross-sectional study. BMC Psychiatry, 25(1), 343. https://doi.org/10.1186/s12888-025-06781-9</p>
+<p>Ananthasubramaniam, A., Jurgens, D., Kahsay, E., &amp; Mezuk, B. (2024). Characteristics of and Variation in Suicide Mortality Related to Retirement During the Great Recession: Perspectives From the National Violent Death Reporting System. The Gerontologist, 64(6), gnae015. https://doi.org/10.1093/geront/gnae015</p>
+<p>Arksey, H., &amp; O&#x27;Malley, L. (2005). Scoping studies: Towards a methodological framework. International Journal of Social Research Methodology, 8(1), 19-32. https://doi.org/10.1080/1364557032000119616</p>
+<p>Bakkeli, N. Z. (2023). Predicting Psychological Distress During the COVID-19 Pandemic: Do Socioeconomic Factors Matter? Social Science Computer Review, 41(4), 1227-1251. https://doi.org/10.1177/08944393211069622</p>
+<p>Bashar, N., Ahmed, Md. S., Haque Mili, M., &amp; Mary, M. M. (2025). A Hybrid Clustering and Classification Approach for Mental Health Diagnosis in Rohingya Refugees Using Explainable AI: SHAP and LIME. 2025 2nd International Conference on Next-Generation Computing, IoT and Machine Learning (NCIM), 1-6. https://doi.org/10.1109/NCIM65934.2025.11159903</p>
+<p>Bathina, K. C., Ten Thij, M., Valdez, D., Rutter, L. A., &amp; Bollen, J. (2021). Declining well-being during the COVID-19 pandemic reveals US social inequities. PLOS ONE, 16(7), e0254114. https://doi.org/10.1371/journal.pone.0254114</p>
+<p>Britt, N. F., Kowalski, R. M., &amp; Dodson, C. (2026). Sense-Making and Gratitude in the Aftermath of Hurricane Helene. Journal of Clinical Psychology, 82(3), 308-316. https://doi.org/10.1002/jclp.70072</p>
+<p>Camargo, L., Manjarrés, P. A., &amp; Martínez-González, M. B. (2026). Effects of violence on executive function: A neuropsychological and predictive analysis in victims of the armed conflict in Colombia. Frontiers in Human Neuroscience, 19, 1737110. https://doi.org/10.3389/fnhum.2025.1737110</p>
+<p>Chintalapudi, N., Battineni, G., &amp; Amenta, F. (2021). Sentiment Analysis of COVID-19 Tweets Using Deep Learning Models. Infectious Disease Reports, 13(2), 329-339. https://doi.org/10.3390/idr13020032</p>
+<p>Colic, S., He, J. C., Richardson, J. D., Cyr, K. St., Reilly, J. P., &amp; Hasey, G. M. (2022). A machine learning approach to identification of self-harm and suicidal ideation among military and police Veterans. Journal of Military, Veteran and Family Health, 8(1), 56-67. https://doi.org/10.3138/jmvfh-2021-0035</p>
+<p>Colic, S., Richardson, J. D., Reilly, J. P., &amp; Hasey, G. M. (2018). Using Machine Learning Algorithms to Enhance the Management of Suicide Ideation. 2018 40th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC), 4936-4939. https://doi.org/10.1109/EMBC.2018.8513200</p>
+<p>Conrad, D., Wilker, S., Pfeiffer, A., Lingenfelder, B., Ebalu, T., Lanzinger, H., Elbert, T., Kolassa, I.-T., &amp; Kolassa, S. (2017). Does trauma event type matter in the assessment of traumatic load? European Journal of Psychotraumatology, 8(1), 1344079. https://doi.org/10.1080/20008198.2017.1344079</p>
+<p>Dell, N. A., Salas-Wright, C. P., Vaughn, M. G., Maldonado-Molina, M. M., Oh, S., Bates, M., &amp; Schwartz, S. J. (2024). A machine learning approach using migration-related cultural stress to classify depression and post-traumatic stress disorder among hurricane survivors. Journal of Affective Disorders, 347, 77-84. https://doi.org/10.1016/j.jad.2023.11.055</p>
+<p>Dhankar, A., &amp; Katz, A. (2023). Tracking pregnant women&#x27;s mental health through social media: An analysis of Reddit posts. JAMIA Open, 6(4), ooad094. https://doi.org/10.1093/jamiaopen/ooad094</p>
+<p>Elyashar, A., Plochotnikov, I., Cohen, I.-C., Puzis, R., &amp; Cohen, O. (2021). The State of Mind of Health Care Professionals in Light of the COVID-19 Pandemic: Text Analysis Study of Twitter Discourses. Journal of Medical Internet Research, 23(10), e30217. https://doi.org/10.2196/30217</p>
+<p>Elo, S., &amp; Kyngäs, H. (2008). The qualitative content analysis process. Journal of Advanced Nursing, 62(1), 107-115. https://doi.org/10.1111/j.1365-2648.2007.04569.x</p>
+<p>Esterwood, E., &amp; Saeed, S. A. (2020). Past Epidemics, Natural Disasters, COVID19, and Mental Health: Learning from History as We Deal with the Present and Prepare for the Future. Psychiatric Quarterly, 91(4), 1121-1133. https://doi.org/10.1007/s11126-020-09808-4</p>
+<p>Farokhnia Hamedani, M., Esmaeili, M., Sun, Y., Sheybani, E., &amp; Javidi, G. (2024). Paving the way for COVID survivors&#x27; psychosocial rehabilitation: Mining topics, sentiments, and their trajectories over time from Reddit. Health Informatics Journal, 30(2), 14604582241240680. Scopus (WOS:001221585400001). https://doi.org/10.1177/14604582241240680</p>
+<p>Figueiredo, S., &amp; Ndiaye, L. (2025). Predicting PTSD with machine learning: Forecasting refugees&#x27; trauma and tailored intervention. European Journal of Trauma &amp; Dissociation, 9(1), 100502. https://doi.org/10.1016/j.ejtd.2025.100502</p>
+<p>Flesia, L., Monaro, M., Mazza, C., Fietta, V., Colicino, E., Segatto, B., &amp; Roma, P. (2020). Predicting Perceived Stress Related to the Covid-19 Outbreak through Stable Psychological Traits and Machine Learning Models. Journal of Clinical Medicine, 9(10), 3350. https://doi.org/10.3390/jcm9103350</p>
+<p>Foremny, D., Sorribas-Navarro, P., &amp; Vall Castelló, J. (2024). Income insecurity and mental health in pandemic times. Economics &amp; Human Biology, 53, 101351. https://doi.org/10.1016/j.ehb.2024.101351</p>
+<p>García, Y. E., Villa-Pérez, M. E., Li, K., Tai, X. H., Trejo, L. A., Daza-Torres, M. L., Montesinos-López, J. C., &amp; Nuño, M. (2024). Wildfires and social media discourse: Exploring mental health and emotional well-being through Twitter. Frontiers in Public Health, 12, 1349609. https://doi.org/10.3389/fpubh.2024.1349609</p>
+<p>Ge, F., Li, Y., Yuan, M., Zhang, J., &amp; Zhang, W. (2020). Identifying predictors of probable posttraumatic stress disorder in children and adolescents with earthquake exposure: A longitudinal study using a machine learning approach. Journal of Affective Disorders, 264, 483-493. https://doi.org/10.1016/j.jad.2019.11.079</p>
+<p>Gradus, J. L., King, M. W., Galatzer-Levy, I., &amp; Street, A. E. (2017). Gender Differences in Machine Learning Models of Trauma and Suicidal Ideation in Veterans of the Iraq and Afghanistan Wars. Journal of Traumatic Stress, 30(4), 362-371. https://doi.org/10.1002/jts.22210</p>
+<p>Gruebner, O., Lowe, S. R., Sykora, M., Shankardass, K., Subramanian, S. V., &amp; Galea, S. (2018). Spatio- temporal distribution of negative emotions in New York City after a natural disaster as seen in social media. International Journal of Environmental Research and Public Health, 15(10), Article 2275. https://doi.org/10.3390/ijerph15102275</p>
+<p>Habashneh, R., Qattous, H., Alsmadi, M., &amp; Alkhateeb, A. (2026). Machine Learning Models for Assessing Depression in Syrian Adolescent Refugees in Jordan. In Rojas I., Ortuño F., Rojas Ruiz F., Herrera L.J., Escobar J.J., &amp; Valenzuela O. (Eds.), Lect. Notes Comput. Sci.: 16051 LNCS (pp. 199-208). Springer Science and Business Media Deutschland GmbH. Scopus. https://doi.org/10.1007/978-3-032-08452-1_16</p>
+<p>Halabitska, I., Petakh, P., Buchynskyi, M., Kamyshna, I., Lushchak, O., &amp; Kamyshnyi, O. (2025). War, diet, and PTSD in Ukrainian youth. Scientific Reports, 16(1), 1422. https://doi.org/10.1038/s41598-025- 31138-3</p>
+<p>Hossain, M. M., Amin, M. S., Khairunnasa, F., &amp; Rizvi, S. T. H. (2025). Lexicon and Transformer-Based Sentiment and Emotion Analysis of Twitter Responses to the 2023 Turkey-Syria Earthquakes. Informatica (Slovenia), 49(33), 79-94. Scopus. https://doi.org/10.31449/inf.v49i33.6499</p>
+<p>Hsieh, H.-F., &amp; Shannon, S. E. (2005). Three approaches to qualitative content analysis. Qualitative Health Research, 15(9), 1277-1288. https://doi.org/10.1177/1049732305276687</p>
+<p>Hu, X., Liu, J., Hao, B., &amp; Lv, Y. (2025). Impact of crisis intervention on mental health in the context of specific civilian emergencies. PLOS One, 20(9), e0331249. https://doi.org/10.1371/journal.pone.0331249</p>
+<p>Hueniken, K., Somé, N. H., Abdelhack, M., Taylor, G., Elton Marshall, T., Wickens, C. M., Hamilton, H. A., Wells, S., &amp; Felsky, D. (2021). Machine Learning-Based Predictive Modeling of Anxiety and Depressive Symptoms During 8 Months of the COVID-19 Global Pandemic: Repeated Cross-sectional Survey Study. JMIR Mental Health, 8(11), e32876. https://doi.org/10.2196/32876</p>
+<p>Im, H., &amp; Abdulrahim, A. (2026). Structural determinants of depressive symptoms among refugees and host communities in South Sudan: Evidence from explainable machine learning. Frontiers in Public Health, 14, 1778986. https://doi.org/10.3389/fpubh.2026.1778986</p>
+<p>Jayawickreme, N., Atefi, E., Jayawickreme, E., Qin, J., &amp; Gandomi, A. H. (2020). Association Rule Learning Is an Easy and Efficient Method for Identifying Profiles of Traumas and Stressors that Predict Psychopathology in Disaster Survivors: The Example of Sri Lanka. International Journal of Environmental Research and Public Health, 17(8), 2850. https://doi.org/10.3390/ijerph17082850</p>
+<p>Jha, I. P., Awasthi, R., Kumar, A., Kumar, V., &amp; Sethi, T. (2021). Learning the Mental Health Impact of COVID-19 in the United States with Explainable Artificial Intelligence: Observational Study. JMIR Mental Health, 8(4), e25097. https://doi.org/10.2196/25097</p>
+<p>Karstoft, K.-I., Statnikov, A., Andersen, S. B., Madsen, T., &amp; Galatzer-Levy, I. R. (2015). Early identification of posttraumatic stress following military deployment: Application of machine learning methods to a prospective study of Danish soldiers. Journal of Affective Disorders, 184, 170-175. https://doi.org/10.1016/j.jad.2015.05.057</p>
+<p>Karstoft, K.-I., Tsamardinos, I., Eskelund, K., Andersen, S. B., &amp; Nissen, L. R. (2020). Applicability of an Automated Model and Parameter Selection in the Prediction of Screening-Level PTSD in Danish Soldiers Following Deployment: Development Study of Transferable Predictive Models Using Automated Machine Learning. JMIR Medical Informatics, 8(7), e17119. https://doi.org/10.2196/17119</p>
+<p>Keller, J., Eglinsky, J., Garbade, M., Pfeiffer, E., Plener, P. L., Rosner, R., Sukale, T., &amp; Sachser, C. (2026). Prevalence and risk factors of suicidal ideation amongst unaccompanied young refugees: A machine learning approach. European Child &amp; Adolescent Psychiatry, 35(2), 503-511. https://doi.org/10.1007/s00787-025-02828-0</p>
+<p>Kessler, R. C., Bossarte, R. M., Hwang, I., Luedtke, A., Naifeh, J. A., Nock, M. K., Petukhova, M., Sadikova, E., Sampson, N. A., Sverdrup, E., Zubizarreta, J. R., Wager, S., Wagner, J., Stein, M. B., &amp; Ursano, R. J. (2024). A prediction model for differential resilience to the effects of combat-related stressors in U.S. Army soldiers. International Journal of Methods in Psychiatric Research, 33(4), e70006. https://doi.org/10.1002/mpr.70006</p>
+<p>Karami, M., Parackal, M., Mather, D., Ali, S., &amp; Fatima, F. (2026). Entrepreneurs&#x27; reaction to a crisis. Applied Economics Letters. Advance online publication. https://doi.org/10.1080/13504851.2026.2646420</p>
+<p>Karatekin, C., Chakraborty, S., Fteiha, M., Corcoran, F., Khanna, U., Mason, S. M., &amp; Barnes, A. J. (2024). Re-politicizing the WHO&#x27;s social determinants of health framework. Health Promotion International, 39(6), Article daae122. https://doi.org/10.1093/heapro/daae122</p>
+<p>Karatekin, C., Chakraborty, S., Fteiha, M., Corcoran, F., Khanna, U., Mason, S. M., &amp; Barnes, A. J. (2026). Clarifying the social and structural determinants of health and health inequities: Refining and extending a conceptual framework. Health Promotion International, 41(3), Article daag072. https://doi.org/10.1093/heapro/daag072</p>
+<p>Kunzler, A. M., Röthke, N., Günthner, L., Stoffers-Winterling, J., Tüscher, O., Coenen, M., Rehfuess, E., Schwarzer, G., Binder, H., Schmucker, C., Meerpohl, J. J., &amp; Lieb, K. (2021). Mental burden and its risk and protective factors during the early phase of the SARS-CoV-2 pandemic: Systematic review and meta- analyses. Globalization and Health, 17(1), 34. https://doi.org/10.1186/s12992-021-00670-y Leightley, D., Williamson, V., Darby, J., &amp; Fear, N. T. (2019). Identifying probable post-traumatic stress disorder: Applying supervised machine learning to data from a UK military cohort. Journal of Mental Health, 28(1), 34-41. https://doi.org/10.1080/09638237.2018.1521946</p>
+<p>Leung, Y. T., &amp; Khalvati, F. (2022). Exploring COVID-19-Related Stressors: Topic Modeling Study. Journal of Medical Internet Research, 24(7), e37142. https://doi.org/10.2196/37142</p>
+<p>Levac, D., Colquhoun, H., &amp; O&#x27;Brien, K. K. (2010). Scoping studies: Advancing the methodology. Implementation Science, 5(1), 69. https://doi.org/10.1186/1748-5908-5-69</p>
+<p>Li, J., Zhu, J., Guan, C., Shen, T., &amp; Zhou, B. (2024). Correlating personality traits with acute stress responses in earthquake simulations: An HRV and RESP analysis. Stress and Health, 40(6), Article e3510. https://doi.org/10.1002/smi.3510</p>
+<p>Lieneck, C., Bosworth, M., Weaver, E., Heinemann, K., &amp; Patel, J. (2021). Protective and Non-Protective Factors of Mental Health Distress in the United States during the COVID-19 Pandemic: A Systematic Review. Medicina, 57(12), 1377. https://doi.org/10.3390/medicina57121377</p>
+<p>Liu, X., Bao, M., Wang, X., &amp; Zhou, G. (2024). A longitudinal investigation of mental health outcomes after the Henan floods in China: Examining predictors of resilience trajectories. PsyCh Journal, 13(6), 993- 1003. https://doi.org/10.1002/pchj.781</p>
+<p>Marenco-Escuderos, A., Parra-Fernández, M., Hernández-Bustos, R., Alarcón-Vásquez, Y., Quintero- González, S., Duque-Rhenals, H., Puerta-Pérez, A., &amp; Rambal-Rivaldo, L. (2026). Explanatory model of well-being in victims of political violence in Colombia. SSM -Mental Health, 9, 100627. https://doi.org/10.1016/j.ssmmh.2026.100627</p>
+<p>Mukherjee, S., Rintamaki, L., Shucard, J. L., Wei, Z., Carlasare, L. E., &amp; Sinsky, C. A. (2022). A Statistical Learning Approach to Evaluate Factors Associated with Post-Traumatic Stress Symptoms in Physicians: Insights From the COVID-19 Pandemic. IEEE Access, 10, 114434-114454. https://doi.org/10.1109/ACCESS.2022.3217770</p>
+<p>Navarro Flores, C. M., Vázquez, A. L., Young, J., Orengo-Aguayo, R., &amp; Stewart, R. W. (2025). After the storm, the calm never came: Hurricane Maria-related stressors and PTSD symptoms among Puerto Rican youth. Psychological Trauma: Theory, Research, Practice, and Policy, 17(1), 48-56. https://doi.org/10.1037/tra0001837</p>
+<p>Nemkova, P., Ubani, S., Polat, S. O., Kim, N., &amp; Nielsen, R. D. (2023). Detecting human rights violations on social media during the Russia-Ukraine war (arXiv:2306.05370). arXiv. https://doi.org/10.48550/arXiv.2306.05370</p>
+<p>Newnham, E. A., Mergelsberg, E. L. P., Chen, Y., Kim, Y., Gibbs, L., Dzidic, P. L., DaSilva, M. I., Chan, E. Y. Y., Shimomura, K., Narita, Z., Huang, Z., &amp; Leaning, J. (2022). Long-term mental health trajectories after disasters and pandemics: A multilingual systematic review of prevalence, risk and protective factors. Clinical Psychology Review, 97, Article 102203. https://doi.org/10.1016/j.cpr.2022.102203</p>
+<p>Nichols, E. S., Pathak, H. S., Bgeginski, R., Mottola, M. F., Giroux, I., Van Lieshout, R. J., Mohsenzadeh, Y., &amp; Duerden, E. G. (2022). Machine learning-based predictive modeling of resilience to stressors in pregnant women during COVID-19: A prospective cohort study. PLOS ONE, 17(8), e0272862. https://doi.org/10.1371/journal.pone.0272862</p>
+<p>Nickerson, R. C., Varshney, U., &amp; Muntermann, J. (2013). A method for taxonomy development and its application in information systems. European Journal of Information Systems, 22(3), 336-359. https://doi.org/10.1057/ejis.2012.26</p>
+<p>Nissen, L. R., Tsamardinos, I., Eskelund, K., Gradus, J. L., Andersen, S. B., &amp; Karstoft, K. I. (2021). Forecasting military mental health in a complete sample of Danish military personnel deployed between 1992 and 2013. Journal of Affective Disorders, 288, 167-174. https://doi.org/10.1016/j.jad.2021.04.010</p>
+<p>Nomura, S., Parsons, A. J. Q., Hirabayashi, M., Kinoshita, R., Liao, Y., &amp; Hodgson, S. (2016). Social determinants of mid-to long-term disaster impacts on health: A systematic review. International Journal of Disaster Risk Reduction, 16, 53-67. https://doi.org/10.1016/j.ijdrr.2016.01.013</p>
+<p>Ojokoh, B. A., Olaku, O. A., Sarumi, O. A., &amp; Olotu, S. I. (2021). Predictive analytics for economic crisis- triggered depression risk level identification among some adults in Nigeria. Scientific African, 14, e01056. https://doi.org/10.1016/j.sciaf.2021.e01056</p>
+<p>Okuzono, S., Slopen, N., Shiba, K., Yazawa, A., Kondo, K., &amp; Kawachi, I. (2024). Do Adverse Childhood Experiences Modify the Association Between Disaster-Related Trauma and Cognitive Disability? AMERICAN JOURNAL OF EPIDEMIOLOGY, 193(1), 36-46. (WOS:001105763500001). https://doi.org/10.1093/aje/kwad158</p>
+<p>Onnela, J. P., Rauch, S. Harnessing Smartphone-Based Digital Phenotyping to Enhance Behavioral and Mental Health. Neuropsychopharmacology 41, 1691-1696 (2016). https://doi.org/10.1038/npp.2016.7</p>
+<p>Ou, Y., de Bruijn, G.-J., &amp; Schulz, P. J. (2025). Social media as an emotional barometer: BERT-LSTM sentiment analysis on the evolution of public sentiments during influenza A on Sina Weibo. Journal of Medical Internet Research, 27, e68205. https://doi.org/10.2196/68205</p>
+<p>Pang, O., Movahedi Nia, Z., Gillies, M., Leung, D., Bragazzi, N., Gizo, I., &amp; Kong, J. D. (2025). Analyzing Reddit social media content in the United States related to H5N1: Sentiment and topic modeling study. Journal of Medical Internet Research, 27, e70746. https://doi.org/10.2196/70746</p>
+<p>Papini, S., Norman, S. B., Campbell-Sills, L., Sun, X., He, F., Kessler, R. C., Ursano, R. J., Jain, S., &amp; Stein, M. B. (2023). Development and Validation of a Machine Learning Prediction Model of Posttraumatic Stress Disorder After Military Deployment. JAMA Network Open, 6(6), e2321273. https://doi.org/10.1001/jamanetworkopen.2023.21273</p>
+<p>Park, S., Park, K., Ahn, J., &amp; Oh, A. (2020). Suicidal Risk Detection for Military Personnel. Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP), 2523-2531. https://doi.org/10.18653/v1/2020.emnlp-main.198</p>
+<p>Pearlin, L. I., Lieberman, M. A., Menaghan, E. G., &amp; Mullan, J. T. (1981). The Stress Process. Journal of Health and Social Behavior, 22(4), 337-356.</p>
+<p>Peters, M. D. J., Godfrey, C., McInerney, P., Khalil, H., Larsen, P., Marnie, C., Pollock, D., Tricco, A. C., &amp; Munn, Z. (2022). Best practice guidance and reporting items for the development of scoping review protocols. JBI Evidence Synthesis, 20(4), 953-968. https://doi.org/10.11124/JBIES-21-00242</p>
+<p>Portugal, L. C. L., Gama, C. M. F., Gonçalves, R. M., Mendlowicz, M. V., Erthal, F. S., Mocaiber, I., Tsirlis, K., Volchan, E., David, I. A., Pereira, M. G., &amp; Oliveira, L. D. (2022). Vulnerability and Protective Factors for PTSD and Depression Symptoms Among Healthcare Workers During COVID-19: A Machine Learning Approach. Frontiers in Psychiatry, 12, 752870. https://doi.org/10.3389/fpsyt.2021.752870</p>
+<p>Prout, T. A., Zilcha-Mano, S., Aafjes-van Doorn, K., Békés, V., Christman-Cohen, I., Whistler, K., Kui, T., &amp; Di Giuseppe, M. (2020). Identifying Predictors of Psychological Distress During COVID-19: A Machine Learning Approach. Frontiers in Psychology, 11, 586202. https://doi.org/10.3389/fpsyg.2020.586202</p>
+<p>Qasrawi, R., Vicuna Polo, S., Abu Khader, R., Abu Al-Halawa, D., Hallaq, S., Abu Halaweh, N., &amp; Abdeen, Z. (2023). Machine learning techniques for identifying mental health risk factors associated with schoolchildren&#x27;s cognitive ability living in politically violent environments. Frontiers in Psychiatry, 14, 1071622. https://doi.org/10.3389/fpsyt.2023.1071622</p>
+<p>Qasrawi, R., Amro, M., VicunaPolo, S., Abu Al-Halawa, D., Agha, H., Abu Seir, R., Hoteit, M., Hoteit, R., Allehdan, S., Behzad, N., Bookari, K., AlKhalaf, M., Al-Sabbah, H., Badran, E., &amp; Tayyem, R. (2022a). Machine learning techniques for predicting depression and anxiety in pregnant and postpartum women during the COVID-19 pandemic: A cross-sectional regional study. F1000Research, 11, 390. https://doi.org/10.12688/f1000research.110090.1</p>
+<p>Qasrawi, R., Vicuna Polo, S. P., Abu Al-Halawa, D., Hallaq, S., &amp; Abdeen, Z. (2022b). Assessment and Prediction of Depression and Anxiety Risk Factors in Schoolchildren: Machine Learning Techniques Performance Analysis. JMIR Formative Research, 6(8), e32736. https://doi.org/10.2196/32736</p>
+<p>Rathje, S., Mirea, D.-M., Sucholutsky, I., Marjieh, R., Robertson, C. E., &amp; Van Bavel, J. J. (2024). GPT is an effective tool for multilingual psychological text analysis. Proceedings of the National Academy of Sciences, 121(34), Article e2308950121. https://doi.org/10.1073/pnas.2308950121</p>
+<p>Ren, Z., Xin, Y., Wang, Z., Liu, D., Ho, R. C. M., &amp; Ho, C. S. H. (2021). What Factors Are Most Closely Associated with Mood Disorders in Adolescents During the COVID-19 Pandemic? A Cross-Sectional Study Based on 1,771 Adolescents in Shandong Province, China. Frontiers in Psychiatry, 12, 728278. https://doi.org/10.3389/fpsyt.2021.728278</p>
+<p>Richter, E. P., Brähler, E., Zenger, M., Stöbel-Richter, Y., Emmerich, F., Junghans, J., Krause, J., Irmscher, L., &amp; Berth, H. (2024). Mental health and quality of life in times of crisis: The compounding effects of the COVID-19 pandemic, the Russia-Ukraine War, and economic recession. Journal of Clinical Medicine, 13(16), 4752. doi.org</p>
+<p>Rosellini, A. J., Stein, M. B., Benedek, D. M., Bliese, P. D., Chiu, W. T., Hwang, I., Monahan, J., Nock, M. K., Sampson, N. A., Street, A. E., Zaslavsky, A. M., Ursano, R. J., &amp; Kessler, R. C. (2018). Predeployment predictors of psychiatric disorder symptoms and interpersonal violence during combat deployment. Depression and Anxiety, 35(11), 1073-1080. Scopus. https://doi.org/10.1002/da.22807</p>
+<p>Samuelson, K. W., Dixon, K., Jordan, J. T., Powers, T., Sonderman, S., &amp; Brickman, S. (2022). Mental health and resilience during the coronavirus pandemic: A machine learning approach. Journal of Clinical Psychology, 78(5), 821-846. https://doi.org/10.1002/jclp.23254</p>
+<p>Schäfer, S. K., Supke, M., Kausmann, C., Schaubruch, L. M., Lieb, K., &amp; Cohrdes, C. (2024). A systematic review of individual, social, and societal resilience factors in response to societal challenges and crises. Communications Psychology, 2(1), 92. https://doi.org/10.1038/s44271-024-00138-w Schultebraucks, K., Qian, M., Abu-Amara, D., Dean, K., Laska, E., Siegel, C., Gautam, A., Guffanti, G., Hammamieh, R., Misganaw, B., Mellon, S. H., Wolkowitz, O. M., Blessing, E. M., Etkin, A., Ressler, K. J., Doyle, F. J., Jett, M., &amp; Marmar, C. R. (2021). Pre-deployment risk factors for PTSD in active-duty personnel deployed to Afghanistan: A machine-learning approach for analyzing multivariate predictors. Molecular Psychiatry, 26(9), 5011-5022. https://doi.org/10.1038/s41380-020-0789-2</p>
+<p>Shatte, A. B. R., Hutchinson, D., &amp; Teague, S. (2018). Machine learning in mental health: A systematic scoping review of methods and applications. Open Science Framework. https://doi.org/10.31219/osf.io/hjrw8</p>
+<p>Sheetal, A., Ma, A., &amp; Infurna, F. J. (2024). Psychological predictors of socioeconomic resilience amidst the COVID-19 pandemic: Evidence from machine learning. American Psychologist, 79(8), 1139-1154. Scopus. https://doi.org/10.1037/amp0001329</p>
+<p>Shiba, K., Daoud, A., Hikichi, H., Yazawa, A., Aida, J., Kondo, K., &amp; Kawachi, I. (2023). Uncovering Heterogeneous Associations Between Disaster-Related Trauma and Subsequent Functional Limitations: A Machine-Learning Approach. American Journal of Epidemiology, 192(2), 217-229. https://doi.org/10.1093/aje/kwac187</p>
+<p>Shiba, K., Daoud, A., Kino, S., Nishi, D., Kondo, K., &amp; Kawachi, I. (2022). Uncovering heterogeneous associations of disaster-related traumatic experiences with subsequent mental health problems: A machine learning approach. Psychiatry and Clinical Neurosciences, 76(4), 97-105. https://doi.org/10.1111/pcn.13322</p>
+<p>Simjanoski, M., Ballester, P. L., da Mota, J. C., De Boni, R. B., Balanzá-Martínez, V., Atienza-Carbonell, B., Bastos, F. I., Frey, B. N., Minuzzi, L., Cardoso, T. de A., &amp; Kapczinski, F. (2022). Lifestyle predictors of depression and anxiety during COVID-19: A machine learning approach. Trends in Psychiatry and Psychotherapy, 44, e20210365. Scopus (WOS:000823073800001). https://doi.org/10.47626/2237- 6089-2021-0365</p>
+<p>Solar, O., &amp; Irwin, A. (2010). A conceptual framework for action on the social determinants of health (Social Determinants of Health Discussion Paper 2, Policy and Practice). World Health Organization.</p>
+<p>Stein, J., Vöhringer, M., Wagner, B., Stammel, N., Böttche, M., &amp; Knaevelsrud, C. (2023). Patterns of posttraumatic stress symptoms, their predictors, and comorbid mental health symptoms in traumatized Arabic-speaking people: A latent class analysis. PLOS ONE, 18(12), e0295999. https://doi.org/10.1371/journal.pone.0295999</p>
+<p>Szreter, S., &amp; Woolcock, M. (2004). Health by association? Social capital, social theory, and the political economy of public health. International Journal of Epidemiology, 33(4), 650-667. https://doi.org/10.1093/ije/dyh013</p>
+<p>Tal, N., Cohen, I.-C., Elyashar, A., Grinberg, N., Cohen, O., &amp; Puzis, R. (2026). Emotional and discourse patterns of American first responders during the 2025 Los Angeles wildfires: Signals of distress from Twitter analyses. Climate Risk Management. https://doi.org/10.1016/j.crm.2026.100846</p>
+<p>Taye, A. D., Borga, L. G., Greiff, S., Vögele, C., &amp; D&#x27;Ambrosio, C. (2023). A machine learning approach to predict self-protective behaviors during the early wave of the COVID-19 pandemic. Scientific Reports, 13(1), 6121. https://doi.org/10.1038/s41598-023-33033-1</p>
+<p>Tayebi, S., Sert Oti, A., Fathollahian, H., &amp; Haque, U. (2025). Mapping war trauma: A machine learning approach to predict mental health impacts in Ukraine. SSM -Population Health, 32, 101879. https://doi.org/10.1016/j.ssmph.2025.101879</p>
+<p>Tricco, A. C., Lillie, E., Zarin, W., O&#x27;Brien, K. K., Colquhoun, H., Levac, D., Moher, D., Peters, M. D. J., Horsley, T., Weeks, L., Hempel, S., Akl, E. A., Chang, C., McGowan, J., Stewart, L., Hartling, L., Aldcroft, A., Wilson, M. G., Garritty, C., … Straus, S. E. (2018). PRISMA Extension for Scoping Reviews (PRISMA-ScR): Checklist and Explanation. Annals of Internal Medicine, 169(7), 467-473. https://doi.org/10.7326/M18-0850</p>
+<p>Tu, H.-F., Zierow, L., Lennartsson, M., &amp; Schweitzer, S. (2025). A scoping review and quality assessment of machine learning techniques in identifying maternal risk factors during the peripartum phase for adverse child development. PLOS ONE. https://doi.org/10.1371/journal.pone.0321268</p>
+<p>Tušl, M., Thelen, A., Marcus, K., Peters, A., Shalaeva, E., Scheckel, B., Sykora, M., Elayan, S., Naslund, J. A., Shankardass, K., Mooney, S. J., Fadda, M., &amp; Gruebner, O. (2022). Opportunities and challenges of using social media big data to assess mental health consequences of the COVID-19 crisis and future major events. Discover Mental Health, 2(1), 14. https://doi.org/10.1007/s44192-022-00017-y World Health Organization. (2025a). Over a billion people living with mental health conditions: Services require urgent scale-up [Press release]. https://www.who.int/news/item/02-09-2025-over-a-billion-people- living-with-mental-health-conditions-services-require-urgent-scale-up World Health Organization. (2025b). Suicide. https://www.who.int/news-room/fact-sheets/detail/suicide World Health Organization. (2021). Comprehensive mental health action plan 2013-2030. https://www.who.int/publications/i/item/9789240031029</p>
+<p>Wu, J., Wu, X., Hua, Y., Lin, S., Zheng, Y., &amp; Yang, J. (2023). Exploring Social Media for Early Detection of Depression in COVID-19 Patients. Proceedings of the ACM Web Conference 2023, 3968-3977. https://doi.org/10.1145/3543507.3583867</p>
+<p>Xiang, X., Lu, X., &amp; Guan, X. (2025). Predicting psychological resilience in older adults during the COVID-19 pandemic: A machine learning approach. The Gerontologist, 65(12), gnaf241. https://doi.org/10.1093/geront/gnaf241</p>
+<p>Xiong, J., Lipsitz, O., Nasri, F., Lui, L. M. W., Gill, H., Phan, L., Chen-Li, D., Iacobucci, M., Ho, R., Majeed, A., &amp; McIntyre, R. S. (2020). Impact of the COVID-19 pandemic on mental health in the general population: A systematic review. Journal of Affective Disorders, 277, 55-64. https://doi.org/10.1016/j.jad.2020.08.001</p>
+<p>Zhang, S., Zhang, L., Weng, J., Gasevic, D., Wei, Y., Chen, Z., Zhang, J., Liu, L. Z., &amp; Jian, W. (2025). Evaluating community resilience through social media during China&#x27;s first post-COVID-19 reopening: Insights from machine learning. Journal of Global Health, 15, 04315. https://doi.org/10.7189/jogh.15.04315</p>
+<p>Zhang, Y., Chen, H., Qi, R., Ke, J., Xu, Q., Zhong, Y., Zhang, L., Lu, G., &amp; Chen, F. (2026). A Diagnostic Model of Typhoon-Related Post-Traumatic Stress Disorder Based on Pixel-Based Analysis in Machine Learning. Brain and Behavior, 16(4), e71354. https://doi.org/10.1002/brb3.71354 Chintalapudi, Battineni &amp; Amenta (2021) OpenAlex keyword search &quot;natural disaster&quot; + &quot;sentiment analysis&quot; + &quot;wellbeing&quot; 8 García et al. (2024) OpenAlex keyword search &quot;natural disaster&quot; + &quot;sentiment analysis&quot; + &quot;wellbeing&quot;</p>
+<p>9 Mukherjee et al. (2022) OpenAlex keyword search &quot;combat&quot; + &quot;machine learning&quot; + &quot;mental health&quot; 10</p>
+<p>Park, Park, Ahn &amp; Oh (2020) OpenAlex keyword search &quot;combat exposure&quot; + &quot;machine learning&quot; + &quot;mental health&quot; 11 Ren et al. (2021) OpenAlex keyword search &quot;natural disaster&quot; + &quot;machine learning&quot; + &quot;mental health&quot;</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
