@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: A Relevance Rate Model of the affective
+mechanisms linking social media use to later attentional
+disruption</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+A Relevance Rate Model of the affective mechanisms linking social media
+use to later attentional disruption
+</p>
+<p class="meta">
+2026-11-09 · Metacheck 0.4.3.23
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>16</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="na">Not applicable <span class="n">(16)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 92 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 92 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 92 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Social media use is increasingly suspected of harming attention, but the evidence remains too limited to draw any firm conclusions. One obstacle is the lack of a framework specifying how such use might affect attention afterwards, without any device. To address this gap, we draw on emotional attention, the affective mechanism that prioritises what matters to individuals. The Relevance Rate Model rests on the relevance rate, the frequency with which an environment delivers concern-relevant stimuli. Drawing on predictive coding, we suggest that social media raises the rate that users expect, and that this expectation may persist after each session and, with repeated use, across daily life. When an activity delivers less concern-relevant information than expected, sustained attention to the ongoing task may be disrupted as emotional attention is recruited to address the shortfall. The model specifies four measurable parameters of use, from which we derive a research agenda.</p>
+<h3>[div-01]</h3>
+<p>The growing use of social media over the past decade has become a major societal issue, particularly among adolescents and young adults 1 . Questions have been raised regarding the links between social media use and various psychological, educational, and developmental outcomes, including psychological distress, academic performance and developmental trajectories 2 . Restrictive policies are thus being implemented even as the consequences of this use remain a subject of debate 3 . Attention plays a central role in this debate, given its importance for daily functioning and mental health 4 . Social media cues are well known to capture attention, with notifications diverting resources from the task at hand while they are present 5 . Whether social media use also impairs attention once use has ended, when no cue is present, is less clear. Despite widespread belief in such a persistent effect, current evidence is too limited to settle the question 6 . In the broader digital media literature, associations with attention are similarly weak and inconsistent 7, 8 , partly for lack of a mechanistic framework specifying which properties of exposure affect which attentional processes 6, 9.</p>
+<p>Regarding usage, the evidence linking social media use to attention remains difficult to interpret, largely because of how use is measured. When participants estimate their cumulative time of use, results are mixed 10, 11 , partly because such estimates correlate only moderately with logged use 12 . Logging cumulative time objectively addresses this issue, yet its links with attention remain small and not always in the expected direction 13, 14 , possibly because the same total can conceal very different patterns of use 15 . Studies that distinguished such patterns have reported effects tied to several candidate parameters. Exposure to dense or rapidly updated content disrupts attention after use [16] [17] [18] [19] [20] [21] . Attentional effects vary from moment to moment, and in strength across individuals, as a function of session length and fragmentation, that is, with how use is distributed across the day [22] [23] [24] . Finally, effects observed after a reduction or interruption of use, or after weeks of assigned use, suggest that chronic use may produce more persistent changes 14, 25, 26 . Whether social media use affects attention may thus depend less on its total duration than on what it delivers and how it unfolds over hours and days.</p>
+<p>With regard to attention, these studies have examined several processes, including inattention symptoms 10, 11 , sustained attention 14, 19, 25, 26 , momentary distraction 22 , the monitoring of delayed intentions 18 , inhibitory and proactive control 17, 23, 24 , and the prefrontal activity and frontoparietal connectivity that support it 20, 21 . Although distinct, each can be read as a failure to keep limited resources on the ongoing activity, and thus as a diversion of endogenous attention, which voluntarily sustains that activity, whether reading a text or following a train of thought 27.</p>
+<p>Existing frameworks explain several aspects of digital media use, from the costs of media multitasking 8, 28 to reward-driven engagement 29, 30 , online vigilance 31, 32 and effort recalibration 33 (Box 1). None, however, aims to explain what diverts endogenous attention once use has ended, nor how the properties of exposure would shape this diversion across timescales.</p>
+<p>To answer these two questions, we develop the Relevance Rate Model (RRM), grounded in affectivism, an approach that places affect at the heart of cognition 37 . With regard to usage, this approach calls for content to be characterised not only by Box 1 | Existing accounts of media use and attention Account 1. Media multitasking. The media multitasking framework attributes attentional costs to repeated switching between concurrent media streams 28 . Studies using media multitasking questionnaires have examined associations with sustained attention, attentional lapses and distractibility, yielding mixed findings that vary across measures and samples 7, 8 . However, these measures do not capture the temporal organisation of use or the properties of content encountered within a single stream, thereby overlooking common forms of social media use, such as brief, fragmented browsing. Account 2. Reinforcement learning and addiction. Reinforcementlearning and addiction accounts explain how positive social feedback, such as likes, acquires motivational and attentional value, strengthening cue-reactivity and re-engagement 29, 30 . Problematic-use questionnaires primarily assess symptoms of behavioural addiction and have been widely examined in relation to behavioural and neural measures of attention 34, 35 . However, these measures characterise problematic engagement rather than the properties of exposure that might generate attentional disruption after use. Account 3. Online vigilance and fear of missing out. Online vigilance describes a persistent cognitive orientation towards online information that extends beyond active use 31 . The related construct of fear of missing out (FoMO) captures apprehension of missing rewarding experiences or social information 32 . Their questionnaires assess persistent orientation towards online information, which has been associated with mind-wandering and everyday attentional failures 36 . These constructs characterise states that may persist after use, but do not specify how the properties of exposure generate or maintain them.</p>
+<h3>Account 4. Effort recalibration.</h3>
+<p>Effort recalibration proposes that repeated engagement with low-friction digital activities offering immediate rewards increases the subjective cost of cognitive effort 33 . This change may persist after digital activities are removed, reducing the relative attractiveness of effortful alternatives. The account therefore explains changes in effort allocation and activity selection, rather than attentional lapses within an ongoing task. its density, but also by its quality. It focuses on concern-relevance, defined as the probability that a stimulus will satisfy or dissatisfy a major concern of the organism 38 , such as its needs, goals, values or social standing 39 . Traditionally, social media content is described in terms of reward, that is, the positive feedback users receive 29, 30 . Concern-relevance, by contrast, carries no polarity 40 . News of a conflict or of climate obstructs concerns as surely as a like promotes them, and negativity even drives the consumption of online news 41 . Social media content is not neutral in this respect, as algorithms personalise it according to each user&#x27;s past engagement 42 . We therefore propose to characterise exposure by the rate at which concern-relevant stimuli are encountered, whether conducive or obstructive, which we term the relevance rate.</p>
+<p>With regard to attention, this framework draws on appraisal theories, according to which emotion arises from the ongoing appraisal of what events mean for the individual 43, 44 . Concern-relevant stimuli are automatically given attentional priority, in order to allocate resources to assessing their consequences and the appropriate response 45 . This mechanism is termed emotional attention 46 . Whereas endogenous attention is guided by current task goals 27 , emotional attention prioritises concern-relevant stimuli whether or not they serve the task at hand 47 . The two rely on partially dissociable neural systems, the dorsal frontoparietal network for endogenous attention and the amygdala for emotional attention [48] [49] [50] . Yet both bias the competition for the same limited processing capacity, so that concern-relevant stimuli can draw away the resources needed to pursue current goals 51, 52 . Emotional attention can also be triggered by internal stimuli, such as thoughts 53, 54 , making it a natural candidate for diverting endogenous attention after use, in the absence of an external signal.</p>
+<p>To explain how usage would bring about this diversion, the RRM proposes that the brain learns the relevance rate of its environment, just as it learns other regularities through predictive coding 55 . Exposure to a high relevance rate would thus increase the rate at which the brain expects to encounter concern-relevant stimuli (Fig. 1). When a subsequent activity, such as reading, delivers fewer such stimuli than expected, the resulting relevance-rate mismatch would itself become concern-obstructive, so that concern-relevance comes into play twice, in the stimuli that shape the expectation and in the mismatch that frustrates it. Its appraisal would recruit emotional attention, diverting resources from the endogenous attention that sustains the activity, even without any social media cue. We ground each step of the RRM in evidence, examine how patterns of use and individual differences shape it, and derive a research agenda to test it.</p>
+<p>Fig. 1 The Relevance Rate Model as a treadmill: upward calibration of an expected relevance rate and its offline consequences. Throughout, the belt speed represents the rate at which the environment delivers concern-relevant stimuli (received rate), read on the treadmill console, whereas the pace at which the brain runs represents the internal expectation of that rate (expected relevance rate). Baseline: in ordinary environments, expected and received rates coincide and the pace is sustainable. Exposure: social media streams accelerate the belt, delivering concern-relevant items, conducive or obstructive, faster, more personally and with fewer interruptions than most offline settings. Calibration: the expectation is revised upwards until it matches this higher rate; the pace that was demanding becomes the norm. Mismatch: on leaving the stream, the belt returns to its ordinary pace while the expectation remains elevated, so the expected rate now exceeds the received rate. Resolution: this mismatch admits two routes. Downward recalibration returns the expectation towards the ambient rate and restores baseline, whereas the active route restores the received rate instead, by seeking a higher-rate stream, which re-exposes the user and reinstates the elevated expectation. With a sustained pattern of use, recalibration returns the expectation only to a raised habitual level. The pace stands for an expectation, not for attention itself. Resolving the mismatch is costly because its appraisal recruits emotional attention, which draws on the limited capacity that endogenous attention needs to sustain an ongoing task.</p>
+<h3>The Relevance Rate Model</h3>
+<p>This section examines the four steps of the mechanism: social media delivers concernrelevant stimuli at a high rate, exposure calibrates the expected rate, this expectation persists after use, and the resulting mismatch recruits emotional attention (Fig. 1). For each step, we review the evidence and indicate where the model extends it (key terms are defined in Box 2). Most of this evidence concerns reward, a special case of concernrelevance 56 . The amygdala, proposed as a hub for concern-relevance detection 46, 49, 50 , serves as a common thread across these steps.</p>
+<h3>Box 2 | Glossary</h3>
+<h3>Concern-relevance.</h3>
+<p>The extent to which a stimulus is appraised as likely to bear on one of an individual&#x27;s current concerns, such as needs, goals, values or social standing, whether by promoting or obstructing them 39, 40.</p>
+<h3>Emotional attention.</h3>
+<p>The allocation of processing resources to stimuli appraised as relevant to the individual&#x27;s current concerns, enabling the organism to assess their meaning and prepare an appropriate response 43, 45 . It can be engaged rapidly and involuntarily 47.</p>
+<h3>Endogenous attention.</h3>
+<p>The voluntary orientation of attention according to current goals, which sustains performance on an ongoing task 27 . In the RRM, it is a distinct source of attentional control that shares limited capacity with emotional attention.</p>
+<h3>Relevance rate.</h3>
+<p>The rate at which an environment delivers stimuli appraised as concern-relevant. It is a property of the environment, which depends on how often new items arrive and on the likelihood that they bear on the individual&#x27;s concerns.</p>
+<p>Expected relevance rate. The internal expectation, learned from exposure, of how often concern-relevant stimuli are likely to arrive. It is revised on two timescales. It rises quickly during use and falls back gradually afterwards, towards a resting level, the habitual expectation, which reflects daily life as a whole and shifts more slowly with the pattern of use.</p>
+<p>Persistence. The carryover of an elevated expectation beyond use. It takes two forms, the after-effect of a session, which fades within minutes to hours after use, and a raised habitual expectation, which a sustained pattern of use maintains over days.</p>
+<h3>Precision.</h3>
+<p>The inverse of the variance of a signal or of a prediction. In predictive coding, the precision of an incoming signal relative to that of the prediction sets how strongly a prediction error revises a belief.</p>
+<p>Relevance-rate mismatch. The shortfall of the rate an activity delivers below the expectation carried into it. Because a rate is estimated over time, it accumulates from intervals with few concern-relevant events as much as from those that deliver them. Although concern-obstructive, it is a signal about the rate rather than an event the activity delivers, and so does not enter the rate it measures.</p>
+<h3>Social media as a high-relevance-rate environment</h3>
+<p>Initially designed for active use, such as posting, messaging or reacting within existing networks, social media has since shifted towards passive browsing, as feeds began to mix friends&#x27; content with recommended posts 57 . These recommendations are selected to match each user 42 , which increases the likelihood that each piece of content bears on their concerns. Whether active or passive, usage thus exposes the user to a succession of content that may relate to their concerns. A like may signal approval from others 29, 30 , a message may affect a relationship, a post may alter a sense of status or belonging, and a political video may reinforce or threaten a belief. The implications of each piece of content for the user must therefore be appraised, which is precisely the role of emotional attention. Several findings suggest that emotional attention is recruited during use. Notifications disrupt attention in proportion to the relevance attributed to them 58 . Browsing a feed produces a largely neutral affective baseline, punctuated by brief peaks of physiological activation 59 , which may reflect responses to concernrelevant stimuli.</p>
+<p>Several features of today&#x27;s platforms are increasing the frequency of such content. Short-form formats increase the amount of content encountered per unit of time, and endless feeds eliminate natural stopping points 42 , whilst notifications fragment the day into repeated episodes of evaluation and the low cost of access makes it effortless to return 60 . Users are said to scroll through around 90 metres of content per day, roughly the height of the Statue of Liberty 61 . Other environments also deliver concernrelevant stimuli, from work and relationships to a gripping novel or a binge-watched series, but rarely combine this density, personalisation and ease of access.</p>
+<h3>How exposure calibrates an expected relevance rate</h3>
+<p>A high relevance rate can affect subsequent attention only if the brain learns this regularity and the resulting expectation outlasts use. For the first condition, calibration, predictive coding offers a general mechanism. The brain does not simply react to incoming events but anticipates them, deriving expectations from regularities in past input and registering departures from those expectations 55 . Regularities in an event stream can be learned incidentally, without intention or awareness 62 , and expectations about upcoming events, including their timing, are updated as the statistics of the environment change 63 . Expectations about when events will occur can, in turn, guide the temporal allocation of attention 64 . The RRM extends this general learning capacity to the frequency of events appraised as concern-relevant. Repeated exposure to a high relevance rate may therefore calibrate an expectation about how frequently such events are likely to occur. We propose that this calibration is fast. An expectation formed in a calm activity predicts few concern-relevant events, with little variation around that number. A dense stream delivers many more from its first minutes, which signals that the environment has changed rather than fluctuated, a condition under which expectations are revised faster 63.</p>
+<p>The amygdala offers a possible substrate for this expectation, as its function has recently been described in predictive terms 65, 66 . In non-human primates, amygdala neurons respond to a reward cue only when it signals a higher reward rate than the prevailing one 67 . Amygdala activity also tracks the timing of reward delivery 68 and, in humans, encodes expected values updated through experience 69, 70 . Extending these findings to concern-relevance, we propose that exposure to a high relevance rate raises the expected rate against which the amygdala evaluates incoming events.</p>
+<h3>How expectations persist beyond social media use</h3>
+<p>Persistence is the second condition. Leaving the stream also signals a change in environment, which should speed the downward revision, yet expectations about concern-relevant events appear to resist it. In Pavlovian conditioning, the learning rate during extinction is lower for concern-relevant stimuli, whether threatening or positive, than for neutral stimuli 71 . Similarly, estimates of reward rates are revised more slowly when rewards become scarcer than when they become more frequent 72.</p>
+<p>Evidence suggests that persistence operates on two timescales. The first, shortterm, follows each session: distraction fluctuates from hour to hour with the fragmentation of use 22 . The second, long-term, spans several days: the effects observed following a reduction or prolonged interruption in usage 25, 26 and the connectivity changes measured the day after four weeks of assigned use 14 indirectly suggest changes that do not depend on a recent session. To account for this, the RRM proposes that, following a session, the expectation falls back within minutes to hours. This constitutes the session&#x27;s after-effect. However, it does not drop back to a fixed baseline, but rather to a resting level, the habitual expectation, which reflects the rate delivered by daily life as a whole. This resting level rises slowly with each session that maintains the expectation above it, so that after several days of repeated use, a mismatch may arise in the absence of a recent session, and this level only returns to normal when the usage pattern changes. A similar combination of fast and slow processes governs motor adaptation 73.</p>
+<p>One might object that learned regularities remain tied to the task in which they were acquired 74 . The expected relevance rate, however, is abstract, as users anticipate only that concern-relevant information arrives at roughly a certain rate, not what it will be. Expectations of this degree of generality would occupy the higher levels of the predictive hierarchy, from which they constrain more context-specific predictions 75 . Furthermore, average reward rates transfer between tasks that share a relevant structure 76 . Here, the shared structure, events relating to concerns that occur at a certain rate, is common to all activities, so that the transfer requires no social-media-related cues. What persists is therefore an expectation, not an attentional state. During use, emotional attention is engaged by the content itself, with no ongoing task to disrupt. After use, only the elevated expectation remains, and endogenous attention would be diverted only when a subsequent task delivers less than this expectation predicts.</p>
+<h3>From persistence to relevance-rate mismatch</h3>
+<p>Persistence gives rise to a relevance-rate mismatch when the expectation brought into an activity exceeds the rate that activity delivers. It could stem from either form of persistence, though more strongly from the after-effect than from a raised habitual expectation. In both cases, the mismatch is greatest when the subsequent activity is calm. In terms of predictive coding, the mismatch is a prediction error 55 . In Bayesian terms, the expectation carried into the activity is a prior, itself drawn towards the habitual expectation, that the concern-relevant events of this activity update. Each posterior becomes the prior for the next interval, so that as long as the prior remains above what the activity yields, the shortfall recurs. The mismatch is therefore not a single event but a prediction error that persists throughout the activity (Fig. 2). The amygdala responds to such violations, in humans when an expected reward is delayed or absent 77 or when a neutral outcome replaces an expected appetitive or aversive one 78 , and in other animals for both kinds of outcome 79, 80.</p>
+<p>Fig. 2 The Relevance Rate Model as sequential Bayesian updating. Each panel shows one interval: the distribution over the relevance rate expected for that interval (prior, green), the rate the interval delivers (evidence, amber), and the resulting posterior (purple, dashed). The horizontal axis is the relevance rate λ, in concern-relevant events per minute. The posterior is carried forward as the prior for the next interval and drawn towards the habitual expectation. Icons indicate what the interval contained. Baseline (t 1 -t 3 ): prior, evidence and posterior nearly coincide, and the expectation remains stable. Exposure (t 4 -t 6 ): concern-relevant events arrive at a higher rate than expected. Entering the stream signals a change in the environment, so the prior loses precision and the posterior moves quickly towards the evidence. Daily life after exposure (t 7 -t 9 ): the carried-over expectation exceeds the rate the activity delivers, and the recurring shortfall ε constitutes the relevance-rate mismatch, which in the model recruits emotional attention away from the ongoing task. The prior is now held with confidence, so each interval revises it only slightly and the mismatch shrinks slowly. Because the estimate concerns a rate, distributions are wider at higher rates, and intervals with few concernrelevant events contribute evidence that the rate is lower than expected.</p>
+<h3>From mismatch to attentional disruption</h3>
+<p>Like thoughts, the mismatch is an internal stimulus that can engage emotional attention 53, 54 . It would become concern-obstructive as it disrupts what the brain has become accustomed to, namely appraising concern-relevant stimuli at a certain rate. A single calm interval carries little evidence of this, but successive intervals make the shortfall increasingly precise, and therefore increasingly weighted (Fig. 2). A related state, termed frustrative nonreward, arises when an outcome is omitted or smaller than expected 81 . In humans, a decrease in the rate of positive feedback during a cognitive task induces frustration and can impair performance 82 . In rats, a sufficient reduction in reward activates specific regions of the amygdala 83 . Boredom, which signals a discrepancy between expected and actual engagement 84 , offers an example drawn from social media, as it rises once scrolling through short videos is no longer possible 85.</p>
+<p>Once concern-relevant, the mismatch is appraised to determine how to resolve it 38, 46 . The mismatch can be resolved in two ways (Fig. 1). The expectation may be revised downwards to match the current activity, or the received rate may be raised to match the expectation, by returning to social media or by generating concern-relevant thoughts. The effort recalibration framework already considers the choice between continuing a task and turning to digital media in terms of effort cost and opportunity cost 33 . The RRM focuses instead on the competition that precedes this choice. At the start of a task, the goal of performing it dominates, and endogenous attention sustains it. As the shortfall gains precision, the concern it obstructs would gain weight relative to this goal, until it recruits emotional attention. Resources would then go to appraising the shortfall, its consequences and the response it calls for. Because emotional and endogenous attention compete for the same limited capacity 51, 52 , these resources would be withdrawn from the ongoing task, whichever route is eventually taken. As this shift occurs when one goal overtakes the other, it should produce intermittent lapses rather than a steady decline in performance.</p>
+<p>This mechanism offers a common reading of reported effects. Without competing stimuli, the diversion would appear as momentary distraction, inattention, reduced sustained attention or failures to monitor intentions 10, [17] [18] [19] 25 . With them, it would weaken inhibitory control 23, 24 , with reduced lateral prefrontal activity and default mode-frontoparietal coupling as its neural trace 20, 21 . Effects observed shortly after use [16] [17] [18] 20 would reflect the after-effect, and those observed after an interruption, a reduction or weeks of assigned use 14, 25, 26 a raised habitual expectation.</p>
+<h3>How patterns of use set the expected relevance rate</h3>
+<p>The studies reviewed in the introduction point to four candidate parameters of use, namely the within-session relevance rate, which combines the density and concernrelevance of the feed [16] [17] [18] [19] [20] [21] ; the duration and fragmentation of sessions [22] [23] [24] ; and the chronicity of usage 14, 25, 26 . When these parameters are studied separately, their interactions may be overlooked. The RRM integrates them as a leaky bucket, which each session fills and which empties between sessions down to a resting level, the habitual expectation, itself rising with sustained use.</p>
+<p>The within-session relevance rate sets the level the expectation approaches during use. It depends on both the rate at which new content arrives and its relevance to the user&#x27;s concerns, although how the two combine over the course of a session remains to be established. Speed is increased by continuous feeds and short-form content 42 , as well as by the users themselves, through rapid scrolling, skipping or fast-forwarding 85 . Concern-relevance is enhanced by recommendation systems, which personalise content based on past engagement 42 . Session duration and fragmentation are two sides of the same coin. Because calibration is fast, duration should matter only until the expectation reaches the rate of the stream. Fragmentation then takes over, since a return maintains the expectation only if it comes before the expectation has subsided, so that the spacing of sessions matters more than their number. For the same total duration, fragmented use would therefore keep the expectation elevated for longer than a single long session (Fig. 3).</p>
+<p>Chronicity operates on a slow timescale. Each session that keeps the expectation above the habitual level raises that level slightly. For the same usage pattern, a user who has maintained it for a week rather than a day therefore returns to a higher resting level between sessions.  2. After their morning session (10:00), both users carry the same elevated expectation, because it reaches the stream&#x27;s rate early in a session. By 16:00, it has returned to its resting level for the concentrated user, whilst the fragmented user&#x27;s final session has reinstated it. For the same total duration, fragmentation thus prolongs the mismatch throughout the day. Clock times and durations are illustrative, as the timescales of calibration and decay remain to be estimated.</p>
+<p>This view also exposes the limits of current usage metrics. Cumulative time adds up sessions regardless of their distribution, although the level of the bucket may differ for the same total (Fig. 3). The study that separated duration from fragmentation used isolated one-hour windows 22 , which cannot show how the two combine across the day. Questionnaires derived from existing frameworks (Box 1) measure simultaneous use, problematic use or online vigilance rather than the parameters that calibrate the expectation. They also rely on self-report, which diverges from logged behaviour 12.</p>
+<h3>Who the parameters place at risk</h3>
+<p>Individual differences and transient states may increase vulnerability by making an elevated expected relevance rate more likely to be reached, maintained or acted upon. Boredom proneness 85 , need to belong 86 , anxiety 87 and FoMO 88 may raise the withinsession relevance rate, by increasing scrolling speed and the likelihood that content bears on the user&#x27;s concerns. Because expectations about concern-relevant events resist downward revision, the same dispositions may also lengthen the after-effect, thus acting twice. Others may increase between-session fragmentation by raising the likelihood of picking up the phone. Momentary fatigue 89 and emotion-regulation difficulties 90 may do so by making the current state harder to tolerate, and attention-deficit traits 4 by making it harder to stay with a task other than the phone.</p>
+<p>Adolescence may displace several parameters at once. Peer approval and social evaluation become dominant concerns, raising the expected concern-relevance of social streams 91 and making the expectation resist downward revision once the stream is left. Fragmentation may also increase, as still-developing sustained attention 92 favours returning to the stream over holding a task, and younger users indeed show more fragmented smartphone use 93 . Calibration may in turn be faster, since adolescents learn from social feedback at a higher rate than adults 94 . Faster learning would also speed the decay of the expectation after use, but with frequent returns to the stream, it should mainly serve calibration, each new session quickly bringing the expectation back up. These influences therefore converge on greater exposure, making adolescence, and the early adulthood into which these changes extend 95 , a period of heightened vulnerability.</p>
+<p>Later adulthood may also carry vulnerability. Isolation becomes more likely at this age 96 , and unmet belonging needs heighten the monitoring of social cues 86 , which may raise the expected concern-relevance of social streams. Yet social media use may also reduce loneliness at this age 97 , and the patterns of use that sustain the expectation have not been documented in this population, so its net effect remains open.</p>
+<h3>Predictions and research agenda</h3>
+<p>The questions this literature has to address are whether social media use leaves attention impaired once a session has ended, and whether that impairment persists. The RRM makes both questions answerable by turning them into two quantities. The first is the after-effect, the elevated expectation that follows a session and falls back within minutes to hours. The second is the habitual expectation towards which it falls back, built up over days of repeated use and declining over days once use stops.</p>
+<p>In both cases, sustained attention and attentional lapses may be measured with tasks that are well established 19, 25, 26 , scored for moment-to-moment stability rather than mean performance 98 . What changes is when they are administered, after a fixed period of use, say ten minutes, or after a fixed period of full abstinence as used in restriction studies 25 . The model also predicts when the cost should be greatest. A session taken as a break from a calm task, such as studying, should disrupt attention on returning to that task more than a session followed by a denser activity. Conversely, the more the ongoing task matters, through stakes or deadlines, the later the shortfall should overtake the goal of performing it, and the later lapses should appear. Administered in the scanner, these tasks would show whether windows of unstable performance coincide with amygdala activation, whose connectivity with attention networks already relates to sustained-attention performance 99 . Unstable windows without amygdala involvement would qualify the role attributed to emotional attention.</p>
+<p>What is most urgently needed, though, is a better measure of use, one that would serve this literature whether or not the mechanism proposed here proves correct. The four parameters can be derived from scrolling logs and from the times at which sessions start and end, which tracking tools make increasingly feasible to collect 100 . Only the concern-relevance of content escapes the log, and could be approached through experience sampling. Future studies could combine these parameters into an exposure index that behaves like the leaky bucket described above, rising during sessions, draining between them and drifting with sustained use. Its weights and timescales can be estimated, and the index compared against simpler descriptions of use down to cumulative time. If cumulative time accounts for attention best, the model&#x27;s central claim is rejected. Should the model fail, the same comparison would still identify which description of use is best supported, including descriptions the model does not privilege.</p>
+<p>What remains open is how far the model extends across individuals. The dispositions discussed above are starting points rather than predictions. Age differs, because several parameters move together in a direction the model can specify [92] [93] [94] . Two comparisons follow. Across the patterns of use that individuals actually display, adolescents and young adults should show stronger associations between the expected relevance rate and attentional disruption than older adults. At matched patterns of use, comparing the after-effect across ages would show whether faster learning from social feedback or the greater concern-relevance of social content dominates. A shorter aftereffect in younger users would indicate that faster learning dominates. This prediction matters because age-based restrictions are being implemented despite the absence of supporting experimental evidence 3.</p>
+<h3>Conclusion</h3>
+<p>Whether social media affects attention has been debated for over a decade, and one obstacle has been the lack of an account specifying both the relevant exposure and the mechanism at stake. The RRM offers one such account. It proposes that the brain learns the relevance rate of its environment, like other statistical regularities. Streams that deliver concern-relevant stimuli rapidly and repeatedly may thus calibrate upwards the rate users expect. When this expectation carries over into activities that deliver a lower rate, the resulting mismatch may recruit emotional attention away from the ongoing task. Because emotional and endogenous attention are distinct sources of control, this cost depends on their sharing a limited capacity. If they drew on independent resources, the mismatch would leave the ongoing task intact, which makes attentional disruption after use a direct test of this shared capacity.</p>
+<p>The contribution is both theoretical and methodological. Theoretically, the model identifies one way in which digital environments might affect cognition. Rather than depleting attentional capacity, they may shift what the brain has learned to expect from its surroundings. Unlike reward-based accounts, the model counts obstructive events as much as conducive ones. Methodologically, the model characterises exposure through four parameters that can be computed from logged use, rather than through time spent alone. In doing so, it turns broad questions about the effects of social media into estimable ones. Which patterns of use affect attention, over what timescale and for whom? These questions are worth pursuing whether or not the mechanism proposed here proves to be the right one.</p>
+<h3>Acknowledgements</h3>
+<p>This work received no external funding. Claude (Opus 5.5, Anthropic) was used for language refinement. All scientific ideas and interpretations originated with the authors, who reviewed and revised the text and take full responsibility for the final manuscript.</p>
+<h3>Competing interests</h3>
+<p>The authors declare no competing interests.</p>
+<h3>Author contributions</h3>
+<p>H.F. conceived and developed the model, structured the manuscript, wrote the initial draft, and created the figures. E.R.P. and D.S. contributed to the development of the mechanistic aspects of the model. E.D.-G. actively contributed to the iterative refinement and revision of the manuscript. All authors contributed to scientific discussions, critically reviewed the manuscript, and approved the final version.</p>
+<h3>Fig 3</h3>
+<p>Fig 3 Concentrated versus fragmented usage. Two users spend the same total time on social media (2 hours 20 minutes), one in a single morning session (top), the other in four shorter sessions (bottom). Insets show where the sessions occur during the day, and the blue bars indicate the session preceding each interval. The distributions are coded as in Fig.2. After their morning session (10:00), both users carry the same elevated expectation, because it reaches the stream&#x27;s rate early in a session. By 16:00, it has returned to its resting level for the concentrated user, whilst the fragmented user&#x27;s final session has reinstated it. For the same total duration, fragmentation thus prolongs the mismatch throughout the day. Clock times and durations are illustrative, as the timescales of calibration and decay remain to be estimated.</p>
+<h3>References</h3>
+<p>Orben, A., Meier, A., Dalgleish, T. &amp; Blakemore, S.-J. Mechanisms linking social media use to adolescent mental health vulnerability. Nature Reviews Psychology 3, 407-423 (2024). https://doi.org/10.1038/s44159-024-00307-y.</p>
+<p>Salari, N. et al. The impact of social networking addiction on the academic achievement of university students globally: A meta-analysis. Public Health in Practice 9, 100584 (2025). https://doi.org/10.1016/j.puhip.2025.100584.</p>
+<p>Lind, M. N., Schueller, S. M. &amp; Odgers, C. L. We don&#x27;t know how social media bans will affect youth but we&#x27;re doing it anyway! Frontiers in Developmental Psychology 4, 1805989 (2026). https://doi.org/10.3389/fdpys.2026.1805989.</p>
+<p>Lipszyc, J. &amp; Schachar, R. Inhibitory control and psychopathology: A meta- analysis of studies using the stop signal task. Journal of the International Neuropsychological Society 16, 1064-1076 (2010). https://doi.org/10.1017/ S1355617710000895.</p>
+<p>Haruki, Y., Miyahara, K., Ogawa, K. &amp; Suzuki, K. Attentional bias towards smartphone stimuli is associated with decreased interoceptive awareness and increased physiological reactivity. Communications Psychology 3, 42 (2025). https://doi.org/10.1038/s44271-025-00225-6.</p>
+<p>Capraro, V. et al. A collective review on some potential negative impacts of smartphone and social media use on adolescent mental health: Results from a Delphi process (2025).</p>
+<p>Wiradhany, W. &amp; Nieuwenstein, M. R. Cognitive control in media multitaskers: Two replication studies and a meta-Analysis. Attention, Perception, &amp; Psy- chophysics 79, 2620-2641 (2017). https://doi.org/10.3758/s13414-017-1408-4.</p>
+<p>Parry, D. A. &amp; Le Roux, D. B. &quot;Cognitive control in media multitaskers&quot; ten years on: A meta-analysis. Cyberpsychology: Journal of Psychosocial Research on Cyberspace 15 (2021). https://doi.org/10.5817/CP2021-2-7.</p>
+<p>Wiradhany, W., Parry, D. A., Baumgartner, S. &amp; Nieuwenstein, M. Digital Media and Attention: A Scoping Review of Experimental Methods, Theories, and Evidence (2026).</p>
+<p>Nivins, S., Mooney, M. A., Nigg, J. &amp; Klingberg, T. Digital Media, Genetics, and Risk for ADHD Symptoms in Children: A Longitudinal Study. Pediatrics Open Science 2, 1-10 (2026). https://doi.org/10.1542/pedsos.2025-000922.</p>
+<p>Boer, M., Stevens, G., Finkenauer, C. &amp; Van Den Eijnden, R. Attention Deficit Hyperactivity Disorder-Symptoms, Social Media Use Intensity, and Social Media Use Problems in Adolescents: Investigating Directionality. Child Development 91 (2020). https://doi.org/10.1111/cdev.13334.</p>
+<p>Parry, D. A. et al. A systematic review and meta-analysis of discrepancies between logged and self-reported digital media use. Nature Human Behaviour 5, 1535-1547 (2021). https://doi.org/10.1038/s41562-021-01117-5.</p>
+<p>Jones, C. N., Rudaizky, D., Mahalingham, T. &amp; Clarke, P. J. Investigating the links between objective social media use, attentional control, and psychological distress. Social Science &amp; Medicine 361, 117400 (2024). https://doi.org/10.1016/j.socscimed.2024.117400.</p>
+<p>Hu, B. et al. Intersubject correlation analysis reveals the plasticity of cere- bral functional connectivity in the long-term use of social media. Human Brain Mapping 43, 2262-2275 (2022). https://doi.org/10.1002/hbm.25786.</p>
+<p>Schmitt, O. et al. Beyond Screen Time: Demonstrating the Value of App Activity Logs to Understand User Behavior Further (2026). Version Number: 1.</p>
+<p>Mahakud, G. C. &amp; Thapliyal, A. Assessing the Impact of Different Social Media Video Content Formats on Sustained Attention and Working Memory. Annals of Neurosciences 09727531261424994 (2026). https://doi.org/10.1177/ 09727531261424994.</p>
+<p>Luo, W., Zhao, X., Jiang, B., Fu, Q. &amp; Zheng, J. Swiping Disrupts Switching: Preliminary Evidence for Reduced Cue-Based Preparation Following Short-Form Video Exposure. Behavioral Sciences 15, 1070 (2025). https://doi.org/10.3390/ bs15081070.</p>
+<p>Chiossi, F., Haliburton, L., Ou, C., Butz, A. M. &amp; Schmidt, A. Short-Form Videos Degrade Our Capacity to Retain Intentions: Effect of Context Switching On Prospective Memory (2023).</p>
+<p>Lin, B.-H. et al. Understanding the Effects of Short-Form Videos on Sustained Attention, 1-8 (ACM, Honolulu HI USA, 2024).</p>
+<p>Aitken, A. et al. Naturalistic fNIRS assessment reveals decline in executive function and altered prefrontal activation following social media use in col- lege students. Scientific Reports 15, 36960 (2025). https://doi.org/10.1038/ s41598-025-20844-7.</p>
+<p>Hu, B. et al. Combining Dynamic Network Analysis and Cerebral Carryover Effect to Evaluate the Impacts of Reading Social Media Posts and Science Fiction in the Natural State on the Human Brain. Frontiers in Neuroscience 16, 827396 (2022). https://doi.org/10.3389/fnins.2022.827396.</p>
+<p>Siebers, T., Beyens, I. &amp; Valkenburg, P. M. The effects of fragmented and sticky smartphone use on distraction and task delay. Mobile Media &amp; Communication 12, 45-70 (2024). https://doi.org/10.1177/20501579231193941.</p>
+<p>Telzer, E. H. &amp; Burnell, K. Smartphone Use During School Hours and Association With Cognitive Control in Youths Aged 11 to 18 Years. JAMA Network Open 9, e261092 (2026). https://doi.org/10.1001/jamanetworkopen.2026.1092.</p>
+<p>Toh, W. X., Ng, W. Q., Yang, H. &amp; Yang, S. Disentangling the effects of smartphone screen time, checking frequency, and problematic use on executive function: A structural equation modelling analysis. Current Psychology 42, 4225-4242 (2023). https://doi.org/10.1007/s12144-021-01759-8.</p>
+<p>Castelo, N., Kushlev, K., Ward, A. F., Esterman, M. &amp; Reiner, P. B. Blocking mobile internet on smartphones improves sustained attention, mental health, and subjective well-being. PNAS Nexus 4, pgaf017 (2025). https://doi.org/10.1093/ pnasnexus/pgaf017.</p>
+<p>Van Wezel, M. M., Abrahamse, E. L. &amp; Vanden Abeele, M. M. Does a 7-day restriction on the use of social media improve cognitive functioning and emotional well-being? Results from a randomized controlled trial. Addictive Behaviors Reports 14, 100365 (2021). https://doi.org/10.1016/j.abrep.2021.100365.</p>
+<p>Chica, A. B., Bartolomeo, P. &amp; Lupiáñez, J. Two cognitive and neural systems for endogenous and exogenous spatial attention. Behavioural Brain Research 237, 107-123 (2013). https://doi.org/10.1016/j.bbr.2012.09.027.</p>
+<p>Ophir, E., Nass, C. &amp; Wagner, A. D. Cognitive control in media multitaskers. Proceedings of the National Academy of Sciences 106, 15583-15587 (2009). https: //doi.org/10.1073/pnas.0903620106.</p>
+<p>Lindström, B. et al. A computational reward learning account of social media engagement. Nature Communications 12, 1311 (2021). https://doi.org/10.1038/ s41467-020-19607-x.</p>
+<p>Turner, G. et al. A computational model of reward learning and habits on social media. Nature Communications (2026). https://doi.org/10.1038/ s41467-026-73547-6.</p>
+<p>Bayer, J. B., Campbell, S. W. &amp; Ling, R. Connection Cues: Activating the Norms and Habits of Social Connectedness: Connection Cues. Communication Theory 26, 128-149 (2016). https://doi.org/10.1111/comt.12090.</p>
+<p>Przybylski, A. K., Murayama, K., DeHaan, C. R. &amp; Gladwell, V. Motivational, emotional, and behavioral correlates of fear of missing out. Computers in Human Behavior 29, 1841-1848 (2013). https://doi.org/10.1016/j.chb.2013.02.014.</p>
+<p>Wiradhany, W., Parry, D. &amp; Aru, J. An effort recalibration framework for digital media use and cognition. Nature Human Behaviour (2026). https://doi.org/10.1038/s41562-026-02500-w.</p>
+<p>Choi, J. et al. The neural basis underlying impaired attentional control in problematic smartphone users. Translational Psychiatry 11, 129 (2021). https: //doi.org/10.1038/s41398-021-01246-5.</p>
+<p>Lee, D., Lee, J., Namkoong, K. &amp; Jung, Y.-C. Altered functional connectivity of the dorsal attention network among problematic social network users. Addictive Behaviors 116, 106823 (2021). https://doi.org/10.1016/j.addbeh.2021.106823.</p>
+<p>Johannes, N. et al. Mind-Wandering and Mindfulness as Mediators of the Rela- tionship Between Online Vigilance and Well-Being. Cyberpsychology, Behavior, and Social Networking 21, 761-767 (2018). https://doi.org/10.1089/cyber.2018.0373.</p>
+<p>Dukes, D. &amp; Sander, D. Affectivism and the Emotional Elephant: How a Com- ponential Approach Can Reconcile Opposing Theories to Serve the Future of Affective Sciences. Affective Science 5, 196-200 (2024). https://doi.org/10.1007/ s42761-024-00272-y.</p>
+<p>Stussi, Y. &amp; Sander, D. Computational analysis, appraised concern-relevance, and the amygdala: The algorithmic value of appraisal processes in emotion. Neu- roscience &amp; Biobehavioral Reviews 161, 105676 (2024). https://doi.org/10.1016/ j.neubiorev.2024.105676.</p>
+<p>Frijda, N. H. in Concerns (eds Sander, D. &amp; Scherer, K. R.) The Oxford Compan- ion to Emotion and the Affective Sciences 96 (Oxford University Press, Oxford, United Kingdom, 2009).</p>
+<p>Scherer, K. R. The Nature and Dynamics of Relevance and Valence Appraisals: Theoretical Advances and Recent Evidence. Emotion Review 5, 150-162 (2013). https://doi.org/10.1177/1754073912468166.</p>
+<p>Robertson, C. E. et al. Negativity drives online news consumption. Nature Human Behaviour 7, 812-822 (2023). https://doi.org/10.1038/ s41562-023-01538-4.</p>
+<p>Zannettou, S. et al. Analyzing User Engagement with TikTok&#x27;s Short Format Video Recommendations using Data Donations, 1-16 (ACM, Honolulu HI USA, 2024).</p>
+<p>Scherer, K. R. The dynamic architecture of emotion: Evidence for the component process model. Cognition &amp; Emotion 23, 1307-1351 (2009). https://doi.org/10.1080/02699930902928969.</p>
+<p>Moors, A., Ellsworth, P. C., Scherer, K. R. &amp; Frijda, N. H. Appraisal Theories of Emotion: State of the Art and Future Development. Emotion Review 5, 119-124 (2013). https://doi.org/10.1177/1754073912468165.</p>
+<p>Frijda, N. H. The evolutionary emergence of what we call &quot;emotions&quot;. Cogni- tion and Emotion 30, 609-620 (2016). https://doi.org/10.1080/02699931.2016.1145106.</p>
+<p>Vuilleumier, P. How brains beware: neural mechanisms of emotional attention. Trends in Cognitive Sciences 9, 585-594 (2005). https://doi.org/10.1016/j.tics. 2005.10.011.</p>
+<p>Pool, E., Brosch, T., Delplanque, S. &amp; Sander, D. Attentional bias for positive emotional stimuli: A meta-analytic investigation. Psychological Bulletin 142, 79-106 (2016). https://doi.org/10.1037/bul0000026.</p>
+<p>Corbetta, M. &amp; Shulman, G. L. Control of goal-directed and stimulus-driven attention in the brain. Nature Reviews Neuroscience 3, 201-215 (2002). https: //doi.org/10.1038/nrn755.</p>
+<p>Sander, D., Grafman, J. &amp; Zalla, T. The Human Amygdala: An Evolved System for Relevance Detection. Reviews in the Neurosciences 14 (2003). https://doi. org/10.1515/REVNEURO.2003.14.4.303.</p>
+<p>Vuilleumier, P. &amp; Huang, Y.-M. Emotional Attention: Uncovering the Mech- anisms of Affective Biases in Perception. Current Directions in Psychological Science 18, 148-152 (2009). https://doi.org/10.1111/j.1467-8721.2009.01626.x.</p>
+<p>Pessoa, L. How do emotion and motivation direct executive control? Trends in Cognitive Sciences 13, 160-166 (2009). https://doi.org/10.1016/j.tics.2009.01.006.</p>
+<p>Pourtois, G., Schettino, A. &amp; Vuilleumier, P. Brain mechanisms for emotional influences on perception and attention: What is magic and what is not. Biolog- ical Psychology 92, 492-512 (2013). https://doi.org/10.1016/j.biopsycho.2012.02.007.</p>
+<p>Kleinsorge, T. Anticipation Selectively Enhances Interference Exerted by Pic- tures of Negative Valence. Experimental Psychology 56, 228-235 (2009). https: //doi.org/10.1027/1618-3169.56.4.228.</p>
+<p>Fournier, H., Pardon Tommasini, L., Walter, A. &amp; Plancher, G. When Threat Comes from Within: First Evidence that Anticipatory Emotion Impairs Working Memory. Affective Science (2026). https://doi.org/10.1007/s42761-026-00363-y.</p>
+<p>Clark, A. Whatever next? Predictive brains, situated agents, and the future of cognitive science. Behavioral and Brain Sciences 36, 181-204 (2013). https: //doi.org/10.1017/S0140525X12000477.</p>
+<p>Wharton, T., Bonard, C., Dukes, D., Sander, D. &amp; Oswald, S. Relevance and emotion. Journal of Pragmatics 181, 259-269 (2021). https://doi.org/10.1016/ j.pragma.2021.06.001.</p>
+<p>Gerbaudo, P. TikTok and the algorithmic transformation of social media publics: From social networks to social interest clusters. New Media &amp; Society 28, 1019- 1036 (2026). https://doi.org/10.1177/14614448241304106.</p>
+<p>Fournier, H. et al. Attention hijacked: How social media notifications disrupt cognitive processing. Computers in Human Behavior 179, 108926 (2026). https: //doi.org/10.1016/j.chb.2026.108926.</p>
+<p>Hübner, M., Thalmann, J. &amp; Henseler, J. Disrupting the browsing experi- ence: impact of sponsored social media content on affective flow without driving engagement. Frontiers in Neuroscience 19, 1636848 (2025). https://doi.org/10.3389/fnins.2025.1636848.</p>
+<p>Bruineberg, J. Adversarial inference: predictive minds in the attention economy. Neuroscience of Consciousness 2023, niad019 (2023). https://doi.org/10.1093/ nc/niad019.</p>
+<p>Robertson, C. E., Del Rosario, K. S. &amp; Van Bavel, J. J. Inside the funhouse mirror factory: How social media distorts perceptions of norms. Current Opinion in Psychology 60, 101918 (2024). https://doi.org/10.1016/j.copsyc.2024.101918.</p>
+<p>Turk-Browne, N. B., Scholl, B. J., Johnson, M. K. &amp; Chun, M. M. Implicit Perceptual Anticipation Triggered by Statistical Learning. The Journal of Neuro- science 30, 11177-11187 (2010). https://doi.org/10.1523/JNEUROSCI.0858-10.2010.</p>
+<p>Nassar, M. R., Wilson, R. C., Heasly, B. &amp; Gold, J. I. An Approximately Bayesian Delta-Rule Model Explains the Dynamics of Belief Updating in a Changing Environment. The Journal of Neuroscience 30, 12366-12378 (2010). https://doi.org/10.1523/JNEUROSCI.0822-10.2010.</p>
+<p>Nobre, A. C. &amp; Van Ede, F. Anticipated moments: temporal structure in atten- tion. Nature Reviews Neuroscience 19, 34-48 (2018). https://doi.org/10.1038/ nrn.2017.141.</p>
+<p>Fournier, H., Sander, D. &amp; Pool, E. The role of goals and predictions in emotional attention. In preparation (2026).</p>
+<p>Sladky, R., Kargl, D., Haubensak, W. &amp; Lamm, C. An active inference perspec- tive for the amygdala complex. Trends in Cognitive Sciences 28, 223-236 (2024). https://doi.org/10.1016/j.tics.2023.11.004.</p>
+<p>Bermudez, M. A. &amp; Schultz, W. Reward Magnitude Coding in Primate Amygdala Neurons. Journal of Neurophysiology 104, 3424-3432 (2010). https://doi.org/ 10.1152/jn.00540.2010.</p>
+<p>Bermudez, M., Göbel, C. &amp; Schultz, W. Sensitivity to Temporal Reward Struc- ture in Amygdala Neurons. Current Biology 22, 1839-1844 (2012). https: //doi.org/10.1016/j.cub.2012.07.062.</p>
+<p>Aquino, T. G. et al. Value-Related Neuronal Responses in the Human Amygdala during Observational Learning. The Journal of Neuroscience 40, 4761-4772 (2020). https://doi.org/10.1523/JNEUROSCI.2897-19.2020.</p>
+<p>Prévost, C., McNamee, D., Jessup, R. K., Bossaerts, P. &amp; O&#x27;Doherty, J. P. Evidence for Model-based Computations in the Human Amygdala during Pavlo- vian Conditioning. PLoS Computational Biology 9, e1002918 (2013). https: //doi.org/10.1371/journal.pcbi.1002918.</p>
+<p>Stussi, Y. Affective and computational determinants of threat extinction biases. Behaviour Research and Therapy 192, 104804 (2025). https://doi.org/10.1016/ j.brat.2025.104804.</p>
+<p>Garrett, N. &amp; Daw, N. D. Biased belief updating and suboptimal choice in foraging decisions. Nature Communications 11, 3417 (2020). https://doi.org/ 10.1038/s41467-020-16964-5.</p>
+<p>Smith, M. A., Ghazizadeh, A. &amp; Shadmehr, R. Interacting Adaptive Processes with Different Timescales Underlie Short-Term Motor Learning. PLoS Biology 4, e179 (2006). https://doi.org/10.1371/journal.pbio.0040179.</p>
+<p>Turatto, M., Bonetti, F. &amp; Pascucci, D. Filtering visual onsets via habituation: A context-specific long-term memory of irrelevant stimuli. Psychonomic Bulletin &amp; Review 25, 1028-1034 (2018). https://doi.org/10.3758/s13423-017-1320-x.</p>
+<p>Pezzulo, G., Rigoli, F. &amp; Friston, K. J. Hierarchical Active Inference: A Theory of Motivated Control. Trends in Cognitive Sciences 22, 294-306 (2018). https: //doi.org/10.1016/j.tics.2018.01.009.</p>
+<p>Aberg, K. C. &amp; Paz, R. Average reward rates enable motivational transfer across independent reinforcement learning tasks. Frontiers in Behavioral Neuroscience 16, 1041566 (2022). https://doi.org/10.3389/fnbeh.2022.1041566.</p>
+<p>Enten, L. K. et al. Altered amygdala and striatal responsivity and prediction error encoding of temporal reward dynamics in post-trauma psychopathol- ogy. Neuropsychopharmacology 51, 904-915 (2026). https://doi.org/10.1038/ s41386-025-02276-z.</p>
+<p>Kolada, E. et al. The Human Centromedial Amygdala Contributes to Negative Prediction Error Signaling during Appetitive and Aversive Pavlovian Gustatory Learning. The Journal of Neuroscience 43, 3176-3185 (2023). https://doi.org/ 10.1523/JNEUROSCI.0926-22.2023.</p>
+<p>Belova, M. A., Paton, J. J., Morrison, S. E. &amp; Salzman, C. D. Expectation Mod- ulates Neural Responses to Pleasant and Aversive Stimuli in Primate Amygdala. Neuron 55, 970-984 (2007). https://doi.org/10.1016/j.neuron.2007.08.004.</p>
+<p>McHugh, S. B. et al. Aversive Prediction Error Signals in the Amygdala. Journal of Neuroscience 34, 9024-9033 (2014). https://doi.org/10.1523/JNEUROSCI. 4465-13.2014.</p>
+<p>Papini, M. R. et al. Frustrative Nonreward: Behavior, Circuits, Neurochemistry, and Disorders. The Journal of Neuroscience 44, e1021242024 (2024). https: //doi.org/10.1523/JNEUROSCI.1021-24.2024.</p>
+<p>Morillo-Rivero, L. E., Ibáñez-Molina, A. J. &amp; Torres, C. Successive negative contrast in humans: Dissociation between behavioral and affective measures of frustration. Learning and Motivation 70, 101634 (2020). https://doi.org/10.1016/j.lmot.2020.101634.</p>
+<p>Arjol, D., Agüera, A. D., Hagen, C. &amp; Papini, M. R. Frustrative nonreward: Detailed c-Fos expression patterns in the amygdala after consummatory suc- cessive negative contrast. Neurobiology of Learning and Memory 213, 107942 (2024). https://doi.org/10.1016/j.nlm.2024.107942.</p>
+<p>Trudel, C. et al. Boredom signals deviation from a cognitive homeostatic set point. Communications Psychology 3, 22 (2025). https://doi.org/10.1038/ s44271-025-00209-6.</p>
+<p>Tam, K. Y. Y. &amp; Inzlicht, M. Fast-forward to boredom: How switching behavior on digital media makes people more bored. Journal of Experimental Psychology: General 153, 2409-2426 (2024). https://doi.org/10.1037/xge0001639.</p>
+<p>Pickett, C. L., Gardner, W. L. &amp; Knowles, M. Getting a Cue: The Need to Belong and Enhanced Sensitivity to Social Cues. Personality and Social Psychology Bulletin 30, 1095-1107 (2004). https://doi.org/10.1177/0146167203262085.</p>
+<p>Wu, W., Huang, L. &amp; Yang, F. Social anxiety and problematic social media use: A systematic review and meta-analysis. Addictive Behaviors 153, 107995 (2024). https://doi.org/10.1016/j.addbeh.2024.107995.</p>
+<p>Akbari, M. et al. Fear of missing out (FoMO) and internet use: A comprehensive systematic review and meta-analysis. Journal of Behavioral Addictions 10, 879- 900 (2021). https://doi.org/10.1556/2006.2021.00083.</p>
+<p>Dora, J., Van Hooff, M., Geurts, S., Kompier, M. &amp; Bijleveld, E. Fatigue, bore- dom and objectively measured smartphone use at work. Royal Society Open Science 8, 201915 (2021). https://doi.org/10.1098/rsos.201915.</p>
+<p>Gioia, F., Rega, V. &amp; Boursier, V. Problematic Internet use and emotional dysregulation among young people: a literature review. Clinical Neuropsychiatry 18, 41-54 (2021). https://doi.org/10.36131/cnfioritieditore20210104.</p>
+<p>Somerville, L. H. The Teenage Brain: Sensitivity to Social Evaluation. Current Directions in Psychological Science 22, 121-127 (2013). https://doi.org/10.1177/ 0963721413476512.</p>
+<p>Kardan, O. et al. Differences in the functional brain architecture of sustained attention and working memory in youth and adults. PLOS Biology 20, e3001938 (2022). https://doi.org/10.1371/journal.pbio.3001938.</p>
+<p>Toth, R., Parry, D. &amp; Emmer, M. From Screen Time to Daily Rhythms: A Mixed Methods Study of Smartphone Use Among German Adults. Journal of Quantitative Description: Digital Media 5 (2025). https://doi.org/10.51685/jqd. 2025.019.</p>
+<p>Da Silva Pinho, A., Céspedes Izquierdo, V., Lindström, B. &amp; Van Den Bos, W. Youths&#x27; sensitivity to social media feedback: A computational account. Science Advances 10, eadp8775 (2024). https://doi.org/10.1126/sciadv.adp8775.</p>
+<p>Sawyer, S. M., Azzopardi, P. S., Wickremarathne, D. &amp; Patton, G. C. The age of adolescence. The Lancet Child &amp; Adolescent Health 2, 223-228 (2018). https://doi.org/10.1016/S2352-4642(18)30022-1.</p>
+<p>Peng, S. &amp; Bauldry, S. In-person social isolation in the age of smartphones: Examining age, period, cohort effects by gender. PLOS One 20, e0333493 (2025). https://doi.org/10.1371/journal.pone.0333493.</p>
+<p>Yu, R. P., Mccammon, R. J., Ellison, N. B. &amp; Langa, K. M. The relationships that matter: social network site use and social wellbeing among older adults in the United States of America. Ageing and Society 36, 1826-1852 (2016). https://doi.org/10.1017/S0144686X15000677.</p>
+<p>Esterman, M., Noonan, S. K., Rosenberg, M. &amp; DeGutis, J. In the Zone or Zoning Out? Tracking Behavioral and Neural Fluctuations During Sustained Attention. Cerebral Cortex 23, 2712-2723 (2013). https://doi.org/10.1093/cercor/bhs261.</p>
+<p>Fortenbaugh, F. C. et al. Interpersonal early-life trauma alters amygdala con- nectivity and sustained attention performance. Brain and Behavior 7, e00684 (2017). https://doi.org/10.1002/brb3.684.</p>
+<p>Martens, M. &amp; Van Gaeveren, K. Making the impossible possible: Leverag- ing built-in features for non-intrusive and accurate Apple Screen Time tracking through ASTER. Behavior Research Methods 58, 179 (2026). https://doi.org/ 10.3758/s13428-026-03065-2.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
