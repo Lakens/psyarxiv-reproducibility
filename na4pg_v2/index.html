@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Looping effects and the cognitive source of
+epistemic injustices: A simulation study</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Looping effects and the cognitive source of epistemic injustices: A
+simulation study
+</p>
+<p class="meta">
+2026-11-11 · Metacheck 0.4.3.27
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>16</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="na">Not applicable <span class="n">(16)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 45 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 45 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 45 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>ABSTRACT</h3>
+<p>Patient-clinician interactions are central to diagnosis and treatment in mental health care. They involve inferential processes grounded in patients&#x27; reports of symptoms and clinicians&#x27; interpretations of signs. These processes are liable to microdynamic looping effects that drive diagnostic belief formation. In facing the epistemic challenge of reaching a shared ascription of the patient&#x27;s condition, such looping effects can lead to misalignment and give rise to epistemic injustice if a credibility deficit exists between the patient and the clinician. In this paper, we use the active inference framework to develop a computational model of looping microdynamics that captures how patients and clinicians reciprocally interpret symptoms, attribute causes, and negotiate diagnostic categories over time. We present a simulation study showing how specific interactional patterns can amplify or mitigate credibility deficits, depending in part on clinicians&#x27; attributional attitudes toward patients&#x27; self-interpretations. Our results suggest that, in contexts of diagnostic disagreement, positive disconfirmationoffering an alternative explanatory framing rather than simply negating the patient&#x27;s perspective-may reduce the risk of epistemic injustice. Overall, the model highlights how looping microdynamics structure mutual belief formation in clinical encounters and how attention to these dynamics can support more epistemically responsible clinical communication.</p>
+<h3>1 INTRODUCTION</h3>
+<p>Looping effects can occur at many levels in mental health, psychiatry and psychology. They can occur in the construction of categories and concepts that become ways that people identify and understand themselves; in institutional practices that deploy diagnostic systems that shape illness experience; and in the dynamics of the clinical encounter (Brinkmann, 2005; Gillespie &amp; Wagoner, 2025; Kirmayer, 2026; Kirmayer &amp; Sartorius, 2007). This paper presents a simulation study of the microdynamics of looping effects (Gauld et al., 2025) on the process of belief formation as it occurs in the interaction between patients and clinicians, with a focus on diagnostic practice. It seeks to illustrate how looping microdynamics can engender situations that may lead to epistemic injustices (Fricker, 2007) in clinical practice.</p>
+<p>Our simulation employs the resources of active inference (Parr &amp; Pezzulohttps://paperpile.com/c/1lHXLs/jic5f 2025) , which offers a methodology to model the naturalistic process of belief formation and action selection. The results shed light on the ways in which particular patterns of interaction may contribute to epistemic injustice in clinical interaction (https://paperpile.com/c/1lHXLs/JGOi3/?prefix=cf. Colombo &amp; Fabryhttps://paperpile.com/c/1lHXLs/JGOi3/?prefix=cf 2021) , and on the potential impact of clinicians&#x27; attitudes and modes of response to patients&#x27; interpretation of symptoms, causal attributions and self-ascription of diagnostic labels.</p>
+<p>Studying the microdynamics of looping effects and their impact on belief formation processes is challenging, since they depend on interpersonal interactions that are socially and culturally situated and hence difficult or impossible to manipulate experimentally (Hacking, 2002 (Hacking, , 2004)). Simulation studies can provide insights that simplify the problem space to allow more targeted empirical studies. A growing number of scholars have advocated for the use of computational modeling in philosophy (Scheller et al., 2022; Thagard, 2018).</p>
+<p>Computational models can be used to reveal system dynamics that would otherwise be difficult to capture -e.g., the idea that mild in-group preference could generate major segregation patterns in society such as illustrated by Schelling&#x27;s model of segregation (Weisberg, 2013).</p>
+<p>In addition to clarifying how interactional dynamics can unfold, modeling provides a way to clarify some philosophical questions about social ontology (Epstein, 2025). As Hacking (2000) insisted, there may be many kinds of social construction. Following Epstein (2025) a theory of social construction must characterize the nature of the context, inputs, processes, and outcomes. &quot;If one does not have explicit account of the things that are doing the construction work, one does not really have a theory of social construction&quot; (p. 44).</p>
+<p>Constructing an explicit computational model compels us to specify these and allows us to explore the implications of alternate inputs, processes and outcomes. Moreover, the iterative nature of an interactional model can reveal emergent dynamics not apparent in considering a single conversation exchange or outcome.</p>
+<p>Our model borrows from Bayesian methods in computational psychiatry -specifically, computational phenotyping (Friston et al., 2014) -used to study mental disorders based on the production and manipulation of computational (neuro)phenotypes (Montague et al., 2012). By manipulating computational phenotypes, one can explore hypotheses, in silico, about lesions, pharmacology, and neurophysiology associated with mental disorders (Huys et al., 2015). Here, we adapt these methods to examine a dyadic social interaction. We formalise a computational relationship, whose dimensions and scope are defined in terms of parameters that describe the patient-clinician dyad, as well as the clinical setting itself. The approach we propose thus broadly coheres with formal work in social epistemology aiming at modelling processes of belief formation in social systems (e.g., Grim, 2019; Kirmayer, 2024). Our simulation is relevant for readers interested in the social epistemology of clinical encounters and supports the intuition that adopting a positive approach to challenging patients&#x27; beliefs -about their situation -can be done in a way that improves medical listening and consultation.</p>
+<p>Section 2 introduces the way concepts of looping microdynamics and epistemic injustices are operationalized in our model. Section 3 presents the simulation method. Section 4 presents the results. Section 5 discusses these results, their limitations, and their implications for clinical practice, and Section 6 concludes.</p>
+<h3>2. LOOPING EFFECTS AND EPISTEMIC INJUSTICES</h3>
+<p> &gt;LOOPING EFFECTS AND EPISTEMIC INJUSTICES</p>
+<h3>2.1 The microdynamics of looping effects</h3>
+<p>Mental health assessments involve communicative interactions between patients and clinicians. Like any interpersonal interaction, this process can change the cognition and experience of both interlocutors. In clinical settings, this interaction shapes the ways in which patients recollect and present their symptoms and distress -and the ways that clinicians respond. This interactional process may introduce biases that change patients&#x27; symptom presentations over time, sometimes in unpredictable ways. This can happen when clinicians emphasize certain aspects of the patient&#x27;s experience through questions (e.g., &quot;Can you tell me more about your fatigue?&quot;) and responses, which may be shaped by clinicians&#x27; theoretical orientation, models of psychopathology, or other aspects of their background (Kirmayer, 2025). The clinician&#x27;s questions may direct the patient&#x27;s attention to specific symptoms or illness schemas related to causal attributions or implicit models (e.g., &quot;Yes, now that I think about it, my fatigue is related to my backache and it&#x27;s especially bad on weekdays, when I am really stressed at work&quot;). This in turn may provide the patient with motivations to use local cultural idioms of distress to make sense of their experience, thus emphasizing a given configuration of the presentation often accompanied of an explanation or schema (e.g., &quot;I think I&#x27;m suffering from burnout&quot;) (Kirmayer &amp; Young, 1998; Macias-Velasquez et al., 2020).</p>
+<p>In his earlier work, Ian Hacking (1985) framed these self-constituting and vindicating effects of diagnostic practices in terms of a larger process that he termed the &quot;looping effect of human kinds&quot; (i.e., the fact that people change their self-ascription and experience in response to the categories and descriptions they live under, and the fact that these categories change, in turn, as a function of people&#x27;s subsequent (shared) experience). Such phenomena are typically studied by the social sciences and humanities (Hacking, 1996). In a later version of this thesis, Hacking (2000) defended a view of natural kinds that can interact with phenomena typically acting on human kinds (e.g., labelling). Though Hacking provided detailed historical studies of the looping effect in psychiatric phenomena (Hackinghttps://paperpile.com/c/1lHXLs/VF1H3+RBbca 1998a (Hacking, , 1998b)) , he was not primarily concerned with the mechanisms of looping. In a useful essay, he noted that looping processes involve large-scale discursive formations of power/knowledge; like those described by Foucault as well as the microdynamics of situated interpersonal interaction studied by sociologists like Erving Goffman (Hacking, 2004). These macro and micro dynamics interact by creating and (de)stabilizing categories in social and cultural institutions and practices.</p>
+<p>Building on this dual (macro/micro) view of looping effects, Gauld and colleagues (2025) proposed a mechanistic account -in the context of clinical interactions -that distinguishes two temporal scales of looping effects, according to which changes in patients&#x27; presentations at short time scales would be explained by &quot;microdynamic&quot; looping effects based on the capacity of patients to experience change in symptoms through processes of self-construal.</p>
+<p>Ensuing institutional nosological revision would be explained by &quot;macrodynamic&quot; looping effects on a longer time scale, based on the capacity of the medical institution to revise its nosology in response to clinicians&#x27; cumulative experience of new presentations emerging from communicative interactions. In their paper, Gauld and colleagues address the epistemic nature of these looping processes and the need to better understand the dynamics of looping in a clinical setting, since they may lead to epistemic injustices that disrupt the clinical relation and harm the patient.</p>
+<h3>2.2 Epistemic injustices</h3>
+<p>Fricker (2007) identified two types of epistemic injustice, testimonial and hermeneutical. We adopt Amandine Catala&#x27;s (Catala, 2025; Catala et al., 2021) terminological clarification and analysis of the theory of epistemic injustice according to which an epistemic injustice occurs when a person suffers the consequences of an undue credibility deficit (testimonial injustice) or of an undue intelligibility deficit (hermeneutical injustice). Testimonial injustices happen, for instance, when an interlocutor (here, the clinician) disregards the testimony of a contributor (e.g., failing to consult a patient who could competently contribute to the exchange). In certain circumstances, the situation is such that the contributor cannot even attempt to contribute. These are cases of &quot;silencing&quot;, or &quot;pre-emptive&quot; testimonial injustice.</p>
+<p>In turn, hermeneutical injustices happen when contributors either remain misunderstood by an interlocutor (i.e., self-to-others intelligibility) or fails to understand their own situation (i.e., self-to-self intelligibility) due to an intelligibility deficit. According to Catala (2025), sources of intelligibility deficits include the lack of concepts in the common pool of meaning making resources capturing the contributor&#x27;s experience, the rejection by the interlocutors of the meaning making resources of the contributor, or the misunderstanding by the locutor of existing meaning making resources.</p>
+<p>Below, we present simulations of patient-clinician interactions under conditions that feature a &quot;credibility deficit.&quot; The patient can contribute to the interaction, but their contribution has no effect on the clinician&#x27;s understanding of the patient&#x27;s situation, thereby reflecting a case of testimonial injustices, where the patient is not, overtly silenced or precluded from contributing, but where the effect of contribution is nullified, given the interactional setting.</p>
+<p>For the sort of Bayesian agents implemented here, this credibility deficit can lead to interactions posing risks of intelligibility deficits and associated hermeneutical injustices. For instance, the clinician may hear the patient say &quot;I am feeling sad&quot;, and respond &quot;No, what you experience is anxiety&quot;, thereby leading to a loss of confidence in the patient model, the model reflecting a belief of the sort &quot;Ah, OK, but then I&#x27;m not sure of what I feel anymore&quot;.</p>
+<p>Accordingly, in this simulation, the intelligibility deficit arises from the inability of the patient to contribute to the meaning-making process implicit in the patient-clinician interaction (e.g., the clinician failing to take seriously the patient&#x27;s resistance to their assessment). Practically, the patient model will suffer a credibility deficit in the sense that their testimonial contribution to the interaction will be attenuated under the conditions instantiating the credibility deficit. The consequence of this is that the shared reality between the clinician and the patient will become increasingly divorced from the patient&#x27;s interpretation of their own situation, thereby leading to an intelligibility deficit. Note, also, that credibility imbalances often are created by credibility gaps in which the credibility of the contributor is reduced, while that of the interlocutor is increased (Medina, 2011). In our simulation, there will be no increased credibility of the interlocutor under the credibility deficit conditions. Only a decrease of credibility on the side of the contributor.</p>
+<h3>3 METHOD</h3>
+<p>Our simulation aims to understand the mechanisms of looping microdynamics that underwrite joint inference based upon shared and communicated observations, as well as the consequence these microdynamics have on epistemic injustices in clinical context. To simulate the kind of belief updating implicated in looping microdynamics we will use the Bayesian mechanics afforded by active inference. In particular, we address the interpretative problem faced by doctors and patients resolved under a shared generative models or narratives and, crucially, a reciprocal influence of both participants in a dyadic interaction (Friston &amp; Frith, 2015; Frith &amp; Wentzer, 2013). This requisite reciprocity will be studied in terms of a credibility deficit in which the doctor fails to assign credibility or precision to the patient&#x27;s contribution exposing the patient to a risk of hermeneutical injustice.</p>
+<h3>3.1 The setup</h3>
+<p>The scenario we implement is an interaction between two mutually influencing cognitive agents engaged in communicative exchange. One agent represents the clinician, and the other represents the patient. The task of the two agents is to infer the category that fits the patient&#x27;s situation (e.g., diagnostic category A or B), and to predict the symptom associated with the category (e.g., reports of sadness or anxiety). For the patient, this corresponds to the &quot;subjective&quot; framing of their situation (e.g., &quot;I have A&quot;) and to reflecting upon their experience (e.g., &quot;I am sad&quot;). For the clinician, the inference corresponds to the &quot;subjective&quot; formulation of a preliminary diagnosis (e.g., &quot;The patient might have B&quot;), and to the &quot;subjective&quot; perception of symptoms (e.g., &quot;I see sadness&quot;).</p>
+<p>In our model, the diagnostic category must be inferred because it is a latent variable.</p>
+<p>Conversely, the symptom is something that is observed and shared through the patient&#x27;s selfreport, which forms the basis of diagnostic inference -and implicitly, a shared commitment between the patient and doctor to a common understanding of the symptoms at hand. We will also commit to the conventional clinical distinction between a &quot;symptom&quot; and a &quot;sign&quot;. A symptom is something the patient reports, whereas a sign is something that a clinician observes. The symptom is expected to track the underlying experience of the patient, while functioning as an indicator of the patient&#x27;s diagnostic category. However, in practice, there may be a mismatch between the reported symptom and the patient&#x27;s experience (e.g., as in the case of autistic masking or due to the clinician&#x27;s pre-theoretic assumptions). The model on offer in this paper makes the simplifying assumption that, from the point of view of the clinician, there is a lawful (i.e., deterministic) mapping between the experience and the symptom. By contrast, the mapping between symptoms and diagnostic categories is probabilistic as the model allows for uncertainty in the likelihood of each symptom given the diagnostic category.</p>
+<p>The mutual influence between the patient and the clinician occurs through the communicative interaction, or exchange of &quot;observable&quot; information mediated by an &quot;objective&quot; process that can be influenced by the actions of the patient and the clinician (Bruineberg et al., 2018). The objective process corresponds to the process generating observations in the context of an interaction between the patient and doctor. Thus, we will call this the &quot;interaction&quot; process.</p>
+<p>The interaction process includes the objective symptom-category likelihood mappings, about which both the patient and clinician have prior beliefs (called their subjective modelhttps://paperpile.com/c/1lHXLs/Y7f3b (Schwartenbeck &amp; Friston, 2016 ).</p>
+<p>An interactional process can be understood in terms of a shared generative structure that encodes probabilistic dependencies between inferred states and future observations, thus mediating the temporal coupling between (joint) belief updating, and subsequent symptom expression. Our model assumes that all patient-clinician interactions take place within this shared interaction process. In the case of the patient, the communicated information that shapes the interaction is about their symptom experience and their beliefs about the associated category (e.g., &quot;I think I have A because I am sad&quot;). For the clinician, the interaction process shaping communicative interaction involves confirming or contradicting the patient&#x27;s claim (e.g., &quot;A does not cause sadness&quot;).</p>
+<h3>3.2 The dynamics of the interaction</h3>
+<p>As a preliminary step, to characterize the convergence properties of the model, we simulated 1000 interactions (trials) per condition, for 9 different conditions (see below). We found empirically that a total of 1000 interactions were sufficient to differentiate results under all conditions and to observe convergence between the subjective models and the interaction process (&lt; 5% change in cross entropy). Each trial should be understood as an interaction exchange loop starting with the patient expressing their understanding of the situation, thereby modifying the interaction (i.e., observable) process, and to which the clinician responds, thereby modifying the interaction process in turn (see Figure 1 for a flowchart depicting these interactions).</p>
+<p>With each interaction, the patient provides the clinician with information through the selection of an action based on their subjective model, which updates the interaction process influencing subjective observations (e.g., through utterances, &quot;I think &#x27;A&#x27; causes my anxiety&quot;). In turn, depending on the conditions, the clinician&#x27;s reply will lead to a clinical emphasis or deemphasis of certain symptoms-category mappings (e.g.,&quot; &#x27;A&#x27; generally does/does not cause anxiety&quot;), which also changes the probabilistic structure of the presentation during the interaction (i.e., the interaction process) (see Figure 2).</p>
+<p>Importantly, the symptoms presented by the patient and clinician are biased towards the symptom that they each previously observed (e.g., I was sad/I saw sadness one minute ago, I expect to be/expect to see sadness now) and will shape the observation process accordingly.</p>
+<p>As such, the model assumes that symptoms are necessarily linked to an underlying generative process, without committing to the existence of an essentialist diagnostic category underlying their co-occurrence (e.g., depression as a latent entity behind sadness and anxiety) (Kendler et al., 2011).</p>
+<p>Our goal is to explore the effects that looping microdynamics have on the patterns of ascription between the patient and the clinician. Looping microdynamics may cause the patient and the clinician to reach (or failing to reach) a common ascription of the cause &quot;A&quot; or &quot;B&quot; of the patient&#x27;s symptom or may cause them to achieve (or fail to achieve) a common ascription of the patient&#x27;s experienced symptom &quot;sadness&quot; or &quot;anxiety&quot;. We further explore the contribution of looping microdynamics to epistemic injustices. A &quot;disagreement&quot; over the ascription of categories poses a risk of testimonial injustice (e.g., &quot;I think I have A&quot;, &quot;No, you have B&quot;, &quot;Yet I really think there is something like A going on&quot;). In turn, a &quot;mismatch&quot; between the patient&#x27;s reported experience and the clinician&#x27;s symptom ascription poses a risk of hermeneutical injustice (e.g., &quot;I am feeling sad&quot;, &quot;No, this is anxiety&quot;, &quot;Ah, OK, but then I&#x27;m not sure of what I feel anymore&quot;). We simulate how these risks may be exacerbated in situations of credibility (and intelligibility) deficit on the part of the patient.</p>
+<p>In summary, we present a minimal set up to model dyadic exchanges in a patient-clinician context in which the (objective) probability of the patient presenting with a particular symptom or sign, given their clinical diagnosis, depends upon the exchange between the patient and clinician, under their (subjective) generative models. This setup induces a circular causality characteristic of looping microdynamics which allows the patient-clinician dyad to co-construct an ontology -e.g., through the tendencies of diagnostic categories to elicit certain symptoms and signs (Kotov et al., 2017). Simulation Flowchart representation of one interaction &quot;loop&quot; (1 trial). Patient and clinician models are &#x27;subjective models&#x27;, whereas the model for the interaction environment is the &#x27;interaction process&#x27;. The subjective models (i.e., the generative models of patient and clinician) both interact via the interaction process and influence that process. The observations generated by the subjective models is thus the result of a mixture of the interaction process and the two subjective models. The subjective models comprise 1 hidden state factor (F) and 2 observation modalities (M). States in F correspond to the diagnostic categories A and B and &quot;start&quot; state for the decision. The first modality M1, is the &quot;what&quot; modality, and corresponds to what can be observed under each of the possible states, namely a &quot;sadness&quot; symptom, an &quot;anxiety&quot; symptom, or the observation that one is just at the start of the exchange. This observation can be regarded as a clinical &quot;symptom&quot; modality. The second modality M2, is the &quot;where&quot; modality, and corresponds to the observation of &quot;where&quot; the patient is (i.e., at the start state, the A state, or the B state). The interaction begins with (0) the patient inferring the category to which he belongs, given his inferred psychological state (e.g., &quot;I think I have A/B&quot;) and the associated symptom (e.g., &quot;I am sad&quot;). For indexical clarity, we will refer to the patient&#x27;s model as &quot;his&quot; and the clinician&#x27;s model as &quot;her&quot;. (1) During the interaction, the patient&#x27;s testimony increases or decreases the true probability of category-presentation (i.e., state-outcome) mapping (i.e., likelihood) in the interaction process (e.g., increasing the probability of reporting &quot;sad&quot; given the patient is in diagnostic category A). (2) At the beginning of the interaction, all category-symptom mappings in the interaction process are similarly probable. The patient&#x27;s presentation, however, changes those probability mappings (e.g., a symptom report of &quot;anxiety&quot; is now more probable than &quot;sad&quot;, given diagnostic category A). Start A B 0 1 2 3 4 model), and upon observing signs, the clinician in turn infers the diagnostic category (i.e., hidden state) to which the patient belongs.</p>
+<p>(4) Based on her beliefs, the clinician interacts with the patient and may or may not emphasize/de-emphasize aspects of the patient&#x27;s experience (e.g., by saying that &quot;A/B rarely causes sadness/anxiety&quot;). The clinician&#x27;s statements then change probabilities in the interaction process.</p>
+<h3>3.3 The models</h3>
+<p>Within clinical reasoning, the processes responsible for hypothesis generation, or the making of a diagnosis can be cast as inferential processes, such as deductive and inductive reasoning (e.g., simple induction and abduction), which is supported by rule-based and causal reasoning (Corrao &amp; Argano, 2022; Ledley &amp; Lusted, 1959; Stanley, 2019; Stanley &amp; Campos, 2013).</p>
+<p>As such, they may rest on different heuristics (i.e., prior beliefs) that entail cognitive biases, such as when employing &quot;fast-thinking&quot; strategy (Croskerry, 2009; Hughes et al., 2020). For the patient, inference within the context of our simulation is also characterized by inductive processes that subserve attributional processes that involve causal reasoning (Kirmayer et al., 1994). In the situation we model, this may be viewed as inferential reasoning from experienced somatic and psychological evidence of one&#x27;s health state, to a narrative framing of one&#x27;s situation (e.g., by leveraging cultural explanatory models and folk interpretation of medical concepts) (Kirmayer &amp; Bhugra, 2009).</p>
+<p>The model on offer is based in active inference and therefore implements both deductive (i.e., inference based on evidence, or Bayesian update) and abductive aspects (i.e., inference to the best explanation, or model selection) of diagnostic reasoning using a Bayesian scheme that performs inference under prior beliefs (e.g., about applicable diagnostic categories) based on observed evidence (e.g., observed symptoms; for a detailed discussion, see Friston et al., 2025). Our simulation employs an active inference model of action-perception loops and learning under active inference (Da Costa et al., 2020). Using coupled active inference under Partially Observable Markov Decision Processes (POMDPs), we simulated a series of 1000 interactions such as depicted in Figure 1. A POMDP is a mathematical model used to describe decision-making scenarios where the agent has incomplete information about hidden or latent states generating observations. Unlike a standard MDP model (i.e., a model where the agent has full knowledge of the current state), a POMDP includes observations that provide partial insights into the state, requiring the agent to maintain a belief distribution over possible states.</p>
+<p>This model is useful for simulating real-world clinical situations where uncertainty and partial knowledge play a role in decision-making. The full parametrization of our POMDPs can be found in the code in the appendix.</p>
+<p>We apply a variational free energy minimization for state inference and expected free energy minimization for action policy selection using the function spm_MDP_VB_X (Figure 2) (Friston et al., 2017). The subjective and interaction processes are initialized with full uncertainty. The key to our simulation is the turn-taking interaction implemented as a &quot;for loop&quot;. The &quot;for loop&quot; responsible for the simulated interaction is available in appendix, and subjective likelihood mapping parameterized in terms of Dirichlet counts, at trial i. These counts are updated on the basis of experience and can therefore be learned. In contrast, MDP.A(i) encodes the likelihood mapping of the interaction process as a categorical distribution (obtained by normalizing the Dirichlet parameterization, so that the probability of any observations given a particular state sums to one). The MDP.C encodes the prior preference or probability of different outcomes in each modality and therefore keeps a record of the prevalence of various symptoms and signs that are likely to be encountered.</p>
+<p>At each time step, both agents retain and carry forward their previously learned beliefs about how hidden states generate observations. Each agent then acts and infers on the basis of its current generative model, producing a world-impacting action in the form of an enacted observation-state pairing, changing the probabilistic mappings in the interaction process. This leads to differentiated patterns of attunement to the true probability mapping in the interaction process between the patient&#x27;s symptoms (i.e., observations) and categories (i.e., states) as the patient presents his symptoms and signs, and as the clinician responds. ! ! ! ! ! ! B B D A A A G 1 2 3 4 ! &quot; ! ! &quot; = # right-hand side refer to parameters and circle nodes refer to variables.</p>
+<p>The filled circle nodes are observed variables, which here are the symptoms and signs witnessed by patient and clinician. The steps of the algorithms for state inference are as follows. An observation o_t is received and indexes a row in the likelihood matrix denoted A (cyan square); the initial states vector D is combined with the different policy-dependent transition matrices B and the indexed likelihood following the equation ( 1) to estimate the posterior distribution over states given the current time of observation. The A and C matrices are used in equation ( 2) for the state inference at subsequent time points. This is repeated iteratively until convergence of the posterior is reached for all time points. The steps of the algorithms for policy selection are as follows. Equation ( 3) is used to generate a vector of expected free energy values G for all action policies, according to the prior preference C. Expected free energy can be decomposed into two terms, &quot;risk&quot; and &quot;ambiguity&quot;. Risk is the divergence between the preferences and the predictive posterior over future outcomes. Ambiguity is the conditional entropy of possible observations under possible hidden states. (4) The prior beliefs over policies (pi) is the softmax (sigma; i.e., normalized exponential) of G. The policies with the least G are selected by the agent, as they minimize risk and ambiguity. Note that the model depicted here plans over 3 time points. Our model plans over 2.</p>
+<h3>3.4 The conditions</h3>
+<p>We implemented 9 conditions -including a baseline -to manipulate the way the patient, and clinician can influence the interaction process directly, and thereby influence each other&#x27;s subjective model indirectly. Manipulations under each condition are meant to test the influence of the microdynamics of looping effects on symptom attribution and diagnostic alignment between patients and clinicians.</p>
+<p>Conditions 2-5 are &quot;looping&quot; conditions as they involve influences of both the patient and the clinician on the interaction process. Microdynamic looping effects are driven by patterns of emphasizing and de-emphasizing symptom-category mappings in the interaction process, where deemphasizing means acting -either through behavioral manifestation or speechso as to decrease the probability of a particular symptom in the interaction process (i.e., decreasing the Dirichlet counts in the likelihood mappings in Box 1 by multiplying by .25), and where emphasizing means increasing the Dirichlet counts (i.e., by 2.5).</p>
+<p>Conditions 6-9 are &quot;credibility deficit&quot; conditions wherein the patient&#x27;s ability to modify the interaction process is attenuated (from 2.5 to 1). The baseline (C1) involves no influence from either side.</p>
+<h3>C2 -Disconfirmation through de-emphasis, or &quot;negative disconfirmation&quot;:</h3>
+<h3>C3 -Disconfirmation through emphasis, or &quot;positive disconfirmation&quot;:</h3>
+<p>In C3 the patient de-emphasizes the likelihood of the interaction process matching his inferred state and observation (e.g., &quot;Dr., I don&#x27;t think A caused my anxiety&quot;). In response, the clinician emphasizes the likelihood mapping of the interaction process matching her inferred state and observation (e.g., &quot;Well, A usually causes anxiety&quot;).</p>
+<h3>C4 -Confirmation through emphasis, or &quot;positive confirmation&quot;:</h3>
+<p>In C4, both the patient and the clinician emphasize the interaction process (e.g., &quot;Dr., I think A caused my anxiety&quot;; &quot;Yes, A usually causes anxiety&quot;).</p>
+<h3>C5 -Confirmation through de-emphasis, or &quot;negative confirmation&quot;:</h3>
+<p>In C5 both the patient and the clinician de-emphasize the interaction process (e.g., &quot;Dr., I don&#x27;t think A caused my anxiety&quot;, &quot;Yes, A rarely causes anxiety&quot;).</p>
+<p>C6 to C9 are the same as C2 to C5, except that the patient is subject to the credibility deficit described above.</p>
+<h3>4 RESULTS</h3>
+<h3>4.1 Patient-clinician ascription and looping microdynamics</h3>
+<p>To capture the effect of looping microdynamics on patient-clinician ascription, we measured the number of times the patient and the clinician agreed to elect A or B as the cause of one of the two possible symptoms (i.e., sad or anxious), and the extent to which the patient and the clinician matched in their experience and assessment of the symptoms. Thus, we operationalized the concept of patient-clinician ascription as patterns of agreements and disagreements over the causes (diagnostic categories A or B) and matches and mismatches over the experience and perception of symptoms (sad or anxious).</p>
+<p>Figure 3 depicts the baseline results and the 4 possible patterns of ascription that were observed over the course of the 1000 interactions: (1) Matched agreement: Patient and clinician select the same cause, category &quot;A&quot; or &quot;B&quot;, and observe the same symptom (e.g., both infer that the patient presents with anxiety caused by A): an adolescent reports anxiety when leaving home for school, attributing it to separation from their parents; the clinician identifies the same anxiety symptoms and agrees with the patient&#x27;s interpretation that separation could be the primary source of distress.</p>
+<p>(2) Mismatched agreement: Patient and clinician select the same cause but observe a different symptom (e.g., even though we are not seeing the same symptom, we think it is caused by A): a patient experiencing depression reports persistent fatigue, and the clinician identifies irritability as the most prominent symptom; although they emphasize different manifestations, both attribute them to the same depressive condition.</p>
+<p>(3) Matched disagreement: Patient and clinician select different causes but observe the same symptoms (e.g., we both see anxiety, but we believe it has different causes): a patient reports concentration difficulties and attributes them to ADHD; the clinician recognizes the same attentional difficulties but considers anxiety a more plausible explanation. Both agree on the symptom while disagreeing on its underlying cause. 5 10 15 20 25 30 0.5 1 1.5 2 2.5 3 3.5 4 5 10 15 20 25 30 0.5 1 1.5 2 2.5 3 3.5 4 Policy uncertainty Policy certainty π u1=start;u2=start = 1 π u1=start;u2=categoryA = 2 π u1=start;u2=categoryB = 3 B A B A B A Selected policies (y axis) Same presentation; Same decision (unbiased agreement) Different presentation; Same decision (biased agreement) Behavioral measurements Same presentation; Different decision (unbiased disagreement) Different presentation; Different decisions (biased disagreement) 5 10 15 20 25 30 0.5 1 1.5 2 2.5 3 3.5 4 5 10 15 20 25 30 0.5 1 1.5 2 2.5 3 3.5 4 Dialogical baseline Clinical baseline 62% 68% 65% 56% Client Clinician Client Clinician Outcome&#x27;s observation rate (presentation) Anxiety Sadness A B A B A B A B match agreement: symptom match, category agreement policy prior (MDP.P) u1,u1 u1,u2 u1,u3 mismatch agreement: symptom mismatch, category agreement match disagreement: symptom match, category agreement mismatch disagreement: symptom mismatch, category disagreement sadness anxiety the symptom that the patient experienced and that both agree on the case of that symptom.</p>
+<p>Yellow bars indicate that the symptom perceived by the clinician differed from the one experienced by the patient, but that they nonetheless agreed on the cause. Red bars indicate that the patient and the clinician respectively experienced and perceived the same symptom, yet disagreed on the cause. Black bars indicate that the clinician failed to perceive the symptom experienced by the patient, and that the patient and the clinician disagreed on the cause. Bottom right panel: Depiction of the three possible policies (stay, A, B), and of the probability gradient (1 white, 0 black) for the prior beliefs over policies. Upper left panel: Patterns of ascription over the 1000 baseline trials, or interaction. The top plot represents the clinician&#x27;s subjective model&#x27;s outputs (top gradient A, bottom gradient B), the middle plot represents the patterns of agreement observed in the interaction process standing for the interview setting, and the bottom plot represents the patient&#x27;s subjective model outputs. Upper right panel: Above, percentages of ascription patterns over the 1000 trials. Below, cross entropy between the subjective models of the clinician and the interaction process (red), and cross entropy between the patient&#x27;s subjective model and the interaction process (blue).</p>
+<p>Table 1 shows the results under each condition, with the frequencies in percentages. The figures for each condition can be found in the appendix.</p>
+<h3>Matched agreement:</h3>
+<p>Positive confirmation (C4) yielded the greatest increase in matched agreements, along with positive confirmation and disconfirmation (C7-8) under the credibility deficit condition.</p>
+<h3>Mismatched agreement:</h3>
+<p>Positive confirmation under credibility deficit (C8), along with positive confirmation (C4) and positive disconfirmation under credibility deficit (C7), yielded the greatest decrease in mismatched agreements.</p>
+<p>Matched disagreement: Most of the conditions yielded a decrease in match disagreements.</p>
+<p>Mismatched disagreement: Similarly, most of the conditions yielded a decrease in mismatched disagreements.</p>
+<p>Overall, positive confirmation (C8) and disconfirmation (C7) under a credibility deficitalong with positive confirmation (C4) in the absence of credibility deficit -yielded the most increase in matched agreement, and the greatest decrease in the other ascription patterns.</p>
+<h3>4.2 Epistemic injustices and looping microdynamics</h3>
+<p>Testimonial injustices primarily arise from persistent disagreements over causal attributions, whereas hermeneutical injustices are more likely to emerge from sustained mismatches between patients&#x27; lived symptom experience and clinicians&#x27; perceptual and interpretative frameworks. Accordingly, in a situation of credibility deficit, the disconfirmation of the patient&#x27;s beliefs about the cause of their symptoms can lead to disagreements posing risks of testimonial injustices. Disconfirmation under credibility deficit can also lead to a mismatch in symptom experience and perception posing additional risks of hermeneutical injustices.</p>
+<p>Overall, we assume that epistemic injustice causing harm will tend to happen in disconfirmation conditions. We thus looked at which of the disconfirmation conditions yielded the most increase (or least decrease) in mismatch, the most increase (or least decrease) in disagreements, and the most increase (or least decrease) in mismatch and disagreements, when compared to baseline. We also looked at which of the disconfirmation conditions yielded the best results in terms of match agreements. Table 2 compares the disconfirmation conditions 2 and 3 with the disconfirmation conditions under credibility deficit 6 and 7 relative to the baseline. We found that in the absence of a credibility deficit, the disconfirmation pattern that leads to the greatest increase in matched agreement is the &quot;negative disconfirmation&quot; (C2). But when in a situation of credibility deficit, the disconfirmation patterns that yielded the greatest increase in matched agreement was the positive one (C7). We found that in the absence of a credibility deficit, negative disconfirmation yielded the least increase in mismatches. In turn, in the presence of a credibility deficit, positive disconfirmation yielded the most decrease in mismatches. In the absence of a credibility deficit, both disconfirmation patterns reduced matched and mismatched disagreements to the same degree (1.8% and 1.5% for both C2 and C3). In the presence of a credibility deficit, positive disconfirmation yielded a much greater decrease in both forms of disagreement than negative disconfirmation (0.1% and 0.1% for C7, versus 26.2% and 23.6% for C6).</p>
+<p>Because of the separation between subjective and interaction processes in our simulation, and because of the capacity of subjective models to influence the interaction process directly and the subjective models indirectly, we could track the influence of an agent&#x27;s subjective model on the interaction process, and on the partner&#x27;s subjective model, coupled to it via the interaction process. We did this by evaluating the evolution of the cross entropy between the likelihoods of the subjective models (the predictive models) and the interaction process (the true distribution) over the 1000 interactions (Figure 4). Trends in the absence of credibility deficit (Figure 4, A,C) show a balanced interaction between the patient (blue) and the clinician (red), each in turn influencing the interaction process directly and each other indirectly. The pattern is then one where the mutual influence allows for an oscillation and synchronization between the two subjective models. In situation</p>
+<h3>Negative invalidation</h3>
+<p>Positive invalidation</p>
+<p>No credibility deficit Credibility deficit A B C D of credibility deficit and negative disconfirmation (figure 4, B), the pattern is one where the clinician (red) manages to &quot;pull&quot; the statistics of the interaction process in the direction of its subjective beliefs, and where the patient (blue) oscillates; coming in and out of synchronization with the interaction process, through a trajectory of increase and then flattening out of cross entropy. Under credibility deficit with positive disconfirmation (figure 4, D), both patient and clinician follow a smooth trajectory of increase and then flattening of cross entropy, after an initial common dip in the first couple of trials.</p>
+<h3>5 DISCUSSION</h3>
+<h3>5.1 Implications of the Simulation</h3>
+<p>Recognizing that failure to reach agreement on the patient&#x27;s condition may reflect divergent perspectives or the lack of adequate communication between patient and clinician (Heritage &amp; Maynardhttps://paperpile.com/c/1lHXLs/c8BYm 2006) , we presented a model to explore the effect of the microdynamics of looping effects on the alignment of patient-clinician ascription, and their contribution to epistemic injustices using active inference. Tracking the way looping microdynamics drives the mutual influence of patients&#x27; and clinicians&#x27; perspectives is of central importance to identifying successful communication and clinical intervention. We simulated patient and clinician communicative interaction during interactions under 9 different conditions, including a baseline. We compared the frequencies of the &quot;patterns of ascription&quot; generated by those microdynamics.</p>
+<p>We found that positive confirmation (C8) and positive disconfirmation (C7) under credibility deficit -as well as positive confirmation (C4) in the absence of credibility deficit -yielded the best results with respect to matched agreements. While disagreements and mismatches are part of ordinary clinical interactions, reaching a common causal attribution may be beneficial in certain contexts, particularly when developing a shared diagnostic formulation or negotiating treatment decisions. However, such convergence is not necessarily a therapeutic goal in itself. For instance, in acceptance and commitment therapy (ACT), patients and clinicians may pursue shared therapeutic goals while maintaining different explanations of psychological distress (Hayes et al., 2006). Similarly, in the management of medically unexplained symptoms and functional disorders, improving functioning and reducing distress may take precedence over reaching explicit agreement on the underlying causes of symptoms (Kirmayer et al., 2004; Henningsen et al., 2018). Moreover, consensus itself may sometimes conceal epistemic injustice (e.g., a patient may adopt the clinician&#x27;s interpretation of their symptoms because of the clinician&#x27;s perceived authority, even though their own experience remains insufficiently acknowledged). This is effectively what happens in condition C7, where 99.6% matched agreement is reached due to the fact that the patient&#x27;s credibility is vitiated. Thus, matched agreement should be understood as an interactional outcome whose clinical and epistemic value depends on the context.</p>
+<p>To examine whether situations in which patients are invalidated in their beliefs and experience may pose enhanced risks of epistemic injustice, we explored how disconfirmation would fare under conditions of credibility deficit. Interestingly, there was an inverse relationship between negative and positive disconfirmation depending on whether or not a credibility deficit was at play. The best outcomes in terms of matched agreements, in the absence of credibility deficit, were generated by negative disconfirmation (C2), whereas the best outcomes in matched agreements in the presence of a credibility deficit were produced by positive disconfirmation.</p>
+<p>With respect to the risks of testimonial injustice (i.e., risk of category disagreement when invalidating a patient under a credibility deficit), positive disconfirmation was the least risky approach. With respect to risks of hermeneutical injustices (i.e., risks of symptom perception mismatches when invalidating a patient under a credibility deficit), positive disconfirmation was also the least risky approach. With respect to combined risks (i.e., risks of symptom perception mismatches and category disagreements when invalidating a patient under a credibility deficit), positive disconfirmation was also the least risky approach.</p>
+<p>The main lesson of our study is that in situations of disagreement in which the patient faces a credibility deficit, the clinical approach that minimizes the risks of causing epistemic harm while promoting matched agreement with the patient is that of positive disconfirmation (e.g., &quot;No, it is A that usually causes anxiety&quot;) rather than that of negative disconfirmation (e.g., &quot;No, B does not usually cause anxiety&quot;). This interactional effect was revealed by a simple approximate Bayesian update rules in the context of a computer simulation. Of course, its credibility depends on the adequacy of our model of looping microdynamics and belief formation under active inference.</p>
+<h3>5.2 Limitations</h3>
+<p>This work has several technical, conceptual, and clinical limitations. It relies on a (simplified) active inference architecture with a restricted state-space. These choices favor transparency and analytical control, to isolate and examine the microdynamics of looping effects without mixing them with higher order sources of variability. Conceptually, the model presupposes a set of candidate causes (A, B) and treats symptoms (and signs) as observable cues probabilistically related to those causes. But this does not imply an essentialist view of psychiatric disorders. Symptoms are understood as any expressed or observed indicators that may support a diagnostic interpretation, which allows the model to remain compatible with non-nosological but pluralistic accounts of psychiatric classification (even though the space of causes is fixed). Clinically, the model should be understood as a proof of concept rather than a realistic simulation of clinical encounters. By abstracting away from unexpressed symptoms and individual cognitive biases, we can clarify how looping effects can arise from minimal interactional structures, before reintroducing additional layers of clinical complexity in potential subsequent works. Additionally, people may hold multiple attributions with different levels of commitment according to past illness experience and symptoms models (Kirmayer, 2026; Kirmayer et al., 1994; Kirmayer &amp; Robbins, 1991). It is not clear that our current description of attribution (e.g., P(sad | A) vs. P(sad | B)) is sufficient to capture such multiple attributions. Models representing attribution with tensors may be suitable for achieving this (e.g., P(sad | A,B). 6 CONCLUSION As Hacking emphasized, classifications in the human sciences can interact with the people classified, thereby reshaping self-understandings, behaviors, and subsequent classifications through looping effects. We illustrated how, at the microdynamics level, such looping effects shape clinical interactions. Our simulations made these looping dynamics explicit by modeling how clinicians&#x27; responses, interpretive stances, and diagnostic framings feed back into patients&#x27; perceived symptoms, causal attributions, and self-ascription.</p>
+<p>Although a computational model could never capture all the complexity of looping dynamics, it can capture some of their foundational principles, allowing us to explore how small, systematic differences in interaction parameters can generate qualitatively different epistemic outcomes over time. These outcomes can then inform our intuitions about the driving forces of the modelled system. Indeed, our approach to looping microdynamics supports the intuition that adopting a positive approach -when disconfirming during medical listening -is likely beneficial in clinical exchanges, particularly when patients face credibility deficits. Listening is central to the relational logic of medical consultation and involves active engagement to elicit symptom and illness narratives (Keller &amp; Carroll, 1994).</p>
+<p>This can be done by restating, paraphrasing and summarizing the patient&#x27;s discourse (Culley &amp; Bond, 2011). Active listening involves producing cues that indicate when the clinician is paying greater attention to the details of the patient&#x27;s story (e.g., body language, condition related worries that may be raised, refusal to provide further details, etc.).</p>
+<p>Listening to the implicit assumptions of one&#x27;s own diagnostic line of inquiry while understanding how it may influence the patient&#x27;s response provides a way to connect with the patient and recognize their concerns. This points to the larger issue that assessment is not just about diagnosis but establishing an alliance and understanding the patient&#x27;s predicament.</p>
+<p>This can be done by deploying specific patterns of listening, which may result in listening trajectories that depart from the expected consultation trajectory (Cocksedge &amp; May, 2005).</p>
+<p>Narrative approaches in clinical care emphasize listening to the broader context of patients&#x27; experience in terms of their autobiography, lifeworld, and current concerns (Clark &amp; Mishler, 1992; Kirmayer et al., 2025). This may provide rich resources for reframing illness explanations in ways that are epistemically compelling and resonant for patients.</p>
+<p>Active listening in clinical interaction must also lead to finding a diagnosis that is consistent with clinical knowledge and that reflects the patient&#x27;s experience. This involves confirming and disconfirming aspects of patients&#x27; interpretation of events, synthesizing information by linking symptoms to diagnostic categories, discussing the diagnosis transparently, in a collaborative process in which the clinician is flexible and able to re-evaluate and adjust the formulation based on new information. This interaction can ensure that the diagnosis reflects both clinical observations and the patient&#x27;s lived experience. In situations of credibility deficit, additional attention should be paid to the patterns of listening and responding being deployed, as some strategies may pose enhanced risks of epistemic harm, and may lead to a failure to remain responsive to the patient&#x27;s experience.</p>
+<p>Work on this article was supported by a European Research Council Grant (XSCAPE) ERC-2020-SyG 951631 (AC) and a grant from the CFREF Healthy Brains, Healthy Lives Initiative (LK &amp; AC); KF is supported by funding from the Wellcome Trust (Ref: 226793/Z/22/Z).</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Simulation Flowchart representation of one interaction &quot;loop&quot; (1 trial). Patient and clinician models are &#x27;subjective models&#x27;, whereas the model for the interaction environment is the &#x27;interaction process&#x27;. The subjective models (i.e., the generative models of patient and clinician) both interact via the interaction process and influence that process. The observations generated by the subjective models is thus the result of a mixture of the interaction process and the two subjective models. The subjective models comprise 1 hidden state factor (F) and 2 observation modalities (M). States in F correspond to the diagnostic categories A and B and &quot;start&quot; state for the decision. The first modality M1, is the &quot;what&quot; modality, and corresponds to what can be observed under each of the possible states, namely a &quot;sadness&quot; symptom, an &quot;anxiety&quot; symptom, or the observation that one is just at the start of the exchange. This observation can be regarded as a clinical &quot;symptom&quot; modality. The second modality M2, is the &quot;where&quot; modality, and corresponds to the observation of &quot;where&quot; the patient is (i.e., at the start state, the A state, or the B state). The interaction begins with (0) the patient inferring the category to which he belongs, given his inferred psychological state (e.g., &quot;I think I have A/B&quot;) and the associated symptom (e.g., &quot;I am sad&quot;). For indexical clarity, we will refer to the patient&#x27;s model as &quot;his&quot; and the clinician&#x27;s model as &quot;her&quot;. (1) During the interaction, the patient&#x27;s testimony increases or decreases the true probability of category-presentation (i.e., state-outcome) mapping (i.e., likelihood) in the interaction process (e.g., increasing the probability of reporting &quot;sad&quot; given the patient is in diagnostic category A). (2) At the beginning of the interaction, all category-symptom mappings in the interaction process are similarly probable. The patient&#x27;s presentation, however, changes those probability mappings (e.g., a symptom report of &quot;anxiety&quot; is now more probable than &quot;sad&quot;, given diagnostic category A). (3) Based on her prior knowledge (i.e., subjective</p>
+<p>Figure 1. Simulation Flowchart representation of one interaction &quot;loop&quot; (1 trial). Patient and clinician models are &#x27;subjective models&#x27;, whereas the model for the interaction environment is the &#x27;interaction process&#x27;. The subjective models (i.e., the generative models of patient and clinician) both interact via the interaction process and influence that process. The observations generated by the subjective models is thus the result of a mixture of the interaction process and the two subjective models. The subjective models comprise 1 hidden state factor (F) and 2 observation modalities (M). States in F correspond to the diagnostic categories A and B and &quot;start&quot; state for the decision. The first modality M1, is the &quot;what&quot; modality, and corresponds to what can be observed under each of the possible states, namely a &quot;sadness&quot; symptom, an &quot;anxiety&quot; symptom, or the observation that one is just at the start of the exchange. This observation can be regarded as a clinical &quot;symptom&quot; modality. The second modality M2, is the &quot;where&quot; modality, and corresponds to the observation of &quot;where&quot; the patient is (i.e., at the start state, the A state, or the B state). The interaction begins with (0) the patient inferring the category to which he belongs, given his inferred psychological state (e.g., &quot;I think I have A/B&quot;) and the associated symptom (e.g., &quot;I am sad&quot;). For indexical clarity, we will refer to the patient&#x27;s model as &quot;his&quot; and the clinician&#x27;s model as &quot;her&quot;. (1) During the interaction, the patient&#x27;s testimony increases or decreases the true probability of category-presentation (i.e., state-outcome) mapping (i.e., likelihood) in the interaction process (e.g., increasing the probability of reporting &quot;sad&quot; given the patient is in diagnostic category A). (2) At the beginning of the interaction, all category-symptom mappings in the interaction process are similarly probable. The patient&#x27;s presentation, however, changes those probability mappings (e.g., a symptom report of &quot;anxiety&quot; is now more probable than &quot;sad&quot;, given diagnostic category A). (3) Based on her prior knowledge (i.e., subjective allows the simulated patient and clinician to infer, through turn-taking, their subjective beliefs about the true mapping relation between presentation and category encoded by the interaction process, and to shape the interaction process accordingly (see Box 1 for pseudo code) and for an exemplar application of turn-taking in communicative exchange, see Friston &amp; Frith, 2015) Box 1.</p>
+<p>For loop pseudo code FOR i = 2 TO 1000: • Specify PATIENT MDP.a(i) with MDP.a(i-1) • Replace PATIENT MDP.A(i) with CLINICIAN MDP.A(i-1) • Run PATIENT MDP • Index and update PATIENT MDP.A given inferred state and observation • Index and update PATIENT MDP.C given the inferred observation • Replace CLINICIAN MDP.A(i) with PATIENT updated MDP.A(i) • Specify CLINICIAN MDP.a(i) with MDP.a(i-1) • Run CLINICIAN MDP • Index and update CLINICIAN MDP.A given inferred state and observation • Index and update CLINICIAN MDP.C given the inferred observation END FOR In this pseudo-code scheduling of belief updating and learning, MDP.a(i) encodes a</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Subjective generative model for state inference and policy selection in active inference. The equations in this figure can be implemented using MATLAB routines of the SPM 12 toolbox, and refer to the notation used in(Smith et al., 2022) (e.g., The dagger next to B and T next to A referring to transposition; (•) referring to a dot product; tau being a time index -past, present, or future; &quot;diag&quot; referring to the MATLAB function diag() indexing and rearranging the diagonal elements of a matrix in a row vector. The square nodes on the</p>
+<p>In C2 the patient emphasizes (by 2.5) the likelihood corresponding to a presented symptom and inferred state, or cause (e.g., &quot;Dr., I think B caused my anxiety&quot; = P(anxiety | B) times 2.5), whereas the clinician&#x27;s response de-emphasizes the mapping between the symptom she perceives and the cause she associates with it (e.g., &quot;Well, B rarely causes anxiety&quot; = P(anxiety | B) times .25). Note that the likelihood updated by the clinician can be different from the likelihood updated by the patient (e.g., P(anxiety | A) instead of P(anxiety | B)).</p>
+<h3>( 4 )</h3>
+<p>Mismatched disagreement: Patient and clinician select different causes and observe different symptoms (e.g., I see anxiety caused by A, you see sadness caused by B): a patient describes anxiety about social interactions as the main reason for avoiding work, attributing their difficulties to social anxiety. The clinician instead identifies loss of interest and depressive symptoms as the predominant manifestations, favoring an interpretation in terms of depression. Patient and clinician thus differ both in symptom identification and causal attribution.</p>
+<h3>Figure 3.</h3>
+<p>Figure 3. Behavioral trajectories over 1000 trials (i.e., interactions) for the baseline condition. Bottom left: Patterns of ascription. Green bars indicate that the clinician perceived</p>
+<h3>Figure 4.</h3>
+<p>Figure 4. Cross entropies of the patient (blue) and clinician (red) subjective model (predictive model) and the interaction process (true distribution).</p>
+<h3>Table 1.</h3>
+<p>Frequencies of pattern of ascription in %.</p>
+<h3>Table 2.</h3>
+<p>Disconfirmation scenarios with and without credibility deficits</p>
+<h3>References</h3>
+<p>Brinkmann, S. (2005). Human kinds and looping effects in psychology: Foucauldian and hermeneutical perspectives. Theory &amp; Psychology, 15(6), 769-791.</p>
+<p>Bruineberg, J., Rietveld, E., Parr, T., van Maanen, L., &amp; Friston, K. J. (2018). Free-energy minimization in joint agent-environment systems: A niche construction perspective. Journal of Theoretical Biology, 455, 161-178.</p>
+<p>Catala, A. (2025). The dynamics of epistemic injustice: Situating epistemic power and agency. Oxford University Press.</p>
+<p>Catala, A., Faucher, L., &amp; Poirier, P. (2021). Autism, epistemic injustice, and epistemic disablement: a relational account of epistemic agency. Synthese, 199(3-4), 9013-9039.</p>
+<p>Clark, J. A., &amp; Mishler, E. G. (1992). Attending to patients&#x27; stories: reframing the clinical task. Sociology of Health &amp; Illness, 14(3), 344-372.</p>
+<p>Cocksedge, S., &amp; May, C. (2005). The listening loop: a model of choice about cues within primary care consultations. Medical Education, 39(10), 999-1005.</p>
+<p>Colombo, M., &amp; Fabry, R. E. (2021). Underlying delusion: Predictive processing, looping effects, and the personal/sub-personal distinction. Philosophical Psychology, 34(6), 829-855.</p>
+<p>Corrao, S., &amp; Argano, C. (2022). Rethinking clinical decision-making to improve clinical reasoning. Frontiers in Medicine, 9, 900543.</p>
+<p>Croskerry, P. (2009). A universal model of diagnostic reasoning. Academic Medicine: Journal of the Association of American Medical Colleges, 84(8), 1022-1028.</p>
+<p>Culley, S., &amp; Bond, T. (2011). Integrative Counselling Skills in Action (3rd ed.). Sage Publications. https://play.google.com/store/books/details?id=_0KutyFZwOcC</p>
+<p>Da Costa, L., Parr, T., Sajid, N., Veselic, S., Neacsu, V., &amp; Friston, K. (2020). Active inference on discrete state-spaces: A synthesis. Journal of Mathematical Psychology, 99(102447), 102447.</p>
+<p>Epstein, B. (2025). Social ontology. Cambridge University Press. https://doi.org/10.1017/9781009290562</p>
+<p>Fricker, M. (2007). Epistemic injustice: Power and the ethics of knowing. Clarendon Press.</p>
+<p>Friston, K., Da Costa, L., Tschantz, A., Heins, C., Buckley, C., Verbelen, T., &amp; Parr, T. (2025). Active inference and artificial reasoning. In arXiv [q-bio.NC]. arXiv. https://doi.org/10.48550/arXiv.2512.21129</p>
+<p>Friston, K., &amp; Frith, C. (2015). A duet for one. Consciousness and Cognition, 36, 390-405.</p>
+<p>Friston, K. J., Parr, T., &amp; de Vries, B. (2017). The graphical brain: Belief propagation and active inference. Network Neuroscience (Cambridge, Mass.), 1(4), 381-414.</p>
+<p>Friston, K. J., Stephan, K. E., Montague, R., &amp; Dolan, R. J. (2014). Computational psychiatry: the brain as a phantastic organ. The Lancet. Psychiatry, 1(2), 148-158.</p>
+<p>Frith, C., &amp; Wentzer, T. (2013). Neural Hermeneuticals. In B. Kaldis (Ed.), Encyclopedia of Philosophy and the Social Sciences. SAGE Publications.</p>
+<p>Gauld, C., Nicolle, B., Constant, A., &amp; Gagné-Julien, A.-M. (2025). The role of clinicians in the looping effect: epistemic injustices and looping breaks. Medicine, Health Care, and Philosophy, 28(3), 561-576.</p>
+<p>Gillespie, A., &amp; Wagoner, B. (2025). The looping effects of psychological theories: From anomaly to opportunity. Theory &amp; Psychology, 09593543251381278. https://doi.org/10.1177/09593543251381278</p>
+<p>Grim, P. (2019). Modeling Epistemology: Examples and Analysis in Computational Philosophy of Science. In A. D. Barrio, C. J. Lynch, F. J. Barros, &amp; X. Hu (Eds.), IEEE SpringSim Proceedings 2019 (pp. 1-12). IEEE.</p>
+<p>Hacking, I. (1985). Making Up People. In M. S. A. D. E. W. Heller (Ed.), Reconstructing Individualism. Stanford University Press.</p>
+<p>Hacking, I. (1996). The looping effects of human kinds. In D. Sperber, D. Premack, &amp; A. J. Premack (Ed.), Causal Cognition (pp. 351-383). Oxford University Press.</p>
+<p>Hacking, I. (1998a). Mad travelers: Reflections on the reality of transient mental illnesses. University of Virginia Press.</p>
+<p>Hacking, I. (1998b). Rewriting the soul: Multiple personality and the sciences of memory. Princeton University Press.</p>
+<p>Hacking, I. (2000). The social construction of what? Harvard University Press.</p>
+<p>Hacking, I. (2002). Historical Ontology. Harvard University Press.</p>
+<p>Hacking, I. (2004). Between Michel Foucault and Erving Goffman: between discourse in the abstract and face-to-face interaction. Economy and Society, 33(3), 277-302.</p>
+<p>Hayes, S. C., Luoma, J. B., Bond, F. W., Masuda, A., &amp; Lillis, J. (2006). Acceptance and commitment therapy: Model, processes and outcomes. Behaviour Research and Therapy, 44(1), 1-25.</p>
+<p>Henningsen, P., Zipfel, S., Sattel, H., &amp; Creed, F. (2018). Management of functional somatic syndromes and bodily distress. Psychotherapy and Psychosomatics, 87(1), 12- 31.</p>
+<p>Heritage, J., &amp; Maynard, D. W. (2006). Problems and prospects in the study of physician- patient interaction: 30 years of research. Annual Review of Sociology, 32(1), 351-374.</p>
+<p>Hughes, T. M., Dossett, L. A., Hawley, S. T., &amp; Telem, D. A. (2020). Recognizing heuristics and bias in clinical decision-making. Annals of Surgery, 271(5), 813-814.</p>
+<p>Huys, Q. J. M., Guitart-Masip, M., Dolan, R. J., &amp; Dayan, P. (2015). Decision-theoretic psychiatry. Clinical Psychological Science, 3(3), 400-421.</p>
+<p>Keller, V. F., &amp; Carroll, J. G. (1994). A new model for physician-patient communication. Patient Education and Counseling, 23(2), 131-140.</p>
+<p>Kendler, K. S., Zachar, P., &amp; Craver, C. (2011). What kinds of things are psychiatric disorders? Psychological Medicine, 41(6), 1143-1150.</p>
+<p>Kirmayer, L. J. (2024). Science and sanity: A social epistemology of misinformation, disinformation, and the limits of knowledge. Transcultural Psychiatry, 61(5), 795-808.</p>
+<p>Kirmayer, L. J. (2025). Healing and the Invention of Metaphor: Toward a Poetics of Illness Experience. Cambridge University Press.</p>
+<p>Kirmayer, L. J. (2026). Unraveling the World-Knot: Mind-Body Problems in Clinical Context. Cambridge University Press.</p>
+<p>Kirmayer, L. J., &amp; Bhugra, D. (2009). Culture and mental illness: Social context and explanatory models. In I. M. Salloum &amp; J. E. Mezzich (Eds.), Psychiatric Diagnosis (pp. 29-40). John Wiley &amp; Sons, Ltd.</p>
+<p>Kirmayer, L., Bouizegarene, N., Constant, A., &amp; Ramstead, M. (2025). The place of narrative in psychiatric theory and practice. Philosophy, Psychiatry, &amp; Psychology. https://doi.org/10.1353/ppp.0.a978323</p>
+<p>Kirmayer, L. J., Groleau, D., Looper, K. J., &amp; Dao, M. D. (2004). Explaining medically unexplained symptoms. Canadian Journal of Psychiatry, 49(10), 663-672.</p>
+<p>Kirmayer, L. J., &amp; Robbins, J. M. (1991). Three forms of somatization in primary care: prevalence, co-occurrence, and sociodemographic characteristics. The Journal of Nervous and Mental Disease, 179(11), 647-655.</p>
+<p>Kirmayer, L. J., &amp; Sartorius, N. (2007). Cultural models and somatic syndromes. Psychosomatic Medicine, 69(9), 832-840.</p>
+<p>Kirmayer, L. J., &amp; Young, A. (1998). Culture and somatization: clinical, epidemiological, and ethnographic perspectives. Psychosomatic Medicine, 60(4), 420-430.</p>
+<p>Kirmayer, L. J., Young, A., &amp; Robbins, J. M. (1994). Symptom attribution in cultural perspective. Canadian Journal of Psychiatry, 39(10), 584-595.</p>
+<p>Kotov, R., Krueger, R. F., Watson, D., Achenbach, T. M., Althoff, R. R., Bagby, R. M., Brown, T. A., Carpenter, W. T., Caspi, A., Clark, L. A., Eaton, N. R., Forbes, M. K., Forbush, K. T., Goldberg, D., Hasin, D., Hyman, S. E., Ivanova, M. Y., Lynam, D. R., Markon, K., … Zimmerman, M. (2017). The Hierarchical Taxonomy of Psychopathology (HiTOP): A dimensional alternative to traditional nosologies. Journal of Abnormal Psychology, 126(4), 454-477.</p>
+<p>Ledley, R. S., &amp; Lusted, L. B. (1959). Reasoning foundations of medical diagnosis; symbolic logic, probability, and value theory aid our understanding of how physicians reason: Symbolic logic, probability, and value theory aid our understanding of how physicians reason. Science (New York, N.Y.), 130(3366), 9-21.</p>
+<p>Macias-Velasquez, S., Baez-Lopez, Y., Maldonado-Macias, A. A., Tlapa, D., Limon- Romero, J., &amp; Hernandez-Arellano, J. L. (2020). Working hours, burnout and musculoskeletal discomfort in middle and senior management of Mexican industrial sector. IEEE Access: Practical Innovations, Open Solutions, 8, 48607-48619.</p>
+<p>Medina, J. (2011). The relevance of credibility excess in a proportional view of epistemic injustice: Differential epistemic authority and the social imaginary. Social Epistemology, 25(1), 15-35.</p>
+<p>Montague, P. R., Dolan, R. J., Friston, K. J., &amp; Dayan, P. (2012). Computational psychiatry. Trends in Cognitive Sciences, 16(1), 72-80.</p>
+<p>Parr, T., &amp; Pezzulo, G. (2025). Active inference: The free energy principle in mind, brain, and behavior. MIT Press.</p>
+<p>Scheller, S., Merdes, C., &amp; Hartmann, S. (2022). Computational modeling in philosophy: introduction to a topical collection. Synthese, 200(2). https://doi.org/10.1007/s11229- 022-03481-9</p>
+<p>Schwartenbeck, P., &amp; Friston, K. (2016). Computational phenotyping in psychiatry: A worked example. eNeuro, 3(4). https://doi.org/10.1523/ENEURO.0049-16.2016</p>
+<p>Smith, R., Friston, K. J., &amp; Whyte, C. J. (2022). A step-by-step tutorial on active inference and its application to empirical data. Journal of Mathematical Psychology, 107(102632), 102632.</p>
+<p>Stanley, D. E. (2019). The logic of medical diagnosis: Generating and selecting hypotheses. Topoi: An International Review of Philosophy, 38(2), 437-446.</p>
+<p>Stanley, D. E., &amp; Campos, D. G. (2013). The logic of medical diagnosis. Perspectives in Biology and Medicine, 56(2), 300-315.</p>
+<p>Thagard, P. (2018). Computational models in science and philosophy. In Introduction to Formal Philosophy (pp. 457-467). Springer International Publishing.</p>
+<p>Weisberg, M. (2013). Simulation and similarity: Using models to understand the world. Oxford University Press.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
