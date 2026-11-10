@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Depression-Anxiety Comorbidity Across Sex
+During COVID-19: An Evaluation of Partial Invariance with Invariance
+Partial Pruning</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Depression-Anxiety Comorbidity Across Sex During COVID-19: An Evaluation
+of Partial Invariance with Invariance Partial Pruning
+</p>
+<p class="meta">
+2026-11-10 · Metacheck 0.4.3.24
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>All papers that appeared to involve live data collection contained an
+ethics approval statement.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, and it was present:</p>
+<blockquote>
+<p>We recruited most participants (70%) using a Facebook Business
+algorithm, which was expected to reach 3.6 million of Norway’s 4.2
+million adults.</p>
+</blockquote>
+<p>Ethics approval statement:</p>
+<blockquote>
+<p>Ethical approval for this study was granted by the Regional Committee
+for Medical and Health Research Ethics (reference number 125510).</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 45 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 45 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 45 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Xinkai Du and Sverre Urnes Johnson are supported by Helse Sør-Øst RHF (grant 2022107), which is owned by the Norwegian state through the Ministry of Health and Care.</p>
+<h3>Depression-Anxiety Comorbidity Across Sex During COVID-19: An Evaluation of Partial Invariance with Invariance Partial Pruning</h3>
+<p>Although depression and anxiety are distinct diagnostic categories, they often do not present as isolated conditions; instead, they co-occur so frequently that comorbidity, defined here as the presence of more than one diagnosable disorder in the same individual, is a central clinical presentation rather than an exception in clinical populations (Cheng et al., 2025; Lamers et al., 2011; Li et al., 2025b; Zhang et al., 2024). In the Netherlands Study of Depression and Anxiety (NESDA), among patients diagnosed with depression, 75% were diagnosed with anxiety at least once in their lifetime, and 67% were currently suffering from an anxiety disorder; among patients diagnosed with anxiety, 63% were suffering from a current depressive disorder, and 81% were diagnosed with a depressive disorder at least once (Lamers et al., 2011). The comorbidity of anxiety and depression has been a major contributor to more persistent or treatment-resistant symptom presentations and a challenge to intervention, linked to greater need for professional care, worse clinical outcomes, more disruption to daily functioning, and elevated suicide risk (Beard et al., 2016; Kaiser et al., 2021; Zhang et al., 2024).</p>
+<p>The study of comorbidity and psychology in general was heavily influenced by latent-variable models, such as factor and item-response theory models (Borsboom, 2008; Cramer et al., 2010). This perspective defines and studies mental disorders as unobservable latent common causes that lead to a series of observable features (i.e., symptoms). The observed correlations among features arise from the latent common cause. These correlations are considered trivial and are expected to disappear once the common cause is controlled for (Pearl, 2009). Remaining correlations among residuals 1 are considered to be violations of the local independence assumption (Kline &amp; Little, 2023). Treating symptoms themselves or targeting their relations has no impact on the latent common causes, as the symptoms are the effects rather than the cause of mental disorders. For example, the 1 Residuals are the effects not explained by the latent variable model.</p>
+<p>observed correlations among sneezing, headache, and coughing are meaningless, and treating these symptoms themselves does not cure a cold, as the cold itself is a latent common cause (i.e., a virus or bacterial infection). Curing the cold requires targeting the common cause of the symptoms: the virus or the infection. Once the common cause is removed, the symptoms will disappear naturally. Applying such a perspective to psychopathology is challenging: despite extensive research, attempts to identify shared pathogenic mechanisms have not yet produced a clear or consistent answer for most mental disorders (Borsboom et al., 2019). Furthermore, symptoms and their correlations are meaningful. For example, sleep disturbance can lead to lethargy, which can impair concentration. The latent-variable perspective is also limited in its understanding of comorbidity: observed symptom relations are explained by unobserved constructs (i.e., latent variables). Comorbidity arises solely from relations among latent constructs, providing limited insights for identifying concrete, symptom-level intervention points.</p>
+<p>Recent advances in psychopathology understand comorbidity through a network perspective. Instead of considering mental disorders to be unobservable latent factors, it defines mental disorders as systems of observable symptoms (i.e., nodes) that causally interact with each other (the relations are defined as edges). The inter-symptom interactions sustain mental disorders, and interventions should be based on understanding the connections between observed symptoms, as well as identifying the central symptoms that explain most other symptoms. Consequently, the network perspective posits that comorbidity emerges when symptoms from one disorder causally activate and sustain symptoms from another, with cross-disorder &quot;bridge&quot; symptoms transmitting symptom activation across diagnostic categories (Borsboom, 2017; Borsboom &amp; Cramer, 2013; Cramer et al., 2010; Robinaugh et al., 2020). Therefore, understanding comorbidity involves identifying the bridging symptoms that connect the symptoms of one disorder to those of another. Due to its focus on observable features and the interactions among them, the network analysis of depression and anxiety symptoms can offer more direct insights into the onset of and the intervention for depression-anxiety comorbidity, compared to the latent variable perspective that focuses on unobservable latent variables and their relations (Borsboom, 2017; Borsboom &amp; Cramer, 2013; Cramer et al., 2010).</p>
+<p>Motivated by the aforementioned rationale, prior research has examined the network structure of depression and anxiety symptoms using Gaussian graphical models (GGMs) applied to cross-sectional data (Beard et al., 2016; Kaiser et al., 2021; Li et al., 2025b) and cross-lagged panel network models based on two-wave panel data (Zhang et al., 2024). These studies identified essential bridge symptoms linking depression and anxiety, including psychomotor and concentration problems, restlessness (Beard et al., 2016; Kaiser et al., 2021), nervousness, guilt, (Li et al., 2025b), mood and physical retardation, somatic complaints, hypochondriasis, and diurnal variation (Zhang et al., 2024). Yet, GGMs offer a poor estimate of causal relations (Ryan et al., 2022), and they do not reveal within-person dynamic effects (Epskamp et al., 2018). Two-wave panel data do not allow models to separate within-and between-person variance. Consequently, for cross-lagged panel network models, the estimation of within-person effects can be biased by between-person effects, leading to spurious within-person relations (Hamaker, 2023; Hamaker et al., 2015).</p>
+<p>The panel graphical vector autoregression (panelGVAR) model, by contrast, can estimate fixed effects of within-person dynamical relations between depression and anxiety symptoms while separating within-and between-person variances (Epskamp, 2020). We therefore aim to use this model to study the dynamics of depression and anxiety symptoms over time.</p>
+<p>In addition, existing evidence suggests both robust and nuanced sex differences in depression, anxiety, and their comorbidity, which may have implications for how comorbidity manifests and should be treated. Large cohort studies such as the Netherlands Study of Depression and Anxiety have reported that women with major depressive disorder showed higher levels of comorbid anxiety and atypical features than men, suggesting potentially different underlying mechanisms and course of illness across sex groups (Schuch et al., 2014). Likewise, reviews of anxiety disorders consistently find that women are about twice as likely as men to meet criteria for an anxiety disorder across the lifespan, and that comorbidity with depression is common and often more burdensome among women (McLean et al., 2011). Taken together, these findings indicate that depression-anxiety comorbidity is not uniform across biological sexes.</p>
+<p>These considerations further motivated a modeling strategy that can explicitly compare network structures across sexes. Hence, to estimate the dynamical comorbidity networks, while considering the structural differences across males and females (Du et al., 2026), we adopted a novel approach developed under the panelGVAR framework termed the invariance partial pruning (IVPP) approach (Du et al., 2026). IVPP allows multi-group estimation of the panelGVAR model while revealing group-specific variances and the invariance of edges across groups. The model outputs a unique network structure for each group, with some edges constrained to be equal across groups and others freely estimated within each group, based on data fit. While designed for network comparison, IVPP is also suitable for evidence synthesis that evaluates what connections are shared across groups and what are unique to some groups. To this end, it is well suited to investigating the dynamical relations among depression, anxiety, and transdiagnostic mechanisms to explain comorbidity, while evaluating the cross-group stability of the discovered network structures.</p>
+<p>In this exploratory study, we seek to map the within-person temporal network linking depression and anxiety symptoms and to explore whether these dynamical networks differ between males and females. In the networks, we also added mechanism variables that can be targeted and intervened on to inform intervention. To do so, we will (1) fit panelGVAR models to recover within-person lagged effects among symptoms while separating within-and between-person variance, and (2) use the IVPP multi-group estimation approach to determine which edges are shared across sexes, which are group-specific, and to quantify the degree of invariance.</p>
+<h3>Methods</h3>
+<h3>Participants and data</h3>
+<p>The data is from the Mental Health and Adherence Project (MAP-19), a large-scale longitudinal survey of the Norwegian adult population during COVID-19. As in previous studies (Hoffart, Skjerdingstad, Freichel, et al., 2023; Hoffart et al., 2025), we used the fifth through eighth measurements, which were approximately equidistant, to satisfy the assumption of equidistant measures in panelGVAR (Epskamp, 2020). We implemented the measurements from May 8 to May 25, 2021 (W5), July 4 to August 1, 2021 (W6), October 24 to November 12, 2021 (W7), and January 2 to January 14, 2022 (W8). Ethical approval for this study was granted by the Regional Committee for Medical and Health Research Ethics (reference number 125510).</p>
+<p>Respondents were adults (age ≥ 18 years) residing in Norway during the measurement waves (Ebrahimi et al., 2021). We recruited most participants (70%) using a Facebook Business algorithm, which was expected to reach 3.6 million of Norway&#x27;s 4.2 million adults. To reach the remaining 600,000 target population, we used national, regional, and local information platforms (e.g., television, radio, and newspapers). All participants received the same online survey, regardless of the recruitment method. We also contacted the same participants and asked them to participate in all measurement waves. Data quality was assessed through an attention check question (Please enter the answer option &quot;A little&quot; to show that you are following this survey). After excluding participants who failed the attention check, 10,061 cases remained at the first measurement wave (W1; March 2020). To match the known demographic characteristics of the Norwegian adult population (e.g., a similar sex ratio and distribution of education levels), we extracted a stratified, representative sample of 4,361 adults from the total sample. After excluding participants who did not participate in any of the selected waves or failed to provide information on their biological sex, 1,235 data remained (582 female, 653 male, and M age = 39.0). In this sample, 1,060 responded at W5, 915 responded at W6, 1,006 responded at W7, and 867 responded at W8 (Hoffart, Skjerdingstad, Freichel, et al., 2023).</p>
+<p>We analyzed data with full information maximum likelihood (FIML; Schafer and Graham, 2002) to handle missingness, which assumes that the data are missing at randomfoot_0.</p>
+<h3>Variable selection</h3>
+<p>To maintain reasonable estimation accuracy for parameter-laden network models, we kept the number of nodes at 10, the same maximum used in the simulation study that validated IVPP (Du et al., 2026). In the present study, we selected three depression symptoms and three anxiety symptoms to capture core depression and generalized anxiety outcomes. In addition, to facilitate intervention and explain the mechanisms of comorbidity, we selected three transdiagnostic mechanism variables. Outcomes are defined as specific reactions common to the relevant phenomenology, while mechanisms are observable, actionable processes that psychological treatment can target (Hoffart &amp; Johnson, 2020). The depression symptoms selected were anhedonia, depressed mood, and sleep disturbance from the Patient Health Questionnaire-9 (PHQ-9; Over the last 2 weeks, how often have you been bothered by any of the following problems [0 = Not at all,1 = Several days,2 = More than half the days,3 = Nearly every day]; Kroenke et al., 2001).</p>
+<p>These three symptoms correspond to the two gateway criteria for major depressive disorder and a key somatic symptom (American Psychiatric Association, 2022). They are also central nodes of the PHQ-9 according to previous dynamic network analysis (Hoffart, Skjerdingstad, Freichel, et al., 2023; O&#x27;Driscoll et al., 2022). For anxiety, we selected Nervous, Restless, and Fear from the Generalized Anxiety Disorder 7-item scale (GAD-7; Over the last 2 weeks, how often have you been bothered by any of the following problems [0 = Not at all,1 = Several days,2 = More than half the days,3 = Nearly every day]; Spitzer et al., 2006). They tap the somatic tension and threat-related hyper-arousal components that characterize generalized anxiety and are robustly associated with depression in comorbid samples (Hoffart et al., 2025; Kaiser et al., 2021; O&#x27;Driscoll et al., 2022). For mechanisms, we selected uncontrollable worry (beliefs about the uncontrollability of worry) from GAD-7 and worry and rumination and threat monitoring from the Cognitive-Attentional Syndrome-1 scale (CAS-1; In the past week, how much have you engaged in the following [0 = none of the time,8 = all of the time]; Nordahl and Wells, 2019). They are the three transdiagnostic mechanisms identified by the theory of self-regulatory executive function (S-REF). Specifically, worry, rumination, and threat monitoring are cognitive processes termed CAS, and the uncontrollability of worry is a negative belief about the controllability of CAS. Taken together, these outcome and mechanism nodes align with network-based accounts in which overlapping symptoms and shared cognitive-attentional processes act as &quot;bridges&quot; between depression and anxiety clusters (Groen et al., 2020). The wording of these items can be found in Table 1.</p>
+<h3>Statistical Methods</h3>
+<p>We used the IVPP approach to estimate panelGVAR models while accounting for partial invariance in network structures between males and females (Du et al., 2026). The method comprises three steps to determine group invariance. The first step is a global invariance test on both the temporal and the contemporaneous networks (Hoekstra et al., 2024), where the algorithm compares a fully constrained model (M 0 ) in which both the temporal (B B B) and the contemporaneous networks (Ω Ω Ω) are constrained to be equal across groups with a free model (M 1 ) in which neither network is constrained.</p>
+<p>If the free model (M 1 ) fits better than the fully constrained model (M 0 ), the procedure proceeds to the second step, which is to determine the global invariance of the temporal networks and the contemporaneous networks separately. The procedure can either start from M 0 or M 1 : To determine the global invariance of the temporal networks, we can either add an equality constraint on the temporal networks to M 0 to check whether the equality constraint lowered model fit, or remove the equality constraint on the temporal networks from M 1 to check whether the removal of the equality constraint improved model fit. We can run a similar procedure to determine the global invariance of the contemporaneous networks. Formally, two more models are estimated:</p>
+<p>A global invariance test for the temporal networks can either be M 3 vs. M 0 or M 2 vs.</p>
+<p>M 1 . A global invariance test for the contemporaneous networks can be M 2 vs. M 0 or M 3 vs. M 1 . We based the comparison on sparse networks, as they showed greater power to detect true differences while maintaining false-positive rates similar to tests based on saturated networks in simulation (Du et al., 2026). Model comparisons can be based on AIC, BIC, or the likelihood ratio test (LRT). When these criteria conflicted on global invariance, we based our inference on AIC, as in the simulation study that validates IVPP; BIC showed a high risk of insufficient power, and LRT showed high type I error rates. AIC showed the best power-error balance (Du et al., 2026).</p>
+<p>The end-product of IVPP is a temporal and a contemporaneous network for each group, with some edges constrained to be equal and others freely estimated across groups.</p>
+<p>Using the networks, we further computed the in-and out-strength centrality of each node in temporal networks and the strength centrality in contemporaneous networks.</p>
+<p>In-strength centrality of a node is defined as the sum of all incoming edge weights, that is, the total lagged influence the node receives from all other nodes in the network (Borsboom et al., 2021). Out-strength centrality is defined as the sum of all outgoing edge weights, reflecting the total lagged influence a node exerts on all other nodes. Strength centrality, computed in undirected contemporaneous networks, is the sum of all edge weights incident to a node, capturing a node&#x27;s overall connectivity regardless of direction. In addition, we computed bridge centrality indices to quantify nodes&#x27; role in connecting depression, anxiety, and mechanisms (Jones et al., 2019). Bridge in-strength is the sum of incoming edge weights from nodes in a different community, and bridge out-strength is the sum of outgoing edge weights to nodes in a different community. Bridge strength is the undirected analog, defined as the sum of all edge weights connecting a node to nodes outside its own community. We further broke down the bridge centrality measures by community pairs.</p>
+<p>For example, the bridge out-strength of a depression symptom to anxiety indicates how much this depression symptom contributes to the transition from depression to anxiety.</p>
+<p>Together, these indices identify nodes that may facilitate the spread of activation across symptom clusters, which is of particular clinical relevance in transdiagnostic network models.</p>
+<h3>Results</h3>
+<p>Table 1 presents item information and mean and SD across waves. As shown in Tables 2 and 3, all four models showed comparable absolute fit (TLI, CFI, and RMSEA differing only at the third decimal). The global invariance test produced mixed evidence: relative to the fully constrained model (M 0 ), the free model (M 1 ) was favored by ∆AIC and the LRT but not by ∆BIC (Du et al., 2025).</p>
+<p>Decomposing this result, temporal invariance was not supported: adding temporal constraints to the free model (M 1 → M 2 ) worsened fit on ∆AIC and the LRT but not on ∆BIC, and releasing them from the fully constrained model (M 0 → M 3 ) improved fit on ∆AIC and the LRT but not on ∆BIC. In contrast, contemporaneous invariance was supported: adding contemporaneous constraints (M 1 → M 3 ) improved fit on both ∆AIC and ∆BIC despite a significant LRT, while releasing them (M 0 → M 2 ) worsened fit on both ∆AIC and ∆BIC, again with a significant LRT (Du et al., 2025). M 0 → M 2 Release contemporaneous constraints 4.94 111.62 39.26 21 .009</p>
+<p>Figure 1 displays the temporal and the contemporaneous networks of both sexes estimated with partial pruning. Results indicated that fear positively predicted nervousness and restlessness at the next measurement occasion. Additionally, it predicted two depression symptoms, anhedonia and depressive mood, at the next measurement.</p>
+<p>Worry and rumination positively predicted sleep disturbance at the next measurement.</p>
+<p>The sex difference was in the self-predictive loop of fear. There was a self-loop in this node among female participants but not among males. Mechanism nodes, beliefs about the uncontrollability of worry, worry and rumination, and threat monitoring were at the center of the contemporaneous networks. Females showed a link between nervousness and threat monitoring, whereas males did not.</p>
+<p>Figure 2 shows each node&#x27;s centrality in different networks, and Table 4 and Table 5 show each node&#x27;s specific centrality values. Across both temporal and contemporaneous networks, the same small set of nodes dominated centrality. In the temporal networks, fear had by far the highest out-strength and bridge out-strength, while restless, anhedonia, and depressive mood showed in-strength. Anhedonia, depressive mood, and sleep disturbance showed a bridge in strength. In the contemporaneous networks, depressive mood and beliefs about the uncontrollability of worry were the strongest nodes overall in both sexes, followed by worry and rumination and nervousness; beliefs about the uncontrollability of worry also phq1 phq2 phq3 gad1 gad5 gad7 cas_1 cas_2 gad2 temporal (female) phq1 phq2 phq3 gad1 gad5 gad7 cas_1 cas_2 gad2 contemporaneous (female) phq1 phq2 phq3 gad1 gad5 gad7 cas_1 cas_2 gad2 temporal (male) phq1 phq2 phq3 gad1 gad5 gad7 cas_1 cas_2 gad2 contemporaneous (male) phq1 phq2 phq3 gad1 gad5 gad7 cas_1 cas_2 gad2 temporal (difference) phq1 phq2 phq3 gad1 gad5 gad7 cas_1 cas_2 gad2 contemporaneous (difference) phq1 : Anhedonia phq2 : Depressive Mood phq3 : Sleep gad1 : Nervous gad5 : Restless gad7 : Fear cas_1 : Worry and rumination cas_2 : Threat monitoring gad2 : Uncontrollable worry Note. The between-subject networks were ignored and modeled with Cholesky decomposition. Network differences were computed by female -male.</p>
+<p>had the highest bridge strength, with nervousness second. Sex differences in rank order were absent in the temporal networks and minor in the contemporaneous networks, mainly involving the relative position of nervousness and threat monitoring in females.</p>
+<p>We further broke down bridge centrality by community pairs. In the temporal networks, the cross-community patterns were identical for males and females: Within the anxiety community, the symptom with the strongest bridge out-strength to the depression community was fear (male = 0.13; female = 0.13), whereas nervous and restless had bridge out-strengths of zero. Within the depression community, none of the depression symptoms Temporal (male) 0 0.06 0.12 0.18 0.24 0.3 Anhedonia Depressive Mood Sleep Nervous Restless Fear Worry and rumination</p>
+<p>Threat monitoring Uncontrollable worry instrength outstrength bridgeinstrength bridgeoutstrength Temporal (female) 0 0.06 0.12 0.18 0.24 0.3 Anhedonia Depressive Mood Sleep Nervous Restless Fear Worry and rumination Threat monitoring Uncontrollable worry instrength outstrength bridgeinstrength bridgeoutstrength Contemporaneous (male) 0 0.3 0.6 0.9 1.2 Anhedonia Depressive Mood Sleep Nervous Restless Fear Worry and rumination Threat monitoring Uncontrollable worry strength bridgestrength Contemporaneous (female) 0 0.3 0.6 0.9 1.2 Anhedonia Depressive Mood Sleep Nervous Restless Fear Worry and rumination Threat monitoring Uncontrollable worry strength bridgestrength showed a non-zero bridge out-strength to the anxiety community. Within the mechanisms community, worry and rumination had the strongest bridge out-strength to the depression community (male = 0.06; female = 0.06), while threat monitoring and beliefs about the uncontrollability of worry had bridge out-strengths of zero to depression. Bridge out-strengths from mechanisms to the anxiety community were zero for all mechanism symptoms. Regarding bridge in-strength (i.e., primary recipients of cross-community input), within the depression community the largest bridge in-strength from the anxiety community was observed for anhedonia (male = 0.07; female = 0.07) and depressive mood (male = 0.07; female = 0.07), and the largest bridge in-strength from the mechanisms community was observed for sleep (male = 0.06; female = 0.06). All anxiety symptoms had a bridge strength of zero from both depression and mechanisms.</p>
+<p>In the contemporaneous networks, the cross-community patterns were largely identical for males and females: within the anxiety community, the symptom with the strongest bridge strength with the depression community was nervous (male = 0.12; female = 0.12), followed by fear (male = 0.08; female = 0.08), whereas restless had a bridge strength of zero with depression. The anxiety symptom with the strongest bridge strength with the mechanisms was nervous (male = 0.37; female = 0.49), followed by fear (male = 0.30; female = 0.30) and restless (male = 0.13; female = 0.13). Within the depression community, depressive mood was the only depression symptom showing a non-zero bridge strength with the anxiety community (male = 0.19; female = 0.19). The depression symptoms having the strongest bridge strength with the mechanisms community were depressive mood (male = 0.22; female = 0.22) and sleep (male = 0.22; female = 0.22), followed by anhedonia (male = 0.17; female = 0.17). Within the mechanisms community, worry and rumination had a stronger bridge strength with depression (male = 0.29; female = 0.29) compared to anxiety (male = 0.08; female = 0.08), whereas beliefs about the uncontrollability of worry and threat monitoring had a stronger bridge strength with anxiety (male = 0.51; female = 0.51 for beliefs about the uncontrollability of worry and male = 0.20; female = 0.33 for threat monitoring) compared to depression (male = 0.33; female = 0.33 for beliefs about the uncontrollability of worry and male = female = 0 for threat monitoring).</p>
+<h3>Discussion</h3>
+<p>In this longitudinal study, we examined within-person temporal and contemporaneous networks linking depression symptoms, anxiety symptoms, and transdiagnostic mechanisms during the COVID-19 pandemic, and compared these structures across biological sex using the IVPP approach. Across four waves of data, fear (&quot;feeling afraid as if something awful might happen&quot;) emerged as the primary temporal predictor of subsequent depressive mood and anhedonia, as well as of nervousness and restlessness. Worry and rumination predicted later sleep disturbance. In the contemporaneous networks, nervousness and fear were tightly connected with depressive mood. Worry and rumination were more strongly associated with depression, whereas beliefs about the uncontrollability of worry and threat monitoring were more strongly associated with anxiety. Overall, temporal and contemporaneous network structures were largely invariant across males and females, with only minimal, potentially spurious sex differences detected.</p>
+<p>Bridge centrality analysis by community pairs in the temporal networks revealed the central role of fear in predicting depression in the next measurement (highest bridge out-strength to depression), through anhedonia and depressive mood (highest bridge in-strength from anxiety). Furthermore, worry and rumination were the primary transdiagnostic mechanisms that predicted sleep disturbance in the next measurement occasion. The contemporaneous networks showed bridges between communities within the same measurement occasion. In the contemporaneous networks, anxiety and depression were connected through nervousness, fear, and depressive mood. For mechanism variables, worry and rumination were more connected to depression, and beliefs about the uncontrollability of worry and threat monitoring were more connected to anxiety.</p>
+<p>These results indicated that the main driver for depression-anxiety comorbidity could be anxiety, and depression could be a downstream disorder following persistent anxiety. The channeling symptom was the fear that awful events might happen, which further led to anhedonia and depressive mood. The fear was also a main predictor of other anxiety symptoms in the temporal network. Fear and depressive mood were also the central channels between anxiety and depression in the contemporaneous networks. However, the connection between nervous and depressive mood was stronger in the contemporaneous networks in the present study, which agreed with the findings of Beard et al. (2016) based on GGMs, where they also discovered the connection between nervous and depressive mood as a channel between depression and anxiety. As transdiagnostic mechanisms, beliefs about the uncontrollability of worry and threat-monitoring were more connected to anxiety symptoms in the contemporaneous networks compared to worry and rumination. However, beliefs about the uncontrollability of worry and worry and rumination were more connected to depression symptoms than threat monitoring. This central role of fear aligns with findings from Hoffart et al. (2025), based on daily diary data, and Hoffart, Burger, et al.</p>
+<p>(2023), based on panel data. This node also had the highest out-strength centrality in the network. Moreover, (Hoffart, Burger, et al., 2023) replicated the strong connection between fear and threat monitoring in contemporaneous networks. Furthermore, the contemporaneous connection between worry and rumination and depressive mood discovered in (Hoffart, Skjerdingstad, Freichel, et al., 2023) was replicated.</p>
+<p>Overall, our within-person temporal analyses suggest that anxiety-related processes-particularly fear (the sense that awful events might happen)-often precede increases in depression symptoms, consistent with anxiety acting as a potential driver of short-term depression risk. This interpretation aligns with a substantial body of longitudinal evidence. In NESDA, anxiety preceded depression in 57% of comorbid cases, compared to only 18% in which depression came first (Lamers et al., 2011). A narrative synthesis of 76 NESDA-based papers further confirmed that depression-anxiety comorbidity was most frequently preceded by an anxiety disorder (ter Meulen et al., 2021).</p>
+<p>A daily diary study of individuals with generalized anxiety disorder found that anxious mood robustly predicted depressed mood at subsequent time points-peaking at a two-day lag-whereas depressed mood did not consistently predict later anxious mood (Starr &amp; Davila, 2012).</p>
+<p>This asymmetry suggests that the temporal precedence of anxiety over depression may be an essential motor driving depression-anxiety comorbidity. The temporal and contemporaneous findings suggest that fear and worry-related processes may function as dynamic &quot;gateways&quot; from anxiety to depression, while also providing an explanation for the dense co-occurrence of anxiety and depression symptoms at any given time point.</p>
+<p>Promising symptom-level targets for intervention, therefore, include specific mechanisms assessed here: worry, rumination, and negative meta-cognitive beliefs (Wells, 2011). The largely identical temporal and contemporaneous patterns across males and females suggest that these mechanisms operate similarly across sexes in this sample.</p>
+<p>Regarding sex invariance in network structures, previous research also yielded inconsistent results. For example, Li et al. (2025a) found no sex differences in network connectivity, node centrality, or edges in a GGM analysis of depression-anxiety comorbidity involving 22,868 adolescents from 27 schools in 8 cities in China. The study of (Jin et al., 2022) also reported no sex difference in a network analysis of depression, anxiety, and quality of life based on GGM of 4, 931 clinicians in the public hospitals of China during the late stage of COVID-19. However, there were also studies indicating sex differences in depression-anxiety networks. For example, in a network study on the relation between depression, anxiety, and health-promoting lifestyles with 2,420 adults in China, Zheng et al. (2023) discovered that restlessness and low energy had the highest strength centrality in the female network, whereas suicidal ideation and restlessness were the most central in the male network. These studies were all based on GGM, and the comparisons used the network comparison test (NCT; van Borkulo et al., 2023). One possible explanation for the sex invariance was that the present study focused on within-person effects, whereas GGM merged within-and between-person variance. The other reason might be the conservatism of partial pruning, which relies on BIC (Du et al., 2026). This might be the case for comparing temporal networks. In this test, global AIC-based tests suggested group invariance, yet only the fear self-loop showed a sex difference. The other sex differences might not be estimated because partial pruning is conservative when the true temporal effects were weak, given the long temporal distance between the measurement periods. The null sex difference in the contemporaneous networks might be more credible given that both AIC and BIC suggested invariance.</p>
+<p>These findings must also be understood in light of the COVID-19 context in which the data were collected. The pandemic introduced a combination of chronic, largely uncontrollable stressors-health threats, social restrictions, economic uncertainty, and disruptions to daily routines-that may have selectively amplified fear, worry, and threat monitoring (Hoffart et al., 2022; Magnúsdóttir et al., 2022). This could partly explain why fear emerged as such a prominent temporal driver and why beliefs about the uncontrollability of worry and threat-focused attention occupied central positions in the contemporaneous networks. At the same time, pandemic-related restrictions and lifestyle changes (for example, altered work patterns, reduced social contact, and changes in physical activity and sleep schedules) may have strengthened links between worry, rumination, and sleep disturbance. Thus, the observed network structure may reflect, in part, how depression-anxiety comorbidity is organized under sustained external threat and uncertainty. Although the basic mechanisms we identified (fear, perseverative negative thinking, and threat monitoring) are likely relevant beyond the pandemic (Hoffart &amp; Johnson, 2020), the strength of specific edges-and the prominence of certain nodes-may differ in less extreme or more stable environmental conditions.</p>
+<p>Comparing network structure across groups is crucial for both theory and practice.</p>
+<p>Multi-group analyses reveal whether the dynamical relations that sustain psychopathology are universal or vary systematically across subpopulations, information that cannot be recovered from pooled analyses alone. Clinically, identifying edges that are shared across groups points to transdiagnostic targets suitable for broad interventions, whereas group-specific connections highlight the need for tailored strategies (for example, sex-sensitive assessment or intervention components). Finally, testing for invariance helps reconcile inconsistent findings in the literature by distinguishing true heterogeneity from sampling variation or methodological differences (e.g., cross-sectional GGMs vs within-person panel models). For these reasons, multi-group network comparison is not merely an auxiliary analysis but a central step toward translating symptom-level network insights into equitable and effective clinical practice.</p>
+<h3>Limitations</h3>
+<p>When interpreting the results of the present study, one should bear in mind that VAR-based network models only represent temporal predictive relations, namely, Granger causality (Epskamp et al., 2018). One should not take predictive relations to be causal effects. Furthermore, the measurements in this study were spaced far apart (i.e., 1.5 -2 months), so the true temporal effects were weak and difficult to detect. Therefore, the results based on temporal networks may not generalize well to other samples. The temporal effects estimated in the study were also weak. In addition, the mechanism variables and anxiety symptoms are relatively stable features, whereas depression is episodic (American Psychiatric Association, 2022; Wells, 2011). This might attenuate the temporal variance of mechanism and anxiety variables, leading to weaker temporal links from and towards these variables. Interpret the sex difference in contemporaneous networks with caution, as both AIC and BIC indicated invariance in the global test. In this case, the discovered sex differences were likely false positives (Du et al., 2026). Additionally, the data were positively skewed, with most respondents scoring low on the symptoms and transdiagnostic mechanism items. Furthermore, the PHQ-9 and GAD-7 scales are ordinal rather than continuous (Isvoranu &amp; Epskamp, 2021). However, there are currently no estimation methods for handling ordinal data in panelGVAR models. This can be a promising area to pursue in the future.</p>
+<p>In this study, missing values were handled using full-information maximum likelihood (FIML), which in general performs better than list-wise deletion, pairwise deletion, and mean substitution and yields essentially the same results as multiple imputation (MI) and complete-data maximum likelihood across a wide range of sample sizes, missingness rates, and degrees of model misfit (Schafer &amp; Graham, 2002). However, FIML accuracy relies on the assumption that the data are missing-at-random (MAR).</p>
+<p>MAR implies that, conditional on observed variables (e.g., prior-wave symptom levels and other covariates), the probability of missingness does not depend on the unobserved values themselves (Mazza &amp; Enders, 2013). This assumption may be violated if participants with more severe depression symptoms did not complete questionnaires during the assessment period, even after accounting for their observed symptom history. In this case, the measurement is missing not at random (MNAR), which would underestimate symptom severity, leading to lower-than-expected scores and lower variances, and underestimating the correlational effects in this study. Another possibility is that respondents participated only when they felt terrible and missed measurements when they felt better, because they felt it was unnecessary to join. In this case, the sample&#x27;s symptom severity would be overestimated. However, if a person&#x27;s missingness can be explained by the measurements he/she has already attended to, the data are closer to MAR, thereby enhancing the credibility of the present study. The more missingness is explained by scores the person did not attend to, the closer it is to MNAR, thereby threatening the credibility of the present study.</p>
+<p>Regarding the recruitment process, we aimed to reach the entire Norwegian population through a combination of the Facebook algorithm (3.6 out of 4.2 million Norwegian adults), television, radio, and newspapers (remaining 600,000). However, the generalizability of the present sample is subject to self-selection bias (Kaźmierczak et al., 2023), which occurs when individuals volunteer for a study, leading to a non-representative sample that is often skewed toward extreme opinions or specific demographic traits (often more females and younger participants). In addition, to ensure accurate estimation, we selected a limited number of nodes that did not cover all depression and anxiety symptoms.</p>
+<p>Results may be different when additional nodes are added to the networks. Furthermore, all data are based on self-report questionnaire data and are not clinically validated. As such, the presence of depression or anxiety symptoms should not be interpreted as depression illness or GAD on a diagnostic level.</p>
+<h3>Future directions</h3>
+<p>Future research can build on this work in several ways. First, studies employing denser time-series designs, such as daily diary or ecological momentary assessment, are needed to capture more fine-grained temporal dynamics. Such designs would enable examination of shorter-lag processes (hours or days rather than weeks or months), potentially revealing additional pathways by which anxiety and depression influence each other. Second, experimental and intervention studies could test the causal status of the mechanisms highlighted here using RCT designs. Third, applying multi-group panelGVAR and IVPP to other group comparisons (for example, clinical vs. community samples, individuals with vs. without trauma history, or different age cohorts) could clarify the extent to which the network structure of depression-anxiety comorbidity is universal versus context-specific. Such work would also help identify which edges can be treated as broadly transdiagnostic targets and which require group-specific adaptation.</p>
+<h3>Conclusion</h3>
+<p>Anxiety symptoms predicted depression symptoms in the temporal comorbidity analysis. Fear and mechanisms like worry, rumination, and beliefs about the uncontrollability of worry emerged as central drivers linking anxiety to depression symptoms contemporaneously. These mechanisms formed a transdiagnostic core that connected anxiety and depression. Network structures were largely invariant across males and females, suggesting that key dynamic mechanisms are shared across sexes. These findings support network-based accounts in which comorbidity is sustained by specific symptom and mechanism interactions, and they highlight fear and perseverative negative thinking as promising targets for transdiagnostic intervention aimed at reducing the burden of co-occurring depression and anxiety.</p>
+<h3>Sacha Epskamp is supported by the National University of Singapore grant</h3>
+<p>A-8001098-00-00. Helga Ask is supported by NordForsk (no.156298 and 230738).</p>
+<p>Figure 1Dynamic networks of depression-anxiety comorbidity and sex differences</p>
+<p>Figure 2Centrality of symptoms and transdiagnostic mechanisms</p>
+<h3>Table 1</h3>
+<p>Item information and the item mean and SD at different waves</p>
+<h3>Table 2</h3>
+<p>Absolute fit of the four models in the invariance testing.</p>
+<h3>Table 3</h3>
+<p>Model comparisons: information criteria differences and likelihood-ratio tests.</p>
+<h3>Table 4</h3>
+<p>Node centrality in the temporal networks (identical for males and females)</p>
+<h3>Table 5</h3>
+<p>Node centrality in the contemporaneous networks by sex.</p>
+<p>See Discussion for a more detailed discussion on how missingness and the choice of data handling method might impact the results</p>
+<p>B B B 1 and B B B 2 denote the temporal networks for group 1 and 2 respectively, and Ω Ω Ω 1 and Ω Ω Ω 2 denote the temporal networks for group 1 and 2 respectively</p>
+<h3>References</h3>
+<p>American Psychiatric Association. (2022). Diagnostic and statistical manual of mental disorders (5th ed., text rev.). https://doi.org/10.1176/appi.books.9780890425787</p>
+<p>Beard, C., Millner, A. J., Forgeard, M. J. C., Fried, E. I., Hsu, K. J., Treadway, M. T., Leonard, C. V., Kertz, S. J., &amp; Björgvinsson, T. (2016). Network analysis of depression and anxiety symptom relationships in a psychiatric sample. Psychological Medicine, 46 (16). https://doi.org/10.1017/S0033291716002300</p>
+<p>Borsboom, D. (2008). Latent Variable Theory. Measurement: Interdisciplinary Research &amp; Perspective, 6 (1-2). https://doi.org/10/d23hnp</p>
+<p>Borsboom, D. (2017). A network theory of mental disorders. World Psychiatry, 16 (1). https://doi.org/10/f9ntpv</p>
+<p>Borsboom, D., Cramer, A. O. J., &amp; Kalis, A. (2019). Brain disorders? Not really: Why network structures block reductionism in psychopathology research. Behavioral and Brain Sciences, 42. https://doi.org/10.1017/S0140525X17002266</p>
+<p>Borsboom, D., &amp; Cramer, A. O. (2013). Network analysis: An integrative approach to the structure of psychopathology. Annual Review of Clinical Psychology, 9 (1). https://doi.org/10/f4vznx</p>
+<p>Borsboom, D., Deserno, M. K., Rhemtulla, M., Epskamp, S., Fried, E. I., McNally, R. J., Robinaugh, D. J., Perugini, M., Dalege, J., Costantini, G., Isvoranu, A.-M., Wysocki, A. C., van Borkulo, C. D., van Bork, R., &amp; Waldorp, L. J. (2021). Network analysis of multivariate data in psychological science. Nature Reviews Methods Primers, 1 (1). https://doi.org/10/gmh9kg</p>
+<p>Cheng, S., Chen, Z., Wu, C., Li, X., Shen, X., Qiu, R., Tang, N., Feng, C., Wang, W., Lv, J., Yuan, S., &amp; Liu, X. (2025). The comorbidity of anxiety and depression symptoms in obsessive-compulsive disorder: A network analysis. Frontiers in Psychiatry, 16. https://doi.org/10.3389/fpsyt.2025.1567448</p>
+<p>Cramer, A. O. J., Waldorp, L. J., van der Maas, H. L. J., &amp; Borsboom, D. (2010). Comorbidity: A network perspective. Behavioral and Brain Sciences, 33 (2-3). https://doi.org/10.1017/S0140525X09991567</p>
+<p>Du, X., Skjerdingstad, N., Freichel, R., Ebrahimi, O. V., Hoekstra, R. H. A., &amp; Epskamp, S. (2025). Moving from exploratory to confirmatory network analysis: An evaluation of structural equation modeling fit indices and cutoff values in network psychometrics. Psychological Methods. https://doi.org/10.1037/met0000760</p>
+<p>Du, X., Urnes Johnson, S., &amp; Epskamp, S. (2026). The invariance partial pruning approach to the network comparison in time-series and panel data. Psychological Methods. https://doi.org/10.1037/met0000824</p>
+<p>Ebrahimi, O. V., Bauer, D. J., Hoffart, A., &amp; Johnson, S. U. (2021, December). The evolution of depressive symptomatology across three waves of the COVID-19 pandemic: A 17-month representative longitudinal study of the adult population (Preprint). PsyArXiv.</p>
+<p>Epskamp, S. (2020). Psychometric network models from time-series and panel data. Psychometrika, 85 (1). https://doi.org/10/ggs9tp</p>
+<p>Epskamp, S., Waldorp, L. J., Mõttus, R., &amp; Borsboom, D. (2018). The Gaussian Graphical Model in Cross-Sectional and Time-Series Data. Multivariate Behavioral Research, 53 (4). https://doi.org/10/gghm3c</p>
+<p>Groen, R. N., Ryan, O., Wigman, J. T. W., Riese, H., Penninx, B. W. J. H., Giltay, E. J., Wichers, M., &amp; Hartman, C. A. (2020). Comorbidity between depression and anxiety: Assessing the role of bridge mental states in dynamic psychological networks. BMC Medicine, 18 (1). https://doi.org/10.1186/s12916-020-01738-z</p>
+<p>Hamaker, E. L. (2023). The Curious Case of the Cross-Sectional Correlation. Multivariate Behavioral Research, 0 (0). https://doi.org/10.1080/00273171.2022.2155930</p>
+<p>Hamaker, E. L., Kuiper, R. M., &amp; Grasman, R. P. P. P. (2015). A critique of the cross-lagged panel model. Psychological Methods, 20 (1). https://doi.org/10.1037/a0038889</p>
+<p>Hoekstra, R. H. A., Epskamp, S., Nierenberg, A. A., Borsboom, D., &amp; McNally, R. J. (2024). Testing similarity in longitudinal networks: The Individual Network Invariance Test. Psychological Methods. https://doi.org/10.1037/met0000638</p>
+<p>Hoffart, A., Burger, J., Johnson, S. U., &amp; Ebrahimi, O. V. (2023). Daily dynamics and mechanisms of anxious symptomatology in the general population: A network study during the COVID-19 pandemic. Journal of Anxiety Disorders, 93. https://doi.org/10.1016/j.janxdis.2022.102658</p>
+<p>Hoffart, A., &amp; Johnson, S. U. (2020). Latent Trait, Latent-Trait State, and a Network Approach to Mental Problems and Their Mechanisms of Change. Clinical Psychological Science, 8 (4). https://doi.org/10.1177/2167702620901744</p>
+<p>Hoffart, A., Johnson, S. U., &amp; Ebrahimi, O. V. (2022). Metacognitive beliefs, maladaptive coping strategies, and depressive symptoms: A two-wave network study of the COVID-19 lockdown and reopening. Journal of Psychiatric Research, 152. https://doi.org/10.1016/j.jpsychires.2022.06.008</p>
+<p>Hoffart, A., Skjerdingstad, N., Freichel, R., Johnson, S. U., Epskamp, S., &amp; Ebrahimi, O. V. (2025). Mapping the Dynamics of Generalized Anxiety Symptoms and Actionable Transdiagnostic Mechanisms: A Panel Study. Depression and Anxiety, 2025 (1). https://doi.org/10.1155/da/1885004</p>
+<p>Hoffart, A., Skjerdingstad, N., Freichel, R., Mansueto, A. C., Johnson, S. U., Epskamp, S., &amp; Ebrahimi, O. V. (2023). Depressive Symptoms and Their Mechanisms: An Investigation of Long-Term Patterns of Interaction Through a Panel-Network Approach. Clinical Psychological Science. https://doi.org/10.1177/21677026231208172</p>
+<p>Isvoranu, A.-M., &amp; Epskamp, S. (2021). Which estimation method to choose in network psychometrics? Deriving guidelines for applied researchers. Psychological Methods. https://doi.org/10.1037/met0000439</p>
+<p>Jin, Y., Sha, S., Tian, T., Wang, Q., Liang, S., Wang, Z., Liu, Y., Cheung, T., Su, Z., Ng, C. H., &amp; Xiang, Y. T. (2022). Network analysis of comorbid depression and anxiety and their associations with quality of life among clinicians in public hospitals during the late stage of the COVID-19 pandemic in china. Journal of Affective Disorders, 314. https://doi.org/10.1016/j.jad.2022.06.051</p>
+<p>Jones, P. J., Ma, R., &amp; McNally, R. J. (2019). Bridge Centrality: A Network Approach to Understanding Comorbidity. Multivariate Behavioral Research, 0 (0). https://doi.org/10/ghn6xh</p>
+<p>Kaiser, T., Herzog, P., Voderholzer, U., &amp; Brakemeier, E.-L. (2021). Unraveling the comorbidity of depression and anxiety in a large inpatient sample: Network analysis to examine bridge symptoms. Depression and Anxiety, 38 (3). https://doi.org/10.1002/da.23136</p>
+<p>Kaźmierczak, I., Zajenkowska, A., Rogoza, R., Jonason, P. K., &amp; Ścigała, D. (2023). Self-selection biases in psychological studies: Personality and affective disorders are prevalent among participants. PLOS ONE, 18 (3). https://doi.org/10.1371/journal.pone.0281046</p>
+<p>Kline, R. B., &amp; Little, T. D. (2023). Principles and practice of structural equation modeling (Fifth edition). The Guilford Press.</p>
+<p>Kroenke, K., Spitzer, R. L., &amp; Williams, J. B. (2001). The PHQ-9: Validity of a brief depression severity measure. Journal of General Internal Medicine, 16 (9). https://doi.org/10.1046/j.1525-1497.2001.016009606.x</p>
+<p>Lamers, F., Van Oppen, P., Comijs, H. C., Smit, J. H., Spinhoven, P., Van Balkom, A. J. L. M., Nolen, W. A., Zitman, F. G., Beekman, A. T. F., &amp; Penninx, B. W. J. H. (2011). Comorbidity Patterns of Anxiety and Depressive Disorders in a Large Cohort Study: The Netherlands Study of Depression and Anxiety (NESDA). The Journal of Clinical Psychiatry, 72 (03). https://doi.org/10.4088/JCP.10m06176blu</p>
+<p>Li, T., Zhang, D., Jiang, T., Che, W., Zhang, Y., Wan, Y., Tao, F., Tao, S., &amp; Wu, X. (2025a). A network analysis of the depression and anxiety comorbidity: A nationwide survey among chinese adolescents during the normalization phase of COVID-19 pandemic prevention and control. BMC Psychiatry, 25 (1). https://doi.org/10.1186/s12888-025-07036-3</p>
+<p>Li, T., Zhang, D., Jiang, T., Che, W., Zhang, Y., Wan, Y., Tao, F., Tao, S., &amp; Wu, X. (2025b). A network analysis of the depression and anxiety comorbidity: A nationwide survey among Chinese adolescents during the normalization phase of COVID-19 pandemic prevention and control. BMC Psychiatry, 25 (1). https://doi.org/10.1186/s12888-025-07036-3</p>
+<p>Magnúsdóttir, I., Lovik, A., Unnarsdóttir, A. B., McCartney, D., Ask, H., Kõiv, K., Christoffersen, L. A. N., Johnson, S. U., Hauksdóttir, A., Fawns-Ritchie, C., Helenius, D., González-Hijón, J., Lu, L., Ebrahimi, O. V., Hoffart, A., Porteous, D. J., Fang, F., Jakobsdóttir, J., Lehto, K., . . . Valdimarsdóttir, U. A. (2022). Acute COVID-19 severity and mental health morbidity trajectories in patient populations of six nations: An observational study. The Lancet Public Health, 7 (5). https://doi.org/10.1016/S2468-2667(22)00042-1</p>
+<p>Mazza, G. L., &amp; Enders, C. K. (2013). Missing Data Analysis. In H. T. Reis &amp; C. M. Judd (Eds.), Handbook of Research Methods in Social and Personality Psychology (2nd ed.). Cambridge University Press. https://doi.org/10.1017/CBO9780511996481.029</p>
+<p>McLean, C. P., Asnaani, A., Litz, B. T., &amp; Hofmann, S. G. (2011). Gender differences in anxiety disorders: Prevalence, course of illness, comorbidity and burden of illness. Journal of Psychiatric Research, 45 (8). https://doi.org/10.1016/j.jpsychires.2011.03.006</p>
+<p>Nordahl, H., &amp; Wells, A. (2019). Measuring the Cognitive Attentional Syndrome Associated with Emotional Distress: Psychometric Properties of the CAS-1. International Journal of Cognitive Therapy, 12 (4). https://doi.org/10.1007/s41811-019-00056-4</p>
+<p>O&#x27;Driscoll, C., Epskamp, S., Fried, E., Saunders, R., Cardoso, A., Stott, J., Wheatley, J., Cirkovic, M., Naqvi, S., Buckman, J., &amp; Pilling, S. (2022). Transdiagnostic symptom dynamics during psychotherapy. Scientific Reports, 12. https://doi.org/10.1038/s41598-022-14901-8</p>
+<p>Pearl, J. (2009). Causality: Models, reasoning, and inference (2nd). Cambridge University Press.</p>
+<p>Robinaugh, D. J., Hoekstra, R. H. A., Toner, E. R., &amp; Borsboom, D. (2020). The network approach to psychopathology: A review of the literature 2008-2018 and an agenda for future research. Psychological Medicine, 50 (3). https://doi.org/10.1017/S0033291719003404</p>
+<p>Ryan, O., Bringmann, L. F., &amp; Schuurman, N. K. (2022). The Challenge of Generating Causal Hypotheses Using Network Models. Structural Equation Modeling: A Multidisciplinary Journal, 29 (6). https://doi.org/10.1080/10705511.2022.2056039</p>
+<p>Schafer, J. L., &amp; Graham, J. W. (2002). Missing data: Our view of the state of the art. Psychological Methods, 7 (2). https://doi.org/10.1037/1082-989X.7.2.147</p>
+<p>Schuch, J. J. J., Roest, A. M., Nolen, W. A., Penninx, B. W. J. H., &amp; de Jonge, P. (2014). Gender differences in major depressive disorder: Results from the Netherlands study of depression and anxiety. Journal of Affective Disorders, 156. https://doi.org/10.1016/j.jad.2013.12.011</p>
+<p>Spitzer, R. L., Kroenke, K., Williams, J. B. W., &amp; Löwe, B. (2006). A brief measure for assessing generalized anxiety disorder: The GAD-7. Archives of Internal Medicine, Starr, L. R., &amp; Davila, J. (2012). Temporal patterns of anxious and depressed mood in generalized anxiety disorder: A daily diary study. Behaviour Research and Therapy, 50 (2). https://doi.org/10.1016/j.brat.2011.11.005</p>
+<p>ter Meulen, W. G., Draisma, S., van Hemert, A. M., Schoevers, R. A., Kupka, R. W., Beekman, A. T. F., &amp; Penninx, B. W. J. H. (2021). Depressive and anxiety disorders in concert -A synthesis of findings on comorbidity in the NESDA study. Journal of Affective Disorders, 284. https://doi.org/10.1016/j.jad.2021.02.004</p>
+<p>van Borkulo, C. D., van Bork, R., Boschloo, L., Kossakowski, J. J., Tio, P., Schoevers, R. A., Borsboom, D., &amp; Waldorp, L. J. (2023). Comparing network structures on three aspects: A permutation test. Psychological Methods, 28 (6). https://doi.org/10.1037/met0000476</p>
+<p>Wells, A. (2011). Metacognitive therapy for anxiety and depression. Guilford.</p>
+<p>Zhang, S., Ding, F., &amp; Chen, J. (2024). Comorbidity of anxiety and depression disorder among clinical referral patients: A longitudinal study based on network analysis. Current Psychology, 43 (23). https://doi.org/10.1007/s12144-024-05856-2</p>
+<p>Zheng, Z., Zhao, W., Zhou, Q., Yang, Y., Chen, S., Hu, J., Jiang, W., Zhang, W., Cai, J., &amp; Qiu, J. (2023). Sex differences in depression, anxiety and health-promoting lifestyles among community residents: A network approach. Journal of Affective Disorders, 340. https://doi.org/10.1016/j.jad.2023.07.107</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
