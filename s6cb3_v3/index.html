@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Bayesian Treed Regressions for Heterogeneous
+Test-Score Trajectories in Large-Scale Educational Assessments</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Bayesian Treed Regressions for Heterogeneous Test-Score Trajectories in
+Large-Scale Educational Assessments
+</p>
+<p class="meta">
+2026-11-10 · Metacheck 0.4.3.24
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to fix</span></a><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Effect
+Sizes in t-tests and F-tests</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 2 t-tests and/or F-tests where effect sizes are not
+reported. Check these tests in the table below, and consider adding
+effect sizes.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>We recommend checking the sentences below, and add any missing effect
+sizes.</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Each replication generates N = 1,000 students using the moderator values
+of the first 1,000 students in the empirical data, observed at seven
+waves (t = 1, 2, . . ., 7), for 7,000 observations in total.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+through eighth grade over seven assessment occasions (fall and spring of
+kindergarten, fall and spring of first grade, and spring of third,
+fifth, and eighth grade), which we denote by t = 1, 2, . . ., 7.
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating that effect sizes are often
+not reported:</p>
+<ul>
+<li>Peng, C.-Y. J., Chen, L.-T., Chiang, H.-M., &amp; Chiang, Y.-C.
+(2013). The Impact of APA and AERA Guidelines on Effect Size Reporting.
+Educational Psychology Review, 25(2), 157–209. <a href="doi:%5B10.1007/s10648-013-9218-2" class="uri">doi:[10.1007/s10648-013-9218-2</a>](<a href="https://doi.org/10.1007/s10648-013-9218-2" class="uri">https://doi.org/10.1007/s10648-013-9218-2</a>).</li>
+</ul>
+<p>For educational material on reporting effect sizes:</p>
+<ul>
+<li><a href="https://matthewbjane.quarto.pub/guide-to-effect-sizes-and-confidence-intervals/">Guide
+to Effect Sizes and Confidence Intervals</a></li>
+</ul>
+</div>
+<div class="callout-tip" title="All detected and assessed stats" collapse="true">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Sentence
+</th>
+<th style="text-align:left;">
+Effect Size
+</th>
+<th style="text-align:left;">
+Reported Test
+</th>
+<th style="text-align:left;">
+Test Type
+</th>
+<th style="text-align:left;">
+d Coherence
+</th>
+<th style="text-align:left;">
+d Assumption
+</th>
+<th style="text-align:left;">
+d Coherence Note
+</th>
+<th style="text-align:left;">
+eta Coherence
+</th>
+<th style="text-align:left;">
+eta Assumption
+</th>
+<th style="text-align:left;">
+eta Coherence Note
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Each replication generates N = 1,000 students using the moderator values
+of the first 1,000 students in the empirical data, observed at seven
+waves (t = 1, 2, . . ., 7), for 7,000 observations in total.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+t = 1
+</td>
+<td style="text-align:left;">
+t-test
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable t(df)=value found.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+through eighth grade over seven assessment occasions (fall and spring of
+kindergarten, fall and spring of first grade, and spring of third,
+fifth, and eighth grade), which we denote by t = 1, 2, . . ., 7.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+t = 1
+</td>
+<td style="text-align:left;">
+t-test
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable t(df)=value found.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 27 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 27 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 27 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>In large-scale educational assessments, students&#x27; academic outcomes can evolve over time due to various background variables. For instance, parents&#x27; education level, a common moderator, has been found to have time-varying effects on children&#x27;s test scores, leading to heterogeneous academic trajectories. To model these varying trajectories, parametric models like hierarchical linear models (HLMs) are commonly deployed. While these parametric methods are interpretable, their predictive capacities have not been rigorously compared to those of more flexible non-parametric approaches. We present the results of systematic simulation studies and empirical analyses comparing six parametric specifications to two Bayesian non-parametric methods, Bayesian additive regression trees (BART) and its semi-parametric extension with varying coefficients (VCBART). Our findings indicate that the BART-based alternatives can (1) achieve out-of-sample prediction close to the best-specified HLM, with standardized out-of-sample errors within 0.002 of the best parametric model in every simulation condition; (2) provide a reasonable amount of interpretability and uncertainty quantification; and (3) run about 20 to 200 times faster than the most saturated parametric model. This work contributes to the existing literature by demonstrating that Bayesian treed regressions are viable and feasible alternatives to benchmark HLMs for predicting heterogeneous trajectories across time.</p>
+<h3>Bayesian Treed Regressions for Heterogeneous Test-Score Trajectories in Large-Scale Educational Assessments Introduction Background</h3>
+<p>In large-scale educational assessments, students&#x27; test scores are often heterogeneous at individual levels across time. Exploring the dynamic nature of students&#x27; learning patterns as well as their background characteristics that shape their diverse educational development can offer helpful insights into the efficacy of pedagogical strategies and educational policies. Typically, we estimate these trajectories with parametric statistical models in which the heterogeneity in test score trajectories is captured by individual-level parameters. To illustrate, let us consider a simple case where the test scores are a linear function of the time measures. That is, under the normality assumption, the relationship between test scores and time can be denoted as: where y it and T it are the test scores and time measures for individual i at time t, and σ 2 is the variance of the error term, assumed constant across individuals and occasions throughout this paper.</p>
+<p>The coefficients π 0i and π 1i are the intercept and the slope for T it . We collect the individual-level coefficients in the vector π i = (π 0i , π 1i ) ⊤ , and write π pi for its pth element; the same convention applies once a quadratic term is added later.</p>
+<p>To capture the heterogeneous trajectories of test scores, we shall not assume the coefficients π pi to be constants but let them vary with respect to background characteristics, namely, varying coefficients. This is a common phenomenon in large-scale educational assessments. For instance, a large body of previous longitudinal studies has shown that children&#x27;s academic outcomes have time-varying slopes, due to the joint effects of multiple factors at different levels (e.g., Spilt et al., 2012; Ladd and Dinella, 2009; McNeish et al., 2020; Nestler and Humberg, 2022). Parental education, as one of the common background characteristics in education studies, is shown to have significantly varying effects on children&#x27;s developmental outcomes across time (e.g., Cheadle and Amato, 2011; Dubow et al., 2009; Bae and Wickrama, 2015; Hao and Yeung, 2015; Potter and Roksa, 2013). In particular, Potter and Roksa (2013) conclude that children whose mothers have graduate degrees tend to have higher test scores at all grade levels, compared to those whose mothers have high school degrees, using the Early Childhood Longitudinal Study Kindergarten cohort (ECLS-K) data. With the same empirical data used in Potter and Roksa (2013)&#x27;s study, Figure 1 illustrates the variation in the trajectories of test scores for children as a function of their mothers&#x27; educational background. First, Figure 1a indicates that the mother&#x27;s education makes a difference in the average reading scores, and the regression slope for the time measures is evidently not constant over time, indicating the existence of varying coefficients. To depict how individual characteristics yield different test trajectories given certain levels of background covariates, Figures 1b and 1c show the test scores for individuals whose mother has the lowest (coded as 0) and the highest educational attainment (coded as 8) respectively. We see that children&#x27;s test scores are more similar to each other when their mothers have the same education levels.</p>
+<p>In addition, the heterogeneity in children&#x27;s academic performance can also be attributed to the unique random variability of each individual. This implies that when we model the varying coefficients of the time measures, two components should be taken into consideration: the dependency among students that may cause their scores to be related or similar to each other, and the individual idiosyncrasies that make their learning pattern distinct and independent from others.</p>
+<p>The benchmark methods used in social and behavioral sciences are hierarchical linear models (HLMs), which treat individuals as a cluster to model the growth of test scores across time. Previous studies have indicated that HLMs can effectively obtain adequate statistical inference and provide interpretability for the data (e.g., Cece et al., 2020; Borges et al., 2021). Applications to longitudinal assessment data are plentiful; besides Potter and Roksa (2013), the studies of McNeish (2017), Rittle-Johnson et al. (2017), and McNeish et al. (2020) offer representative examples.</p>
+<p>A larger body of related (a) (b) (c) approaches, such as growth curve modeling and multilevel structural equation modeling, pursues similar goals with different parameterizations (e.g., McNeish and Matta, 2018; Hoffman, 2015; Fine et al., 2019; Wang and Maxwell, 2015).</p>
+<p>In his &quot;Two Cultures&quot; paper, Breiman (2001) describes two cultures of statistical modeling. The first culture assumes a data-generating model of a known form and estimates its parameters, which is how the parametric HLMs above operate. The second culture treats the data-generating process as a black box and approximates it with a flexible algorithm that learns the patterns from the data. This study compares the two cultures on the prediction of heterogeneous test score trajectories.</p>
+<h3>Motivation</h3>
+<p>The first culture comes with some potential drawbacks. First and foremost, to attain accurate prediction, the HLMs are supposed to be correctly specified. This has always been a challenging task as the model should be flexible but rigorous enough to capture the underlying patterns of the data, while being parsimonious enough to avoid overfitting, which means inferences obtained from a specific sample can be generalized to the population or other samples. In addition, there are a large number of model selection methods that can be considered such as information criteria (e.g., AIC) and regularization methods (e.g., LASSO). This necessitates researchers to carefully choose appropriate selection methods since different strategies will lead to different final choices of model, which potentially bring in biased statistical inference. Second, complex hierarchical model structures may fail to converge due to issues such as singularity, as manifested by near zero or negative variances, encountered using frequentist approaches (Snijders and Bosker, 2011; Huang and Anderson, 2021). To reiterate, in this study, we first tried to replicate the results of Potter and Roksa (2013) with frequentist HLMs fitted in lme4 (Bates et al., 2015). For both outcomes, every model that incorporates moderator effects terminated in a boundary (singular) fit, with the estimated correlations between the random intercept and the random time slopes pushed to the boundary of the parameter space. Bayesian estimation with proper priors avoids this issue, since the priors keep the variance components away from the boundary. However, both approaches still require the researcher to specify the model correctly. Lastly, modeling varying coefficients or heterogeneous time trends can be computationally intense, utilizing a large amount of memory and time. Given these challenges, we consider Bayesian non-parametric methods that learn the mean function from the data under default priors. That is, Bayesian additive regression trees (BART) and varying coefficients BART (VCBART). Essentially, we compare the predictive performance obtained from the hierarchical models, BART, and VCBART through both simulation and empirical studies.</p>
+<h3>Aim and Contributions</h3>
+<p>The general goal of this study is to implement an alternative approach that can (1) effectively address these limitations and (2) maintain a comparable level of predictive performance as the benchmark HLMs. We chose Potter and Roksa (2013)&#x27;s work as a starting point to provide a concrete example for the comparisons between baseline HLMs and Bayesian ensemble learning, and our study is not restricted to a single dataset: we employ six simulation conditions and empirical studies with two response variables (reading and math scores). This work contributes to the existing literature in four aspects.</p>
+<p>First, given the complexity of large-scale assessment data, we want to avoid the potential model misspecification issues that are intrinsic to parametric modeling strategies, while maintaining the same level of predictive accuracy as benchmark HLMs; the BART-based methods make minimal parametric assumptions in their default set-up (e.g., Chipman et al., 2010; Hill et al., 2020). Second, large-scale data call for robust uncertainty quantification, and we evaluate the calibration of each method&#x27;s prediction intervals rather than assuming it. Third, VCBART offers the ability to quantify uncertainty using probabilistic intervals and provides a certain level of interpretability for the effects of the time measures, and we examine its estimated coefficient functions directly. Lastly, to make the methods easy to use in practice, especially for applied researchers, BART and VCBART are relatively straightforward to implement, and they are more computationally efficient than the saturated parametric models. The purpose of this paper is not to argue which culture, parametric or non-parametric, is philosophically correct. Instead, we intend to provide a detailed comparison of benchmark hierarchical parametric models and nonparametric machine learning methods in terms of their predictive performance, when the effects of the time measures vary longitudinally in hierarchical clustered data.</p>
+<h3>Outline</h3>
+<p>The remainder of this paper is structured as follows. The next section introduces the notation and the pooling concepts used throughout the study. After that, we formulate the parametric models that will be compared with the BART-based methods, followed by a brief introduction to BART and VCBART. We then present the simulation studies and the empirical study with the ECLS-K data. Implications and limitations are discussed at the end of the paper.</p>
+<h3>Notation and Preliminaries</h3>
+<p>Table 1 collects the notation used in the remainder of the paper. Throughout, bold symbols denote vectors, and X i in particular denotes the vector of moderators for individual i.</p>
+<p>This section also introduces the concepts of complete pooling, no pooling, and partial pooling, which are commonly used in Bayesian statistics and are also gaining traction in social science research (Gelman et al., 1995). 1. Complete pooling ignores the hierarchical clustering structure and treats every observation as part of a single grouping cluster. For instance, students&#x27; test scores can be denoted as y i ∼ N (µ, σ 2 ), where µ is the overall average test score across all schools and σ 2 is the variance. This approach assumes all the schools&#x27; effects are identical, analogous to a regression with only a global intercept and no group-specific parameters.</p>
+<p>2. No pooling treats each group as entirely separate, estimating parameters for each group independently. That is, student test scores for each school j can be denoted as y ij ∼ N (µ j , σ 2 j ), indicating each school has its own mean and variance. Unlike the complete pooling model, this allows for different intercepts across groups but ignores the dependency between groups, and no information is shared.</p>
+<p>3. Partial pooling is a compromise between complete pooling and no pooling, allowing information to be shared across groups while still acknowledging group-level differences.</p>
+<p>That is, y ij ∼ N (µ j , σ 2 ), µ j ∼ N (µ 0 , τ² ). In this case, each school has its own mean, but these means center around an overall mean µ 0 with between-school variance τ².</p>
+<p>This approach corresponds to the mixed-effects model, where both an overall mean function and group-specific deviations are considered.</p>
+<p>Our preference for the pooling notations is due to their flexible hierarchical modeling capabilities, better uncertainty quantification through posterior distributions, and their ability to provide more comprehensive insights for the cluster structure. With this notation in place, we formulate and refine the models in the next section.</p>
+<h3>Model Formulation and Refinement</h3>
+<p>From a General Mean Function to a Centered Quadratic</p>
+<p>We reconsider the simple modeling example, function (a), presented in the introduction, which assumes that children&#x27;s test scores are a linear function of time. As Figure 1 illustrates, the actual trajectories of test scores are not linear, underscoring the need for a more flexible model that can capture the complex relationships between time measures and test scores. We therefore start with a general formulation for predicting test score trajectories at the individual level. Assuming only that the errors are random and normally distributed, we can write the following model: which indicates that the test scores are a noisy measure of some expected values that depend on T it and the moderators X i .</p>
+<p>Without any prior knowledge, however, this function is exceedingly difficult to fit due to several reasons. First, this is an individual-specific function and thus we need to fit a separate model for each person, which incurs considerable computational burden. Second, the concrete relationship between y it and {T it , X i } is not clear such that the above function (b) could be linear, non-linear, and possibly involve high-dimensional interactions. For instance, f i (T it , X i ) may be polynomial, exponential, or even a nonstationary time series function. Third, with the existence of sparsity, high dimensional interactions in f i (T it , X i ) might bring in issues such as overfitting, collinearity, and computational complexity. Therefore, instead of starting with this particularly challenging model, we simplify this individual-specific function by a constant mean function as follows: Our preliminary analysis of the same ECLS-K data shows clear curvature in the trajectories, so the mean function needs at least linear and quadratic terms of the time measures. We adopt the quadratic polynomial, the lowest degree that captures the observed curvature, which also keeps the model parsimonious. A check on the empirical data shows that a cubic term would lower the out-of-sample prediction error by a further three to five percent, so the polynomial degree is itself a specification choice. As such, we model the mean as a quadratic polynomial in centered time: where or subgroups.</p>
+<p>In light of these considerations, we derive six parametric specifications in the next subsection and discuss their potential drawbacks along the way.</p>
+<h3>Parametric Specifications</h3>
+<p>Function (d) shown above will be our first model, model 1. This is a complete pooling model with priors on π p :</p>
+<p>For this parametric model, we standardize the outcome and set normal priors with mean 0 and standard deviation 0.5 on π p , for p = 0, 1, 2. In general, we have chosen the priors and hyper-priors to match the default settings of BART and VCBART in this study, and we provide the details of this calibration in Appendix A. Thus, we set inverse-gamma priors on the overall error variance σ 2 for all the parametric models. Though it is easy to implement this model in statistical software and straightforward to interpret, it assumes the test scores of every individual have the same trend without any individual variation.</p>
+<p>However, as shown in Figure 1, we can see the dissimilarity in the trajectories for different students. Therefore, instead of employing a general constant mean model, we consider fitting a no-pooling model:</p>
+<p>This model places independent priors on each student&#x27;s coefficients with no shared population mean, so the effects of time measures on test scores for each individual are estimated separately. Compared to model 1 which assumes every individual has the same trajectory, this model acknowledges individual idiosyncrasies but neglects the dependency between individuals. The lack of a shared mean has a direct consequence for prediction: a student absent from the training set has no estimated coefficients, and the model predicts that student from the prior alone. We return to this point when interpreting the out-of-sample results. For individuals with similar backgrounds, one can instead expect similar progress over time and thus similar trajectories of test scores, a pattern documented in a large body of previous research (e.g., Bassok et al., 2016; Roberts et al., 2010; Buek, 2019; Miller et al., 2020). From this perspective, instead of letting π pi be completely independent for each student, we can consider using a partial pooling model to account for the similarities between individuals across time.</p>
+<p>Model 3:</p>
+<p>In that light, model 3 is a partial pooling or hierarchical model that recognizes the dependency between individuals as well as the idiosyncratic randomness of each individual. Here β p0 is the population mean of the individual coefficients, σ p0 is their betweenindividual standard deviation, and N + denotes a half-normal prior. The main drawback of this model lies in its neglect of any moderators&#x27; effects on π pi . However, as shown in Figure 1, different levels of the moderator, the mother&#x27;s education, will affect the trajectories to different extents. As such, we consider adding the moderators&#x27; effects in the next two models.</p>
+<p>Model 4: with the same level-1 specification for y it as in model 3.</p>
+<p>Model 4 is a constant mean model that accounts for all the moderators&#x27; effects but contains no individual random errors: the coefficients π pi are a deterministic function of the moderators.</p>
+<p>The vector X i contains the background variables, and Γ p collects the corresponding effects. To interpret, this model assumes individuals with identical moderators will have the same trajectories of test scores. Potter and Roksa (2013) only consider the effects of X i on π 0i (see model 6).</p>
+<p>However, the reason behind this modeling strategy is unclear in their paper, which brings us to another question: what if X i also affects the slopes for the linear and quadratic time measures, π 1i and π 2i ? Therefore, we also include X i in model 4 for the computation of π 1i and π 2i to examine this question. Compared to the above three models, model 4 considers the effects of the moderators and thus introduces extra heterogeneity in the time trend of test scores. Similar to model 1, this model does not account for individual variability, which potentially leads to inaccurate prediction. Therefore, in the next step, we add the individual random errors into model 5.</p>
+<p>Model 5:</p>
+<p>In that manner, model 5 is the most saturated model. This model assumes that individuals with identical moderators will have similar trajectories of test scores. More specifically, their test scores are noisy measures with the same expected value at specific time points, which vary due to individual idiosyncrasies and different moderator effects.</p>
+<p>Based on this highly parametric model, one can understand how the moderators play a role in the trajectories of test scores at an individual level. Despite its capability for explanation, as we mentioned earlier, there are some potential drawbacks we need to consider before fitting this model: (1) it requires correctly pre-specifying the model; (2) may introduce an overfitting issue; (3) is computationally intense. Therefore, instead of carefully building these parametric models based on various model selection methods, another useful approach is to apply some black box methods that flexibly approximate f (T it , X i ). Before we move to the next section, the last model we construct is model 6, where the moderators only affect π 0i . We call this a reference model since Potter and Roksa (2013) has chosen this model in their empirical study, and we will compare this reference model with others to see how they perform differently in terms of prediction.</p>
+<p>Model 6:</p>
+<h3>Bayesian Additive Regression Trees (BART)</h3>
+<p>BART, proposed by Chipman et al. (2010), has gained wide popularity as an &quot;off-the-shelf&quot; ensemble method in statistics and computer science. Generally speaking, BART approximates the unknown f in function (c) by the sum of M independent binary regression trees. Figure 2 illustrates the structure of a binary regression tree, which is the building block for BART. Starting from the root, each regression tree splits based on the thresholds of the inputs, and the corresponding value at each node is the expected value of the outcome variable, µ i (see Figure 2a). In other words, the tree partitions the sample space into several sub-regions (see Figure 2b). While a single tree provides a basic partitioning of the sample space, BART takes this concept further by combining multiple such binary trees, each acting as a &quot;weak learner&quot;, to create a robust predictive model. Essentially, BART employs a sum-of-trees approach where each regression tree is intentionally kept shallow by using strong regularizing priors. This ensemble approach of combining multiple &quot;weak learners&quot; contrasts with those methods relying on a single deep tree that can suffer from instability (Gey and Poggi, 2006). Bayesian backfitting MCMC is used to iteratively build these trees. In each iteration, BART proposes changes to the tree structures including growing and pruning, then updates the terminal node parameters. These proposals are accepted or rejected based on how well they fit the data, subject to the prior constraints. This ensemble learning process allows BART to capture complex, non-linear relationships while maintaining computational feasibility and avoiding overfitting. A more detailed discussion of BART can be found in Chipman et al. (2010) and a review paper by Hill et al. (2020). BART and its extensions have been applied to several different domains such as economics and public health (e.g., Prüser, 2019; Scarpone et al., 2020), due to its flexibility in adapting to different data structures as well as its capacity for accurate prediction. VCBART is one of the elaborations of BART for varying coefficient settings.</p>
+<h3>Varying Coefficients BART (VCBART)</h3>
+<p>In general, VCBART replaces the regression coefficients with functions and uses BART to approximate these functions. For instance, in our case, the test scores can be computed by: where the original coefficient π p is replaced by a function of the moderators π p (X i ) for p = 0, 1, 2, indicating the effects of time measures vary with respect to moderators, and ε it is a standard normal error.</p>
+<p>Instead of using a single BART model to predict the outcome, VCBART employs multiple BART models, one for each varying coefficient. Each of these BART models takes the moderators as inputs and outputs the coefficient value. The  For those interested in exploring this approach further, a comprehensive description of VCBART and its corresponding R package is available in the work of Deshpande et al. (2023).</p>
+<h3>Simulation Studies</h3>
+<p>To examine the performance of the benchmark parametric models and the BARTbased non-parametric methods, in this section, we use synthetic data to evaluate their predictive accuracy.</p>
+<h3>Data Generation Process (DGP)</h3>
+<p>To mimic the real data setting, we consider six conditions by varying the effects of moderators as well as the level of individual random variation. The six conditions form a 3 × 2 factorial design, crossing the moderator structure (no moderators, mother&#x27;s education only, or all moderators) with the individual variation (σ p0 = 0 or σ p0 = 0.5);</p>
+<p>Table 2 summarizes the design. To be specific, we generated the data based on the following model: where MOMED denotes mother&#x27;s education and Z i denotes the remaining moderators.</p>
+<p>Each replication generates N = 1,000 students using the moderator values of the first 1,000 students in the empirical data, observed at seven waves (t = 1, 2, . . . , 7), for 7,000 observations in total. We set β 00 to be 10, β 10 to be 8, and β 20 to be 3 for all six conditions. These values are chosen based on the coefficients obtained from an ordinary least squares regression fitted to the empirical data. In the first two conditions, we intend to examine how the parametric methods and BART-based methods differ when there are no moderator effects. That is, all the β pl and Γ p are set to be zero. Furthermore, we also want to examine how they perform differently when accounting for individual randomness. To do so, in the first condition, we let all the σ p0 be zero while in the second condition, we adjust σ p0 to be 0.5. Therefore, we can regard the second condition as a noisy version of the first condition. Similarly, in conditions 3 and 4, we introduce a single moderator effect of MOMED on the varying coefficients. Namely, we let Γ p be zero but assign different values to β pl . Instead of assuming different levels of mothers&#x27; education have a constant effect on the trajectories of students&#x27; scores, we release this restriction and allow MOMED to have a diminishing effect. The diminishing pattern departs from a trend that is linear in the education levels, and its increments are broadly in line with the narrowing gaps between adjacent education levels observed in the empirical data. For each level of MOMED, we specify β 01 to β 09 as 1, 10, 17, 22, 25, 26, 26.7, 27.2, 27.5, so the increments from the lowest level to the highest level are 9, 7, 5, 3, 1, 0.7, 0.5, and 0.3. Specifications that treat MOMED as categorical, through indicator variables or tree splits, can represent this pattern, while a linear-in-levels term cannot. In the same manner, β 1l and β 2l are configured to have diminishing effects on π 1i and π 2i respectively.</p>
+<p>Similar to the first two conditions, condition 4 is a noisy version of condition 3 with σ p0 = 0.5. Finally, we account for all the moderators&#x27; effects in conditions 5 and 6.</p>
+<p>In particular, Γ p are specified to be non-zero while MOMED has the same diminishing effects as in conditions 3 and 4. Similarly, condition 6 is the noisy version of condition 5.</p>
+<p>Each condition is replicated 100 times with independent draws of the coefficients, the residuals, and the data split. Within a replication, all methods are fit to the same training set of 900 students (90%) and evaluated on the same held-out set of 100 students (10%); the split is formed at the student level, so every out-of-sample prediction concerns a student entirely absent from the training set. We fit the six parametric models with the priors described in the previous section after standardizing the outcome. We chose these priors to match the default settings of VCBART so that we can provide an equitable comparison between the parametric models and the BART-based methods (see Appendix A). The parametric models are implemented using RStan (Stan Development Team, 2023), with four chains of 2,000 iterations each and the first 1,000 iterations of each chain discarded as warm-up, retaining 4,000 posterior draws. Next, we use the R packages BART (Sparapani et al., 2021) and VCBART (Deshpande et al., 2023) to run BART and VCBART respectively. VCBART runs four chains of 1,000 burn-in and 1,000 retained iterations each, matching the 4,000 retained draws of the parametric models; BART runs a single chain with 1,000 burn-in and 1,000 retained draws, its package default. To be precise, we perform BART and VCBART with the same inputs as in models 4, 5, and 6.</p>
+<p>Convergence diagnostics (potential scale reduction factors and effective sample sizes) for the Stan-fitted models are reported in Appendix B. The coding scripts can be found at the GitHub repository (blinded for review).</p>
+<h3>Analysis Measures</h3>
+<p>To compare the predictive performance, we first use the root mean squared error (RMSE), which is a measure of the distance between the actual value y it and the predicted values ˆ︂ y it :</p>
+<p>The smaller the RMSE is, the better the prediction is. Besides RMSE, we also consider using the standardized mean squared errors (SMSE), which is a measure of mean squared errors divided by the mean squared errors between the actual y it and the average response values ȳtrain in the training dataset. That is, .</p>
+<p>SMSE allows us to compare the predictive performances for different types of outcomes.</p>
+<p>Similar to RMSE, a lower out-of-sample SMSE indicates a better predictive performance on new data, while a higher value suggests that the model may not generalize well to unseen data. An SMSE of one corresponds to predicting every observation with the training mean. To quantify the uncertainty, we use coverage of the 95% prediction intervals, a probability measure that prediction intervals [L, U ] will include the actual values.</p>
+<p>As for the computational efficiency, we measured the total time taken (in seconds) to run both the parametric models and the BART-based approaches under the identical sampling conditions described above. All performance measures are averaged over the 100 replications, and we report Monte Carlo standard errors alongside the means.</p>
+<h3>Simulation Results</h3>
+<p>Tables 3 and 4 summarize the RMSE and SMSE results over the 100 replications.</p>
+<p>In general, the prediction errors grow as more moderator effects enter the true DGP, and the noisy conditions (2, 4, and 6) show larger errors than their constant counterparts (1, 3, and 5). We first look at the training set. Most methods perform comparably there, with RMSE close to the residual standard deviation used to generate the data. Model 1 (complete pooling) is the exception, since it ignores both the moderators and the individual variation, so it underfits once either enters the DGP. Models 2 (no pooling) and 3 (partial pooling without moderators) go in the other direction and obtain the smallest training RMSE. These two models estimate a separate set of coefficients for each student, so they fit the training data closely.</p>
+<p>The testing set tells a different story. Model 2 fails in every condition because it does not share any information across students. A student absent from the training set has no estimated coefficients, so the model falls back on the prior for the prediction. As a result, its out-of-sample SMSE equals one, the same value we would obtain by predicting every score with the training mean. Model 3 avoids this failure because its hierarchical structure shrinks the individual coefficients toward a common population mean, which gives a sensible prediction for a new student. Model 3 still ignores the moderators, so once the moderator effects enter the true DGP, its out-of-sample errors become as large as those of model 1.</p>
+<p>When it comes to out-of-sample prediction, the BART-based methods obtain comparably small RMSE as the best parametric model ( model 5 in conditions 4 and 6. They are therefore most competitive when the moderator set is small or when the individual variation dominates, which is the setting most empirical assessment data resemble. All of these differences are far larger than the Monte Carlo standard errors in Table 3. By investigating Figure 3, we can find that the in-sample intervals of all the methods are generally close to or above 95%, with model 2 at one because its intervals are extremely wide. As for the out-of-sample coverage, the hierarchical models with moderators (models 5 and 6) stay at or above the nominal level in every condition, overshooting it in the constant conditions. BART shows the clearest shortfall, with outof-sample coverage falling a few percentage points below the nominal level in the noisy conditions, while VCBART stays closer to it. The reason is that BART and VCBART, as implemented here, contain no student-level random effect. Their prediction intervals for a new student reflect only the residual variance and the uncertainty in the mean function, while the hierarchical models additionally propagate the between-student variance σ 2 p0 . The same shortfall appears again in the empirical study. Figure 4 shows the difference in computational cost between the parametric models and the BART-based methods, on a logarithmic scale. In all instances, BART has taken the shortest time to finish implementation (about 50 seconds per fit), followed by model 1 (about 150 seconds) and VCBART (about 300 seconds). By contrast, models 4 and 5 took the longest time for execution, roughly 14,000 and 10,000 seconds, so model 5 costs about 200 times the computing time of BART and 34 times that of VCBART.</p>
+<h3>Empirical Studies</h3>
+<p>In this section, we conducted empirical studies using the Early Childhood Longitudinal Study, Kindergarten Class of 1998-1999 data with reading and math scores as the response variables.</p>
+<h3>Data Information and Set Up</h3>
+<p>Aiming to improve students&#x27; developmental outcomes, the Early Childhood Longitudinal Study (ECLS) Program, conducted by the U.S. Department of Education, provides important information about how individual, school, family, and community factors affect students&#x27; academic performance. ECLS-K:1998 is one of the longitudinal studies that collected cohort data for the class of 1998, following students from kindergarten Figure 3 In-sample and out-of-sample coverage of the 95% prediction intervals across the six simulation conditions. Each box shows the distribution over the 100 replications and the dashed line marks the nominal level. Conditions 1 and 2 contain no moderator effects, conditions 3 and 4 add the MOMED effects, and conditions 5 and 6 add all the moderator effects; the even-numbered conditions include individual variation (σ p0 = 0.5). Models 1 to 6 are the parametric specifications defined in the text.</p>
+<h3>Figure 4</h3>
+<p>Computation time in seconds on a logarithmic scale across the six simulation conditions. Each box shows the distribution over the 100 replications. The parametric models and VCBART run four chains of 2,000 iterations each and BART runs one chain of 2,000 iterations. Conditions 1 and 2 contain no moderator effects, conditions 3 and 4 add the MOMED effects, and conditions 5 and 6 add all the moderator effects; the even-numbered conditions include individual variation (σ p0 = 0.5). Models 1 to 6 are the parametric specifications defined in the text.</p>
+<p>through eighth grade over seven assessment occasions (fall and spring of kindergarten, fall and spring of first grade, and spring of third, fifth, and eighth grade), which we denote by t = 1, 2, . . . , 7. Our analytic sample consists of the 1,348 students from 421 schools with observed scores at all seven occasions and complete moderator information, for 1,348 ×7 = 9,436 student-occasion observations; students with missing occasions or missing moderators were excluded, and we return to this complete-case restriction in the Discussion. Table 5 reports the means, standard deviations, and ranges of the two outcomes at each wave; both outcomes rise across the waves, and their dispersion grows through the middle waves. We choose the same time measures and moderators as in Potter and Roksa (2013)&#x27;s paper. The moderator vector X i comprises all variables listed in Table 8; mother&#x27;s education (MOMED) is the moderator of primary substantive interest, and Z i collects the remaining moderators. Following Potter and Roksa (2013), the parametric models and the BART-based methods treat the data as repeated measures at the individual level, with occasions nested in students, and do not model the school level.</p>
+<p>The reference study made the same choice because few students stay in the same school across the seven occasions, which precludes a compelling three-level model. In addition, a school random effect improves prediction for a new student only when that student&#x27;s school appears in the training set. We discuss the implications of this choice for inference in the Discussion. For each outcome, we use 10-fold cross-validation with folds formed at the student level, splitting the students into training (90%) and testing (10%) sets, so each held-out student is entirely absent from the corresponding training set. All models are fit with the same priors and sampling settings as in the simulation studies.</p>
+<h3>Empirical Results</h3>
+<p>Table 6 summarizes the results with math and reading scores as the outcome variable in the training and testing datasets respectively. The RMSE and SMSE columns follow the same pattern and show the distance between the actual and the predicted response values on the raw and the standardized scale. Model 2 yields the smallest insample RMSE/SMSE but the largest out-of-sample RMSE/SMSE. As in the simulations, this is the structural consequence of no pooling: held-out students have no estimated coefficients of their own, so the model predicts them from the prior, and its out-ofsample SMSE is close to one. Model 3, the partially pooled counterpart, does not share this behavior. Other than model 2, for the training dataset, parametric models that either model individual randomness (models 3, 5, and 6) or capture moderators&#x27; effects (models 4, 5, and 6) have obtained similarly small RMSE/SMSE, followed by BART and VCBART. For the testing dataset, the results are mixed: BART attains the lowest out-of-sample RMSE/SMSE for reading scores (20.810 against 21.344 for model 5), while model 5 attains the lowest values for math scores (17.320 against 17.663 for BART), with the differences between them small in both cases. BART&#x27;s advantage for reading is consistent with the degree check in the model formulation section: the reading trend departs more from the quadratic form, and BART places no restriction on the shape of the time trend. In both cases, the out-of-sample predictive performance of BART and VCBART is comparable to the best parametric model. The out-of-sample coverage of the BART-based methods, however, falls below the nominal level, with BART showing the largest shortfall, while the parametric models stay close to it. As in the simulation studies, the likely source is that the tree-based methods contain no student-level random effect, so their intervals for a new student leave out the between-student variance. We return to this limitation in the Discussion.</p>
+<h3>Table 6</h3>
+<p>RMSE and SMSE obtained from the empirical studies using the ECLS-K data with math and reading scores as the dependent variables. Values are means over the ten student-level cross-validation folds, computed in sample (training students) and out of sample (held-out students). Models 1 to 6 are the parametric specifications defined in the text. The lowest value in each column for each outcome is in bold.</p>
+<h3>Figure 5</h3>
+<p>In-sample and out-of-sample coverage of the 95% prediction intervals in the empirical studies. Each box shows the distribution over the ten cross-validation folds and the dashed line marks the nominal level. Models 1 to 6 are the parametric specifications defined in the text.</p>
+<h3>Figure 6</h3>
+<p>Computation time in seconds on a logarithmic scale in the empirical studies. Each box shows the distribution over the ten cross-validation folds. The parametric models and VCBART run four chains of 2,000 iterations each and BART runs one chain of 2,000 iterations. Models 1 to 6 are the parametric specifications defined in the text.</p>
+<p>31 points for math and 39 points for reading, and the first three levels account for roughly two thirds of this gain. A one-level increase in mother&#x27;s education therefore matters most at the low end of the education scale. The linear slope function shows that children of more educated mothers also grow faster. The expected gain per wave rises from about 18.6 to 21.9 points for math and from about 22.3 to 26.6 points for reading, leveling off above level 5. The quadratic slope function stays essentially constant near 3.6 for math and 3.9 for reading, so the curvature of the trajectories does not vary with mother&#x27;s education.</p>
+<p>The small dips at levels 4 and 6 correspond to the two sparsest education categories in the training data. These estimates speak directly to the specification question raised earlier. The reference model of Potter and Roksa (2013) lets the moderators shift only the intercept, which misses the gradient in the linear slope, while adding moderator effects on the quadratic slope would contribute little. VCBART recovers this structure without the analyst specifying it in advance. In summary, this empirical study has indicated that the BART-based methods achieve out-of-sample prediction comparable to the best parametric model, with BART ahead for reading and model 5 ahead for math. Together with their computational efficiency, BART-based methods can be a viable alternative to the parametric models, with the caveat of under-coverage for new students noted above.</p>
+<h3>Conclusion, Limitations, and Discussion</h3>
+<p>This study compared the benchmark parametric models and the BART-based methods on the prediction of heterogeneous trajectories of test scores. Across the six simulation conditions, which crossed the moderator structure with the presence of individual variability, the BART-based methods obtained RMSE and SMSE comparable to the best parametric models. In the empirical studies, their performance was comparable to the saturated model 5, with BART ahead for reading scores and model 5 ahead for math scores. The BART-based methods offer several advantages. They do not require the researcher to pre-specify the model correctly, and their default settings predict well.</p>
+<p>They also run much faster than model 5. VCBART further provides a reasonable degree of interpretability through its estimated coefficient functions. For large-scale longitudinal studies, we therefore consider the BART-based methods practical alternatives to the standard parametric models.</p>
+<p>The results also offer guidance on the choice between the two tree-based methods.</p>
+<p>In the simulation conditions with moderator effects, VCBART predicted as accurately as BART or better, and its out-of-sample coverage was higher. VCBART also returns the estimated coefficient functions, which BART does not. When the form of the time trend is known, such as the quadratic polynomial in our setting, VCBART provides prediction on par with the best parametric model together with interpretable time coefficients. BART remains attractive for its shorter computing time and for settings where the form of the time trend itself is uncertain.</p>
+<p>A well specified parametric model such as model 5 remains a strong choice in some settings. It provides direct estimates and credible intervals for the moderator effects Γ p , which the tree-based methods do not, so it suits studies whose goal is formal inference on these effects, and it remained the most accurate method for math scores in our empirical study. Reaching this accuracy, however, requires several careful steps. The researcher must choose the form of the time trend, decide which moderators affect which coefficients, include the individual random effects, and check convergence. Our results show that missing any of these steps costs predictive accuracy, as models 4 and 6 illustrate. The BART-based methods reach nearly the same accuracy without these steps and at a much lower computational cost. We therefore suggest the saturated parametric model when formal inference on the moderator effects is needed and the specification can be built with care, and the BART-based methods when prediction is the main goal.</p>
+<p>Uncertainty quantification deserves a separate qualification. The out-of-sample coverage of BART and VCBART fell below the nominal 95% level in the empirical study, by roughly three to nine percentage points depending on the method and outcome. As implemented here, neither method includes a student-level random effect, so their prediction intervals for a new student omit the between-student variance that the hierarchical models propagate. Two remedies appear feasible: incorporating a random intercept into the tree model, or calibrating the intervals on a held-out fold. We leave both for future work.</p>
+<p>Regarding prior selection, our strategy was to standardize the outcome and align the priors of the parametric models with the defaults of BART and VCBART, which places comparable shrinkage on all methods (see Appendix A). For applied researchers we consider this a sensible starting point: the defaults of Chipman et al. (2010) were designed for standardized outcomes, and matching them avoids giving any method an advantage through more diffuse or more concentrated priors.</p>
+<p>There are several limitations of this study which can serve as motivations for future research. Our analysis is constrained by two primary assumptions that may not be universally applicable. The first is that we assumed the time measures, the moderators, and the function f are known. In fields where domain expertise is limited, the roles of these variables might be less clear, possibly necessitating exploratory variable selection techniques. The second assumption is related to the normality assumption of our data. In scenarios where data are not normally distributed, employing other prob-ability distributions like Poisson or Bernoulli might be more effective. In addition, the models operate at the student and occasion levels and do not include a school level. This choice preserves comparability with Potter and Roksa (2013)  to explore a wider range of analytical tools, and we hope it inspires further methodological development, including computational tools that make these methods more accessible to practitioners in large-scale assessments.</p>
+<h3>Acknowledgements</h3>
+<p>The author would like to acknowledge Dr. Sameer Deshpande, whose insights, guidance, and mentorship have shaped the direction and quality of this research. In addition, the author is grateful to Ajinkya H. Kokandakar and Dr. David Kaplan for their helpful discussion in this study. The author also thanks the Center For High Throughput Computing (CHTC) in the Department of Computer Science at UW-Madison for their technical support in this research (Center for High Throughput Computing, 2006).</p>
+<h3>Funding</h3>
+<p>No funding was received to assist with the preparation of this manuscript.</p>
+<h3>Availability of Data</h3>
+<p>The empirical ECLS-K:1998 public-use data analyzed in this study are available from the National Center for Education Statistics at https://nces.ed.gov/ecls/.</p>
+<h3>Conflicts of Interest</h3>
+<p>The author declares no conflicts of interest.</p>
+<p>Model 1 18.633 18.695 0.158 0.160 Model 2 0.936 46.801 0.000 1.000 Model 3 10.040 18.695 0.046 0.160 Model 4 16.563 17.328 0.125 0.137 Model 5 10.072 17.320 0.046 0.137 Model 6 10.065 17.448 0.046 0.139 BART 12.191 17.663 0.068 0.143 VCBART 14.000 17.543 0.089 0.141 Reading Model 1 22.728 22.911 0.160 0.164 Model 2 1.602 56.687 0.001 1.001 Model 3 14.063 22.923 0.061 0.164 Model 4 20.570 21.359 0.131 0.142 Model 5 14.130 21.344 0.062 0.142 Model 6 14.113 21.513 0.062 0.144 BART 15.412 20.810 0.074 0.135 VCBART 18.576 21.455 0.107 0.144</p>
+<p>Figure 6 shows the computation time of each method. For both outcomes, BART is the most computationally efficient method (about 120 seconds per fit), followed by model 1 (about 280 seconds) and VCBART (about 500 seconds). The parametric models with moderator effects took far longer: model 4 averaged about 22,000 seconds and model 5 about 9,000 to 14,000 seconds, so the best performing parametric model costs roughly 100 times the computing time of BART and 20 times that of VCBART.</p>
+<h3>Estimated Coefficient Functions</h3>
+<p>A main asset of VCBART is that it returns the estimated coefficient functions π 0 (X), π 1 (X), and π 2 (X), so we can inspect how the moderators shape the trajectories rather than assuming a form for them.</p>
+<h3>Consent to participate</h3>
+<p>Not applicable.</p>
+<h3>Consent for publication</h3>
+<p>Not applicable.</p>
+<h3>Author&#x27;s contributions</h3>
+<p>Not applicable.</p>
+<h3>Appendix Appendix A: Prior Calibration</h3>
+<p>All methods are fit after standardizing the outcome to mean zero and unit variance within the training set. On this scale, the VCBART default places a prior standard deviation of 0.5/ √ M on each tree&#x27;s contribution to a coefficient function, with M = 50 trees, so the implied marginal prior on each coefficient function has standard deviation 0.5.</p>
+<p>The N (0, 0.5 2 ) priors on π p in models 1, 2, and 4 match this marginal scale directly. In models 3, 5, and 6 the same marginal scale is split between the two levels: the N (0, 0.4 2 ) prior on β p0 and the half-normal N + (0, 0.3 2 ) prior on σ p0 imply a marginal standard deviation of √ 0.4 2 + 0.32 = 0.5 for π pi , since 0.4 2 + 0.32 = 0.5 2 . The residual variance σ 2 receives the inverse-gamma prior Inv-Gamma(ν/2, νλ/2) with ν = 3 and λ chosen so that the prior places probability 0.9 above the standardized residual variance, following the default calibration of Chipman et al. (2010); the same setting is used by the BART and VCBART packages. The moderator effects Γ p receive N (0, 0.5 2 ) or N (0, 0.4 2 ) priors on the same standardized scale, as listed with each model. These choices place comparable shrinkage on all methods and give none of them an advantage through more diffuse or more concentrated priors.</p>
+<h3>Appendix B: Convergence Diagnostics</h3>
+<p>Table 7 reports the largest potential scale reduction factor ( ˆ︁ R) and the smallest effective sample size across the monitored parameters (the population means β p0 , the moderator effects Γ p where present, the standard deviations σ p0 , and σ; for model 2, which has no population-level parameters, the student-specific coefficients and σ) for one representative cross-validation fold of each Stan-fitted model and outcome, run with the settings of the main analyses. All models converge well, with ˆ︁ R ≤ 1.012 and effective sample sizes in the hundreds or above.</p>
+<h3>Figure 1</h3>
+<p>Figure 1 Reading test scores by mother&#x27;s education. (a) Average reading scores across time, conditional on mother&#x27;s education level; (b) and (c) Individual reading scores across time when their mothers hold the lowest and highest degree respectively. Different colors denote the test scores for different individuals.</p>
+<p>which assumes each individual has the same mean trajectory across time and thus the entire sample data can be used to model this particular function. As such, the next step is to learn this function, typically, either through non-parametric approximation or in a parametric manner. Both of these two types of methods have their pros and cons. Essentially, non-parametric methods such as BART are flexible and often &quot;off-theshelf&quot;, but they are generally difficult to interpret, especially in applied settings. On the other hand, as mentioned earlier, conventional benchmark parametric models are often interpretable but lack adaptivity and require pre-specifying the models. In the case of the ECLS-K data, based on Figure1, it is expected that the baseline parametric model would be a polynomial function. Therefore, considering the (dis)advantages of these two types of methods, our first step is trying to approximate the non-parametric function (c) in a polynomial parametric manner.</p>
+<p>and T is the mean of all time points, which is the same for every student because all students are observed at the same seven waves. That is, T * it denotes the distance between each time point and the average time point. Centering, rather than any particular expansion, is what reduces the correlation between the linear and quadratic terms and keeps the coefficients interpretable. The factor of 1/2 on the quadratic term is a scaling convention borrowed from the second-order Taylor polynomial. A Taylor expansion approximates a smooth function around a chosen point by its value, its slope, and half its second derivative at that point. Writing the quadratic term as T * 2 it /2 follows this form, so π 1 can be read as the rate of change at the mean time point and π 2 directly as the curvature of the trajectory, without being doubled for interpretation. The fitted model remains a quadratic polynomial in centered time; the Taylor form only sets the scale of the coefficients. The coefficients π 0 , π 1 , and π 2 are the regression coefficients for the time measures: π 0 represents the average test score at the mean time point (when T * it = 0); π 1 denotes the rate of change in test scores with respect to time, with larger values indicating more rapid increases or decreases; π 2 describes how the slope π 1 is changing over time. A positive π 2 suggests accelerating growth, while a negative value indicates accelerating decline. While this parametric approach offers interpretability, it may still have limitations in capturing complex, heterogeneous patterns across different individuals</p>
+<h3>Figure 2</h3>
+<p>Figure 2 An example of regression tree as the building block of BART. (a) A binary regression tree with 3 splits. (b) The same regression tree partitions the sample space.</p>
+<p>then computed using these varying coefficients in a linear combination with the time measures. This approach allows VCBART to capture both the non-linear relationships between moderators and coefficients, and the varying effects of predictors on the outcome. Unlike BART which approximates the entire function in a non-parametric manner, VCBART only focuses on estimating the varying coefficients with the ensemble of binary regression trees. In other words, VCBART is a semi-parametric approach with improved interpretability over BART. For example, VCBART could show how the impact of time (represented by T * it and T * 2 it ) on test scores varies with background variables (i.e., the mother&#x27;s educational background). Researchers might find that the rate of change in test scores, π 1 (X i ), is steeper for children whose mothers have higher educational attainment, or that the acceleration of growth, π 2 (X i ), is larger for students from certain educational backgrounds. These insights can inform more nuanced educational policies and interventions tailored to students based on their family educational backgrounds. We examine the estimated coefficient functions for the ECLS-K data in the empirical study.</p>
+<p>). When there are no moderator effects (conditions 1 and 2), all methods except model 2 achieve the same level of predictive accuracy, and their RMSE is close to the residual standard deviation used to generate the data. In conditions 3 and 4, where MOMED has a diminishing effect on π pi , the RMSE obtained by model 5, VCBART, and BART are very close to one another (0.507, 0.588, and 0.635 in condition 3). In condition 4, the BART-based methods attain the lowest RMSE (both 1.825), slightly below model 5 (1.844). As more moderators are incorporated into the true DGP (conditions 5 and 6), model 5 keeps the lowest RMSE in the constant condition (0.505 against 1.264 for VCBART and 1.651 for BART in condition 5), while in the noisy condition 6 VCBART (1.787) is again on par with model 5 (1.846). Throughout, VCBART stays comparable to the best parametric model and never trails it by more than the gap in condition 5, which is small on the standardized scale: every method that uses the moderators, parametric or tree-based, attains out-of-sample SMSE at or below 0.002 in all conditions. By contrast, model 4, which omits the individual random errors, reaches RMSE between 6.27 and 6.44 whenever the moderators affect the slopes, and the reference model 6, which lets the moderators shift only the intercept, reaches RMSE between 11.8 and 12.1 (out-of-sample SMSE 0.017 to 0.028). These gaps show what happens when a parametric model leaves out a term that matters. Model 6 illustrates the point: Potter and Roksa (2013) preferred this specification, yet it falls well behind the saturated model 5 here. In summary, based on the RMSE and SMSE results, the BART-based methods perform as well as the best parametric model and clearly outperform the remaining parametric specifications. The design of the six conditions also lets us examine the effects of the moderators and of the individual variation separately. Conditions 3 and 5 share the same individual variation (σ p0 = 0) and differ only in the moderators, which grow from MOMED alone to all the moderators. Across these two conditions, the RMSE of model 5 stays essentially unchanged, while the RMSE of VCBART rises from 0.588 to 1.264 and that of BART from 0.635 to 1.651. Conditions 3 and 4 share the same moderators and differ only in the individual variation, and the same holds for conditions 5 and 6. Raising σ p0 from 0 to 0.5 increases the RMSE of every method by a similar amount, because no method can predict the individual random variation of a new student. Under this added noise, the BART-based methods perform similarly well as model 5 or even slightly better, as</p>
+<h3>Figure 5</h3>
+<p>Figure5is a boxplot showing the distribution of coverage across the cross-validation folds. All the methods obtain in-sample coverage close to or above the nominal level.</p>
+<h3>Figure 7</h3>
+<p>Figure 7Estimated coefficient functions from VCBART against mother&#x27;s education (MOMED), for math (top row) and reading (bottom row). Lines show the average posterior mean across training students at each MOMED level; shaded bands show the average of their 95% credible intervals. The other moderators vary across students as observed.</p>
+<p>and does not affect prediction for new students from unknown schools, but it may understate the uncertainty of population-level estimates such as Γ p . Student mobility across schools complicates a three-level specification in these data, and extending the comparison to three levels is a natural next step. The analytic sample is also restricted to students observed at all seven waves, so the complete-case results may not generalize to students who left the study. While informative, furthermore, our study represents an initial step in comparing BART-based methods with HLMs. We recognize that more advanced HLM structures exist beyond those examined here. Further research is needed to assess how BART-based approaches perform against complex HLMs incorporating mixture distributions or latent class structures, as well as other approaches such as growth curve modeling and multilevel structural equation modeling, providing a more complete understanding of their potential in educational data analysis.Building on these findings and limitations, this study offers a detailed comparison of methods and aspires to broaden the methodological perspective in social science research, particularly for those accustomed to conventional parametric approaches for model building. Based on Breiman&#x27;s &quot;Two Cultures&quot; paper(Breiman, 2001), the true nature of the data-generating process often remains elusive: either adhere to a specific parametric form or treat it as a complex black box. Rather than using parametric modeling methods as the default, which is common in social science research, we consider both perspectives. While our study uses baseline HLMs as a point of comparison, it also demonstrates the value of learning the data-generating process step by step without imposing strong a priori assumptions. By showing how BART-based methods can complement benchmark HLMs in educational research, this paper encourages social scientists</p>
+<h3>Table 1</h3>
+<p>Notation.</p>
+<h3>Table 2</h3>
+<p>Summary of the six simulation conditions.</p>
+<h3>Table 3</h3>
+<p>Root mean squared errors (RMSE): Monte Carlo means over 100 replications, with Monte Carlo standard errors in parentheses. Values within two standard errors of the lowest value in each condition are in bold.</p>
+<h3>Table 4</h3>
+<p>Standardized mean squared errors (SMSE): Monte Carlo means over 100 replications, with Monte Carlo standard errors in parentheses. Values within two standard errors of the lowest value in each condition are in bold.</p>
+<h3>Table 5</h3>
+<p>Descriptive statistics of the math and reading scores at each wave (1,348 students per wave).</p>
+<p>Figure 7 plots these functions against mother&#x27;s education. For each MOMED level, the line shows the average posterior mean of the coefficient across the training students at that level, and the shaded band shows the average of their 95% credible intervals. The intercept function rises steeply over the lower education levels and flattens toward the top. In practice, moving from the lowest to the highest education level raises the expected score at the mean time point by about</p>
+<h3>Table 7</h3>
+<p>Convergence diagnostics for the Stan-fitted models on the ECLS-K data (one representative fold per outcome): largest ˆ︁ R and smallest effective sample size over the monitored hyperparameters, with total sampling time in seconds.</p>
+<h3>Table 8</h3>
+<p>Summary of variables in ECLS-K data.</p>
+<h3>References</h3>
+<p>Bae, D. and Wickrama, K. A. (2015). Family socioeconomic status and academic achieve- ment among Korean adolescents: linking mechanisms of family processes and adoles- cents&#x27; time use. The Journal of Early Adolescence, 35(7):1014-1038.</p>
+<p>Bassok, D., Finch, J. E., Lee, R., Reardon, S. F., and Waldfogel, J. (2016). Socioeconomic gaps in early childhood experiences: 1998 to 2010. Aera Open, 2(3):2332858416653924.</p>
+<p>Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting linear mixed-effects models using lme4. Journal of Statistical Software, 67(1):1-48.</p>
+<p>Borges, L. M., Holliday, R., Barnes, S. M., Bahraini, N. H., Kinney, A., Forster, J. E., and Brenner, L. A. (2021). A longitudinal analysis of the role of potentially morally injuri- ous events on COVID-19-related psychosocial functioning among healthcare providers. PLoS One, 16(11):e0260033.</p>
+<p>Breiman, L. (2001). Statistical modeling: The two cultures (with comments and a re- joinder by the author). Statistical Science, 16(3):199-231.</p>
+<p>Buek, K. W. (2019). Early growth trajectories of children&#x27;s approaches to learning: The contribution of parent and family characteristics. Psychology in the Schools, 56(6):1053- 1072.</p>
+<p>Cece, V., Duchesne, M., Guillet-Descas, E., and Martinent, G. (2020). Self-determined motivation, emotional process and subjective performance among young elite athletes: A longitudinal hierarchical linear modelling approach. European Journal of Sport Sci- ence, 20(9):1255-1267.</p>
+<p>Center for High Throughput Computing (2006). Center for High Throughput Computing. https://chtc.cs.wisc.edu/.</p>
+<p>Cheadle, J. E. and Amato, P. R. (2011). A quantitative assessment of Lareau&#x27;s qualitative conclusions about class, race, and parenting. Journal of family Issues, 32(5):679-706.</p>
+<p>Chipman, H. A., George, E. I., and McCulloch, R. E. (2010). BART: Bayesian additive regression trees. The Annals of Applied Statistics, 4(1):266-298.</p>
+<p>Deshpande, S. K., Bai, R., Balocchi, C., Starling, J. E., and Weiss, J. (2023). VCBART: Bayesian trees for varying coefficients. arXiv preprint arXiv:2003.06416.</p>
+<p>Dubow, E. F., Boxer, P., and Huesmann, L. R. (2009). Long-term effects of parents&#x27; education on children&#x27;s educational and occupational success: Mediation by family in- teractions, child aggression, and teenage aspirations. Merrill-Palmer quarterly (Wayne State University. Press), 55(3):224.</p>
+<p>Fine, K. L., Suk, H. W., and Grimm, K. J. (2019). An examination of a functional mixed- effects modeling approach to the analysis of longitudinal data. Multivariate Behavioral Research, 54(4):475-491.</p>
+<p>Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (1995). Bayesian data analysis. Chapman and Hall/CRC.</p>
+<p>Gey, S. and Poggi, J.-M. (2006). Boosting and instability for regression trees. Computa- tional Statistics &amp; Data Analysis, 50(2):533-550.</p>
+<p>Hao, L. and Yeung, W.-J. J. (2015). Parental spending on school-age children: Structural stratification and parental expectation. Demography, 52(3):835-860.</p>
+<p>Hill, J., Linero, A., and Murray, J. (2020). Bayesian additive regression trees: A review and look forward. Annual Review of Statistics and Its Application, 7:251-278.</p>
+<p>Hoffman, L. (2015). Longitudinal analysis: Modeling within-person fluctuation and change. Routledge.</p>
+<p>Huang, M. and Anderson, C. (2021). A Bayesian Solution to Non-convergence of Crossed Random Effects Models, page 297-307. Springer International Publishing.</p>
+<p>Ladd, G. W. and Dinella, L. M. (2009). Continuity and change in early school engagement: Predictive of children&#x27;s achievement trajectories from first to eighth grade? Journal of Educational Psychology, 101(1):190.</p>
+<p>McNeish, D. (2017). Multilevel mediation with small samples: A cautionary note on the multilevel structural equation modeling framework. Structural Equation Modeling: A Multidisciplinary Journal, 24(4):609-625.</p>
+<p>McNeish, D., Dumas, D. G., and Grimm, K. J. (2020). Estimating new quantities from longitudinal test scores to improve forecasts of future performance. Multivariate Be- havioral Research, 55(6):894-909.</p>
+<p>McNeish, D. and Matta, T. (2018). Differentiating between mixed-effects and latent-curve approaches to growth modeling. Behavior Research Methods, 50:1398-1414.</p>
+<p>Miller, D. P., Thomas, M. M., Waller, M. R., Nepomnyaschy, L., and Emory, A. D. (2020). Father involvement and socioeconomic disparities in child academic outcomes. Journal of Marriage and Family, 82(2):515-533.</p>
+<p>Nestler, S. and Humberg, S. (2022). A lasso and a regression tree mixed-effect model with random effects for the level, the residual variance, and the autocorrelation. Psy- chometrika, 87(2):506-532.</p>
+<p>Potter, D. and Roksa, J. (2013). Accumulating advantages over time: Family experi- ences and social class inequality in academic achievement. Social science research, 42(4):1018-1032.</p>
+<p>Prüser, J. (2019). Forecasting with many predictors using Bayesian additive regression trees. Journal of Forecasting, 38(7):621-631.</p>
+<p>Rittle-Johnson, B., Fyfe, E. R., Hofer, K. G., and Farran, D. C. (2017). Early math trajectories: Low-income children&#x27;s mathematics knowledge from ages 4 to 11. Child Development, 88(5):1727-1742.</p>
+<p>Roberts, G., Mohammed, S. S., and Vaughn, S. (2010). Reading achievement across three language groups: Growth estimates for overall reading and reading subskills obtained with the Early Childhood Longitudinal Survey. Journal of Educational Psychology, 102(3):668.</p>
+<p>Scarpone, C., Brinkmann, S. T., Große, T., Sonnenwald, D., Fuchs, M., and Walker, B. B. (2020). A multimethod approach for county-scale geospatial analysis of emerging infectious diseases: a cross-sectional case study of COVID-19 incidence in Germany. International journal of health geographics, 19(1):1-17.</p>
+<p>Snijders, T. A. and Bosker, R. (2011). Multilevel analysis: An introduction to basic and advanced multilevel modeling.</p>
+<p>Sparapani, R., Spanbauer, C., and McCulloch, R. (2021). Nonparametric Machine Learn- ing and Efficient Computation with Bayesian Additive Regression Trees: The BART R Package. Journal of Statistical Software, 97(1):1-66.</p>
+<p>Spilt, J. L., Hughes, J. N., Wu, J.-Y., and Kwok, O.-M. (2012). Dynamics of teacher- student relationships: Stability and change across elementary school and the influence on children&#x27;s academic success. Child Development, 83(4):1180-1195.</p>
+<p>Stan Development Team (2023). RStan: the R interface to Stan. R package version 2.26.24.</p>
+<p>Wang, L. P. and Maxwell, S. E. (2015). On disaggregating between-person and within- person effects with longitudinal data using multilevel models. Psychological Methods, 20(1):63.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
