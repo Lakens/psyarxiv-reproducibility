@@ -1,0 +1,2445 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Multimodal processing of chemical
+representations: advantages of chemistry expertise and inadvertent
+challenges for learning</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Multimodal processing of chemical representations: advantages of
+chemistry expertise and inadvertent challenges for learning
+</p>
+<p class="meta">
+2026-11-10 · Metacheck 0.4.3.24
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>2</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>2</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>10</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(2)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">StatCheck</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 possible error in t-tests or F-tests</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>We detected possible errors in test statistics. Note that as the
+accuracy of statcheck has only been validated for <em>t</em>-tests and
+<em>F</em>-tests. As Metacheck only uses validated modules, we only
+provide statcheck results for <em>t</em> tests and <em>F</em>-tests.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10em" />
+<col />
+<col />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:right;">
+Recomputed p
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+F(3, 128) = 5.67, p &lt; .001
+</td>
+<td style="text-align:right;">
+0.00112
+</td>
+<td style="text-align:left;">
+The analogous main effect on response time had a moderate effect size,
+F(3, 128) = 5.67, p &lt; .001, ηp² = .117.
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific research on the validity of statcheck, and it’s
+usefulness to prevent statistical reporting errors, see:</p>
+<p>Nuijten M, van Assen M, Hartgerink C, Epskamp S, Wicherts J (2017).
+“The validity of the tool &quot;statcheck&quot; in discovering statistical
+reporting inconsistencies.”
+<a href="https://doi.org/10.31234/osf.io/tcxaja">doi:10.31234/osf.io/tcxaja</a>.
+Preprint.</p>
+<p>Nuijten M, Wicherts J (2023). “The effectiveness of implementing
+statcheck in the peer review process to avoid statistical reporting
+errors.”
+<a href="https://doi.org/10.31234/osf.io/bxau9">doi:10.31234/osf.io/bxau9</a>.
+Preprint.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Exact
+P-Values</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 3 imprecise <em>p</em> values out of 41 detected <em>p</em>
+values.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Reporting <em>p</em> values imprecisely (e.g., <em>p</em> &lt; .05)
+reduces transparency, reproducibility, and re-use (e.g., in <em>p</em>
+value meta-analyses). Best practice is to report exact p-values with
+three decimal places (e.g., <em>p</em> = .032) unless <em>p</em> values
+are smaller than 0.001, in which case you can use <em>p</em> &lt;
+.001.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (e.g., “decreased at the <em>p</em>
+&lt; .05 significance threshold”).</p>
+<div style="max-height:8em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+P-Value
+</th>
+<th style="text-align:left;">
+Text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p &lt; .01
+</td>
+<td style="text-align:left;">
+Trial accuracy was very weakly negatively correlated with Hs,s, ρ(4750)=
+-.168, p &lt; .001, and Hs,n, ρ(4750)= -.046, p &lt; .01.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &lt; .05
+</td>
+<td style="text-align:left;">
+Participants in Groups A and B generally exhibited smaller Hs,s than
+Groups C and D, which was significant by pairwise t-tests (p &lt; .05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &lt; .05
+</td>
+<td style="text-align:left;">
+All pairwise t-tests among complexity conditions were also significant
+for Hs,n (p &lt; .05).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>The APA manual states: Report exact <em>p</em> values (e.g.,
+<em>p</em> = .031) to two or three decimal places. However, report
+<em>p</em> values less than .001 as <em>p</em> &lt; .001. However, 2
+decimals is too imprecise for many use-cases (e.g., a <em>p</em> value
+meta-analysis), so report <em>p</em> values with three digits.</p>
+<p>American Psychological Association (2020). <em>Publication manual of
+the American Psychological Association</em>, 7 edition. American
+Psychological Association.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(2)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 8 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p = .133
+</td>
+<td style="text-align:left;">
+The main effect of participant group on Hs,n was not significant, F(3,
+128) = 1.90, p = .133.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .408
+</td>
+<td style="text-align:left;">
+Post-hoc t-tests indicated the effect of target type was significant for
+participants in Groups A and B (p &lt; .001) but not Groups C (p = .408)
+and D (p = .360).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .360
+</td>
+<td style="text-align:left;">
+Post-hoc t-tests indicated the effect of target type was significant for
+participants in Groups A and B (p &lt; .001) but not Groups C (p = .408)
+and D (p = .360).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .388
+</td>
+<td style="text-align:left;">
+Our ANOVA for Hs,n did not reveal a significant main effect of target
+type, F(1, 128) = .750, p = .388.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .077
+</td>
+<td style="text-align:left;">
+The complexity × expertise interaction was not significant, F(5.51, 235)
+= 1.97, p = .077 (Figure 4).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .874
+</td>
+<td style="text-align:left;">
+The complexity × expertise interaction was also not significant for
+Hs,n, F(4.98, 212) = .360, p = .874.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .083
+</td>
+<td style="text-align:left;">
+From our post-hoc analyses that examined difference among groups for
+each trial type (Bonferroni-corrected α = .008), we found that the
+effect of expertise was particularly weak for the misplaced group
+condition, F(3, 128) = 2.28, p = .083.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .469
+</td>
+<td style="text-align:left;">
+The two-way interaction between foil type and expertise was not
+significant for Hs,n, F(15, 640) = .985, p = .469.
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Effect Sizes in t-tests and F-tests</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 4 t-tests and/or F-tests where effect sizes are not
+reported. Check these tests in the table below, and consider adding
+effect sizes.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>We recommend checking the sentences below, and add any missing effect
+sizes.</p>
+<p>For F-tests with a reported eta-squared effect size, coherence checks
+yielded 9 matches under assumptions.</p>
+<div style="max-height:8em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+The main effect of participant group on Hs,n was not significant, F(3,
+128) = 1.90, p = .133.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Our ANOVA for Hs,n did not reveal a significant main effect of target
+type, F(1, 128) = .750, p = .388.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+From our post-hoc analyses that examined difference among groups for
+each trial type (Bonferroni-corrected α = .008), we found that the
+effect of expertise was particularly weak for the misplaced group
+condition, F(3, 128) = 2.28, p = .083.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+The two-way interaction between foil type and expertise was not
+significant for Hs,n, F(15, 640) = .985, p = .469.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating that effect sizes are often
+not reported:</p>
+<ul>
+<li>Peng, C.-Y. J., Chen, L.-T., Chiang, H.-M., &amp; Chiang, Y.-C.
+(2013). The Impact of APA and AERA Guidelines on Effect Size Reporting.
+Educational Psychology Review, 25(2), 157–209. <a href="doi:%5B10.1007/s10648-013-9218-2" class="uri">doi:[10.1007/s10648-013-9218-2</a>](<a href="https://doi.org/10.1007/s10648-013-9218-2" class="uri">https://doi.org/10.1007/s10648-013-9218-2</a>).</li>
+</ul>
+<p>For educational material on reporting effect sizes:</p>
+<ul>
+<li><a href="https://matthewbjane.quarto.pub/guide-to-effect-sizes-and-confidence-intervals/">Guide
+to Effect Sizes and Confidence Intervals</a></li>
+</ul>
+</div>
+<div class="callout-tip" title="All detected and assessed stats" collapse="true">
+<div style="max-height:15em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Sentence
+</th>
+<th style="text-align:left;">
+Effect Size
+</th>
+<th style="text-align:left;">
+Reported Test
+</th>
+<th style="text-align:left;">
+Test Type
+</th>
+<th style="text-align:left;">
+d Coherence
+</th>
+<th style="text-align:left;">
+d Assumption
+</th>
+<th style="text-align:left;">
+d Coherence Note
+</th>
+<th style="text-align:left;">
+eta Coherence
+</th>
+<th style="text-align:left;">
+eta Assumption
+</th>
+<th style="text-align:left;">
+eta Coherence Note
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+We observed a large main effect of participant group on overall
+accuracy, F(3, 128) = 9.55, p &lt; .001, ηp² = .183.
+</td>
+<td style="text-align:left;">
+ηp² = .183
+</td>
+<td style="text-align:left;">
+F(3, 128) = 9.55
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+The analogous main effect on response time had a moderate effect size,
+F(3, 128) = 5.67, p &lt; .001, ηp² = .117.
+</td>
+<td style="text-align:left;">
+ηp² = .117
+</td>
+<td style="text-align:left;">
+F(3, 128) = 5.67
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+We observed a large main effect of self-reported expertise on Hs,s, F(3,
+128) = 9.12, p &lt; .001, ηp² = .176.
+</td>
+<td style="text-align:left;">
+ηp² = .176
+</td>
+<td style="text-align:left;">
+F(3, 128) = 9.12
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+The main effect of participant group on Hs,n was not significant, F(3,
+128) = 1.90, p = .133.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+F(3, 128) = 1.90
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable eta-squared effect size found.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+There was a large main effect of target type on Hs,s, F(1, 128) = 44.6,
+p &lt; .001, ηp² = .258.
+</td>
+<td style="text-align:left;">
+ηp² = .258
+</td>
+<td style="text-align:left;">
+F(1, 128) = 44.6
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+We observed pg. 8 a significant interaction between target type and
+group of expertise with a large effect size, F(3, 128) = 8.52, p &lt;
+.001, ηp² = .166 (Figure 4(a)).
+</td>
+<td style="text-align:left;">
+ηp² = .166
+</td>
+<td style="text-align:left;">
+F(3, 128) = 8.52
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Our ANOVA for Hs,n did not reveal a significant main effect of target
+type, F(1, 128) = .750, p = .388.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+F(1, 128) = .750
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable eta-squared effect size found.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+From our post-hoc analyses that examined difference among groups for
+each trial type (Bonferroni-corrected α = .008), we found that the
+effect of expertise was particularly weak for the misplaced group
+condition, F(3, 128) = 2.28, p = .083.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+F(3, 128) = 2.28
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable eta-squared effect size found.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+We also observed a large main effect of foil type on Hs,n, F(5, 640) =
+30.7, p &lt; .001, ηp² = .193.
+</td>
+<td style="text-align:left;">
+ηp² = .193
+</td>
+<td style="text-align:left;">
+F(5, 640) = 30.7
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+The two-way interaction between foil type and expertise was not
+significant for Hs,n, F(15, 640) = .985, p = .469.
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+F(15, 640) = .985
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+indeterminate
+</td>
+<td style="text-align:left;">
+none
+</td>
+<td style="text-align:left;">
+No parseable eta-squared effect size found.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+From our post-hoc analyses (Bonferroni-corrected α = .008), we found
+that the main effect of target type was weakest for extra group, F(1,
+128) = 9.30, p = .003, ηp² = .068, and missing group trials, F(1, 128) =
+11.1, p = .001, ηp² = .080.
+</td>
+<td style="text-align:left;">
+ηp² = .068
+</td>
+<td style="text-align:left;">
+F(1, 128) = 9.30
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+From our post-hoc analyses (Bonferroni-corrected α = .008), we found
+that the main effect of target type was weakest for extra group, F(1,
+128) = 9.30, p = .003, ηp² = .068, and missing group trials, F(1, 128) =
+11.1, p = .001, ηp² = .080.
+</td>
+<td style="text-align:left;">
+ηp² = .080
+</td>
+<td style="text-align:left;">
+F(1, 128) = 11.1
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Interestingly, during misplaced group trials, participants generally had
+larger Hs,s on cyclic trials (M = 0.683, SD = 0.139) than acyclic trials
+(M = 0.630, SD = 0.127), F(1, 128) = 36.0, p &lt; .001, ηp² = .219.
+</td>
+<td style="text-align:left;">
+ηp² = .219
+</td>
+<td style="text-align:left;">
+F(1, 128) = 36.0
+</td>
+<td style="text-align:left;">
+F-test
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+match_under_assumptions
+</td>
+<td style="text-align:left;">
+partial_eta_squared
+</td>
+<td style="text-align:left;">
+Match under partial eta-squared formula from F and dfs.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>All papers that appeared to involve live data collection contained an
+ethics approval statement.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(10)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, and it was present:</p>
+<blockquote>
+<p>We used a combined word-picture verification and difference
+recognition task paradigm in which participants were required to choose
+which of two presented chemical structures matched the presented
+chemical name.</p>
+</blockquote>
+<blockquote>
+<p>Informed consent was obtained from all participants.</p>
+</blockquote>
+<blockquote>
+<p>Participants filled out a brief questionnaire that asked them to
+report their current role (faculty, post-doctoral fellow, graduate
+student, undergraduate student, or staff member), area of study
+(chemistry, biology, physics, etc.), and undergraduate chemistry courses
+taken, if the participant was an undergraduate student.</p>
+</blockquote>
+<blockquote>
+<p>Based on the information collected in the questionnaire, we could not
+classify participants who were either staff members or undergraduate
+students who have not taken any chemistry courses at our university into
+these groups.</p>
+</blockquote>
+<blockquote>
+<p>These participants are represented in Group 4.</p>
+</blockquote>
+<blockquote>
+<p>Participants completed a series of 36 randomized trials in which they
+viewed a pair of organic molecules and an IUPAC name (Figure 2).</p>
+</blockquote>
+<blockquote>
+<p>For each trial, participants had a maximum of 15 seconds to select
+which organic molecule matched the IUPAC name.</p>
+</blockquote>
+<blockquote>
+<p>In word-picture verification tasks, participants are presented with
+an image and word (e.g., an image of a fish and the word “fish”) and
+must decide if they match.</p>
+</blockquote>
+<blockquote>
+<p>N* 1 Chemistry faculty, post-doctoral fellows, and graduate students
+27 2 Undergraduate students who have already taken second-year organic
+chemistry 34 3 Undergraduate students who are currently taking
+first-year chemistry or second-year organic chemistry 42 4 Other (staff
+members, undergraduate students that have not taken chemistry courses)
+29 *After exclusion of participants due to poor eye-tracker calibration
+or high data loss.</p>
+</blockquote>
+<blockquote>
+<p>Each participant completed each of these 36 trials.</p>
+</blockquote>
+<blockquote>
+<p>Participants were seated 60-65 cm away from the monitor in a dim
+room.</p>
+</blockquote>
+<blockquote>
+<p>Participants had smaller Hs,s on trials with cyclic targets (M =
+0.564, SD = 0.178) than acyclic targets (M = 0.589, SD = 0.159).</p>
+</blockquote>
+<p>Ethics approval statement:</p>
+<blockquote>
+<p>Prior to data collection, we received ethics approval from our
+university’s institutional review board to run this study.</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 112 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Wagemans, J.; Elder, J. H.; Kubovy, M.; Palmer, S. E.; Peterson, M. A.;
+Singh, M.; von der Heydt, R. A Century of Gestalt Psychology in Visual
+Perception I. Perceptual Grouping and Figure-Ground Organization.
+Psychol Bull 2012, 138 (6), 1172-1217. <a href="https://doi.org/10.1037/a0029333" class="uri">https://doi.org/10.1037/a0029333</a>
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/032967E9CC2277A02562309A12A514" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 112 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 112 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Chemists use verbal and visual representations of molecules to communicate and solve problems, yet little is known about how chemists efficiently interpret them simultaneously with ease. Participants (N = 200) of varied chemistry expertise completed an experiment in which they solved short representation-matching tasks with bond-line structures and IUPAC names of organic molecules. Drawing upon information-processing theory and prior chemistry education research on representational processing efficiency, we examined how expertise and varied task characteristics affected visual scanning efficiency. We recorded participants&#x27; eye movements during the tasks to quantify the extent to which their gaze was focused or exploratory using a metric called stationary gaze entropy. Chemistry experts exhibited more focused gaze within the bondline structures presented, which suggests that they more efficiently apply more chunk stimuli and activate prior knowledge connecting the representations. By looking at the effects of varied structural features and complexity, we outline inadvertent challenges that chemistry novices may face while processing these representations during chemistry instruction. We offer chemistry instructors suggestions for mitigating demands on their students&#x27; working memory. We also propose avenues for follow-up research that will allow chemistry instructors to better understand how to scaffold their students&#x27; development of the implicit skills associated with chemistry expertise.</p>
+<h3>Graphical Abstract Introduction</h3>
+<p>Chemists regularly use multiple representations, like bond-line structures and disciplinary vocabulary, to communicate and reason about phenomena that are unobservable to the naked eye. 1, 2 These representations are often likened to a foreign language. [3] [4] [5] In organic chemistry, bond-line diagrams of molecules are used ubiquitously to communicate the structure and reactivity of molecules. The challenges students face and the strategies they take to overcome them have been documented widely for translating among chemistry&#x27;s various visual representations. [6] [7] [8] [9] [10] It is difficult for students to navigate learning environments with multiple representations because they generally struggle to translate among them, 8, 10 even in the most basic cases of connecting a molecule&#x27;s structure to its name. Although learning modules have been developed to help students understand and translate between names (designated by the IUPAC system) and structures (shown as bond-line diagrams), 11- 13 less is known about the cognitive processes involved in encountering and using these visual and verbal representations during chemistry instruction.</p>
+<p>During science teaching, other modes of communication including gestures, speech, and writing, provide important context for the interpretation of visual representations. [14] [15] [16] Because the fluency at which students connect meaning between these modes is integral to the development of scientific expertise, 14 we argue that multimodal processing may play an important yet little understood role in chemistry expertise. Diagrammatic representations of molecules can be traced back to the nineteenth century, 17 and so these visuals were not designed with an explicit understanding of how the brain processes them. 18 The analysis of how the properties of these visuals affect encoding may hence reveal inadvertent challenges that students face in the classroom or chemists face during their practice. Multiple representations could overload learners&#x27; cognitive resources if they are interpreted as isolated ideas rather than used in tandem during problem-solving. [19] [20] [21] Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 2 Prior work on multiple representations has distinguished between sense-making skills and perceptual fluency as aspects of a learner&#x27;s representational competence. [21] [22] [23] [24] In the present study, we adopt the term representational processing efficiency to describe the ease with which learners encode, coordinate, and retrieve information from disciplinary representations during task performance. This definition encompasses processes such as attentional guidance, chunking, pattern recognition, and retrieval of representation-specific knowledge, which are central to efficient use of chemistry representations.</p>
+<p>Sense-making skills describe one&#x27;s knowledge of a representation&#x27;s meaning, purpose, and relationship to other representations, and have been explored in depth in chemistry education research. For example, numerous studies have revealed that beginner chemistry students base their reasoning on visually-apparent features of molecules rather than their implicit properties. 25, [25] [26] [27] Despite its importance in chemistry expertise, representational processing efficiency has received less attention in chemistry education research compared to sense-making. 22 Representational processing efficiency develops through repeated exposure to representations, which allows students to apply implicit pattern-recognition rather than explicit reasoning to identify information about chemical reactivity embedded in visual representations. [22] [23] [24] The same processes should also support the efficient coordination of chemistry&#x27;s visual and verbal representational systems, such as connecting bond-line structures with their corresponding IUPAC names. Students&#x27; sense-making skills about IUPAC nomenclature can be built through guided practice modules, [11] [12] [13] but their associated processing efficiency has not been explored.</p>
+<p>Herein, we investigate multimodal processing of simple chemical representations across a range of chemistry expertise. We used a combined word-picture verification and difference recognition task paradigm in which participants were required to choose which of two presented chemical structures matched the presented chemical name. We measured visual scanning efficiency from eye movements (stationary gaze entropy) and explored its interaction with disciplinary expertise. 28, 29 We aim to generate insights for chemistry instruction by operationalizing representational processing efficiency among verbal and visual modes of chemistry representations.</p>
+<h3>Representational Processing Efficiency and Information-Processing Theory</h3>
+<p>Information-processing theory is used to model how the brain stores, reasons with, and retrieves information. 30 This framework has allowed for seminal discoveries regarding how humans solve problems and experience cognitive load, 31, 32 which have informed many innovations in chemistry education. [33] [34] [35] In terms of information-processing theory, processing efficiency is characterized by encoding larger perceptual chunks and filtering attention to focus on relevant features of stimuli. [36] [37] [38] [39] [40] Chunking is the implicit process by which stimulus features are grouped together in working memory, which frees up working memory for higher-order tasks. [40] [41] [42] Chunking efficiency is affected by both top-down and bottom-up processes. 43 The chunking ability gained through repeated exposure to stimuli is considered a top-down effect. 43 Top-down processes describe how prior experience and expectations modify one&#x27;s approach to perceiving stimuli. By contrast, bottom-up processes describe how characteristics of the stimulus influence perception directly. 44 Investigated in terms of Gestalt psychology, 45, 46 spatial grouping of components and symmetry of domain-general stimuli have marked effects on chunking ability. [47] [48] [49] [50] [51] [52] [53] [54] Chemists seamlessly view and generate visual representations while reading, speaking, or hearing these terms during disciplinary discourse. 3, 14 This skill, while underexplored, may be vital for chemistry students to develop so they may communicate and reason about chemical phenomena. Recently, Braun and colleagues examined chemistry students&#x27; ability to efficiently detect resonance in chemical structures. Using structures with systematically varied features and students&#x27; accuracy and response times on the tasks, they found that many students quickly detect resonance in simpler structural motifs like allylic carbocations, suggesting that these students are implicitly detecting resonance from a structural pattern rather than reasoning about resonance from first principles. The authors argue that students may face drastically different challenges pertaining to detecting resonance.</p>
+<h3>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 3</h3>
+<h3>Using Eye Movements to Study Chemistry Learning</h3>
+<p>Eye movement data are used to examine the neurocognitive processes surrounding perception, memory, and problemsolving. 44, [55] [56] [57] The eye-mind hypothesis posits that eye movements are a window into understanding cognitive processes. 58 Eye movements are behavioral indices of processes that govern attention towards relevant information while scanning complex visual stimuli. Sustained gaze towards specific areas in stimuli, called fixations, reveal what and to what extent information in these stimuli is attended to. 56 Like perception, visual attention is affected by both top-down and bottom-up processes. 44, 59, 60 For complex or goal-driven tasks, top-down processes bias visual attention toward task-relevant locations on a stimulus. By contrast, in free-viewing or memory tasks, bottom-up processes bias visual attention toward regions of visual salience. 44, [61] [62] [63] Prior research has used eye movements to examine students&#x27; problem-solving strategies based on attention allocation and scan paths. For example, researchers have investigated how students solve chemistry word problems, [64] [65] [66] problems involving spectral data or assignment of absolute configuration, [67] [68] [69] [70] and case comparison tasks. 71 Locations of sequential fixations or the ratio between fixations and transitions can be indicative of expert-like approaches to solving chemistry problems. 67, 71 Other eye-tracking metrics, like fixation disparity, have been used to quantify visuospatial cognition while viewing visual representations of molecules. 72 Notably, Braun and colleagues revealed that attention allocation relates to students&#x27; drawing of productive vs. unproductive resonance structures. In their study, participants who made unproductive resonance structures spent more time attending to unrelated structural features in previous resonance structures. The authors argue that students&#x27; visual selection of relevant features of molecules when reasoning about resonance are vital to their development of representational competence. 73 Additionally, related research by Williamson and colleagues found that visual attention to disciplinary stimuli may be context dependent. In their study, students spent more attention on provided ball-and-stick representations compared to electrostatic potential when students were provided different prompts like determining the site of nucleophilic attack in the molecule. 74 Few chemistry education research studies have explicitly examined the efficiency of information-processing of chemical representations, though. 22 Disciplinary experts have several perceptual advantages in their processing of discipline-specific stimuli. 29, 36, 75, 76 Foundational eye-tracking research was done by psycholinguists to outline the perceptual advantages and eye movement patterns of skilled readers. 58, [77] [78] [79] Countless research articles in this discipline have used eye movements to study the information-processing underlying word recognition, sentence comprehension, and reading passages, 78, [80] [81] [82] which have built the basis for the eye-mind hypothesis. 58 Two examples of these advantages, as discovered by research on reading, are: (i) With more experience viewing a type of stimulus, readers or other disciplinary experts develop a wider perceptual span, which describes the area at which they can peripherally encode information on a stimulus from a single fixation. 75, 78, 83 (ii) Fluency in a language is associated with efficient retrieval of semantic representations between words and their picture referents, which manifests as faster fixations toward matching pictures in specific experimental paradigms. 84, 85 In terms of informationprocessing theory, advantage (i) relates to the encoding of stimuli in working memory, and advantage (ii) relates to the retrieval of multimodal semantic representations from long-term memory and their effects on visual attention. We argue that the visual processing of bond-line structures of organic molecules may come with similar expertise advantages.</p>
+<h3>Present Study</h3>
+<p>In this study, we examined stationary gaze entropy (Hs) for capturing the spatial allocation of attention to visual diagrams of molecules, which are two-dimensional and modular. Stationary gaze entropy quantifies the extent to which gaze is dispersed across areas of a stimulus, 44, 64 and was chosen because it aligned with established theory, precedent, and our context. 86 Stationary gaze entropy has been used extensively to study the processing efficiency of complex visual environments and how visual attention is affected by top-down and bottom-up processes. 44 For goal-driven tasks, stationary gaze entropy is negatively correlated with top-down gaze control. 44 That is, the more focused one&#x27;s gaze is on a stimulus, the more they are affected by top-down processes due to repeated exposure to the same type of stimulus. Research has investigated how stimulus complexity, 87, 88 individual variations like emotional context or sleep deprivation, [89] [90] [91] and task difficulty 92 affect the extent to which top-down processes bias visual attention. This metric has also been used to investigate the relationship between expertise and gaze behavior in surgical and air traffic control simulations, [92] [93] [94] video games, 93 and chemistry problem solving. 64 Little is known about how visual representations in chemistry are processed, let alone in multimodal environments with multiple different types of representations. 21 We designed an experiment to study the top-down processes involved in visual scanning of stimuli that included visual representations (bond-line structures) and verbal representations (IUPAC names) of organic molecules. Our study addresses the following research questions:</p>
+<h3>RQ1. How does chemistry expertise influence the extent to which visual attention is focused on specific components of visual and verbal modes of chemistry representations during a representation-matching task? RQ2.</h3>
+<p>To what extent do features of the stimuli and/or multimodal cue affect the dispersion of visual attention during this task, and how do these effects differ between experts and novices?</p>
+<p>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 4 Chemistry experts&#x27; repeated exposure to chemical diagrams and names may facilitate chunking of these disciplinary stimuli in working memory. Analogous to the increased perceptual span of experienced readers, 75, 78, 83 we expect this effect to manifest as less dispersed viewing on representations in tasks that require one to encode a chemical diagram or name. Via chunking, experts could encode the entire representation in working memory with fewer distinct fixations. This is expected to be influenced by various features of the stimuli including complexity, aspects of the chemical structure, or differences between the presented structures. Similarly, the retrieval of long-term semantic knowledge may be efficient enough to directly affect visual attention. This retrieval has been observed to occur implicitly during name-picture matching tasks. 84, 85 Hence, we expect chemistry experts to focus their attention on relevant portions of each representation in a task in which they must match a bond-line structure and IUPAC name. We refer to this bidirectional effect as multimodal cueing.</p>
+<h3>Methods</h3>
+<h3>Context and Participants</h3>
+<p>Prior to data collection, we received ethics approval from our university&#x27;s institutional review board to run this study. Recruitment and data collection occurred at a Canadian national chemistry conference and at our university. We set up a data collection booth at which potential participants could review the study details and decide whether to take part. Our booth was located at high foot traffic spots at both sites. Conference attendees and university students, faculty, and staff (N = 200) volunteered to participate in the study. Informed consent was obtained from all participants. Participation in the study took 5-10 minutes, and we did not provide compensation to participants. Participants filled out a brief questionnaire that asked them to report their current role (faculty, post-doctoral fellow, graduate student, undergraduate student, or staff member), area of study (chemistry, biology, physics, etc.), and undergraduate chemistry courses taken, if the participant was an undergraduate student. We used participants&#x27; answers to this questionnaire to assign them one of four groups of expertise (Table 1). We use these groups to roughly model participants&#x27; experience processing chemistry representations. Group 1 contains participants with the most experience (chemistry faculty, post-doctoral fellows, and graduate students), and Group 3 contains participants with the least experience (undergraduate students currently in first-or second-year chemistry courses). Based on the information collected in the questionnaire, we could not classify participants who were either staff members or undergraduate students who have not taken any chemistry courses at our university into these groups. These participants are represented in Group 4. We did not collect any other demographic information like ethnicity or gender because they are not the focus of our research questions, and we wanted to minimize risks of data reidentification.</p>
+<p>Table 1. Groups of participants based on responses to the demographic questionnaire.</p>
+<h3>Experiment Design</h3>
+<p>Participants completed a series of 36 randomized trials in which they viewed a pair of organic molecules and an IUPAC name (Figure 2). For each trial, participants had a maximum of 15 seconds to select which organic molecule matched the IUPAC name. A fixation cross was displayed for 500 ms to center participants&#x27; gaze prior to each trial.</p>
+<p>The task used in our experiment is a blend of two experimental paradigms from cognitive psychology: word-picture verification tasks and difference recognition tasks. In word-picture verification tasks, participants are presented with an image and word (e.g., an image of a fish and the word &quot;fish&quot;) and must decide if they match. This paradigm is used to study how semantic representations are activated from long-term memory during multimodal processing. [95] [96] [97] [98] In difference recognition tasks, participants must locate the difference between a pair of images. This paradigm is used to study visual scanning efficiency and its interaction with disciplinary expertise for domain-specific stimuli. 28, 29 The target (correct organic molecule) and foil (incorrect organic molecule) differed by one structural motif or feature. Recognizing the visually salient difference between the two organic molecules and determining how the IUPAC name may resolve that difference hence play an integral role in the task, incorporating ideas from both experimental paradigms.</p>
+<h3>Group Description</h3>
+<p>N* 1 Chemistry faculty, post-doctoral fellows, and graduate students 27 2 Undergraduate students who have already taken second-year organic chemistry 34 3 Undergraduate students who are currently taking first-year chemistry or second-year organic chemistry 42 4 Other (staff members, undergraduate students that have not taken chemistry courses) 29 *After exclusion of participants due to poor eye-tracker calibration or high data loss. Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 5</p>
+<p>We varied the trials factorially based on three task characteristics: (i) target type, (ii) complexity, and (iii) foil type (Table 2).</p>
+<p>Target type has two conditions referring to whether the target is cyclic or acyclic. Complexity has three conditions based on the number of carbon atoms and functionalities in the target. Finally, foil type has six conditions based on the visually salient difference between the target and foil. For instance, in stimuli in the extra group condition, the foil contains a functionality that is not present in the IUPAC name, and in stimuli in the missing group condition, the foil is missing a functionality that is present in the IUPAC name. Our 2×3×6 factorial design allowed 36 unique combinations of task characteristic conditions. Our experiment featured one of each type of trial. Each participant completed each of these 36 trials. We counterbalanced functional groups (alkenes, alkynes, halides, alcohols, aldehydes/ketones, and amines) and the position (left or right) of the correct answer across conditions. *The correct answer to each trial is annotated with a green square. The green squares are not in the stimuli shown to participants.</p>
+<h3>Apparatus and Data Preprocessing</h3>
+<p>Eye movements during the experiment were recorded with a Tobii Pro Spectrum 300 eye-tracker. This device is attached to a 23.8&quot; monitor with a resolution of 1920 x 1080 pixels. Participants were seated 60-65 cm away from the monitor in a dim room. The eye-tracker was calibrated for each participant using a nine-point calibration procedure. The position of the participant&#x27;s gaze on the monitor is recorded by the eye-tracker at a sampling rate of 300 Hz. The Tobii Pro Velocity- pg. 6 Threshold Identification Gaze Filter was used to preprocess the eye-tracking data. This algorithm classifies eye movements as fixations or saccades if movements in gaze position are slower or faster than 30 °/s, respectively. Visual angle degrees (°) are calculated based on the distance of the participant from the monitor and the monitor&#x27;s size. Gaze position measurements from the left and right eye were averaged during data preprocessing. Data was excluded from our analysis for participants with poor calibration accuracy (above 0.5°) and participants who had at least one trial with high data loss (above 20%). 99 The final sample included in our analysis contained 132 participants.</p>
+<h3>Calculation of Stationary Gaze Entropy</h3>
+<p>Stationary gaze entropy (Hs) quantifies the extent to which fixations are spread evenly across areas of interest, which are portions of the stimulus defined by the researcher. The method in which researchers define these areas of interest, which are typically either grid-based or content-based, have marked effects on the resulting stationary gaze entropy values. 44, 64 Because we are interested in attention cueing and encoding efficiency within bond-line structures and IUPAC names, we adopted a contentbased approach to examine if attention is focused on specific portions of each mode of representation. 44 where the full set of areas of interest for the trial is 𝜑 = {1, … , 𝑠}, 𝑠 is the number of areas of interest in the trial, and 𝜋 &quot; is the proportion of fixations during the trial that landed in area of interest 𝑖. 64 For areas of interest that are not fixated on during a trial, 0 * ln 0 is set equal to 0 by convention. 100 Because the number of atoms in structures and number of components of names vary across stimuli, we normalized stationary gaze entropy based on the number of possible areas of interest (𝑠) using the denominator in Equation (1).</p>
+<h3>Stationary gaze entropy is given by</h3>
+<p>The maximum value of Hs is standardized to 1, allowing for its comparison across trials with different values of 𝑠.</p>
+<p>We calculated two separate stationary gaze entropy metrics: one for the structures in the stimuli (Hs,s) and one for the names in the stimuli (Hs,n). The areas of interest that are used in the stationary gaze entropy calculation were defined systematically for each stimulus. For the molecular structures, we followed a protocol recently developed by Langner and colleagues that algorithmically defines areas of interest around each atom in a molecule. Using this method avoids the bias of manual definition of areas of interest on findings. As recommended by the authors, we set the radius of each area of interest equal to the bond length in the structural diagrams. 101 An example definition of structure areas of interest for a stimulus is shown in Figure 3(a). IUPAC names in each stimulus were segmented into components, which were defined as prefixes, locants, root chain lengths (e.g., -but-), base (e.g., -ane), and suffixes. A visual angle margin of 1° was added on all sides of the IUPAC name text while defining these areas of interest.</p>
+<h3>Results</h3>
+<p>All statistical tests were run in SPSS 31.0.1.102</p>
+<h3>Accuracy and Response time</h3>
+<p>We conducted ANOVAs to examine the effect of participants&#x27; self-reported expertise (Table 1) on overall performance on the experiment and response time. Descriptive statistics for each study metric across these groups are shown in Table 3.</p>
+<p>Overall performance and response time were approximately normally distributed. There were four outliers for overall pg. 7 performance and one outlier for response time. The removal of the outliers did not substantially affect the results of the ANOVAs, so we included them in the final models. We observed a large main effect of participant group on overall accuracy, F(3, 128) = 9.55, p &lt; .001, ηp² = .183. Bonferroni-corrected post hoc t-tests revealed that participants in Groups A and B generally performed better on the experiment than participants in Group D (p &lt; .001). Participants in Group A also performed better on the experiment than those in Group C (p = .007). The analogous main effect on response time had a moderate effect size, F(3, 128) = 5.67, p &lt; .001, ηp² = .117. Participants in Group A generally responded faster than those in Groups C (p = .018) and D (p = .009). Participants in Group B also generally responded faster than those in Group D (p = .037). We calculated pairwise correlation coefficients for per trial response time, accuracy, Hs,s, and Hs,n (Table 4). Because there were outliers in the distributions of each metric, we report Spearman&#x27;s ρ for all correlations. The time spent on the task was moderately correlated with Hs,s, ρ(4750)= .642, p &lt; .001, and weakly with Hs,n, ρ(4750)= .216, p &lt; .001. Trial accuracy was very weakly negatively correlated with Hs,s, ρ(4750)= -.168, p &lt; .001, and Hs,n, ρ(4750)= -.046, p &lt; .01.</p>
+<h3>Effects of Expertise and Task Characteristics on Stationary Gaze Entropy</h3>
+<p>Repeated measures ANOVAs were run for Hs,s and Hs,n using the task characteristics (target type, complexity, and foil type) as within-subjects factors and self-reported expertise (Table 1) as a between-subjects factor. For within-subject comparisons, we conducted Mauchly&#x27;s sphericity test to validate the assumption of equal variances made by the repeated-measures ANOVAs. When the assumption of sphericity was violated, we corrected degrees of freedom with the Greenhouse-Geisser correction. 102 We assessed normality using quartile-quartile plots. 102 We note that the assumption of homogeneity of variance across participant groups was violated for three and seven cells for Hs,s and Hs,n, respectively (Levene&#x27;s Test). Because our group sizes are not drastically different in size (Table 1) and the violation only occurs in few of the total 36 cells for each ANOVA, our models can still be interpreted reliably. 103 We identified several outliers after examining the distribution of each cell, which were most usually values near zero. Excluding the outliers did not substantially affect the results (significance and effect size of main effects and interactions) of the ANOVAs, so we concluded that our original models were robust against the outliers. Thus, our results are presented from the models including these outliers. Post-hoc pairwise t-tests and ANOVAs were run for significant main effects and interactions, respectively. The p-values for pairwise t-tests were adjusted for multiple comparisons using the Bonferroni correction.</p>
+<h3>Main effects of expertise.</h3>
+<p>We observed a large main effect of self-reported expertise on Hs,s, F(3, 128) = 9.12, p &lt; .001, ηp² = .176. Descriptive statistics for each group are shown in Table 3. Participants in Groups A and B generally exhibited smaller Hs,s than Groups C and D, which was significant by pairwise t-tests (p &lt; .05). The main effect of participant group on Hs,n was not significant, F(3, 128) = 1.90, p = .133.</p>
+<h3>Effects of target type.</h3>
+<p>There was a large main effect of target type on Hs,s, F(1, 128) = 44.6, p &lt; .001, ηp² = .258. Participants had smaller Hs,s on trials with cyclic targets (M = 0.564, SD = 0.178) than acyclic targets (M = 0.589, SD = 0.159). We observed pg. 8 a significant interaction between target type and group of expertise with a large effect size, F(3, 128) = 8.52, p &lt; .001, ηp² = .166 (Figure 4(a)).</p>
+<h3>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28</h3>
+<p>Post-hoc t-tests indicated the effect of target type was significant for participants in Groups A and B (p &lt; .001) but not Groups C (p = .408) and D (p = .360). Our ANOVA for Hs,n did not reveal a significant main effect of target type, F(1, 128) = .750, p = .388.</p>
+<h3>Effects of stimulus complexity.</h3>
+<p>We found that stimulus complexity had a large effect on Hs,s, F(1.84, 235) = 406, p &lt; .001, ηp² = .761. As stimulus complexity increased, Hs,s generally increased too (Table 5). All pairwise t-tests between low, medium, and high complexity conditions were significant (p &lt; .001). The complexity × expertise interaction was not significant, F(5.51, 235) = 1.97, p = .077 (Figure 4).</p>
+<p>The main effect of complexity on Hs,n was also large, F(1.66, 212) = 38.7, p &lt; .001, ηp² = .232. Interestingly, Hs,n was generally largest for low complexity stimuli, followed by high complexity stimuli (Table 5). All pairwise t-tests among complexity conditions were also significant for Hs,n (p &lt; .05). The complexity × expertise interaction was also not significant for Hs,n, F(4.98, 212) = .360, p = .874. Effects of foil type. There was a large main effect of foil type on Hs,s, F(4.40, 564) = 147, p &lt; .001, ηp² = .534. The average Hs,s across participants is displayed for each foil type condition in Figure We observed a significant two-way interaction between foil type and self-reported expertise on Hs,s, but the effect size was small, F(13.2, 564) = 2.44, p = .003, ηp² = .054 (Figure 4). pg. 9</p>
+<p>From our post-hoc analyses that examined difference among groups for each trial type (Bonferroni-corrected α = .008), we found that the effect of expertise was particularly weak for the misplaced group condition, F(3, 128) = 2.28, p = .083. We also observed a large main effect of foil type on Hs,n, F(5, 640) = 30.7, p &lt; .001, ηp² = .193. Differences in Hs,n across trial types generally followed the same trend as for Hs,s (Figure 5(b)). Participants also exhibited larger Hs,n on extra group trials (M = 0.788, SD = 0.129) compared to missing group trials (M = 0.751, SD = 0.157; p &lt; .001). The two-way interaction between foil type and expertise was not significant for Hs,n, F(15, 640) = .985, p = .469.</p>
+<p>Interactions between task characteristics. All two-way interactions between task characteristics were significant for Hs,s. We observed a weak target type × complexity interaction, F(1.87, 239) = 3.55, p = .033, ηp² = .027. The target type × foil interaction had a large effect size, F(4.65, 595) = 38.1, p &lt; .001, ηp² = .229 (Figure 7(a)). From our post-hoc analyses (Bonferroni-corrected α = .008), we found that the main effect of target type was weakest for extra group, F(1, 128) = 9.30, p = .003, ηp² = .068, and missing group trials, F(1, 128) = 11.1, p = .001, ηp² = .080. Interestingly, during misplaced group trials, participants generally had larger Hs,s on cyclic trials (M = 0.683, SD = 0.139) than acyclic trials (M = 0.630, SD = 0.127), F(1, 128) = 36.0, p &lt; .001, ηp² = .219. The complexity × foil type also had a large effect size, F(8.60, 1100) = 33.5, p &lt; .001, ηp² = .208 (Figure 7(b)). The main effect of complexity for extra group conditions was smaller (but still large) than for the other conditions, F(1.87, 239) = 23.7, p &lt; .001, ηp² = .156 (Bonferroni-corrected a = .008).</p>
+<h3>Discussion</h3>
+<p>Using an experiment that prompted participants to choose the bond-line structure that matched a provided IUPAC name, we investigated how top-down processes like visual chunking and multimodal cueing affected gaze behavior on each type of representation. We used stationary gaze entropy, a metric calculated from the eye movements we captured during the experiment, to examine how participants&#x27; experience in chemistry and varied characteristics of the tasks modified the role of these top-down processes. To answer our first research question, we compared the stationary gaze entropy of participants based on their self-reported chemistry expertise. To answer our second research question, we varied the characteristics of the trials based on whether molecules were cyclic or acyclic (target type), the size of the molecules (complexity), and the type of visually salient difference between the two molecules (foil type).</p>
+<h3>1. Experts sample less information within the structures but not within the names.</h3>
+<p>We found that participants with more chemistry expertise generally exhibited more focused attention within the bond-line structures. While our analysis does not reveal whether these participants focused on more relevant portions of the stimuli, they generally sampled less information across the bond-line structures, which is associated with top-down gaze control. 44 Based on prior research, it is likely that experts focus their attention towards task-relevant features of disciplinary stimuli. 36, 66, 69 Most of the information in the bond-line structures is redundant, and experts have been found to ignore provided information that is not useful for solving chemistry tasks. 64 We found that accuracy per trial was only weakly correlated with focused gaze behavior, which suggests that sense-making skills and representational processing efficiency play distinct roles in the tasks. 22, 23 That is, being able to accurately match bond-line structures with IUPAC names does not necessarily mean one completes the task efficiently.</p>
+<p>By contrast, we found no evidence that the extent to which attention was dispersed across components of the IUPAC names differed for experts and novices. The intrinsic segmentation of morphemes in the IUPAC names (either phonetically or visually with dashes) may allow for domain-general chunking via bottom-up means. 82, 104, 105 Even though the name is read with our eyes, the encoding of the IUPAC names occurs verbally in the phonological loop, 106, 107 which may not affect gaze behavior in the same way as visual chunking. Further, compared to the atoms of the bond-line structures, attention was generally more evenly distributed across components of the IUPAC names. This may be because the name is generally read left-to-right, whereas there is no constrained sequence for scanning the bond-line structures. Participants may need to sample the entire name in this manner before comparing it to the bond-line structures. It is also possible that this experiment cannot elicit topdown effects on the visual scanning of IUPAC names.</p>
+<h3>2. Chunking is a strategy to mitigate working memory demands under specific circumstances.</h3>
+<p>Our target type conditions isolated the observed effects to top-down effects of visual chunking. This is because the content and task demand of the IUPAC names between these trial types only differed in the presence of cyclo for the cyclic targets. As such, we suggest that any effects due to cueing from the IUPAC name should be the same across cyclic and acyclic target types. We found that gaze across atoms in the structures was more focused during cyclic trials, but upon further investigation, we only observed this effect for participants with higher expertise. Contrary to our hypotheses that bottom-up facilitation of chunking would occur similarly for all participants due to Gestalt principles like grouping, [46] [47] [48] this suggests that these features of cyclic molecules may not govern experts&#x27; more focused attention within the cyclic molecules. This also contrasts work by Stieff and colleagues that investigated chemistry novices&#x27; encoding of ball-and-stick models in a change detection task. They found that novice chemists leveraged spatial groupings in the stimuli during encoding that corresponded to expert chunks. 40 We considered that novice participants may always engage in the exploratory scanning associated with dispersed gaze behavior, 44 which could be due to uncertainty during the task and lack of sense-making skills. These participants&#x27; visual scanning was sensitive to the other manipulations of task characteristics, though, so we argue that students may face inadvertent challenges working with visual representations containing cyclic molecules. Chemistry instructors may overlook this challenge while highlighting structural information in a cyclic molecule or asking their students to copy down a mechanism containing cyclic molecules, both of which require the student to encode the visual in working memory.</p>
+<p>We found that regardless of expertise, participants exhibited highly dispersed viewing behavior across the bond-line structures for trials in which the visually salient cue was the misplacement of a parent functional group or substituent. We had anticipated that experts may have experience counting carbon atoms on organic molecules and would still exhibit more focused viewing relative to novices. This skill may hence not be a component of their representational processing efficiency, perhaps due to limited repeated exposure to this type of task. It is also possible that counting does not demand much of visual working memory, as chunking strategies are typically employed implicitly to lessen load working memory during difference recognition tasks. 28</p>
+<h3>3. The extent to which multimodal cueing affects visual attention may depend on how the cue is delivered.</h3>
+<p>As the bond-line structures became larger and IUPAC names became longer, participants exhibited more exploratory gaze behavior, which is consistent with prior reports of stationary gaze entropy across tasks of varied complexity and difficulty. 87, 88, 92, 108 However, we note that our entropy values were normalized across conditions based on the total number of areas of interest, 44, 64 which we anticipated to have a different relationship with stimulus complexity. The visually salient difference between structures was generated in the same way for each complexity level. For each trial, increasing stimulus complexity made structures longer or introduced additional functionalities that were common to both structures presented.</p>
+<p>As such, the added information is redundant and not directly relevant for distinguishing the structures based on the IUPAC name. The observed effect may hence be due to exploratory viewing resulting from poor cueing from the IUPAC name. As the name becomes longer, the cue distinguishing the correct and incorrect structure becomes less apparent, which doesn&#x27;t allow for multimodal cueing to filter attention towards specific structural features.</p>
+<p>Our variation of the foil type modified the type of visually salient difference between the structures and the corresponding cue in the IUPAC name that distinguished them. Because the type of difference could have marked effects on its recognition, 29 pg. 12 we compared trials in which the incorrect structure either had an extra group or was missing a group. We found that participants exhibited more exploratory viewing substantially more for the former condition, which we argue is due to the lack of a direct cue in the IUPAC name (i.e., there is nothing in the IUPAC name for this condition indicating that the group is not meant to be there). We also found that viewing was generally exploratory across trials of all complexity for this condition, which suggests that without the presence of the cue buried in the name, the main effect of complexity is less dramatic.</p>
+<h3>4. Attention filtering of verbal information may be affected differently by top-down processes.</h3>
+<p>By contrast to our observations for attention on the bond-line structures, participants attended to components of the IUPAC names more evenly for low complexity stimuli compared to medium or high complexity stimuli. Because this also contrasts the related research on visual scene complexity, 87, 88 we suggest that attention allocation on the names may be affected by different processes than that of the structures. Participants may have had enough space in working memory to encode the entire IUPAC name (by reading it left-to-right) before comparing it to the bond-line structures. As the names became longer, though, participants may have implicitly began to skim or chunk multiple components together to avoid cognitive overload. 28 The effects of varied foil types on attention allocation within the IUPAC names were like the effects described for the bondline structures. The way that the cue in the name is delivered (as varied by foil type) may hence also affect visual attention within the name. If a participant is searching for clues to help with their solving of the task, and does not find one (e.g., in the extra group condition), they may continue viewing the name exploratively.</p>
+<h3>Implications</h3>
+<h3>Implications for Teaching</h3>
+<p>We frame these implications in terms of some of the inadvertent challenges that students may face while processing multiple modes of representations during chemistry instruction. Foremost, our findings suggest that chemistry novices are inefficient in their encoding visual representations and translating between verbal and visual representations of organic molecules. Perceptual learning activities embedded in course designs could address this issue, 23, [110] [111] [112] [113] and analogous activities for organic nomenclature may be adapted from previous work. [11] [12] [13] Since students may face these processing demands later in their organic chemistry courses, maintenance of fluency beyond that is encountered in the typical introductory nomenclature unit would be particularly useful. We also revealed that chemistry novices may encounter difficulties viewing cyclic molecules, even though they feature domain-general spatial grouping. Because the chemistry experts in our study exhibited visual-cognitive advantages over novices while viewing cyclic molecules, this challenge to learners may be especially easy for chemistry instructors to overlook. Instructors should aim to be conscious of how much time is provided for students to view and/or write down visual representations during instruction or assessment. That the relevant information in increasingly complex stimuli is difficult for both novices and experts to discern supports the practice of introducing representation types gradually while explicitly explaining their purposes and connections. 35 Further, effective signaling strategies (i.e., signaling students&#x27; attention to specific features of representations during instruction) used with complex representations may similarly help students build representational processing efficiency. 99, 114, 115 Implications for Research Our work builds upon research that has investigated how attention is allocated to visual representations during chemistry problem solving and the importance of representational processing efficiency in chemistry learning. [21] [22] [23] 69, 73 The analysis of gaze entropy may be applied to examine the efficacy of fluency-building activities in chemistry in a pre/post manner. 23 The experiment design in our study provides one means for doing so, but it could be adapted to include other types of visual representations and prompts. For example, varying the task can drastically affect students&#x27; visual attention to representations, 74 which may reflect the cognitive resources that are imposing top-down control over gaze.</p>
+<p>Prior work has found that chemistry students may detect implicit information in bond-line structures more easily for certain substrates, and that this skill may vary substantially across students. 22 In our experiment, participants viewed bond-line structures while matching them to an IUPAC name, which meant activating long-term knowledge about the relationships between these visual and verbal representations. Chemistry experts more efficiently processed information during the tasks, and our analysis showed the various ways in which visual chunking and multimodal cueing allowed for these informationprocessing advantages. Building off of this work and a report of chemistry novices&#x27; ability to use expert chunks without having chemistry expertise, 40 we suggest that future research explore how the morphology of bond-line structures may make them easier or harder to chunk by chemistry novices (i.e., via bottom-up processes). Our findings suggest that information presented in cyclic molecules may not be easier for chemistry novices to process, despite the inherent spatial grouping. Future research should reproduce this finding and explore how other features common to bond-line structure (e.g., conjugation, heteroatoms, stereochemistry, and various functional groups) may affect encoding efficiency.</p>
+<p>More generally, our work substantiates the need for approaches to teaching that consider students&#x27; cognitive load while learning in multimedia environments. 20, 21 It is for chemistry students to translate between different representations, 10 and the Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 13 chemistry novices faced similar challenges in our experiment. Hence, we suggest that future chemistry education research explore how teaching practices recommended by the multimedia learning theory, like signaling, may help build chemistry students&#x27; representational processing efficiency. 20, 99</p>
+<h3>Limitations</h3>
+<p>We note several limitations of the present study. Our interpretations of eye movements are limited by the design of our experiment, which explored how chunking and multimodal cueing affected gaze behavior. Because our experiment combined a difference recognition task and a word-picture matching task, we cannot isolate the effects of either of these processes. We use our task variations to better interpret each effect independently, but we note that further experimentation is needed to more confirm our findings independently from one another. We did not collect a standardized measurement of sense-making skills in IUPAC naming, so we could not characterize the complex interplay between representational sense-making skills and processing efficiency. We use participants&#x27; self-reported expertise to represent their exposure to chemical structures and names (not their sense-making skills). Another limitation of our study is that our interpretations of eye movement data are not cross validated with other sources of data. Retrospective think-alouds can reveal participants&#x27; problem-solving strategies during experiments in which eye movements are recorded, 109 which may have allowed us to confirm that participants&#x27; viewing strategies were affected by working memory capacity and/or multimodal cueing.</p>
+<p>Our analysis did not capture a related eye movement metric called gaze transition entropy, which captures the randomness of transitions between regions of a stimulus. Similarly to stationary gaze entropy, this metric is also associated with top-down gaze control in a variety of tasks. 44 Sequential eye movements may vary substantially based on the task, particularly in chemistry learning environments. Connor and colleagues found that chemistry experts exhibited more unidirectional viewing while comparing spectral data and chemical structures. 67 In terms of gaze entropy, such a pattern of visual scanning would be considered to have low gaze transition entropy and hence be associated with top-down effects (like experience solving similar problems) on gaze. By contrast, comparative viewing behavior may be a marker of expertise for other tasks. 71 Because our tasks were answered quickly, we did not investigate the time-course changes to attention allocation during the trials. Such an analysis may allow researchers to examine how top-down processes affect different stages of problem-solving during chemistry tasks, including familiarization, reasoning, and decision-making. For instance, Rodemer et al. characterized students&#x27; viewing of organic chemistry case comparison tasks as focused or comparative based on the ratio of fixations to transitions on the stimuli; they found that viewing generally starts off comparative, becomes focused, and then comparative again leading up to the participant&#x27;s response. 71</p>
+<h3>Conclusion</h3>
+<p>This study explored how chemistry expertise and varied task characteristics influence the processing of visual and verbal chemistry representations. We captured chemistry experts and novices&#x27; eye movements while they solved a series of representation-matching tasks involving bond-line structures and IUPAC names of organic molecules. Within each type of representation, we used these eye movements to calculate participants&#x27; stationary gaze entropy, which indicates to what extent their attention was dispersed. We found that chemistry experts exhibited focused viewing among atoms of the bond-line structures, which we attributed to the top-down effects on gaze from their repeated exposure to chemistry representations. Repeated exposure is likely to allow chemistry experts to chunk components of the stimuli more efficiently in working memory and more efficiently retrieve semantic representations relating the verbal and visual representations. 21, 39, 85 We discerned between these top-down effects by varying the characteristics of the task, such as whether the molecules were cyclic and how complex the molecules were. Our findings suggest that disciplinary chunking may be especially efficient for cyclic molecules. For some types of trials, expertise had much weaker effects on visual attention, which allowed us to generate potential boundaries for how chemistry experts&#x27; representational processing efficiency interacted with the tasks. We also found that conditions in which the relevant cue in the IUPAC name were less explicit were associated with more dispersed visual attention. For instance, participants generally exhibited higher stationary gaze entropy for stimuli containing longer IUPAC names (higher complexity). For these stimuli, the relevant cue is surrounded by more information that does not directly help one solve the task. Thus, the degree to which multimodal cueing affects gaze behavior may be modulated by the accessibility of the cue. Chemistry experts and novices both exhibited relatively exploratory viewing among portions of the IUPAC names. This indicates that top-down processing may affect attention towards visual and verbal representations in distinct ways. Whereas attention within bond-line structures became more exploratory as their size increased, attention within the IUPAC names became more focused for longer names, which may reflect changing scanning strategies or chunking employed to mitigate demands on working memory. Taken together, these findings extend research on representational competence in chemistry education by highlighting the role of representational processing efficiency in processing multiple modes of representations simultaneously. Our analysis reveals the advantages that chemistry experts have during processing and inadvertent challenges that varied task demands may pose to chemistry novices (and occasionally experts). We hope that our work provides a foundation for future research and instructional interventions aimed at building chemistry students&#x27; representational competence.</p>
+<h3>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28</h3>
+<p>pg. 14</p>
+<h3>Associated Content</h3>
+<h3>Acknowledgments</h3>
+<p>We thank the study participants for volunteering to contribute to this study. We thank Zoé Lord for recruiting participants and providing valuable feedback on the manuscript. We also thank Delaney Stoltz, Shauna Schechtel, Josh Maligaya, Victoria Yu, and Bela Leger for assisting with data collection.</p>
+<h3>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28</h3>
+<p>pg. 15</p>
+<h3>Data Availability</h3>
+<p>The de-identified data, data analysis code, full model outputs, and full experiment protocol will be publicly available on GitHub upon publication.</p>
+<h3>Notes</h3>
+<p>The authors declare no competing financial interest.</p>
+<p>Author Contributions SG: conceptualization, methodology, investigation, formal analysis, visualization, writing -original draft. AB: conceptualization, resources, project administration, supervision, validation, writing -review and editing (CRediT Contributor Roles Taxonomy).</p>
+<h3>22 Figure 1.</h3>
+<p>Figure 1. Simplified model of information-processing, as described by Baddeley (2000), Baddeley and Hitch (1974), and Baars and Gage (2010). The model is contextualized to the experiment task, in which participants must select which bond-line structure corresponds to the IUPAC name.</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Overview of the experiment procedure.</p>
+<h3>Figure 3.</h3>
+<p>Figure 3. Visualizations for stationary gaze entropy calculations. (a) Definition of areas of interest and (b,c) heat maps depicting the distribution of fixation for representative trials exhibiting low (0.44) and high (0.86) structure stationary gaze entropy (Hs,s). (d) Definition of areas of interest and (e,f) heat maps depicting the distribution of fixation for representative trials exhibiting low (0.67) and high (0.90) name stationary gaze entropy (Hs,n).</p>
+<p>5(a). Results from post-hoc pairwise t-tests are shown in Figure 6(a). Notably, participants exhibit larger Hs,s on extra group trials (M = 0.628, SD = 0.127) compared to missing group trials (M = 0.505, SD = 0.188; p &lt; .001). Participants also generally has larger Hs,s on misplaced group trials (M = 0.656, SD = 0.136) compared to all other trial types (p &lt; .001).</p>
+<h3>Figure 4.</h3>
+<p>Figure 4. Average structure stationary gaze entropy (Hs,s) per group of participants (expertise) for each condition of the (a) target type and (b) complexity trial characteristics. Error bars indicate 95% confidence intervals.</p>
+<h3>Figure 5.</h3>
+<p>Figure 5. Average stationary gaze entropy (Hs) per foil type condition for (a) structure stationary gaze entropy (Hs,s) and name stationary gaze entropy (Hs,n). Error bars indicate 95% confidence intervals.</p>
+<h3>Figure 6.</h3>
+<p>Figure 6. A matrix displaying the results of pairwise t-tests is shown for average stationary gaze entropy (Hs) per foil type condition for (a) structure stationary gaze entropy (Hs,s) and name stationary gaze entropy (Hs,n). The p-values were Bonferroni-corrected for 15 comparisons.</p>
+<h3>Figure 7.</h3>
+<p>Figure 7. Average structure stationary gaze entropy (Hs,s) to visualize interactions among task characteristics. (a) Target type × foil type. (b) Complexity × foil type. Error bars indicate 95% confidence intervals.</p>
+<h3>Table 2.</h3>
+<p>Trial characteristics that were varied factorially, including examples of each condition for target type, complexity, and foil type.</p>
+<h3>Table 3.</h3>
+<p>Average stationary gaze entropy across participant groups.</p>
+<h3>Table 4.</h3>
+<p>Spearman correlation (ρ) matrix for stationary gaze entropy, response time, and accuracy per trial.</p>
+<h3>Table 5.</h3>
+<p>Average stationary gaze entropy across stimulus complexity.</p>
+<h3>References</h3>
+<p>Kozma, R.; Russell, J. Students Becoming Chemists: Developing Representational Competence. In Visualization in Science Education; Gilbert, J. K., Ed.; Springer Netherlands: Dordrecht, 2005; pp 121-145. https://doi.org/10.1007/1- 4020-3613-2_8</p>
+<p>Talanquer, V. The Complexity of Reasoning about and with Chemical Representations. JACS Au 2022, 2 (12), 2658- 2669. https://doi.org/10.1021/jacsau.2c00498</p>
+<p>Laszlo, P. Towards Teaching Chemistry as a Language. Sci &amp; Educ 2013, 22 (7), 1669-1706. https://doi.org/10.1007/s11191-011-9408-6</p>
+<p>Markic, S.; Childs, P. E. Language and the Teaching and Learning of Chemistry. Chem. Educ. Res. Pract. 2016, 17 (3), 434-438. https://doi.org/10.1039/C6RP90006B</p>
+<p>Taber, K. S. Exploring the Language(s) of Chemistry Education. Chem. Educ. Res. Pract. 2015, 16 (2), 193-197. https://doi.org/10.1039/C5RP90003D</p>
+<p>Gkitzia, V.; Salta, K.; Tzougraki, C. Students&#x27; Competence in Translating between Different Types of Chemical Representations. Chem. Educ. Res. Pract. 2020, 21 (1), 307-330. https://doi.org/10.1039/C8RP00301G</p>
+<p>Mohamed-Salah, B.; Alain, D. To What Degree Does Handling Concrete Molecular Models Promote the Ability to Translate and Coordinate between 2D and 3D Molecular Structure Representations? A Case Study with Algerian Students. Chem. Educ. Res. Pract. 2016, 17 (4), 862-877. https://doi.org/10.1039/C5RP00180C</p>
+<p>Olimpo, J. T.; Kumi, B. C.; Wroblewski, R.; Dixon, B. L. Examining the Relationship between 2D Diagrammatic Conventions and Students&#x27; Success on Representational Translation Tasks in Organic Chemistry. Chem. Educ. Res. Pract. 2015, 16 (1), 143-153. https://doi.org/10.1039/C4RP00169A</p>
+<p>Stull, A. T.; Hegarty, M.; Dixon, B.; Stieff, M. Representational Translation With Concrete Models in Organic Chemistry. Cognition and Instruction 2012, 30 (4), 404-434. https://doi.org/10.1080/07370008.2012.719956</p>
+<p>Ward, L. W.; Rotich, F.; Arévalo, S.; Popova, M. Translating across Multiple Representations of Molecular Structure: Student Reasoning, Accuracy, and Personas. Chemistry Education Research and Practice 2026. https://doi.org/10.1039/D5RP00382B</p>
+<p>Bodé, N. E.; Caron, J.; Flynn, A. B. Evaluating Students&#x27; Learning Gains and Experiences from Using Nomenclature101.Com. Chem. Educ. Res. Pract. 2016, 17 (4), 1156-1173. https://doi.org/10.1039/c6rp00132g</p>
+<p>Fendos, J. Combining Jigsaws, Rule-Based Learning, and Retrieval Practice Improves IUPAC Nomenclature Competence. J. Chem. Educ. 2021, 98 (5), 1503-1517. https://doi.org/10.1021/acs.jchemed.0c01235</p>
+<p>Flynn, A. B.; Caron, J.; Laroche, J.; Daviau-Duguay, M.; Marcoux, C.; Richard, G. Nomenclature101.Com: A Free, Student-Driven Organic Chemistry Nomenclature Learning Tool. J. Chem. Educ. 2014, 91 (11), 1855-1859. https://doi.org/10.1021/ed500353a</p>
+<p>Airey, J.; Linder, C. A Disciplinary Discourse Perspective on University Science Learning: Achieving Fluency in a Critical Constellation of Modes. Journal of Research in Science Teaching 2009, 46 (1), 27-49. https://doi.org/10.1002/tea.20265</p>
+<p>Airey, J.; Linder, C. Social Semiotics in University Physics Education. In Multiple Representations in Physics Education; Treagust, D. F., Duit, R., Fischer, H. E., Eds.; Springer International Publishing: Cham, 2017; pp 95-122. https://doi.org/10.1007/978-3-319-58914-5_5</p>
+<p>Unsworth, L.; Tytler, R.; Fenwick, L.; Humphrey, S.; Chandler, P.; Herrington, M.; Pham, L. Multimodal Literacy in School Science: Transdisciplinary Perspectives on Theory, Research and Pedagogy; Routledge: London, 2022. https://doi.org/10.4324/9781003150718</p>
+<p>Liu, Y.; Taber, K. S. Analysing Symbolic Expressions in Secondary School Chemistry: Their Functions and Implications for Pedagogy. Chem. Educ. Res. Pract. 2016, 17 (3), 439-451. https://doi.org/10.1039/C6RP00013D</p>
+<p>Miller, G. A. The Magical Number Seven, plus or Minus Two: Some Limits on Our Capacity for Processing Information. Psychological Review 1956, 63 (2), 81-97. https://doi.org/10.1037/h0043158</p>
+<p>Ainsworth, S. DeFT: A Conceptual Framework for Considering Learning with Multiple Representations. Learning and Instruction 2006, 16 (3), 183-198. https://doi.org/10.1016/j.learninstruc.2006.03.001</p>
+<p>Mayer, R. E. Cognitive Theory of Multimedia Learning. In The Cambridge Handbook of Multimedia Learning; Mayer, R. E., Ed.; Cambridge Handbooks in Psychology; Cambridge University Press: Cambridge, 2014; pp 43-71. https://doi.org/10.1017/CBO9781139547369.005</p>
+<p>Rau, M. A. Conditions for the Effectiveness of Multiple Visual Representations in Enhancing STEM Learning. Educ Psychol Rev 2017, 29 (4), 717-761. https://doi.org/10.1007/s10648-016-9365-3</p>
+<p>Braun, I.; E. Lewis, S.; Graulich, N. A Question of Pattern Recognition: Investigating the Impact of Structure Variation on Students&#x27; Proficiency in Deciding about Resonance Stabilization. Chemistry Education Research and Practice 2025, 26 (1), 158-182. https://doi.org/10.1039/D4RP00155A</p>
+<p>Rau, M. A. Making Connections among Multiple Visual Representations: How Do Sense-Making Skills and Perceptual Fluency Relate to Learning of Chemistry Knowledge? Instr Sci 2018, 46 (2), 209-243. https://doi.org/10.1007/s11251-017-9431-3</p>
+<p>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 16</p>
+<p>Bhaskar, R. G.; Cook, A.; Rotich, F.; Arévalo, S.; Popova, M. Characterizing Student Reasoning with Multiple Representations of Molecular Structure. JACS Au 2026, 6 (8), 4776-4792. https://doi.org/10.1021/jacsau.6c00898</p>
+<p>Galloway, K. R.; Leung, M. W.; Flynn, A. B. A Comparison of How Undergraduates, Graduate Students, and Professors Organize Organic Chemistry Reactions. J. Chem. Educ. 2018, 95 (3), 355-365. https://doi.org/10.1021/acs.jchemed.7b00743</p>
+<p>Graulich, N.; Hedtrich, S.; Harzenetter, R. Explicit versus Implicit Similarity -Exploring Relational Conceptual Understanding in Organic Chemistry. Chem. Educ. Res. Pract. 2019, 20 (4), 924-936. https://doi.org/10.1039/C9RP00054B</p>
+<p>Rotich, F.; Ward, L.; Beck, C.; Popova, M. Attention Is Currency: How Surface Features of Lewis Structures Influence Organic Chemistry Student Reasoning about Stability. Chem. Educ. Res. Pract. 2024, 25 (4), 1071-1089. https://doi.org/10.1039/D4RP00030G</p>
+<p>Li, Y.; Zhuang, X.; Ma, G. Use of Minimal Working Memory in Visual Comparison: An Eye-Tracking Study. Perception 2023, 52 (11-12), 759-773. https://doi.org/10.1177/03010066231194488</p>
+<p>Robson, S. G.; Tangen, J. M.; Searston, R. A. The Effect of Expertise, Target Usefulness and Image Structure on Visual Search. Cogn. Research 2021, 6 (1), 16. https://doi.org/10.1186/s41235-021-00282-5</p>
+<p>Atkinson, R. C.; Shiffrin, R. M. Human Memory: A Proposed System and Its Control Processes. In Psychology of Learning and Motivation; Academic Press, 1968; Vol. 2, pp 89-195. https://doi.org/10.1016/S0079-7421(08)60422-3</p>
+<p>Newell, A.; Simon, H. A. Human Problem Solving; Human problem solving; Prentice-Hall: Oxford, England, 1972; pp xiv, 920.</p>
+<p>Sweller, J. Cognitive Load during Problem Solving: Effects on Learning. Cognitive Science 1988, 12 (2), 257-285. https://doi.org/10.1016/0364-0213(88)90023-7</p>
+<p>Duffy, P. L.; Enneking, K. M.; Gampp, T. W.; Amir Hakim, K.; Coleman, A. F.; Laforest, K. V.; Paulson, D. M.; Paulson, E. T.; Shepard, J. D.; Tiettmeyer, J. M.; Mazzarone, K. M.; Grove, N. P. Form versus Function: A Comparison of Lewis Structure Drawing Tools and the Extraneous Cognitive Load They Induce. J. Chem. Educ. 2019, 96 (2), 238- 247. https://doi.org/10.1021/acs.jchemed.8b00574</p>
+<p>Magnone, K. Q.; Ebert, J. A.; Creeden, R.; Karlock, G.; Loveday, M.; Blake, E.; Pratt, J. M.; Schafer, A. G. L.; Yezierski, E. J. Cognitively Loaded: An Investigation of Educational Chemistry YouTube Videos&#x27; Adherence to Mayer&#x27;s Multimedia Principles. J. Chem. Educ. 2023, 100 (2), 432-441. https://doi.org/10.1021/acs.jchemed.2c00591</p>
+<p>Nyachwaya, J. M.; Gillaspie, M. Features of Representations in General Chemistry Textbooks: A Peek through the Lens of the Cognitive Load Theory. Chem. Educ. Res. Pract. 2016, 17 (1), 58-71. https://doi.org/10.1039/C5RP00140D</p>
+<p>Gegenfurtner, A.; Lehtinen, E.; Säljö, R. Expertise Differences in the Comprehension of Visualizations: A Meta- Analysis of Eye-Tracking Research in Professional Domains. Educ Psychol Rev 2011, 23 (4), 523-552. https://doi.org/10.1007/s10648-011-9174-7</p>
+<p>Gibson, E. J. Perceptual Learning in Development: Some Basic Concepts. Ecological Psychology 2000, 12 (4), 295-302. https://doi.org/10.1207/S15326969ECO1204_04</p>
+<p>Kellman, P. J.; Garrigan, P. Perceptual Learning and Human Expertise. Phys Life Rev 2009, 6 (2), 53-84. https://doi.org/10.1016/j.plrev.2008.12.001</p>
+<p>Kellman, P. J.; Massey, C. M. Perceptual Learning, Cognition, and Expertise. In The psychology of learning and motivation, Vol. 58; The psychology of learning and motivation; Elsevier Academic Press: San Diego, CA, US, 2013; pp 117-165.</p>
+<p>Stieff, M.; Werner, S.; DeSutter, D.; Franconeri, S.; Hegarty, M. Visual Chunking as a Strategy for Spatial Thinking in STEM. Cogn. Research 2020, 5 (1), 18. https://doi.org/10.1186/s41235-020-00217-6</p>
+<p>Chase, W. G.; Simon, H. A. Perception in Chess. Cognitive Psychology 1973, 4 (1), 55-81. https://doi.org/10.1016/0010-0285(73)90004-2</p>
+<p>Gobet, F.; Lane, P. C. R.; Croker, S.; Cheng, P. C.-H.; Jones, G.; Oliver, I.; Pine, J. M. Chunking Mechanisms in Human Learning. Trends in Cognitive Sciences 2001, 5 (6), 236-243. https://doi.org/10.1016/S1364-6613(00)01662-4</p>
+<p>Gilchrist, A. L. How Should We Measure Chunks? A Continuing Issue in Chunking Research and a Way Forward. Front Psychol 2015, 6, 1456. https://doi.org/10.3389/fpsyg.2015.01456</p>
+<p>Shiferaw, B.; Downey, L.; Crewther, D. A Review of Gaze Entropy as a Measure of Visual Scanning Efficiency. Neuroscience &amp; Biobehavioral Reviews 2019, 96, 353-366. https://doi.org/10.1016/j.neubiorev.2018.12.007</p>
+<p>Palmer, S. E. Hierarchical Structure in Perceptual Representation. Cognitive Psychology 1977, 9 (4), 441-474. https://doi.org/10.1016/0010-0285(77)90016-0</p>
+<p>Wagemans, J.; Elder, J. H.; Kubovy, M.; Palmer, S. E.; Peterson, M. A.; Singh, M.; von der Heydt, R. A Century of Gestalt Psychology in Visual Perception I. Perceptual Grouping and Figure-Ground Organization. Psychol Bull 2012, 138 (6), 1172-1217. https://doi.org/10.1037/a0029333</p>
+<p>Chen, S.; Kocsis, A.; Liesefeld, H. R.; Müller, H. J.; Conci, M. Object-Based Grouping Benefits without Integrated Feature Representations in Visual Working Memory. Atten Percept Psychophys 2021, 83 (3), 1357-1374. https://doi.org/10.3758/s13414-020-02153-5</p>
+<p>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 17</p>
+<p>Li, J.; Qian, J.; Liang, F. Evidence for the Beneficial Effect of Perceptual Grouping on Visual Working Memory: An Empirical Study on Illusory Contour and a Meta-Analytic Study. Sci Rep 2018, 8 (1), 13864. https://doi.org/10.1038/s41598-018-32039-4</p>
+<p>Peterson, D. J.; Gözenman, F.; Arciniega, H.; Berryhill, M. E. Contralateral Delay Activity Tracks the Influence of Gestalt Grouping Principles on Active Visual Working Memory Representations. Atten Percept Psychophys 2015, 77 (7), 2270-2283. https://doi.org/10.3758/s13414-015-0929-y</p>
+<p>Peterson, D. J.; Berryhill, M. E. The Gestalt Principle of Similarity Benefits Visual Working Memory. Psychon Bull Rev 2013, 20 (6), 1282-1289. https://doi.org/10.3758/s13423-013-0460-x</p>
+<p>Hamilton, C. J.; Brown, L. A.; Rossi-Arnaud, C. Older Adults Benefit from Symmetry, but Not Semantic Availability, in Visual Working Memory. Front. Psychol. 2018, 8. https://doi.org/10.3389/fpsyg.2017.02373</p>
+<p>He, C.; Gunalp, P.; Meyerhoff, H. S.; Rathbun, Z.; Stieff, M.; Franconeri, S. L.; Hegarty, M. Visual Working Memory for Connected 3D Objects: Effects of Stimulus Complexity, Dimensionality and Connectivity. Cogn. Research 2022, 7 (1), 19. https://doi.org/10.1186/s41235-022-00367-9</p>
+<p>Kałamała, P.; Sadowska, A.; Ordziniak, W.; Chuderski, A. Gestalt Effects in Visual Working Memory: Whole-Part Similarity Works, Symmetry Does Not. Experimental Psychology 2017, 64 (1), 5-13. https://doi.org/10.1027/1618- 3169/a000346</p>
+<p>Rossi-Arnaud, C.; Pieroni, L.; Spataro, P.; Baddeley, A. Working Memory and Individual Differences in the Encoding of Vertical, Horizontal and Diagonal Symmetry. Acta Psychologica 2012, 141 (1), 122-132. https://doi.org/10.1016/j.actpsy.2012.06.007</p>
+<p>Adeli, H.; Vitu, F.; Zelinsky, G. J. A Model of the Superior Colliculus Predicts Fixation Locations during Scene Viewing and Visual Search. J. Neurosci. 2017, 37 (6), 1453-1467. https://doi.org/10.1523/JNEUROSCI.0825- 16.2016</p>
+<p>Guerrasio, L.; Quinet, J.; Büttner, U.; Goffart, L. Fastigial Oculomotor Region and the Control of Foveation During Fixation. Journal of Neurophysiology 2010, 103 (4), 1988-2001. https://doi.org/10.1152/jn.00771.2009</p>
+<p>Shaikh, A. G.; Zee, D. S. Eye Movement Research in the Twenty-First Century-a Window to the Brain, Mind, and More. Cerebellum 2018, 17 (3), 252-258. https://doi.org/10.1007/s12311-017-0910-5</p>
+<p>Just, M. A.; Carpenter, P. A. A Theory of Reading: From Eye Fixations to Comprehension. Psychological Review 1980, 87 (4), 329-354. https://doi.org/10.1037/0033-295X.87.4.329</p>
+<p>Duncan, J. Converging Levels of Analysis in the Cognitive Neuroscience of Visual Attention. Philos. Trans. R. Soc. B Biol. Sci. 1998, 353 (1373), 1307-1317. https://doi.org/10.1098/rstb.1998.0285</p>
+<p>Baars, B. J.; Gage, N. M. Chapter 2 -A Framework. In Cognition, Brain, and Consciousness (Second Edition); Academic Press: London, 2010; pp 32-61. https://doi.org/10.1016/B978-0-12-375070-9.00002-4</p>
+<p>Foulsham, T. Eye Movements and Their Functions in Everyday Tasks. Eye 2015, 29 (2), 196-199. https://doi.org/10.1038/eye.2014.275</p>
+<p>Lappi, O. Eye Movements in the Wild: Oculomotor Control, Gaze Behavior &amp; Frames of Reference. Neuroscience &amp; Biobehavioral Reviews 2016, 69, 49-68. https://doi.org/10.1016/j.neubiorev.2016.06.006</p>
+<p>Tatler, B. W.; Hayhoe, M. M.; Land, M. F.; Ballard, D. H. Eye Guidance in Natural Vision: Reinterpreting Salience. J Vis 2011, 11 (5), 5. https://doi.org/10.1167/11.5.5</p>
+<p>Nahlik, P.; Daubenmire, P. L. Adapting Gaze-Transition Entropy Analysis to Compare Participants&#x27; Problem Solving Approaches for Chemistry Word Problems. Chem. Educ. Res. Pract. 2022, 23 (3), 714-724. https://doi.org/10.1039/D2RP00066K</p>
+<p>Tang, H.; Kirk, J.; Pienta, N. J. Investigating the Effect of Complexity Factors in Stoichiometry Problems Using Logistic Regression and Eye Tracking. J. Chem. Educ. 2014, 91 (7), 969-975. https://doi.org/10.1021/ed4004113</p>
+<p>Tang, H.; Pienta, N. Eye-Tracking Study of Complexity in Gas Law Problems. J. Chem. Educ. 2012, 89 (8), 988-994. https://doi.org/10.1021/ed200644k</p>
+<p>Connor, M. C.; Glass, B. H.; Finkenstaedt-Quinn, S. A.; Shultz, G. V. Developing Expertise in 1 H NMR Spectral Interpretation. J. Org. Chem. 2021, 86 (2), 1385-1395. https://doi.org/10.1021/acs.joc.0c01398</p>
+<p>Cullipher, S.; Sevian, H. Atoms versus Bonds: How Students Look at Spectra. J. Chem. Educ. 2015, 92 (12), 1996- 2005. https://doi.org/10.1021/acs.jchemed.5b00529</p>
+<p>Topczewski, J. J.; Topczewski, A. M.; Tang, H.; Kendhammer, L. K.; Pienta, N. J. NMR Spectra through the Eyes of a Student: Eye Tracking Applied to NMR Items. J. Chem. Educ. 2017, 94 (1), 29-37. https://doi.org/10.1021/acs.jchemed.6b00528</p>
+<p>Langner, A.; Sahba, M.; Popova, M.; Graulich, N. An Integrated Approach to Characterizing Changes in Organic Chemistry Students&#x27; Eye Movements. J. Chem. Educ. 2026, 103 (1), 101-117. https://doi.org/10.1021/acs.jchemed.5c00849</p>
+<p>Rodemer, M.; Eckhard, J.; Graulich, N.; Bernholt, S. Decoding Case Comparisons in Organic Chemistry: Eye-Tracking Students&#x27; Visual Behavior. J. Chem. Educ. 2020, 97 (10), 3530-3539. https://doi.org/10.1021/acs.jchemed.0c00418</p>
+<p>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 18</p>
+<p>Koh, D. H.; Xu, Z.; Wang, J.; Burgess, A. N.; Seccia, A.; Schneps, M.; Pomplun, M.; Lamb, R.; Keil, A.; Dawson, K.; Antonenko, P. Fixation Disparity: A Possible Index of Visuospatial Cognition during Authentic Learning Tasks. Mind, Brain, and Education 2024, 18 (3), 346-359. https://doi.org/10.1111/mbe.12424</p>
+<p>Braun, I.; Langner, A.; Graulich, N. Let&#x27;s Draw Molecules: Students&#x27; Sequential Drawing Processes of Resonance Structures in Organic Chemistry. Front. Educ. 2022, 7. https://doi.org/10.3389/feduc.2022.1055280</p>
+<p>Williamson, V. M.; Hegarty, M.; Deslongchamps, G.; Williamson, K. C. I.; Shultz, M. J. Identifying Student Use of Ball-and-Stick Images versus Electrostatic Potential Map Images via Eye Tracking. J. Chem. Educ. 2013, 90 (2), 159- 164. https://doi.org/10.1021/ed200259j</p>
+<p>Charness, N.; Reingold, E. M.; Pomplun, M.; Stampe, D. M. The Perceptual Aspect of Skilled Performance in Chess: Evidence from Eye Movements. Memory &amp; Cognition 2001, 29 (8), 1146-1152. https://doi.org/10.3758/BF03206384</p>
+<p>Reingold, E. M.; Charness, N.; Pomplun, M.; Stampe, D. M. Visual Span in Expert Chess Players: Evidence from Eye Movements. Psychol Sci 2001, 12 (1), 48-55. https://doi.org/10.1111/1467-9280.00309</p>
+<p>Engbert, R.; Nuthmann, A.; Richter, E. M.; Kliegl, R. SWIFT: A Dynamical Model of Saccade Generation During Reading. Psychological Review 2005, 112 (4), 777-813. https://doi.org/10.1037/0033-295X.112.4.777</p>
+<p>Rayner, K. The 35th Sir Frederick Bartlett Lecture: Eye Movements and Attention in Reading, Scene Perception, and Visual Search. Quarterly Journal of Experimental Psychology 2009, 62 (8), 1457-1506. https://doi.org/10.1080/17470210902816461</p>
+<p>Reichle, E. D.; Rayner, K.; Pollatsek, A. The E-Z Reader Model of Eye-Movement Control in Reading: Comparisons to Other Models. Behav Brain Sci 2003, 26 (4), 445-476; discussion 477-526. https://doi.org/10.1017/s0140525x03000104</p>
+<p>Coltheart, M.; Rastle, K.; Perry, C.; Langdon, R.; Ziegler, J. DRC: A Dual Route Cascaded Model of Visual Word Recognition and Reading Aloud. Psychol Rev 2001, 108 (1), 204-256. https://doi.org/10.1037/0033-295x.108.1.204</p>
+<p>Lelonkiewicz, J. R.; Ktori, M.; Crepaldi, D. Morphemes as Letter Chunks: Linguistic Information Enhances the Learning of Visual Regularities. Journal of Memory and Language 2023, 130, 104411. https://doi.org/10.1016/j.jml.2023.104411</p>
+<p>Rastle, K.; Davis, M. H.; New, B. The Broth in My Brother&#x27;s Brothel: Morpho-Orthographic Segmentation in Visual Word Recognition. Psychonomic Bulletin &amp; Review 2004, 11 (6), 1090-1098. https://doi.org/10.3758/BF03196742</p>
+<p>Hao, Y.; Sakai, H.; Liu, X.; Yan, M. Exploring the Perceptual Span of Japanese Among Second Language Learners. Applied Cognitive Psychology 2026, 40 (2), e70194. https://doi.org/10.1002/acp.70194</p>
+<p>Apfelbaum, K. S.; Goodwin, C.; Blomquist, C.; McMurray, B. The Development of Lexical Competition in Written- and Spoken-Word Recognition. Quarterly Journal of Experimental Psychology 2023, 76 (1), 196-219. https://doi.org/10.1177/17470218221090483</p>
+<p>Kutlu, E.; Klein-Packard, J.; Jeppsen, C.; Tomblin, J. B.; McMurray, B. The Development of Real-Time Spoken and Written Word Recognition Derives from Changes in Ability, Not Maturation. Cognition 2024, 251, 105899. https://doi.org/10.1016/j.cognition.2024.105899</p>
+<p>Godfroid, A.; Hui, B. Five Common Pitfalls in Eye-Tracking Research. Second Language Research 2020, 36 (3), 277- 305. https://doi.org/10.1177/0267658320921218</p>
+<p>Ramos Gameiro, R.; Kaspar, K.; König, S. U.; Nordholt, S.; König, P. Exploration and Exploitation in Natural Viewing Behavior. Sci Rep 2017, 7 (1), 2311. https://doi.org/10.1038/s41598-017-02526-1</p>
+<p>Valliappan, N.; Dai, N.; Steinberg, E.; He, J.; Rogers, K.; Ramachandran, V.; Xu, P.; Shojaeizadeh, M.; Guo, L.; Kohlhoff, K.; Navalpakkam, V. Accelerating Eye Movement Research via Accurate and Affordable Smartphone Eye Tracking. Nat Commun 2020, 11 (1), 4553. https://doi.org/10.1038/s41467-020-18360-5</p>
+<p>Kaspar, K.; Gameiro, R. R.; König, P. Feeling Good, Searching the Bad: Positive Priming Increases Attention and Memory for Negative Stimuli on Webpages. Computers in Human Behavior 2015, 53, 332-343. https://doi.org/10.1016/j.chb.2015.07.020</p>
+<p>Raptis, G. E.; Fidas, C. A.; Avouris, N. M. On Implicit Elicitation of Cognitive Strategies Using Gaze Transition Entropies in Pattern Recognition Tasks. In Proceedings of the 2017 CHI Conference Extended Abstracts on Human Factors in Computing Systems; CHI EA &#x27;17; Association for Computing Machinery: New York, NY, USA, 2017; pp 1993-2000. https://doi.org/10.1145/3027063.3053106</p>
+<p>Shiferaw, B. A.; Downey, L. A.; Westlake, J.; Stevens, B.; Rajaratnam, S. M. W.; Berlowitz, D. J.; Swann, P.; Howard, M. E. Stationary Gaze Entropy Predicts Lane Departure Events in Sleep-Deprived Drivers. Sci Rep 2018, 8 (1), 2220. https://doi.org/10.1038/s41598-018-20588-7</p>
+<p>Di Stasi, L. L.; Díaz-Piedra, C.; Ruiz-Rabelo, J. F.; Rieiro, H.; Sanchez Carrion, J. M.; Catena, A. Quantifying the Cognitive Cost of Laparo-Endoscopic Single-Site Surgeries: Gaze-Based Indices. Applied Ergonomics 2017, 65, 168- 174. https://doi.org/10.1016/j.apergo.2017.06.008</p>
+<p>Pokkula, S. K.; Amresh, A.; Duval, J. Gaze Entropy as a Measure of Player Performance and Its Correlation with Focus and Attention. In Proceedings of the 2025 Symposium on Eye Tracking Research and Applications; ETRA &#x27;25; Association for Computing Machinery: New York, NY, USA, 2025; pp 1-6. https://doi.org/10.1145/3715669.3725884</p>
+<p>Ganescu &amp; Bongers -Draft Manuscript V.2026-10-28 pg. 19</p>
+<p>Wu, C.; Cha, J.; Sulek, J.; Zhou, T.; Sundaram, C. P.; Wachs, J.; Yu, D. Eye-Tracking Metrics Predict Perceived Workload in Robotic Surgical Skills Training. Hum Factors 2020, 62 (8), 1365-1386. https://doi.org/10.1177/0018720819874544</p>
+<p>Collins, A. M.; Loftus, E. F. A Spreading-Activation Theory of Semantic Processing. Psychological Review 1975, 82 (6), 407-428. https://doi.org/10.1037/0033-295X.82.6.407</p>
+<p>Robson, H.; Pilkington, E.; Evans, L.; DeLuca, V.; Keidel, J. L. Phonological and Semantic Processing during Comprehension in Wernicke&#x27;s Aphasia: An N400 and Phonological Mapping Negativity Study. Neuropsychologia 2017, 100, 144-154. https://doi.org/10.1016/j.neuropsychologia.2017.04.012</p>
+<p>Stadthagen-Gonzalez, H.; Damian, M. F.; Pérez, M. A.; Bowers, J. S.; Marín, J. Name-Picture Verification as a Control Measure for Object Naming: A Task Analysis and Norms for a Large Set of Pictures. The Quarterly Journal of Experimental Psychology 2009, 62 (8), 1581-1597. https://doi.org/10.1080/17470210802511139</p>
+<p>Underwood, G.; Jebbett, L.; Roberts, K. Inspecting Pictures for Information to Verify a Sentence: Eye Movements in General Encoding and in Focused Search. The Quarterly Journal of Experimental Psychology Section A 2004, 57 (1), 165- 182. https://doi.org/10.1080/02724980343000189</p>
+<p>Rodemer, M.; Lindner, M. A.; Eckhard, J.; Graulich, N.; Bernholt, S. Dynamic Signals in Instructional Videos Support Students to Navigate through Complex Representations: An Eye-Tracking Study. Applied Cognitive Psychology 2022, 36 (4), 852-863. https://doi.org/10.1002/acp.3973</p>
+<p>Shannon, C. E. A Mathematical Theory of Communication. Bell System Technical Journal 1948, 27 (3), 379-423. https://doi.org/10.1002/j.1538-7305.1948.tb01338.x</p>
+<p>Langner, A.; Hain, L. S.; Graulich, N. Defining Areas of Interest in Organic Chemistry Education Eye-Tracking Research. J. Chem. Educ. 2025, 102 (3), 1285-1297. https://doi.org/10.1021/acs.jchemed.4c00830</p>
+<p>Field, A. Discovering Statistics Using IBM SPSS Statistics; SAGE Publications, 2024.</p>
+<p>Glass, G. V.; Peckham, P. D.; Sanders, J. R. Consequences of Failure to Meet Assumptions Underlying the Fixed Effects Analyses of Variance and Covariance. Review of Educational Research 1972, 42 (3), 237-288. https://doi.org/10.3102/00346543042003237</p>
+<p>Hyönä, J.; Pollatsek, A. Reading Finnish Compound Words: Eye Fixations Are Affected by Component Morphemes. J Exp Psychol Hum Percept Perform 1998, 24 (6), 1612-1627. https://doi.org/10.1037//0096-1523.24.6.1612</p>
+<p>Stevens, P.; Plaut, D. C. From Decomposition to Distributed Theories of Morphological Processing in Reading. Psychon Bull Rev 2022, 29 (5), 1673-1702. https://doi.org/10.3758/s13423-022-02086-0</p>
+<p>Baddeley, A. D.; Hitch, G. Working Memory. In Psychology of Learning and Motivation; Bower, G. H., Ed.; Academic Press, 1974; Vol. 8, pp 47-89. https://doi.org/10.1016/S0079-7421(08)60452-1</p>
+<p>Paivio, A. Dual Coding Theory: Retrospect and Current Status. Canadian Journal of Psychology / Revue canadienne de psychologie 1991, 45 (3), 255-287. https://doi.org/10.1037/h0084295</p>
+<p>Di Stasi, L. L.; Diaz-Piedra, C.; Rieiro, H.; Sánchez Carrión, J. M.; Martin Berrido, M.; Olivares, G.; Catena, A. Gaze Entropy Reflects Surgical Task Load. Surg Endosc 2016, 30 (11), 5034-5043. https://doi.org/10.1007/s00464-016- 4851-8</p>
+<p>Langner, A.; Graulich, N. From Sight to Insight -Reflection Processes in an Eye-Gaze-Augmented Retrospective. International Journal of Science Education 2026, 48 (7), 953-976. https://doi.org/10.1080/09500693.2024.2430804</p>
+<p>Jacoby, V. L.; Kellman, P. J. Categorization-Driven Perceptual Learning Changes Perceived Similarity in the Naturalistic Domain of Skin Lesion Diagnosis. Sci Rep 2026. https://doi.org/10.1038/s41598-026-59055-z</p>
+<p>Kellman, P. J. Adaptive and Perceptual Learning Technologies in Medical Education and Training. Mil Med 2013, 178 (10 Suppl), 98-106. https://doi.org/10.7205/MILMED-D-13-00218</p>
+<p>Kellman, P. J.; Massey, C. M.; Son, J. Y. Perceptual Learning Modules in Mathematics: Enhancing Students&#x27; Pattern Recognition, Structure Extraction, and Fluency. Top Cogn Sci 2010, 2 (2), 285-305. https://doi.org/10.1111/j.1756- 8765.2009.01053.x</p>
+<p>Kellman, P. J.; Jacoby, V.; Massey, C.; Krasne, S. Perceptual Learning, Adaptive Learning, and Gamification: Educational Technologies for Pattern Recognition, Problem Solving, and Knowledge Retention in Medical Learning. In Technologies in Biomedical and Life Sciences Education: Approaches and Evidence of Efficacy for Learning; Witchel, H. J., Lee, M. W., Eds.; Springer International Publishing: Cham, 2022; pp 135-166. https://doi.org/10.1007/978-3-030- 95633-2_5</p>
+<p>Mayer, R. E.; Fiorella, L. Principles for Reducing Extraneous Processing in Multimedia Learning: Coherence, Signaling, Redundancy, Spatial Contiguity, and Temporal Contiguity Principles. In The Cambridge Handbook of Multimedia Learning; Mayer, R. E., Ed.; Cambridge Handbooks in Psychology; Cambridge University Press: Cambridge, 2014; pp 279-315. https://doi.org/10.1017/CBO9781139547369.015</p>
+<p>Scheiter, K.; Eitel, A. Signals Foster Multimedia Learning by Supporting Integration of Highlighted Text and Diagram Elements. Learning and Instruction 2015, 36, 11-26. https://doi.org/10.1016/j.learninstruc.2014.11.002</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
