@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Commitment-Driven Information Seeking in
+Misinformation Consumption</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Commitment-Driven Information Seeking in Misinformation Consumption
+</p>
+<p class="meta">
+2026-11-10 · Metacheck 0.4.3.26
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to
+fix</span></span><a class="count improve" href="#improve"><b>2</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>12</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="improve">To check <span class="n">(2)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 11 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p = .875
+</td>
+<td style="text-align:left;">
+However, note that in our data, total visits did not correlate with
+direct traffic (r1908 = -.004, p = .875), but correlated positively with
+search traffic (r1908 = .10, p &lt; .001) and negatively with social
+traffic (r1907 = -.12, p &lt; .001), which led to its inclusion in all
+models.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .295
+</td>
+<td style="text-align:left;">
+Although unreliability was not associated with visit duration (r1904 =
+-.02, p = .295) or pages per visit (r1904 = -.03, p = .154), it was
+negatively associated with bounce rate (r1903 = -.07, p = .001),
+indicating that unreliable websites received a lower proportion of
+one-page visits.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .154
+</td>
+<td style="text-align:left;">
+Although unreliability was not associated with visit duration (r1904 =
+-.02, p = .295) or pages per visit (r1904 = -.03, p = .154), it was
+negatively associated with bounce rate (r1903 = -.07, p = .001),
+indicating that unreliable websites received a lower proportion of
+one-page visits.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .352
+</td>
+<td style="text-align:left;">
+The increase in direct traffic with unreliability was steepest for
+conspiracy websites (β = 2.49, p &lt; .001), followed by conservative
+websites (β = .83, p &lt; .001); direct traffic was not associated with
+unreliability among liberal websites (β = .20, p = .352).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .378
+</td>
+<td style="text-align:left;">
+Social traffic showed the opposite pattern: it increased with
+unreliability among liberal (β = 2.07, p &lt; .001) and conservative
+websites (β = 1.30, p &lt; .001), but not among conspiracy websites (β =
+-.74, p = .378; see Appendix SM10).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .57
+</td>
+<td style="text-align:left;">
+Across the full sample, traffic from Facebook (β = 1.81, p &lt; .001),
+Twitter (β = .39, p &lt; .001), and YouTube (β = .19, p = .04) increased
+with unreliability, whereas Reddit traffic did not (β = -.05, p = .57;
+Appendix SM13).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .139
+</td>
+<td style="text-align:left;">
+Facebook traffic increased with unreliability for liberal (β = 1.98, p
+&lt; .001) and conservative websites (β = 1.34, p &lt; .001), whereas
+the estimate for conspiracy websites was negative but nonsignificant (β
+= -1.31, p = .139).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .093
+</td>
+<td style="text-align:left;">
+Similarly, Twitter traffic increased with unreliability for liberal (β =
+1.04, p &lt; .001) and conservative websites (β = .81, p &lt; .001); it
+was positive for conspiracy websites but failed to reach significance (β
+= 1.52, p = .093).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .066
+</td>
+<td style="text-align:left;">
+When comparing social vs search traffic, social traffic increased
+relative to search traffic for liberal (β = 2.88, p &lt; .001) and
+conservative (β = 2.92, p &lt; .001) websites, but not for conspiracy
+websites (β = 1.62, p = .066).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .055
+</td>
+<td style="text-align:left;">
+The direct vs social comparison yielded the clearest difference between
+conspiracy and politically biased websites: in conspiracy websites,
+direct traffic increased most steeply relative to social traffic (β =
+3.63, p &lt; .001), whereas liberal (β = -.56, p = .055) and
+conservative websites (β = -.13, p = .511) showed no change (Appendix
+SM15).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .511
+</td>
+<td style="text-align:left;">
+The direct vs social comparison yielded the clearest difference between
+conspiracy and politically biased websites: in conspiracy websites,
+direct traffic increased most steeply relative to social traffic (β =
+3.63, p &lt; .001), whereas liberal (β = -.56, p = .055) and
+conservative websites (β = -.13, p = .511) showed no change (Appendix
+SM15).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We could not check 1 repository: <a href="https://osf.io/XXXXXX" class="uri">https://osf.io/XXXXXX</a> (not a valid OSF link).</li>
+<li>We found 0 files in 1 repository.</li>
+<li>We found 0 README files and 0 repositories without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories-that-could-not-be-checked">Repositories that could
+not be checked</h4>
+<p>These repositories are linked in the paper, but their contents could
+not be retrieved, so nothing below describes them. When the reason is
+that the platform did not answer, running the check again later may
+work.</p>
+<ul>
+<li><a href="https://osf.io/XXXXXX" class="uri">https://osf.io/XXXXXX</a>: not a valid OSF link</li>
+</ul>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:left;">
+Error
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/XXXXXX" target="_blank">osf.io/XXXXXX</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:left;">
+not a valid OSF link
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>README files were found in all repositories.</p>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 85 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(12)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>We found 1 OSF link, but no registrations.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 60 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Steve Rathje, Jay Joseph Van Bavel, and Sander van der Linden. Out-group
+animosity drives en- gagement on social media. Proceedings of the
+National Academy of Sciences, 118(26), 6 2021. ISSN 1091-6490. doi:
+10.1073/pnas.2024292118.
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/508BA8E1641EA3E368367B35052390" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 60 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 60 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>The role of social media in misinformation consumption remains contested. This disagreement might arise from the failure to distinguish incidental exposure to misinformation from deliberate consumption. We address this gap by analyzing incoming traffic data, collected in November 2020, to more than 2,000 websites that vary in misinformation and type of bias (liberal, conservative, and conspiracy). We compare the traffic modalities through which users reach those sites: direct traffic, such as typing a URL or using a bookmark (mostly associated with self-directed information seeking); social traffic, from links clicked on social media; and search traffic, from search engines (mostly associated with incidental exposure). We found that reliable, low-misinformation websites are reached mainly via search traffic, whereas unreliable ones are mostly reached via direct traffic; this pattern is stronger for conspiracy websites. Breaking down social traffic by platform reveals that Facebook was the main driver of traffic towards unreliable websites, mostly towards politically biased and entry-level conspiracy websites. These findings suggest that structural interventions such as algorithmic adjustments and content moderation may reduce incidental exposure among users with low belief commitment, but are unlikely to deter highly committed information seekers, who require targeted, ideologically informed strategies.</p>
+<h3>1 Introduction</h3>
+<p>Misinformation undermines citizens&#x27; ability to make informed decisions, posing a significant threat to democratic processes [1, 2]. Among the drivers of its diffusion, social media have often been blamed [3, 4]. Features such as algorithmic curation (e.g., YouTube&#x27;s ranked recommendations) and platform designs that favor like-minded communities (e.g., Facebook groups) can reinforce users&#x27; existing beliefs while filtering out contradictory information, facilitating the spread of misinformation [5] [6] [7] [8]. Combined with deeper engagement in echo chambers, this can draw users into &quot;rabbit holes&quot; [9, 10] that amplify extreme viewpoints [11] and reinforce ideological segregation and polarization [12, 13].</p>
+<p>There is an active debate about how pervasive misinformation actually is in the digital information landscape [14, 15] and whether exposure to misinformation does [16, 17] or does not [18, 19] translate into active engagement, belief uptake, and behavioral change. But social media can also function as intermediaries [20] whose influence depends on users&#x27; predispositions, cognitive biases, and environment [21] [22] [23]. For instance, in autocracies and emerging democracies, social media use can be beneficial, increasing political participation and information consumption, whereas in established democracies it can be detrimental, associated with declining political trust, populism, and polarization [24].</p>
+<p>A critical point concerns the distinction between exposure and consumption. Because much social media content is processed only superficially [25], researchers have moved beyond mere exposure, analyzing patterns of active consumption such as web browsing activity [26]. However, browsing data have their own limitations. Most tracking tools do not capture in-platform actions, making it difficult to determine whether a visit originated from social media or via other routes [27] (but see [28]). Moreover, such data are difficult to collect from users with extreme ideologies, who are often mistrustful of research institutions [29].</p>
+<p>These gaps can be addressed by shifting the focus from individual browsing behavior to website-level incoming traffic patterns. Rather than following individuals across the web, this approach decomposes a website&#x27;s incoming traffic into the traffic modalities through which its visits arrive, such as search traffic (from search engines), social traffic (from links clicked on social media), or direct traffic (typing a URL or using a bookmark), among others. Traffic is aggregated over a website&#x27;s entire audience rather than over a recruited panel, so it also captures visits from users unwilling to be tracked, such as those most likely to consume extreme content. Because -in principle-a website&#x27;s content attracts users seeking that content, systematic differences in traffic modality between types of websites are informative about the information-seeking behavior patterns of the users who reach them.</p>
+<p>An earlier analysis of incoming traffic data from 91 websites [30] showed that conspiracy websites were accessed primarily via direct traffic (58% of visits), compared with 18% referred by social media and 14% arriving from search engines. In contrast, pro-science and least-biased websites showed the opposite pattern: they were accessed predominantly via search engines (71% of visits), had little direct traffic (13%), and even less social traffic (5%). A partial replication analyzing 56 Italian misinformation websites found that websites&#x27; unreliability correlated negatively with search traffic and positively with direct traffic [31].</p>
+<p>These analyses suggest that website characteristics are associated with specific patterns of information seeking: reliable websites tend to be reached via search engines, whereas unreliable websites are more often reached via direct traffic. Yet, given their exploratory nature, limited sample sizes, and lack of key control variables (e.g., website popularity), conclusions drawn from these studies remain tentative. The studies fail to account for differences between misinformation types (e.g., conspiracy vs politically biased) and social media platforms (e.g., Facebook vs Reddit), and do not offer a comprehensive, comparative analysis of the contribution of each traffic modality.</p>
+<p>Here, we analyze patterns of incoming traffic for a large set of websites that vary in unreliability and in the type and strength of their bias. We first characterize how traffic modality varies with website unreliability, and whether this relationship differs between politically biased and conspiracy websites; we then break down social traffic by social media platforms to assess the contribution of each. Second, we compare traffic modalities with each other and within each website group. This comparison informs about the relative contribution of self-directed information seeking (mostly reflected in direct traffic), incidental exposure (mostly reflected in search traffic), and the role of social media as intermediaries (social traffic).</p>
+<h3>2 Methods</h3>
+<h3>2.1 Website characteristics</h3>
+<p>In November 2020, we manually compiled a list of websites (N = 2,734) by surveying the entire content of MediaBiasFactCheck (MBFC, http://www.mediabiasfactcheck.com), a widely used ground-truth dataset in misinformation research (see e.g., [12, 30]).</p>
+<p>For most websites (98.39%, N = 2,690), we mapped their editorial tendency to deliver misinformation using the reliability score developed by Lin et al. [32]. This score was compiled for 11,520 websites by aggregating ratings from six independent expert sources-including professional fact-checkers, MBFC, and NewsGuard (one of the most widely used and comprehensive databases for website trustworthiness ratings [33])-each of which rated websites on dimensions such as trust, reliability, bias, credibility, and transparency. Scores range from 0 to 1, with higher values indicating more reliable websites, and show high correspondence with other indices of website quality, which are themselves highly correlated with one another. To keep its polarity commensurate with our other website indicators-MBFC bias strength, for which higher values indicate more extreme political or conspiratorial content-we inverted this score (1 -reliability) to obtain a measure of unreliability. Higher values thus consistently indicate more problematic websites across all indicators (e.g., nasa.gov = .043; infowars.com = .954), and positive slopes indicate traffic that increases with misinformation.</p>
+<p>We use MBFC categories to differentiate websites by their bias, in order to investigate differences across groups of unreliable websites. According to MBFC&#x27;s descriptions, Politically biased websites (N = 1826 in our sample) are moderately to strongly biased toward either liberal (N = 913; e.g., dailykos.com) or conservative (N = 913; e.g., breitbart.com) ideologies, often reflected in topic selection and use of emotionally charged language. These websites may publish misleading reports or omit ideologically unfavorable information, and some of these websites are considered less trustworthy. Conspiracy websites (N = 294; e.g., infowars.com) frequently publish unverifiable claims tied to conspiracy theories and often lack credible evidence and are generally unreliable for factual information. Finally, our sample includes minimally biased (MB) websites (e.g., reuters.com), which are those labelled by MBFC as pro-science and least-biased (N = 614 in our sample). These websites remain committed to scientific integrity, avoid emotionally charged or misleading language, and are considered among the most credible media outlets. Although our focus is on biased websites that vary in unreliability, we retain minimally biased websites whenever a full spectrum of unreliability is needed or when specific ideological biases are irrelevant.</p>
+<p>MBFC provides coarse-grained bias-strength ratings for each category (e.g., the degree of conspiratorial content on a 1-5 scale), which are highly correlated with unreliability (r2688 = .84, p &lt; .001; expectedly because MBFC is one of the indices used to compute the unreliability score). Throughout, we refer to MBFC&#x27;s five labels (pro-science, least-biased, liberal, conservative, and conspiracy) as categories, to the groupings used in our models (liberal, conservative, conspiracy, and minimally biased) as groups, and to each combination of category and bias strength (e.g., CT01, R05) as a bias level. We refer to conspiracy websites with the lowest bias strength (CT01-CT02) as entry-level conspiracy websites.</p>
+<p>Note that website group and unreliability are measured independently: group membership reflects MBFC&#x27;s categorical classification of content, whereas unreliability is a continuous score aggregated across six expert sources [32]. As a result, unreliability varies within each group. For example, conspiracy websites are on average less reliable than minimally biased ones, but the two distributions overlap. A description of MBFC categories and unreliability is given in the Supplemental Material (SM; Appendix SM1).</p>
+<h3>2.2 Traffic modality</h3>
+<p>Measures of incoming traffic were collected in November 2020 from SimilarWeb (http://www.similarweb.com), a web analytics platform that provides traffic data for approximately 100 million websites (10 billion content pages). SimilarWeb&#x27;s data, expressed as monthly averages, correlate highly with Google Analytics [34]. As in previous work [30, 31], we focus on three primary traffic modalities through which users access websites, namely search, direct, and social traffic.</p>
+<p>Search traffic is the percentage of total visits originating from search engine queries. Search traffic has been associated with greater source diversity in web-tracking data: users who reach news through search engines visit a more ideologically diverse set of outlets, including outlets that do not match their political preferences [35], and have more varied news diets and higher overall news exposure [20]; moreover, search engines direct users to a more diverse set of sources than social media do [36]. In our sample, the proportion of search traffic correlates positively with bounce rate (the percentage of single-page visits; see below; r1907 = .24, p &lt; .001) and negatively with visit duration (r1907 = -.21, p &lt; .001) and pages per visit (r1908 = -.11, p &lt; .001), suggesting that search visits tend to be short and mostly focused on a specific page.</p>
+<p>Direct traffic is the percentage of total visits that SimilarWeb attributes to no referring source, that is, visits in which users type the URL into their browser or use a bookmark. It is therefore commonly taken to reflect self-directed, preference-driven information selection: studies using web-tracking data have linked direct traffic to more congenial, ideologically aligned engagement [35]. In our sample, direct traffic correlates negatively with bounce rate (r1907 = -.51, p &lt; .001) and positively with visit duration (r1907 = .45, p &lt; .001) and pages per visit (r1908 = .36, p &lt; .001), suggesting that users who reach a website via direct traffic show greater on-site engagement with its content.</p>
+<p>Social traffic is the percentage of total visits originating from links shared on social media platforms. It captures the extent to which social media function as intermediaries routing users to external websites [20]. Social traffic correlates positively with bounce rate (r1906 = .26, p &lt; .001), and negatively with visit duration (r1906 = -.26, p &lt; .001) and pages per visit (r1907 = -.27, p &lt; .001), suggesting that social visits tend to be short and mostly focused on that specific page. SimilarWeb breaks down social traffic by platform. Here, we collected traffic from Facebook, YouTube, Twitter, and Reddit, which together account for approximately 80% of social traffic in our sample (M = 79.92, SD = 15.27, range: 18.21-99.97; these four platforms were chosen for their popularity at the time, confirmed with a reanalysis of 96 websites two years later; see Appendix SM2).</p>
+<p>We included two other measures to account for websites&#x27; popularity and single-page visits. A website&#x27;s popularity was quantified via total visits, measured by SimilarWeb as the monthly number of visits. We reasoned that an unpopular website is more likely to be accessed via direct traffic because it is likely to not appear within the first pages of a search engine; therefore, we controlled for popularity to exclude this artifact. However, note that in our data, total visits did not correlate with direct traffic (r1908 = -.004, p = .875), but correlated positively with search traffic (r1908 = .10, p &lt; .001) and negatively with social traffic (r1907 = -.12, p &lt; .001), which led to its inclusion in all models. Total visits were log-transformed to better align with website rankings (from r1889 = -.19, p &lt; .001 to r1889 = -.99, p &lt; .001). The other measure, bounce rate, represents the percentage of single-page visits, in which users leave a website after viewing only one page. Bounce rate was included as a covariate to control for low-engagement visits (e.g., accidental or uninterested ones), which could otherwise skew the interpretation of traffic modality contributions.</p>
+<p>In November 2022, we re-collected traffic measures for a subset of our dataset (see Appendix SM2 for details) and show they are rather stable over a two-year time.</p>
+<h3>3 Results</h3>
+<p>A detailed description of all variables included in our dataset is reported in Appendix SM3; the correlation matrix of the main variables is reported in Appendix SM4. Unreliability was negatively associated with search traffic (r1901 = -.49, p &lt; .001) and positively associated with social (r1900 = .25, p &lt; .001) and direct traffic (r1901 = .28, p &lt; .001). Although unreliability was not associated with visit duration (r1904 = -.02, p = .295) or pages per visit (r1904 = -.03, p = .154), it was negatively associated with bounce rate (r1903 = -.07, p = .001), indicating that unreliable websites received a lower proportion of one-page visits. Unreliability was also negatively associated with total visits (r1903 = -.21, p &lt; .001). When we grouped websites by bias level (the one provided by MBFC) and binned them by unreliability score, less reliable websites received fewer visits than more reliable ones, and visits were concentrated among centrist and slightly left-leaning websites (see Appendix SM5). In Appendix SM6, we report the weighted proportion of each traffic modality by website category and bias level.</p>
+<p>We analyze incoming traffic in three steps. First, we examine how the shares of traffic modality (search, direct, and social) vary across the full sample, across website groups, and with unreliability. Second, we repeat these analyses for traffic from individual social media platforms (Facebook, Twitter, YouTube, and Reddit). Third, we compare pairs of traffic modalities to assess their relative contributions across the unreliability spectrum within each website group.</p>
+<p>In all analyses, we fit regression models to predict the percentage of incoming traffic, controlling for bounce rate and total visits (log). Estimated means, slopes, and pairwise contrasts with Tukey adjustment were extracted using the R package emmeans. Models that did not include website group as a predictor used the full sample, including minimally biased websites; models that included website group were restricted to liberal, conservative, and conspiracy websites. We report estimated means as percentages, contrasts as percentage-point differences, and slopes of traffic on unreliability as standardized β coefficients. Because of missing values, sample sizes vary across analyses according to the variables and grouping factors included in each model. Variable-specific sample sizes are reported in Appendix SM3.</p>
+<h3>3.1 Traffic modality</h3>
+<p>We first examined how traffic shares varied by website group and unreliability. We fitted regression models predicting the percentage of incoming traffic from: (A) traffic modality; (B) traffic modality, website group, and their interaction; (C) unreliability, traffic modality, and their interaction; and (D) unreliability, website group, and their interaction, separately for each traffic modality. Full model results, including estimated means, slopes, and contrasts, are reported in the SM (Sections SM7-SM10).</p>
+<p>In panel A of Figure 1, search (40.04% [39.18, 40.90]) and direct traffic (38.37% [37.51, 39.23]) accounted for the largest shares of visits, with search traffic slightly exceeding direct traffic (∆ = 1.67 [0.22, 3.13], p = .019). Social traffic accounted for a much smaller share (13.49% [12.63, 14.35]; see Appendix SM7 for details).</p>
+<p>In panel B, search traffic accounted for the largest share among liberal websites (44.21% [42.75, 45.68]), whereas direct traffic accounted for the largest share among conservative (43.33% [41.75, 44.92]) and conspiracy websites (49.42% [46.34, 52.50]). Social traffic accounted for the smallest share in every group. Liberal websites received a larger share of search traffic than conservative (∆ = 14.04 [11.46, 16.62], p &lt; .001) and conspiracy websites (∆ = 17.76 [13.66, 21.86], p &lt; .001); search traffic did not differ between the latter two groups. Direct traffic increased from liberal to conservative to conspiracy websites, with all pairwise differences significant, whereas social traffic did not differ across groups (Appendix SM8).</p>
+<p>In panel C, search traffic decreased with unreliability across the full sample (β = -1.94, p &lt; .001), whereas direct (β = .95, p &lt; .001) and social traffic (β = .66, p &lt; .001) increased (Appendix SM9).</p>
+<p>In panel D, we examined whether the associations between unreliability and traffic shares differed by website group. The decline in search traffic was similar across groups, with no evidence that the slopes differed. The increase in direct traffic with unreliability was steepest for conspiracy websites (β = 2.49, p &lt; .001), followed by conservative websites (β = .83, p &lt; .001); direct traffic was not associated with unreliability among liberal websites (β = .20, p = .352). Social traffic showed the opposite pattern: it increased with unreliability among liberal (β = 2.07, p &lt; .001) and conservative websites (β = 1.30, p &lt; .001), but not among conspiracy websites (β = -.74, p = .378; see Appendix SM10).</p>
+<h3>3.2 Social media platforms</h3>
+<p>We then focused on the traffic delivered by specific social media platforms, repeating the same analyses but replacing traffic modality with social media platform (Facebook, Twitter, YouTube, and Reddit). Full model results, including estimated means, slopes, and contrasts, are reported in the SM (Sections SM11-SM14).</p>
+<p>As shown in Figure 1, panel E, across the full sample, Facebook was by far the largest platform (7.64% [7.30, 7.98]), followed by Twitter (3.31% [2.97, 3.65]), Reddit (1.94% [1.59, 2.29]), and YouTube (0.73% [0.36, 1 .11]; see Appendix SM11).</p>
+<p>Panel F shows that Facebook was consistently the largest platform in every group and its share increased from liberal (7.10% [6.48, 7.72]) to conservative (9.48% [8.81, 10.16]) to conspiracy websites (12.13% [10.81, 13.46]). The shares of the other three platforms did not differ across groups (Appendix SM12).</p>
+<p>Panel G shows the relationship between traffic from social media platforms and website unreliability. Across the full sample, traffic from Facebook (β = 1.81, p &lt; .001), Twitter (β = .39, p &lt; .001), and YouTube (β = .19, p = .04) increased with unreliability, whereas Reddit traffic did not (β = -.05, p = .57; Appendix SM13).</p>
+<p>Panel H further decomposes social traffic by website group. Facebook traffic increased with unreliability for liberal (β = 1.98, p &lt; .001) and conservative websites (β = 1.34, p &lt; .001), whereas the estimate for conspiracy websites was negative but nonsignificant (β = -1.31, p = .139). Similarly, Twitter traffic increased with unreliability for liberal (β = 1.04, p &lt; .001) and conservative websites (β = .81, p &lt; .001); it was positive for conspiracy websites but failed to reach significance (β = 1.52, p = .093). YouTube traffic increased with unreliability for conservative websites (β = .55, p = .009), while estimates for the other groups were uncertain; Reddit traffic was not reliably associated with unreliability in any group (Appendix SM14).  [32] in the full sample. Panels D and H break these down by website group, separately for each traffic modality and platform. Panel I shows standardized (β) differences in traffic shares between pairs of modalities as a function of unreliability, by website group; each y-axis label reflects the difference between modalities (e.g., Social -Search), so positive values indicate a larger share for the first modality. All models control for bounce rate and total visits. Error bars and shaded areas indicate 95% confidence intervals.</p>
+<h3>3.3 Relative contributions of traffic modalities</h3>
+<p>To better understand how traffic modalities contributed within each website group, we directly compared pairs of traffic modalities by fitting, for each pair, a regression model predicting the percentage of traffic from the three-way interaction between unreliability, traffic modality (direct vs search, social vs search, or direct vs social), and website group. From these models we derived the slope of the difference in traffic share across the unreliability spectrum. Positive values indicate that the first modality in each pair is stronger relative to the second as unreliability increases.</p>
+<p>Figure 1, panel I, reports these results. When comparing social vs search traffic, social traffic increased relative to search traffic for liberal (β = 2.88, p &lt; .001) and conservative (β = 2.92, p &lt; .001) websites, but not for conspiracy websites (β = 1.62, p = .066). When the contrast was defined as direct vs search, direct traffic increased relative to search traffic as a function of unreliability in all three groups (liberal: β = 2.62, p &lt; .001; conservative: β = 3.11, p &lt; .001), but most steeply for conspiracy websites (β = 5.48, p &lt; .001). The direct vs social comparison yielded the clearest difference between conspiracy and politically biased websites: in conspiracy websites, direct traffic increased most steeply relative to social traffic (β = 3.63, p &lt; .001), whereas liberal (β = -.56, p = .055) and conservative websites (β = -.13, p = .511) showed no change (Appendix SM15).</p>
+<h3>4 Discussion</h3>
+<p>We analyzed incoming traffic to more than 2,000 websites that differed in unreliability-a proxy for misinformation content-and in the type and strength of their bias. As website unreliability increased, the shares of direct and social traffic increased, while the share of search traffic declined. Traffic patterns were broadly similar across website groups, with one notable exception: as unreliability increased, conspiracy websites showed the steepest increase in direct traffic relative to search traffic. By contrast, the balance between social and search traffic shifted toward social traffic for politically biased websites, but not for conspiracy websites. Among the social media platforms examined, Facebook traffic was most strongly associated with website unreliability. This association differed by website group: it was positive for politically biased websites but not significant for conspiracy websites. Twitter, YouTube, and Reddit each accounted for a smaller share of incoming traffic than Facebook, on average. The most consistent pattern across our results was a decline in search traffic with unreliability. This decline, however, does not necessarily mean that search engines actively prioritize reliable sources. Search rankings rely in part on links among websites, which carry information about popularity and, by extension, about the consensus on a website&#x27;s credibility. Consistent with this, unreliability correlated negatively with total visits, and total visits correlated positively, albeit weakly, with search traffic (see Appendix SM4). Because our data are observational and aggregated at the website level, the association between unreliability and search traffic may therefore partly be a by-product of web interconnectivity and popularity, rather than evidence that search engines assess credibility directly.</p>
+<p>Direct traffic exceeds social traffic, particularly for websites with the greatest bias. Direct traffic, which includes also bookmarking favorite websites, was associated with greater engagement than search and social traffic, as reflected in longer visits, more pages viewed per session, and lower bounce rates. Such patterns are consistent with more self-directed, preference-driven visits, but note that our observational data cannot allow us to distinguish the preference for belief-congruent information from other forms of self-directed information seeking (more on this later). Selective exposure has been linked to stronger motivation [37], which may be particularly relevant when beliefs are closely tied to identity and worldviews [38]. People strongly committed to an ideology tend to exhibit rigid thinking, dogmatic beliefs, and strong belief commitment [39] [40] [41], and they may therefore seek information that aligns with their preexisting beliefs and avoid conflicting information. To the extent that direct traffic reflects selective exposure, our findings are consistent with prior research linking selective exposure to both political [42, 43] and conspiratorial worldviews [44].</p>
+<p>Note that search and social traffic should not automatically be treated as incidental: these modalities can also include self-directed information seeking. Search traffic, for example, is not always informational: people may search for a topic without a preferred destination. Approximately 10% of Google queries are navigational, meaning that users are seeking a specific website or page (e.g., &quot;covid symptoms wiki&quot; vs &quot;covid symptoms&quot;; see [45]). Most search traffic to unreliable websites has been found to be navigational [46]. 1 Even when Google presents users with a diverse range of results, users tend to engage more with identity-congruent content, including unreliable content, and this tendency is stronger among Republicans than Democrats [47]. Thus, particularly for highly committed information seekers, some search visits may be self-directed and may resemble direct visits in this respect. If anything, direct traffic may underestimate the extent of self-directed information seeking.</p>
+<p>Similarly, social traffic can arise in different contexts, such as links shared in ideologically aligned communities (e.g., Facebook groups), algorithmic recommendations (e.g., YouTube videos suggested on the basis of viewing histories), or posts from acquaintances. Although both algorithmic ranking and engagement-based distribution on social media can reinforce ideological clustering and echo chambers [12, 13], they might be involving different degrees of self-directed selection. Clicks from within a chosen, like-minded community may reflect selective exposure, whereas links encountered in broader feeds may be more incidental. Unfortunately, our data cannot distinguish between these contexts. Selection may also operate before the click: users&#x27; browsing histories can shape algorithmic recommendations, and their choice of communities may itself reflect selective exposure [48, 49].</p>
+<h3>4.1 Commitment-driven information seeking</h3>
+<p>Our results are consistent with behavioral patterns of commitment-driven information seeking. In the following, we provide a tentative explanation for the underlying psychological mechanisms.</p>
+<p>The increase in direct (over search) traffic with unreliability was strongest for conspiracy websites. This pattern is consistent with a commitment-driven account of information seeking, in which initial exposure can be incidental but may gradually become more systematic as belief commitment deepens. A person may first encounter a conspiratorial claim through a social media feed or by searching for a specific concern, such as whether COVID-19 statistics are exaggerated, without yet being strongly committed to conspiratorial thinking. At this stage, a link to an entry-level conspiracy website may appear relevant and compelling, and a single search or click can trigger a broader process of information gathering. As more &quot;evidence&quot; accumulates, an initial incidental encounter can build into a more coherent narrative that &quot;something is wrong with COVID&quot;, and the person may then move across an interconnected system of webpages that reinforce the same worldview.</p>
+<p>Entry-level conspiracy websites can therefore function as entry points to deeper conspiratorial engagement, reinforcing belief systems and potentially drawing users into &quot;rabbit holes&quot; of conspiracy theories [9, 10]. This process aligns with longitudinal psychological research on the monological nature of conspiracy thinking, which suggests that belief in one conspiracy theory often leads to belief in others over time [50]. A network analysis of conspiracy websites reveals a high degree of thematic and narrative interconnectedness [51], and browsing data indicate that unreliable websites are highly interconnected through internal links, which may increase user engagement and contribute to the rabbit hole phenomenon [52].</p>
+<p>As belief commitment strengthens, users may increasingly bypass intermediaries and engage in more self-directed information seeking. This shift from social to direct traffic along the unreliability continuum may resemble the solitary &quot;epistemic journey&quot; and &quot;spiritual awakening&quot; characterizing conspiracy believers [29, 53], who often present themselves as independent reasoners and portray their research as autonomous [54]. However, this pattern should not be interpreted as evidence that believers are less susceptible to social influence. On the contrary, it suggests that once belief commitment is established, information seeking becomes less dependent on external intermediaries and more self-directed. This interpretation is consistent with evidence that social influence remains relevant even when users increasingly seek information on their own [54].</p>
+<h3>4.2 Traffic from social media platforms</h3>
+<p>Our findings also show distinct differences in how social media platforms route traffic to unreliable websites.</p>
+<p>Facebook emerged as the platform delivering the largest share of social traffic to unreliable websites, aligning with evidence that its engagement-driven ranking algorithms and group-based ecosystem foster ideological homogeneity and misinformation amplification [12]. However, as websites&#x27; unreliability increased so did the share of Facebook traffic towards politically biased, but not conspiracy websites. One tentative explanation is that temporary efforts by Facebook to reduce the spread of misinformation around the 2020 election may have disproportionately limited referrals to the most unreliable websites starting already with A/B testing in the summer of 2020 [55]. These measures, however, were not specific to conspiracy websites and our data cannot establish whether they explain this pattern.</p>
+<p>YouTube contributed less to overall traffic towards unreliable websites: we found that link only for conservative websites. This seems in contrast with evidence for its role in self-driven radicalization and to dissemination of conspiracy theories and extreme content [56]. Our findings are not in contradiction because YouTube might push towards extreme and conspiratorial content within the platform itself, rather than delivering traffic towards external websites.</p>
+<p>Twitter was more strongly associated with traffic towards politically biased websites than with conspiracy websites, consistent with studies indicating that its fact-checking interventions (at least in 2020) reduced prolonged exposure to conspiracy theories [57], although misinformation persists [58]. But note that our data was collected before Elon Musk acquired Twitter, reducing content moderation and propagating misinformation, raising concerns for democracy [59].</p>
+<p>Among the social media platforms, Reddit traffic was not associated with website unreliability, likely due to its community-driven moderation system. Unlike algorithmically curated platforms such as Facebook and YouTube, Reddit&#x27;s voting mechanism enables collective content regulation, reducing misinformation visibility [60].</p>
+<h3>4.3 Limitations and future work</h3>
+<p>Our data were collected in November 2020. Since then, the online information landscape has changed. Although we demonstrate that traffic patterns remained relatively stable over a two-year period, changes in website and social media ownership, misinformation policies, and editorial practices [33] can lead to changes in misinformation dissemination and traffic modalities. Since 2020, new social media platforms have gained prominence in spreading misinformation, such as TikTok but also more specialized environments such as Stormer, Parler, Truth Social, and Voat, to cite a few, along with messaging platforms such as Telegram, WhatsApp, and even webmail [3] Since our dataset is publicly available, a replication could offer valuable insights into the evolution of incoming traffic patterns over time (provided that SimilarWeb&#x27;s methodology remains consistent). When we recollected data in 2022 to assess the stability of traffic measures, we found that social traffic included additional platforms. Future research could use the SimilarWeb API to scrape more platforms and track the evolving landscape of social traffic.</p>
+<p>Automated traffic, such as that generated by bot visits, may skew direct traffic measures, thus influencing our estimates. Although this effect is likely evenly distributed over website categories, some conspiracy and other unreliable websites (e.g., file://localhost/opt/grobid/grobid-home/tmp/infowars.com) rely heavily on revenue from branded products [61], making bot-generated traffic counterproductive for their business models. Although we did not have data to explicitly control for bot activity, a substantial impact of bots on our direct traffic measures for unreliable websites appears unlikely.</p>
+<p>During data collection in 2020, some metrics available on SimilarWeb were not included in our dataset, such as the distinction between organic search results and paid advertisements, because we specifically focused on traffic modalities. Future work could gather more data relying on the SimilarWeb API (as of September 2026, the service is accessible only via a paid subscription). Also, while we collected data on the percentage of referral traffic (i.e., traffic originating from other websites; see Appendix SM3), we did not map specific website referrals. In this regard, the recently developed DONALD corpus, built using the list of websites included in this study [62], offers a valuable resource for investigating referral patterns. This dataset contains over two million documents, each with a list of URLs present on the webpage, allowing researchers to analyze interconnections between unreliable websites. It would not be surprising to find a highly interconnected network of unreliable websites reinforcing each other, as observed in previous research [51, 52].</p>
+<p>Finally, a cautionary note is warranted. Our results should not be interpreted as downplaying the role of social media in the dissemination of misinformation. Although this study focused on assessing the extent to which social media drive traffic to external websites, it is crucial to recognize that misinformation can also cause harm within social media platforms themselves, without redirecting users to external websites (e.g., YouTube). The absence of website clicks from social media posts does not necessarily imply a lack of exposure to misinformation. Unfortunately, this type of data cannot capture the consumption of misinformation that occurs entirely within social media ecosystems. Capturing such exposure would require browsing data or platform-specific social media data.</p>
+<h3>5 Conclusions</h3>
+<p>Our analysis of incoming traffic across a large sample of websites with varying degrees of unreliability and bias reveals two distinct patterns in misinformation consumption. While incidental exposure, mostly via search traffic, introduces users with low belief commitment to unreliable content, self-directed information seeking appears to drive consumption of websites with the highest bias strength, particularly conspiracy websites. Our interpretation is that unlike politically biased websites, which rely more on social traffic, consumption of conspiracy content tends to follow solitary epistemic journeys, where individuals rely less on social media and more on self-reinforcing discovery mechanisms.</p>
+<p>Our results carry important implications for intervention strategies. While structural interventions such as content moderation and deplatforming may help limit incidental exposure to misinformation, they are unlikely to deter users with conspiratorial worldviews, who often migrate to alternative platforms [63] or perceive moderation efforts as censorship, further reinforcing their worldview [17]. Additionally, the growing reluctance of major platforms to implement misinformation countermeasures raises concerns about the longterm sustainability of structural interventions [1].</p>
+<p>Given these challenges, individual-level approaches, including psychological inoculation, emerge as more viable solutions, with large-scale prebunking initiatives holding promise as scalable interventions [64]. Ultimately, while no single approach can fully counter misinformation, a comprehensive strategy that assesses costs and benefits while integrating targeted platform policies with prebunking campaigns offers the most effective path forward in mitigating the societal impact of misinformation in both the short and long term.</p>
+<h3>SM1 Unreliability and MediaBiasFactCheck (MBFC) categories</h3>
+<p>Our list of websites (N = 2,734) was manually compiled in November 2020 by surveying the entire content of MediaBiasFactCheck (MBFC, http://www.mediabiasfactcheck.com) at that time. At the time of compilation, MBFC contained approximately 3,000 annotated websites, primarily news outlets; as of January 2025, this figure has grown to over 8,900. For politically biased and conspiracy websites, MBFC provides bias strength ratings. Bias strength for conspiracy websites is rated on a 5-point scale (1 = lower than mild,2 = mild,3 = moderate,4 = strong, and5 = tin foil hat). Bias strength for political websites is rated on a 3-point scale (1 = center right|left,2 = right|left, and3 = extreme right|left). To facilitate direct comparison with the conspiracy-bias scale, we rescaled political-bias ratings onto the same 5-point-range metric by remapping the three original categories (to 1, 3, and 5, respectively). Table S1 provides a detailed description of our sample by MBFC categories, group, bias level, bias strength, and unreliability, along with the number of websites at each bias level, and a representative example. Unreliability is obtained by reversing the score by Lin et al. [32] (1 -reliability) and expressed as mean (standard deviation). In Figure S1, we report website unreliability by MBFC bias strength (from 0 to 5) and category.</p>
+<p>Table S1: Website category descriptive statistics Category Group Label Bias N Unreliability Example Pro-science (PS) MB PS00 0 146 .130 (0.08) webmd.com L05 5 95 .552 (0.14) dailykos.com Liberal (N = 913) L L03 3 265 .401 (0.09) huffpost.com L01 1 553 .210 (0.10) bbc.com Least biased (LB) MB LB00 0 468 .123 (0.05) reuters.com R01 1 294 .264 (0.15) tribunnews.com Conservative (N = 913) R R03 3 285 .490 (0.13) foxnews.com R05 5 334 .752 (0.09) breitbart.com CT01 1 37 .736 (0.07) brightside.me CT02 2 34 .786 (0.05) mercola.com Conspiracy (N = 294) CT CT03 3 52 .801 (0.06) collective-evolution.com CT04 4 70 .802 (0.08) gaia.com CT05 5 101 .844 (0.10) infowars.com 0.00 0.25 0.50 0.75 1.00 0 1 2 3 4 5 Bias Unreliability 0.00 0.25 0.50 0.75 1.00 MB L R CT Group Unreliability 0.00 0.25 0.50 0.75 1.00 PS00 L05 L03 L01 LB00 R01 R03 R05 CT01 CT02 CT03 CT04 CT05 Group and bias Unreliability</p>
+<h3>SM2 Temporal stability of traffic measures</h3>
+<p>To assess the temporal stability of traffic measures, we re-collected data in November 2022 (two years after the initial collection) for a subset of websites previously included in LOCO (N = 96; [30]). We also tested the stability of the data collected during LOCO&#x27;s construction in July 2020 (six months earlier), which exhibited even stronger correlations; for simplicity, we report only the results from the two-year follow-up. The measures exhibited high agreement with the 2020 dataset (all ps &lt; .001), reported in Table S2. This indicates that our traffic measures are stable over time. Note that beyond Facebook, YouTube, Twitter, and Reddit, in 2022, we found that social traffic included additional platforms. Those are listed in Table S3.</p>
+<p>Table S2: Correlations between traffic measures collected in 2020 and 2022 total visits r84 = .96 visit duration r84 = .58 pages per visit r84 = .64 bounce rate r84 = .75 search traffic r84 = .92 direct traffic r84 = .85 social traffic r84 = .66 social traffic from Facebook r75 = .83 social traffic from YouTube r65 = .56 social traffic from Twitter r74 = .62 social traffic from Reddit r68 = .71</p>
+<h3>Measure Correlation</h3>
+<p>Table S3: Social traffic from other platforms as recorded by SimilarWeb in November 2022 Social Media % Twitter 83.33 Facebook 83.33 Reddit 79.17 Youtube 78.12 Others 75.00 Linkedin 45.83 Pocket 16.67 Pinterest 12.50 ResearchGate 4.17 Facebook Messenger 3.12 VKontakte 3.12 quora 2.08 Pixiv 1.04 SoundCloud.com 1.04 Instagram 1.04 Digg 1.04 Discord 1.04 Google Groups 1.04 Weibo.com 1.04 Telegram Webapp 1.04 Balatarin 1.04</p>
+<p>Note. % represents the percentage of websites (N = 96) that include data from that specific social media platform..</p>
+<h3>SM4 Correlations between study variables</h3>
+<p>Table S5: Correlation matrix of main variables 1.2.</p>
+<p>3.4. 5.6. 7.8. 1. Unreliability 2. Ideological bias .84*** 3. Direct traffic .28*** .29*** 4. Social traffic .25*** .29*** -.28*** 5. Search traffic -.49*** -.53*** -.66*** -.42*** 6. Bounce rate -.07** -.06* -.51*** .26*** .24*** 7. Visit duration (log) -.02 -.05* .45*** -.26*** -.21*** -.65*** 8. Pages per visit (log) -.03 -.05* .36*** -.27*** -.11*** -.76*** .75*** 9. Total visits (log) -.21*** -.20*** -.00 -.12*** .10*** -.26*** .38*** .26*** Note. *** p &lt; .001; ** p &lt; .01; * p &lt;0.05</p>
+<h3>SM5 Total visits by bias level and unreliability</h3>
+<p>Total monthly visits, averaged by bias level and unreliability score, are shown in Figure S2. Panel A shows that conservative websites with the highest bias strength (R05) and conspiracy websites receive fewer visits per month compared to websites with lower bias strength. The same pattern holds for highly unreliable websites (Panel B). Similarly, the weighted average unreliability is .268, lower than the unweighted average: .337. Note that websites classified as news aggregators, social media, or dictionaries/encyclopedias were excluded from the dataset; these were: medium.com, news.google.com, news.yahoo.com, aol.com, bing.com, buzzfeed.com, facebook.com, msn.com, researchgate.net, wikipedia.org. The same figure, including those websites is plotted in Figure S3.</p>
+<p>We then assessed the political lean and unreliability of our sample weighted by total visits. Following Cinelli et al. [12], we converted political bias strength into numerical values ranging from -1 to +1, where -1 represents extreme left, +1 represents extreme right, and 0 represents least-biased. Intermediate values include ±.33 for center-left and center-right and ±.66 for left and right, respectively. The unweighted average political bias across all websites is .027. When weighted by total visits, the average political bias shifts to -.028. This suggests that although the sample of our websites is more biased towards right-leaning websites, users nevertheless visit left-leaning websites more. But overall, visits are quite on the center.</p>
+<p>PS00 L05 L03 L01 LB00 R01 R03 R05 CT01 CT02 CT03 CT04 CT05 13,472,356 2,772,319 6,222,826 13,702,391 6,337,510 10,454,520 11,818,766 1,831,357 2,305,754 799,078 806,588 1,757,607 773,043 group A) .00 -.10 .10 -.20 .20 -.30 .30 -.40 .40 -.50 .50 -.60 .60 -.70 .70 -.80 .80 -.90 .90 -1.00 9,141,186 10,596,107 9,071,360 8,325,581 12,352,961 8,834,013 9,966,528 3,420,067 1,199,822 1,211,892 unreliability B) Figure S2: Total monthly visits averaged by bias level (A) and by unreliability (B) binned at .10 PS00 L05 L03 L01 LB00 R01 R03 R05 CT01 CT02 CT03 CT04 CT05 14,553,751 2,772,319 6,222,826 72,969,632 20,578,474 10,454,520 11,818,766 1,831,357 2,305,754 799,078 806,588 1,757,607 773,043 group A) .00 -.10 .10 -.20 .20 -.30 .30 -.40 .40 -.50 .50 -.60 .60 -.70 .70 -.80 .80 -.90 .90 -1.00 9,141,186 20,644,240 15,599,205 8,895,605 12,352,961 279,180,302 9,966,528 3,420,067 1,199,822 1,211,892 unreliability B)</p>
+<h3>SM6 Weighted proportion of traffic by MBFC categories</h3>
+<p>We then computed the proportion of each traffic modality, weighted by total visits, to estimate their relative contributions within each category and bias level. Figure S4 presents the mean weighted proportion of each traffic modality (direct, search, and social; top panels), as well as the breakdown of social traffic by platform (Facebook, YouTube, Twitter, and Reddit; bottom panels). These proportions are shown for all websites (Panels A, D), by website category (Panels B, E), and by bias level (Panels C, F).</p>
+<p>Panel A shows that search and direct traffic were the primary traffic modalities for all websites, while social traffic accounted for a relatively small proportion (8.42%). Panel B reveals an increasing trend in both social and direct traffic from pro-science to conspiracy websites. Specifically, social traffic increased from 2.89% in pro-science websites to 14.65% in conspiracy websites. Similarly, direct traffic rose from 19.84% in pro-science websites to 48.72% in conspiracy websites. Panel C indicates that social traffic was highest for entry-level conspiracy websites (CT01: 23.55%), followed by conservative websites with the highest bias strength (R05: 17.78%). Direct traffic accounted for approximately or above 70% of total visits in websites with the highest bias strength, including L05 (71.60%), R05 (60.69%), CT04 (74.35%), and CT05 (69.05%). These findings support the idea that websites with the highest bias strength are primarily accessed via direct traffic.</p>
+<p>Among social media platforms, Panel D shows that Facebook delivered the largest share of social traffic overall (39.28%), followed by Twitter (23.57%), Reddit (15.47%), and YouTube (13.91%). Facebook delivered the largest share of social traffic to conservative websites, accounting for 44.80% of their total social traffic (Panel E). However, Facebook traffic was disproportionately high for entry-level conspiracy websites, contributing 60.93% of traffic for bias level CT02 (see Panel F). In contrast, Reddit delivered the largest share of social traffic to pro-science websites (23.76%). Notably, 23.59% of social traffic to CT01 originated from platforms other than the four mainstream social media platforms analyzed in this study.</p>
+<p>.42 .44 .08 .06 0.00 0.25 0.50 0.75 1.00 total Proportion of Traffic (weighted by total visits) .06 .09</p>
+<p>Traffic Source direct search other social .39 .24 .14 .15 .08 0.00 0.25 0.50 0.75 1.00 total Proportion of Social Traffic (weighted by total visits)  S1). The category &quot;other&quot; represents the residual of traffic to sum up to 100% not displayed in the figure (e.g., traffic from mail or other social media).</p>
+<h3>SM7 Supplemental tables for Figure 1, panel A</h3>
+<p>Table S6 reports the model fitted on the full sample and controlling for bounce rate and total visits. Table S7 reports the estimated mean share of each traffic modality and the pairwise (Tukey-adjusted) differences between modalities. Means are in percentages and differences in percentage points. *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S6: Regression coefficients Full sample Term Est. 95% CI Sig. Direct -1.67 [-2.89, -0.46] ** Social -26.55 [-27.77, -25.34] *** Bounce rate -0.14 [-0.65, 0.38] Total visits (log) 0.08 [-0.43, 0.59] Constant 40.04 [39.18, 40.90] *** Adj. R² .29 Table S7: Estimates and contrasts Whole sample Term Est. 95% CI Sig. Mean (Est. = %) Search 40.04 [39.18, 40.90] Direct 38.37 [37.51, 39.23] Social 13.49 [12.63, 14.35] Pairwise difference (Est. = percentage points) Search -Direct 1.67 [0.22, 3.13] * Search -Social 26.55 [25.10, 28.01] *** Direct -Social 24.88 [23.43, 26.34] ***</p>
+<h3>SM8 Supplemental tables for Figure 1, panel B</h3>
+<p>Table S8 reports the model fitted on liberal, conservative, and conspiracy websites and controlling for bounce rate and total visits. Table S9 reports the estimated mean share of each traffic modality within each website group, the pairwise differences between modalities within each group, and the pairwise (Tukeyadjusted) differences between website groups within each traffic modality. Means are in percentages and differences in percentage points. *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S8: Regression coefficients By group Term Est. 95% CI Sig. Direct -9.54 [-11.60, -7.48] *** Social -30.05 [-32.11, -27.99] *** R -14.04 [-16.20, -11.88] *** CT -17.76 [-21.18, -14.33] *** Direct × R 22.70 [19.66, 25.74] *** Social × R 15.13 [12.09, 18.17] *** Direct × CT 32.51 [27.71, 37.30] *** Social × CT 19.97 [15.17, 24.77] *** Bounce rate -0.26 [-0.87, 0.35] Total visits (log) -0.05 [-0.67, 0.56] Constant 44.21 [42.75, 45.67] *** Adj. R² .29 Table S9: Estimates and contrasts L R CT Term Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Mean (Est. = %) Search 44.21 [42.75, 45.68] 30.17 [28.59, 31.76] 26.45 [23.37, 29.54] Direct 34.67 [33.21, 36.14] 43.33 [41.75, 44.92] 49.42 [46.34, 52.50] Social 14.16 [12.70, 15.63] 15.26 [13.67, 16.84] 16.37 [13.29, 19.46] Difference between categories, within group (Est. = percentage points) Search -Direct 9.54 [7.07, 12.01] *** -13.16 [-15.84, -10.49] *** -22.97 [-28.15, -17.78] *** Search -Social 30.05 [27.58, 32.52] *** 14.92 [12.24, 17.59] *** 10.08 [4.90, 15.26] *** Direct -Social 20.51 [18.04, 22.98] *** 28.08 [25.40, 30.76] *** 33.05 [27.87, 38.23] *** L -R L -CT R -CT Term Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Difference between groups, within category (Est. = percentage points) Search 14.04 [11.46, 16.62] *** 17.76 [13.66, 21.86] *** 3.72 [-0.42, 7.86] Direct -8.66 [-11.25, -6.08] *** -14.75 [-18.85, -10.65] *** -6.08 [-10.22, -1.95] ** Social -1.09 [-3.68, 1.49] -2.21 [-6.31, 1.89] -1.12 [-5.26, 3.02]</p>
+<h3>SM9 Supplemental tables for Figure 1, panel C</h3>
+<p>Table S10 reports the model fitted on the full sample and controlling for bounce rate and total visits. Table S11 reports the estimated slope of each traffic modality on unreliability and the pairwise (Tukeyadjusted) differences between slopes. Slopes are standardized coefficients (β). *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S10: Regression coefficients Full sample Term Est. 95% CI Sig. Unreliability -.52 [-.55, -.48] *** Direct .07 [.02, .12] ** Social -1.04 [-1.09, -.99] *** Unreliability × Direct .77 [.72, .82] *** Unreliability × Social .69 [.64, .74] *** Bounce rate -.01 [-.03, .01] Total visits (log) -.00 [-.02, .02] Constant .32 [.28, .35] *** Adj. R² .39 Table S11: Slopes and contrasts Whole sample Term Est. 95% CI Sig. Slope per unit of unreliability (Est. = β) Search -1.94 [-2.08, -1.80] *** Direct .95 [.81, 1.09] *** Social .66 [.52, .80] *** Pairwise difference in slope (Est. = β) Search -Direct -2.89 [-3.13, -2.65] *** Search -Social -2.60 [-2.83, -2.36] *** Direct -Social .29 [.06, .53] *</p>
+<h3>SM10 Supplemental tables for Figure 1, panel D</h3>
+<p>Table S12 reports the models fitted separately for each traffic modality on the full sample and within each website group, controlling for bounce rate and total visits. Table S13 reports the estimated slope of each traffic modality on unreliability in the full sample and within each website group, together with the pairwise (Tukey-adjusted) differences between groups. Slopes are standardized coefficients (β). *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S12: Regression coefficients Full sample By group Term Est. 95% CI Sig. Est. 95% CI Sig. Search Unreliability -.49 [-.53, -.45] *** -.43 [-.54, -.32] *** R -.25 [-.35, -.14] *** CT .37 [-.24, .97] Unreliability × R -.14 [-.28, -.01] * Unreliability × CT -.16 [-.55, .24] Bounce rate .22 [.18, .26] *** .20 [.15, .25] *** Total visits (log) .06 [.02, .10] ** .04 [-.01, .09] Constant -.09 [-.13, -.05] *** -.01 [-.08, .07] Adj. R² .29 .29 Direct Unreliability .24 [.19, .28] *** .05 [-.06, .17] R .24 [.13, .35] *** CT -.51 [-1.12, .09] Unreliability × R .17 [.03, .30] * Unreliability × CT .61 [.22, 1.00] ** Bounce rate -.52 [-.56, -.48] *** -.56 [-.61, -.51] *** Total visits (log) -.09 [-.13, -.05] *** -.10 [-.14, -.05] *** Constant .04 [.00, .08] * -.10 [-.18, -.03] ** Adj. R² .33 .35 Social Unreliability .29 [.25, .34] *** .55 [.42, .68] *** R -.16 [-.28, -.03] * CT .40 [-.31, 1.11] Unreliability × R -.20 [-.36, -.05] * Unreliability × CT -.75 [-1.21, -.29] ** Bounce rate .29 [.25, .34] *** .36 [.30, .41] *** Total visits (log) .02 [-.03, .06] .04 [-.02, .09] Constant .06 [.01, .10] ** .21 [.12, .30] *** Adj. R² .14 .16 Table S13: Slopes and contrasts by website group Search Direct Social Term Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Slope (Est. = β) Full sample -1.84 [-1.99, -1.68] *** .88 [.73, 1.04] *** 1.11 [.94, 1.28] *** L -1.61 [-2.04, -1.19] *** .20 [-.22, .62] 2.07 [1.58, 2.57] *** R -2.15 [-2.44, -1.86] *** .83 [.54, 1.12] *** 1.30 [.97, 1.64] *** CT -2.20 [-3.61, -.79] ** 2.49 [1.08, 3.90] *** -.74 [-2.39, .91] L -R .53 [-.08, 1.14] -.63 [-1.23, -.02] * .77 [.06, 1.48] * L -CT .59 [-1.17, 2.35] -2.29 [-4.04, -.54] ** 2.81 [.76, 4.87] ** R -CT .05 [-1.67, 1.78] -1.66 [-3.38, .05] 2.05 [.03, 4.06] * Adj. R² .293 .350 .165</p>
+<h3>SM11 Supplemental tables for Figure 1, panel E</h3>
+<p>Table S14 reports the model fitted on the full sample and controlling for bounce rate and total visits. Table S15 reports the estimated mean share of each social media platform and the pairwise (Tukey-adjusted) differences between platforms. Means are in percentages and differences in percentage points. *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S14: Regression coefficients Full sample Term Est. 95% CI Sig. Twitter -4.33 [-4.81, -3.85] *** YouTube -6.91 [-7.41, -6.40] *** Reddit -5.70 [-6.18, -5.21] *** Bounce rate 0.98 [0.80, 1.17] *** Total visits (log) -0.36 [-0.54, -0.18] *** Constant 7.67 [7.34, 8.01] *** Adj. R² .13 Table S15: Estimates and contrasts Whole sample Term Est. 95% CI Sig. Mean (Est. = %) Facebook 7.64 [7.30, 7.98] Twitter 3.31 [2.97, 3.65] YouTube 0.73 [0.36, 1.11] Reddit 1.94 [1.59, 2.29] Pairwise difference (Est. = percentage points) Facebook -Twitter 4.33 [3.70, 4.96] *** Facebook -YouTube 6.91 [6.25, 7.56] *** Facebook -Reddit 5.70 [5.06, 6.34] *** Twitter -YouTube 2.57 [1.91, 3.24] *** Twitter -Reddit 1.37 [0.72, 2.01] *** YouTube -Reddit -1.21 [-1.88, -0.54] ***</p>
+<h3>SM12 Supplemental tables for Figure 1, panel F</h3>
+<p>Table S16 reports the model fitted on liberal, conservative, and conspiracy websites and controlling for bounce rate and total visits. Table S17 reports the estimated mean share of each social media platform within each website group, the pairwise differences between platforms within each group, and the pairwise (Tukeyadjusted) differences between website groups within each social media platform. Means are in percentages and differences in percentage points. *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S16: Regression coefficients By group Term Est. 95% CI Sig. Twitter -3.41 [-4.29, -2.54] *** YouTube -6.56 [-7.50, -5.63] *** Reddit -4.84 [-5.73, -3.96] *** R².38 [1.47, 3.30] *** CT 5.04 [3.57, 6.50] *** Twitter × R -2.04 [-3.34, -0.73] ** YouTube × R -2.01 [-3.38, -0.64] ** Reddit × R -2.83 [-4.16, -1.50] *** Twitter × CT -6.11 [-8.22, -4.00] *** YouTube × CT -3.91 [-6.03, -1.79] *** Reddit × CT -6.21 [-8.36, -4.06] *** Bounce rate 1.28 [1.04, 1.52] *** Total visits (log) -0.27 [-0.51, -0.03] * Constant 7.13 [6.51, 7.75] *** Adj. R² .15 Table S17: Estimates and contrasts L R CT Term Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Mean (Est. = %) Facebook 7.10 [6.48, 7.72] 9.48 [8.81, 10.16] 12.13 [10.81, 13.46] Twitter 3.68 [3.06, 4.31] 4.03 [3.34, 4.72] 2.61 [1.21, 4.01] YouTube 0.54 [-0.17, 1.24] 0.91 [0.17, 1.65] 1.66 [0.28, 3.04] Reddit 2.26 [1.62, 2.89] 1.81 [1.08, 2.54] 1.08 [-0.38, 2.54] Difference between categories, within group (Est. = percentage points) Facebook -Twitter 3.41 [2.26, 4.57] *** 5.45 [4.19, 6.72] *** 9.52 [7.01, 12.04] *** Facebook -YouTube 6.56 [5.34, 7.79] *** 8.57 [7.26, 9.89] *** 10.47 [7.98, 12.96] *** Facebook -Reddit 4.84 [3.68, 6.00] *** 7.67 [6.37, 8.97] *** 11.05 [8.49, 13.62] *** Twitter -YouTube 3.15 [1.92, 4.38] *** 3.12 [1.80, 4.45] *** 0.95 [-1.62, 3.51] Twitter -Reddit 1.43 [0.26, 2.59] ** 2.22 [0.90, 3.53] *** 1.53 [-1.10, 4.17] YouTube -Reddit -1.72 [-2.96, -0.48] ** -0.90 [-2.26, 0.46] 0.58 [-2.03, 3.20] L -R L -CT R -CT Term Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Difference between groups, within category (Est. = percentage points) Facebook -2.38 [-3.48, -1.29] *** -5.04 [-6.79, -3.28] *** -2.65 [-4.43, -0.88] ** Twitter -0.35 [-1.46, 0.77] 1.07 [-0.77, 2.91] 1.42 [-0.44, 3.29] YouTube -0.37 [-1.59, 0.84] -1.13 [-2.99, 0.73] -0.75 [-2.62, 1.12] Reddit 0.44 [-0.72, 1.60] 1.17 [-0.73, 3.08] 0.73 [-1.21, 2.68]</p>
+<h3>SM13 Supplemental tables for Figure 1, panel G</h3>
+<p>Table S18 reports the model fitted on the full sample and controlling for bounce rate and total visits. Table S19 reports the estimated slope of each social media platform on unreliability and the pairwise (Tukeyadjusted) differences between slopes. Slopes are standardized coefficients (β). *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S18: Regression coefficients Full sample Term Est. 95% CI Sig. Unreliability .48 [.44, .52] *** Twitter -.62 [-.68, -.56] *** YouTube -.96 [-1.02, -.90] *** Reddit -.82 [-.88, -.76] *** Unreliability × Twitter -.38 [-.44, -.31] *** Unreliability × YouTube -.43 [-.49, -.37] *** Unreliability × Reddit -.49 [-.56, -.43] *** Bounce rate .15 [.12, .17] *** Total visits (log) -.01 [-.03, .02] Constant .61 [.57, .65] *** Adj. R² .19 Table S19: Slopes and contrasts Whole sample Term Est. 95% CI Sig. Slope per unit of unreliability (Est. = β) Facebook 1.81 [1.64, 1.97] *** Twitter .39 [.22, .56] *** YouTube .19 [.01, .37] * Reddit -.05 [-.23, .13] Pairwise difference in slope (Est. = β) Facebook -Twitter 1.41 [1.10, 1.72] *** Facebook -YouTube 1.62 [1.30, 1.93] *** Facebook -Reddit 1.86 [1.54, 2.18] *** Twitter -YouTube .21 [-.12, .53] Twitter -Reddit .45 [.12, .77] ** YouTube -Reddit .24 [-.09, .57]</p>
+<h3>SM14 Supplemental tables for Figure 1, panel H</h3>
+<p>Table S20 reports the models fitted separately for each social media platform on the full sample and within each website group, controlling for bounce rate and total visits. Table S21 reports the estimated slope of each social media platform on unreliability in the full sample and within each website group, together with the pairwise (Tukey-adjusted) differences between groups. Slopes are standardized coefficients (β). *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S20: Regression coefficients Full sample By group Term Est. 95% CI Sig. Est. 95% CI Sig. Facebook Unreliability .31 [.26, .35] *** .53 [.39, .67] *** R -.07 [-.20, .06] CT .83 [.09, 1.57] * Unreliability × R -.17 [-.34, -.01] * Unreliability × CT -.88 [-1.36, -.40] *** Bounce rate .24 [.19, .28] *** .31 [.25, .37] *** Total visits (log) .00 [-.04, .05] .03 [-.03, .09] Constant .06 [.02, .10] ** .13 [.04, .23] ** Adj. R² .13 .14 Twitter Unreliability .16 [.11, .21] *** .28 [.13, .42] *** R -.11 [-.25, .02] CT -.97 [-1.73, -.21] * Unreliability × R -.06 [-.23, .11] Unreliability × CT .13 [-.36, .62] Bounce rate .15 [.10, .19] *** .16 [.09, .22] *** Total visits (log) -.03 [-.08, .02] -.03 [-.10, .03] Constant .04 [-.01, .08] .19 [.10, .29] *** Adj. R² .04 .05 YouTube Unreliability .20 [.15, .25] *** .04 [-.14, .21] R .12 [-.04, .27] CT .56 [-.27, 1.39] Unreliability × R .11 [-.09, .31] Unreliability × CT .02 [-.52, .56] Bounce rate -.04 [-.09, .01] -.04 [-.11, .03] Total visits (log) -.08 [-.13, -.02] ** -.09 [-.16, -.03] ** Constant .04 [-.01, .09] -.08 [-.20, .04] Adj. R² .05 .05 Reddit Unreliability -.05 [-.10, .00] .07 [-.08, .21] R -.17 [-.31, -.04] * CT -.41 [-1.21, .39] Unreliability × R -.10 [-.27, .08] Unreliability × CT -.06 [-.57, .46] Bounce rate .15 [.10, .20] *** .16 [.10, .22] *** Total visits (log) -.02 [-.07, .04] -.02 [-.08, .05] Constant -.02 [-.06, .03] .13 [.03, .23] ** Adj. R² .02 .04 Table S21: Slopes and contrasts by website group Facebook Twitter YouTube Reddit Term Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Slope (Est. = β) Full sample 1.15 [.97, 1.32] *** .58 [.40, .77] *** .75 [.55, .95] *** -.19 [-.39, .01] L 1.98 [1.47, 2.50] *** 1.04 [.50, 1.57] *** .14 [-.51, .79] .25 [-.29, .79] R 1.34 [.98, 1.69] *** .81 [.45, 1.18] *** .55 [.14, .97] ** -.12 [-.50, .26] CT -1.31 [-3.04, .43] 1.52 [-.25, 3.29] .20 [-1.72, 2.12] .04 [-1.81, 1.90] L -R .65 [-.10, 1.39] .22 [-.55, .99] -.41 [-1.33, .50] .37 [-.42, 1.15] L -CT 3.29 [1.13, 5.45] ** -.48 [-2.69, 1.73] -.06 [-2.48, 2.35] .21 [-2.10, 2.51] R -CT 2.64 [.53, 4.76] ** -.70 [-2.87, 1.46] .35 [-2.00, 2.70] -.16 [-2.42, 2.10] Adj. R² .144 .051 .050 .037</p>
+<h3>SM15 Supplemental tables for Figure 1, panel I</h3>
+<p>Table S22 reports the models fitted separately for each pair of traffic modalities on the full sample and within each website group, controlling for bounce rate and total visits. Table S23 reports the estimated slope of the difference between the two modalities in each pair on unreliability in the full sample and within each website group. Positive values indicate that the first modality becomes relatively more prevalent than the second as unreliability increases. Slopes are standardized coefficients (β). *** p &lt; .001; ** p &lt; .01; * p &lt;0.05.</p>
+<p>Table S22: Regression coefficients (Panel I of Figure 1).</p>
+<h3>Full sample By group</h3>
+<p>Est. 95% CI Sig. Est. 95% CI Sig. Social vs Search Unreliability .20 [.16, .23] *** .35 [.26, .45] *** Search 1.02 [.97, 1.06] *** 1.00 [.91, 1.10] *** Unreliability × Search -.67 [-.72, -.63] *** -.77 [-.90, -.63] *** R -.10 [-.20, -.01] * CT .26 [-.26, .79] Unreliability × R -.13 [-.24, -.01] * Unreliability × CT -.48 [-.82, -.15] ** Search × R -.13 [-.26, .00] Search × CT .09 [-.66, .83] Unreliability × Search × R -.01 [-.18, .15] Unreliability × Search × CT .34 [-.14, .81] Bounce rate .20 [.18, .23] *** .21 [.18, .24] *** Total visits (log) .03 [.01, .06] ** .03 [.00, .06] * Constant -.53 [-.57, -.50] *** -.44 [-.50, -.37] *** Adj. R² .49 .42 Direct vs Search Unreliability .26 [.22, .31] *** .14 [.02, .26] * Search -.07 [-.13, -.02] * .19 [.07, .31] ** Unreliability × Search -.83 [-.89, -.77] *** -.70 [-.87, -.53] *** R .26 [.15, .38] *** CT -.53 [-1.19, .12] Unreliability × R .07 [-.08, .21] Unreliability × CT .58 [.16, 1.00] ** Search × R -.57 [-.73, -.41] *** Search × CT .98 [.05, 1.91] * Unreliability × Search × R -.13 [-.33, .08] Unreliability × Search × CT -.76 [-1.36, -.16] * Bounce rate -.12 [-.15, -.09] *** -.15 [-.19, -.11] *** Total visits (log) -.01 [-.04, .02] -.02 [-.06, .01] Constant .01 [-.03, .05] -.15 [-.23, -.06] *** Adj. R² .19 .21 Direct vs Social Unreliability .25 [.21, .29] *** .14 [.04, .25] ** Social -1.18 [-1.23, -1.13] *** -.91 [-1.01, -.80] *** Unreliability × Social -.08 [-.14, -.03] ** .15 [-.00, .30] R .26 [.16, .37] *** CT -.53 [-1.11, .06] Unreliability × R .06 [-.07, .19] Unreliability × CT .57 [.19, .95] ** Social × R -.42 [-.56, -.27] *** Social × CT .87 [.04, 1.70] * Unreliability × Social × R -.11 [-.30, .07] Unreliability × Social × CT -1.11 [-1.65, -.58] *** Bounce rate -.13 [-.16, -.11] *** -.13 [-.16, -.09] *** Total visits (log) -.04 [-.06, -.01] ** -.03 [-.06, .00] Constant .63 [.59, .67] *** .48 [.41, .55] *** Adj. R² .40 .38</p>
+<p>Table S23: Slopes of the differences between traffic modalities (Panel I of Figure 1).</p>
+<p>Social vs Search Direct vs Search Direct vs Social Term Est. 95% CI Sig. Est. 95% CI Sig. Est. 95% CI Sig. Full sample 2.54 [2.35, 2.72] *** 3.13 [2.90, 3.36] *** .31 [.12, .51] ** L 2.88 [2.37, 3.39] *** 2.62 [1.99, 3.26] *** -.56 [-1.12, .01] R².92 [2.57, 3.28] *** 3.11 [2.67, 3.55] *** -.13 [-.52, .26] CT 1.62 [-.11, 3.34] 5.48 [3.33, 7.63] *** 3.63 [1.71, 5.55] *** Adj. R² .421 .208 .382</p>
+<h3>Acknowledgment</h3>
+<p>We would like to thank Özgür Oktay, Idil Dalli, and Gabriel Calvo Müller for their contribution to data collection.</p>
+<p>Funding AM is supported by the Swiss National Science Foundation (SNSF, project number 214293, &quot;In/coherent worldviews&quot;). SL is supported by the European Research Council (ERC) under Advanced Grant agreement No 101020961 (PRODEMINFO). TH is supported by the Economic and Social Research Council (ESRC) through the Centre for Competitive Advantage in the Global Economy (CAGE) at the University of Warwick [grant number ES/Z504701/1].</p>
+<h3>Data availability</h3>
+<p>The dataset and the R scripts for reproducing the analyses will be available upon manuscript acceptance.</p>
+<p>Author contributions statement AM: Conceptualization; Data curation; Formal analysis; Investigation; Methodology; Resources; Software; Validation; Visualization; Writing-original draft; Writing-review &amp; editing. TS: Writing-review &amp; editing. SL: Writing-review &amp; editing. TH: Conceptualization; Supervision; Writing-review &amp; editing. AB: Conceptualization; Project administration; Supervision; Writing-original draft; Writing-review &amp; editing.</p>
+<h3>SM3 Descriptive Statistics</h3>
+<p>The dataset and the R scripts for reproducing the analyses is available at https://osf.io/XXXXXX/. In Table S4, we report our dataset&#x27;s variable names and their description. The dataset contains 2,734 rows, one per website.</p>
+<p>Table S4: Variable names and descriptions Variable Description domain Website&#x27;s name (e.g., nytimes.com) URL Website&#x27;s URL (e.g., https://www.nytimes.com/) group</p>
+<p>Website&#x27;s label (e.g., PS00 = pro-science; see Table S1 for group count) unreliability</p>
+<p>Website&#x27;s level of unreliability (M = 0.39, range: 0.00-1.00, N = 2,690) SW_global.rank (M = 143,990, range: 83-2,189,735, N = 1,891) SW_total.visits (M = 8,652,008, range: 50,000-514,400,000, N = 1,912) SW_traffic.direct</p>
+<h3>Figure 1 :</h3>
+<p>Figure 1: Estimated shares of incoming traffic by traffic modality (A-D) and social media platform (E-H), and pairwise differences between traffic modalities (I). Panels A and E show estimated mean shares in the full sample. Panels B and F show estimated mean shares by website group. Panels C and G show estimated shares as a function of website unreliability[32] in the full sample. Panels D and H break these down by website group, separately for each traffic modality and platform. Panel I shows standardized (β) differences in traffic shares between pairs of modalities as a function of unreliability, by website group; each y-axis label reflects the difference between modalities (e.g., Social -Search), so positive values indicate a larger share for the first modality. All models control for bounce rate and total visits. Error bars and shaded areas indicate 95% confidence intervals.</p>
+<h3>Figure S1 :</h3>
+<p>FigureS1: Website unreliability by MBFC category and bias strength</p>
+<h3>Figure S3 :</h3>
+<p>Figure S3: Total monthly visits (without excluding news aggregators, social media platforms, and dictionaries/encyclopedias) averaged by bias level (A) and by unreliability score (B), binned at 0.10.</p>
+<h3>PS00Figure S4 :</h3>
+<p>Figure S4: Mean proportion of traffic modalities weighted by total visits. From top to bottom: Panels A-C show the share of total visits that arrive via direct, search, social, and other traffic; Panels D-F brake down the social traffic by individual platforms (Facebook, Twitter, YouTube, Reddit, and other). From left to right: Panels A and D show the proportions for all websites; Panels B and E present proportions by website category (PS: pro-science; LB: least-biased; L: liberal; R: conservative; CT: conspiracy); Panels C and F display proportions by bias levels (see TableS1). The category &quot;other&quot; represents the residual of traffic to sum up to 100% not displayed in the figure (e.g., traffic from mail or other social media).</p>
+<p>Percentage of direct traffic (M = 38.36, range: 1.81-99.69, N = 1,910) SW_traffic.search Percentage of search traffic (M = 40.07, range: 0.00-92.34, N = 1,910) SW_traffic.social Percentage of social traffic (M = 13.48, range: 0.00-96.55, N = 1,909) SW_traffic.referrals Percentage of incoming traffic from another webpage (M = 6.45, range: 0.00-89.03, N = 1,910) SW_traffic.mail Percentage of traffic from mail (M = 1.49, range: 0.00-32.22, N = 1,910) SW_bounce.rate Percentage of single-page visits (M = 69.74, range: 0.16-94.26, N = 1,912) SW_avg.visit.duration Average duration (in seconds) per visit (M = 139, range: 6-5,745, N = 1,913) SW_pages.per.visit Average pages per visit (M = 2.07, range: 1.05-21.00, N = 1,913) SW_social.facebook Percentage of social traffic from Facebook (M = 46.78, range: 0.17-100.00, N = 1,886) SW_social.youtube Percentage of social traffic from YouTube (M = 8.22, range: 0.01-95.97, N = 1,541) SW_social.twitter Percentage of social traffic from Twitter (M = 26.42, range: 0.01-98.53, N = 1,819) SW_social.reddit Percentage of social traffic from Reddit (M = 17.19, range: 0.00-100.00, N = 1,706)</p>
+<p>Using SimilarWeb (in January 2025), we found that the top five associated search keywords for infowars.com were all navigational (infowars, info wars, infowars.com, infowars official site, and infowars website).</p>
+<h3>References</h3>
+<p>Stephan Lewandowsky. Free speech, fact checking, and the right to accurate information. Science, 387 (6734), 2025. ISSN 1095-9203. doi: 10.1126/science.adv4632.</p>
+<p>M. Scharfbillig, Stephan Lewandowsky, Sacha Altay, M. Van Alstyne, Anastasia Kozyreva, Ralph Her- twig, Philipp Lorenz-Spreen, Renée DiResta, S. Valenzuela, S. Egidy, Walter Quattrociocchi, and A. Or- ben. Fractured reality. Technical Report KJ-01-26-115-EN-N, Publications Office of the European Union, Luxembourg (Luxembourg), 2026.</p>
+<p>Esma Aïmeur, Sabrine Amri, and Gilles Brassard. Fake news, disinformation and misinformation in social media: a review. Social Network Analysis and Mining, 13(1), 2 2023. ISSN 1869-5469. doi: 10.1007/s13278-023-01028-5. URL https://doi.org/10.1007/s13278-023-01028-5.</p>
+<p>Yuxi Wang, Martin McKee, Aleksandra Torbica, and David Stuckler. Systematic literature review on the spread of health-related misinformation on social media. Social Science &amp; Medicine, 240:112552, 11 2019. ISSN 0277-9536. doi: 10.1016/j.socscimed.2019.112552.</p>
+<p>David M. J. Lazer. The rise of the social algorithm. Science, 348(6239):1090-1091, 6 2015. ISSN 0036-8075, 1095-9203. doi: 10.1126/science.aab1422.</p>
+<p>Stephan Lewandowsky, Ronald E. Robertson, and Renée DiResta. Challenges in understanding human- algorithm entanglement during online information consumption. Perspectives on Psychological Science, 19(5):758-766, 7 2023. ISSN 1745-6924. doi: 10.1177/17456916231180809.</p>
+<p>Eli Pariser. The filter bubble: What the Internet is hiding from you. penguin UK, 2011.</p>
+<p>Cass R. Sunstein. #Republic: Divided Democracy in the Age of Social Media. Princeton University Press, 10 2018. ISBN 978-1-4008-9052-1. doi: 10.1515/9781400890521.</p>
+<p>Joseph E. Uscinski, Adam M. Enders, Casey A. Klofstad, and Justin Stoler. Cause and effect: On the antecedents and consequences of conspiracy theory beliefs. Current Opinion in Psychology, 47:101364, 10 2022. ISSN 2352-250X. doi: 10.1016/j.copsyc.2022.101364.</p>
+<p>Henrich R. Greve, Hayagreeva Rao, Paul Vicinanza, and Echo Yan Zhou. Online conspiracy groups: Micro-bloggers, bots, and coronavirus conspiracy talk on twitter. American Sociological Review, 87(6): 919-949, 10 2022. ISSN 0003-1224. doi: 10.1177/00031224221125937. URL https://doi.org/10.117 7/00031224221125937.</p>
+<p>Steve Rathje, Jay Joseph Van Bavel, and Sander van der Linden. Out-group animosity drives en- gagement on social media. Proceedings of the National Academy of Sciences, 118(26), 6 2021. ISSN 1091-6490. doi: 10.1073/pnas.2024292118.</p>
+<p>Matteo Cinelli, Gianmarco De Francisci Morales, Alessandro Galeazzi, Walter Quattrociocchi, and Michele Starnini. The echo chamber effect on social media. Proceedings of the National Academy of Sciences, 118(9):e2023301118, 2 2021. ISSN 0027-8424. doi: 10.1073/pnas.2023301118.</p>
+<p>Jay Joseph Van Bavel, Steve Rathje, Elizabeth Harris, Claire E. Robertson, and Anni Sternisko. How social media shapes polarization. Trends in Cognitive Sciences, 25(11):913-916, 11 2021. ISSN 1364- 6613. doi: 10.1016/j.tics.2021.07.013.</p>
+<p>Ullrich K. H. Ecker, Li Qian Tay, Jon Roozenbeek, Sander van der Linden, John Cook, Naomi Oreskes, and Stephan Lewandowsky. Why misinformation must not be ignored. American Psychologist, 80(6): 867-878, 9 2024. ISSN 0003-066X. doi: 10.1037/amp0001448.</p>
+<p>Sacha Altay, Manon Berriche, and Alberto Acerbi. Misinformation on misinformation: Conceptual and methodological challenges. Social Media + Society, 9(1):205630512211504, 1 2023. ISSN 2056-3051. doi: 10.1177/20563051221150412.</p>
+<p>Philipp Schmid and Hannah Bauer. Impact of exposure to health misinformation on belief in health misinformation: A meta-analysis of rcts. Health Communication, 41(5):877-887, 7 2025. ISSN 1041- 0236. doi: 10.1080/10410236.2025.2536772. URL https://doi.org/10.1080/10410236.2025.253677 2.</p>
+<p>Ullrich K. H. Ecker, Stephan Lewandowsky, John Cook, Philipp Schmid, Lisa K. Fazio, Nadia Brashier, Panayiota Kendeou, Emily K. Vraga, and Michelle A. Amazeen. The psychological drivers of misin- formation belief and its resistance to correction. Nature Reviews Psychology, 1(1):13-29, 1 2022. ISSN 2731-0574. doi: 10.1038/s44159-021-00006-y.</p>
+<p>Ceren Budak, Brendan Nyhan, David M. Rothschild, Emily A. Thorson, and Duncan J. Watts. Mis- understanding the harms of online misinformation. Nature, 630(8015):45-53, 6 2024. ISSN 1476-4687. doi: 10.1038/s41586-024-07417-w.</p>
+<p>Nardjes Amieur, Salim Chouaki, Oana Goga, and Beatrice Roussillon. A comparative study of news ex- posure and consumption on and off facebook. Proceedings of the ACM on Human-Computer Interaction, 9(7):1-34, 10 2025. ISSN 2573-0142. doi: 10.1145/3757540. URL https://doi.org/10.1145/3757540.</p>
+<p>Michael Scharkow, Frank Mangold, Sebastian Stier, and Johannes Breuer. How social network sites and other online intermediaries increase exposure to news. Proceedings of the National Academy of Sciences, 117(6):2761-2763, 1 2020. ISSN 0027-8424, 1091-6490. doi: 10.1073/pnas.1918279117.</p>
+<p>Václav Štětka, Francisco Brandao, Fanni Tóth, Sabina Mihelj, Danilo Rothberg, Daniel Hallin, Beata Klimkiewicz, and Paulo Ferracioli. Beyond social media: The influence of news consumption, populism, and expert trust on belief in covid-19 misinformation. The International Journal of Press/Politics, 31 (2):314-343, 11 2024. ISSN 1940-1612. doi: 10.1177/19401612241302755. URL https://doi.org/10 .1177/19401612241302755.</p>
+<p>Thomas T. Hills. The Dark Side of Information Proliferation. Perspectives on Psychological Science, 14(3):323-330, 11 2019. ISSN 1745-6916. doi: 10.1177/1745691618803647.</p>
+<p>Natalie Jomini Stroud. Polarization and partisan selective exposure. Journal of Communication, 60 (3):556-576, 8 2010. ISSN 0021-9916. doi: 10.1111/j.1460-2466.2010.01497.x.</p>
+<p>Philipp Lorenz-Spreen, Lisa Oswald, Stephan Lewandowsky, and Ralph Hertwig. A systematic review of worldwide causal and correlational evidence on digital media and democracy. Nature Human Behaviour, 7(1):74-101, 11 2022. ISSN 2397-3374. doi: 10.1038/s41562-022-01460-1.</p>
+<p>Jakob Ohme and Cornelia Mothes. News snacking and political learning: changing opportunity struc- tures of digital platform news use and political knowledge. Journal of Information Technology &amp; Politics, 22(1):1-15, 3 2023. ISSN 1933-169X. doi: 10.1080/19331681.2023.2193579.</p>
+<p>Sebastian Stier, Johannes Breuer, Pascal Siegers, and Kjerstin Thorson. Integrating survey data and digital trace data: Key issues in developing an emerging field. Social Science Computer Review, 38(5): 503-516, 4 2019. ISSN 1552-8286. doi: 10.1177/0894439319843669.</p>
+<p>Bernhard Clemm von Hohenberg, Sebastian Stier, Ana S. Cardenal, Andrew M. Guess, Ericka Menchen- Trevino, and Magdalena Wojcieszak. Analysis of web browsing data: A guide. Social Science Computer Review, 42(6):1479-1504, 2 2024. ISSN 1552-8286. doi: 10.1177/08944393241227868.</p>
+<p>Felix Schmidt, Frank Mangold, Sebastian Stier, and Roberto Ulloa. Facebook as an avenue to news: A comparison and validation of approaches to identify facebook referrals. Political Communication, 41 (6):921-943, 4 2024. ISSN 1058-4609. doi: 10.1080/10584609.2024.2342983. URL https://doi.org/ 10.1080/10584609.2024.2342983.</p>
+<p>Bradley Franks, Adrian Bangerter, Martin W. Bauer, Matthew Hall, and Mark C. Noort. Beyond &quot;Monologicality? Exploring Conspiracist Worldviews. Frontiers in Psychology, 8:861, 6 2017. ISSN 1664-1078. doi: 10.3389/fpsyg.2017.00861.</p>
+<p>Alessandro Miani, Thomas T. Hills, and Adrian Bangerter. LOCO: The 88-million-word language of conspiracy corpus. Behavior Research Methods, 54(4):1794-1817, 10 2021. ISSN 1554-3528. doi: 10.3758/s13428-021-01698-z.</p>
+<p>Fabio Carrella, Alessandro Miani, and Stephan Lewandowsky. IRMA: the 335-million-word Italian coRpus for studying MisinformAtion. In Andreas Vlachos and Isabelle Augenstein, editors, Proceedings of the 17 th Conference of the European Chapter of the Association for Computational Linguistics, pages 2339-2349, Dubrovnik, Croatia, 2023. Association for Computational Linguistics. doi: 10.18653/v1/20 23.eacl-main.171.</p>
+<p>Hause Lin, Jana Lasser, Stephan Lewandowsky, Rocky Cole, Andrew Gully, David G. Rand, and Gordon Pennycook. High level of correspondence across different news domain quality rating sets. PNAS Nexus, 2(9), 9 2023. ISSN 2752-6542. doi: 10.1093/pnasnexus/pgad286.</p>
+<p>Jula Lühring, Hannah Metzler, Ruggero Lazzaroni, Apeksha Shetty, and Jana Lasser. Best practices for source-based research on misinformation and news trustworthiness using newsguard. Journal of Quantitative Description: Digital Media, 5, 2025. ISSN 2673-8813. doi: 10.51685/jqd.2025.003.</p>
+<p>Bernard J. Jansen, Soon-gyo Jung, and Joni Salminen. Measuring user interactions with websites: A comparison of two industry standard analytics approaches using data of 86 websites. PLOS ONE, 17 (5):e0268212, 5 2022. ISSN 1932-6203. doi: 10.1371/journal.pone.0268212. URL https://doi.org/10 .1371/journal.pone.0268212.</p>
+<p>Ana S. Cardenal, Carlos Aguilar-Paredes, Carol Galais, and Mario Pérez-Montoro. Digital Technologies and Selective Exposure: How Choice and Filter Bubbles Shape News Media Exposure. The International Journal of Press/Politics, 24(4):465-486, 7 2019. ISSN 1940-1612, 1940-1620. doi: 10.1177/19401612 19862988.</p>
+<p>Dimitar Nikolov, Mounia Lalmas, Alessandro Flammini, and Filippo Menczer. Quantifying biases in online information exposure. Journal of the Association for Information Science and Technology, 70 (3):218-229, 11 2018. ISSN 2330-1635. doi: 10.1002/asi.24121. URL https://doi.org/10.1002/as i.24121.</p>
+<p>Jana H. Dreston and German Neubaum. How incidental and intentional news exposure in social media relate to political knowledge and voting intentions. Frontiers in Psychology, 14, 12 2023. ISSN 1664- 1078. doi: 10.3389/fpsyg.2023.1250051.</p>
+<p>Mark E. Koltko-Rivera. The Psychology of Worldviews. Review of General Psychology, 8(1):3-58, 3 2004. ISSN 1089-2680. doi: 10.1037/1089-2680.8.1.3.</p>
+<p>Silvia Knobloch-Westerwick and Jingbo Meng. Looking the other way: Selective exposure to attitude- consistent and counterattitudinal political information. Communication Research, 36(3):426-448, 3 2009. ISSN 0093-6502, 1552-3810. doi: 10.1177/0093650209333030.</p>
+<p>Lion Schulz, Max Rollwage, Raymond J. Dolan, and Stephen M. Fleming. Dogmatism manifests in lowered information search under uncertainty. Proceedings of the National Academy of Sciences, 117 (49):31527-31534, 11 2020. ISSN 0027-8424, 1091-6490. doi: 10.1073/pnas.2009641117.</p>
+<p>Charles S. Taber and Milton Lodge. Motivated skepticism in the evaluation of political beliefs. American Journal of Political Science, 50(3):755-769, 6 2006. ISSN 0092-5853, 1540-5907. doi: 10.1111/j.1540-5 907.2006.00214.x.</p>
+<p>George David Hooke Pearson and Silvia Knobloch-Westerwick. Is the confirmation bias bubble larger online? pre-election confirmation bias in selective exposure to online versus print political information. Mass Communication and Society, 22(4):466-486, 2019. ISSN 1520-5436. doi: 10.1080/15205436.2019.1599956.</p>
+<p>Axel Westerwick, Benjamin K. Johnson, and Silvia Knobloch-Westerwick. Confirmation biases in selec- tive exposure to political online information: Source bias vs. content bias. Communication Monographs, 84(3):343-364, 5 2017. ISSN 0363-7751, 1479-5787. doi: 10.1080/03637751.2016.1272761.</p>
+<p>Neophytos Georgiou, Paul Delfabbro, and Ryan P. Balzan. Conspiracy-beliefs and receptivity to dis- confirmatory information: A study using the bade task. Sage Open, 11(1):215824402110061, 1 2021. ISSN 2158-2440, 2158-2440. doi: 10.1177/21582440211006131.</p>
+<p>Bernard J. Jansen, Danielle L. Booth, and Amanda Spink. Determining the informational, navigational, and transactional intent of Web queries. Information Processing &amp; Management, 44(3):1251-1266, 5 2008. ISSN 0306-4573. doi: 10.1016/j.ipm.2007.07.015.</p>
+<p>Kevin T. Greene, Nilima Pisharody, Lucas Augusto Meyer, Mayana Pereira, Rahul Dodhia, Juan Lav- ista Ferres, and Jacob N. Shapiro. Current engagement with unreliable sites from web search driven by navigational search. Science Advances, 10(44), 11 2024. ISSN 2375-2548. doi: 10.1126/sciadv.adn3750.</p>
+<p>Ronald E. Robertson, Jon Green, Damian J. Ruck, Katherine Ognyanova, Christo Wilson, and David M. J. Lazer. Users choose to engage with more partisan news than they are exposed to on google search. Nature, 618(7964):342-348, 5 2023. ISSN 1476-4687. doi: 10.1038/s41586-023-06078-5.</p>
+<p>Michela Del Vicario, Antonio Scala, Guido Caldarelli, H. Eugene Stanley, and Walter Quattrociocchi. Modeling confirmation bias and polarization. Scientific Reports, 7(1):40391, 1 2017. ISSN 2045-2322. doi: 10.1038/srep40391.</p>
+<p>Fabiana Zollo, Alessandro Bessi, Michela Del Vicario, Antonio Scala, Guido Caldarelli, Louis Shekht- man, Shlomo Havlin, and Walter Quattrociocchi. Debunking in a world of tribes. PLOS ONE, 12(7): e0181821, 7 2017. ISSN 1932-6203. doi: 10.1371/journal.pone.0181821.</p>
+<p>Matt N. Williams, Mathew D. Marques, John R. Kerr, Stephen R. Hill, Mathew Ling, and Edward J. R. Clarke. Does developing a belief in one conspiracy theory lead a person to be more likely to believe in others? European Journal of Social Psychology, 55(4):554-564, 2 2025. ISSN 1099-0992. doi: 10.1002/ejsp.3153.</p>
+<p>Alessandro Miani, Thomas T. Hills, and Adrian Bangerter. Interconnectedness and (in)coherence as a signature of conspiracy worldviews. Science Advances, 8(43):1-9, 10 2022. ISSN 2375-2548. doi: 10.1126/sciadv.abq3668.</p>
+<p>Kevin T. Greene, Mayana Pereira, Nilima Pisharody, Rahul Dodhia, Juan Lavista Ferres, and Jacob N. Shapiro. Using website referrals to identify unreliable content rabbit holes. Behaviour &amp; Information Technology, 44(7):1-10, 5 2024. ISSN 1362-3001. doi: 10.1080/0144929x.2024.2352093.</p>
+<p>Sander Van de Cruys, Jo Bervoets, Stephen Gadsby, David Gijbels, and Karolien Poels. Insight in the conspiracists mind. Personality and Social Psychology Review, 28(3):302-324, 9 2023. ISSN 1532-7957. doi: 10.1177/10888683231203145.</p>
+<p>Sacha Altay, Kenzo Nera, Waqas Ejaz, Céline Schöpfer, and Frédéric Tomas. Conspiracy believers claim to be free thinkers but (under)use advice like everyone else. British Journal of Social Psychology, 62 (4):1782-1797, 5 2023. ISSN 2044-8309. doi: 10.1111/bjso.12655.</p>
+<p>M. Emmanuel Vincent, Héloïse Théro, and Shaden Shabayek. Measuring the effect of facebook&#x27;s downranking interventions against groups and websites that repeatedly share misinformation. Har- vard Kennedy School Misinformation Review, 6 2022. doi: 10.37016/mr-2020-100. URL https: //doi.org/10.37016/mr-2020-100.</p>
+<p>Marc Faddoul, Guillaume Chaslot, and Hany Farid. A Longitudinal Analysis of YouTubes Promotion of Conspiracy Videos. 2020. doi: 10.48550/ARXIV.2003.03318.</p>
+<p>Yannis Theocharis, Ana Cardenal, Soyeon Jin, Toril Aalberg, David Nicolas Hopmann, Jesper Ström- bäck, Laia Castro, Frank Esser, Peter Van Aelst, Claes de Vreese, Nicoleta Corbu, Karolina Koc- Michalska, Joerg Matthes, Christian Schemer, Tamir Sheafer, Sergio Splendore, James Stanyer, Ag- nieszka Stępińska, and Václav Štětka. Does the platform matter? Social media and COVID-19 con- spiracy theory beliefs in 17 countries. New Media &amp; Society, 25(12):146144482110456, 10 2021. ISSN 1461-4448, 1461-7315. doi: 10.1177/14614448211045666.</p>
+<p>Jana Lasser, Segun Taofeek Aroyehun, Almog Simchon, Fabio Carrella, David Garcia, and Stephan Lewandowsky. Social media sharing of low-quality news sources by political elites. PNAS Nexus, 1(4): 186, 9 2022. ISSN 2752-6542. doi: 10.1093/pnasnexus/pgac186.</p>
+<p>Kanishka Singh and Sheila Dang. Wrong claims by musk on u.s. election got 2 billion views on x, 2024 report says. Reuters, 2024. URL https://www.reuters.com/world/us/wrong-claims-by-musk-u s-election-got-2-billion-views-x-2024-report-says-2024-11-04/. Accessed: 2025-02-06.</p>
+<p>Galen Weld, Maria Glenski, and Tim Althoff. Political bias and factualness in news sharing across more than 100,000 online communities. Proceedings of the International AAAI Conference on Web and Social Media, 15:796-807, 5 2021. ISSN 2162-3449. doi: 10.1609/icwsm.v15i1.18104.</p>
+<p>H Van den Bulck and A Hyzen. Of lizards and ideological entrepreneurs: Alex jones and infowars in the relationship between populist nationalism and the post-global media ecology. International Communication Gazette, 82(1):42-59, 10 2019. ISSN 1748-0493. doi: 10.1177/1748048519880726.</p>
+<p>Alessandro Miani, Fabio Carrella, and Stephan Lewandowsky. DONALD: the 2M-document Dataset Of News Articles for studying the Language of Dubious information. 7 in preparation. doi: 10.31219/o sf.io/j3ma9.</p>
+<p>Manoel Horta Ribeiro, Homa Hosseinmardi, Robert West, and Duncan J. Watts. Deplatforming did not decrease parler users&#x27; activity on fringe social media. PNAS Nexus, 2(3), 3 2023. ISSN 2752-6542. doi: 10.1093/pnasnexus/pgad035.</p>
+<p>Stephan Lewandowsky and Sander van der Linden. Countering misinformation and fake news through inoculation and prebunking. European Review of Social Psychology, 32(2):348-384, 2 2021. ISSN 1046- 3283. doi: 10.1080/10463283.2021.1876983.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
