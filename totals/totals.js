@@ -916,18 +916,19 @@ function ranked(obj) {
 }
 
 function drawOpen(cards) {
-  var c = card(cards, "From a paper to code that runs",
-    "Each step counts the preprints that got that far. The last steps depend on the ones before: code can only be run when it is shared.", true);
+  var c = card(cards, "How many papers that link to a repository share data and code in a way that is automatically computationally reproducible?",
+    "Each step counts the preprints that got that far, starting from those that link to a repository. The last steps depend on the ones before: code can only be run when it is shared.", true);
+  // counted only among the preprints that link to a repository
+  var linked = P.filter(function (p) { return p.repos > 0 || p.files > 0; });
   var steps = [
-    ["preprints checked", function () { return true; }],
-    ["link to a repository", function (p) { return p.repos > 0 || p.files > 0; }],
+    ["link to a repository", function () { return true; }],
     ["share code", function (p) { return p.code > 0; }],
     ["have code Metacheck could run", function (p) { return p.scr > 0; }],
     ["all their scripts ran through", function (p) { return p.scr > 0 && p.broke === 0; }]
   ];
   hbars(c, steps.map(function (s, k) {
-    return { label: s[0], value: count(P, s[1]), color: mix(C.greenTint, C.greenDark, 0.35 + 0.65 * (1 - k / steps.length)) };
-  }), { total: P.length, labelW: 230, what: "Step", unit: "Preprints" });
+    return { label: s[0], value: count(linked, s[1]), color: mix(C.greenTint, C.greenDark, 0.35 + 0.65 * (1 - k / steps.length)) };
+  }), { total: linked.length, labelW: 230, what: "Step", unit: "Preprints" });
 
   var c2 = card(cards, "Open science, at a glance", "The share of preprints with each.");
   tiles(c2, [
@@ -942,7 +943,7 @@ function drawOpen(cards) {
   var c3 = card(cards, "Preregistration templates", "The kinds of preregistration the preprints link to.");
   hbars(c3, list(D.counts.prereg_templates), { labelW: 260, clip: 44, what: "Template", unit: "Preregistrations" });
 
-  var c4 = card(cards, "Which repositories are used", "The preprints that link to each repository website (a preprint can link to several).");
+  var c4 = card(cards, "Which repositories are used", "");
   var withRepo = count(P, function (p) { return p.repos > 0 || p.files > 0; });
   hbars(c4, list(D.counts.repo_sites || [], null, C.s1), { labelW: 200, clip: 30, what: "Repository", unit: "Preprints" });
   say(c4, fmt(withRepo) + " of the " + fmt(P.length) + " preprints link to at least one repository.");
@@ -950,11 +951,62 @@ function drawOpen(cards) {
 
 function drawEthics(cards) {
   var live = count(P, function (p) { return p.live > 0; });
-  var c = card(cards, "", "", true);
-  tiles(c, [
-    { value: share(function (p) { return p.live > 0; }), label: "collected new data, by their text" },
-    { value: pc(count(P, function (p) { return p.live > 0 && p.ethics > 0; }), live), label: "of those mention ethics approval" }
-  ]);
+  var eth = count(P, function (p) { return p.live > 0 && p.ethics > 0; });
+  var c = card(cards, "", "Of all checked preprints, those whose text says they collected new data; of those, the ones that mention ethics approval. Point at a band to see the numbers.", true);
+  sankey(c, [
+    { id: "all", col: 0, value: P.length, color: C.greenDark, label: "all preprints", sub: fmt(P.length) },
+    { id: "live", col: 1, value: live, color: C.s1, label: "collected new data", sub: fmt(live) + " (" + pc(live, P.length) + ")" },
+    { id: "nolive", col: 1, value: P.length - live, color: C.na, label: "no new data", sub: fmt(P.length - live) + " (" + pc(P.length - live, P.length) + ")" },
+    { id: "eth", col: 2, value: eth, color: C.fine, label: "mention ethics approval", sub: fmt(eth) + " (" + pc(eth, live) + " of new data)" },
+    { id: "noeth", col: 2, value: live - eth, color: C.yellow, label: "do not mention it", sub: fmt(live - eth) + " (" + pc(live - eth, live) + " of new data)" }
+  ], [
+    { from: "all", to: "live", value: live, tip: "<b>Collected new data</b><br>" + fmt(live) + " of " + fmt(P.length) + " preprints (" + pc(live, P.length) + ")" },
+    { from: "all", to: "nolive", value: P.length - live, tip: "<b>No new data, by their text</b><br>" + fmt(P.length - live) + " of " + fmt(P.length) + " preprints (" + pc(P.length - live, P.length) + ")" },
+    { from: "live", to: "eth", value: eth, tip: "<b>New data, ethics approval mentioned</b><br>" + fmt(eth) + " of " + fmt(live) + " (" + pc(eth, live) + ")" },
+    { from: "live", to: "noeth", value: live - eth, tip: "<b>New data, no mention of ethics approval</b><br>" + fmt(live - eth) + " of " + fmt(live) + " (" + pc(live - eth, live) + ")" }
+  ], { height: 260 });
+}
+
+// A flow from left to right: nodes {id, col, value, color, label, sub} stand
+// in columns, each as high as its value; links {from, to, value, tip} are
+// bands as wide as their value. A node's label stands to its right.
+function sankey(c, nodes, links, o) {
+  o = o || {};
+  fit(c);
+  var h = o.height || 260, nw = 14, gap = 22, labelW = Math.min(230, Math.round(W * 0.3));
+  var cols = maxOf(nodes.map(function (n) { return n.col; })) + 1;
+  var step = (W - labelW - nw) / Math.max(1, cols - 1);
+  var byCol = [];
+  nodes.forEach(function (n) { (byCol[n.col] = byCol[n.col] || []).push(n); });
+  // one scale for all columns: the fullest column fills the height
+  var k = minOf(byCol.map(function (ns) { return (h - 8 - gap * (ns.length - 1)) / sum(ns.map(function (n) { return n.value; })); }));
+  var at = {};
+  byCol.forEach(function (ns, ci) {
+    var y = 4;
+    ns.forEach(function (n) {
+      n.x = ci * step; n.y = y; n.h = Math.max(1, n.value * k); n.out = 0; n.in = 0;
+      at[n.id] = n; y += n.h + gap;
+    });
+  });
+  var s = svgOf(h, o.aria || "Flow diagram");
+  links.forEach(function (l) {
+    var a = at[l.from], b = at[l.to], w = Math.max(1, l.value * k);
+    var x0 = a.x + nw, x1 = b.x, y0 = a.y + a.out, y1 = b.y + b.in, xm = (x0 + x1) / 2;
+    a.out += w; b.in += w;
+    sv("path", { d: "M" + x0 + "," + y0 + " C" + xm + "," + y0 + " " + xm + "," + y1 + " " + x1 + "," + y1 +
+                    " L" + x1 + "," + (y1 + w) + " C" + xm + "," + (y1 + w) + " " + xm + "," + (y0 + w) + " " + x0 + "," + (y0 + w) + " Z",
+                 fill: b.color, "fill-opacity": 0.45, stroke: C.surface, "stroke-width": 1, "data-tip": l.tip }, s);
+  });
+  nodes.forEach(function (n) {
+    sv("rect", { x: n.x, y: n.y, width: nw, height: n.h, rx: 3, fill: n.color, "data-tip": "<b>" + esc(n.label) + "</b><br>" + esc(n.sub) }, s);
+    var ty = n.y + n.h / 2;
+    // an outline in the box's colour keeps a label readable on a band
+    var halo = { "paint-order": "stroke", stroke: C.surface, "stroke-width": 4, "stroke-linejoin": "round" };
+    txt(s, n.x + nw + 8, ty - 2, n.label, Object.assign({ "font-size": 13, "font-weight": 600 }, halo));
+    txt(s, n.x + nw + 8, ty + 14, n.sub, Object.assign({ "font-size": 12, class: "muted" }, halo));
+  });
+  c.appendChild(s);
+  tableView(c, ["From", "To", "Preprints"], links.map(function (l) { return [at[l.from].label, at[l.to].label, l.value]; }));
 }
 
 function drawCode(cards) {
