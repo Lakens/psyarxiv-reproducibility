@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Comparing Logit and Probit Coefficients From
+Same-Sample Nested Models: Adapting the (Revised) KHB Method to an SEM
+Framework</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Comparing Logit and Probit Coefficients From Same-Sample Nested Models:
+Adapting the (Revised) KHB Method to an SEM Framework
+</p>
+<p class="meta">
+2026-11-11 · Metacheck 0.4.3.27 · DOI 10.23668/psycharchives.22695
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>13</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>At the second measurement point, a subsample of n = 2,145
+participants reported that they were enrolled in higher education and
+provided information about their major.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 1 non-significant p value that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p = .930
+</td>
+<td style="text-align:left;">
+Interestingly, they found that the regression coefficient for
+Investigative interests was not statistically significant (b = 0.01; p =
+.930) in a model without the EVT constructs, but it was statistically
+significantly negative (b = -0.24; p = .014) when they controlled for
+the EVT constructs.
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 2 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(13)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>We thank our English language editor, Jane Zagorski. While preparing this work, we used DeepL (https://www.deepl.com/) for English language editing. We reviewed and edited the content as needed and take full responsibility for the publication&#x27;s content. We have no conflicts of interest to disclose.</p>
+<h3>Comparing Logit and Probit Coefficients From Same-Sample Nested Models: Adapting the (Revised) KHB Method to an SEM Framework</h3>
+<p>Many empirical studies in the social sciences use regression analyses to compare nested models with an increasing number of predictors. Typically, the focus is on investigating how regression coefficients change when additional predictors are added to a given model. For instance, a researcher might be interested in the impact of parental socioeconomic status on children&#x27;s college graduation and how it changes if student achievement is added as a predictor (see the example in Breen et al., 2013). The interpretation of such differences in regression coefficients is straightforward for comparisons of samesample nested linear models with continuous outcome variables. However, the interpretation is generally more complicated for nonlinear models, such as logistic or probit regressions, for two reasons (Karlson et al., 2012). First, the variance of the assumed underlying latent variable for the categorical outcome is typically not constant across same-sample nested models with different predictors. Second, the shape of the residual distribution usually changes across models. Karlson et al. (2012) suggested a method, often referred to as the KHB method, in which both the variance of the underlying latent variable of the outcome and the shape of the residual distribution are held constant across nested models. The core idea is to hold the predicted part of the underlying latent variable (linear predictor) constant across the models that are being compared. In the revised KHB method, Breen et al. (2021) presented a modified approach that estimates the full model in a first step and generates the linear predictor, which is subsequently predicted by models with fewer predictors. However, in its common implementations (Kohler &amp; Karlson, 2024; Kohler et al., 2011), the KHB method is limited to manifest predictor variables and data sets without missing observations.</p>
+<p>It also cannot easily incorporate nested data structures or survey weights.</p>
+<p>In the present paper, we introduce the single-step pseudo mediation model (PMM) and show how this model implements the multistep KHB method within a structural equation modeling (SEM) framework. We demonstrate how differences between and ratios of regression coefficients from a sequence of same-sample nested models can be estimated using coefficients from a single full model.</p>
+<p>This specification solves typical challenges in the analysis of empirical data, such as (a) missing values, (b) measurement error in the predictors, and (c) complex data structures with clustering and survey weights. In current implementations of the (revised) KHB method, either all observations with any missing values on the variables of interest have to be excluded from the analysis (listwise deletion, see, e.g., Xie &amp; He, 2025) or the data have to be (multiply) imputed before the analysis (see, e.g., Domènech-Abella et al., 2018). Applying the KHB method to a complex data set that includes plausible values and replicate weights (e.g., the PIAAC data used in Braun, 2018) can be challenging (Gurkan et al., 2021). Such issues can easily be handled with the PMM in contemporary SEM software such as Mplus (Muthén &amp; Muthén, 2017). Moreover, the PMM can also easily be realized in Bayesian modeling frameworks, for instance, PROC MCMC (SAS Institute Inc., 2023) or the blavaan package (Merkle et al., 2021; Merkle &amp; Rosseel, 2018). In addition to the SAS macro used in our simulations to estimate model parameters for the revised KHB method, we also provide Mplus code templates for models with up to 10 predictors as well as a SAS macro to generate the respective code for models with even more than 10 predictors (PsychArchives: https://doi.org/10.23668/psycharchives.22695). The Mplus code can also easily be adapted for the blavaan package.</p>
+<h3>Logit and Probit Regression in KHB and PMM Frameworks</h3>
+<p>In the following, we refer to a logistic or probit regression with a binary outcome y (which could also be an ordered-categorical outcome) and a set of predictors 𝑥𝑥 1 to 𝑥𝑥 j . We define the latent linear regression model for the underlying latent continuous variable 𝑦𝑦 * , the predictors 𝑥𝑥 1 to 𝑥𝑥 j , and the residual ε, assumed to be uncorrelated with the predictors.</p>
+<p>The observed binary outcome is defined as 𝑦𝑦 = 1 if 𝑦𝑦 * &gt; τ and 𝑦𝑦 = 0 otherwise, with τ as a threshold parameter. In the latent linear regression formulation, a constraint on the variance of the residual is necessary to identify the model. This variance is typically fixed to π 23 ≈ 3.29 for logistic regression models and to 1 for probit regression models, for instance, in Mplus (Muthén, 2004) or SAS PROC LOGISTIC (SAS Institute Inc., 2023). The linear predictor 𝑉𝑉 corresponding to Equation 1 can be defined as</p>
+<p>The variance of the underlying latent continuous variable 𝑦𝑦 * is given by σ 2 (𝑦𝑦 * ) = σ 2 (𝑉𝑉) + σ 2 (ε).</p>
+<p>( 3 )</p>
+<p>Equations 3 and 4 imply that the distribution and variance of 𝑦𝑦 * can differ across different sets of predictors-for example, 𝐱𝐱 [1] = (𝑥𝑥 1 ); 𝐱𝐱 [1,2] = (𝑥𝑥 1 , 𝑥𝑥 2 ); 𝐱𝐱 [1,2,3] = (𝑥𝑥 1 , 𝑥𝑥 2 , 𝑥𝑥 3 )-if the regression coefficients β j are different from zero. If they are different from zero, adding a predictor-even if it is uncorrelated with all other predictors in the model-will lead to a change in the regression coefficients of the other predictors that are already in the model because the variance of 𝑦𝑦 * increases with the increase in the variance of the linear predictor 𝑉𝑉.</p>
+<p>The original KHB method (Karlson et al., 2012) solves this problem by including residualized predictors in the model. The excluded predictors (which will be added to the model in further steps) are regressed on the predictors currently in the model, and the residuals of these regressions are included as predictors. This approach keeps the variance of linear predictor 𝑉𝑉 constant without changing the interpretation of the regression coefficients of the focal predictors in the model. For instance, in a full model with two predictors 𝑥𝑥 1 and the change in the regression coefficient for 𝑥𝑥 1 after 𝑥𝑥 2 is included is estimated as follows:</p>
+<p>First, 𝑥𝑥 2 is regressed on 𝑥𝑥 1 in an OLS regression. Then, the residuals 𝑥𝑥 � 2 (which have mean zero and are uncorrelated with 𝑥𝑥 1 by definition) are added to the first model:</p>
+<p>Finally, the full model with both 𝑥𝑥 1 and 𝑥𝑥 2 (Equation 4) is estimated, and the change in the regression coefficient β 1 between Equations 4 and 5 is evaluated. Karlson et al. (2012) showed that the model given in Equation 5is a reparameterization of the full model (Equation 4): The distribution of the underlying latent variable 𝑦𝑦 * in the first model (the reference model) with a single predictor 𝑥𝑥 (𝑥𝑥 1 in Equation 5) is ensured to be identical to that from the second model (with one or more additional predictors) by adding the 𝑥𝑥-residualized predictor(s) that is/are not part of the model (𝑥𝑥 � 2 in Equation 5). Thus, both the linear predictors (i.e., the explained part of the latent variable) and the residuals (following a standard logistic or normal distribution for logit or probit regression models, respectively) are identical between the two models. Karlson et al. (2012) argued that a meaningful comparison of the change in the regression coefficient for a predictor 𝑥𝑥 from two nested nonlinear models should be based on a reference model, which includes the 𝑥𝑥residualized predictor(s), as this comparison is not affected by arbitrary changes in the variance of 𝑦𝑦 *. et al. (2012) also noted that the effect of 𝑥𝑥 1 on 𝑦𝑦 * in a model that includes the residuals of the other predictors can be understood as a total effect that can be decomposed into a direct effect and one or more indirect effects. These indirect effects represent the change in the regression coefficient for 𝑥𝑥 1 from the reference model in Equation 5to the model that includes the other predictors (instead of their residuals) in Equation 4. In the case of multiple mediators, Breen et al. (2013) denoted the sum of indirect effects over different control variables or mediators as the grand indirect effect. Technically, as Karlson et al. (2012) noted, estimating the regression coefficients from two nested models using their proposed method can be considered a path model, in which the direct and indirect effects of a predictor 𝑥𝑥 are distinguished (see also Karlson &amp; Holm, 2011). We explain this point in more detail below.</p>
+<h3>Decomposition of Effects</h3>
+<h3>Karlson</h3>
+<p>Figure 1 Panel A demonstrates the decomposition into direct and indirect effects by representing the association between the two predictors 𝑥𝑥 1 and 𝑥𝑥 2 as a regression instead of a covariance (with regression coefficients β 1 and β 2 given in Equation 5). The comparison of the regression coefficient for 𝑥𝑥 1 between Model 1 (Equation 5), which includes only a single predictor (𝑥𝑥 1 ), and Model 2 (Equation 4), which includes both 𝑥𝑥 1 and 𝑥𝑥 2 as predictors, can be represented as follows: Technically, 𝑥𝑥 2 functions as a mediator between 𝑥𝑥 1 and 𝑦𝑦 * . The total effect of 𝑥𝑥 1 on 𝑦𝑦 * , 𝑏𝑏 tot1 , can be decomposed into the direct effect 𝑏𝑏 31 and the indirect effect 𝑏𝑏 21 𝑏𝑏 32 as follows: 𝑏𝑏 tot1 = 𝑏𝑏 31 + 𝑏𝑏 21 𝑏𝑏 32 . In the original KHB method, the residual 𝑥𝑥 � 2represented by ε 𝑥𝑥2 in Figure 1 Panel A-is used as a predictor instead of 𝑥𝑥 2 . In this case, the total effect 𝑏𝑏 𝑡𝑡𝑡𝑡𝑡𝑡1 -which represents the regression coefficient of 𝑥𝑥 1 in Model 1-is directly given by the corresponding path coefficient of the effect of 𝑥𝑥 1 on 𝑦𝑦 * because the focal predictor 𝑥𝑥 1 and the residual 𝑥𝑥 � 2 are linearly independent. In order to assess the change in regression coefficients when holding other variables constant (the goal of the KHB method), the total effect 𝑏𝑏 tot1 is compared with the partial regression coefficient 𝑏𝑏 31 (the direct effect).</p>
+<p>The difference between β 1 in Model 2 (Equation 4) and Model 1 (Equation 5 In the next step, we show that instead of estimating the residuals 𝑥𝑥 � 2 in a separate step as suggested by the original KHB method, this comparison can also be achieved by estimating the respective coefficients from a joint PMM by including 𝑥𝑥 2 as a (pseudo) mediator, whose residual ε 𝑥𝑥2 replaces 𝑥𝑥 � 2 . The term pseudo mediator refers to the possibility that, from a theoretical point of view, 𝑥𝑥 2 does not necessarily have to be a causal mediator but can be any additional predictor of the outcome. When both 𝑥𝑥 1 and 𝑥𝑥 2 are included as predictors in the full model (Model 2), the corresponding regression coefficient of 𝑥𝑥 1 would be equal to the direct effect β1 = 𝑏𝑏 31 . Therefore, the indirect effect 𝑏𝑏 21 𝑏𝑏 32 represents the difference between the regression coefficients for 𝑥𝑥 1 in both models. Thus, all relevant KHB-analogous regression coefficients for both models (Model 1: total effect of 𝑥𝑥 1 on 𝑦𝑦 * , 𝑏𝑏 tot1 ; Model 2: effect of 𝑥𝑥 2 and direct effect of 𝑥𝑥 1 on 𝑦𝑦 * ) as well as the difference in the regression coefficients for 𝑥𝑥 1 in Model 2 versus Model 1 (Δ = 𝑏𝑏 31 -𝑏𝑏 tot1 = -𝑏𝑏 21 𝑏𝑏 32 ) or the respective ratio (Ρ = 𝑏𝑏 31 /𝑏𝑏 tot1 ) can be obtained from a single model as depicted in Figure 1.</p>
+<p>As only a single model is estimated, the distribution of 𝑦𝑦 * is constant for all estimated parameters as in the case of the (revised) KHB method. Thus, changes in the regression coefficients when including additional variables that are due to confounding can be separated from changes due to the implied variance of the latent response variable (see Equation 3).</p>
+<p>The threshold parameter τ estimated in the PMM is equal to the KHB-analogous parameter in Model 2 (the full model, see Equation 4). As Model 1 (see Equation 5) would only include the residual 𝑥𝑥 � 2 (with mean zero by definition) instead of 𝑥𝑥 2 as in the original KHB method, the threshold estimated in the PMM has to be adjusted by the intercept 𝑏𝑏 02 of 𝑥𝑥 2 multiplied by the regression coefficient of 𝑥𝑥 2 on 𝑦𝑦 * : τ -𝑏𝑏 02 𝑏𝑏 32.</p>
+<h3>Expanding the PMM</h3>
+<p>The PMM can easily be expanded by adding further predictors. For example, if a series of models is evaluated, beginning with Model 1, which includes 𝑥𝑥 1 as a single predictor, followed by Model 2, which includes 𝑥𝑥 2 as a second predictor, and finally Model 3, which includes all three predictors (𝑥𝑥 1 , 𝑥𝑥 2 , and 𝑥𝑥 3 ), all relevant estimates for a comparison of the regression coefficients can be obtained from the model shown in Figure 2. As the specification of indirect effects and total effects becomes increasingly complex in larger models, we first specify the (controlled, grand) total effects for each predictor while controlling for all predictors that were added in prior modeling steps.</p>
+<p>There are two special cases: First, the grand total effect for the first predictor (Equation 8) is not controlled because there are no predictors from prior models. Second, as there are no indirect effects for the last predictor, the &quot;total&quot; effect (Equation 6) is equal to its regression coefficient on the outcome. Nevertheless, we use this notation, as it simplifies the equations for the general case of K predictors shown below (Equations 14, 15, and 16).</p>
+<p>Suppose we want to estimate the (simple) regression coefficient for 𝑥𝑥 1 in Model 1 analogously to the KHB method with 𝑥𝑥 1 as the only predictor, with the residuals of the other two predictors included to keep the variance of the latent response variable constant as follows:</p>
+<p>The coefficient β 1 in Equation 9 refers to the KHB estimate for 𝑥𝑥 1 , including the residuals of both other predictors, namely 𝑥𝑥 � 2 and 𝑥𝑥 � 3 . An analogous coefficient 𝑏𝑏 (1)1 (the index in brackets refers to Model 1) including only predictor 𝑥𝑥 1 can be obtained by using the PMM as 𝑏𝑏 (1)1 = 𝑏𝑏 tot1 because the grand total effect 𝑏𝑏 tot1 reflects the association of 𝑥𝑥 1 with the outcome, that is, the direct and all indirect effects on the outcome. This effect is equivalent to the effect of 𝑥𝑥 1 on the latent response variable without controlling for 𝑥𝑥 2 or 𝑥𝑥 3 but accounting for their impact on the variance of the latent response variable.</p>
+<p>Model 2 additionally includes 𝑥𝑥 2 as a second predictor and would be specified as follows when applying the KHB method:</p>
+<p>The respective coefficient 𝑏𝑏 (2)1 for 𝑥𝑥 1 in Model 2-analogous to β 2 in Equation 10which includes 𝑥𝑥 2 as a second predictor and thereby controls for its impact, is given by</p>
+<p>Here, the indirect effect of 𝑥𝑥 1 &quot;mediated&quot; by 𝑥𝑥 2 is excluded because 𝑥𝑥 2 is a predictor whose influence should be controlled for. Furthermore, the regression coefficient for 𝑥𝑥 2 (controlling for 𝑥𝑥 1 but not for 𝑥𝑥 3 ) in Model 2 is given by 𝑏𝑏 (2)2 = 𝑏𝑏 42 + 𝑏𝑏 tot3 𝑏𝑏 32.</p>
+<p>Model 3, the full model with all three predictor variables, would be defined by the KHB method as a standard nonlinear probability model (e.g., a logistic or probit regression) as follows:</p>
+<p>The analogous regression coefficients for β 1 , β 2 , and β 3 (Equation 11) in the PMM are given by 𝑏𝑏 (3)1 = 𝑏𝑏 41 , 𝑏𝑏 (3)2 = 𝑏𝑏 42 , and 𝑏𝑏 (3)3 = 𝑏𝑏 43 , respectively.</p>
+<p>The thresholds for each model, assuming a binary outcome, can be calculated as follows:</p>
+<p>The threshold for Model 3 (Equation 11) with all three predictors, τ (3) , is equal to the threshold of the PMM, τ (Equation 12), as the PMM is just an alternative specification of a &quot;simple&quot; regression with three predictors where associations between the predictors are represented by regression coefficients instead of covariances. In Model 2, where 𝑥𝑥 3 is excluded, the threshold τ (2) changes compared with τ (3) by the amount of the effect of 𝑥𝑥 3 multiplied by its intercept 𝑏𝑏 03 (Equation 13). This change can easily be explained by the analogy to the original KHB method, where the inclusion of the residual of 𝑥𝑥 3 -which has a mean of zero by definition-cannot change the threshold (or intercept, respectively), whereas including 𝑥𝑥 3 has an impact on the threshold, if its mean is different from zero and a nonzero regression coefficient is assumed. Analogously, τ (1) is given by the difference between τ (2) and the total effect of 𝑥𝑥 2 multiplied by its intercept 𝑏𝑏 02 (Equation 14).</p>
+<p>In general, PMMs with 𝐾𝐾 predictors can be specified as shown in Figure 3. The relevant regression parameters 𝑏𝑏 (m)k for the 𝑀𝑀 models with sequentially more parameters, starting with the model with 𝑚𝑚 = 1, which includes only the first predictor, followed by the model with 𝑚𝑚 = 2, which includes the first and the second predictors, and so forth, can be estimated as shown in Equation 16 by using the (grand) total effects 𝑏𝑏 tot,k as specified in Equation 15. Furthermore, the model-specific thresholds can be estimated as shown in Equation 17 with 𝑏𝑏 0,k as the intercept of predictor 𝑘𝑘 &gt; 1.</p>
+<p>The differences or ratios for regression coefficients for a given predictor from different models can then be defined as new parameters on the basis of the full PMM. Here, we define Δ (m,r)k as the difference between a coefficient for a given predictor k from a model m minus the respective coefficient from a reference model 𝑟𝑟 with 𝑟𝑟 &lt; 𝑚𝑚. This specification means that negative values for Δ (m,r)k represent smaller coefficients after including one or more additional predictors. In the same way, we define the ratio Ρ (m,r)k as the ratio of a coefficient for a given predictor 𝑘𝑘 from a model 𝑚𝑚 divided by the respective coefficient from a model 𝑟𝑟 with 𝑟𝑟 &lt; 𝑚𝑚.</p>
+<p>Of course, it is also possible to &quot;ignore&quot; model steps. If, for instance, in a PMM with four predictors, the first target model should include two predictors and the second target model all four predictors, the difference for the first predictor would be specified as Δ (41)1 = 𝑏𝑏 (4)1 -𝑏𝑏 (1)1 . Furthermore, it is possible to treat &quot;predictors&quot; as covariates by including the covariates as the first 𝐶𝐶 variables in the row (i.e., 𝑘𝑘 = 1, 𝑘𝑘 = 2, …, 𝑘𝑘 = 𝐶𝐶). In this case, the first target model would be model 𝐶𝐶 + 1 with the first predictor 𝑘𝑘 = 𝐶𝐶 + 1.</p>
+<p>Applying the KHB method in a similar instance, Dumont et al. (2019) investigated the impact of parents&#x27; occupational status (i.e., Highest International Socio-Economic Index of Occupational Status [HISEI]; Ganzeboom et al., 1992) and educational background (Abitur certificate) as well as student achievement and five additional predictors on the transition to secondary school type (academic track vs. other tracks) controlling for student background (immigrant background, gender, age, grade retention). In this case, a PMM with 𝐶𝐶 = 4 covariates would be specified as follows: The covariates would be the first four &quot;predictors&quot; (𝑥𝑥 1 , 𝑥𝑥 2 , 𝑥𝑥 3 , and 𝑥𝑥 4 ), the fifth and sixth predictors would be HISEI and the dummy for the Abitur certificate (Model 6 with predictors 𝑥𝑥 5 and 𝑥𝑥 6 ), student achievement would be the seventh predictor (Model 7 with predictors 𝑥𝑥 5 , 𝑥𝑥 6 , and 𝑥𝑥 7 ), and the remaining predictors (𝑥𝑥 8 , 𝑥𝑥 9 , 𝑥𝑥 10 , 𝑥𝑥 11 , and 𝑥𝑥 12 ) would follow in subsequent models. The first target model would then be Model 6 for estimating the effects of HISEI (𝑏𝑏 (6)5 ) and the Abitur certificate (𝑏𝑏 (6)6 ) on the outcome while controlling for the four covariates. A comparison of these coefficients with the respective coefficients from Model 7 (HISEI: 𝑏𝑏 (7)5 , Abitur certificate: 𝑏𝑏 (7)6 ) could then be based on the differences Δ (76)5 = 𝑏𝑏 (7)5 -𝑏𝑏 (6)5 and Δ (76)6 = 𝑏𝑏 (7)6 -𝑏𝑏 (6)6.</p>
+<h3>Statistical Inference for Parameter Estimates Using the PMM</h3>
+<p>Currently, the standard estimation approach in an SEM framework is maximum likelihood (ML) estimation (Jobst et al., 2023). There are also extensions such as full information maximum likelihood (FIML) estimation, which allows for improved estimation under missing data scenarios, and robust full information maximum likelihood (RFIML) estimation, which additionally provides acceptable inferences in cases of nonnormally distributed continuous variables (Jia &amp; Wu, 2023). In generalized SEM frameworks, link functions map ordered-categorical or binary outcomes onto normally distributed underlying latent variables, enabling ML estimation via numerical integration (Rockwood, 2021).</p>
+<p>Inferential tests for individual parameter estimates are usually based on Wald statistics, which treat parameter estimates divided by their estimated standard errors as zvalues (Rosseel &amp; Vidal, 2025): A ratio of an estimate to its standard error outside the range of -1.96 to 1.96 is judged as statistically significant at an alpha level of 5%. The differences between coefficients for a given predictor from different models in a PMM are equivalent to indirect effects (at least technically). However, as these effects are products of parameters, the delta method (Sobel, 1982), which relies on normality, provides only a rough approximation.</p>
+<p>The (multivariate) delta method is also implemented in SEM software such as lavaan (Rosseel, 2012) or Mplus (Muthén &amp; Muthén, 2017) for user-defined parameters such as indirect effects. However, simulation studies have shown that tests for indirect effects based on the delta method typically suffer from low power (Biesanz et al., 2010; Falk &amp; Biesanz, 2015). Therefore, in line with Breen et al. (2021), we suggest relying on bootstrapping for statistical inference for differences and ratios of estimates in the PMM approach. The percentile bootstrap has been shown to provide acceptable Type I error rates and coverage rates for the 95% confidence limits, for example, for indirect effects in mediation models (Biesanz et al., 2010; Falk &amp; Biesanz, 2015; Tibbe &amp; Montoya, 2022) even in the case of missing or nonnormal data.</p>
+<p>For more complex PMMs (e.g., multidimensional latent variable models), however, bootstrapping might not be feasible, as the numerical integration needed for (FI)ML estimation can be computationally cumbersome. In such cases, Sobel&#x27;s (1982) suggestion to construct normal-distribution-based confidence intervals with the standard errors for indirect effects given in SEM software packages such as Mplus (MacKinnon et al., 2012) may be a reasonable-though potentially less powerful-choice. Furthermore, Bayesian estimation can be a viable alternative for complex models that require numerical integration with (FI)ML estimation (Rockwood, 2021).</p>
+<h3>Comparing the PMM With the KHB Method</h3>
+<p>If it includes only observed variables, a PMM is always a saturated structural equation model (i.e., it has zero degrees of freedom), as all associations among variables are specified by specific paths (regressions). Thus, the PMM is an easy one-step procedure by which to obtain all relevant regression coefficients for a series of target models that implement the KHB method from a single model. By defining the KHB coefficients as additional model parameters (under Model Constraint Mplus 8.11; Muthén &amp; Muthén, 2017), the distribution of y * is necessarily constant when estimating these parameters.</p>
+<p>The revised KHB method (Breen et al., 2021) introduced a different way of obtaining the unbiased coefficients for a model sequence predicting a binary outcome with increasing numbers of predictors: Here, the distribution of 𝑦𝑦 * is held constant across models by generating the linear predictor 𝑉𝑉 (see Equation 2) for the full model on the basis of the estimated regression coefficients β j from a nonlinear probability model (e.g., a logistic regression model). This generated linear predictor variable 𝑉𝑉 is then used as an outcome variable in a series of linear (OLS) regression models that estimate the regression coefficients with a stepwise inclusion of predictors. Suppose there is a full model with two predictors 𝑥𝑥 1 and 𝑥𝑥 2 . In a first step, the regression coefficients for both predictors are estimated, for instance, in a logistic regression model. Based on the resulting estimates of both regression coefficients, the linear predictor is generated as 𝑉𝑉 = β 1 𝑥𝑥 1 + β 2 𝑥𝑥 2 . The regression coefficient for a model including only 𝑥𝑥 1 is then estimated in a second step by regressing 𝑉𝑉 on 𝑥𝑥 1 in a linear regression. This approach is analogous to the classical mediation approach in linear models where the total effect for 𝑥𝑥 1 is estimated in a model including only 𝑥𝑥 1 as a predictor, and the indirect effect is estimated as the difference between this total effect and the effect of 𝑥𝑥 1 on the outcome in a second model that also includes 𝑥𝑥 2 (MacKinnon, 2008). Although conceptually related, the revised KHB approach is different from the single-step PMM approach, as the revised KHB approach still relies on a series of models to be estimated, whereas all coefficients for different target models are obtained from a single model in the PMM approach.</p>
+<p>The PMM approach takes advantage of the flexibility of SEM implementations to easily and appropriately handle challenges commonly encountered in the analysis of realistically complex empirical data. Thus, it is more flexible than the (revised) KHB method.</p>
+<p>First, missing data-a common problem in applied data analysis-can be handled by the implementation of FIML estimation in SEM if the missing-at-random (MAR; Rubin, 1976) assumption holds. Analogous Bayesian versions for handling missing data are available as well (Enders, 2025). Second, measurement error can be handled by defining latent variables and respective measurement models-with metric as well as categorical indicators-for the predictors in SEM. Third, complex sampling designs (including cluster sampling and survey weights to account for unequal probability sampling) can be taken into account in SEM software such as Mplus (Muthén &amp; Muthén, 2017) or lavaan (Rosseel, 2012). Mplus (Muthén &amp; Muthén, 2017) also implements bootstrapping procedures that allow users to estimate a nonsymmetric confidence interval (often called percentile bootstrap; Biesanz et al., 2010; Falk &amp; Biesanz, 2015; Tibbe &amp; Montoya, 2022) for coefficients and p values even for clustered data (cluster bootstrapping).</p>
+<h3>A Simulation Study: Research Questions</h3>
+<p>We demonstrate the equivalence of our PMM approach with the revised KHB method in a simulation study with three predictors that were either uncorrelated or correlated. With uncorrelated predictors, the regression coefficients for a given predictor were expected to be constant across models including only 𝑥𝑥 1 (Model 1), 𝑥𝑥 1 and 𝑥𝑥 2 (Model 2), or all three predictors (Model 3) when the revised KHB method or the PMM approach was applied.</p>
+<p>However, when correlated predictors were specified, we expected changes in the regression coefficients for a given predictor across models. In general, we expected comparable coverage rates for the nonsymmetric bootstrap 95% confidence intervals of the regression coefficients as well as the respective parameter differences (Δs) and ratios (Ρs).</p>
+<h3>Method</h3>
+<p>We used the model shown in Figure 2 with three normally distributed predictors 𝑥𝑥 1 , 𝑥𝑥 2 , and 𝑥𝑥 3 as the population model in the simulation. The variance of 𝑥𝑥 1 as well as the residual variances of 𝑥𝑥 2 and 𝑥𝑥 3 were set to 1. First, we applied a population model with uncorrelated predictors (i.e., 𝑏𝑏 21 , 𝑏𝑏 31 , and 𝑏𝑏 32 were set to zero so that the expected Δ and Ρ population parameters were zero and one, respectively). The direct effects of the predictors were set to 𝑏𝑏41 = 0.5, 𝑏𝑏42 = 0.7, and 𝑏𝑏43 = 1 for 𝑥𝑥 1 , 𝑥𝑥 2 , and 𝑥𝑥 3 , respectively.</p>
+<p>Second, we used a population model with correlated predictors to generate the data.</p>
+<p>We chose regression coefficients (𝑏𝑏21 = 0.258, 𝑏𝑏31 = 0.211, and 𝑏𝑏32 = 0.204) that reflected intercorrelations of r = .25 among all predictors with variances σ 12 = 1, σ 22 = 1.067, and σ 12 = 1.111 for 𝑥𝑥 1 , 𝑥𝑥 2 , and 𝑥𝑥 3 , respectively. We used these variances to adjust the regression coefficients of the predictors of the outcome from the scenario with uncorrelated predictors.</p>
+<p>Thus, after the predictors were z-standardized, identical coefficients would be expected. The adjusted coefficients were as follows: 𝑏𝑏41 = 0.5, 𝑏𝑏42 = 0.678, and 𝑏𝑏43 = 0.949.</p>
+<p>For each of three different sample sizes (N = 200, 500, 1,000), we generated 1,000 replicates. We used logistic regression models with 1,000 bootstrap samples to analyze the data, and we constructed nonsymmetric 95% confidence intervals as described by Asparouhov and Muthén (2023) for each estimate of a parameter difference or ratio. The revised KHB method was implemented in SAS (SAS Institute Inc., 2023), and the PMM approach in Mplus 8.11 (Muthén &amp; Muthén, 2017). The SAS macro called %revKHB is included in the online materials and can be used to estimate logistic or probit regression coefficients for different models with an increasing number of predictors and differences and ratios of regression coefficients from different models as well as their symmetric and nonsymmetric bootstrap confidence intervals and p values (Asparouhov &amp; Muthén, 2023).</p>
+<p>We also estimated a Bayesian version of the PMM. The respective model details and results are reported in the Appendix.</p>
+<h3>Results</h3>
+<p>The comparison of the results from the PMM with maximum likelihood estimation and bootstrapping and those from the revised KHB method for the uncorrelated predictors in Table 1 show that the population parameters were well-recovered. Moreover, the average parameter estimates, their average standard errors, and the mean square error were identical between the two methods to the third decimal. The 95% coverage rates for the parameters were quite close to the expected 95% for both the PMM (M = 94.8%, Min = 93.4%, Max = 96.9%) and the revised KHB method (M = 94.7%, Min = 92.9%, Max = 97.1%). Furthermore, the absolute differences in the percentages of estimates that were statistically significant (i.e., the 95% confidence interval did not include 1 in the case of ratios or 0 otherwise) were also small in size (M = 0.2%, Min = 0.0%, Max = 0.8%). With a (much) larger number of bootstrap samples, the results from both approaches would be expected to become increasingly comparable, as the &quot;randomness&quot; in the estimated confidence interval limits due to bootstrapping (i.e., due to the random sampling of units with replacement from the available sample) would fade away.</p>
+<p>The results for the correlated predictors reported in Table 2 painted a similar picture with adequately recovered population parameters and, in most cases, identical average parameter estimates, average standard errors, and mean square errors up to the third decimal, with maximum absolute differences of 0.001. The differences and ratios for parameterspecific regression coefficients from different models-which are expected in scenarios with correlated predictors that are associated with the outcome-were also well-recovered. In addition, in at least 80.1% of the replications (revised KHB method, Ρ (32)1 , N = 200), they were found to be statistically significant at the α = .05 level without adjustments for multiplicity. As in the case of uncorrelated predictors, the 95% coverage rates for the parameters were quite close to the expected 95% for both the PMM (M = 94.7%, Min = 93.0%, Max = 96.7%) and the revised KHB method (M = 94.7%, Min = 92.8%, Max = 96.6%).</p>
+<h3>Two Empirical Examples</h3>
+<p>In the following, we first report the results of a replication of the analysis in Karlson and Holm (2011). Then we report results from a reanalysis of data from Wille et al. (2020) in which we used the PMM to predict mathematically intensive STEM-major choices in college on the basis of students&#x27; vocational interests at the end of high school (Holland, 1997). We ran the models with and without controlling for motivational constructs from expectancyvalue theory (EVT; Eccles et al., 1983). These empirical examples were chosen to demonstrate how model parameters are interpreted in &quot;real-world&quot; applications. Furthermore, we selected the first example (Karlson &amp; Holm, 2011) to check the reproducibility of the published coefficients from the KHB method and to compare the standard errors from the &quot;classical&quot; KHB approach and those from the PMM based on bootstrapping. The second example referred to a study by Wille et al. (2020), who did not originally use a KHB approach. We reanalyzed their data using a PMM, which allowed us to perform a statistical test on a reported finding regarding the &quot;Investigative&quot; vocational orientation. The regression coefficient for &quot;Investigative&quot; was not statistically significant in a model without the EVT constructs, but it was statistically significantly negative after they were included. In a KHB framework, this finding could be tested against the null hypothesis that the regression coefficients of a predictor would be equal in two nested models. Additionally, we wanted to explore the impact of different model specifications (e.g., survey weights and latent variables) on the results.</p>
+<p>Example 1 (Karlson &amp; Holm, 2011) Karlson and Holm (2011) presented results that were based on data from the Danish Longitudinal Survey of Youth (Jæger &amp; Holm, 2007).</p>
+<p>The data set (dlsy_khb.dta) is provided as part of the Stata KHB module (Kohler &amp; Karlson, 2024) at http://fmwww.bc.edu/repec/bocode/d/dlsy_khb.dta (access date: January 13, 2026). Karlson and Holm (2011) investigated the extent to which social origin (&quot;discrete five-category measure of father&#x27;s social class&quot; p. 228) predicted whether children born in 1954 finished university (coded 1) or not (coded 0) and to what extent this effect was mediated by academic performance (using a z-standardized ability measure as a proxy, see p. 228).</p>
+<p>We applied the PMM and the revised KHB method (each with 10,000 bootstrap samples) with the four social origin dummy indicators (reference group = lowest, dummies: low, middle, high, highest) as the first four predictors and academic performance as the fifth.</p>
+<p>The direct effects for social origin were estimated as the respective regression weights from the full model (i.e., Model 5: 𝑏𝑏 (5)1 , 𝑏𝑏 (5)2 , 𝑏𝑏 (5)3 , 𝑏𝑏 (5)4 ). The indirect effects of social origin mediated by academic performance were estimated on the basis of the difference measures between the coefficients from Model 4 (social origin dummies only) and the full model (Δ (54)1 , Δ (54)2 , Δ (54)3 , Δ (54)4 ). The difference coefficients were multiplied by -1 because the difference Δ (54)k referred to the regression coefficient from Model 5 minus the respective coefficient from Model 4, Δ (54)1 = 𝑏𝑏 (5)𝑘𝑘 -𝑏𝑏 (4)𝑘𝑘 = 𝑏𝑏 tot5 -(𝑏𝑏 tot5 + 𝑏𝑏 tot5 𝑏𝑏 5k ) = -𝑏𝑏 tot5 𝑏𝑏 5k (see Equation 16), which was the indirect effect (𝑏𝑏 tot5 𝑏𝑏 5k ) but with the opposite sign.</p>
+<p>Additionally, the model-specific intercepts were estimated as the respective thresholds multiplied by -1.</p>
+<p>The results for the estimates in the full model (Table 3) were perfectly in line with those reported in Karlson and Holm (2011). The standard errors differed slightly across the approaches, which was due to the bootstrapping technique used in the PMM and the revised KHB method. A PMM without bootstrapping (not reported in Table 3) resulted in standard errors that were identical to those given in Karlson and Holm (2011). Also, due to the randomness of the bootstrapping approach (the random draws in Mplus and our SAS macro were not identical), the results differed slightly. Due to the binary indicators (dummies) that were included in the linear model (each dummy except the first was regressed on all other dummies), an error message appeared in Mplus indicating that &quot;the standard errors or the model parameter estimates may not be trustworthy.&quot; In our case, this message could be ignored because bootstrapping was used, and the standard errors were based only on the estimates from the bootstrap samples.</p>
+<p>From a theoretical point of view, the effects in Table 3 regarding social background could be interpreted as direct effects with higher social class being associated with a greater chance of completing university (Karlson &amp; Holm, 2011). Table 4 presents the indirect effects of social background mediated by ability. These effects are equivalent to the differences between the regression coefficients of the reduced model (without ability) minus those of the full model. Again, our estimates were identical to those given in Karlson and Holm (2011).</p>
+<p>The indirect effects were statistically significant for all social classes.</p>
+<p>Example 2 (Wille et al., 2020)</p>
+<p>Our second example shows the handling of missing data when applying FIML, applying survey weights, and implementing latent variables in a PMM. These extensions are not possible in typical implementations of the KHB method. We reanalyzed data from Wille et al. (2020), who studied whether students&#x27; choice of mathematically intensive majors in college could be predicted by their prior vocational interests. They used data from the</p>
+<p>Transformation of the Secondary School System and Academic Careers (TOSCA; Trautwein et al., 2010) study. In spring 2006, the first assessment took place in 157 university-track schools in the state of Baden-Württemberg (Germany), followed by a second measurement point 2 years later for all participants who had agreed to participate in the longitudinal study.</p>
+<p>As schools within strata and students within schools were selected with unequal probabilities, survey weights were constructed to reflect these selection probabilities. Thus, representative results based on these data could only be expected if survey weights were included in the analysis. At the second measurement point, a subsample of n = 2,145 participants reported that they were enrolled in higher education and provided information about their major.</p>
+<p>Vocational interests were defined on the basis of Holland&#x27;s model (1997), which differentiates between six general interest orientations (Realistic, Investigative, Artistic, Social, Enterprising, and Conventional; RIASEC). These interests were assessed with the Revised General Interest Structure test (GIST-R; Bergmann &amp; Eder, 2005). As part of their fourth research question, Wille et al. (2020) stated that they &quot;expected realistic and investigative interests to be the strongest predictors of STEM major choice in the combined model&quot; (p. 5), which included EVT constructs (math and English value scales based on 14 items adapted from large-scale studies; for details, see Wille et al., 2020). Interestingly, they found that the regression coefficient for Investigative interests was not statistically significant (b = 0.01; p = .930) in a model without the EVT constructs, but it was statistically significantly negative (b = -0.24; p = .014) when they controlled for the EVT constructs. However, Wille et al. (2020) did not apply the KHB method. Furthermore, they analyzed manifest scale scores, not latent variables, and did not apply survey weights.</p>
+<p>In the first step of our reanalysis of the data, we focused on the changes in the regression coefficients of the six vocational interest orientations after including the EVT constructs. We applied a PMM with cluster bootstrapping (500 bootstrap samples) to reflect the sampling at the school level. In a second step, we included the survey weights that reflected the unequal probabilities of selection and nonparticipation. In a third step, we excluded the survey weights again but represented the six general interest orientations with latent variables. We applied a single indicator approach (Bollen, 1989) to keep the model as simple as possible and enable estimation that was computationally quite demanding.</p>
+<p>Therefore, we also relied on the &quot;simple&quot; robust standard errors instead of a cluster bootstrap in this case.</p>
+<p>In all three models, we relied on FIML to handle the missing values. The missing data rates were particularly high for the EVT constructs (58.6% to 59.2% of the subsample) due to a planned missingness design at T1 for those constructs with two different questionnaire versions that were randomly assigned to students at T1. In line with the analyses in Wille et al. (2020), we included dummy-coded variables for school type (vocational Gymnasium = 1), gender (female = 1), and immigration background (immigration background = 1) as well as socioeconomic background (highest international socioeconomic index, HISEI; Ganzeboom &amp; Treiman, 1996) and standardized measures of math and English achievement at T1 as covariates (for details, see Wille et al., 2020).</p>
+<p>Table 5 presents the results of the PMM with manifest scale scores and without survey weights. In line with the results reported by Wille et al. (2020), there were statistically significant regression coefficients for four of the six RIASEC orientations in Model 1. Due to the larger variance of 𝑦𝑦 * in the PMM compared with the respective model in Wille et al.</p>
+<p>(2020), the coefficients from the PMM were slightly more extreme (largest difference for Realistic: b = 1.04 in the PMM vs. 0.93 in Wille et al., 2020). After including the EVT constructs in Model 2, three regression coefficients for the RIASEC orientations and one of the EVT constructs were statistically significant. As expected, the results regarding the regression coefficients for this full model based on the PMM were essentially identical to those reported by Wille et al. (2020), with absolute differences of less than 0.01.</p>
+<p>However, and also in line with the results reported by Wille et al. (2020), the pattern of statistically significant RIASEC orientations was quite different for Models 1 and 2: Only Realistic and Conventional were statistically significant in both models, whereas Artistic and Enterprising were only statistically significant in Model 1, and Investigative was only statistically significant in Model 2. However, the results for the differences between the regression coefficients of the RIASEC predictors from both models (see column 10 in Table 5) were only statistically significant for the first three orientations: Realistic (Δ = -0.13, LL = -0.22, UL = -0.06), Investigative (Δ = -0.24, LL = -0.35, UL = -0.15), and Artistic (Δ = 0.22, LL = 0.14, UL = 0.32). For Investigative and Artistic, there was not only a difference in the significance pattern between the two models (statistically significant in one model but not in the other), but also in the sizes of the coefficients. This size difference can be seen in the statistically significant differences in the respective coefficients from both models.</p>
+<p>Compared with the results from the first PMM, the second PMM, which included survey weights, showed regression coefficients that were slightly more extreme in size with larger standard errors (Table 6). Regarding statistical significance, the pattern was slightly different from the one for the models in the first PMM. In the PMM that included survey weights, the regression coefficient for Conventional in Model 1 was not statistically significant, whereas the coefficient for Enterprising in Model 2 was statistically significant.</p>
+<p>However, the patterns of statistically significant differences between regression coefficients from Models 1 and 2 were identical to those from the unweighted PMM.</p>
+<p>Table 7 presents the results from the PMM that included the latent variables (ignoring the survey weights) representing the RIASEC orientations. We used a single indicator approach for the latent variables with loadings fixed to the square root of the reliability estimates (Cronbach&#x27;s α, person separation reliability for weighted likelihood achievement scores) reported in Wille et al. (2020) and fixed the residual variances of the z-standardized indicators to 1 -reliability estimate. Therefore, the variance of the latent variables was implicitly fixed to 1, except for slight deviations resulting from the FIML estimation based on z-standardized indicators. In contrast to the first PMM-which was also estimated without applying survey weights-the coefficient for Enterprising in Model 1 was not statistically significant. In Model 2, the pattern of statistically significant regression coefficients for Realistic, Investigative, Conventional, and Math intrinsic/attainment (an EVT scale) was identical to that from the first PMM. In contrast to the results from the first PMM without latent variables, the results from the PMM with latent variables showed a nonsignificant difference for Realistic (Δ = -0.09, LL = -0.20, UL = 0.02) and a statistically significant difference for Conventional (Δ = -0.24, LL = -0.37, UL = -0.10) between Model 1 and Model 2.</p>
+<h3>Discussion</h3>
+<p>Comparing coefficients from same-sample nested models is not as straightforward in linear probability models (e.g., logistic or probit regression) as in linear regression because the regression coefficients in nested models might change even if a predictor is included in a model that is uncorrelated with all the other predictors. To handle this problem, Karlson et al. (2012) suggested a method in which the distribution of the underlying latent variable of the outcome is held constant across nested models (the KHB method). In the present paper, we introduced the PMM and embedded it in an SEM framework. Then we showed in our simulation study and in one of our empirical examples that the PMM produces results that are equivalent to the (revised) KHB method under the same assumptions (observed data from a simple random sample without missing values). The PMM can easily be implemented in Mplus via the code templates or our SAS macro, which generates the necessary Mplus code.</p>
+<p>Compared with the (revised) KHB method, we demonstrated in our empirical examples, which were based on Wille et al. (2020), that the PMM has at least three advantages (if implemented in Mplus): First, missing values can be adequately handled under MAR assumptions with FIML instead of listwise deletion or multiple imputation. Second, complex sampling designs (e.g., cluster sampling, survey weights) can be taken into account, for instance, by applying a cluster bootstrap with or without survey weights. Third, latent variables can be included as predictors or covariates that-assuming an adequate specification of the measurement model-may be preferable to point estimates (e.g., factor scores) that contain measurement error and may lead to biased results.</p>
+<p>For inferential statistics, the results from a bootstrapping procedure (e.g., the lower and upper limits of a CI) always depend on randomly drawn bootstrap samples. In simulation studies with a rather large number of Monte Carlo samples, even relatively small numbers of bootstrap samples lead to valid results with regard to the coverage of confidence intervals (Gaigall &amp; Gerstenberg, 2026). In a specific statistical application, however, a larger number of bootstrap samples may be recommended for two reasons (Hesterberg, 2011): First, results are more likely to converge across different software implementations. Second, compared with the cost of the data in terms of money, time, and so forth, the cost of the analysis is typically of minor importance. Thus, the gain in the precision of a CI (e.g., due to a larger number of bootstrap samples) is less expensive than increasing the sample size. Hesterberg (2011), for instance, suggested 15,000 bootstrap samples for a bootstrap percentile interval &quot;to have 95% probability that the actual one-sided noncoverage for a 95% bootstrap interval falls within 10% of the desired value, between 0.0225 and 0.0275&quot; (p. 522).</p>
+<p>Therefore, for applied researchers, approximately 15,000 bootstrap samples would be advisable for 95% CIs, provided that number of samples is computationally feasible in terms of memory capacity and computation time. Otherwise, it may be difficult for other researchers to closely replicate a given CI when using different software, as the lower and upper limits of the CI are less accurate approximations of the respective percentiles of the theoretical bootstrap distribution.</p>
+<h3>Limitations and Future Directions</h3>
+<p>The PMM can be applied to a large variety of different contexts, including scenarios with missing data, complex sampling, and latent variable models. With the bootstrap approach, reliable standard errors and accurate nonsymmetric CIs for the estimated coefficients can be expected in many different scenarios. Bootstrapping, however, might not be feasible for (very) complex (latent variable) models because of the high computational demand, and standard error estimation for (grand) indirect effects based on (robust) maximum likelihood estimation might be preferred in such cases. However, symmetric confidence intervals calculated with this method may fail to achieve the intended 1-α coverage probability. In simulation studies, the first-order or Sobel test (Sobel, 1982) for indirect effects, for instance, showed low power rates and low Type I error rates (MacKinnon et al., 2002). In such cases, Bayesian estimation of the PMM might be a viable alternative to maximum likelihood approaches.</p>
+<p>Regarding ordered-categorical outcomes with more than two categories, even though we did not discuss such cases in the present study, the PMM can easily be applied (e.g., in Mplus where such outcomes can be handled as well). In such cases, the outcome is represented by a single latent response variable 𝑦𝑦 * , and all equations that include the regression coefficients for the predictors and covariates are valid. For the thresholds, however, the respective equations must be applied to each threshold in cases with more than two outcome categories. Furthermore, researchers can use our SAS macro %revKHB to estimate coefficients for ordered-categorical outcomes via the bootstrap-based revised KHB method.</p>
+<h3>Conclusion</h3>
+<p>In applied research, the specific research questions about categorical outcomes are often addressed by applying logistic or probit regression models. Compared with other approaches, the statistical hypotheses that can be addressed with the KHB method may often be seen as the most adequate for such research questions. We propose that researchers integrate the KHB method&#x27;s strength in ensuring regression coefficient comparability across models with the capacity of SEM to handle missing data via FIML, accommodate survey weights, and incorporate latent variables. The suggested PMM framework is a simple way of combining the best of both worlds. The b parameters refer to the regression coefficients from models with increasing numbers of predictors. The Δ and Ρ parameters refer to the differences and ratios, respectively, between two models. M(Est.) and SD(Est.) refer to the mean and the standard deviation, respectively, of the 1,000 replicates for each sample size (N = 200, 500, 1,000). MSE: Mean square error (average square deviation of the estimate from the population parameter). 95% coverage: Coverage of the nonsymmetric bootstrap 95% confidence intervals in percent. % significant: Percentage of statistically significant estimates (H0: parameter = 1 for ratios Ρ (21)1 , Ρ (32)1 , Ρ (32)2 ; H0: parameter = 0 in all other cases). The b parameters refer to the regression coefficients from models with increasing numbers of predictors. The Δ and Ρ parameters refer to the differences and ratios, respectively, between two models. M(Est.) and SD(Est.) refer to the mean and the standard deviation, respectively, of the 1,000 replicates for each sample size (N = 200, 500, 1,000). MSE: Mean square error (average square deviation of the estimate from the population parameter). 95% coverage: Coverage of the nonsymmetric bootstrap 95% confidence intervals in percent. % significant: Percentage of statistically significant estimates (H0: parameter = 1 for ratios Ρ (21)1 , Ρ (32)1 , Ρ (32)2 ; H0: parameter = 0 in all other cases). The calculations for the estimates for the PMM and the revised KHB method were based on the differences between parameters in the full model (Model 5) and Model 4 (Δ (54)k ), which were multiplied by -1. The lower and upper limits were calculated as 𝐿𝐿𝐿𝐿 indirect = -𝑈𝑈𝐿𝐿 Δ and 𝑈𝑈𝐿𝐿 indirect = -𝐿𝐿𝐿𝐿 Δ , respectively. coefficients for the covariates are not reported). Statistically significant estimates (i.e., the nonsymmetric bootstrap 95% CI did not include zero) are printed in bold. In Model 2, the EVT constructs for both math and English were added as additional predictors. Both models included dummy-coded variables for school type, gender, and migration status as well as the highest international socioeconomic index (HISEI), math achievement, and English achievement as covariates (regression coefficients for the covariates are not reported). Statistically significant estimates (i.e., the nonsymmetric bootstrap 95% CI did not include zero) are printed in bold.</p>
+<p>coefficients for the covariates are not reported). Statistically significant estimates (i.e., the symmetric 95% CI based on cluster-robust standard errors did not include zero) are printed in bold. A B x1 x2 y * b21 β2 = b32 β1 = b31 εx2 ε x1 𝑥𝑥 � 2 y * β2 = b32 bootstrapping as well as those from the revised KHB method (see Table 1 and Table 2 for results of scenarios with uncorrelated and correlated predictors, respectively). The most notable results were: (a) The posterior median seemed to be preferable to the posterior mean, particularly with regard to the mean square errors for the ratio parameters in the small sample size conditions (N = 200) where (b) the HPD intervals-which per definition have the shortest possible interval lengths-showed coverages above the nominal level (95% in this case) in the scenarios with uncorrelated predictors, whereas the credible intervals, which were based on percentiles of the posterior distribution, were close to the 95% coverage rate.</p>
+<p>Table A1 Results of the Simulation Study for the Bayesian PMM With Uncorrelated Predictors 95% Credible Interval Posterior mean Posterior median HPD Percentiles Sample size Parameter Population parameter M SD MSE M SD MSE 95% Coverage % Significant 95% Coverage % Significant 200 b(1)1 0.500 0.525 0.201 0.041 0.522 0.200 0.040 95.6 76.9 95.2 76.9 b(2)1 0.500 0.524 0.192 0.038 0.521 0.191 0.037 95.8 79.3 95.4 79.5 b(2)2 0.700 0.739 0.212 0.046 0.734 0.210 0.045 94.5 97.1 94.0 97.1 b(3)1 0.500 0.521 0.180 0.033 0.518 0.179 0.032 95.1 86.3 95.3 86.3 b(3)2 0.700 0.736 0.194 0.039 0.732 0.192 0.038 94.1 98.4 94.3 98.6 b(3)3 1.000 1.060 0.208 0.047 1.054 0.207 0.046 94.1 100.0 94.3 100.0 Δ(21)1 0.000 -0.001 0.055 0.003 -0.001 0.051 0.003 97.7 2.3 95.4 4.6 Δ(32)1 0.000 -0.003 0.074 0.006 -0.003 0.072 0.005 95.7 4.3 94.8 5.2 Δ(32)2 0.000 -0.003 0.080 0.006 -0.003 0.078 0.006 94.7 5.3 93.3 6.7 Ρ(21)1 1.000 0.971 0.793 0.629 1.001 0.108 0.012 99.3 0.7 97.2 2.8 Ρ(32)1 1.000 0.997 3.065 9.384 1.001 0.145 0.021 97.4 2.6 96.0 4.0 Ρ(32)2 1.000 1.266 7.070 50.013 1.010 0.122 0.015 96.1 3.9 94.2 5.8 500 b(1)1 0.500 0.510 0.125 0.016 0.509 0.125 0.016 94.2 98.9 94.4 99.1 b(2)1 0.500 0.509 0.120 0.014 0.507 0.119 0.014 94.7 99.2 95.0 99.3 b(2)2 0.700 0.717 0.126 0.016 0.715 0.126 0.016 94.3 100.0 94.4 100.0 b(3)1 0.500 0.509 0.109 0.012 0.508 0.109 0.012 95.4 100.0 95.8 100.0 b(3)2 0.700 0.716 0.119 0.014 0.714 0.118 0.014 94.1 100.0 93.8 100.0 b(3)3 1.000 1.028 0.126 0.017 1.026 0.126 0.016 95.0 100.0 95.3 100.0 Δ(21)1 0.000 -0.001 0.032 0.001 -0.001 0.031 0.001 95.9 4.1 95.8 4.2 Δ(32)1 0.000 0.000 0.047 0.002 0.000 0.046 0.002 95.1 4.9 94.6 5.4 Δ(32)2 0.000 -0.001 0.047 0.002 -0.001 0.047 0.002 95.0 5.0 94.7 5.3 Ρ(21)1 1.000 1.018 0.176 0.031 1.002 0.066 0.004 97.2 2.8 95.9 4.1 Ρ(32)1 1.000 1.062 0.945 0.897 1.009 0.101 0.010 97.1 2.9 95.0 5.0 Ρ(32)2 1.000 1.010 0.075 0.006 1.004 0.070 0.005 96.0 4.0 94.7 5.3 1000 b(1)1 0.500 0.504 0.088 0.008 0.504 0.087 0.008 94.3 100.0 94.4 100.0 b(2)1 0.500 0.504 0.083 0.007 0.503 0.083 0.007 94.2 100.0 94.4 100.0 b(2)2 0.700 0.708 0.087 0.008 0.707 0.087 0.008 94.9 100.0 95.0 100.0 b(3)1 0.500 0.504 0.076 0.006 0.504 0.076 0.006 94.9 100.0 95.4 100.0 b(3)2 0.700 0.707 0.082 0.007 0.706 0.082 0.007 93.8 100.0 94.0 100.0 b(3)3 1.000 1.014 0.089 0.008 1.013 0.089 0.008 95.0 100.0 94.7 100.0 Δ(21)1 0.000 -0.001 0.022 0.000 -0.001 0.022 0.000 96.8 3.2 96.7 3.3 Δ(32)1 0.000 0.001 0.033 0.001 0.000 0.033 0.001 93.7 6.3 93.3 6.7 Δ(32)2 0.000 0.000 0.032 0.001 0.000 0.032 0.001 95.3 4.7 95.3 4.7 Ρ(21)1 1.000 1.004 0.049 0.002 1.001 0.046 0.002 97.3 2.7 96.7 3.3 Ρ(32)1 1.000 1.011 0.075 0.006 1.006 0.070 0.005 94.7 5.3 93.3 6.7 Ρ(32)2 1.000 1.004 0.048 0.002 1.002 0.047 0.002 95.3 4.7 95.3 4.7 Note.</p>
+<p>The b parameters refer to the regression coefficients from models with increasing numbers of predictors. The Δ and Ρ parameters refer to the differences and ratios, respectively, between two models. M(Est.) and SD(Est.) refer to the mean and the standard deviation, respectively, of the 1,000 replicates for each sample size (N = 200, 500, 1,000). MSE: Mean square error (average square deviation of the estimate from the population parameter). 95% coverage: Coverage of the 95% credible intervals (HPD or 2.5 th and 97.5 th percentile of the posterior distribution, respectively) in percent. % significant: Percentage of credible intervals that did not cover the H0 value (H0: parameter = 1 for ratios Ρ(21)1, Ρ(32)1, Ρ(32)2; H0: parameter = 0 in all other cases).</p>
+<p>Table A2 Results of the Simulation Study for the Bayesian PMM With Correlated Predictors 95% Credible Interval Posterior mean Posterior median HPD Percentiles Sample size Parameter Population parameter M SD MSE M SD MSE 95% Coverage % Significant 95% Coverage % Significant 200 b(1)1 0.925 0.986 0.232 0.058 0.980 0.231 0.056 95.2% 99.7% 94.4% 99.8% b(2)1 0.700 0.745 0.217 0.049 0.741 0.216 0.048 95.3% 96.3% 95.1% 96.6% b(2)2 0.871 0.929 0.230 0.056 0.923 0.229 0.055 93.3% 99.7% 92.8% 99.8% b(3)1 0.500 0.532 0.200 0.041 0.529 0.199 0.040 94.7% 79.7% 94.5% 80.0% b(3)2 0.678 0.720 0.207 0.045 0.716 0.206 0.044 93.7% 96.4% 93.5% 96.5% b(3)3 0.949 1.005 0.218 0.051 0.999 0.216 0.049 94.4% 100.0% 94.4% 100.0% Δ(21)1 -0.225 -0.241 0.092 0.009 -0.233 0.091 0.008 93.8% 92.6% 94.0% 94.5% Δ(32)1 -0.200 -0.213 0.083 0.007 -0.207 0.082 0.007 95.6% 79.3% 95.8% 82.6% Δ(32)2 -0.194 -0.208 0.091 0.008 -0.202 0.090 0.008 93.0% 77.2% 93.6% 80.6% Ρ(21)1 0.757 0.737 0.140 0.020 0.753 0.098 0.010 94.9% 91.6% 94.8% 94.1% Ρ(32)1 0.714 0.687 0.571 0.326 0.706 0.122 0.015 96.5% 72.6% 96.7% 79.7% Ρ(32)2 0.778 0.762 0.171 0.029 0.776 0.095 0.009 95.6% 78.3% 94.1% 80.5% 500 b(1)1 0.925 0.951 0.140 0.020 0.949 0.139 0.020 94.6% 100.0% 95.0% 100.0% b(2)1 0.700 0.719 0.132 0.018 0.718 0.131 0.018 94.3% 100.0% 94.7% 100.0% b(2)2 0.871 0.892 0.136 0.019 0.890 0.135 0.019 94.1% 100.0% 94.4% 100.0% b(3)1 0.500 0.514 0.121 0.015 0.513 0.121 0.015 94.8% 99.0% 95.0% 99.1% b(3)2 0.678 0.693 0.126 0.016 0.692 0.126 0.016 94.2% 100.0% 94.2% 100.0% b(3)3 0.949 0.974 0.131 0.018 0.972 0.131 0.018 94.3% 100.0% 94.4% 100.0% Δ(21)1 -0.225 -0.232 0.053 0.003 -0.229 0.053 0.003 95.6% 100.0% 95.8% 100.0% Δ(32)1 -0.200 -0.205 0.054 0.003 -0.203 0.053 0.003 95.0% 99.4% 95.3% 99.3% Δ(32)2 -0.194 -0.199 0.053 0.003 -0.197 0.053 0.003 93.8% 99.3% 94.2% 99.4% Ρ(21)1 0.757 0.751 0.057 0.003 0.755 0.056 0.003 95.9% 100.0% 96.3% 100.0% Ρ(32)1 0.714 0.704 0.080 0.007 0.712 0.076 0.006 96.0% 99.3% 95.6% 99.3% Ρ(32)2 0.778 0.773 0.058 0.003 0.776 0.057 0.003 95.4% 99.3% 94.9% 99.4% 1000 b(1)1 0.925 0.936 0.099 0.010 0.935 0.099 0.010 93.9% 100.0% 94.3% 100.0% b(2)1 0.700 0.709 0.093 0.009 0.708 0.093 0.009 93.9% 100.0% 94.4% 100.0% b(2)2 0.871 0.879 0.092 0.008 0.878 0.091 0.008 94.9% 100.0% 94.8% 100.0% b(3)1 0.500 0.506 0.085 0.007 0.506 0.085 0.007 94.7% 100.0% 94.8% 100.0% b(3)2 0.678 0.682 0.086 0.007 0.681 0.086 0.007 94.6% 100.0% 94.9% 100.0% b(3)3 0.949 0.962 0.092 0.009 0.960 0.092 0.009 93.7% 100.0% 94.1% 100.0% Δ(21)1 -0.225 -0.228 0.035 0.001 -0.226 0.035 0.001 95.3% 100.0% 95.7% 100.0% Δ(32)1 -0.200 -0.202 0.037 0.001 -0.201 0.037 0.001 94.4% 100.0% 94.3% 100.0% Δ(32)2 -0.194 -0.197 0.036 0.001 -0.195 0.036 0.001 94.6% 100.0% 94.5% 100.0% Ρ(21)1 0.757 0.754 0.039 0.002 0.756 0.038 0.001 95.1% 100.0% 94.8% 100.0% Ρ(32)1 0.714 0.710 0.053 0.003 0.713 0.052 0.003 95.4% 100.0% 95.4% 100.0% Ρ(32)2 0.778 0.774 0.040 0.002 0.776 0.040 0.002 93.7% 100.0% 94.0% 100.0% Note.</p>
+<p>The b parameters refer to the regression coefficients from models with increasing numbers of predictors. The Δ and Ρ parameters refer to the differences and ratios, respectively, between two models. M(Est.) and SD(Est.) refer to the mean and the standard deviation, respectively, of the 1,000 replicates for each sample size (N = 200, 500, 1,000). MSE: Mean square error (average square deviation of the estimate from the population parameter). 95% coverage: Coverage of the 95% credible intervals (HPD or 2.5 th and 97.5 th percentile of the posterior distribution, respectively) in percent. % significant: Percentage of credible intervals that did not cover the H0 value (H0: parameter = 1 for ratios Ρ(21)1, Ρ(32)1, Ρ(32)2; H0: parameter = 0 in all other cases).</p>
+<p>In Model 2, the EVT constructs for both math and English were added as additional predictors. Both models included dummy-coded variables for school type, gender, and migration status as well as the highest international socioeconomic index (HISEI), math achievement, and English achievement as covariates (regression In Model 2, the EVT constructs for both math and English were added as additional predictors. Both models included dummy-coded variables for school type, gender, and migration status as well as the highest international socioeconomic index (HISEI), math achievement, and English achievement as covariates (regression</p>
+<h3>Appendix</h3>
+<p>For our simulation, we also estimated a Bayesian version of the PMM that was based on the specification of a Bayesian mediation model proposed by Miočević and MacKinnon (2014) for SAS PROC MCMC (SAS Institute Inc., 2023). We applied moderately informative normal priors (µ = 0, σ2 = 9) for the threshold as well as the regression parameters (including intercepts).</p>
+<p>For the residual variances, we specified gamma priors on the precision (i.e., the inverse of the residual variances) with 0.1 for shape and inverse scale, respectively. The equations for the additional model-specific parameters as well as the Δ and Ρ parameters were included in the model during the estimation. This allowed us to monitor convergence during the estimation process also with regard to these additional parameters of interest. We checked for convergence by running PROC MCMC within the automcmc macro (Wagner et al., 2023) with a single chain and the convergence criteria of an effective sample size (ESS) of at least 400 (Zitzmann &amp; Hecht, 2019) and a potential scale reduction (PSR) smaller than 1.01 (Vehtari et al., 2021). We report parameter estimates (posterior mean and median), standard deviations and mean square errors of the estimates, 95% highest posterior density (HPD) intervals, as well as 95% credible intervals based on the 2.5 th and the 97.5 th percentiles of the posterior distribution and their coverage of the parameters in percent as well as the percentage of replications for which the intervals did not include 1 in the case of ratios, or zero otherwise (percentage of a given parameter estimate judged to be significantly different from zero). Bayesian estimation is also possible in Mplus (Muthén &amp; Muthén, 2017) with the ESTIMATOR = BAYES option.</p>
+<p>Regarding the Bayesian version of the PMM, the results for both scenarios with uncorrelated predictors in Table A1 or correlated predictors in Table A2 show that they were largely in line with those from the PMM with the maximum likelihood estimator and ) is illustrated in Panel B of Figure1.</p>
+<p>Including the residual 𝑥𝑥 � 2 instead of 𝑥𝑥 � 2 in the regression leads to a change in β 1 , which is equal to 𝑏𝑏 tot1 = 𝑏𝑏 31 + 𝑏𝑏 21 𝑏𝑏 32.</p>
+<h3>Figure 1 AFigure 2 A</h3>
+<p>Figure 1A Model With Two Predictors: Direct Effect and Indirect Effects of 𝑥𝑥 1 on 𝑦𝑦 *</p>
+<h3>Table 1</h3>
+<p>Results of the Simulation Study for the PMM and the Revised KHB Approach With Uncorrelated Predictors</p>
+<h3>Table 2</h3>
+<p>Results of the Simulation Study for the PMM and the Revised KHB Approach With Correlated Predictors</p>
+<h3>Table 3</h3>
+<p>Example Data: Results of the Full Model Based on the PMM and the Revised KHB Approach (Dependent Variable: Student FinishedThe calculation for the intercept for the PMM was based on the threshold, which was multiplied by -1, and the lower and upper limits of the 95% confidence interval for the intercept were calculated as 𝐿𝐿𝐿𝐿 intercept = -𝑈𝑈𝐿𝐿 𝜏𝜏 and 𝑈𝑈𝐿𝐿 intercept = -𝐿𝐿𝐿𝐿 𝜏𝜏 , respectively.</p>
+<h3>Table 4</h3>
+<p>Example Data: Differences for Regression Coefficients in the Full Model and the Model Without Ability (Indirect Effects) Based on the PMM and the Revised KHB Approach</p>
+<h3>Table 6</h3>
+<p>Choice of Mathematically Intensive STEM University Major Predicted by RIASEC Orientations and EVT Constructs Based on the PMM With Logistic Link Including Survey Weights (Based onWille et al., 2020) Model 1 included the six RIASEC orientations as predictors.</p>
+<h3>Table 5</h3>
+<p>Choice of Mathematically Intensive STEM University Major Predicted by RIASEC Orientations and EVT Constructs Based on the PMM With Logistic Link (Based onWille et al., 2020)</p>
+<h3>Table 7</h3>
+<p>Choice of Mathematically Intensive STEM University Major Predicted by RIASEC Orientations Represented as Latent Variables and EVT Constructs Based on the PMM With Logistic Link (Based onWille et al., 2020) Model 1 included the six RIASEC orientations as predictors.</p>
+<h3>References</h3>
+<p>Asparouhov, T., &amp; Muthén, B. (2023). Bootstrap p-value computation. Retrieved November 14, 2025, from https://www.statmodel.com/download/FAQ-Bootstrap%20- %20Pvalue.pdf</p>
+<p>Bergmann, C., &amp; Eder, F. (2005). AIST-R: Allgemeiner-Interessen-Struktur-Test mit Umwelt- Struktur-Test (UST-R) -Revision [GIST-R: General interest structure test and environmental structure test (EST-R) -Revision].</p>
+<p>Beltz.</p>
+<p>Biesanz, J. C., Falk, C. F., &amp; Savalei, V. (2010). Assessing mediational models: Testing and interval estimation for indirect effects. Multivariate Behavioral Research, 45(4), 661- 701. https://doi.org/10.1080/00273171.2010.498292</p>
+<p>Bollen, K. A. (1989). Structural Equations with latent variables. Wiley.</p>
+<p>Braun, H. (2018). How long is the shadow? The relationships of family background to selected adult outcomes: results from PIAAC. Large-scale Assessments in Education, 6(1), 4. https://doi.org/10.1186/s40536-018-0058-x</p>
+<p>Breen, R., Karlson, K. B., &amp; Holm, A. (2013). Total, direct, and indirect effects in logit and probit models. Sociological Methods &amp; Research, 42(2), 164-191. https://doi.org/10.1177/0049124113494572</p>
+<p>Breen, R., Karlson, K. B., &amp; Holm, A. (2021). A note on a reformulation of the KHB method. Sociological Methods &amp; Research, 50(2), 901-912. https://doi.org/10.1177/0049124118789717</p>
+<p>Domènech-Abella, J., Mundó, J., Leonardi, M., Chatterji, S., Tobiasz-Adamczyk, B., Koskinen, S., Ayuso-Mateos, J. L., &amp; Haro, J. M. (2018). The association between socioeconomic status and depression among older adults in Finland, Poland and Spain: A comparative cross-sectional study of distinct measures and pathways. Journal of Affective Disorders, 241, 311-318. https://doi.org/10.1016/j.jad.2018.08.077</p>
+<p>Dumont, H., Klinge, D., &amp; Maaz, K. (2019). The many (subtle) ways parents game the system: Mixed-method evidence on the transition into secondary-school tracks in Germany. Sociology of Education, 92(2), 199-228. https://doi.org/10.1177/0038040719838223</p>
+<p>Eccles, J. S., Adler, T. F., Futterman, R., Goff, S. B., Kaczala, C. M., Meece, J. L., &amp; Midgley, C. (1983). Expectancies, values, and academic behaviors. In J. T. Spence (Ed.), Achievement and achievement motivation (pp. 75-146). W. H. Freeman.</p>
+<p>Enders, C. K. (2025). Missing data: An update on the state of the art. Psychological Methods, 30(2), 322-339. https://doi.org/10.1037/met0000563</p>
+<p>Falk, C. F., &amp; Biesanz, J. C. (2015). Inference and interval estimation methods for indirect effects with latent variable models. Structural Equation Modeling: A Multidisciplinary Journal, 22(1), 24-38. https://doi.org/10.1080/10705511.2014.935266</p>
+<p>Gaigall, D., &amp; Gerstenberg, J. (2026). On the number of replications in resampling tests and Monte Carlo simulation studies. The American Statistician, 1-10. https://doi.org/10.1080/00031305.2025.2612197</p>
+<p>Ganzeboom, H. B. G., De Graaf, P. M., &amp; Treiman, D. J. (1992). A standard international socio-economic index of occupational status. Social Science Research, 21(1), 1-56. https://doi.org/https://doi.org/10.1016/0049-089X(92)90017-B</p>
+<p>Ganzeboom, H. B. G., &amp; Treiman, D. J. (1996). Internationally comparable measures of occupational status for the 1988 international standard classification of occupations. Social Science Research, 25(3), 201-239. https://doi.org/https://doi.org/10.1006/ssre.1996.0010</p>
+<p>Gurkan, G., Benjamini, Y., &amp; Braun, H. (2021). Defensible inferences from a nested sequence of logistic regressions: a guide for the perplexed. Large-scale Assessments in Education, 9(1), 16. https://doi.org/10.1186/s40536-021-00111-7</p>
+<p>Hesterberg, T. (2011). Bootstrap. WIREs Computational Statistics, 3(6), 497-526. https://doi.org/10.1002/wics.182</p>
+<p>Holland, J. L. (1997). Making vocational choices: A theory of vocational personalities and work environments (3rd ed.). Psychological Assessment Resources.</p>
+<p>Jæger, M. M., &amp; Holm, A. (2007). Does parents&#x27; economic, cultural, and social capital explain the social class effect on educational attainment in the Scandinavian mobility regime? Social Science Research, 36(2), 719-744. https://doi.org/https://doi.org/10.1016/j.ssresearch.2006.11.003</p>
+<p>Jia, F., &amp; Wu, W. (2023). A comparison of multiple imputation strategies to deal with missing nonnormal data in structural equation modeling. Behavior Research Methods, 55(6), 3100-3119. https://doi.org/10.3758/s13428-022-01936-y</p>
+<p>Jobst, L. J., Bader, M., &amp; Moshagen, M. (2023). A tutorial on assessing statistical power and determining sample size for structural equation models. Psychological Methods, 28(1), 207-221. https://doi.org/10.1037/met0000423</p>
+<p>Karlson, K. B., &amp; Holm, A. (2011). Decomposing primary and secondary effects: A new decomposition method. Research in Social Stratification and Mobility, 29(2), 221- 237. https://doi.org/https://doi.org/10.1016/j.rssm.2010.12.005</p>
+<p>Karlson, K. B., Holm, A., &amp; Breen, R. (2012). Comparing regression coefficients between same-sample nested models using logit and probit: A new method. Sociological Methodology, 42(1), 286-313. https://doi.org/10.1177/0081175012444861</p>
+<p>Kohler, U., &amp; Karlson, K. (2024). KHB: Stata module to decompose total effects into direct and indirect via KHB-method. In https://EconPapers.repec.org/RePEc:boc:bocode:s457215</p>
+<p>Kohler, U., Karlson, K. B., &amp; Holm, A. (2011). Comparing coefficients of nested nonlinear probabilty models. The Stata Journal, 11(3), 420-438. https://doi.org/10.1177/1536867X1101100306</p>
+<p>MacKinnon, D. P. (2008). Introduction to statistical mediation analysis. Erlbaum.</p>
+<p>MacKinnon, D. P., Cheong, J., &amp; Pirlott, A. G. (2012). Statistical mediation analysis. In APA handbook of research methods in psychology, Vol 2: Research designs: Quantitative, qualitative, neuropsychological, and biological. (pp. 313-331). American Psychological Association. https://doi.org/10.1037/13620-018</p>
+<p>MacKinnon, D. P., Lockwood, C. M., Hoffman, J. M., West, S. G., &amp; Sheets, V. (2002). A comparison of methods to test mediation and other intervening variable effects. Psychological Methods, 7(1), 83-104. https://doi.org/10.1037/1082-989X.7.1.83</p>
+<p>Merkle, E. C., Fitzsimmons, E., Uanhoro, J., &amp; Goodrich, B. (2021). Efficient Bayesian structural equation modeling in Stan. Journal of Statistical Software, 100(6), 1 -22. https://doi.org/10.18637/jss.v100.i06</p>
+<p>Merkle, E. C., &amp; Rosseel, Y. (2018). blavaan: Bayesian structural equation models via parameter expansion. Journal of Statistical Software, 85(4), 1-30. https://doi.org/10.18637/jss.v085.i04</p>
+<p>Muthén, B. (2004). Mplus technical appendices. Muthén &amp; Muthén.</p>
+<p>Muthén, L. K., &amp; Muthén, B. O. (2017). Mplus user&#x27;s guide (8th ed.). Muthén &amp; Muthén.</p>
+<p>Rockwood, N. J. (2021). Efficient likelihood estimation of generalized structural equation models with a mix of normal and nonnormal responses. Psychometrika, 86(2), 642- 667. https://doi.org/10.1007/s11336-021-09770-5</p>
+<p>Rosseel, Y. (2012). lavaan: An R package for structural equation modeling. Journal of Statistical Software, 48(2), 36. https://doi.org/10.18637/jss.v048.i02</p>
+<p>Rosseel, Y., &amp; Vidal, M. (2025). A tutorial for understanding SEM using R: Where do all the numbers come from? British Journal of Mathematical and Statistical Psychology, n/a(n/a). https://doi.org/https://doi.org/10.1111/bmsp.70003</p>
+<p>Rubin, D. B. (1976). Inference and missing data. Biometrika, 63(3), 581-592. https://doi.org/10.1093/biomet/63.3.581</p>
+<p>SAS Institute Inc. (2023). SAS/STAT® 15.3 user&#x27;s guide. SAS Institute Inc.</p>
+<p>Sobel, M. E. (1982). Asymptotic confidence intervals for indirect effects in structural equation models. Sociological Methodology, 13, 290-312. https://doi.org/10.2307/270723</p>
+<p>Tibbe, T. D., &amp; Montoya, A. K. (2022). Correcting the bias correction for the bootstrap confidence interval in mediation analysis. Frontiers in Psychology, 13. https://doi.org/10.3389/fpsyg.2022.810258</p>
+<p>Trautwein, U., Neumann, M., Nagy, G., Lüdtke, O., &amp; Maaz, K. (Eds.). (2010). Schulleistungen von Abiturienten: Die neu geordnete gymnasiale Oberstufe auf dem Prüfstand [School achivement of upper secondary school students. The rearrangend upper secondary school on the trial]. VS Verlag für Sozialwissenschaften.</p>
+<p>Wille, E., Stoll, G., Gfrörer, T., Cambria, J., Nagengast, B., &amp; Trautwein, U. (2020). It takes two: Expectancy-value constructs and vocational interests jointly predict STEM major choices. Contemporary Educational Psychology, 61, 101858. https://doi.org/https://doi.org/10.1016/j.cedpsych.2020.101858</p>
+<p>Xie, Y., &amp; He, J. (2025). The health cost of college expectations: Adolescent educational expectations and obesity. Youth &amp; Society, 57(4), 644-666. https://doi.org/10.1177/0044118x241287225</p>
+<p>Miočević, M., &amp; MacKinnon, D. P. (2014). SAS® for Bayesian mediation analysis. In Proceedings of the 39th annual meeting of SAS Users Group International. SAS Institute. https://support.sas.com/resources/papers/proceedings14/1569-2014.pdf</p>
+<p>Wagner, W., Hecht, M., &amp; Zitzmann, S. (2023). A SAS macro for automated stopping of Markov chain Monte Carlo estimation in Bayesian modeling with PROC MCMC. Psych, 5(3), 966-982. https://doi.org/10.3390/psych5030063</p>
+<p>Zitzmann, S., &amp; Hecht, M. (2019). Going beyond convergence in Bayesian estimation: Why precision matters too and how to assess it. Structural Equation Modeling, 26(4), 646-661. https://doi.org/10.1080/10705511.2018.1545232</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
