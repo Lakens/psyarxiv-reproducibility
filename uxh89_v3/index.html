@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Developing Effective GenAI Users: The Missing
+Motivational System and Why It Matters for Equity</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Developing Effective GenAI Users: The Missing Motivational System and
+Why It Matters for Equity
+</p>
+<p class="meta">
+2026-11-10 · Metacheck 0.4.3.26
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>We found 2 replications for 1 original you cited.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 34 references with DOIs. We found 2 replications for 1
+original you cited.</p>
+<p>Check if you are aware of the replication studies, and cite them
+where appropriate.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Replication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Hulleman, C. S., &amp; Harackiewicz, J. M. (2009). Promoting interest
+and performance in high school science classes. Science, 326(5958),
+1410-1412. <a href="https://doi.org/10.1126/science.1177067" class="uri">https://doi.org/10.1126/science.1177067</a>
+</td>
+<td style="text-align:left;">
+Hulleman, C. S., Kosovich, J. J., Barron, K. E., &amp; Daniel, D. B.
+(2017). Making connections: Replicating and extending the utility value
+intervention in the classroom. Journal of Educational Psychology,
+109(3), 387–404.
+<a href="https://doi.org/10.1037/edu0000146" target="_blank">doi:10.1037/edu0000146</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hulleman, C. S., &amp; Harackiewicz, J. M. (2009). Promoting interest
+and performance in high school science classes. Science, 326(5958),
+1410-1412. <a href="https://doi.org/10.1126/science.1177067" class="uri">https://doi.org/10.1126/science.1177067</a>
+</td>
+<td style="text-align:left;">
+Hulleman, C. S., Kosovich, J. J., Barron, K. E., &amp; Daniel, D. B.
+(2017). Making connections: Replicating and extending the utility value
+intervention in the classroom. Journal of Educational Psychology,
+109(3), 387–404.
+<a href="https://doi.org/10.1037/edu0000146" target="_blank">doi:10.1037/edu0000146</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Research on Generative AI (GenAI) in education has largely focused on how much students use it and its impact on learning. This framing overlooks the motivational processes driving students&#x27; choices. We propose broadening research to include the study of what cultures, contexts, and learning experiences give students the knowledge, skills, beliefs, and motivation to become effective GenAI users. We define effective GenAI use and propose a motivational model of how learning environments and students&#x27; perceptions of them shape their goals and GenAI engagement choices, with attention to educational inequities that may emerge.</p>
+<p>Picture two students working on a difficult assignment, due soon, with a Generative AI (GenAI) chatbot open in another tab. The assignment, the GenAI tool, and the pressure are the same for both students. But their goals and behavior may diverge widely depending on the meaning they make of the situation.</p>
+<p>For one student, the assignment feels disconnected from the things she really cares about, and the difficulty of the assignment seems to prove that she was never going to be good at this subject anyway. But the deadline is tight, and she is concerned about her grade. When schoolwork feels like a performance to survive rather than a challenge to learn from, a rational goal is to do the minimum necessary to achieve an acceptable outcome. The impulse to do the minimum on assignments is as old as school itself, but the advent of GenAI offers a faster, more fluent, and more successful looking way to achieve this goal than has ever been available before. As one student put it, &quot;It was a psych pre-class quiz that I had to do and it was due at 11:59 and I had left it to the last minute. So I decided that an AI tool would be best to make sure I got credit.&quot; (U.S. undergraduate student; [authors], 2026). The relief that comes with handing in an assignment this way reinforces the usefulness of the approach, and the next time a student is faced with the same choice, it may feel even easier to offload their critical thinking onto GenAI.</p>
+<p>For the second student, the same difficulty carries a different meaning: it feels like a challenge she can work through and learn from, instead of like a chore that proves her lack of ability. She, too, opens the chatbot and begins by asking a question. The chatbot&#x27;s explanation makes sense, but it raises more questions, and the problem becomes more interesting.</p>
+<h3>[div-01]</h3>
+<p>Somewhere along the way, the exchange stops being about simply finishing the assignment, and instead becomes about learning and understanding. She asks why an idea works. She pushes back when an answer seems too simple. She asks for an example from a primary source, then follows up with her own question that the assignment never mentioned. Another student described working this way: &quot;I would first try the problem myself, then check my approach... If I got stuck, I asked [the chatbot] to guide me step-bystep rather than giving the final answer … I actually felt more confident solving similar problems on my own afterward&quot; (U.S. 9th grader; [authors], 2026). Instead of relief, this student is reinforced by mastery: she now understands the steps much better, can catch her own mistakes, and the next hard problem feels like hers to solve. These two students are not separate archetypes. When we asked college students about their GenAI use over the past month, the same students who reported asking follow-up questions and requesting push back on their ideas in one context also reported having GenAI produce most or all of an assignment in other contexts ( [authors], 2026). Thus, there is nuanced use within individuals, which also includes nuances behind choices to not use GenAI: to learn independently, avoid accusations of cheating, or because the costs are considered not worthwhile (e.g., environmental costs of data centers, privacy issues).</p>
+<h3>Broadening the Research Question: Studying How Students Become Effective GenAI Users</h3>
+<p>As educators, we want students to become effective learners capable of leveraging the resources at their disposal. We often look to the quality of students&#x27; work as evidence of what they have learned. But with GenAI, high-quality work can result from students working through ideas with it or asking it to produce answers for them. Educators naturally wonder: do students learn when they use GenAI? This question has led to hundreds of observational and experimental studies, meta-analyses, and meta-analyses of metaanalyses evaluating the outcomes of different amounts of GenAI use (e.g., Emslander et al., 2026).</p>
+<p>But GenAI is not an intervention that adults can apply to, or withhold from, students. It is a tool already in their lives. Students make choices about using GenAI every day, whether anyone is scaffolding the development of that decision-making capacity or not. And testing GenAI access as an intervention evaluates whether a particular tool, with its guardrails, used by students with their own goals, motivation, and skills, is effective for a particular task. It is not informative about what students learn when they are taught how to use GenAI well, given the opportunity to practice across years, and supported in developing the judgment to know when it is and is not a useful tool. Studying GenAI outside the context of students&#x27; real use will limit our understanding of the thoughts, feelings, behaviors, and environments that shape students&#x27; use of it, and thus our ability to help students become effective GenAI users. We propose broadening the study of AI-in-education to ask: what cultures, contexts, and learning experiences give students the knowledge, skills, beliefs, and motivation to become effective users of GenAI -and do so equitably?</p>
+<h3>Defining Effective GenAI Use</h3>
+<p>We define an effective user of GenAI as having the capacity to: • know how, when, and when not to use GenAI, evaluated against where the technology is currently reliable and where it fails; • match GenAI use or nonuse to the goal for the current task and situation; • use GenAI to enhance thinking, learning, and work.</p>
+<p>This definition is an addition to existing AI literacy frameworks, which have focused on students&#x27; understanding of what GenAI is, how to use it and evaluate its output, and what ethical use requires (Feng &amp; Carolus, 2026). While these skills are clearly important, we believe equal attention should be paid to the contexts, beliefs, and goals that drive students&#x27; choices about GenAI. A student can be taught how to prompt and still use GenAI to avoid thinking. She can know that output should be checked and still defer to it when she doubts her judgment. She can understand responsible use and still avoid the tool because she fears being accused of cheating. In each case the student has the knowledge.</p>
+<p>We argue that what differs is the goals she is striving to meet and the contexts that give rise to those goals.</p>
+<p>We make two clarifying notes about this definition. First, knowing how to use GenAI includes understanding how GenAI works and how to prompt well, as well as how to effectively elicit help that builds learning (i.e., instrumental help-seeking; Roll et al., 2011) and apply effective self-regulated learning strategies to enhance thinking and learning (Zimmerman, 1990). Second, although within education contexts the desired goal is learning, not all environments motivate young people to hold learning goals. In environments that motivate non-learning goals, such as completing work quickly, delegating the work to GenAI becomes a rational choice. Thus, the study of effective GenAI use for learning requires studying use within contexts that motivate learning goals. We expand on these points within our motivational model of GenAI engagement.</p>
+<h3>A Motivational Model of GenAI Engagement</h3>
+<p>Drawing on decades of research on the science of learning, development, and motivation, we propose a motivational model of GenAI engagement to organize the research space on GenAI and learning. Figure 1 provides an overview of this domain-general decision-making process. Our model accounts for how learning environments and students&#x27; perceptions of them shape their goals and choices. Students appraise their situations, form their goals, choose strategies, and accumulate knowledge and experiences that shape their engagement the next time (Walton &amp; Wilson, 2018). Set against this model, many AI-ineducation studies focus on a narrow slice of the decision-making process: students&#x27; GenAI use and its consequences, often with access assigned rather than chosen (Emslander et al., 2026). In contrast, much of what the learning sciences knows about engaging students sits earlier in the sequence, in students&#x27; environments (Darling-Hammond et al., 2020), the appraisals they form (Walton &amp; Wilson, 2018), and the goals associated with those appraisals (Muenks et al., 2024). Furthermore, the decision-making process varies within students: motivational states, including goals, form and shift from situation to situation (Törmänen et al., 2025). By skipping straight to GenAI use and its outcomes, we skip the processes that produce these behaviors, and students appear as products of GenAI use rather than agents directing a resource. Strategies. Many well-known resource-use strategies map onto newer terms commonly used to describe students&#x27; use of GenAI. For example, students such as the one in the second vignette above may seek instrumental help (Roll et al., 2011) by asking for limited assistance so they can solve the problem on their own. Instrumental help can include use of GenAI to amplify thinking by (a) aiding learning rather than providing answers, and (b) pushing thinking beyond what is possible on one&#x27;s own. Students such as the one in the first vignette may seek executive help from GenAI by asking for answers and solutions, also referred to as offloading or delegating thinking. Students may also avoid help-seeking entirely (from GenAI or otherwise) to maximize independent learning or because admitting to needing help seems threatening (Karabenick &amp; Dembo, 2011). Students may even purposefully choose not to use GenAI in situations where other resources (such as a textbook, a peer, their class notes, etc.) would better serve their goals (Chen et al., 2017).</p>
+<p>Students move among all four of these resource-use strategies from task to task.</p>
+<h3>Goals.</h3>
+<p>Students&#x27; strategies follow from their goals. Decisions about using GenAI and other educational resources, such as tutors, textbooks, and peer study groups, can be seen as rational strategies designed to achieve specific goals. Drawing on research on learning and motivation, we distinguish four goal types that shape students&#x27; behavior: 1.</p>
+<p>Learning goals: Driven by safety, value, and curiosity, a learning goal seeks to build understanding, improvement, and competence in the subject matter (Dweck &amp; Leggett, 1988; Elliot &amp; McGregor, 2001).</p>
+<p>2. Achievement (Performance): Driven by evaluative and high-stakes cues, an achievement goal seeks to demonstrate competence and secure a valued outcome, such as a high score or good grade (Elliot &amp; McGregor, 2001; Elliot et al., 2011; Senko et al., 2011; Sievers et al., 2026).</p>
+<h3>3. Completion (Efficiency):</h3>
+<p>Driven by high cost/low value, a completion goal is transactional: it aims simply to get the assignment done (Eccles &amp; Wigfield, 2020; Nicholls et al., 1985).</p>
+<h3>4. Protection (Avoidance):</h3>
+<p>Driven by low safety/low belonging, a protection goal seeks to hide a lack of understanding or avoid the risk of making a mistake (Elliot &amp; McGregor, 2001; Ryan &amp; Pintrich, 1997).</p>
+<p>Each goal is a rational response to the learning environment that a given student inhabits.</p>
+<p>Evaluation structures that reward demonstrated ability make achievement goals rational (Muenks et al., 2020; Senko et al., 2011; Sievers et al., 2026). Classrooms where struggle feels unsafe can make protection rational: students are more likely to avoid seeking help they need, or to seek only the kind that ends the task, so they withdraw effort (Karabenick, 2004; Ryan et al., 2001). Tasks that demand more effort than they seem worth, or more time than the schedule allows, tend to elicit completion goals (Eccles &amp; Wigfield, 2020).</p>
+<p>Achievement, completion, and protection goals are all generally well-served by GenAI&#x27;s fluent generation of believable work products. In contrast, when students hold learning goals, their objective is to master the knowledge or skill at hand. Students holding learning goals may also care about outcomes such as earning a good grade or passing a test, but their interest in the topic goes beyond the grade (Grant &amp; Dweck, 2003). We therefore predict that students holding learning goals will tend to use GenAI to enhance, rather than offload, their critical thinking.</p>
+<h3>Appraisals.</h3>
+<p>Goals do not follow directly from the objective features of a task. Instead, they are determined by what those features mean to the student in a given moment. These meaning-making processes, or appraisals, are what create a situation&#x27;s motivational consequences for each person (Eccles &amp; Wigfield, 2020). Faced with the same assignment, a student may judge that she can succeed, that the task is worth the effort, that it is safe to struggle or ask for help, and that her own judgment matters -or she may reach the opposite conclusions. These appraisals are situation-specific rather than fixed properties of individual students (Törmänen et al., 2025). Expectations for success vary across activities and contexts (Eccles &amp; Wigfield, 2020) and may shift as competing demands change (Beymer et al., 2026). Concerns about safety and belonging may rise and fall according to identity-relevant cues in the setting (Kroeper et al., 2026). Task value is also malleable: helping students connect course material to their lives increases interest and grades, particularly among students with low expectations for success (Hulleman &amp; Harackiewicz, 2009). Thus, the situation itself does not determine a student&#x27;s goal directly.</p>
+<p>Instead, students engage in complex meaning-making processes, taking into account a variety of environmental cues and relevant beliefs, which together make some goals more salient than others.</p>
+<h3>Situation: A Person in Context.</h3>
+<p>The learning environment shapes appraisals by providing cues about what and who is valued. Stereotypes about who has valuable abilities can undermine belonging (Bauer et al., 2025), while features of the task and setting shape whether students see the work as valuable (Eccles &amp; Wigfield, 2020). Furthermore, many students are attuned to cues that their gender, racial/ethnic background, or their family&#x27;s immigrant status or socio-economic background may be devalued in a given setting, a vigilance that helps them navigate the context (Kroeper et al., 2026). Students facing such cues may feel the need to work even harder to prove themselves, or may disengage from school or from the subject matter if they believe their effort is futile. For example, computing has long been seen as a field in which men belong and excel (Master et al., 2025). Young women may avoid new technology for fear that being &quot;techie&quot; is not for &quot;people like me.&quot; When the learning environment sends signals that students are at risk of being judged negatively, it brings out threat appraisals and protection goals.</p>
+<p>Considering the motivational process model as a whole, it bears mentioning that no goal is inherently good or problematic. Adults routinely delegate or offload mundane tasks to preserve effort for more valuable work (Zhu et al., 2026). Self-protection in a threatening environment may be critical to a student&#x27;s well-being (Kroeper et al., 2026). What educators perceive as a student problem is often a mismatch between the educator&#x27;s goal to assess learning, and the goal the environment has made rational for the student. Place the same student in three different environments, and three different goals with three different strategies for GenAI use may emerge. Each choice that a given student makes about GenAI use builds knowledge and experience that shapes the next appraisal, allowing small task-level consequences to accumulate into trajectories of skill, confidence, agency, and belonging. This recursive process, each experience shaping how the next situation is interpreted and approached, is what makes the model developmental rather than a snapshot (Walton &amp; Wilson, 2018).</p>
+<h3>New Issues Surfaced by the Introduction of GenAI</h3>
+<p>So far, we have focused on motivational processes that are by and large unchanged from the pre-GenAI era. While GenAI is a new resource with new affordances, the basic processes by which students navigate resources in their learning environment are not new.</p>
+<p>However, GenAI does introduce unique affordances to that environment which we believe are likely to shape student motivation in the years to come. In this section, we discuss the implications of some of these affordances for educational research and policy.</p>
+<h3>Teaching Effective Resource Use</h3>
+<p>Even when students hold learning goals, it does not necessarily follow that they will use GenAI (or other learning resources) effectively. Strategically selecting which resources to use for learning has always been a challenge, even before GenAI. For example, college undergraduates benefited from an intervention prompting them to plan proactively what resources they would use for studying; e.g., reviewing lecture notes, attending office hours, and consulting with peers (Chen et al., 2017).</p>
+<p>GenAI adds a new learning resource to the mix. A student who chooses GenAI as a learning resource must know how to use it effectively to elicit instrumental help (Roll et al., 2011).  (Aleven et al., 2003), but they can be taught: when students were given metacognitive feedback on their helpseeking, they improved their help-seeking skills and those improvements carried into new material a month after the support was withdrawn (Roll et al., 2011). Historically, schools have rarely engaged in teaching these competencies (Karabenick &amp; Dembo, 2011), relying instead on adults to tell young people which resources to use, sequence hints for them, and withhold the answers to check for understanding. With the addition of GenAI, adults have less control over the availability of hints, correct answers, and resources than they did in the past. Therefore, 21 st century schools need to teach students the skills of seeking help effectively and monitoring their own learning progress more explicitly than was previously necessary.</p>
+<h3>A New Kind of Authority</h3>
+<p>Unlike previous technologies, GenAI participates in meaning-making. It introduces questions, offers pushback, and contributes to the knowledge a student is building, requiring students to adopt a trust-but-verify stance by critically reviewing outputs, checking sources, and evaluating plausibility against their own understanding (Wu et al., 2025). Yet students may experience this highly intelligent meaning-making partner the way they were taught to experience other authorities in their lives. Children learn early whether it is appropriate to question or seek help from authority figures, and those lessons differ by social class (Calarco, 2014). Faced with the question: &quot;Is my thinking worth contributing?&quot; a student whose voice was never valued is unlikely to feel ownership now.</p>
+<p>Becoming an effective GenAI user depends on learning environments that foster authority and ownership. Classrooms that create a climate of respect and belonging, and that value learning over getting the right answer, build students&#x27; authority over their ideas and reduce their worry about being judged for sharing them (Engle &amp; Conant, 2002; Muenks et al., 2020). Those conditions, however, are set by adults still working out an unfamiliar technology for themselves. A natural reaction to a technology we do not fully understand is to reach for control, either by holding students to high standards without giving them the support to meet them, or by lowering the demands and blocking the tool (Yeager et al., in press). Both approaches limit student agency and focus more on detecting or banning use.</p>
+<p>In contrast, a &quot;mentor mindset&quot; can hold students to high standards while providing the support needed for students to safely fail, learn from mistakes, and build their skill, confidence, and ownership of judgment (Yeager et al., in press). Knowing that GenAI output should be checked is not enough; students need to be shown that their judgment is valued.</p>
+<h3>Tinkering and Keeping up with Ever-Changing Technology</h3>
+<p>Effective GenAI use also requires a working map of where the tool is currently reliable and where it fails. This boundary is often described as a &quot;jagged edge&quot; because it is counterintuitive and constantly shifting (Dell&#x27;Acqua et al., 2026). No fixed playbook can therefore replace calibrated experience. Students need structured opportunities to test the tool against tasks they understand, to watch it succeed and fail, and to update their mental representations. This practice works best when the learning environment communicates that (a) everyone can become an effective user of GenAI, and (b) trying and learning from mistakes is valued over performance outcomes. This presumes schools permit GenAI use. In our 2026 national adolescent data, 42% of students whose parents did not have a college degree attended schools where GenAI use was prohibited, compared with 17% of students with college-educated parents ( [authors], 2026).</p>
+<p>Permitting practice for some students and not others is how the next digital divide gets built (Capraro et al., 2024).</p>
+<p>Teachers need the same opportunity. Whether they are using GenAI to generate lesson plans, teaching about GenAI, or simply enforcing GenAI policy, teachers cannot support a judgment they have not had the chance to build. Time, space, and support for teachers&#x27; productive tinkering must be a high priority. Fortunately, learning environments can be changed at scale through providing teachers with structured, supported practice (Yeager et al., in press).</p>
+<h3>Concluding Thoughts</h3>
+<p>Drawing on decades of motivation and help-seeking research, we have argued that research must study much more than the overall frequency of students&#x27; GenAI use, or whether students use GenAI to offload their critical thinking. How students choose to engage in learning follows from their appraisals of the learning environment, the goals those appraisals make salient, and the strategies that rationally follow those goals. To learn how to support effective GenAI use, research and policy must seek to understand these beliefs and motivations. When young people see the purpose of the material they are learning, finishing quickly with minimal effort is no longer the rational goal. If it feels safe to struggle and make mistakes, difficulty stops indicating inability, and students feel more empowered to hand in work that reflects their real, imperfect learning. And when students are treated as autonomous individuals with agency, whose judgment is respected, then they have a reason to believe their judgment is worth using. Each of these experiences, and many more, may create learning environments that support young people to use GenAI</p>
+<p>This work was supported by a National Science Foundation grant (2201928).</p>
+<h3>Figure 1 A</h3>
+<p>Figure 1 A Motivational Model of GenAI Engagement recognize what she does not yet understand, ask for an explanation rather than an answer, judge what comes back against what she already knows, and decide what to do next.</p>
+<h3>DEVELOPING</h3>
+<p>Students do not become skilled help-seekers on their own effectively over time.</p>
+<p>Thus, our model organizes the research space around these experiences by naming key ideas and pointing to the development of measures, hypotheses, and research designs surrounding the question the field now needs to answer: what cultures, contexts, and learning experiences give students the knowledge, skills, beliefs, and motivation to become effective users of GenAI, and do so equitably? To answer such questions, research must measure key aspects of the learning environment, students&#x27; beliefs, appraisals, and goals, and the strategies they use to achieve these goals, not just their overall amount of GenAI use. We call for research designs that vary the signals the learning environment sends about what is valued, such as how assignments are designed and graded, and then examine how students&#x27; goals and behavior with GenAI shift in response to these changes. Studies examining students&#x27; GenAI use will benefit from collecting data to understand why students make the choices they do. Measures of the whole processsituation, appraisal, goal, strategy, consequence -will allow the field to learn what supports effective GenAI use among different student populations and scale the most effective approaches. Powerful narratives are emerging in popular culture that frame GenAI as a miracle tutor on the one hand, or as a source of cognitive decay on the other. But if our policies are to be based on evidence, then science must catch up with these narratives. We hope this model helps the science set the pace by identifying the kinds of factors that lead students to become effective GenAI users rather than refereeing the tool. What we want for students has not changed. Before GenAI, the science of learning and development sought to develop young people who pose questions, seek out resources to answer them, evaluate what they find across multiple sources and perspectives, and work toward goals that matter (Learning Policy Institute &amp; Turnaround for Children, 2021). GenAI has changed the conditions for getting there. The work ahead is building classrooms where the rational choice and the learning choice are the same choice -for every student.</p>
+<h3>References</h3>
+<p>2026). How and why students use generative AI for schoolwork: Strategies, goals, and situations in three samples of adolescents and college students. [Manuscript in preparation]</p>
+<p>Aleven, V., Stahl, E., Schworm, S., Fischer, F., &amp; Wallace, R. (2003). Help seeking and help design in interactive learning environments. Review of Educational Research, 73(3), 277-320. https://doi.org/10.3102/00346543073003277</p>
+<p>Bauer, C. A., Poddar, A., Brummelman, E., &amp; Cimpian, A. (2025). The brilliance-belonging model: How cultural beliefs about intellectual ability undermine educational equity. Educational Psychology Review, 37, Article 64. https://doi.org/10.1007/s10648-025- 10034-2</p>
+<p>Beymer, P. N., Keller, K. L., Rosenzweig, E. Q., &amp; Muenks, K. (2026). Examining interrelations among weekly coursework and motivational beliefs in college physics. Journal of Educational Psychology, 118(4), 594-610. https://doi.org/10.1037/edu0001012</p>
+<p>Calarco, J. M. (2014). Coached for the classroom: Parents&#x27; cultural transmission and children&#x27;s reproduction of educational inequalities. American Sociological Review, 79(5), 1015-1037. https://doi.org/10.1177/0003122414546931</p>
+<p>Capraro, V., Lentsch, A., Acemoglu, D., Akgun, S., Akhmedova, A., Bilancini, E., Bonnefon, J.-F., Brañas-Garza, P., Butera, L., Douglas, K. M., Everett, J. A. C., Gigerenzer, G., Greenhow, C., Hashimoto, D. A., Holt-Lunstad, J., Jetten, J., Johnson, S., Kunz, W. H., Longoni, C., . . . Viale, R. (2024). The impact of generative artificial intelligence on socioeconomic inequalities and policy making. PNAS Nexus, 3(6), Article pgae191. https://doi.org/10.1093/pnasnexus/pgae191</p>
+<p>Chen, P., Chavez, O., Ong, D. C., &amp; Gunderson, B. (2017). Strategic resource use for learning: A self-administered intervention that guides self-reflection on effective resource use enhances academic performance. Psychological Science, 28(6), 774- 785. https://doi.org/10.1177/0956797617696456</p>
+<p>Darling-Hammond, L., Flook, L., Cook-Harvey, C., Barron, B., &amp; Osher, D. (2020). Implications for educational practice of the science of learning and development. Applied Developmental Science, 24(2), 97-140. https://doi.org/10.1080/10888691.2018.1537791</p>
+<p>Dell&#x27;Acqua, F., McFowland, E., III, Mollick, E., Lifshitz, H., Kellogg, K. C., Rajendran, S., Krayer, L., Candelon, F., &amp; Lakhani, K. R. (2026). Navigating the jagged technological frontier: Field experimental evidence of the effects of artificial intelligence on knowledge worker productivity and quality. Organization Science, 37(2), 403-423. https://doi.org/10.1287/orsc.2025.21838</p>
+<p>Dweck, C. S., &amp; Leggett, E. L. (1988). A social-cognitive approach to motivation and personality. Psychological Review, 95(2), 256-273. https://doi.org/10.1037/0033- 295X.95.2.256</p>
+<p>Eccles, J. S., &amp; Wigfield, A. (2020). From expectancy-value theory to situated expectancy- value theory: A developmental, social cognitive, and sociocultural perspective on motivation. Contemporary Educational Psychology, 61, Article 101859. https://doi.org/10.1016/j.cedpsych.2020.101859</p>
+<p>Elliot, A. J., &amp; McGregor, H. A. (2001). A 2 × 2 achievement goal framework. Journal of Personality and Social Psychology, 80(3), 501-519. https://doi.org/10.1037/0022- 3514.80.3.501</p>
+<p>Elliot, A. J., Murayama, K., &amp; Pekrun, R. (2011). A 3 × 2 achievement goal model. Journal of Educational Psychology, 103(3), 632-648. https://doi.org/10.1037/a0023952</p>
+<p>Emslander, V., Lindner, M. A., Eitel, A., Kasneci, E., &amp; Bardach, L. (2026). What do we know about the effects of artificial intelligence in education? A second-order meta-analysis [Preprint]. PsyArXiv. https://doi.org/10.31234/osf.io/6e5du</p>
+<p>Engle, R. A., &amp; Conant, F. R. (2002). Guiding principles for fostering productive disciplinary engagement: Explaining an emergent argument in a community of learners classroom. Cognition and Instruction, 20(4), 399-483. https://doi.org/10.1207/S1532690XCI2004_1</p>
+<p>Feng, S., &amp; Carolus, A. (2026). Artificial intelligence literacy at school: A systematic review with a focus on psychological foundations. Computers and Education: Artificial Intelligence, 10, Article 100551. https://doi.org/10.1016/j.caeai.2026.100551</p>
+<p>Grant, H., &amp; Dweck, C. S. (2003). Clarifying achievement goals and their impact. Journal of Personality and Social Psychology, 85(3), 541-553. https://doi.org/10.1037/0022- 3514.85.3.541</p>
+<p>Hulleman, C. S., &amp; Harackiewicz, J. M. (2009). Promoting interest and performance in high school science classes. Science, 326(5958), 1410-1412. https://doi.org/10.1126/science.1177067</p>
+<p>Karabenick, S. A. (2004). Perceived achievement goal structure and college student help seeking. Journal of Educational Psychology, 96(3), 569-581. https://doi.org/10.1037/0022-0663.96.3.569</p>
+<p>Karabenick, S. A., &amp; Dembo, M. H. (2011). Understanding and facilitating self-regulated help seeking. New Directions for Teaching and Learning, 2011(126), 33-43. https://doi.org/10.1002/tl.442</p>
+<p>Kroeper, K. M., Hernandez-Colmenares, A., Green, D. J., Williams, H. E., Kuzdal, A., Ospina, J., Moore, C. A., Agarwal, G., Heckler, A. F., Crocker, J., Fujita, K., Murphy, M. C., &amp; Spencer, S. J. (2026). How do you measure a threat in the air? Testing the universal, dynamic, and multifaceted nature of social identity threat. Science Advances, 12, Article eadx2953. https://doi.org/10.1126/sciadv.adx2953</p>
+<p>Learning Policy Institute &amp; Turnaround for Children. (2021). Design principles for schools: Putting the science of learning and development into action.</p>
+<p>Master, A., Meltzoff, A. N., Tang, D., &amp; Cheryan, S. (2025). Divergence in children&#x27;s gender stereotypes and motivation across STEM fields. Proceedings of the National Academy of Sciences, 122(18), Article e2408657122. https://doi.org/10.1073/pnas.2408657122</p>
+<p>Muenks, K., Canning, E. A., LaCosse, J., Green, D. J., Zirkel, S., Garcia, J. A., &amp; Murphy, M. C. (2020). Does my professor think my ability can change? Students&#x27; perceptions of their STEM professors&#x27; mindset beliefs predict their psychological vulnerability, engagement, and performance in class. Journal of Experimental Psychology: General, 149(11), 2119-2144. https://doi.org/10.1037/xge0000763</p>
+<p>Muenks, K., Lin, S., Rutten, L. D., Hecht, C. A., &amp; Yan, V. X. (2024). Exploring undergraduate students&#x27; challenge frameworks: A person-centered approach. Learning and Individual Differences, 116, Article 102562. https://doi.org/10.1016/j.lindif.2024.102562</p>
+<p>Nicholls, J. G., Patashnick, M., &amp; Nolen, S. B. (1985). Adolescents&#x27; theories of education. Journal of Educational Psychology, 77(6), 683-692. https://doi.org/10.1037/0022- 0663.77.6.683</p>
+<p>Roll, I., Aleven, V., McLaren, B. M., &amp; Koedinger, K. R. (2011). Improving students&#x27; help- seeking skills using metacognitive feedback in an intelligent tutoring system. Learning and Instruction, 21(2), 267-280. https://doi.org/10.1016/j.learninstruc.2010.07.004</p>
+<p>Ryan, A. M., &amp; Pintrich, P. R. (1997). &quot;Should I ask for help?&quot; The role of motivation and attitudes in adolescents&#x27; help seeking in math class. Journal of Educational Psychology, 89(2), 329-341. https://doi.org/10.1037/0022-0663.89.2.329</p>
+<p>Ryan, A. M., Pintrich, P. R., &amp; Midgley, C. (2001). Avoiding seeking help in the classroom: Who and why? Educational Psychology Review, 13(2), 93-114. https://doi.org/10.1023/A:1009013420053</p>
+<p>Senko, C., Hulleman, C. S., &amp; Harackiewicz, J. M. (2011). Achievement goal theory at the crossroads: Old controversies, current challenges, and new directions. Educational Psychologist, 46(1), 26-47. https://doi.org/10.1080/00461520.2011.538646</p>
+<p>Sievers, J., Muenks, K., &amp; Goldstein, M. G. (2026). How will I be graded? The past, present, and future of research on grading policies and student motivation in secondary and postsecondary education. Educational Psychologist, 61(2), 99-119. https://doi.org/10.1080/00461520.2026.2636491</p>
+<p>Törmänen, T., Ketonen, E., Lehtoaho, E., Turunen, M., Zabolotna, K., Shubina, T., &amp; Järvenoja, H. (2025). Situational motivation in academic learning: A systematic review. Educational Psychology Review, 37, Article 56. https://doi.org/10.1007/s10648-025- 10036-0</p>
+<p>Walton, G. M., &amp; Wilson, T. D. (2018). Wise interventions: Psychological remedies for social and personal problems. Psychological Review, 125(5), 617-655. https://doi.org/10.1037/rev0000115</p>
+<p>Wu, J.-Y., Lee, Y.-H., Chai, C. S., &amp; Tsai, C.-C. (2025). Strengthening human epistemic agency in the symbiotic learning partnership with generative artificial intelligence. Educational Researcher, 54(6), 358-368. https://doi.org/10.3102/0013189X251333628</p>
+<p>Yeager, D. S., Hecht, C. A., Bryan, C., Giani, M., Crosnoe, R., Muller, C., Tipton, E., Murray, J., Smith, R., Zhang, S., Johnson, M., Smith, M., Mitterer-Claudet, J., Buontempo, J., Boylan, R., Green, S., Trzesniewski, K., Murphy, M. C., &amp; Dweck, C. S. (in press). A scalable culture-of-learning program for teachers improved student outcomes and teacher well-being. Nature Human Behaviour.</p>
+<p>Zhu, Q., Li, X., Dong, Y., Chang, P., &amp; Fan, M. (2026). Not all cognitive offloading is equal: Distinguishing dependent and autonomous offloading to generative AI. Frontiers in Psychology, 17, Article 1878629. https://doi.org/10.3389/fpsyg.2026.1878629</p>
+<p>Zimmerman, B. J. (1990). Self-regulated learning and academic achievement: An overview. Educational Psychologist, 25(1), 3-17. https://doi.org/10.1207/s15326985ep2501_2</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
