@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: From Behavioral Design to Behavior-Based
+Design: Functional Specification for Designed Environments</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+From Behavioral Design to Behavior-Based Design: Functional
+Specification for Designed Environments
+</p>
+<p class="meta">
+2026-11-10 · Metacheck 0.4.3.24
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>16</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="na">Not applicable <span class="n">(16)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 58 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 58 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 58 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Behavioral design has developed frameworks and taxonomies that help researchers and practitioners organize, select, and describe interventions. However, identifying an intervention technique does not establish the functional relations through which it influences behavior. This article proposes behavior-based design (BBD) as a programmatic approach that places functional specification at the center of the design process. BBD does not introduce new behavioral principles or replace established methods of behavior analysis. Instead, it organizes their application to deliberately designed environments, including digital interfaces, public services, sustainability initiatives, and organizational systems. The article identifies five criteria for adequate functional specification: behavioral precision, functional coherence, discriminability among alternative functional explanations, relevance to design decisions, and empirical accountability. Examples illustrate how the same intervention category may involve different functional relations, leading to different predictions, measurement strategies, and design decisions. Particular attention is given to competing contingencies, maintenance, generalization, and the conditions affecting those responsible for implementing and sustaining interventions.</p>
+<p>Finally, the article outlines a research agenda for comparing designs informed by explicit functional hypotheses with approaches relying primarily on broader intervention categories. The proposed contribution of BBD is therefore methodological and programmatic: to make 2 functional specification an explicit requirement of design and to evaluate its predictive and practical value through cumulative empirical research.</p>
+<h3>Introduction</h3>
+<p>Behavior change has become a mainstream design problem. Across policy, health, organizational practice, sustainability, public services, and digital systems, practitioners increasingly treat behavior as something to be arranged, measured, and modified rather than merely encouraged. This development should be welcomed: it has legitimized behavioral outcomes, improved the reporting of intervention components, and moved many applied fields beyond intuition and common sense. Digital product design shows the same shift. Recent work on evidence-based digital design argues that the field has too often relied on personal experience, common sense, or isolated experiments and needs a stronger framework for predicting and influencing users&#x27; behavior (León Domínguez, 2025). In this article, behavioral design is used broadly to refer to approaches that intentionally configure environments, interfaces, or services to influence behavior. It is not treated as a single, unified discipline.</p>
+<p>Much of this expansion has been driven by behavioral economics and related traditions, including nudging, choice architecture, and accounts of judgment and decision-making (Kahneman, 2011; Thaler &amp; Sunstein, 2008; Tversky &amp; Kahneman, 1974). In parallel, structured frameworks such as the capability-opportunity-motivation-behavior model (COM-B), the Behavior Change Wheel, and the Behavior Change Technique Taxonomy have given practitioners a shared vocabulary for designing, classifying, and reporting interventions (Michie et al., 2011 (Michie et al., , 2013)). These tools support interdisciplinary communication and make behaviorchange methods more accessible across fields.</p>
+<p>These achievements matter: a field that once did not talk about behavior in systematic ways now often does. Yet greater classificatory precision has not necessarily produced greater functional precision, and a shared vocabulary should not be mistaken for a shared explanatory system. Taxonomies organize intervention labels. They do not by themselves specify the functional relations through which behavior is selected, maintained, weakened, generalized, or replaced. A design may be accurately classified as prompting, feedback, incentivization, environmental restructuring, or friction reduction while leaving open important questions about which behavior is affected, under what conditions, through which consequences, and for how long. Whether a particular intervention is functionally underspecified remains an empirical and analytic question. It cannot be inferred from its label alone.</p>
+<p>Design itself has long recognized a similar problem. Norman&#x27;s critique of the loose use of &quot;affordance&quot; is instructive: designers often claimed to have &quot;added an affordance&quot; when they had actually added a visual cue, a convention, or feedback (Norman, 1999). The same risk arises when an influence strategy or design feature is reported without specifying the behavioral function of the component. The problem is not interdisciplinary terminology as such, but the tendency for useful terms to harden into labels that obscure the relations they were meant to clarify. A common professional vocabulary may facilitate coordination while leaving functional integration incomplete.</p>
+<p>Behavior analysis is well positioned to address this. Its contribution is not merely a more technical vocabulary but an approach centered on the functional relations between behavior and environmental conditions, including response classes, antecedent and motivating variables, consequences, competing contingencies, and the conditions governing maintenance over time (Catania, 2017; Rasmussen et al., 2023; Skinner, 1953). These are not ornaments attached to an otherwise complete intervention. Specifying their relations is essential to understanding whether an intervention produces a transient effect, durable change, relapse, countercontrol, or no measurable change.</p>
+<p>The argument also requires an internal critique. Behavior analysis has achieved substantial applied impact, including instructional design, organizational behavior management, behavior-based safety, and environmental interventions. These traditions establish that design problems are not foreign to the discipline. Much of this work, however, has developed within specific applied domains. For example, behavior-based safety has focused on workplace safety practices (Komaki et al., 1978; Sulzer-Azaroff, 1978), while organizational behavior management has examined performance feedback and organizational performance (Prue &amp; Fairbank, 1981). Research on environmental interventions has similarly addressed specific problems such as energy conservation and recycling (Hayes &amp; Cone, 1977; O&#x27;Connor et al., 2010). These contributions provide an established foundation, but the literature considered here does not reveal a comparably recognizable, cumulative research program focused on the functional specification of designed environments across domains. The extent to which existing behavior-analytic contributions already address this broader research objective remains to be systematically examined.</p>
+<p>Behavior analysts already possess the relevant concepts. What remains worth developing is a visible, cumulative, interdisciplinary program that organizes those concepts around the problems of deliberately designed environments and tests what functional specification adds to established design practice.</p>
+<p>The primary audience of this article is therefore behavior analysts. Its purpose is not to provide designers, policy researchers, sustainability researchers, or other professional communities with a complete behavior-analytic methodology in a single paper. Those communities present different problems, vocabularies, constraints, and literatures. Effective engagement will require domain-specific work in their own scholarly and professional venues.</p>
+<p>The narrower task here is internal: to specify what behavior analysis can contribute to designed environments and how a research program around that contribution might begin.</p>
+<p>The issue is therefore one of disciplinary participation as well as conceptual accuracy.</p>
+<p>Without a coherent research program, behavior-analytic principles may continue to be cited indirectly, loosely interpreted, or rediscovered under new names, rather than systematically applied, evaluated, and examined for their ethical implications in the design of contemporary environments.</p>
+<p>The article has two related goals. First, it offers a behavior-analytic reappraisal of behavioral design by distinguishing taxonomic or process-level integration from functional specification. Second, it proposes behavior-based design (BBD) as a programmatic research and design orientation through which behavior analysts can contribute more systematically to deliberately designed environments. The term does not name a new theory, discipline, or replacement for behavioral design. It names a focused invitation to bring established functional methods into interdisciplinary design research, while testing rather than assuming their added value.</p>
+<p>The proposed orientation is analogous, in a limited programmatic sense, to behaviorbased safety: a recognizable effort to bring established behavior-analytic concepts and methods to problems in a defined applied arena, without founding a separate science. The comparison should not conceal differences in maturity or evidence. Behavior-based safety has a substantial applied history. Behavior-based design, as used here, names a proposed interdisciplinary research program whose incremental contribution remains to be tested. Functional and contingency analysis, organizational behavior management, and behavioral systems analysis already provide established approaches to analyzing existing environments and informing the design of new ones. They are methodological antecedents, not competing approaches. The proposed value of a separate programmatic designation lies in making functional specification an explicit and shared objective across applied design domains, systematically integrating it into the formulation of design problems, the selection of environmental arrangements, and the evaluation of their behavioral effects. Whether this integration provides incremental predictive or practical value remains an empirical question. Rather than replacing established behavior-analytic methods, BBD would organize their use around recurring design problems and support cumulative comparisons of how functional hypotheses influence design decisions, behavioral outcomes, maintenance, and generalization. BBD is concerned with the broader design research problems of interfaces, artifacts, physical environments, services, and sociotechnical systems, rather than claiming exclusive jurisdiction over any of these domains.</p>
+<h3>From Intervention Categories to Functional Specification</h3>
+<p>Not all conceptual tools used in behavior change serve the same purpose. Some organize practice, some describe intervention components, some propose general causal relations, and some specify the variables that make behavior more or less likely in a particular setting. This distinction matters because coordination, classification, explanation, and functional analysis represent different levels of work. Frameworks help teams map options and organize decisions.</p>
+<p>Taxonomies provide consistent names for intervention components. Process theories propose relations among variables. Functional specification goes further by identifying the environmental and historical conditions under which a response class is likely to occur, persist, weaken, or generalize.</p>
+<p>These levels are related but not interchangeable: a framework can be useful without being a process theory; a taxonomy can support reporting without explaining change; a process theory can suggest broad causal relations without specifying the contingencies at work in a given case.</p>
+<p>Functional specification asks a more direct question: which relations among antecedents, response classes, consequences, motivating variables, histories, and competing contingencies account for the observed behavior? COM-B and the Behavior Change Wheel are strong translational tools. They link behavior to capability, opportunity, and motivation, and map these categories onto intervention functions such as education, restriction, and environmental restructuring (Michie et al., 2011).</p>
+<p>The Behavior Change Technique Taxonomy adds a more granular descriptive layer (Michie et al., 2013). Their value is greatest for coordination and reporting, but their limitation appears when a category is treated as if it identified a behavioral process.</p>
+<p>Recent research on behavioral design helps illustrate this distinction. Cash et al. (2017) examined 20 projects from one design firm and proposed a behavioral-design process, while Bay Brix Nielsen et al. (2021) synthesized cognition, ability, motivation, timing, and social and physical context into a &quot;behavioral design space&quot;. These are meaningful contributions to design-process organization and the systematic exploration of design possibilities. Yet the empirical assessment of process activities or the classification of design parameters is not, by itself, a functional analysis of the variables controlling a response class. In Cash et al. (2017), project success also included perceived customer and team success and project-delivery indicators.</p>
+<p>Those outcomes should not be confused with demonstrations of behavioral mechanisms. The authors do recommend experimentation, so the point is not that behavioral design excludes rigorous tests, but that design-process evaluation and functional identification answer distinct questions. Likewise, broad dimensions such as motivation or physical context help designers explore options but can subsume different behavior-environment relations. Bay Brix Nielsen et al. (2021) themselves acknowledge that their design-space framework does not yet capture interdependencies among its parameters. A functional specification does not compete with these tools as a new taxonomy. It asks which candidate relations are implicated, what observations might discriminate among them, and what different decisions would follow. Normand et al. (2021) reinforce this: many techniques cataloged in mainstream healthbehavior taxonomies overlap substantially with standard behavior-analytic procedures. The implication is not merely terminological. Treated only as named components, these techniques leave their behavioral function underspecified. The behavior-analytic contribution is to clarify when a component serves one of several distinct behavioral functions, for example as a discriminative stimulus or a response-effort manipulation.</p>
+<p>Broad categories such as capability, opportunity, and motivation compress heterogeneous relations. &quot;Motivation,&quot; for instance, may refer to several distinct processes, including motivating operations, rule-governed behavior, reinforcement, avoidance, and competing consequences (Hackenberg, 2009; Malott, 1992; Michael, 1993; Odum, 2011), processes that are not interchangeable even when placed under one heading. Umbrella terms organize discussion but are too coarse to guide precise contingency design.</p>
+<p>The same holds for common labels. A prompt may act as a discriminative stimulus, a rule, or an inert reminder, depending on local reinforcement history. Feedback may function as reinforcement, punishment, a discriminative stimulus, or mere information with no effect on responding. An incentive may involve positive or negative reinforcement, conditioned reinforcement, delayed symbolic exchange, or rule-governed behavior. The label says what the intervention resembles, not what it does.</p>
+<p>Examples from human-computer interaction and ergonomics show why the distinction is practical. Chang et al. (2008) developed an interactive toothbrushing game with contingent audiovisual changes and direct behavioral measures, but the multicomponent evaluation does not isolate the reinforcing function of individual signals. Taverna et al. (2017) invoked positive reinforcement in the design of interactive hygiene products while evaluating primarily prototype comprehension and user experience. Brandenburg and Mirka (2005) found more favorable subjective responses to an ergonomic intervention with positive feedback but no comparable improvement in measured performance or discomfort. In contrast, Lambert et al. (2025) used a quasi-experimental approach to examine subsequent Reddit behavior following positive feedback. Their findings are consistent with reinforcement hypotheses but do not directly establish the function of individual feedback events for individual users. These studies pursue legitimate, different research objectives. Their comparison suggests a constructive role for behavior analysts in designing tests that separate intervention effectiveness from claims about particular functional processes. Existing frameworks have contributed to the organization and dissemination of behavioral interventions, but these contributions should not be confused with a functional account of behavior change. Classifying an intervention as prompting, feedback, incentivization, or environmental restructuring does not explain why it works, under what conditions it works, or whether its effects will persist. These questions require an analysis of the functional relations between behavior and environmental events. Behavior-based design places this analysis at the center of the design process, making functional specification a fundamental requirement for developing, evaluating, and refining interventions rather than an optional addition to existing frameworks.</p>
+<h3>When Labels Replace Contingencies</h3>
+<p>Applied behavior change literature often combines constructs from multiple traditions, from beliefs and intentions to habits, biases, engagement, and reinforcement, and presents this as comprehensiveness. In practice it can become conceptual packaging: many terms are placed side by side without specifying the relations among them. Invoked without independent operationalization, such constructs yield post hoc redescriptions of outcomes rather than functional accounts.</p>
+<p>The relevant issue is what these labels leave unspecified, not whether every use of them is conceptually empty. Terms such as motivation, engagement, friction, feedback, or incentive may summarize useful properties of an intervention. The label alone, however, does not determine which behavioral process is operating. This distinction can be demonstrated at the level of individual design problems. This is not only a philosophical objection but a design problem. Attributing a change to &quot;motivation&quot; still leaves the designer needing to know what to manipulate, under which conditions, and with what plan for consequences and maintenance. When someone fails to complete an administrative form, attributing the failure to &quot;low motivation&quot; is less informative than examining the effort required, the clarity of the available cues, the delay of relevant consequences, and whether abandoning the task is reinforced by the immediate termination of aversive demands.</p>
+<p>Consider a digital service that sends repeated reminders for an unfinished application while leaving response effort unchanged, the next step ambiguous, and the payoff delayed.</p>
+<p>Whatever label is used, the functional question is whether the stimulus has acquired control over the relevant response class. If completion is limited by high response effort or delayed consequences, or if abandonment is maintained by escape from aversive demands, repeated reminders may have little effect unless those conditions change.</p>
+<p>The example also generates a prediction. If failure to initiate the application is primarily related to weak stimulus control, a well-timed and discriminable reminder may increase initiation. If abandonment is instead related to missing documents, repeated errors, high response effort, potentially reinforcing consequences of task termination, or stronger competing contingencies, increasing reminder frequency should have limited effects unless those conditions also change. Classifying the intervention as &quot;prompting&quot; does not distinguish between these possible explanations, whereas functional specification can.</p>
+<p>The alternatives imply different measurement plans. Weak stimulus control suggests measuring initiation after discriminable cues and testing cue timing. High response effort suggests recording step-level latencies, errors, attempts, and abandonment despite initiation.</p>
+<p>Competing contingencies suggest observing allocations among the target task and alternative activities, where feasible. The same overall completion rate can conceal these different patterns, so a category-based decision to send more reminders could miss the relevant variable. These are discriminating hypotheses for future assessment, not functions established for a particular service.</p>
+<p>Similarly, an organization may add a dashboard, described as feedback, to increase reporting. Yet for the individual employee, accurate reporting may bring extra work, social friction, or blame, or have no visible effect at all. Unless the dashboard changes the consequences of reporting, its stimulus control, its effort, or the value of competing responses, the intervention carries a behavioral label while the functional design stays weak.</p>
+<p>Here, too, the difference is predictive rather than merely terminological. If dashboard information functions as an effective consequence or discriminative stimulus, reporting should change in relation to its presentation. If accurate reporting continues to produce extra work or blame, however, these consequences may discourage the very behavior the organization intends to promote. The functional account therefore directs attention to the contingencies affecting reporting behavior, which the category &quot;feedback&quot; alone does not identify.</p>
+<p>These examples illustrate why identifying an intervention technique is not sufficient to explain its effects. Feedback, incentives, and environmental restructuring can influence behavior through different functional relations, depending on the conditions in which they are implemented and the individual&#x27;s learning history (degli Espinosa &amp; Hackenberg, 2024; Hackenberg, 2009). The same limitation applies to descriptions of behavior as automatic or reflective (Kahneman, 2011; Schneider &amp; Shiffrin, 1977; Stanovich &amp; West, 2000). Such descriptions may be useful, but they do not identify the variables responsible for the behavior observed. A behavior-based approach requires designers to move beyond these categories and formulate testable hypotheses about the relations between behavior and environmental conditions. The relevant question is not simply which technique to use, but which contingencies must be arranged, modified, or maintained to produce the intended behavioral outcomes.</p>
+<h3>From Design Features to Functional Relations</h3>
+<p>Behavioral design often involves arranging antecedent conditions, such as prompts, defaults, and changes in the accessibility of available responses (Michie et al., 2011; Thaler &amp; Sunstein, 2008). These interventions can be useful, and antecedent control is an established part of behavior analysis (Catania, 2017; Rasmussen et al., 2023). However, specifying antecedent arrangements alone is insufficient to explain how behavior is acquired and maintained. A functional account must also consider the consequences of responding, relevant reinforcement histories, and competing contingencies.</p>
+<p>A default may raise a target behavior by reducing effort or the immediate cost of an alternative. A reminder can prompt a response when the repertoire exists and the cue has acquired function. A dashboard may influence behavior when the information it presents acquires discriminative functions or participates in reinforcing or punishing contingencies. But what happens in a different interface, routine, or context with stronger competing reinforcers? Without a plan for maintenance and generalization, many interventions stay bounded to the engineered context (Stokes &amp; Baer, 1977).</p>
+<p>The problem may appear even before maintenance is tested: arranged consequences can be weak, delayed, or poorly connected to the target response. An intervention may change the conditions under which a response occurs without establishing the contingencies needed to maintain that response over time. A person may click, comply, attend, or complete a form once because the local arrangement makes that response temporarily easier. Such one-time change should not be equated with a durable repertoire.</p>
+<p>Behavior-based design is proposed here as an approach to the functional specification of deliberately designed environments. It does not introduce new behavioral principles or distinguish a new science from behavior analysis. Its proposed contribution is methodological and programmatic: it places functional specification at the center of the design process and organizes the application of established behavior-analytic methods to the development, evaluation, and refinement of designed environments. Functional specification does not require a formal experimental functional analysis in every design project. It requires an explicit, testable account of the response classes, antecedent conditions, consequences, competing contingencies, and maintenance variables judged relevant to the problem.</p>
+<p>Its defining feature is therefore a change in the unit at which the design problem is represented: from intervention categories, psychological tendencies, or surface features to relations among contexts, response classes, consequences, histories, competing responses, and conditions of maintenance. In complex designed environments, the analysis also includes the contingencies acting on the people and organizations that implement, maintain, and evaluate the design.</p>
+<p>An adequate specification should identify the observable target and competing response classes, the antecedent and motivating conditions hypothesized to affect them, relevant consequences (including their timing and contingency), and plausible sources of competing reinforcement, avoidance, or response effort. It should also describe expected conditions for maintenance and generalization, possible adverse effects or countercontrol, and, when relevant, the contingencies acting on designers, implementers, and organizations responsible for sustaining the arrangement.</p>
+<h3>Adequacy of Functional Specification</h3>
+<p>An adequate functional specification does not require an exhaustive description of every variable that may influence behavior. Its adequacy depends on the behavioral problem being addressed and the decisions that researchers and designers need to make. At a minimum, it should identify the relevant response classes and competing alternatives, the antecedent and motivating conditions under which behavior occurs, and the consequences and competing contingencies hypothesized to influence responding. Depending on the problem, it should also address maintenance, generalization, and the conditions required for successful implementation.</p>
+<p>Five criteria are particularly important for evaluating the adequacy of functional specification: behavioral precision, functional coherence, discriminability among alternative functional explanations, relevance to design decisions, and empirical accountability. Behavioral precision requires a clear definition of the responses under consideration. Functional coherence requires an explicit account of how environmental conditions and consequences may influence those responses. Discriminability concerns whether alternative functional explanations lead to different predictions or measurement strategies. Relevance to design decisions requires that the analysis identify variables that can inform the selection or modification of an intervention.</p>
+<p>Finally, empirical accountability requires that proposed functional relations remain open to observation, testing, and revision. These criteria are not intended as a new checklist or validated assessment scale. Rather, they establish standards for determining whether a functional account can meaningfully guide design. Not every project requires an experimental functional analysis, but competing explanations should be sufficiently explicit to generate different predictions about behavior or suggest different intervention strategies. It is also essential to distinguish between relations hypothesized on theoretical grounds, relations supported by observational evidence, and those demonstrated experimentally. For example, providing a reward does not establish that it functions as a reinforcer, just as increased system use does not necessarily demonstrate a reinforcement process.</p>
+<p>Functional specification is therefore adequate when it identifies the relevant behavioral relations, makes clear the evidence supporting them, and provides testable implications for design or evaluation. Its contribution lies in what researchers and designers can predict, measure, manipulate, and revise on the basis of the analysis. Simply describing familiar intervention techniques in behavior-analytic terminology does not meet this standard.</p>
+<p>In designed environments, functional specification must also consider the contingencies affecting those responsible for implementing and maintaining an intervention. An arrangement that supports the intended behavior of users may create additional effort, costs, or unfavorable consequences for managers, service providers, or other actors involved. For example, a reporting procedure may improve accuracy while increasing a manager&#x27;s workload, and a redesigned service may reduce user effort while increasing administrative costs. These differences matter because the implementation and maintenance of an intervention depend not only on the contingencies affecting users, but also on those influencing the behavior of the people responsible for sustaining it.</p>
+<p>Behavior-based design places these requirements at the center of the design process. The relevant task is not simply to identify a suitable intervention category, but to specify the functional relations through which an intervention is expected to influence behavior and determine how those relations can be evaluated. The same intervention label may correspond to different functional processes, with different implications for measurement, intervention selection, maintenance, and generalization. Table 1 illustrates this distinction by presenting alternative functional hypotheses, discriminating measures, and possible design implications for familiar intervention categories. It should be noted that the hypotheses are illustrative and do not establish the functions of intervention components. Measures and comparisons are intended to distinguish plausible accounts, but additional experimental evidence may be needed to establish functional relations.</p>
+<h3>Designed Environments as a Research Domain</h3>
+<p>Public services, organizational systems, digital interfaces, and sustainability initiatives are all settings in which environmental conditions are deliberately arranged to influence behavior. Access requirements, deadlines, prompts, feedback, and response costs can affect what people do, how often they respond, and whether their behavior persists. However, the presence of these design features does not establish their behavioral function. This is where functional specification becomes important. Digital interfaces offer a particularly useful example because user responses can be measured and followed by programmed consequences (León Domínguez, 2025). They provide opportunities to study how specific environmental arrangements influence behavior.</p>
+<p>Behavior analysts have a mature science of many of these variables, and relevant applications already exist in organizational systems, instructional technologies, sustainability, and environmental design. Yet these contributions have generally developed within bounded research traditions rather than under a shared, cross-domain program of functional specification for designed environments. The issue is not that other fields necessarily ignore behavioral function, nor that a systematic census has established the absence of behavior analysts. It is that their distinctive functional methods offer a concrete opportunity for more organized, cumulative participation in design research.</p>
+<p>Several features may contribute to this limited visibility. Behavior-analytic language can appear opaque to nonspecialists, the field&#x27;s public identity is often narrowed to autism and special education despite a much broader tradition (Normand et al., 2021; Northup et al., 1993), and its methods may be perceived as better suited to controlled interventions than to complex, multilevel design problems. The issue is strategic as well as scientific. Designers already arrange environmental conditions that may influence behavior. Interfaces present prompts, provide incentives, introduce delays, and restrict access. Policies establish eligibility rules, deadlines, and penalties.</p>
+<p>Organizations arrange performance measures and consequences. The question is not whether behavior will be designed, but whether designed environments will be analyzed with rigor.</p>
+<h3>Illustrative Domains for Behavior-Based Design</h3>
+<p>The following domains illustrate how functional specification can be applied. They are not a representative sample from which the prevalence of functional underspecification can be estimated. Their purpose is analytic: to show what additional questions become available when a design is represented in terms of response classes and contingencies rather than intervention labels alone.</p>
+<p>The examples focus on sustainability, public services, and organizational systems. Digital interfaces are considered throughout the article as designed environments that can also form part of these domains. All three domains have generated behavior-analytic research or tools relevant to designed environments, and together they provide illustrative contexts in which a comparative research program could be developed (Gelino et al., 2021; León Domínguez, 2025; Normand et al., 2021; Prue &amp; Fairbank, 1981; Sulzer-Azaroff, 1978). The point is not that behavior analysis has been absent from these areas, but that the evidence of such contributions should not be confused with a dedicated, cross-domain evaluation of functional specification in design.</p>
+<h3>Sustainability</h3>
+<p>Sustainability offers a clear case where the limits of merely classificatory design become visible. Sustainable action is not one behavior. Energy use, recycling, and transport choices involve different response classes (Gelino et al., 2021; Lange &amp; Dewitte, 2019), each competing with alternatives that are cheaper, easier, or more immediately reinforcing. Sustainable choices may involve immediate costs in time, effort, or money, while some of their benefits are delayed, uncertain, or distributed beyond the individual. These conditions can favor alternatives associated with more immediate consequences (Berry et al., 2017; Odum, 2011; Van Horen et al., 2018).</p>
+<p>Here it is not enough to describe an intervention as informational, prompting, feedback, or incentive-based: the same label can describe different designs, and different labels can arrange the same relation. Information alone has often proved weak, whereas feedback, incentives, and manipulations of response effort produce more reliable effects in energy-conservation research (Hayes &amp; Cone, 1977 , 1981; Kohlenberg et al., 1976; Slavin et al., 1981; Staats et al., 2000; Van Houten et al., 1981; Winett et al., 1979 Winett et al., , 1982)). Depending on a user&#x27;s history and the arranged relations, feedback may make consumption more discriminable or participate in consequential control, though its effects depend on timing, accuracy, relevance, and the consequences arranged for change (Aljadeff-Abergel et al., 2017; Brand et al., 2020; Daniels &amp; Bailey, 2014).</p>
+<p>What design language calls friction often works by altering the relative effort of competing responses. For example, Van Houten et al. (1981) examined how changes in elevator convenience could influence the choice between elevator and stair use. Eco-feedback can be hypothesized to support responding by making outcomes more timely, salient, or actionable (Froehlich et al., 2010; Tiefenbeck et al., 2018). Recycling depends less on prompts than on bin location, effort, discriminability, and competing disposal responses (O&#x27;Connor et al., 2010).</p>
+<p>The functional specification changes the question from &quot;Does feedback work?&quot; or &quot;Does reducing friction work?&quot; to questions about the conditions under which these arrangements alter responding. For example, a feedback intervention should have different effects when information is immediate and response-contingent than when it is delayed and aggregated. A friction manipulation should have different effects depending on the effort required by the target and competing responses. These are testable differences hidden by the broad intervention label.</p>
+<p>The lesson is not just that multicomponent interventions can work, but that effective design requires specifying target responses, competing reinforcers, effort, consequences, and maintenance. A sustainability intervention, like any designed environment, should be analyzed by the contingencies it arranges, not the labels it carries.</p>
+<h3>Public Services and Compliance Behaviors</h3>
+<p>Public services rely on behavioral chains, not isolated acts (Cooper et al., 2020; Moynihan et al., 2015). A user may have to detect a requirement, understand eligibility, gather documents, recover credentials, complete and upload forms, correct errors, attend appointments, make payments, and wait for delayed outcomes. Administratively these register as single outcomes such as &quot;application completed&quot; or &quot;appointment attended&quot;, but functionally they are extended chains under multiple sources of stimulus control. Failure at any link gets labeled noncompliance or low motivation, even when the operative variables are response effort, ambiguous cues, weak or delayed consequences, punishment for errors, or stronger competing contingencies.</p>
+<p>This matters especially in health and public-service settings, where important outcomes depend on what people do under specific environmental conditions. Behavioral factors play an important role in public health (Schroeder, 2007), and Normand et al. (2021) identify several areas in which applied behavior analysis can contribute to public-health research and practice. Public administration presents different problems, but the need to specify the conditions influencing behavior is equally relevant. A behavior-based analysis asks what the service requires the person to do, under what conditions, and with what consequences. A reminder may function as a discriminative stimulus when the relevant response is in the repertoire and the stimulus signals conditions under which that response has previously contacted reinforcement. The same reminder may have limited effects when the person lacks documents, cannot access the portal, expects error messages, or has competing obligations with more immediate payoffs. The problem then is not a missing prompt but the arrangement of the whole contingency.</p>
+<p>Consider benefit renewal, tax filing, or permit applications (Moynihan et al., 2015). The target is treated as &quot;submitting the form&quot;, but functionally the task is a chain of smaller responses such as finding the portal, recalling a password, interpreting official language, retrieving documents, correcting errors, and confirming. At some steps, abandoning the task may provide immediate relief from effortful or aversive demands, while the benefits of completing the procedure remain delayed or uncertain.</p>
+<p>This example shows the practical difference between classification and functional specification.</p>
+<p>A label-based account may identify &quot;send reminder&quot; or &quot;reduce friction&quot; as intervention components. A functional account first identifies where the chain breaks. If users reach the portal but stop at password recovery, a general reminder should have little effect relative to reducing effort at that link. If users possess the required documents and skills but fail to initiate the chain, a discriminable reminder delivered under appropriate conditions may be sufficient. If users complete the chain once but fail at the next renewal, the design problem shifts again from acquisition to maintenance. The same top-level outcome, noncompletion, therefore implies different interventions depending on the controlling relations.</p>
+<p>Missed healthcare appointments can be understood in the same way (Boksmati et al., 2016; Werner et al., 2023). Rather than treating them simply as failures of engagement, it is more useful to analyze them as a sequence of required steps: booking the appointment, confirming it, arranging transport, arriving, and checking in. Each step may involve different barriers, such as effort, waiting time, competing responsibilities, and benefits that occur only later. In some cases, a text reminder may be enough. In other cases, the main problem is not the lack of a reminder, but the effort required, competing demands, and delayed outcomes.</p>
+<p>Behavior-based redesign would decompose the outcome into component responses, reduce effort, sharpen cues, confirm completed steps, preserve progress across sessions, reduce effortful or potentially aversive consequences of errors, and support the links where abandonment is most likely. The relevant consequence may be access to a benefit or avoidance of fines, lost eligibility, or interrupted care. These distinctions matter because the consequences maintaining behavior, including the termination or avoidance of aversive events, may have different implications for persistence, generalization, countercontrol, and ethical evaluation.</p>
+<p>Public-service compliance is thus a useful test case. It shows why terms like engagement, adherence, or friction reduction are insufficient until translated into functional relations. A service can be simplified topographically while its consequences remain delayed, errors are followed by aversive events, and competing responses contact more immediate reinforcement.</p>
+<p>Conversely, it can support important outcomes when its design specifies the response chain, cuts effort at critical points, arranges effective feedback, and plans for maintenance beyond one-time completion.</p>
+<h3>Organizational Systems Beyond Safety</h3>
+<p>Behavior analysis has a strong tradition in behavior-based safety, analyzing accidents and safe conduct as relations among work behavior, conditions, and consequences (Komaki et al., 1978; Sulzer-Azaroff, 1978). Classic work showed that safe performance improves when target responses are pinpointed and reinforced systematically (Komaki et al., 1978). The same logic extends beyond safety to organizational practices such as reporting, quality checks, knowledge sharing, and procedural adherence. These are often described as culture, training, or leadership problems but treated here first as contingency problems.</p>
+<p>The key questions are functional: what consequences follow the behavior, how immediate they are, what competes with them, and how they are scheduled? A common failure is reliance on delayed, aggregated outcomes, for example monthly indicators too remote to control daily responses. Such long-delayed outcomes act indirectly, through rule-governed behavior and verbal histories rather than direct reinforcement (Malott, 1992). Hogan et al. (2009) simulated baggage-screening study makes the point: search behavior rates varied between variable-interval and extinction conditions, consistent with the hypothesis that signal detections may participate in maintaining search responding.</p>
+<p>A second failure is punishing the very behavior the organization claims to value: nearmiss reporting may be encouraged in principle yet immediately followed by paperwork, blame, or surveillance. Desired responses rarely persist when they seldom contact reinforcement, or contact punishment more reliably than reinforcement (Catania, 2017; Herrnstein, 1970; Sidman, 1989 Sidman, /2000)).</p>
+<p>A behavior-based redesign would not start from &quot;safety culture&quot; or &quot;ethical culture.&quot; It would define the response classes, reduce effort, shield reporting from punitive consequences, acknowledge it immediately, and connect accurate reporting to visible local improvement. A parallel logic appears in usable security, where usability features may alter effort, stimulus control, and consequences relevant to secure responding (Di Nocera, 2026; Di Nocera &amp; Tempestini, 2022), and in organizational behavior management, where performance feedback is among the field&#x27;s most common procedures (Balcazar et al., 1989; Prue &amp; Fairbank, 1981).</p>
+<p>Culture need not be discarded as a descriptive term, but it should not become an explanatory endpoint detached from the contingencies that generate and transmit organizational practices (Skinner, 1971).</p>
+<p>Organizational examples also make visible a second level of functional analysis. The intervention itself must be maintained by someone. A reporting system may be effective for employees but costly for managers. A safer procedure may increase response effort or reduce production speed. A transparent interface may conflict with other organizational outcomes.</p>
+<p>Behavior-based design therefore asks not only what maintains the target user&#x27;s behavior, but what consequences maintain the behavior of those who adopt, implement, modify, and fund the system. This does not require assuming that organizations have unitary goals. It requires analyzing the behavior of the relevant actors under their respective contingencies.</p>
+<p>This point limits a simple interpretation of behavior-based design as &quot;apply functional analysis at larger scale.&quot; Scale alone is not the issue. Designed environments involve interdependent contingencies in which the behavior of users, implementers, managers, and designers may be controlled by different consequences. A functional design account should make these relations explicit when they are relevant to whether the intervention can be implemented or maintained.</p>
+<h3>Designing for Maintenance and Generalization</h3>
+<p>When interventions demonstrate immediate effects without assessing maintenance and generalization, it is difficult to determine whether meaningful change has occurred. In behavior analysis, these outcomes are central rather than optional (Baer et al., 1968; Stokes &amp; Baer, 1977).</p>
+<p>Behavior observed only under engineered prompts has not yet been shown to be durable.</p>
+<p>Behavior that fails to transfer may have been trained too narrowly, maintained by artificial consequences, or brought under idiosyncratic stimulus control.</p>
+<p>Relapse may be described as lost engagement, reduced motivation, or habit decay. A functional account asks instead whether reinforcement was artificial and never transferred to natural contingencies, or was thinned too quickly, whether competing behavior continued to be reinforced, whether controlling stimuli disappeared outside the intervention, and whether persistent effort, avoidance, or countercontrol altered performance.</p>
+<p>Generalization must be programmed rather than assumed from acquisition in a single setting (Stokes &amp; Baer, 1977). Differences between training and natural environments may limit generalization, while the absence of effective maintenance contingencies may lead to a decline in responding over time. Similarly, teaching a single response form does not guarantee that other appropriate responses will occur in new situations. These are predictable design problems, not mysterious failures of motivation.</p>
+<p>For behavior-based design, maintenance and generalization must be considered from the beginning of the design process, not only when evaluating outcomes. An initial increase in behavior does not necessarily indicate lasting change. This distinction is particularly important in digital and policy settings, where short-term engagement is often treated as evidence of success.</p>
+<p>A click, sign-up, or single attendance may be a useful outcome, but it does not demonstrate that behavior will persist over time.</p>
+<p>This distinction also protects behavior-based design from becoming a new label for shortterm behavior change. A functional specification should state not only how the target response is expected to increase initially, but what will maintain it when prompts, incentives, engineered feedback, or intensive monitoring are withdrawn or altered. Where no plausible maintenance contingency can be identified, that limitation should be part of the design account rather than discovered only at follow-up.</p>
+<p>This perspective also shapes research. A program in designed environments should treat maintenance, transfer, relapse, and countercontrol as central dependent variables and as part of the phenomenon to be explained, not as complications considered only after an intervention fails.</p>
+<h3>Methodological Implications</h3>
+<p>Aggregate and self-report measures can miss individual variability and within-person patterns such as delayed acquisition or relapse. An average change can conceal functional heterogeneity when individuals contact different contingencies or change for different reasons.</p>
+<p>Behavior analysts can contribute single-case experimental logic where feasible, repeated direct measurement of response classes, and planned replication across contexts and populations (Kazdin, 2020). Not every study must become a traditional single-case experiment. The point is that design research should grow more sensitive to within-person change, repeated contact with contingencies, and the temporal patterns that reveal functional relations.</p>
+<p>Behavior-based design places functional specification at the center of the design process.</p>
+<p>Whether organizing design around this requirement improves prediction, intervention selection, and behavioral outcomes, however, remains an empirical question. For example, teams Expertise, design time, and access to information would need to be balanced. A null result, or a benefit limited to particular problems, would help clarify the conditions under which explicit functional specification provides additional predictive or practical value. If comparative research consistently fails to identify such benefits, the justification for BBD as a distinct research program would need to be reconsidered, even though functional specification would remain an established component of behavior-analytic practice.</p>
+<p>Where formal designs are infeasible, teams can still use repeated measurement, staggered implementation, replication, follow-up probes, and individual-level analysis. These may not match traditional experimental control, but they strengthen functional inference over one-shot or aggregate pre-post comparisons.</p>
+<p>Digital environments already produce fine-grained traces, including clicks, dwell times, errors, latencies, and abandonment points. The analytic risk is that these traces may be examined without functional hypotheses, explicit contingency mapping, or a distinction between response topography and function. Behavior analysis can translate them into operant-level variables, consistent with a digital-design logic that breaks behavior into measurable parameters linked to programmed consequences. The measurement becomes behavior analytic, however, only when events are interpreted in relation to response classes, antecedent control, consequences, histories, and competing contingencies.</p>
+<p>This translation requires care: a click is not automatically a response class, dwell time is not direct evidence of engagement, repeated use is not necessarily evidence of reinforcement, and dropout is not necessarily evidence of lost motivation. A &quot;like&quot; may participate in social approval, status, habit, or a nearly inconsequential interaction, and the same action may enter different contingencies for different users. Because the same topography can serve different functions and different topographies can serve the same function (Catania, 2017; Cooper et al., 2020), digital traces should be treated as measures that may inform functional hypotheses, rather than as direct evidence of behavioral function. The proposed relations must then be evaluated through appropriate observations and tests.</p>
+<p>An important research task for behavior-based design is therefore comparative. The relevant empirical question is not simply whether behavior analysis can redescribe an existing intervention. It is whether a functional specification changes what researchers predict, manipulate, measure, or conclude. Studies that compare interventions selected from the same broad category but based on different functional hypotheses would provide a stronger test of the proposed added value than terminological translation alone.</p>
+<h3>Translation Without Conceptual Dilution</h3>
+<p>A further barrier is language. Core behavior-analytic terms are precise but not always usable in interdisciplinary teams. The answer is not to abandon precision but to translate in ways that preserve function.</p>
+<p>Scientific vocabularies earn their keep by preserving distinctions that matter for prediction and influence. Terms such as signal, friction, and feedback can facilitate interdisciplinary communication, but their use does not establish the underlying behavioral functions. A signal may function as a discriminative stimulus, friction may involve response effort, and feedback may acquire different functions depending on the relevant contingencies.</p>
+<p>Fogg&#x27;s Behavior Model shows both the promise and the risk. Describing behavior as the convergence of motivation, ability, and triggers gives designers an accessible, memorable vocabulary (Fogg, 2009), but one that compresses functionally distinct processes into broad categories. &quot;Motivation&quot; may mean motivating operations, reinforcement histories, rulegoverned behavior, or social contingencies. &quot;Ability&quot; or simplicity may mean response effort, skill repertoires, resources, or cognitive load. &quot;Triggers&quot; may be prompts, discriminative stimuli, or occasions for rule-following. Fogg&#x27;s own distinction among sparks, facilitators, and signals partly acknowledges this, yet still keeps different functions under one design label. The model provides an accessible framework for organizing design decisions, but its categories do not specify the functional relations among antecedent conditions, behavior, and consequences. These relations must be identified and tested to explain how a particular design influences behavior.</p>
+<p>The same need for functional precision applies to other constructs commonly used in behavioral design. Present bias can be examined in relation to the effects of immediate and delayed consequences (Odum, 2011). Status quo bias may involve differences in response effort and the contingencies associated with available alternatives (Friman &amp; Poling, 1995). Social proof may involve imitation and socially mediated consequences (Baer et al., 1967), while engagement may be examined through patterns of repeated responding, reinforcement schedules, and competing contingencies (Ferster &amp; Skinner, 1957; Herrnstein, 1970). These constructs can be useful for describing behavioral patterns, but their use in design requires identifying the functional relations relevant to each situation. The aim is not to replace familiar terms with behavior-analytic terminology, but to specify the variables that can be measured and manipulated.</p>
+<p>A similar issue arises in recent work on evidence-based digital design. León Domínguez (2025) applies operant concepts directly, describing digital services as arrangements of discriminative stimuli, measurable responses, programmed consequences, and reinforcement schedules, while also blending in cognitive constructs such as beliefs, expectations, and goaldirected behavior. It supports the present argument indirectly: behavior-analytic concepts are highly relevant to digital design, but their interdisciplinary use requires careful functional specification.</p>
+<p>Some translations are productive when they stay functionally anchored. Response effort can be discussed in terms of friction, and discriminative stimulus control can be explained through cues that signal when responding is likely to produce particular consequences.</p>
+<p>Reinforcement can be described in accessible terms as a process in which consequences increase the future likelihood of responding. The same discipline should govern translations of generalization, extinction, and competing contingencies.</p>
+<p>Handled carefully, such translations let behavior analysts act as design collaborators rather than post hoc critics, and connect the field to design thinking. Design thinking contributes problem framing and iteration (Brown, 2008; Liedtka, 2015). Behavior analysis contributes functional assessment, contingency design, repeated measurement, and maintenance programming. Together, they can support interventions that are both human-centered and functionally rigorous.</p>
+<p>Communicating behavior-analytic contributions to designers and other professional communities will require domain-specific research, examples, and vocabularies. Interdisciplinary translation should therefore be treated as a continuing research task rather than as something that can be accomplished through a single conceptual article.</p>
+<p>The challenge is to avoid two symmetrical errors: jargonistic purity, which preserves technical language but fails to influence practice, and conceptual dilution, which translates terms so loosely that their function disappears. Behavior-based design needs the middle path: accessible language with rigorous contingency analysis behind it.</p>
+<h3>Ethical Implications: Contingency Transparency</h3>
+<p>The ethical stakes are substantial. Designed environments do not merely inform. They arrange contingencies: changing effort, access, delay, and the probability or cost of consequences. These arrangements can support important outcomes but can also produce compliance, dependency, avoidance, restricted choice, or countercontrol (Sidman, 1989 (Sidman, /2000;; Skinner, 1971; Wolf, 1978). The concern is acute in digital environments, where the same elements that increase access or engagement may also sustain patterns of use that mainly benefit the platform.</p>
+<p>A behavior-based approach makes these relations explicit. Whose behavior is being selected, to what ends, and by which consequences? Are those consequences transparent or hidden? Are their costs fairly distributed? Does the design widen meaningful choice or restrict it while calling the result engagement, and does it rely on reinforcement, punishment, or coercion?</p>
+<p>These are functional questions as much as ethical ones.</p>
+<p>This is why taxonomic labels can be ethically insufficient. &quot;Engagement,&quot; &quot;personalization,&quot; or &quot;gamification&quot; may arrange very different contingencies, some expanding access and easing useful behavior, others sustaining use that benefits mainly the designer. A default may spare needless effort or exploit inaction. A reminder may help someone reach a delayed benefit or serve as aversive stimulation that maintains compliance.</p>
+<p>The organizational level is relevant here as well. A design cannot be evaluated only by whether it changes a user&#x27;s behavior. Contingency transparency also requires examining the consequences that may maintain the behavior of those responsible for designing and implementing the environment. User welfare, completion, retention, productivity, revenue, compliance, and reduced administrative cost need not align. Making these contingencies explicit does not determine the ethical answer, but it makes potential conflicts more visible.</p>
+<p>Contingency transparency is thus both a scientific and an ethical requirement: interventions should be described by the relations they arrange, not only the outcomes they intend.</p>
+<p>It also demands attention to countercontrol. When people resist, avoid, or disengage, that is not automatically irrationality or low motivation. It may be a functional response to coercive, opaque, effortful, or poorly reinforced environments.</p>
+<h3>A Programmatic Call for Behavior-Based Design</h3>
+<p>The next step is to build a cumulative research program, not simply establish a new label.</p>
+<p>Behavior-based design will be useful only insofar as it develops and tests functional specifications that offer something beyond behavior-analytic redescription. Its starting point should be bounded problems in deliberately designed environments, such as repeated errors, abandonment of service procedures, persistence of insecure routines, or allocation among competing responses.</p>
+<p>Such problems call for sustained collaborations with designers, engineers, human factors researchers, public administrators, and other domain experts. The role of behavior analysts is not to displace those specialists but to contribute response-class definitions, explicit hypotheses about relevant contingencies, measures capable of distinguishing alternative interpretations, and plans for maintenance and generalization. Participating at problem formulation and during design, rather than solely after implementation, may make this contribution more consequential.</p>
+<p>A cumulative program also requires empirical accountability. Studies should determine whether functional specification actually changes predictions, intervention selection, measurement, replication, durability, or ethical appraisal. Immediate clicks, sign-ups, and shortterm compliance may be legitimate outcomes, but they should not be mistaken for maintenance, generalization, or transfer. Equally important are the contingencies affecting those who implement and sustain an intervention, and the possibility that nominally beneficial arrangements generate countercontrol or dependency.</p>
+<p>Training and disciplinary visibility should grow from such empirical work. Research partnerships, replications, graduate projects, and domain-specific publications can establish practical exemplars that others can challenge and extend. The issue is not to defend a label for its own sake, but to make behavior-analytic expertise usable in fields that are already designing environments intended to influence behavior. If these efforts do not add predictive or practical value, BBD will have little justification as a separate programmatic designation.</p>
+<h3>Conclusion</h3>
+<p>Contemporary behavior-change practice has made behavior a central object of design, policy, and implementation. Its frameworks and taxonomies have improved communication, classification, and reporting, creating conditions under which behavior can be deliberately arranged and evaluated.</p>
+<p>The argument of this article is not that contemporary behavioral design generally lacks functional thinking, or that behavior analysis offers principles unknown to other fields. The narrower claim is that intervention categories and broad explanatory labels do not, by themselves, guarantee functional specification. Questions remain about response classes, controlling conditions, consequences, competing contingencies, maintenance, generalization, and the behavior of those responsible for the design.</p>
+<p>Behavior-based design is therefore not a new theory of behavior or a renamed form of applied behavior analysis. It is a programmatic use of behavior analysis in deliberately designed environments, organized around functional specification as a design requirement. Its value will depend on whether this additional specification produces better questions, different predictions, more informative measurement, more durable interventions, clearer analyses of failure, or greater ethical transparency. A research program must test those claims rather than assume them.</p>
+<p>The immediate task is not to persuade every neighboring discipline through one general argument, but to build conceptual and empirical examples that make later interdisciplinary collaboration possible. Different communities will require different forms of engagement. The contribution of behavior analysis is to specify relations that can be investigated and tested.</p>
+<p>Behavior-based design names that programmatic possibility: behavior analysts working with other professional communities to specify, test, and ethically examine the functional relations embedded in designed environments, while demonstrating rather than assuming the value of doing so.</p>
+<p>These obstacles are reasons to organize, not to withdraw. The problem is not a lack of tools but the opportunity to develop a more visible, cumulative, interdisciplinary program that puts them to work in designed environments. Building one requires not abandoning behavioranalytic foundations but translating them into research questions, collaborations, methods, and demonstrations legible outside traditional settings. Such a program need not begin by creating complete training systems or placing behavior analysts in every design domain. Researchers can start with recurring behavioral problems in one domain, collaborate with professionals already working there, map the functional relations implied by existing interventions, derive competing predictions from alternative specifications, and test whether the additional functional information improves intervention selection, maintenance, generalization, or explanation. Successful cases can then provide the research questions, collaborations, exemplars, and training opportunities that a larger program would require.A preliminary illustration is provided by Steady State, a physical, two-player educational game in which task allocation, postponement, and resource management were specified through response classes, programmed consequences, competing demands, and repeated in-game measures(Di Nocera &amp; Tinella, 2026). Rather than invoking behavioral principles only after game features were developed, the design translated hypothesized relations into programmed mechanics and measurable choices. A demonstrative alternating-treatments pilot (12 sessions, one dyad) contrasted the contingency-based arrangement with a procedural comparison emphasizing stochastic outcomes. The pilot provided a preliminary illustration of contingencyinformed design specification, without establishing educational effectiveness.</p>
+<p>addressing abandonment of the same online administrative procedure could receive comparable preliminary data and equivalent resources. One condition would use an established categorybased behavioral-design framework. The other would additionally require explicit functional hypotheses concerning response chains, stimulus control, effort, consequences, and competing contingencies. Investigators could compare the teams&#x27; predictions of where abandonment occurs, the measures selected, and the interventions chosen, then evaluate the resulting interventions experimentally, including follow-up and transfer when task requirements or contexts change.</p>
+<h3>Table 1</h3>
+<p>From Intervention Labels to Functional Hypotheses and Design Decisions</p>
+<h3>References</h3>
+<p>Aljadeff-Abergel, E., Peterson, S. M., Wiskirchen, R. R., Hagen, K. K., &amp; Cole, M. L. (2017). Evaluating the temporal location of feedback: Providing feedback following performance vs. prior to performance. Journal of Organizational Behavior Management, 37(2), 171- 195. https://doi.org/10.1080/01608061.2017.1309332</p>
+<p>Baer, D. M., Peterson, R. F., &amp; Sherman, J. A. (1967). The development of imitation by reinforcing behavioral similarity to a model. Journal of the Experimental Analysis of Behavior, 10(5), 405-416. https://doi.org/10.1901/jeab.1967.10-405</p>
+<p>Baer, D. M., Wolf, M. M., &amp; Risley, T. R. (1968). Some current dimensions of applied behavior analysis. Journal of Applied Behavior Analysis, 1(1), 91-97. https://doi.org/10.1901/jaba.1968.1-91</p>
+<p>Balcazar, F. E., Shupert, M. K., Daniels, A. C., Mawhinney, T. C., &amp; Hopkins, B. L. (1989). An objective review and analysis of ten years of publication in the Journal of Organizational Behavior Management. Journal of Organizational Behavior Management, 10, 7-37. https://psycnet.apa.org/doi/10.1300/J075v10n01_02</p>
+<p>Bay Brix Nielsen, C. K. E., Daalhuizen, J., &amp; Cash, P. J. (2021). Defining the behavioural design space. International Journal of Design, 15(1), 1-16. https://www.ijdesign.org/index.php/IJDesign/article/view/3922</p>
+<p>Berry, M. S., Nickerson, N. P., &amp; Odum, A. L. (2017). Delay discounting as an index of sustainable behavior: Devaluation of future air quality and implications for public health. International Journal of Environmental Research and Public Health, 14(9), 997. https://doi.org/10.3390/ijerph14090997</p>
+<p>Boksmati, N., Butler-Henderson, K., Anderson, K., &amp; Sahama, T. (2016). The effectiveness of SMS reminders on appointment attendance: A meta-analysis. Journal of Medical Systems, 40, Article 90. https://doi.org/10.1007/s10916-016-0452-2</p>
+<p>Brand, D., Novak, M. D., DiGennaro Reed, F. D., &amp; Tortolero, S. A. (2020). Examining the effects of feedback accuracy and timing on skill acquisition. Journal of Organizational Behavior Management, 40(1-2), 3-18. https://doi.org/10.1080/01608061.2020.1715319</p>
+<p>Brandenburg, D. L., &amp; Mirka, G. A. (2005). Assessing the effects of positive feedback and reinforcement in the introduction phase of an ergonomic intervention. Human Factors, 47(3), 526-535. https://doi.org/10.1518/001872005774860078</p>
+<p>Brown, T. (2008). Design thinking. Harvard Business Review, 86(6), 84-92, 141. https://hbr.org/2008/06/design-thinking</p>
+<p>Cash, P., Gram Hartlev, C., &amp; Durazo, C. B. (2017). Behavioural design: A process for integrating behaviour change and design. Design Studies, 48, 96-128. https://doi.org/10.1016/j.destud.2016.10.001</p>
+<p>Catania, A. C. (2017). The ABCs of behavior analysis: Introduction to behavior and learning. Sloan Educational Publishing.</p>
+<p>Chang, Y.-C., Lo, J.-L., Huang, C.-J., Hsu, N.-Y., Chu, H.-H., Wang, H.-Y., Chi, P.-Y., &amp; Hsieh, Y.-L. (2008). Playful toothbrush: UbiComp technology for teaching tooth brushing to kindergarten children. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (pp. 363-372). Association for Computing Machinery. https://doi.org/10.1145/1357054.1357115</p>
+<p>Cooper, J. O., Heron, T. E., &amp; Heward, W. L. (2020). Applied behavior analysis (3rd ed.). Pearson.</p>
+<p>Daniels, A. C., &amp; Bailey, J. S. (2014). Performance management: Changing behavior that drives organizational effectiveness (5th ed.). Performance Management Publications.</p>
+<p>degli Espinosa, F., &amp; Hackenberg, T. D. (2024). Token economies: Evidence-based recommendations for practitioners. Behavioral Interventions, 39(4), e2051. https://doi.org/10.1002/bin.2051</p>
+<p>Di Nocera, F. (2026). Usable security: A (re)definition and a research agenda. Theoretical Issues in Ergonomics Science, 27(2), 118-131. https://doi.org/10.1080/1463922X.2025.2597035</p>
+<p>Di Nocera, F., &amp; Tempestini, G. (2022). Getting rid of the usability/security trade-off: A behavioral approach. Journal of Cybersecurity and Privacy, 2(2), 245-256. https://doi.org/10.3390/jcp2020013</p>
+<p>Di Nocera, F., &amp; Tinella, S. (2026). Steady State: A behavior-based educational game for time management. Behavioral Sciences, 16(8), Article 1290. https://doi.org/10.3390/bs16081290</p>
+<p>Ferster, C. B., &amp; Skinner, B. F. (1957). Schedules of reinforcement. Appleton-Century-Crofts. https://doi.org/10.1037/10627-000</p>
+<p>Fogg, B. J. (2009). A behavior model for persuasive design. In Proceedings of the 4th International Conference on Persuasive Technology (Article 40). Association for Computing Machinery. https://doi.org/10.1145/1541948.1541999</p>
+<p>Friman, P. C., &amp; Poling, A. (1995). Making life easier with effort: Basic findings and applied research on response effort. Journal of Applied Behavior Analysis, 28(4), 583-590. https://doi.org/10.1901/jaba.1995.28-583</p>
+<p>Froehlich, J., Findlater, L., &amp; Landay, J. (2010). The design of eco-feedback technology. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (pp. 1999-2008). Association for Computing Machinery. https://doi.org/10.1145/1753326.1753629</p>
+<p>Gelino, B. W., Erath, T. G., &amp; Reed, D. D. (2021). Going green: A systematic review of proenvironmental empirical research in behavior analysis. Behavior and Social Issues, 30, 587-611. https://doi.org/10.1007/s42822-020-00043-x</p>
+<p>Hackenberg, T. D. (2009). Token reinforcement: A review and analysis. Journal of the Experimental Analysis of Behavior, 91(2), 257-286. https://doi.org/10.1901/jeab.2009.91-257</p>
+<p>Hayes, S. C., &amp; Cone, J. D. (1977). Reducing residential electrical energy use: Payments, information, and feedback. Journal of Applied Behavior Analysis, 10, 425-435. https://doi.org/10.1901/jaba.1977.10-425</p>
+<p>Hayes, S. C., &amp; Cone, J. D. (1981). Reduction of residential consumption of electricity through simple monthly feedback. Journal of Applied Behavior Analysis, 14, 81-88. https://doi.org/10.1901/jaba.1981.14-81</p>
+<p>Herrnstein, R. J. (1970). On the law of effect. Journal of the Experimental Analysis of Behavior, 13(2), 243-266. https://doi.org/10.1901/jeab.1970.13-243</p>
+<p>Hogan, L. C., Bell, M., &amp; Olson, R. (2009). A preliminary investigation of the reinforcement function of signal detections in simulated baggage screening: Further support for the vigilance reinforcement hypothesis. Journal of Organizational Behavior Management, 29(1), 6-18. https://doi.org/10.1080/01608060802660116</p>
+<p>Kahneman, D. (2011). Thinking, fast and slow. Farrar, Straus and Giroux.</p>
+<p>Kazdin, A. E. (2020). Single-case research designs: Methods for clinical and applied settings. Oxford University Press.</p>
+<p>Kohlenberg, R. J., Phillips, T., &amp; Proctor, W. (1976). A behavioral analysis of peaking in residential electrical-energy consumers. Journal of Applied Behavior Analysis, 9(1), 13- 18. https://doi.org/10.1901/jaba.1976.9-13</p>
+<p>Komaki, J., Barwick, K. D., &amp; Scott, L. R. (1978). A behavioral approach to occupational safety: Pinpointing and reinforcing safe performance in a food manufacturing plant. Journal of Applied Psychology, 63, 434-445. https://doi.org/10.1037/0021-9010.63.4.434</p>
+<p>Lambert, C., Saha, K., &amp; Chandrasekharan, E. (2025). Does positive reinforcement work? A quasi-experimental study of the effects of positive feedback on Reddit. In Proceedings of the 2025 CHI Conference on Human Factors in Computing Systems. Association for Computing Machinery. https://doi.org/10.1145/3706598.3713830</p>
+<p>Lange, F., &amp; Dewitte, S. (2019). Measuring pro-environmental behavior: Review and recommendations. Journal of Environmental Psychology, 63, 92-100. https://doi.org/10.1016/j.jenvp.2019.04.009</p>
+<p>León Domínguez, U. (2025). Digital behavior: Evidence-based digital design. Cambridge University Press. https://doi.org/10.1017/9781009568296</p>
+<p>Liedtka, J. (2015). Perspective: Linking design thinking with innovation outcomes through cognitive bias reduction. Journal of Product Innovation Management, 32(6), 925-938. https://doi.org/10.1111/jpim.12163</p>
+<p>Malott, R. W. (1992). A theory of rule-governed behavior and organizational behavior management. Journal of Organizational Behavior Management, 12(2), 45-65. https://doi.org/10.1300/J075v12n02_03</p>
+<p>Michael, J. (1993). Establishing operations. The Behavior Analyst, 16(2), 191-206. https://doi.org/10.1007/BF03392623</p>
+<p>Michie, S., Richardson, M., Johnston, M., Abraham, C., Francis, J., Hardeman, W., Eccles, M. P., Cane, J., &amp; Wood, C. E. (2013). The behavior change technique taxonomy (v1) of 93 hierarchically clustered techniques: Building an international consensus for the reporting of behavior change interventions. Annals of Behavioral Medicine, 46(1), 81-95. https://doi.org/10.1007/s12160-013-9486-6</p>
+<p>Michie, S., van Stralen, M. M., &amp; West, R. (2011). The behaviour change wheel: A new method for characterizing and designing behaviour change interventions. Implementation Science, 6, Article 42. https://doi.org/10.1186/1748-5908-6-42</p>
+<p>Moynihan, D. P., Herd, P., &amp; Harvey, H. (2015). Administrative burden: Learning, psychological, and compliance costs in citizen-state interactions. Journal of Public Administration Research and Theory, 25(1), 43-69. https://doi.org/10.1093/jopart/muu009</p>
+<p>Norman, D. A. (1999). Affordance, conventions, and design. Interactions, 6(3), 38-43. https://doi.org/10.1145/301153.301168</p>
+<p>Normand, M. P., Dallery, J., &amp; Slanzi, C. M. (2021). Leveraging applied behavior analysis research and practice in the service of public health. Journal of Applied Behavior Analysis, 54(2), 457-483. https://doi.org/10.1002/jaba.832</p>
+<p>Northup, J., Vollmer, T. R., &amp; Serrett, K. (1993). Publication trends in 25 years of the Journal of Applied Behavior Analysis. Journal of Applied Behavior Analysis, 26(4), 527-537. https://doi.org/10.1901/jaba.1993.26-527</p>
+<p>O&#x27;Connor, R. T., Lerman, D. C., Fritz, J. N., &amp; Hodde, H. B. (2010). Effects of number and location of bins on plastic recycling at a university. Journal of Applied Behavior Analysis, 43, 711-715. https://doi.org/10.1901/jaba.2010.43-711</p>
+<p>Odum, A. L. (2011). Delay discounting: I&#x27;m a k, you&#x27;re a k. Journal of the Experimental Analysis of Behavior, 96(3), 427-439. https://doi.org/10.1901/jeab.2011.96-423</p>
+<p>Prue, D. M., &amp; Fairbank, J. A. (1981). Performance feedback in organizational behavior management: A review. Journal of Organizational Behavior Management, 3, 1-16. https://doi.org/10.1300/J075v03n01_01</p>
+<p>Rasmussen, E. B., Clay, C. J., Pierce, W. D., &amp; Cheney, C. D. (2023). Behavior analysis and learning: A biobehavioral approach (7th ed.). Routledge.</p>
+<p>Schneider, W., &amp; Shiffrin, R. M. (1977). Controlled and automatic human information processing: II. Perceptual learning, automatic attending, and a general theory. Psychological Review, 84(2), 127-190. https://psycnet.apa.org/doi/10.1037/0033- 295X.84.2.127</p>
+<p>Schroeder, S. A. (2007). We can do better: Improving the health of the American people. The New England Journal of Medicine, 357(12), 1221-1228. https://doi.org/10.1056/NEJMsa073350</p>
+<p>Sidman, M. (2000). Coercion and its fallout (Rev. ed.). Authors Cooperative. (Original work published 1989)</p>
+<p>Skinner, B. F. (1953). Science and human behavior. Macmillan.</p>
+<p>Skinner, B. F. (1971). Beyond freedom and dignity. Knopf.</p>
+<p>Slavin, R. E., Wodarski, J. S., &amp; Blackburn, B. L. (1981). A group contingency for electricity conservation in master-metered apartments. Journal of Applied Behavior Analysis, 14, 357-363. https://doi.org/10.1901/jaba.1981.14-357</p>
+<p>Staats, H., Van Leeuwen, E., &amp; Wit, A. (2000). A longitudinal study of informational interventions to save energy in an office building. Journal of Applied Behavior Analysis, 33, 101-104. https://doi.org/10.1901/jaba.2000.33-101</p>
+<p>Stanovich, K. E., &amp; West, R. F. (2000). Individual differences in reasoning: Implications for the rationality debate? Behavioral and Brain Sciences, 23(5), 645-665. https://doi.org/10.1017/S0140525X00003435</p>
+<p>Stokes, T. F., &amp; Baer, D. M. (1977). An implicit technology of generalization. Journal of Applied Behavior Analysis, 10(2), 349-367. https://doi.org/10.1901/jaba.1977.10-349</p>
+<p>Sulzer-Azaroff, B. (1978). Behavioral ecology and accident prevention. Journal of Organizational Behavior Management, 2, 11-44. https://doi.org/10.1300/J075v02n01_02</p>
+<p>Taverna, M., Colombo, S., &amp; Rampino, L. (2017). Igeni: Reinforcing hygiene practices in children through dynamic products. In Proceedings of the Conference on Design and Semantics of Form and Movement: Sense and Sensitivity (DeSForM 2017). https://doi.org/10.5772/intechopen.71122</p>
+<p>Thaler, R. H., &amp; Sunstein, C. R. (2008). Nudge: Improving decisions about health, wealth, and happiness. Yale University Press.</p>
+<p>Tiefenbeck, V., Goette, L., Degen, K., Tasic, V., Fleisch, E., Lalive, R., &amp; Staake, T. (2018). Overcoming salience bias: How real-time feedback fosters resource conservation. Management Science, 64(3), 1458-1476. https://doi.org/10.1287/mnsc.2016.2646</p>
+<p>Tversky, A., &amp; Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. Science, 185(4157), 1124-1131. https://doi.org/10.1126/science.185.4157.1124</p>
+<p>Van Horen, F., van der Wal, A., &amp; Grinstein, A. (2018). Green, greener, greenest: Can competition increase sustainable behavior? Journal of Environmental Psychology, 59, 16-25. https://doi.org/10.1016/j.jenvp.2018.08.007</p>
+<p>Van Houten, R., Nau, P. A., &amp; Merrigan, M. (1981). Reducing elevator energy use: A comparison of posted feedback and reduced elevator convenience. Journal of Applied Behavior Analysis, 14, 377-387. https://doi.org/10.1901/jaba.1981.14-377</p>
+<p>Werner, K., Alsuhaibani, S. A., Alsukait, R. F., Alshehri, R., Herbst, C. H., Alhajji, M., &amp; Lin, T. K. (2023). Behavioural economic interventions to reduce health care appointment non- attendance: A systematic review and meta-analysis. BMC Health Services Research, 23, Article 1136. https://doi.org/10.1186/s12913-023-10059-9</p>
+<p>Winett, R. A., Hatcher, J. W., Fort, T. R., Leckliter, I. N., Love, S. Q., Riley, A. W., &amp; Fishback, J. F. (1982). The effects of videotape modeling and daily feedback on residential electricity conservation, home temperature and humidity, perceived comfort, and clothing worn: Winter and summer. Journal of Applied Behavior Analysis, 15, 381-402. https://psycnet.apa.org/doi/10.1901/jaba.1982.15-381</p>
+<p>Winett, R. A., Neale, M. S., &amp; Grier, H. C. (1979). Effects of self-monitoring and feedback on residential electricity consumption. Journal of Applied Behavior Analysis, 12, 173-184. https://doi.org/10.1901/jaba.1979.12-173</p>
+<p>Wolf, M. M. (1978). Social validity: The case for subjective measurement or how applied behavior analysis is finding its heart. Journal of Applied Behavior Analysis, 11(2), 203- 214. https://doi.org/10.1901/jaba.1978.11-203</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
