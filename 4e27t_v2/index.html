@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Don’t throw the baby out with the bathwater!
+Why “preregistration” is still a useful term: Commentary on Mayo-Wilson
+et al. (2025)</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Don’t throw the baby out with the bathwater! Why “preregistration” is
+still a useful term: Commentary on Mayo-Wilson et al. (2025)
+</p>
+<p class="meta">
+2026-11-11 · Metacheck 0.4.3.27
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to
+fix</span></span><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We found 21 files in 1 repository.</li>
+<li>We found 0 README files and 1 repository without READMEs.</li>
+<li>We could not classify 1 file.</li>
+<li>We found 3 file naming problems to fix.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" target="_blank">osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+osf
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="files">Files</h4>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Size
+</th>
+<th style="text-align:left;">
+Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/nyxtd/" target="_blank">pre-reg.png</a>
+</td>
+<td style="text-align:left;">
+33.5 kB
+</td>
+<td style="text-align:left;">
+image
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/ythze/" target="_blank">preregchallenge.png</a>
+</td>
+<td style="text-align:left;">
+128 kB
+</td>
+<td style="text-align:left;">
+image
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/3acrq/" target="_blank">preregoverview.gif</a>
+</td>
+<td style="text-align:left;">
+1.6 MB
+</td>
+<td style="text-align:left;">
+image
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/acn34/" target="_blank">preregchallengeprezi.png</a>
+</td>
+<td style="text-align:left;">
+383.4 kB
+</td>
+<td style="text-align:left;">
+image
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/peut2/" target="_blank">Prereg_Overview.pdf</a>
+</td>
+<td style="text-align:left;">
+222.7 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/zwkqj/" target="_blank">Manuscript_Checklist.docx</a>
+</td>
+<td style="text-align:left;">
+59.6 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/7tq5p/" target="_blank">The
+Preregistration Challenege.pptx</a>
+</td>
+<td style="text-align:left;">
+463.2 kB
+</td>
+<td style="text-align:left;">
+slide
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/u74qf/" target="_blank">Transparency_COS_long.pptx</a>
+</td>
+<td style="text-align:left;">
+11.4 MB
+</td>
+<td style="text-align:left;">
+slide
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/ncqg7/" target="_blank">AnalysisPlanChecklists.docx</a>
+</td>
+<td style="text-align:left;">
+10 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/c2psw/" target="_blank">DISCOVER_JASP.pdf</a>
+</td>
+<td style="text-align:left;">
+1 MB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/4uxbj/" target="_blank">Prereg_Challenge_Eligibility.pdf</a>
+</td>
+<td style="text-align:left;">
+224.1 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/jea94/" target="_blank">OSF_Prereg_template.docx</a>
+</td>
+<td style="text-align:left;">
+22.6 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/jkq2y/" target="_blank">Preregistration
+Challenge Bibliography.rtf</a>
+</td>
+<td style="text-align:left;">
+3.6 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/h4ga8/" target="_blank">Reviewer_instructions.docx</a>
+</td>
+<td style="text-align:left;">
+143.5 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/vstj6/" target="_blank">preregistration_challenge.pdf</a>
+</td>
+<td style="text-align:left;">
+2.1 MB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/59ex8/" target="_blank">blog_interview_questions.docx</a>
+</td>
+<td style="text-align:left;">
+79.4 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/jr6yf/" target="_blank">prereg_challenge.pptx</a>
+</td>
+<td style="text-align:left;">
+97.7 kB
+</td>
+<td style="text-align:left;">
+slide
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/yrvcg/" target="_blank">Transparent-Changes-Template-Document.docx</a>
+</td>
+<td style="text-align:left;">
+17.1 kB
+</td>
+<td style="text-align:left;">
+text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/zakb8/" target="_blank">Analysis_Decision.pptx</a>
+</td>
+<td style="text-align:left;">
+55.5 kB
+</td>
+<td style="text-align:left;">
+slide
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/vb6xf/" target="_blank">ecomodeler_decision_tree.emp</a>
+</td>
+<td style="text-align:left;">
+6.8 kB
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a>
+</td>
+<td style="text-align:left;">
+<a href="https://osf.io/download/mw8x5/" target="_blank">ecomodeler_decision_tree_screenshot.png</a>
+</td>
+<td style="text-align:left;">
+87.4 kB
+</td>
+<td style="text-align:left;">
+image
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="readme-files">README Files</h4>
+<p>README files are a way to document the contents and structure of a
+folder, helping users locate the information they need. You can use a
+README to document changes to a repository, and explain how files are
+named. Please consider adding a README to each repository or including
+‘README’ in the name of your overview document.</p>
+<h4 id="unclassified-files">Unclassified Files</h4>
+<p>We could not classify 1 file by name or extension:
+ecomodeler_decision_tree.emp. Add a recognisable keyword
+(<code>data</code>, <code>code</code>, <code>materials</code>,
+<code>documentation</code>, <code>output</code>) to the file name, or
+use a common extension, so both humans and machines can tell what kind
+of file it is.</p>
+<h4 id="file-naming">File Naming</h4>
+<p>File names should be machine-parseable: no spaces or special
+characters, and every file should be classifiable by name or extension.
+We found 3 naming problems that should be fixed, and 0 files with a
+naming suggestion (not required, but a good habit).</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Rule
+</th>
+<th style="text-align:left;">
+Severity
+</th>
+<th style="text-align:left;">
+Detail
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+The Preregistration Challenege.pptx
+</td>
+<td style="text-align:left;">
+spaces
+</td>
+<td style="text-align:left;">
+Required
+</td>
+<td style="text-align:left;">
+contains a space
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Preregistration Challenge Bibliography.rtf
+</td>
+<td style="text-align:left;">
+spaces
+</td>
+<td style="text-align:left;">
+Required
+</td>
+<td style="text-align:left;">
+contains a space
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ecomodeler_decision_tree.emp
+</td>
+<td style="text-align:left;">
+unclassifiable
+</td>
+<td style="text-align:left;">
+Required
+</td>
+<td style="text-align:left;">
+could not be classified by name or extension (data_type is ‘unknown’);
+add a recognisable keyword (data, code, materials, …) or a known
+extension
+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="file-classification">File Classification</h4>
+<div class="callout-note" title="See how every file was classified and grouped" collapse="true">
+<p><strong>documentation</strong> (16 files)</p>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+pre-reg.png
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Images/pre-reg.png
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Prereg_Overview.pdf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/Prereg_Overview.pdf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Manuscript_Checklist.docx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/Manuscript_Checklist.docx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+The Preregistration Challenege.pptx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/The Preregistration Challenege.pptx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transparency_COS_long.pptx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/Transparency_COS_long.pptx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AnalysisPlanChecklists.docx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/AnalysisPlanChecklists.docx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DISCOVER_JASP.pdf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/DISCOVER_JASP.pdf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Prereg_Challenge_Eligibility.pdf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/Prereg_Challenge_Eligibility.pdf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OSF_Prereg_template.docx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/OSF_Prereg_template.docx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Preregistration Challenge Bibliography.rtf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/Preregistration Challenge
+Bibliography.rtf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Reviewer_instructions.docx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/Reviewer_instructions.docx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+preregistration_challenge.pdf
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/preregistration_challenge.pdf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+blog_interview_questions.docx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/blog_interview_questions.docx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+prereg_challenge.pptx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and Guides/prereg_challenge.pptx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transparent-Changes-Template-Document.docx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Resources, Checklists, and
+Guides/Transparent-Changes-Template-Document.docx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Analysis_Decision.pptx
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Decision Trees/Analysis_Decision.pptx
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>materials</strong> (4 files)</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+preregchallenge.png
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Images/preregchallenge.png
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+preregoverview.gif
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Images/preregoverview.gif
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+preregchallengeprezi.png
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Images/preregchallengeprezi.png
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ecomodeler_decision_tree_screenshot.png
+</td>
+<td style="text-align:left;">
+ex1
+</td>
+<td style="text-align:left;">
+Decision Trees/ecomodeler_decision_tree_screenshot.png
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>unknown</strong> (1 file)</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+File
+</th>
+<th style="text-align:left;">
+Group
+</th>
+<th style="text-align:left;">
+Path
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+ecomodeler_decision_tree.emp
+</td>
+<td style="text-align:left;">
+—
+</td>
+<td style="text-align:left;">
+Decision Trees/ecomodeler_decision_tree.emp
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 2 references with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>We found 4 OSF links, but no registrations.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We classified 21 files: 16 documentation, 4 materials, 1
+unknown.</li>
+<li>We found 0 tabular data files and extracted 0 columns from 0 of
+them.</li>
+<li>We grouped the files into 1 study group (ex1). We found no readable
+tabular data files to validate.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="files">Files in the repository</h2>
+<p>Where the files sit within each repository. Each file is followed by
+how it was classified, which study it belongs to, and any file-naming
+issue found by repo_check; junk files, hidden files and empty folders
+are marked.</p>
+<p><strong>Repository: <a href="https://osf.io/x5w7h/files/jea94" class="uri">https://osf.io/x5w7h/files/jea94</a></strong></p>
+<div style="max-height: 40em; overflow: auto;">
+<pre><code>├── Decision Trees/
+│   ├── Analysis_Decision.pptx                      📖 documentation ex1
+│   ├── ecomodeler_decision_tree_screenshot.png     📁 materials     ex1
+│   └── ecomodeler_decision_tree.emp                ❓ unknown            could not be classified by name or extension (data_type is &#39;unknown&#39;); add a recognisable keyword (data, code, materials, ...) or a known extension
+├── Images/
+│   ├── pre-reg.png                                 📖 documentation ex1
+│   ├── preregchallenge.png                         📁 materials     ex1
+│   ├── preregchallengeprezi.png                    📁 materials     ex1
+│   └── preregoverview.gif                          📁 materials     ex1
+└── Resources, Checklists, and Guides/
+    ├── AnalysisPlanChecklists.docx                 📖 documentation ex1
+    ├── blog_interview_questions.docx               📖 documentation ex1
+    ├── DISCOVER_JASP.pdf                           📖 documentation ex1
+    ├── Manuscript_Checklist.docx                   📖 documentation ex1
+    ├── OSF_Prereg_template.docx                    📖 documentation ex1
+    ├── Prereg_Challenge_Eligibility.pdf            📖 documentation ex1
+    ├── prereg_challenge.pptx                       📖 documentation ex1
+    ├── Prereg_Overview.pdf                         📖 documentation ex1
+    ├── Preregistration Challenge Bibliography.rtf  📖 documentation ex1  contains a space
+    ├── preregistration_challenge.pdf               📖 documentation ex1
+    ├── Reviewer_instructions.docx                  📖 documentation ex1
+    ├── The Preregistration Challenege.pptx         📖 documentation ex1  contains a space
+    ├── Transparency_COS_long.pptx                  📖 documentation ex1
+    └── Transparent-Changes-Template-Document.docx  📖 documentation ex1</code></pre>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+Data Check
+</summary>
+<div class="fold">
+<p>This module classifies repository files and, for tabular data files
+available locally, extracts each column’s type and summary
+statistics.</p>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 17 references with DOIs. You cited 2 references with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Hardwicke, T. E., &amp; Vazire, S. (2024). Transparency Is Now the
+Default at Psychological Science. Psychological Science, 35(7), 708-711.
+<a href="https://doi.org/10.1177/09567976231221573" class="uri">https://doi.org/10.1177/09567976231221573</a>
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/2A15539B5B7371CB83CEFDC982E200" target="_blank">link</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nosek, B. A., Ebersole, C. R., DeHaven, A. C., &amp; Mellor, D. T.
+(2018). The preregistration revolution. Proceedings of the National
+Academy of Sciences, 115(11), 2600-2606. <a href="https://doi.org/10.1073/pnas.1708274114" class="uri">https://doi.org/10.1073/pnas.1708274114</a>
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/E96C39735908C94D88D0481220182A" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 17 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 17 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Practices In Psychological Science. This is the revised version, which has been resubmitted and is currently under review.</p>
+<h3>[div-01]</h3>
+<p>In their article, Mayo-Wilson et al. (2025) argue that the term &quot;preregistration&quot; has been used ambiguously, referring to many different components present at different stages of the research process. We agree with the authors&#x27; goal to &quot;enhance understanding and support better implementation and reporting of open science&quot; (p. 1) and that the term &quot;preregistration&quot; is currently being used ambiguously. However, Mayo-Wilson et al. (2025) suggest replacing the term &quot;preregistration&quot;, a proposal we find counterproductive. Thus, we offer an alternative perspective on it. Mayo-Wilson et al. (2025) build on the terminology change implemented in the TOP 2025 Guidelines (Grant et al., 2026). TOP 2025 disaggregates preregistration into registration, study protocol, and analysis plan, and asks authors to report when each was created and shared, without taking a stance on whether &quot;preregistration&quot; remains useful as an umbrella term for these practices. Going beyond this, Mayo-Wilson et al. propose that &quot;rather than use the term &#x27;preregistration&#x27; to refer to different times for different studies and study types, [...] authors describe specific research outputs, such as registrations, and the times at which those outputs were created and shared in relation to other relevant study events&quot; (p. 5). In addition, &quot;preregistration&quot; is not defined in the article at all, nor is it specified whether and how the other terms relate to it, implying that the authors do not see other uses for the term &quot;preregistration&quot;.</p>
+<h3>Why we still need &quot;preregistration&quot;</h3>
+<p>Although the definition of preregistration has been contested, there appears to be some consensus that it requires recording a time-stamped plan for (parts of) a study before the data have been collected or examined, usually in a dedicated repository (cf. Krypotos et al., 2022; Lakens et al., 2024; Nosek et al., 2018; Parsons et al., 2022). In recent years, the term &quot;preregistration&quot; has become established and is now so prevalent within psychology that it can be discussed and promoted efficiently (Hardwicke &amp; Vazire, 2024), with over a third of researchers in psychology in the Netherlands and the UK reporting that they regularly preregister their studies (Gopalakrishna et al., 2022; Silverstein et al., 2024). However, the vast majority of published studies in psychology still include no elements that are preregistered (Hardwicke et al., 2022 (Hardwicke et al., , 2024)). We worry that dropping the term will divert attention from understanding the myriad of potential benefits of the practice in its various forms, raising awareness and adoption, evaluating its impact, and proposing targeted improvements, and may ultimately cause more confusion among researchers already working on improving transparency in their research.</p>
+<p>We agree that the different components outlined by Mayo-Wilson et al. (2025) -that is, registration, study protocol, and analysis plan -are distinct. However, distinguishing components does not require dropping the term that groups them. For example, a protocol may or may not state hypotheses or include study materials, yet &quot;study protocol&quot; as an umbrella term is still useful. Similarly, we argue that &quot;preregistration&quot; is a useful umbrella term to clarify that these (and other) elements of a research process can be prespecified and recorded to aid in research planning and reduce bias. Using both the overarching term &quot;preregistration&quot; and terms for the specific components that can be preregistered may facilitate teaching and advocacy, while also nudging researchers to think about the utility of all possible components and the importance of being transparent about their choices. We believe in the utility of a preregistration that includes only some of these (sub)components, as long as researchers are transparent about this and understand the relative benefits of preregistering these different elements.</p>
+<p>Whatever researchers choose to ( not  2025) also argue for a consistent terminology across disciplines, which they believe is not achievable while using the term &quot;preregistration&quot;. However, we believe that an overarching framework of &quot;preregistration&quot; has utility in enabling interdisciplinary exchange about different goals of preregistration and how best to achieve them. For instance, psychologists can offer lessons regarding the use of preregistration to restrict researcher degrees of freedom (e.g., Spitzer et al., 2026), while being able to learn from other disciplines how immediate public availability of preregistrations can enable the coordination of efforts and reduce the file-drawer issue (Rosenthal, 1979). For this interdisciplinary exchange, resource collections like &quot;Open Research Across Disciplines&quot; (Farran et al., 2020; Silverstein et al., 2026) can be useful. We do agree with Mayo-Wilson and colleagues that greater standardisation within disciplines makes sense. Such efforts are currently underway in psychology to establish best-practice guidelines for various open science practices, including preregistration (see https://forrt.org/best-practices-psychology/).</p>
+<h3>Why we should not drop the &quot;pre&quot;</h3>
+<p>Mayo-Wilson and colleagues (2025) also suggest that the &quot;pre&quot; in preregistration is confusing as there is not one single event that it would precede across studies. While this is true, we believe that this makes it even more important for authors to emphasise and specify the &quot;pre&quot;. To limit degrees of freedom and/or aid study planning, the practice needs to occur prior to the event relevant to that goal. Which events are relevant may differ between study designs, as Mayo-Wilson and colleagues also point out. For example, registration after a study&#x27;s completion does not aim to reduce researchers&#x27; degrees of freedom at all, but has other benefits, e.g., findability. At times, there is a lack of differentiation between preregistration and other types of registration, for example in the open-ended registrations on the OSF, which can convey a mistaken impression of bias control and hamper metascientific efforts (Ensinck &amp; Lakens, 2025). However, specificity with regard to study events is already contained in most preregistration templates in psychology. For example, the OSF Preregistration Template (https://osf.io/x5w7h/files/jea94) and the PRP-QUANT Template (Bosnjak et al., 2022; available at: https://prereg-psych.org/) ask about when the preregistration is taking place with regard to data collection, access, and analysis.</p>
+<p>Mayo-Wilson and colleagues state the definition of register (verb) as: &quot;Enter a record in a register, such as submit minimum study information to ClinicalTrials.gov&quot; (p. 2). However, a wider definition of register (verb) is &quot;to make a record of&quot; (Merriam-Webster, 2026). We believe that this wider definition of register, paired with &quot;pre&quot; in &quot;preregistration&quot;, captures the act of making a record of something prior to the activity relevant to that goal, and that this wider definition covers all current uses of preregistration in psychology.</p>
+<p>We agree with Mayo-Wilson et al. (2025) that currently, platforms typically used to register studies in psychology do not live up to the highest standards. Some (pre)registration platforms are not indexed at all and offer no search (e.g., AsPredicted), others are indexed but do not require sufficient minimum information (e.g., open-ended OSF registrations), many default to embargo periods, few have robust plans for long-term preservation, and no database offers an aggregated search across multiple preregistration platforms. Stage 1 Registered Reports, as a type of preregistration, should be included in such a registry, since they are currently not consistently registered 1 . Yet, we do not believe that these issues are a reason to replace the term &quot;preregistration&quot;, but rather that there is an opportunity to improve infrastructure. Preregistration platforms and journals offering Registered Reports should work towards achieving these requirements. For example, different preregistration platforms could collaborate to ensure long-term preservation (similar to initiatives for data repositories, e.g., DataPASS, http://data-pass.org), and to develop preregistration metadata standards (for example, to distinguish between preregistration and registration after a study is completed). Preregistration platforms should also work towards solutions to balance the benefits of immediate findability with concerns from authors about being &quot;scooped&quot; and about their identities being revealed in masked peer review. There is room for different preregistration platforms to take different approaches to this issue (and others), so that authors and journals can make an informed decision about their priorities.</p>
+<h3>Conclusion</h3>
+<p>Ultimately, debate about the purpose, scope, and limits of preregistration can enable the development of discipline-specific and method-specific norms regarding best practices of the what, when, and where of preregistration, and support researchers in making their own reasoned choices and transparently reporting these. We propose that for this, it is neither necessary nor desirable for the field of psychology to replace the term &quot;preregistration&quot; altogether; instead, we should advocate that researchers are transparent about all aspects of their preregistrations, and develop policies that enable this.</p>
+<p>As mentioned previously, best-practice guidelines for preregistration in psychology are currently under development (https://forrt.org/best-practices-psychology/), which will include recommendations for preregistration reporting. In the meantime, to aid transparency in reporting, we propose that authors include and follow a 21-word statement, similar to the one proposed by Simmons et al. (2012) for transparent reporting of methods. Specifically, we propose that researchers state: &quot;For each study, we clearly report what was preregistered, when, where it is available, and any deviations that occurred after preregistration.&quot;</p>
+<h3>Acknowledgments:</h3>
+<p>We thank Arthur Thives Mello for attending and contributing to a discussion at the Open Science Retreat in Machynlleth, Wales, that prompted the writing of this commentary. We also thank the Open Science Retreat organisers for creating the space for such discussions to take place.</p>
+<h3>Funding:</h3>
+<p>PS is supported by the European Union under the HE grant ID 101087416 [DOI:10.3030/101087416], and co-funded by the EU Recovery and Resilience Facility, and Portuguese national funds via FCT -Fundação para a Ciência e a Tecnologia, under projects LA/P/0058/2020 [DOI: 10.54499/LA/P/0058/2020], UID/PRR/04539/2025 [DOI: 10.54499/UID/PRR/04539/2025] and UID/04539/2025.</p>
+<h3>AI disclosure:</h3>
+<p>We used Opus 4.8 to obtain feedback on the original draft structure. During revisions, we used Opus 5.5 to give feedback on language accuracy and flow. All writing was done by the authors.</p>
+<h3>Prior versions:</h3>
+<p>A previous version of the manuscript is currently preprinted at PsyArXiv (https://doi.org/10.31234/osf.io/4e27t_v1). The preprint will be updated upon submission.</p>
+<p>Conflicts of Interest: LS leads the Best-Practices in Psychology Guidelines Project, including developing best-practice guidelines for preregistration, and all other authors are a part of this project. LS is managing the preregistration service PreReg offered by the Leibniz Institute for Psychology (ZPID). PS and LS either have served or are currently serving on the Society for the Improvement of Psychological Science (SIPS) Executive Committee. All authors are involved in the Framework for Open and Reproducible Research Training (FORRT).</p>
+<p>) preregister, they should be encouraged to explicitly and transparently report what they preregister, when in the research process this preregistration was done, where this preregistration can be accessed, and what deviations occurred after preregistration.Mayo-Wilson et al. (</p>
+<p>As an aside, we agree that using the term &quot;Pre-Registered Reports&quot; would be more fitting. However, given how established the Registered Report term has become, it might be more effective to contribute to the refinement of current standards and improvement of journal policy and practice than to campaign for language change.</p>
+<h3>References</h3>
+<p>References: Bosnjak, M., Fiebach, C. J., Mellor, D., Mueller, S., O&#x27;Connor, D. B., Oswald, F. L., &amp; Sokol, R. I. (2022). A template for preregistration of quantitative research in psychology: Report of the joint psychological societies preregistration task force. American Psychologist, 77(4), 602-615. https://doi.org/10.1037/amp0000879</p>
+<p>Ensinck, E. N. F., &amp; Lakens, D. (2025). An Inception-Cohort Study Quantifying How Many Registered Studies Are Publicly Shared. Advances in Methods and Practices in Psychological Science, 8(1), 25152459241296031. https://doi.org/10.1177/25152459241296031</p>
+<p>Farran, E. K., Silverstein, P., Ameen, A. A., Misheva, I., &amp; Gilmore, C. (2020). Open Research: Examples of good practice, and resources across disciplines (2026 edition). OSF Preprints. https://doi.org/10.31219/osf.io/3r8hb</p>
+<p>Gopalakrishna, G., Wicherts, J. M., Vink, G., Stoop, I., van Den Akker, O. R., ter Riet, G., &amp; Bouter, L. M. (2022). Prevalence of responsible research practices among academics in The Netherlands. F1000Research, 11, 471. https://doi.org/10.12688/f1000research.110664.2</p>
+<p>Grant, S., Corker, K.S., Mellor, D. et al. TOP 2025: An update to the Transparency and Openness Promotion Guidelines. Research Integrity and Peer Review, 11, 40 (2026). https://doi.org/10.1186/s41073-026-00223-0</p>
+<p>Hardwicke, T. E., Thibault, R. T., Clarke, B., Moodie, N., Crüwell, S., Schiavone, S. R., Handcock, S. A., Nghiem, K. A., Mody, F., Eerola, T., &amp; Vazire, S. (2024). Prevalence of PREREGISTRATION COMMENT 9 transparent research practices in psychology: A cross-sectional study of empirical articles published in 2022. Advances in Methods and Practices in Psychological Science, 7(4). https://doi.org/10.1177/25152459241283477</p>
+<p>Hardwicke, T. E., Thibault, R. T., Kosie, J. E., Wallach, J. D., Kidwell, M. C., &amp; Ioannidis, J. P. A. (2022). Estimating the prevalence of transparency and reproducibility-related research practices in psychology (2014-2017). Perspectives on Psychological Science, 17(1), 239-251. https://doi.org/10.1177/1745691620979806</p>
+<p>Hardwicke, T. E., &amp; Vazire, S. (2024). Transparency Is Now the Default at Psychological Science. Psychological Science, 35(7), 708-711. https://doi.org/10.1177/09567976231221573</p>
+<p>Krypotos, A.-M., Mertens, G., Klugkist, I., &amp; Engelhard, I. M. (2022). Preregistration: Definition, Advantages, Disadvantages, and How It Can Help Against Questionable Research Practices. Avoiding Questionable Research Practices in Applied Psychology, 343-357. https://doi.org/10.1007/978-3-031-04968-2_15</p>
+<p>Lakens, D., Mesquida, C., Rasti, S., &amp; Ditroilo, M. (2024). The benefits of preregistration and Registered Reports. Evidence-Based Toxicology, 2(1). https://doi.org/10.1080/2833373x.2024.2376046</p>
+<p>Mayo-Wilson, E., Grant, S., Corker, K. S., &amp; Moher, D. (2025). Consistent and precise description of research outputs could improve implementation of Open Science. Advances in Methods and Practices in Psychological Science, 8(4). https://doi.org/10.1177/25152459251375445</p>
+<p>Merriam-Webster. (n.d.). Register. In Merriam-Webster.com dictionary. Retrieved July 29, 2026, from https://www.merriam-webster.com/dictionary/register</p>
+<p>Nosek, B. A., Ebersole, C. R., DeHaven, A. C., &amp; Mellor, D. T. (2018). The preregistration revolution. Proceedings of the National Academy of Sciences, 115(11), 2600-2606. https://doi.org/10.1073/pnas.1708274114</p>
+<p>Parsons, S., Azevedo, F., Elsherif, M. M., Guay, S., Shahim, O. N., Govaart, G. H., … &amp; Aczel, B. (2022). A Community-Sourced Glossary of Open Scholarship Terms. Nature Human Behaviour, 6(3), 312-318. https://doi.org/10.1038/s41562-021-01269-4</p>
+<p>Rosenthal, R. (1979). The file drawer problem and tolerance for null results. Psychological Bulletin, 86(3), 638-641. https://doi.org/10.1037/0033-2909.86.3.638</p>
+<p>Silverstein, P., Pennington, C. R., Branney, P., O&#x27;Connor, D. B., Lawlor, E., O&#x27;Brien, E., &amp; Lynott, D. (2024). A registered report survey of open research practices in psychology departments in the UK and Ireland. British Journal of Psychology, 115(3), 497-534. https://doi.org/10.1111/bjop.12700</p>
+<p>Silverstein, P., Wallrich, L., Farran, E. K., Gilmore, C., Davies, R., Jacobs, N., Abt, G., Ameen, A. A., Auer, T., Barbrook-Johnson, P., Bhogal, S. K., Bhogal, J., Bowe, M., Bowering Mullen, L., Buil-Gil, D., Catt, B., Chigevenga, R., Chue Hong, N., Cole, G., Cornell, J., Costello, K., French, I., Gonnet, H., Gore-Gorszewska, G., Graves, T. A., Gupta, A., Hergert, J., Höffler, J. H., Holliday, D. D., Iley, B., Kalandadze, T., Kurtin, D., Lister, A., Miller-Dicks, M., Misheva, I., Pennington, C., Plomp, E., Plonsky, L., Plumbley, M., Pollard, T., Pownall, M., Prosser, A. M. B., Rinke, E. M., Shahadu, S., Smith, F., Spitzer, L., Struck, L., Townsend, P., Underwood, C., Van PREREGISTRATION COMMENT 11</p>
+<p>Hauwaert, S., Violante, I., Watt, B., Weinerova, J., Wise, E., Woodyer, T., &amp; FORRT (2026). Open Research Across Disciplines: Examples of good practice, and resources across disciplines [Online resource].</p>
+<p>FORRT. https://forrt.org/disciplines/</p>
+<p>Simmons, Joseph P. and Nelson, Leif D. and Simonsohn, Uri, A 21 Word Solution (October 14, 2012). Available at SSRN: http://dx.doi.org/10.2139/ssrn.2160588</p>
+<p>Spitzer L, Kroeger A, Mueller S. Stage 2 Registered Report: Restriction of Researcher Degrees of Freedom Through the Psychological Research Preregistration-Quantitative Template. Advances in Methods and Practices in Psychological Science. 2026;9(2). doi:10.1177/25152459261432216</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
