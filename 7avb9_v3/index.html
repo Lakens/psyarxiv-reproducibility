@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Enhancing measurement in adaptive learning
+systems: How much can we gain from response times?</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Enhancing measurement in adaptive learning systems: How much can we gain
+from response times?
+</p>
+<p class="meta">
+2026-11-10 · Metacheck 0.4.3.24
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to
+fix</span></span><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 10 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+The correlations for the CRTM P = 0.1 ranged between .868 and .924 in
+the different datasets, while for the best performing NRM they were
+.977-.998.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+This can be explained by considering that the CRTM with P = 0.1 gives a
+relatively high weight to being fast vs. slow in its scoring rule,
+compared to the difference between giving a correct and an incorrect
+response.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = .1
+</td>
+<td style="text-align:left;">
+Only for some of the models, most notably for CRTM with P = .1, RTs lead
+to an improvement the early phase with this improvement decaying and
+even turning into disadvantage later on across most of the datasets.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+For example, in the Old Scoring Rule Multiplication dataset the CRTM
+with P = 0.1 performed worse than the RM in our main analysis, but
+slightly better when the persons with at least 5 responses were included
+in the analysis.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+The response accuracy and RT data were generated under the SRTM for the
+datasets with the old scoring rule and under the CRTM with a small
+penalty (P = 0.1) for the datasets with the new scoring rule.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+To specify the corresponding true values for the item parameters in the
+CRTM with P = 0.1, the values from the RM needed to go through a
+non-linear transformation 11.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+Appendix A: Sensitivity analysis Old scoring rule New scoring rule Model
+Threshold + -× ÷ + -× ÷ SRTM 20 -.00008 -.00006 .00010 .00202 .00016
+.00013 .00023 .00178 10 -.00007 .00015 .00001 .00338 .00030 .00028
+.00027 .00335 5 -.00052 .00005 -.00013 .00528 -.00005 .00031 .00037
+.00567 DSRTM 20 .00050 .00114 .00131 .00291 .00078 .00138 .00140 .00255
+10 .00064 .00143 .00172 .00438 .00094 .00162 .00193 .00426 5 .00072
+.00191 .00252 .00662 .00123 .00223 .00299 .00689 PCM 20 -.00017 -.00012
+.00009 .00024 .00003 -.00000 .00020 .00038 10 -.00015 -.00007 .00012
+.00040 .00007 .00007 .00027 .00062 5 -.00012 -.00001 .00020 .00061
+.00016 .00017 .00042 .00096 CRTM 20 .00319 .00111 .00062 .00223 .00334
+.00137 .00116 .00324 P = 0.1 10 .00302 .00104 .00016 .00339 .00328
+.00120 .00076 .00460 5 .00198 .00052 -.00053 .00647 .00231 .00077 .00026
+.00804 CRTM 20 -.00002 .00014 .00005 .00223 .00034 .00052 .00063 .00319
+10 -.00008 .00010 -.00027 .00339 .00027 .00040 .00040 .00460 5 -.00040
+-.00023 -.00072 .00571 .00007 .00021 .00017 .00686 NRM 20 -.00029
+-.00022 -.00016 -.00005 -.00010 -.00009 -.00004 .00000 10 -.00029
+-.00025 -.00015 -.00007 -.00010 -.00009 -.00004 .00000 5 -.00027 -.00022
+-.00012 -.00009 -.00007 -.00006 -.00002 .00001 Table 8 Hyperparameter
+values optimized in Step 2.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+For CRTM we also computed the final metrics for P = 0.1 in addition to
+the one with the optimized P ,
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+Figure 6Empirical cumulative distribution functions (ECDF) of the
+correlations between response times of correct responses and ability
+estimated based on accuracy in empirical data and data simulated under
+the normative models (SRTM and CRTM with P = 0.1).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+P = 0.1
+</td>
+<td style="text-align:left;">
+‘Normative RTs’ means that the data were generated under the normative
+RT models (SRTM and CRTM with P = 0.1 for the old and the new scoring
+rules, respectively).
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 10 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 32 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 32 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 32 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI. If you run the
+doi_check module in a pipeline before this, it will use the enhanced DOI
+list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited (currently, a warning is provided regardless
+of whether the replication/reproduction study is already cited).</p>
+<p>The module requires that the reference has a DOI. If you run the
+ref_doi_check module in a pipeline before this, it will use the enhanced
+DOI list from that module, otherwise it will only run on references with
+existing DOIs.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Obtaining accurate measures of changing abilities is essential for online adaptive learning systems (ALS) to provide learners with instructional material and practice items at the appropriate level. Despite the large data volume in ALS, focusing on a single individual at a specific moment yields limited data, reducing measurement precision. To improve precision, it has been proposed to incorporate response time (RT) data into measurement (Klinkenberg et al., 2011). Using data from an ALS for primary school mathematics Math Garden (Straatemeier, 2014), we compare different models that incorporate RTs and can be used for ability tracking with each other and with the benchmark Rasch model, in which ability is measured based only on the accuracy of the responses, in terms of next-response prediction. We also contrast these empirical findings with simulation results that match the empirical setup but where the generating model matches the way in which RTs are incorporated into measurement, to study what can be gained under ideal circumstances. Our results show that while theoretical gains are large, in the studied empirical setting RTs at best provide a modest improvement that was not fully consistent across domains and depended on the reward system implemented in the ALS.</p>
+<p>Implications of the results for the choice of the measurement model in ALS are discussed.</p>
+<p>Enhancing measurement in adaptive learning systems: How much can we gain from response times?</p>
+<h3>Introduction</h3>
+<p>One of the most impactful and promising ambitions in educational innovation is the move toward large-scale personalized learning, facilitated by the emergence of online adaptive learning systems (ALS), also known as adaptive learning environments or computer adaptive practice systems (Ennouamani &amp; Mahani, 2017). These systems are designed to dynamically adjust the level of practice and instructional content according to each learner&#x27;s abilities, as well as other potential characteristics such as learning preferences, interests, and motivation, fostering an engaging environment (Bernacki et al., 2021; Pelánek, 2025; Van Schoors et al., 2021; Xie et al., 2019). Examples of such systems include Franel, an item-based intelligent tutoring system for French and Dutch languages (Desmet et al., 2006), Outline Maps, an adaptive practice system for geography facts (Papoušek et al., 2016), and Math Garden, an online learning system for primary school mathematics (Straatemeier, 2014). Depending on the system, it can also provide diagnostic feedback, such as which skills and abilities the learner is deficient in, navigational support regarding which skills to work on, and learning resources for improving these skills.</p>
+<p>To effectively optimize feedback, instruction, and educational materials, it is essential to have continuously updated, accurate, and reliable assessments of students&#x27; evolving abilities. Consequently, measurement becomes a crucial aspect of ALS. However, measuring change is inherently complex and the adaptive nature of ALS, combined with the necessity of serving thousands of learners who require ongoing updates to their ability estimates, adds further complexity. These characteristics present significant challenges to traditional psychometric models and algorithms (see e.g., Deonovic et al., 2020; Wauters et al., 2012).</p>
+<p>To address these challenges, rating systems such as the Elo rating system (ERS; Elo, 1978) have been used to monitor abilities in ALS (Klinkenberg et al., 2011; Pelánek et al., 2017). In the ERS the students&#x27; abilities are updated based on every student-item interaction, based on the difference between the observed and expected response: where θjt and θj(t-1) are the estimates of ability of student j at timepoints t and t -1, respectively, and K is the step-size parameter.</p>
+<p>Smaller K-values can be selected to reduce noise, while larger values allow to track changes better. The expected response at timepoint t is calculated using the estimated ability at timepoint t -1 under the chosen measurement model. A simple measurement model often used in this context is the Rasch model (RM; Rasch, 1960), in which the probability of a correct response only depends on the difference between ability of the student and the difficulty of the item.</p>
+<p>The difficulty of the items can either be updated alongside the abilities of the students, or fixed at pre-calibrated values.</p>
+<p>The ERS provides a computationally efficient, easy-to-implement, and transparent way of tracking student abilities. Nonetheless, a significant challenge persists: Despite the large volume of data generated by ALS, focusing on a specific individual at a given moment yields limited data, making it difficult to achieve high measurement precision using information from response accuracy alone. Additionally, items with relatively high correct response probabilities (0.7-0.8) are typically selected to boost motivation and engagement (Jansen et al., 2013). Consequently, the response accuracy data would provide less information about ability compared to settings where items are presented in the statistically optimal way with a probability of a correct response close to 0.5 (as is done in computerized adaptive testing aimed at optimizing test information in a personalized way; see e.g., van der Linden, Glas, et al., 2000). Hence, selecting items that do not provide a lot of information makes the speed of convergence slower. For example, in the cold-start problem, estimates of abilities move away from their initial values slower (Bolsinova et al., 2025), requiring a lot of responses before the estimates get close to their true values. Mismatches between the true ability level of the student and their estimated level of ability can therefore result in long periods for which the difficulty level of the presented items is not well-aligned with the ability level of student, causing issues for the ALS such as for example reducing student motivation, risk of dropout, and a slower learning rate due to presenting misaligned learning material.</p>
+<p>To improve measurement precision in ALS and to speed up the convergence of the ability estimates, it has been proposed to utilize response times (RTs), which are easy to collect and have many potential uses in ALS (Pelánek, 2024). Klinkenberg et al. (2011) proposed a modification of the standard ERS, which in addition to the response accuracy The SRTM makes strict assumptions about the exact way in which ability and RTs are related to each other, and when these assumptions are violated this may lead to bias. This suggests that the exact specification of the SRTM might not always be the most optimal way to model the link between ability and RTs, and that it is possible for other similar models to result in a better measurement (quantified through next-response prediction) than the base SRTM. For example, some of the assumptions of the SRTM can be relaxed while still keeping the general idea that fast correct responses are indicative of higher ability than slow correct responses (Tijmstra &amp; Bolsinova, 2021), or RTs can be incorporated into the scoring rule in an alternative way (Vermeiren et al., 2025).</p>
+<p>Regardless of which specific scoring-rule-based model is adopted, ability can be monitored using a version of the ERS where instead of the binary item score X, a different score and its expected value are used: where S jit is the model-specific score of student j to item i at timepoint t.</p>
+<p>In this way, RTs can be incorporated into ability tracking in different ways, based on different assumptions (e.g., more or less strict) about the relationship between ability and RT.</p>
+<p>While there is a wide range of ways of modeling RTs (e.g., Bolsinova &amp; Tijmstra, 2018; Molenaar et al., 2015; Van der Linden, 2007), in this project we focus on the scoring-rule-based approach, because it makes ability estimation transparent and easy to explain to stakeholders (students, parents, teachers) as opposed to using black box approaches that may lack interpretability (e.g., Zhang et al., 2017; Zhu et al., 2026) and data-driven statistical approaches which do not provide motivation of why RTs should influence estimation of ability is a certain way (e.g., in the hierarchical modeling framework of van der Linden, 2007, how RTs influence ability measurement depends on the estimated correlation between ability and speed). Furthermore, the scoring-rule-based approach allows to keep the model relatively simple as opposed to most alternatives, which is important to make on-the-fly estimation of ability within an ALS feasible.</p>
+<p>In this study, we compare different models that incorporate RTs and can be used for monitoring ability with ERS (i.e., models based on scoring rules) with each other and with the benchmark RM in which ability is updated based only on accuracy data. The logic for the setup is that if including RTs into the model improves measurement of ability, then it should increase prediction accuracy of next responses based on the ability estimates. Since model misfit may introduce construct-irrelevant variance to the estimates, it is not a given that using the models with scoring rules that include RT as well as response accuracy will outperform the RM in terms of prediction accuracy, due to possibly introducing bias in the estimates that outweigh potential gains in precision.</p>
+<p>Thus, we suggest to use prediction accuracy (rather than model-based assessments of precision of measurement) as the tool to assess whether including RTs into the scoring rule improves measurement in ALS, and to study which scoring rule seems to perform best in practice.</p>
+<p>We use data from an online learning system called Math Garden for primary school mathematics, described in more detail in the Methods section. The system has two interesting properties that make it an interesting case study. First, gamification elements in the system focused on explicitly communicating the scoring rule to the students by showing the number of coins that they receive or lose based on the correctness of their response and the RT. The measurement model corresponding to that communicated scoring rule, which we will refer to as the normative RT model, was used for item selection when the data were collected. Second, a change in the scoring rule was made in 2019, moving from the SRTM to only differentiating the scores for correct responses based on RTs (Vermeiren et al., 2025), rather than for both correct and incorrect responses. This intervention essentially presents a natural experiment, and hence we obtained two datasets: one from when the old scoring rule was used and another from when the new rule was adopted as a normative scoring rule. Since our objective is to evaluate the performance of a wider range of relevant scoring rules, in this study we also retroactively fit models to the data that differ from these normative models.</p>
+<p>The remainder of the paper is organized as follows. First, we describe the online learning system and the datasets that we used in this study. Second, we describe and motivate the scoring-rule-based models which we used. Third, we describe the data analysis strategy. Fourth, we present the results, describing the differences between the scoring rules on the different parts of the data. Fifth, we present a simulation study, in which we mimic the conditions of the empirical example but generate data using the two normative models used in Math Garden, in order to study the improvements in measurement under ideal conditions. Finally, we discuss the implications of our results for the choice of a measurement model in ALS.</p>
+<h3>Methods</h3>
+<h3>Data</h3>
+<p>For this research we use data from Math Garden 1 , a large-scale online learning system, facilitating computerized adaptive practice for primary education. Since its development by Klinkenberg et al. (2011) and Straatemeier (2014), hundreds of thousands of learners have practiced thousands of questions in an adaptive fashion, where items are optimally matched to the learners. With response rates reaching over a million questions answered a day, there are over a billion responses in the system (Brinkhuis et al., 2018).</p>
+<p>After picking a game, each practice session consists of answering 10 items. The time given to respond to an item, usually 20 seconds, is shown on the screen in the form of coins, which decrease by one coin per second, until the time is up or an answer is made.</p>
+<p>If the item is answered correctly, the user receives the number of coins that are left. If the user gives an incorrect response, they lose the remaining coins (old scoring rule) or a fixed number of coins is subtracted from their total (new scoring rule, adapted in 2019). The virtual coins, reflecting the amount of practice, can be spend in their online &#x27;trophy cabinet&#x27;. After every response, the person&#x27;s ability estimate is updated and a relevant next item in the session is selected based on the new ability estimate. Students can self-select 1 Part of Prowise Learn, see https://www.prowise.com/en/product/prowise-learn.</p>
+<p>the relative difficulty level of the selected practice items, resulting in an expected probability of a correct response of .90 (easy), .75 (medium, and selected by default), or .60 (difficult). Figure 1 shows a screenshot of the landing page ( on the left) and the addition game (on the right) in the Math Garden environment.</p>
+<p>Domain #responses #students #items p-correct RT descriptives Mean SD p-timeout p-fast Old scoring rule + 12,768,233 152,162 2,209 .76 9.1 (8.4) 4.7 (3.9) .06 .66 -9,402,019 136,554 1,748 .76 8.4 (7.8) 4.7 (3.9) .05 .71 × 7,406,645 109,815 1,297 .75 8.3 (7.7) 4.5 (3.7) .05 .74 ÷ 7,704,838 95,023 1,400 .71 6.8 (6.3) 4.5 (3.7) .04 .82 New scoring rule + 8,690,371 135,431 2,209 .76 8.8 (8.2) 4.6 (3.2) .05 .69 -6,598,764 121,217 1,748 .76 8.2 (7.6) 4.6 (3.8) .05 .74 × 5,019,190 93,471 1,297 .73 8.0 (7.4) 4.4 (3.7) .04 .76 ÷ 5,245,605 81,868 1,400 .69 6.5 (6.1) 4.3 (3.6) .03 .84 Table 1</p>
+<p>Description of the number of responses, students, and items for each domain under the old and the new scoring rules, the overall proportions of correct responses (p-correct), the mean and standard deviation (SD) of response times in second (the number in the brackets shows the statistics with the timed-out responses removed), the proportion of timed-out incorrect responses (p-timeout), and the proportion of fast responses (faster than half of the deadline, p-fast) in each dataset.</p>
+<p>We used data from four different games within the Math Garden environment: Addition, Subtraction, Multiplication, and Division. They all include items (both open-ended and multiple-choice) for specific arithmetic operations, all with a timelimit of 20 seconds. We used data from the period between September 1, 2018 and June 30, 2019, during which the SRTM scoring rule was used in the system, and from September 1, 2020 to June 30, 2021, when the scoring rule was changed to only distinguishing between the RTs of correct responses while having a small fixed penalty for incorrect responsesfoot_0 . We included data from all students that had at least 20 responses in a domain. Table 1 shows for each game how many responses, students, and items there were in each dataset. It also shows the proportion of correct responses and the descriptive statistics for the distribution of the RTs. Note that there is some variability between the datasets both in terms of accuracy and RTs (e.g., proportions of correct responses are the highest and RTs are the longest for addition, while in division the proportion-correct is the smallest, but the proportion of fast responses is the highest and the standard deviation of RTs is the smallest. These differences are (partly) due to the differences in the populations of students that practice in these domains with division practiced by children who are on average older and who are more likely to have more experience with the platform and with digital learning in general. Figure 2 shows the distributions of RTs in each dataset.</p>
+<p>Note that there in all datasets there is a notable proportion of timed-out incorrect responses (.03-.06). For the analysis each of the eight datasets was divided student-wise into four folds of (almost) equal size for cross-validation.</p>
+<h3>Models</h3>
+<p>As a benchmark model, we use the standard RM, where ability is estimated based only on response accuracy, ignoring the RTs. The probability of a correct response is modeled as a function of ability and item difficulty (δ i ; the ability level for which the probability of a correct response to the item is .5):</p>
+<p>In this model, the item score is simply the response accuracy: S ji = X ji , and i X ji is the sufficient statistic for ability. The binary scores of the RM can be equivalently represented as a reward of 1 for correct responses and a penalty of -1 for incorrect responses (see the left side of Figure 3). In the SRTM, the size of the reward or penalty for a correct or incorrect response, respectively, is proportional to the remaining proportion of the timelimit (see in the</p>
+<p>Table 2 Density of the data for student j on item i and probability of a correct response under different models.</p>
+<p>middle in Figure 3): where t ji ∈ [0, 1] is the RT of person j on item i divided by the timelimit.</p>
+<p>The SRTM (see the joint distribution of response accuracy and RT in Table 2) is derived from the same assumptions as the RM: sufficiency of the total person score i S ji for ability, sufficiency of the total item score j S ji for difficulty, and conditional independence between the items (Maris &amp; van der Maas, 2012), but uses a different scoring function (Equation 4).</p>
+<p>If we dichotomize the RT variable into categories of fast (t ji ≤ 1 2 ) and slow (t ji &gt; 1 2 ) responses, then we can define four ordered categories of responses: fast incorrect ( (Coomans et al., 2016). Let us by Z ji ∈ {0, 1, 2, 3} denote a random variable which can take on four different values corresponding to these four ordered response categories. The model for the distribution of this new variable directly follows from the SRTMfoot_1 and is shown in Table 2. In this discretized signed-residual-time model (DSRTM; Tijmstra &amp; Bolsinova, 2021),</p>
+<p>The idea behind working with dichotomized RT instead of continuous RT is that the linearity assumptions for the relationship between RTs and ability made by the SRTM may be too restrictive in some settings. The DSRTM is less restrictive, while still retaining the idea of giving higher credit/penalty to fast responses than to slow responses.</p>
+<p>If the SRTM holds, it would provide a better ability measure than the DSRTM since the latter uses only part of the information contained in the RTs. But if the SRTM does not adequately represent the data generating process, the simplicity of the DSRTM might allow it to be more robust, for example in the presence of fast guessing or timed-out responses, which are especially impactful under the SRTM due to its linear scoring rule.</p>
+<p>Under the SRTM and the DSRTM, the probability of a correct response is the same as in the RM. This, however, does not necessarily mean that the estimates of the ability and the difficulty parameters under the RM, the SRTM and the DSRTM will be very close to each other. The more misfit the RT-based models have, the more discrepancy there would be between the estimates of the model parameters under different models.</p>
+<p>The DSRTM can be seen as a restricted version of the partial credit model (PCM; Masters, 2016) which is a commonly used IRT model for ordinal responses in which the sufficient statistic for ability is also i Z ji . On the item side, the PCM has three item intercept parameters (δ i1 , δ i2 , δ i3 ) instead of a single difficulty parameter, which allows for more flexibility in modeling the joint distribution of response accuracy and dichotomized RT than under the DSRTM. The probabilities of the different response categories under the PCM are shown in Table 2. 4The SRTM, the DSRTM, and the PCM assume that fast correct responses indicate higher level of ability compared to slow correct responses, and that slow incorrect responses indicate higher level of ability compared to fast incorrect responses. However, it has been argued that RTs of incorrect responses may not provide relevant information about ability. Vermeiren et al. (2025) proposed a model with an alternative RT-based scoring rule. It follows the SRTM in assigning higher scores to fast correct responses than to slow correct responses, but does not differentiate between incorrect responses in terms of RTs (i.e., all incorrect responses have the same score). While in the SRTM the penalty for the incorrect response is time-dependent, here the penalty is fixed (see Figure 3 on the right). The model for RTs and accuracy is then derived from the same principles as for the SRTM (i.e., sufficiency of the summed scores and conditional independence). Since this model includes residual RT in the scoring rule only for correct responses, in this research we will refer to this model as the correct-residual-time model (CRTM), to distinguish it from other models considered.</p>
+<p>The joint distribution of response accuracy and RT under the CRTM is presented in Table 2. Note that the item parameter δ * i in this model does not have the same interpretation as in the RM (level of ability corresponding to .5 probability correct). It may be noted that the penalty for incorrect responses (P ) can take on different values and that the values of the person and item parameters will depend on the chosen penalty. In Math Garden a small penalty of 0.1 has been implemented to reduce the negative effect of receiving a penalty on motivation and engagement of students. However, the penalty can be viewed as a tuning parameter and chosen in a data-driven way (see our Analysis Plan).</p>
+<p>The same as we have considered a discretized version of the SRTM, for the CRTM one can also decide to only consider dichotomized RTs (i.e., fast, t ji ≤ .5, vs. slow, t ji &gt; .5). However, unlike the transition from the SRTM to the DSRTM, deriving a discretized version of the CRTM does not result in a model that belongs to the exponential family, and the resulting model would be problematic to estimate. For these reasons, we instead take the main elements of the CRTM -fast correct responses being indicative of a higher ability level than slow correct responses, but no distinction between fast and slow incorrect responses, -and propose to use a restricted version of the nominal response model (NRM; Bock, 1997) that imposes exactly this ordering of these three possible response outcomes. That is, we distinguish fast correct (Z * ji = 2), slow correct (Z * ji = 1), and incorrect responses (Z * ji = 0; regardless of RT) from each other, using the NRM to model these three possible outcomes. Note that to make the model comparable to the other models in this study we do not include item-specific discrimination parameters, which are typically used in the NRM (see Table 2). We use the same scores as in the PCM for the slow correct (a1 = 1) and the fast correct (a2 = 3 2 ) responses, but treat the score for the incorrect response a 0 as a tuning parameter similar to the penality P in the CRTM. Only distinguishing between dichotomously scored fast and slow responses can be beneficial when the linearity assumption about the relationship between ability and RT of correct responses is violated or in the presence of many outliers (for example, extremely fast responses or responses just before the timelimit which are likely to indicate guessing).</p>
+<h3>Model</h3>
+<p>S</p>
+<p>Table 3 Observed and expected scores under different models. To shorten the notation we introduced: ϑ ji = (θ j -δ * i ).</p>
+<p>Table 3 summarizes information about which functions of response accuracy and RT are used as the item score in each of the models and what the model-based expected score is. These two elements are needed to construct the update for the ERS (see Equation 2).</p>
+<p>Since our evaluation of the model quality will consider the predictive accuracy of each of these models, it is relevant to explicitly consider the implications of each model for the probability of obtaining a correct response. The earlier discussed Table 2 includes the model-based probabilities of a correct response, which can be used to predict the next response of the person in the system. It may be noted that while the first two RT-based models imply the same probability of a correct response as the benchmark RM, the remaining models deviate from that. However, since the parameter estimates may differ under each of these models, even models with the same formula for response accuracy can be expected to differ in their predicted probability of a correct response, and hence can show difference in performance on our evaluation metric.</p>
+<h3>Analysis</h3>
+<p>Our analysis consisted of three steps.</p>
+<p>In Step 1, the item parameters are calibrated (the discussion of Step 1 below will explicate why pre-calibration of item parameters was needed). Step 2 constitutes the training phase, where the tuning parameters K and -for those models where applicable -P and a 0 are optimized. Finally, Step 3 constitutes the testing phase, where we compute the prediction error for the accuracy of the next response for all models. Since more data is needed for estimating the item parameters than for optimizing the tuning parameters and for computing the final output measures with sufficient precision, we divided the data folds across the steps with two data folds assigned to Step 1, one data fold to Step 2, and one to Step 3. The four data folds were assigned to the calibration, training, and testing datasets in twelve different possible ways (see Figure 4), resulting in twelve data splits. The analyses were repeated for each data split, and the final measures were averaged across the twelve data splits. All analyses were performed in R (R Core Team, 2025).</p>
+<h3>Step 1: Calibration.</h3>
+<p>When working with ERSs, one has to decide whether the item difficulties are updated alongside the abilities of the students, or whether precalibrated values will be used for the item difficulties that are not updated alongside ability. While updating the item difficulties has the benefit of tracking changes over time in the item parameters, an important downside in adaptive settings is that it also introduces variance inflation (Bolsinova et al., 2025; Hofman et al., 2020). That is, the variance of the estimates of ability across students artificially increases over time if item difficulties are updated.</p>
+<p>While it has been shown that this issue can be avoided by using parallel chains of estimates (Bolsinova et al., 2025), this is something that needs to be implemented during data collection and cannot be applied retroactively. Thus, when using existing data that were collected adaptively without such an implementation, updating item difficulties together with student abilities would lead to variance inflation. Moreover, such variance inflation may be affecting different models to a different extent and hence would jeopardize our objective of comparing the performance of the different models. Therefore, to ensure comparability of the models, we use the ERS with item parameters fixed at calibrated values, and a calibration step was needed. In this step, the item parameters for each of the models were estimated using the calibration dataset and then fixed to these estimates when running the Elo algorithm to dynamically measure the ability of the students in the training and testing datasets in Steps 2 and 3.</p>
+<p>In this step, the objective is solely to obtain estimates for the item parameters based on a calibration data set, to be used in the later two steps. While the focus is on estimating the item parameters, this cannot be done without also modeling ability of the students. On the one hand, fitting a measurement model to a calibration dataset that would fully ignore the change in abilities over time can be expected to lead to some degree of bias in the item parameters. On the other hand, implementing a full dynamic model to account for change within and between sessions would not be computationally feasible, and exceed the purpose of this calibration step. With these considerations in mind, we opted to allow student ability to change across sessions, without explicitly modeling growth. To achieve this, we divided the data of each person into separate sessions (items answered within one day) and treated each of these sessions as if they came from separate respondents. For simplicity, the data of different &#x27;pseudo-respondents&#x27; originating from the same student were treated as though they were independent (i.e., dependence between the different sessions of a student was ignored), and the full set of pseudo-respondents were taken to come from a single population distribution, allowing marginal maximum likelihood estimation (Bock &amp; Aitkin, 1981) to be applied. While this assumption of independence between sessions is of course a simplification, it should not impact point estimates of the item parameters (similar to the stepwise approach in dynamic factor models; Rein et al., 2025), which are the objective of this step. Similar to typical testing scenarios, we assumed that within a session ability is stable.</p>
+<p>Some data filtering needed to be applied to make sure that for each item included in the analysis there would be enough responses to achieve sufficient precision for estimating its parameters, and that each pseudo-respondents included in the analysis had at least three responses. 5 To start, we first removed pseudo-respondents with fewer than five responses (across datasets between 14.2% and 18.7% of the pseudo-respondents and between 0.7% and 2.7% of the students were removed), after which we removed items with fewer than 300 responses (13.4-36.4% of the items were removed across different datasets), and finally we removed pseudo-respondents with fewer than three responses (i.e., those pseudo-respondents for whom too few responses remained after dropping the items with too few observations; additional 0.8-1.7% of pseudo-respondents and 0.1-0.4% of students were removed). Table 4 shows the number of responses used and number of students included for item calibration in each of the domains, together with the median number of responses available for each of the items and the number of items included in the analysis (all values are averaged across the twelve data splits).</p>
+<p>Domain Total Step 1 Step 2 &amp; 3 R N K R N N i R N K j Old scoring rule + 12,005,178 132,865 1,913 5,953,071 75,028 2,982 3,026,054 28,918 58 -8,762,828 116,024 1,366 4,380,738 67,408 3,062 2,191,045 24,308 51 × 6,839,530 92,782 890 3,397,778 53,966 2,274 1,720,876 19,408 50 ÷ 6,988,148 79,092 891 3,431,301 46,041 2,336 1,778,423 16,526 59 New scoring rule + 8,209,836 114,480 1,913 4,138,534 67,048 2,232 2,035,651 23,716 47 -6,159,468 100,281 1,366 3,131,121 60,042 2,358 1,514,174 20,119 41 × 4,651,202 76,868 890 2,351,552 46,000 1,841 1,149,825 15,434 42 ÷ 4,834,042 66,424 891 2,414,445 39,826 1,469 1,209,798 13,298 48 Table 4 We assumed that ability of the pseudo-respondents comes from a normal distribution with a mean of zero and variance σ 2 , which is common for marginal maximum likelihood estimation of item parameters of IRT models (e.g., Johnson, 2007).</p>
+<p>The variance of ability and the item parameters were estimated using an EM algorithm (Bock &amp; Aitkin, 1981). Since the students vary in their number of sessions included in the analysis and since we wanted to prevent item parameters from being overly influenced by more active students, we included weights for each pseudo-respondent such that the sum of weights for each student was the same. The parameters under the CRTM and the NRM were estimated for different values of the tuning parameters: P ∈ {0.1, 0.3, . . . , 1.9} and a 0 ∈ {-4, -3.5, . . . , 0.5}, respectively 6 . 6 Initially, we chose smaller ranges of these values: for P between 0.1 and 1 mirroring the range of the We optimized the K-values for each model separately (we used the function optimize in R for numeric optimization), and for the CRTM and the NRM this was done ten times, separately for each different values of the tuning parameters P and a 0 , respectively. In each case, we minimized the prediction error of the next response in the training set. As the outcome measure we used the mean squared error (MSE) of prediction which compares the observed accuracy of the next response with the expected accuracy under each of the models (see Table 2) given the current rating of the person and the estimate(s) of the item parameter(s):</p>
+<p>RT-based penalties in the SRTM (between 0 and 1); for a 0 values between 0 and 0.9 mirroring the range between the scores for slow incorrect (0) and slow correct responses (1) in the DSRTM and the PCM, but since the optimal values in Step 2 were often chosen on the original boundary (1 for P and 0 for a 0 ) of the grid, we opted to increase the boundaries and to use the intervals reported here.</p>
+<p>7 To evaluate how the results are effected by the choice of the minimal number of responses we performed a sensitivity analyses with 5 and 10 responses as the minimum number of responses per student in Steps 2 and 3 of the analysis. The results can be found in Appendix A. There were no clear general effects on the results when switching from a minimum of 20 to 10 or 5 responses. In line with the mentioned potential impact of the cold-start on the results the remainder of the paper will focus on the analysis of persons with a least 20 responses.</p>
+<p>where n j is the number of responses for student j. That is, MSE was first computed for each person (error is averaged across all responses of the student) and then averaged across all persons in the training set. Table 4 shows how many responses and persons were included in the analyses with the Elo algorithms, and the median number of responses available per person. Figure 8 in Appendix B shows the distributions of the number of responses per person in the different datasets.</p>
+<p>In all Elo algorithms the item parameters were fixed to the values obtained in</p>
+<p>Step 1 for the corresponding model. The starting values of abilities were set to 0 for all students in all models. In each model, the update was based on the difference between the corresponding observed and expected scores (see Table 3). After the optimal K-values were chosen for each of the ten different versions of the CRTM and NRM, the optimal P and a 0 were also based on the lowest MSE among the MSEs of the ten corresponding models with their optimized K-values 8.</p>
+<h3>Step 3: Testing.</h3>
+<p>Using the remaining 25% of the data (testing set), we ran the Elo algorithms with since that is the model currently implemented in the Math Garden. The results were averaged across the twelve data splits.</p>
+<h3>Results</h3>
+<p>Table 5 shows the prediction accuracy in the testing data (in terms of MSE) for different models in the eight different datasets. When evaluating the results of the different RT-based models we compare them to those under the benchmark RM (the differences from the benchmark are shown). To reflect the uncertainty about the results, we present the range of values across the twelve data splits. The magnitudes of the differences between the models are very small, which is to be expected for differences in 8 The optimized values of the hyperparameters (K, P , a 0 ) are shown in Appendix C.</p>
+<h3>Table 5</h3>
+<p>Mean squared error of next-response prediction of the next response for the benchmark Rasch model (RM) and the difference from the benchmark for the RT-based models. The results show the range of values in the 12 cross-validation data splits. (Pelánek, 2018) and even more so when items are selected adaptively targeting a specific probability of a correct response (Papoušek &amp; Pelánek, 2015). Prior research on student modeling in adaptive learning environments showed that small differences in prediction error often represent meaningful differences in the quality of compared models (Niznan et al., 2015). To evaluate the practical significance the MSE differences found in the empirical data we performed a simulation study (see next section).</p>
+<h3>MSE of next-response prediction in general</h3>
+<p>Overall, RT-based models performed best in the Addition and Subtraction domains when the old scoring rule was used. Here, the SRTM, the PCM, and the NRM performed better than the RM, consistently across the twelve data splits. When the new scoring rule was introduced, the NRM was the only RT-based model that had lower MSE than the RM in three of the domains. For the Division domain when the new scoring rule was used, the RM and the NRM performed similarly, with one model performing better in some data splits and another in others (i.e., the range of MSE differences covers both negative and positive values).</p>
+<p>In all datasets the best performing RT-based model was the NRM. It is the model that makes the least assumptions about the relationship between RT and ability: It only uses RTs of correct responses in its scoring rule, does not assume linearity in the relationship between RT and ability, and does not assume that only one item parameter is sufficient to describe both the accuracy and RT aspects of item performance. The score for incorrect responses in the NRM ranged from -4 to -1 in the different datasets (the scores were less negative in datasets with a larger difference between the NRM and the benchmark RM; for the optimized values across datasets see Appendix C). The score for the incorrect responses was always lower in the NRM than in the PCM, meaning that the NRM gives relatively less weight to the RTs (i.e., the distance between the scores of correct and incorrect responses were much larger than the differences between the scores for fast and slow correct responses).</p>
+<p>Interestingly, the CRTM with the small penalty for incorrect responses was one of the worst models in all datasets, even though it was the normative model when the new scoring rule was used. This is not surprising if we look at the correlations between the ability estimates under the different models. We computed the correlations between the expected a posteriori estimates of ability in Step 1 of the analysis for each of the RT-based models on the one hand and the RM on the other (i.e., ability measure reflecting only accuracy). The correlations for the CRTM P = 0.1 ranged between .868 and .924 in the different datasets, while for the best performing NRM they were .977-.998. That is, for these datasets the ability measure obtained under the CRTM with a small penalty deviated notably from those obtained under the RM, and this difference was much larger than for any of the other RT-based models. This can be explained by considering that the CRTM with P = 0.1 gives a relatively high weight to being fast vs. slow in its scoring rule, compared to the difference between giving a correct and an incorrect response. That is, the difference in score between a fast and a slow correct response can be as large as 1, while the difference between a (slow) correct response and an incorrect response can be as small as 0.1. Thus, the ability measure of the CRTM much more than that of the other models tends to reflect individual differences in speededness than in ability to produce correct responses, and in settings where speed is not only determined by ability but also by other factors (e.g., risk-taking of the student or student self-confidence) one can expect this ability measure to deviate the most from that of the RM.</p>
+<p>The DSRTM which was introduced as a way of relaxing the assumption of the linear relationship between ability and RT present in the SRTM performed worse than the RM across datasets, and in some datasets worse than all other models. That is, we did not find added value of moving from continuous to discrete scores within the signed-residual time scoring rule. However, further relaxing the model by including extra item parameters (PCM) leads to better prediction compared to both the RM and the SRTM in some of the datasets.</p>
+<p>Importantly, the NRM is the only model that did not deteriorate next-response prediction across all datasets. All other models are showing results worse than the benchmark in at least some datasets, with the increase of MSE compared to the RM often being much larger (e.g., +.00202 for the SRTM in the Division domain when the old scoring rule was used) than the decrease (-.00008 for the SRTM in the Addition domain when the old scoring rule was used), which underscores the importance of evaluating the effects of adding RTs on prediction accuracy.</p>
+<p>Because it is not a given that the potential added value of using RTs is stable as the number of responses increases, we also specifically considered the performance of the RT-based models in terms of their prediction accuracy gains and losses compared to the benchmark RM for observations binned based on the number of responses up to that point. The MSEs were calculated based on the observations that fell specifically into that bin (i.e., in the first bin the MSE was calculated using only the first five responses, and in the second bin using only responses six through ten). Note that the last bin no longer includes all students which may introduce confounding in the comparison. Therefore, we focus on the first four bins (1-5, 6-10, 11-15, 16-20) which allows us to evaluate how the models compare during the cold start where one may expect that considering additional information from RTs may provide the most benefit. Figure 5 shows the MSE differences in different bins. There is no consistent effect of the most benefit being present in the early responses. Only for some of the models, most notably for CRTM with P = .1, RTs lead to an improvement the early phase with this improvement decaying and even turning into disadvantage later on across most of the datasets. This pattern is also reflected in the small differences found during sensitivity analysis (see Appendix A ).</p>
+<p>For example, in the Old Scoring Rule Multiplication dataset the CRTM with P = 0.1 performed worse than the RM in our main analysis, but slightly better when the persons with at least 5 responses were included in the analysis. In the division dataset where RT-based models perform the worst, none of the models has advantage at the early stage. On the contrary, the negative effect of adding RTs is the largest at the start and decreases over time. This is also consistent with the results of the sensitivity analysis where in the division datasets the advantage of the RM over RT-based models is larger in the analysis with smaller thresholds (see Appendix A). To try to explain the differences in the results between the datasets from different domains and from different periods when different gamification and different normative models were used, we looked at the relationship between RTs and ability in different datasets. Here, we focused on ability measured only based on response accuracy, as all of the models (if true) imply that the ability measure based on both accuracy and RT is the same ability as would be measured by response accuracy only, but with less random measurement error. In each dataset, we took the expected a posteriori estimates of ability under the RM for each pseudo-respondent in Step 1 of the analysis and for each item computed the correlation between these estimates and RTs of correct and incorrect responses taken separately 9 . Figures 6 and 7 show the cumulative distributions of these correlations across items in each dataset (the values are averaged across the twelve data splits) for correct and incorrect responses, respectively. The figures also include the distributions of the correlations from data generated under the two normative models 10 , where the results are combined across all datasets since the results were very similar. For incorrect responses, the CRTM results are not included because the model does not predict any relationship in that case. Figure 6 shows that in all eight datasets for the RTs of correct responses the observed correlations with ability deviated notably from what is expected under the normative models. In the Addition and the Subtraction domains the correlations were negative for all items in the data from the period with the old scoring rules, but they 9 These correlations are attenuated because there is measurement error in the ability estimates. Because the amount of measurement error depends on the length of the response vectors which can vary across datasets, as a sensitivity analysis we re-calculated these correlations using only response vectors with exactly ten responses (the typical session length in Math Garden) and the results were very similar. 10 To generate data we used a draw from the posterior distribution of ability of each pseudo-respondent and the estimates of the item parameters under the model. were weaker than expected. The results were similar for the Multiplication domain, but the correlations were even weaker. In the Division domain, the distribution of the correlations is closer to zero with a non-negligible number of items having positive correlations between RTs of correct responses and ability. In all four datasets with the new scoring rule, the distributions of the correlations shifted notably to the right: The correlations weakened for the first three domains and were on average close to zero for Division (where for about 60% of the items the correlation was positive).</p>
+<p>As Figure 7 shows, the deviation from the normative model was even larger when considering the RTs of incorrect responses. Under the SRTM positive correlations are expected, but when the SRTM was the normative model the empirical data show that for the majority of the items the correlations were slightly negative. Interestingly, after the new scoring rule was introduced the correlations moved closer to what the SRTM predicts, but the correlations were still notably weaker than expected under that model.</p>
+<h3>Simulation study</h3>
+<p>To investigate how the results in the empirical data compare to what one can expect in terms of improvement of measurement in the best case scenario, that is when the normative RT model is the data generating model, we performed a simulation study.</p>
+<p>For each empirical dataset we generated simulated datasets that would mimic its structure. We kept the same number of responses and the same items that each student received in the empirical data. The response accuracy and RT data were generated under the SRTM for the datasets with the old scoring rule and under the CRTM with a small penalty (P = 0.1) for the datasets with the new scoring rule. Additionally, we considered a scenario in which the RTs do not follow the normative models and provide no information about ability. In this scenario we re-sampled RT values with replacement from the empirical distributions specific to each item and conditional on response accuracy. This allowed to create simulated data where the RT distributions and the relationships between RT and accuracy are the same as in the empirical data, but RTs are not expected to improve measurement of ability.</p>
+<p>To specify the true values of the item parameters we used the estimates of the item parameters under the RM averaged across data splits. These values were used to generate data under the SRTM (i.e., under the normative model in the old scoring rule datasets) and to generate response accuracy under the RM in the scenario with random RTs. To specify the corresponding true values for the item parameters in the CRTM with P = 0.1, the values from the RM needed to go through a non-linear transformation 11.</p>
+<p>For each student we aimed to obtain a rough approximation of their learning curve in the empirical data and use that as their true learning curve for the simulation.</p>
+<p>We used the Elo algorithm with our benchmark RM to do that. The optimal K-values from the empirical data were used. To obtain better person-specific starting values and to make sure that the Elo estimates do not deviate from the true learning curve dramatically at the start, for each student we ran the Elo algorithm (from the starting value of 0) through all the responses provided by that student in the empirical data, first 11 To obtain this transformation we generated data under the RM of 100000 students sampled from N (0, 1) to 501 items δ i equally spaced between -4 and 1, the range large enough to cover the range of the parameters in the empirical data, obtained the estimates of the parameters of the CRTM δ * i and fitted a fourth-degree polynomial regression δ * ∼ δ.</p>
+<p>in their chronological order and then in reverse chronological order (i.e., running through their response vector front-to-back and subsequently back-to-front). With this setup, we can largely avoid the issue of a cold start resulting in bias in the ability estimates, while getting starting values that better match each student&#x27;s starting position. For each student, the resulting estimate was used as their starting value for the final run of the Elo algorithm, which was subsequently run. To reduce noise in the learning curve for each student, ability values for the learning curve were set at the session level rather than at the response level, by for each student taking the average of all ability estimates within a single session (i.e., all responses provided on a single day) as their true ability level during that session, to be used to generate responses obtained for that student during that session. For each student with less than 20 responses (i.e., whose data is used only in</p>
+<p>Step 1 of the analysis), we obtained a single expected posteriori estimate of their ability assuming constant ability across all their responses.</p>
+<p>For each dataset, we generated ten simulated datasets under the corresponding normative RT model and under the random RTs scenario, after which the three steps of the analysis were performed in the same way as was done when considering the empirical data, but only for the RM and the two corresponding normative RT models.</p>
+<p>Additionally, we used the simulation study to compare potential improvement in prediction from RTs (both in the empirical in the simulated data) with the improvement of prediction accuracy that can be achieved if more responses were available at each timepoint. To simulate a scenario with more responses, for each student for 50%, 30% or 10% of their responses we generated an additional item response using the same item   Table 6 also shows the results for the scenario where RTs were generated randomly.</p>
+<p>Here prediction accuracy of RT-based model dropped down compared to the benchmark RM (MSE increase of .0073-.00439 across data sets). This increase of prediction error is not surprising since RTs were not directly related to ability in this scenario and hence do not provide additional information about it.</p>
+<h3>Discussion</h3>
+<p>Models that make use of RT-based scoring rules have the potential to improve quality of measurement in ALS over what can be achieved using response-accuracy-only models such as the RM. In this research, we focused on prediction accuracy as one of the aspects of measurement quality and studied both the empirical and theoretical gains that can be obtained using different RT-based models, with both the empirical and simulation-based analysis considered in the context of a case study ALS in mathematics for elementary school students. Both the empirical and simulation-based results suggest potential for improving the measurement quality, as evaluated by the accuracy with which next responses can be predicted based on the current ability estimate under each of the different models. However, the simulation-based results show a much more positive picture than was observed in the empirical setting, where the gains in measurement were somewhat small and not fully consistent, and where the normative models did not notably outperform the benchmark model that made use of response accuracy only.</p>
+<p>While there was some improvement in the MSE when using some of the RT-based models instead of the RM in some of the datasets, the improvement over the benchmark in those cases was rather small. When we compared it to the improvement in simulated data, we observed that the largest improvement in the empirical data roughly matched what can be expected if there were 10% more responses available. The achieved improvement, although non-negligible, is not large and does not hold universally across datasets. The notable difference between the observed gains when studying the empirical data versus when studying simulated data obtained under the normative models comes from notable differences between the relationship between RT and ability as specified by the models versus what happens in reality, which can be considered problematic for the interpretation of scores produced under these models. When the ability and RTs are not as strongly related to each other compared to what the normative model assumes, the empirical gains of including RTs are notably smaller. And when the assumed relationship is largely absent in the data or when it is in the different direction from what is observed in the empirical data, using a normative model leads to the decrease of prediction accuracy compared to the benchmark. These results demonstrate the importance of evaluating the assumptions of RT-based models in empirical data.</p>
+<p>Both the SRTM and the CRTM have been designed with the idea that explicitly communicating the RT-based scoring rule to the respondents should lead to them behaving according to that model. Analyzing the data from an online learning environment where these scoring rules have been implemented, we found that this is not necessarily the case. The normative models were not the best performing models in our study, nor did they provide notable improvements in measurement over using the RM, while in some datasets notably increasing prediction error. These results emphasize that when implementing a measurement model which takes RTs into account it is important to check whether its theoretical expectations match the empirical relationships in the data.</p>
+<p>More specifically, studying the relationship between ability and RTs of correct and incorrect responses is a crucial step in choosing a measurement model for the system.</p>
+<p>Our results also show that changing the instructions for respondents (here, changing the rewards/penalties within the system communicated to the students) may change the relationship between ability and RTs, and may also affect whether RT-based models are beneficial for measurement. In this case, making the penalty for incorrect responses independent of RT made RTs of correct responses less informative about ability, as evidenced by the correlation between the RT of correct responses and ability shifting further away from where the normative model predicts it to be. Findings such as these strongly suggest that any changes in the instructions or the reward system in the game should be followed by a new evaluation of the measurement models.</p>
+<p>Interestingly enough, the RT-based model that showed the best performance in the empirical setting was the NRM. This model has to our knowledge not yet been considered in the context of utilizing RTs in ALS, but it outperformed both the normative models and the other considered models. It is likely that its better performance can to some extent be attributed to it also being the most flexible model of the set. It should be noted that this may suggest that the degree of misspecification present in the other models is likely their main obstacle to showing good performance in the empirical setting, as was also evidenced by the large contrast between the theoretical gains (studied through simulation) versus the empirical gains obtained for the two normative models. It is quite plausible that a model that is more specific than that NRM but that also more closely matches the actual response process than the models considered in this research could also outperform the NRM. However, what this model would need to look like needs to be a topic of further research, and would likely require a more in-depth study of the response behavior of students in the ALS. It is however clear that because it outperformed all other models, future studies in this direction should definitely consider including the NRM as one of the benchmark models.</p>
+<p>A notable limitation of the current study is the assymetry between the compared models: First, the item sequences presented to students were determined based on the normative model. Second, the instructions to the students were aligned with this model (note, that while in Math Garden the scoring rule of the normative model is explicitely communicated to the students, in general the model used for abiltiy estimation and item selection does not have to be aligned with the scoring rule communicated to the student).</p>
+<p>The counterfactual data (e.g., items selected based on the RM and/or students not instructed to pay attention their response times) are not available. Since we have observed that when instructions changed from the old to the new scoring rule, student behavior and relationships between ability and response times have changed, we can also expect that if the scoring rule from the RM were communicated to the students, their behavior would be different as well, and therefore the consequences of incorporating RTs for prediction accuracy could be different. The assymetry in terms of the which model was used for item selection is less crucial. Previous simulation studies (Niznan et al., 2015) showed that while the magnitude of differences between the models depends on the model used for item selection (the better the model used for item selection is, the closer the probabilities-correct of the selected items are to the target probabilities, the smaller the difference between the different models become), the model closest to the data generating model still provides better estimates of ability and higher prediction accuracy.</p>
+<p>The starting point of this study has been that RTs are incorporated into the measurement model to increase precision of measurement, without altering the measurement itself. That is, we assume that ability measured by accuracy only is a valid measure, but that in standard ALS settings the precision of the accuracy-based measure is low due to data sparsity and item selection aimed at optimised student engagement rather than statistical information in the responses. From this perspective it makes sense to use prediction of the accuracy of the next response as the criterion for model comparison and for contrasting the RM with each of the RT-based models. However, a different perspective that could be taken is that an accuracy-based ability measure is not necessarily the best measure of ability (e.g., one may argue that to be good at addition one needs to not only be correct but also demonstrate fluency), and that incorporating RTs is not just a way to increase precision, but a way of changing the operationalization of the construct and potentially improving validity of score interpretations. From this perspective, misalignment of accuracy and RT information within RT-based models would not necessarily be taken as a reason to not use the model, but rather as a sign that the resulting measure of ability is a composite score of the accuracy and RT components, which are not perfectly aligned with each other. However, to make such an argument, one would need to provide evidence of increased validity of these alternative interpretations, for example by comparing the ability estimates form different models with student grades or with scores from standardized assessments, as a way of evaluating external validity.</p>
+<p>Since differences in RTs may reflect not only construct-relevant variance (i.e., reflect higher mastery of skills that require fluency and automatization) but also carry construct-irrelevant variance (e.g., reading speed, motor speed, familiarity with computerised practice, rapid guessing), the alternative operationalization should not be taken as a better measure of ability without such evidence.</p>
+<p>Regardless of the answer to the question about the best operationalization of ability, increasing prediction error for the accuracy of the next response after incorporation of RTs in the model is an important problem within an ALS. When prediction is less accurate, selected items would be less closely matching the desired level of accuracy, which is often used as a criterion for item selection (e.g., in Math Garden students choose a difficulty level with either 60%, 75% or 90% expected correct responses), which can lead to either an over-or an under-challenging environment for some students.</p>
+<p>An undesired consequence of that could be that students from specific groups would be disadvantaged. One possibility concerns gender differences in response behavior. For example, research often shows that girls are more cautious than boys (Jansen et al., 2016). If such differences occur, girls&#x27; ability would be underestimated and boys&#x27; abilities overestimated if RTs of correct responses are taken into account, and as a result item selection would unintentionally result in presenting more difficult items to boys than to girls, given the same ability level of the student. It was not possible to examine this gender-related implication as part of the current study because information on gender was not available. It therefore represents a conjecture that warrants further investigation.</p>
+<p>In this study we compared data from a natural experiment consisting of two periods, during which different scoring rules were implemented in Math Garden. It is important to note however that while the change in the scoring rule was the main change introduced in the system, it is not the only thing that was different between the academic years of 2018-2019 and 2020-2021, which is a limitation of the current study. For example, new domains have been added to the system and new ways of recommending different domains within the system to students were introduced (Brinkhuis et al., 2020). The consequences of this can be noticed in there being fewer students and fewer responses per student in the 2020-2021 dataset, since some students who would have otherwise been practicing in the four domains included in this study chose other domains to practice.</p>
+<p>Potentially the composition of the population of the students practicing in our four domains in 2020-2021 could be different compared to that from 2018-2019, which could also be contributing to the differences in response behavior that we found. Furthermore, there may be other differences between the two time periods included in the study, for example in terms of increased digitalisation at schools (also due to the COVID-19 pandemic). RT patterns may have changed if the students became more used to working with digital platforms or if the dominant type of devices used for practice changed.</p>
+<p>Detailed study of potential mode effects goes beyond the scope of the current paper but is an important direction for further research.</p>
+<p>All RT-based models included in this study assume that the same relationship between ability and RTs holds for all students. As such, these models do not take into account any individual differences in response behavior that go beyond the differences in ability. However, some students might be generally faster than others with the same ability level. Failing to account for these differences may be one of the reasons that the models do not provide a lot of improvement over the benchmark RM. Additionally, the environment allowed students to choose their desired difficulty level (operationalized through the expected proportion correct), and there may be relevant differences between students who choose a relatively easy versus hard difficulty level, which could also potentially have had an impact on the results. Developing ways of taking all of these individual differences into account could lead to better models, which would improve measurement precision without introducing confounding. Future research should also focus on studying the differences between people from different subgroups (e.g., gender, language spoken at home).</p>
+<p>This research was supported by the Dutch Research Council (NWO) grant VI.Veni.221G.056 (Maria Bolsinova).</p>
+<p>Appendix A: Sensitivity analysis Old scoring rule New scoring rule Model Threshold + -× ÷ + -× ÷ SRTM 20 -.00008 -.00006 .00010 .00202 .00016 .00013 .00023 .00178 10 -.00007 .00015 .00001 .00338 .00030 .00028 .00027 .00335 5 -.00052 .00005 -.00013 .00528 -.00005 .00031 .00037 .00567 DSRTM 20 .00050 .00114 .00131 .00291 .00078 .00138 .00140 .00255 10 .00064 .00143 .00172 .00438 .00094 .00162 .00193 .00426 5 .00072 .00191 .00252 .00662 .00123 .00223 .00299 .00689 PCM 20 -.00017 -.00012 .00009 .00024 .00003 -.00000 .00020 .00038 10 -.00015 -.00007 .00012 .00040 .00007 .00007 .00027 .00062 5 -.00012 -.00001 .00020 .00061 .00016 .00017 .00042 .00096 CRTM 20 .00319 .00111 .00062 .00223 .00334 .00137 .00116 .00324 P = 0.1 10 .00302 .00104 .00016 .00339 .00328 .00120 .00076 .00460 5 .00198 .00052 -.00053 .00647 .00231 .00077 .00026 .00804 CRTM 20 -.00002 .00014 .00005 .00223 .00034 .00052 .00063 .00319 10 -.00008 .00010 -.00027 .00339 .00027 .00040 .00040 .00460 5 -.00040 -.00023 -.00072 .00571 .00007 .00021 .00017 .00686 NRM 20 -.00029 -.00022 -.00016 -.00005 -.00010 -.00009 -.00004 .00000 10 -.00029 -.00025 -.00015 -.00007 -.00010 -.00009 -.00004 .00000 5 -.00027 -.00022 -.00012 -.00009 -.00007 -.00006 -.00002 .00001  Table 8 Hyperparameter values optimized in Step 2. K and SD(K) indicate the average K-value and its standard deviation across the cross-validation data splits, for CRTM and NRM these values were computed using only those data splits where the selected P and a 0 , respectively, were equal to the most frequent value. These most frequent values of P and a 0 can be found in the table as well, together with the number of data splits (out of 12, shown in parentheses) in which they were selected. Note, that the K-values under different models are not directly comparable.</p>
+<h3>takes</h3>
+<p>RTs into account when updating ability. While for the standard ERS the underlying measurement model is the RM, where ability is measured based on binary item scores (1 -correct, 0 -incorrect), in this modified ERS the signed-residual-time model (SRTM; Maris &amp; van der Maas, 2012) is used which incorporates RTs in the item scores. The idea of this RT-based score is that RTs provide information about ability beyond what is captured by response accuracy alone: Correct responses still indicate a higher ability level than incorrect responses, but the speed with which that response was provided additionally influences the indicated ability level, and the way in which RTs relate to ability depends on response accuracy. Concretely, it is assumed that responses that are both correct and fast indicate higher ability compared to responses that are correct yet slow. The converse is assumed for incorrect responses, where fast incorrect responses are taken to indicate a lower ability level than slow incorrect responses. Note that these assumptions are not guaranteed to hold universally as RTs are influenced by many different factors. The SRTM has been developed for applications where items are presented to students with an explicit timelimit, but have also been applied in setting without item-level timelimits (van Rijn &amp; Ali, 2017).</p>
+<h3>Figure 1</h3>
+<p>Figure 1 Screenshot of the landing page (left) and the addition game during a practice session (right).</p>
+<h3>Figure 2</h3>
+<p>Figure 2 Distributions of RTs across different datasets, the colors within each bar represent the distribution of response accuracy within each range of RT values.</p>
+<h3>Figure 3</h3>
+<p>Figure 3 Scoring rules of the Rasch model (RM, left), the signed-residual time model (SRTM, middle), and the correct-residual-time model (CRTM, right).</p>
+<h3>Figure 4</h3>
+<p>Figure 4 Visualization of the cross-validation procedure: Four data folds (F1, F2, F3, F4) are assigned to the Calibration (two data folds), Training (one data fold), and Testing (one data fold) phase, resulting in twelve different data splits.</p>
+<p>Description of the datasets used in the analysis: R -number of responses, N -number of students, K -number of items, N i -median number of responses per item used for the estimation of the item parameters (Step 1), K j -median number of responses per student used for the dynamic estimation of ability (Steps 2 and 3).</p>
+<p>In addition to the estimation of the item parameters, we need to optimize the tuning parameters: the penalty P for the CRTM, the incorrect category score a 0 for the NRM, and the K-values for the Elo algorithms of all models. We did this in Step 2 of the analysis using the training data. For each student we consider their full time series of responses, meaning that in Step 2 we are not splitting the data of individual students into different pseudo-respondents like in Step 1. Students with fewer than 20 responses were removed for this step (24-35% of the students were removed across different datasets), since we did not want the results to be overly influenced by what happens during the cold start (i.e., when the estimates have not yet moved far enough from the starting values to the region where the true values are) 7.</p>
+<p>calibrated items (from Step 1) and optimized tuning parameters (K, P , and a 0 from Step 2) with all six models and computed the final accuracy metrics (see Equation 5) for them (same as in Step 2, students with less than 20 responses were excluded). For CRTM we also computed the final metrics for P = 0.1 in addition to the one with the optimized P ,</p>
+<h3>Figure 5</h3>
+<p>Figure 5Difference in MSE of the RT-based models from the benchmark computed for different number of responses (e.g., &#x27;1-5&#x27; are the first five responses a student provided).</p>
+<h3>Figure 6</h3>
+<p>Figure 6Empirical cumulative distribution functions (ECDF) of the correlations between response times of correct responses and ability estimated based on accuracy in empirical data and data simulated under the normative models (SRTM and CRTM with P = 0.1).</p>
+<h3>Figure 7</h3>
+<p>Figure 7 Empirical cumulative distribution functions (ECDF) of the correlations between response times of incorrect responses and ability estimated based on accuracy in empirical data and data simulated under the normative model (SRTM).</p>
+<p>difficulty as for the original response. Having more responses improves measurement precision and therefore should reduce prediction error. The magnitude of prediction error reduction can serve as a reference point for interpreting the size of both theoretical (i.e., in the simulation data) and empirical reduction of prediction error from incorporating RTs. Here, we only used the RM to analyze the data.</p>
+<p>Mean squared error (MSE) of prediction of the next response in the simulated data for the benchmark RM and the differences in MSE from the benchmark. &#x27;Normative RTs&#x27; means that the data were generated under the normative RT models (SRTM and CRTM with P = 0.1 for the old and the new scoring rules, respectively). &#x27;Random RTs&#x27; means that the RTs were randomly sampled from the observed RTs in the empirical data and therefore did not contain any information about ability. &#x27;+X% data&#x27; shows the decrease of the prediction error when X% more responses were available at each session and the benchmark RM was used. The results were averaged across 10 replications, the numbers in the parentheses indicate Monte Carlo standard errors. generating model, the SRTM and the CRTM resulted in .00098-.00139 and 0.00152-.00176 decrease in MSE compared to the RM in the different domains, respectively. The improvement of prediction accuracy that is obtained from RTs when the normative model is true is for most of the datasets close to what is achieved from having 50% more response data. In contrast, the maximum improvement observed in the real data (Addition domain under the old scoring rule: 0.00029 on average across data splits) is close to what is achieved from having 10% more response data.</p>
+<h3>Table 6</h3>
+<p>shows how much improvement in prediction accuracy one can expect if the data-generating model is the normative model used in the system. When set as the 12) -1.0(12) -1.5(9) -2.0(9) -2.5(12) -2.0(9) -4.0(6) -4.0(12)</p>
+<h3>Table 7</h3>
+<p>Sensitivity analysis for the number of responses (&#x27;Threshold&#x27;) used to filter students in Steps 2 and 3 of the analysis. The differences in the mean squared error of next-response prediction from the benchmark Rasch model are shown, averaged across the 12 data splits.</p>
+<p>Note that the change in the scoring rule was implemented in the 2019-2020 academic year and we decided to not included the data right after the change since some students might not be directly aware of the change and their behavior would not directly change when the new scoring rule was implemented.</p>
+<p>To derive this distribution one needs to integrate the density of the SRTM over the ranges of values of t ji separately for correct and incorrect responses.</p>
+<p>Note that instead of the category scores of {0, 1, 2, 3} which are usually used in the PCM, we use the scores {0, 1 2 , 1, 3 2 } to make the model more similar to the DSRTM. Mathematically, the models with the two sets of category scores are equivalent.</p>
+<p>The minimum of three responses was chosen to be able to retain most of the sessions of each respondent, while still having at least some information about their ability level at that specific session.</p>
+<h3>References</h3>
+<p>Model Addition Subtraction Multiplication Division Old scoring rule RM (benchmark) [.15897, .15946] [.15929, .16031] [.16629, .16717] [.18505, .18628]</p>
+<p>DSRTM [.00044, .00054] [.00111, .00119] [.00122, .00137] [.00275, .00303]</p>
+<p>CRTM [-.00005, .00001] [.00010, .00019] [-.00001, .00009] [.00209, .00234]</p>
+<p>NRM [-.00032, -.00027] [-.00023, -.00020] [-.00018, -.00014] [-.00006, -.00004] New scoring rule RM (benchmark) [.15869, .15897] [.15799, .15895] [.17402, .17549] [.18745, .18811]</p>
+<p>SRTM [.00010, .00023] [.00005, .00019] [.00017, .00028] [.00170, .00190]</p>
+<p>DSRTM [.00072, .00084] [.00131, .00143] [.00135, .00146] [.00249, .00264]</p>
+<p>PCM [-.00001, .00005] [-.00004, .00003] [.00018, .00022] [.00036, .00042]</p>
+<p>CRTM [.00028, .00039] [.00042, .00061] [.00057, .00067] [.00310, .00330]</p>
+<p>Bernacki, M. L., Greene, M. J., &amp; Lobczowski, N. G. (2021). A systematic review of research on personalized learning: Personalized by whom, to what, how, and for what purpose (s)? Educational Psychology Review, 33 (4), 1675-1715.</p>
+<p>Bock, R. D. (1997). The nominal categories model. In Handbook of modern item response theory (pp. 33-49). Springer.</p>
+<p>Bock, R. D., &amp; Aitkin, M. (1981). Marginal maximum likelihood estimation of item parameters: Application of an em algorithm. Psychometrika, 46 (4), 443-459.</p>
+<p>Bolsinova, M., Gergely, B., &amp; Brinkhuis, M. J. (2025). Keeping elo alive: Evaluating and improving measurement properties of learning systems based on elo ratings. British Journal of Mathematical and Statistical Psychology.</p>
+<p>Bolsinova, M., &amp; Tijmstra, J. (2018). Improving precision of ability estimation: Getting more from response times. British Journal of Mathematical and Statistical Psychology, 71 (1), 13-38.</p>
+<p>Brinkhuis, M. J. S., Cordes, W., &amp; Hofman, A. D. (2020). Governing games: Adaptive game selection in the math garden. In D. Ivanović (Ed.), Proceedings of the international conference on ICT enhanced social sciences and humanities 2020 (p. 03003, Vol. 33). EDP Sciences. https://doi.org/10.1051/itmconf/20203303003</p>
+<p>Brinkhuis, M. J. S., Savi, A. O., Coomans, F., Hofman, A. D., van der Maas, H. L. J., &amp; Maris, G. (2018). Learning as it happens: A decade of analyzing and shaping a large-scale online learning system. Journal of Learning Analytics, 5 (2), 29-46. https://doi.org/10.18608/jla.2018.52.3</p>
+<p>Coomans, F., Hofman, A., Brinkhuis, M. J. S., Van Der Maas, H. L., &amp; Maris, G. (2016). Distinguishing fast and slow processes in accuracy-response time data. PloS one, 11 (5), e0155149.</p>
+<p>Deonovic, B., Bolsinova, M., Bechger, T., &amp; Maris, G. (2020). A Rasch model and rating system for continuous responses collected in large-scale learning systems. Frontiers in psychology, 11.</p>
+<p>Desmet, P., Paulussen, H., &amp; Wylin, B. (2006). Franel: A public online language learning environment, based on broadcast material. EdMedia, 2307-2308.</p>
+<p>Elo, A. E. (1978). The rating of chessplayers, past and present (2nd ed.). Arco Publishing.</p>
+<p>Ennouamani, S., &amp; Mahani, Z. (2017). An overview of adaptive e-learning systems. 2017 eighth international conference on intelligent computing and information systems (ICICIS), 342-347.</p>
+<p>Hofman, A. D., Brinkhuis, M. J. S., Bolsinova, M., Klaiber, J., Maris, G., &amp; van der Maas, H. L. J. (2020). Tracking with (un) certainty. Journal of Intelligence, 8 (1), 10. https://doi.org/10.3390/jintelligence8010010</p>
+<p>Jansen, B. R. J., Louwerse, J., Straatemeier, M., van der Ven, S. H. G., Klinkenberg, S., &amp; van der Maas, H. L. J. (2013). The influence of experiencing success in math on math anxiety, perceived math competence, and math performance. Learning and Individual Differences, 24, 190-197.</p>
+<p>Jansen, B. R., Hofman, A. D., Savi, A., Visser, I., &amp; van der Maas, H. L. (2016). Self-adapting the success rate when practicing math. Learning and Individual Differences, 51, 1-10. https://doi.org/10.1016/j.lindif.2016.08.027</p>
+<p>Johnson, M. S. (2007). Marginal maximum likelihood estimation of item response models in R. Journal of Statistical Software, 20, 1-24.</p>
+<p>Klinkenberg, S., Straatemeier, M., &amp; van der Maas, H. L. J. (2011). Computer adaptive practice of maths ability using a new item response model for on the fly ability and difficulty estimation. Computers &amp; Education, 57 (2), 1813-1824. https://doi.org/10.1016/j.compedu.2011.02.003</p>
+<p>Maris, G., &amp; van der Maas, H. L. J. (2012). Speed-accuracy response models: Scoring rules based on response time and accuracy. Psychometrika, 77 (4), 615-633. https://doi.org/10.1007/s11336-012-9288-y</p>
+<p>Masters, G. N. (2016). Partial credit model. In Handbook of item response theory (pp. 109-126). Chapman; Hall/CRC.</p>
+<p>Molenaar, D., Tuerlinckx, F., &amp; van der Maas, H. L. (2015). A bivariate generalized linear item response theory modeling framework to the analysis of responses and response times. Multivariate Behavioral Research, 50 (1), 56-74.</p>
+<p>Niznan, J., Papousek, J., &amp; Pelánek, R. (2015). Exploring the role of small differences in predictive accuracy using simulated data. AIED Workshops.</p>
+<p>Papoušek, J., &amp; Pelánek, R. (2015). Impact of adaptive educational system behaviour on student motivation. International Conference on Artificial Intelligence in Education, 348-357.</p>
+<p>Papoušek, J., Stanislav, V., &amp; Pelánek, R. (2016). Evaluation of an adaptive practice system for learning geography facts. Proceedings of the sixth international conference on learning analytics &amp; knowledge, 134-142.</p>
+<p>Pelánek, R. (2018). The details matter: Methodological nuances in the evaluation of student models: R. pelánek. User Modeling and User-Adapted Interaction, 28 (3), 207-235.</p>
+<p>Pelánek, R. (2024). Leveraging response times in learning environments: Opportunities and challenges. User Modeling and User-Adapted Interaction, 34 (3), 729-752.</p>
+<p>Pelánek, R. (2025). Adaptive learning is hard: Challenges, nuances, and trade-offs in modeling. International Journal of Artificial Intelligence in Education, 35 (1), 304-329.</p>
+<p>Pelánek, R., Papoušek, J., Řihák, J., Stanislav, V., &amp; Nižnan, J. (2017). Elo-based learner modeling for the adaptive practice of facts. User Modeling and User-Adapted Interaction, 27, 89-118.</p>
+<p>R Core Team. (2025). R: A language and environment for statistical computing. R Foundation for Statistical Computing. Vienna, Austria. https://www.R-project.org/</p>
+<p>Rasch, G. (1960). Probabilistic models for some intelligence and attainment tests [Expanded edition, 1980. Chicago: The University of Chicago Press]. Danish Institute of Educational Research.</p>
+<p>Rein, M. T., Vermunt, J. K., De Roover, K., &amp; Vogelsmeier, L. V. (2025). Latent vector autoregressive modeling: A stepwise estimation approach. Structural Equation Modeling: A Multidisciplinary Journal, 32 (1), 105-116.</p>
+<p>Straatemeier, M. (2014, April 25). Math Garden: A new educational and scientific instrument [Doctoral dissertation, University of Amsterdam].</p>
+<p>Tijmstra, J., &amp; Bolsinova, M. (2021). Accounting for individual differences in speed in the discretized signed residual time model. British Journal of Mathematical and Statistical Psychology, 74, 176-198.</p>
+<p>van Rijn, P. W., &amp; Ali, U. S. (2017). A comparison of item response models for accuracy and speed of item responses with applications to adaptive testing. British Journal of Mathematical and Statistical Psychology, 70 (2), 317-345.</p>
+<p>Van der Linden, W. J. (2007). A hierarchical framework for modeling speed and accuracy on test items. Psychometrika, 72 (3), 287-308.</p>
+<p>van der Linden, W. J., Glas, C. A., et al. (2000). Computerized adaptive testing: Theory and practice (Vol. 13). Springer.</p>
+<p>Van Schoors, R., Elen, J., Raes, A., &amp; Depaepe, F. (2021). An overview of 25 years of research on digital personalised learning in primary and secondary education: A systematic review of conceptual and methodological trends. British Journal of Educational Technology, 52 (5), 1798-1822.</p>
+<p>Vermeiren, H., Kruis, J., Bolsinova, M., van der Maas, H. L., &amp; Hofman, A. D. (2025). Psychometrics of an elo-based large-scale online learning system. Computers and Education: Artificial Intelligence, 100376.</p>
+<p>Wauters, K., Desmet, P., &amp; Van Den Noortgate, W. (2012). Item difficulty estimation: An auspicious collaboration between data and judgment. Computers &amp; Education, 58 (4), 1183-1193. https://doi.org/10.1016/j.compedu.2011.11.020</p>
+<p>Xie, H., Chu, H.-C., Hwang, G.-J., &amp; Wang, C.-C. (2019). Trends and development in technology-enhanced adaptive/personalized learning: A systematic review of journal publications from 2007 to 2017. Computers &amp; Education, 140, 103599.</p>
+<p>Zhang, L., Xiong, X., Zhao, S., Botelho, A., &amp; Heffernan, N. T. (2017). Incorporating rich features into deep knowledge tracing. Proceedings of the fourth (2017) ACM conference on learning@ scale, 169-172.</p>
+<p>Zhu, X., Chen, W., Xiao, K., Zhang, M., Wang, J., &amp; Huang, Z. (2026). Dkpkt: Dynamic knowledge perception for temporal knowledge tracing. Web Intelligence, 24 (3), 59-76.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
