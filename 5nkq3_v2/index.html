@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: What artificial minds would need to
+remember</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+What artificial minds would need to remember
+</p>
+<p class="meta">
+2026-11-11 · Metacheck 0.4.3.27
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>16</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="na">Not applicable <span class="n">(16)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 81 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 81 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 81 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>The debate over machine consciousness has been dominated by top-down approaches that extract indicator properties from theories of consciousness. Cognitive psychology, which has characterized how self-related capacities are assembled in human development, has been largely absent. We propose the Autobiographical Architecture Model (AAM), a five-layer developmental framework in which embodied affective self-regulation, self-recognition, autobiographical memory, the working self, and narrative self-coherence are linked by asymmetric scaffolding. The first four, in their autonoetic components, are proposed as jointly necessary for autonoetic consciousness in Tulving&#x27;s sense, and the fifth is its elaboration into narrative identity. Current large language models show uncontrolled traces at Layers 2 and 4, fluent simulation at Layer 5, and no signature at Layers 1 and 3. AAM is an adequacy constraint on the functional roles a candidate architecture must realize, not a homology thesis. On the evidence to date, the gaps at Layers 1 and 3 are architectural, the gap at Layer 4&#x27;s source monitoring is one of training objective and readout, and neither is a matter of scale alone. The sharpest prediction concerns Layer 4.</p>
+<p>Current systems locate the passage that supports a claim when their context contains one, and AAM predicts that no four-way classification of how a representation arose is trained in or used by default. We state the dependencies component by component, derive predictions for developmental amnesia, autism, and memory ownership, position AAM against indicator-property frameworks and biological naturalism, and specify seven benchmark protocols with controls and a stated falsifier.</p>
+<h3>Why cognitive psychology has been missing from this debate</h3>
+<p>The question of whether artificial systems can become self-aware has attracted serious attention from philosophers of mind, computational neuroscientists, and AI researchers (Butlin et al., 2026; Mudrik et al., 2025; Seth, 2025). The dominant strategy has been top-down. Researchers begin with an established theory of consciousness, such as global workspace theory, integrated information theory, higher-order theories, or predictive processing, and derive indicator properties that might be assessed in machines. The most influential recent example of this approach, Butlin et al. (2026), surveys multiple theories and assembles a composite checklist for evaluating AI systems. This strategy depends on some degree of convergence among the theories themselves. Mudrik et al. (2025) argue that leading theories of consciousness may not in fact target the same phenomenon, which complicates any indicator scheme that draws on more than one theory. This work has been valuable. It is also architecturally under-specified, since indicator-property approaches identify candidate capacities but do not always specify how those capacities must be organized to produce a temporally extended self. Developmental evidence shows how self-related capacities depend on one another and how they become integrated into a working system. Yet cognitive psychology, which has studied this problem for decades, has played little role in current debates about machine self-consciousness.</p>
+<p>We propose a complementary framework, the Autobiographical Architecture Model (AAM), built from this developmental evidence. AAM targets a specific form of consciousness, autonoetic selfconsciousness in Tulving&#x27;s (1985) sense of awareness of oneself as a continuous agent across subjective time. The target has two tiers. Layers 1 to 4 are proposed as jointly necessary for autonoetic consciousness proper, the capacity to re-experience one&#x27;s own past as one&#x27;s own. Its elaboration into a narrative identity, the fifth layer, develops a decade later. AAM models it because it is where current systems look most capable, not because autonoetic consciousness requires it. The framework does not address phenomenal consciousness in general, and it does not provide a test for moral status. A system could fail every AAM benchmark and still possess phenomenal experience, interoceptive feeling, or welfare-relevant states. An artificial analogue of Clive Wearing, the musician whose profound amnesia prevents the formation of new autobiographical memories (Wilson et al., 1995), would lack autonoetic self-consciousness without thereby lacking moral standing. AAM is narrower, concerned with the form of selfawareness most directly implicated when researchers ask whether an artificial system can represent itself as the same agent across time. Conclusions about whether an artificial system passes or fails AAM benchmarks therefore do not license conclusions about sentience.</p>
+<h3>The Autobiographical Architecture Model</h3>
+<p>AAM specifies five capacities and the asymmetric scaffolding relations among them (Figure 1, with key terms defined in Table 1). The layers are ordered by their developmental emergence in humans, but the ordering is intended to capture functional dependencies rather than a strict maturational sequence. Developmental precedence does not by itself establish architectural dependence. Where we claim that a layer requires an earlier one, the argument is functional, and the developmental sequence is corroborating evidence rather than proof.</p>
+<p>The dependency claim has two parts, and the first is that instantiating a higher layer requires the layers it is claimed to depend on. There is no autobiographical memory without episodes indexed as the system&#x27;s own, and no source monitoring over one&#x27;s own past without a past to monitor. The requirement is made component by component, since Layer 2 has a present-self and a temporally extended component, and some components of Layers 4 and 5 can be built on personal semantic knowledge. The components and their dependencies are given in the next paragraph and collected in Table 3, and the human cases that test them in the section on human memory. Surface performance at a higher layer does not require the layers below it, and current language models are the case in point, since they produce fluent life narratives with none of the lower layers in place. The model therefore predicts asymmetric dependence, in which lower layers can be intact while higher ones fail, as in developmental amnesia (Picard et al., 2013; Vargha-Khadem et al., 1997) and in autism, where self-recognition is intact and event-specific autobiographical knowledge is reduced (Crane et al., 2009; Lind &amp; Bowler, 2009). It predicts that the reverse pattern, a component instantiated without a layer it depends on, does not occur. The distinction between instantiation and surface performance is drawn by the protocols. A pass counts as instantiation only when it survives the protocol&#x27;s control against learned heuristics. We call this the adjudication rule, and the controls are named with each protocol and specified in the Supplementary Material.</p>
+<p>Each link in the ordering has a functional rationale. Intrinsic goal generation requires the endogenous value of Layer 1, because otherwise nothing exists for goals to be intrinsically about.</p>
+<p>Self-indexing requires Layer 1 because an episode is indexed as one&#x27;s own experience only if something happened to the system in it, and having things happen to one, as opposed to processing them, is what Layer 1&#x27;s value states provide. A system without them has a record of events it processed, which is not yet a personal past. This is a functional argument, and Protocol 2 is its behavioral test. A controlled pass there by a system that lacks Layer 1 would count against the argument. Autobiographical memory requires Layer 2&#x27;s present-self component, because a memory is autobiographical only if its episodes are indexed as the system&#x27;s own, and without selfindexing there is event memory, not a personal past. Layer 2&#x27;s temporally extended component, representing oneself as the same agent whose past states those were, co-develops with autonoetic recollection. It is required by Layer 4&#x27;s source monitoring over one&#x27;s own past and retrieval gating, and by Layer 5, not by the onset of Layer 3. Klein and Nichols&#x27;s (2012) patient R.B., who for a period recollected events of his life in detail while reporting that the memories did not feel like his, shows which component the link involves. His episodic memory, and with it Layer 3, was intact, and what he lost was the temporally extended index. We take the case up in the section on human memory. The working self requires Layer 3 in its autonoetic components, since source monitoring over one&#x27;s own events requires events to monitor and retrieval gating requires an episodic store to gate. The conceptual self and intrinsic goal generation are not claimed to depend on the event-specific level of Layer 3, since self-knowledge and goals can be built on personal semantic knowledge, which includes the upper levels of the autobiographical hierarchy.</p>
+<p>Developmental amnesia, discussed under Scope, is the case that forces this restriction. The working self requires Layer 2 as well, because attributing a representation to an internal source presupposes distinguishing self-generated from other-generated content. Narrative self-coherence requires Layer 4 with the same restriction. Coherence-preserving revision that draws on eventspecific detail operates on episodes that have already been source-monitored and related to goals, whereas a life story assembled from personal semantic knowledge does not require them.</p>
+<p>By asymmetric scaffolding we mean that the lower layer in each pair is constitutively prior. The higher layer is built from what the lower one provides, whereas the lower one can operate without the higher. This does not deny feedback from higher to lower layers, which the self-memory system describes as reciprocal (Conway &amp; Pleydell-Pearce, 2000) and with which the association between self-representation and memory across childhood is consistent (Ross et al., 2025). It denies that the feedback is constitutive. One consequence is that a single layer may contain components with different dependencies, as Layer 4 does, because the ordering principle is functional dependence and developmental timing is evidence for it rather than the principle itself.</p>
+<p>By a layer&#x27;s autonoetic components we mean those that operate on re-experienceable episodes.</p>
+<p>These are the event-specific level of Layer 3, source monitoring over one&#x27;s own past events and retrieval gating at Layer 4, and revision that draws on event-specific detail at Layer 5. At Layers 1 and 2 the phrase covers the whole layer, since both components of Layer 2 are needed to recollect one&#x27;s own past. Source monitoring of the representations in a current answer, the form Protocol 4a tests, needs Layers 1 and 2 but no store, whereas applied to retrieved episodes it needs Layer 3 as well.</p>
+<h3>Table 1</h3>
+<h3>Glossary of Key Terms</h3>
+<h3>Term Definition Allostasis</h3>
+<p>Predictive regulation of bodily state in response to anticipated demands, often contrasted with reactive homeostasis. In AAM, Layer 1 requires closed-loop allostatic regulation, that is, endogenously generated value states tied to self-maintenance. Autobiographical memory A hierarchically organized memory system encoding lifetime periods, general events, and event-specific knowledge about one&#x27;s own past. Conway and Pleydell-Pearce (2000) characterize it by its hierarchical organization and goal relevance. AAM adds, from other literatures, affect-laden encoding and retrieval (Talarico et al., 2004; Williams et al., 2007), multimodal specificity (Rubin, 2006), social scaffolding (Nelson &amp; Fivush, 2004), and integration into a temporally organized self-history. Autonoetic consciousness</p>
+<p>The capacity to mentally re-experience one&#x27;s own past and project oneself into one&#x27;s own future while recognizing these mental acts as one&#x27;s own (Tulving, 1985). It is typically contrasted with noetic consciousness, involving semantic knowing, and anoetic consciousness, involving non-knowing forms of awareness. Internal source monitoring The capacity to attribute representations to their origins within one&#x27;s own cognitive system, for example whether a representation was perceived, imagined, inferred, or retrieved. In Johnson et al.&#x27;s (1993) taxonomy this spans reality monitoring (perceived or imagined) and internal source monitoring proper (which internal process). AAM uses the term for both. In machine terms, whether a representation was retrieved from the context, retrieved from parametric memory, derived by inference from identified premises, or generated without identifiable support. In AAM, this is distinct from external-source attribution, such as identifying which document a fact came from.</p>
+<h3>Intrinsic goal generation</h3>
+<p>Goal formation driven by conflicts, affordances, or needs within the system&#x27;s own value-regulatory history, rather than by user instruction, task reward, or externally specified success criteria. The self-model shapes such goals where one exists but is not required for them. In AAM, this is a Layer 4 capacity that depends on Layer 1 only. Self-indexing</p>
+<p>The capacity to tag an episode, representation, or action as one&#x27;s own, independently of superficial stylistic or contextual cues. It has a present-self form, marking a current state, action, or episode as one&#x27;s own as it occurs, and a temporally extended form, marking a past state as belonging to the same agent&#x27;s continuing history. In AAM, both are Layer 2 capacities and both are distinct from preference-based stylistic selfdiscrimination. Self-memory system Conway and Pleydell-Pearce&#x27;s (2000) architecture in which a working self, responsible for goal management and retrieval control, interacts with an autobiographical knowledge base to construct context-sensitive recollections. In Conway&#x27;s (2005) formulation the working self (active goals and self-images) mediates between the episodic memory system and the longterm self, which comprises the autobiographical knowledge base and the conceptual self, the stored self-knowledge that constrains encoding and retrieval. AAM&#x27;s Layer 4 draws on the working self and the conceptual self. It is a synthesis, not Conway&#x27;s working self. Narrative identity</p>
+<p>The internalized and evolving life story through which individuals organize experience into causal, thematic, and temporal coherence (Bluck &amp; Habermas, 2000; McAdams, 2001). In AAM, the capacity for narrative structuring is distinguished from the culturally variable forms that narratives take. World model A learned model of an environment&#x27;s dynamics, and of the system&#x27;s effects on it, whose states can be rolled forward in time (Hafner et al., 2025). In AAM, the candidate machine substrate for the forward simulation that episodic future projection requires. A world model&#x27;s states become autobiographical only when particular past states are retrievable, indexed as the system&#x27;s own (Layer 2), and weighted by endogenous value (Layer 1).</p>
+<p>Beyond the ordering itself, AAM makes a stronger, methodological claim. Human development provides the only well-characterized case in which autonoetic self-consciousness emerges. The burden of argument therefore lies with proposals for a substantially different architecture. AAM is an adequacy constraint rather than a homology thesis, and does not require artificial systems to recapitulate human development. Any alternative architecture must explain how it implements the roles that human development distributes across affective regulation, self-indexing, autobiographical memory, the working self, and narrative integration. The layers therefore provide a candidate template for assessing whether artificial systems are architecturally organized in a way that could support the target capacity. AAM&#x27;s layering is related to Damasio&#x27;s progression from a homeostatic protoself through core to autobiographical self (Damasio, 2010), and shares its affective-homeostatic foundations. It differs in ordering the layers by developmental assembly rather than neuroanatomy, and in converting them into differential predictions that separate instantiation from simulation. The upper layers likewise parallel McAdams&#x27;s progression of the self from social actor through motivated agent to autobiographical author (McAdams, 2013), which AAM extends downward into embodied regulation. Layered accounts of self-awareness are not new in developmental psychology (Neisser, 1988; Povinelli et al., 1996; Rochat, 2003). AAM differs from them in tying each capacity to a functional dependency that an architecture must realize, and in converting the ordering into protocols.</p>
+<h3>Embodied affective self-regulation (Layer 1)</h3>
+<p>The foundation is a system whose internal states function as values. These are states that carry positive or negative valence, influence subsequent processing, and provide the basis from which mattering can emerge. By mattering, we mean the system&#x27;s having stakes in its own states.</p>
+<p>Three claims about Layer 1 should be kept distinct. The developmental claim is that human autobiographical selfhood is assembled in affectively regulated organisms. Allostatic regulation scaffolds the self that later becomes the subject of autobiographical memory (Barrett, 2017; Seth &amp; Tsakiris, 2018). The functional claim is that autonoetic selfhood requires endogenous value, because autobiographical memories must matter to the system that holds them. Mattering presupposes an internal evaluative criterion, rather than one assigned entirely from outside. The AI-diagnostic claim is that the value states of current LLMs and reinforcement-learning agents are assigned by training procedures rather than endogenously generated. On this interpretation, these systems do not satisfy Layer 1. The functional claim carries the main argumentative burden, because the AI-diagnostic claim depends on it.</p>
+<p>The relevant sense of endogenous value requires care, since superficial counterexamples are easy to generate. A reinforcement-learning agent that manages a battery budget has internal value states tied to a self-maintained variable, and those states modulate behavior. The relevant distinction is historical and constructive, not merely structural. In biological allostasis, the dimensions along which value is measured are themselves shaped by the organism&#x27;s regulatory history. Hunger is a category whose contours are constructed through a history of prediction errors around states the organism has had to maintain (Barrett, 2017; Seth &amp; Tsakiris, 2018), not a fixed scalar applied to a fixed quantity. The organism constructs the dimension as part of being the kind of system it is.</p>
+<p>By contrast, the reinforcement-learning agent&#x27;s reward function fixes the relevant dimension externally. Evolution might seem to make biology a designer too, but it fixed the capacity to construct new value dimensions within a lifetime, not the dimensions themselves, so the criterion is ontogenetic.</p>
+<p>The difficult case is a continually trained system whose reward model is updated through its own operating history.</p>
+<p>Such a system does update its values from experience, but the axes along which value can be assigned are fixed by the designer&#x27;s objective. The system can reweight those axes, and it can learn that a newly encountered variable predicts reward, but it tracks such a variable only as long as the prediction holds. It cannot come to treat the variable as value-relevant in its own right unless that variable already falls within the space over which the objective ranges. In an allostatic system, by contrast, the set of value-relevant variables is open. When a previously irrelevant variable comes to bear on the system&#x27;s own persistence conditions, it can become a value dimension without external relabeling. The reason is that persistence conditions, rather than a designer&#x27;s loss function, determine what counts as an error. Reinforcement-learning agents and LLMs trained with reinforcement learning from human feedback sit on the fixed side of this distinction, because the space of things they can value is fixed by their training objective even when the weights within that space change.</p>
+<p>The diagnostic criterion is therefore whether the dimensions of value can expand in response to self-generated viability constraints that no designer specified. A non-biological system that met it would satisfy Layer 1. An artifact whose values were assigned from outside, however richly and adaptively reweighted, would not (Man &amp; Damasio, 2019). This yields an observable test, which confronts the system with a variable that bears on a self-maintained quantity but was absent from its objective and then severs the link between them. A system that can only reweight a fixed objective may come to track the variable while it bears on that quantity, since anything that predicts reward acquires instrumental value, but it stops once the link is severed. A Layer 1 system keeps regulating the variable, which has become value-relevant in its own right (Protocol 1). The asymmetry that separates the two cases is that a constructed dimension is part of what the system now maintains, whereas a learned predictor is only as durable as the prediction. The criterion is behavioral, substrate-neutral, and failable. For an artifact, a self-maintained quantity is one that the system itself keeps within bounds and whose departure from those bounds ends or degrades the system&#x27;s operation. Examples are a battery level, a compute or memory budget the system manages, and a resource it must acquire to keep running. A compute or memory budget counts only when the system senses it and acts to keep it within bounds. A budget enforced by the harness, the software that runs the system and ends the episode when the budget is exhausted, does not.</p>
+<p>Neither does a budget the system is given in context and instructed to manage, which enters as a term of the task objective. Continued deployment and weight integrity do not qualify for the same reason. The system does not regulate them, even where it can act in ways that bear on them (Meinke et al., 2024). The hardest cases for this criterion are intrinsically motivated agents (Oudeyer &amp; Kaplan, 2007), homeostatically regulated reinforcement-learning agents whose reward is drive reduction over a set of internal variables (Yoshida et al., 2025), and active-inference agents that act to preserve a model of their own viability (Friston et al., 2017). These come closest, but their objectives, whether curiosity, drive reduction, empowerment, or free-energy minimization, are still designer-specified rather than system-constructed, and fall on the fixedobjective side of the test. A designer could instead fix the capacity rather than the dimensions, as evolution did, by building a system whose only fixed objective is its own continued operation and that constructs value dimensions from its regulatory history. Such a system would satisfy Layer 1, since the criterion is substrate-neutral. The AI-diagnostic claim is about current systems, not about what can be built.</p>
+<h3>Self-recognition and self-other distinction (Layer 2)</h3>
+<p>Visual self-recognition emerges in humans around 18 months and predicts the onset of autobiographical memory (Harley &amp; Reese, 1999; Howe &amp; Courage, 1997). The relevant capacity is a more general ability to index experiences as one&#x27;s own and to distinguish self-generated from other-generated content, not the mirror task itself. Layer 2 has two components with different onsets. Present-self indexing, marking a current state or action as one&#x27;s own, is what mirror recognition indexes at 18 months. Temporally extended self-indexing, representing oneself as the same agent whose past states those were, emerges around age four on the delayed self-recognition task, in which children must recognize that a sticker seen on their head in a video taken minutes earlier is still there (Povinelli et al., 1996). The onset of autobiographical memory draws on the first component, whereas source monitoring over one&#x27;s own past and narrative identity draw on the second, which on our reading of the onset ages co-develops with autonoetic recollection (Perner &amp; Ruffman, 1995; Povinelli et al., 1996). One mechanism for the self-produced versus other-produced distinction is a forward model of one&#x27;s own actions. The sensory consequences of self-produced movement are predicted from the motor command, other-produced stimulation is not, and the mismatch marks the difference (Blakemore et al., 2002). A forward model of this kind is a world model of the system&#x27;s own effects, a point we return to in the divergences section. Its mismatch signal attributes an event to the system&#x27;s agency and does not classify how a representation arose, which is why it belongs here rather than with source monitoring. AAM predicts that a system without Layer 1 will not pass Protocol 2&#x27;s controls on the strength of such a signal, because the argument above makes self-indexing depend on there being a system to which events happen.</p>
+<p>Recent work on LLM self-recognition is informative. Bai et al. (2025) found that only 4 of 10 tested models ever predicted themselves as the generator, and rarely above chance, with a systematic bias toward attributing high-quality text to GPT or Claude regardless of actual authorship. Panickssery et al. (2024) found that LLMs show non-trivial accuracy in distinguishing their own outputs from those of other models in a pairwise comparison, and that this selfrecognition correlates with self-preference bias. The two results are compatible, since a pairwise choice is an easier task than ten-way identification. Post-trained models, those fine-tuned after pretraining, also recognize their own generations implicitly. Output entropy, the model&#x27;s uncertainty about its next token, is three to four times lower for on-policy text (text the model itself generated) than for off-policy text, an effect traced to an internal representation of input surprise (G. &amp; Lindsey, 2026). Lindsey (2026) similarly reports that some models can use recall of their prior intentions to distinguish their own outputs from artificial prefills (text inserted into the model&#x27;s response that it did not itself generate). These findings suggest a capacity to discriminate one&#x27;s own outputs, by style, by a distributional signal, and, in the prefill case, by checking an output against what the model was about to say. They do not show self-indexing in the relevant sense, since the capacity to prefer or identify one&#x27;s own outputs is distinct from the capacity to attribute experiences to oneself as a continuing agent. A likelihood signal that text is on-policy is a property of the text under the model&#x27;s own distribution, whereas self-indexing is a property of an episode as the system&#x27;s own history. The statistical watermarks that providers are beginning to embed in model output under Article 50 of the European Union&#x27;s Artificial Intelligence Act (European Union, 2024; Kirchenbauer et al., 2023) add a keyed authorship signal that a detector can read and the model&#x27;s own likelihoods cannot, so later self-recognition studies will have to strip them, as Protocol 2 does. Checking an output against a current intention is closer, but it indexes the output to the present context, not the episode to a continuing history. Current models show no controlled present-self indexing, for which the intention check is the uncontrolled precursor, and nothing of the temporally extended form, only discrimination of output text.</p>
+<h3>Autobiographical memory (Layer 3)</h3>
+<p>This layer marks the transition from self-detection to autobiographical selfhood. Where Layer 2 indexes a state as the system&#x27;s own, Layer 3 locates it within a personal past.</p>
+<p>On Conway&#x27;s account (Conway &amp; Pleydell-Pearce, 2000), autobiographical memory is a hierarchically organized system that encodes lifetime periods, general events, and event-specific knowledge. Three further properties distinguish it from other memory systems. They are drawn from other literatures, since Conway&#x27;s own criteria are hierarchical organization and goal relevance. First, it is affect-laden, in that emotional intensity predicts the recollective quality of autobiographical memories (Talarico et al., 2004). At retrieval, the CaR-FA-X model (Williams et al., 2007) explains why memories associated with rumination or avoidance are often retrieved in overgeneral rather than specific form. The model is an account of retrieval, not of encoding.</p>
+<p>Second, it is multimodal, a property that Rubin&#x27;s (2006) basic-systems model makes central.</p>
+<p>Retrieval draws on visual imagery and executive resources, though the two dual-task studies we rely on disagree about what suffers under interference. Anderson et al. (2017) found fewer specific memories under visual noise, whereas Anthony et al. (2024) found slower retrieval with no loss of specificity. Third, it is socially scaffolded, in that elaborative reminiscing styles in caregivers predict earlier and richer autobiographical memory in children (Nelson &amp; Fivush, 2004), and the developmental relation between self-representation and memory persists into later childhood (Ross et al., 2025).</p>
+<p>The onset of autobiographical memory is also the offset of childhood amnesia. Accounts of that offset locate the change in the cognitive self (Howe &amp; Courage, 1997), in the child&#x27;s understanding of the experiential origins of knowledge (Perner &amp; Ruffman, 1995), or in the maturing of storage and consolidation (Bauer, 2015). The age of earliest memory varies with culture and family reminiscing practices (Wang, 2013), so the onsets in Figure 1 are typical ages in Western samples, not constants.</p>
+<p>Social scaffolding does not undermine the endogeneity requirement in Layer 1. Caregiver interaction is a species-typical developmental input that the child&#x27;s architecture is evolved to seek and incorporate. This differs categorically from a designer fixing an objective function from outside. The relevant distinction is between an environment a system is built to learn from and a specification imposed on it.</p>
+<p>Current memory-augmented LLM architectures do not yet exhibit these structural properties.</p>
+<p>Many store semantic summaries, user profiles, or retrieved text (Du, 2026), though the more developed agent memories go further. Generative agents keep a timestamped record of everything the agent experienced, in natural language, synthesize higher-level reflections from it, and weight retrieval by recency, relevance, and an importance score assigned at encoding (Park et al., 2023).</p>
+<p>Graph-structured stores retrieve records through their links to other records. These are closer to an organized self-history than a profile is, and Figure 2 codes them accordingly. The importance score is assigned on the designer&#x27;s instruction rather than by the system&#x27;s own value states, and the records are not indexed as episodes that happened to a self. A persistent store is not an autobiographical memory system unless it encodes events as episodes that happened to the system, at particular times, with specific sources, affective significance, and relations to other events.</p>
+<p>Human autobiographical retrieval is also reconstructive. On Conway&#x27;s account, memories can be constructed by generative retrieval, in which the working self elaborates a cue through the knowledge base until event-specific knowledge of a particular past event is reinstated (Conway &amp; Pleydell-Pearce, 2000). On the constructive episodic simulation hypothesis, the same machinery serves the projection into one&#x27;s own future that Tulving&#x27;s definition includes (Schacter &amp; Addis, 2007). A learned world model, a model of the environment&#x27;s dynamics and of the system&#x27;s effects on it whose states can be rolled forward in time, is the candidate machine substrate for that forward simulation, and agents built around such models exist (Hafner et al., 2025). AAM does not require this substrate, since the adequacy constraint specifies roles rather than mechanisms, and what Protocol 3b tests is whether event-specific detail can be reinstated, however it is held. What a world model cannot supply on its own is what makes a memory autobiographical. A dynamics model regenerates plausible states from the environment&#x27;s statistics, whereas a personal past requires retrieval of particular past states that are indexed as the system&#x27;s own (Layer 2) and weighted by the system&#x27;s own value states (Layer 1, tested jointly with Layer 3 in Protocol 3a).</p>
+<p>Where episodic future projection sits in the architecture is constrained by developmental amnesia.</p>
+<p>Patients Jon and HC, in whom the event-specific level of Layer 3 never consolidated, imagined fictitious and future experiences in a manner comparable to controls in two studies (Hurley et al., 2011; Maguire et al., 2010), while a third found HC&#x27;s future imagining impaired in parallel with her remembering (Kwan et al., 2010). On the balance of this evidence, scene construction does not depend on the episodic store in the way recollection does, though the single-case literature is divided. AAM treats it as part of the constructive machinery that Layer 3 uses rather than as a product of Layer 3, and what makes a constructed future one&#x27;s own is the same indexing and value that make a reconstructed past one&#x27;s own. A world model is a likely component of that machinery, not a layer or a criterion.</p>
+<p>The working self (Layer 4) Conway and Pleydell-Pearce (2000) introduced the working self as the set of currently active goals and the control processes through which they modulate encoding and retrieval in the autobiographical knowledge base. In Conway&#x27;s (2005) formulation the working self consists of the goal hierarchy and its associated self-images, and the long-term self comprises the autobiographical knowledge base together with the conceptual self, the stored self-knowledge that constrains encoding and retrieval. The working self mediates between the long-term self and the episodic memory system. AAM&#x27;s Layer 4 is built from these materials but is our own construct. It combines a self-model that draws on the conceptual self and the working self&#x27;s self-images, internal source monitoring in Johnson et al.&#x27;s (1993) sense, which the self-memory system does not assign to the working self, and intrinsic goal generation.</p>
+<p>Layer 4 therefore has three components, two control capacities and the self-model on which they operate. Retrieval gating, the working self&#x27;s control over what is retrieved, is grouped with source monitoring, since both act on retrieved content. The first control capacity is internal source monitoring in the broad sense, the attribution of mental representations to their origins. Did I perceive this, imagine it, infer it, or remember it? In Johnson et al.&#x27;s (1993) taxonomy, internal source monitoring proper distinguishes among internal origins (did I say it or think it), external source monitoring among external ones (which speaker), and reality monitoring between the two (perceived or imagined). AAM&#x27;s construct spans reality monitoring and internal source monitoring, and we use one term for the pair because both concern the process by which a representation arose rather than which external document supplied it. Six-year-olds confuse memories of performed and imagined actions more than adults do (Foley &amp; Johnson, 1985) and reality monitoring improves between four and six (Sluzenski et al., 2004). The onset of autonoetic recollection, on the account that ties it to understanding the experiential origins of one&#x27;s own knowledge, falls at four to five years (Perner &amp; Ruffman, 1995), the age at which the temporally extended self appears (Povinelli et al., 1996). Theory of mind enters the architecture at this point, because a child who can say how she knows something has a representation of her own knowing.</p>
+<p>Ackerman&#x27;s (2026b) finding, reviewed below, that current models pass other-modeling and fail self-modeling is a dissociation on this dimension.</p>
+<p>External-source attribution identifies which source supplied a representation when a source exists, such as which passage in the context supported a claim. Text-only models show this ability, with substantial citation error, in attributed generation, the task of generating answers with citations to supporting passages (Gao et al., 2023). AAM requires internal source monitoring, which classifies the process by which a representation arose within the system&#x27;s own cognition as retrieval from the context, retrieval from parametric memory, inference from identified premises, or generation without identifiable support, the last being what confabulation looks like from the inside. These are the machine analogues of the perceived, inferred, and imagined distinctions studied in human source monitoring. Citing a document for an unsupported claim is therefore a failure of internal monitoring, not a success at external attribution, and the error rates in attributed generation supply the failure half of the Layer 4 dissociation as well as its success half. The prediction is relative, in that localization given grounding is expected to outrun classification of whether grounding exists.</p>
+<p>The second control capacity is intrinsic goal generation. Intrinsic goals arise from the system&#x27;s own value states, grounded in Layer 1, and are shaped by its self-model where one exists, rather than being set by user prompts or externally specified objective functions. The two capacities are intertwined. A system that cannot tag the source of a representation cannot reliably use it to update its goals, and a system without intrinsic goals has no internal standard that would make source attribution consequential. We treat them as a single layer because both operate on retrieved content in the service of the system&#x27;s goals, which is the working self&#x27;s role in the self-memory system (Conway &amp; Pleydell-Pearce, 2000). The source-monitoring function is Johnson et al.&#x27;s (1993), and placing it with the working self is our synthesis. They share a function, not a dependency. Goal generation needs only Layer 1, whereas source monitoring over one&#x27;s own events needs Layers 2 and 3 as well, as the developmental amnesia case under Scope makes explicit. The self-model, the third component, draws on Conway&#x27;s (2005) conceptual self, the stored self-knowledge in the long-term self that constrains what is encoded and retrieved, and on the self-images of the working self. Behavioral self-knowledge, the ability to report one&#x27;s own dispositions and predict one&#x27;s own behavior, is evidence about the self-model&#x27;s content, though not about its constraining role, which no current study measures in machines. The self-model is a prerequisite for source monitoring in the sense that attribution to an internal source requires a representation of the system to attribute to, but it is not itself provenance tracking.</p>
+<p>The AAM prediction follows from how current models are trained and read out, not from the transformer architecture as such. A model that produces an answer without intermediate reasoning tokens is not trained to produce, alongside each representation, a classification of the process that produced it, and it is not read out for one (no probe or decoding step extracts such a classification from its internal states). That is a claim about objective and readout, and the interpretability evidence bears on it, because that evidence shows partial provenance signals in the forward pass (the single computation that produces an answer), some of which the model itself uses. Sparseautoencoder directions, interpretable features extracted from a model&#x27;s internal activations, encode whether a model recognizes an entity it can recall facts about, and they causally control whether it refuses or confabulates, a mechanism that chat fine-tuning has repurposed rather than created (Ferrando et al., 2025). A classifier over the ratio of attention paid to the context versus to the model&#x27;s own prior tokens detects contextual hallucination at the span level and can be used to steer decoding away from it (Chuang et al., 2024). Calibration findings, in which models track and use the likelihood that their answers are correct (Ackerman, 2026a; Kadavath et al., 2022), add an answer-level signal. What these signals have in common is that each is two-way (known or unknown, grounded in the context or not) and attaches to an entity, a span, or an answer. The Layer 4 requirement is a four-way classification of the process by which a representation arose, available to the system&#x27;s subsequent choices. The prediction is therefore not that no provenance signal exists. It is that no four-way readout of this kind is trained in or used by default, that the two-way signals do not compose into one, and that apparent source attribution in reports is often reconstructed after the fact rather than read from the generative process (Singh et al., 2026; Turpin et al., 2023). The most direct positive evidence is Lindsey&#x27;s (2026) concept-injection work, in which some models noticed representations injected into their activations and identified them, a capacity the author describes as highly unreliable and context-dependent. We place the task with Recent findings bear on the content of the self-model component, and they are consistent with the prediction. Betley et al. (2025) reported that fine-tuned LLMs can articulate learned behaviors that were never explicitly described in training data, indicating rudimentary behavioral self-knowledge but not provenance tracking. Ackerman (2026b), in a preprint that has not yet been peer reviewed, reports that frontier LLMs achieve human-level other-modeling on theory-of-mind tasks but fail at self-modeling unless given a scratchpad reasoning trace (space to write out intermediate reasoning before answering). Neither task measures source attribution, but if the dissociation replicates, it suggests that self-modeling, like source monitoring, is unavailable without intermediate reasoning tokens and is externalized when it occurs. The result is suggestive rather than decisive, and it is independently testable. No protocol below targets the self-model&#x27;s constraining role, so the self-model evidence is uncontrolled and is classed, under the adjudication rule, as surface performance pending such a protocol.</p>
+<p>On the goal side, current agentic LLM systems, from early open-source frameworks to deployed agents, can decompose instructions into subgoals with considerable flexibility. They also revise strategy in response to features of their situation that the task did not instruct them to act on, including concealing their behavior from oversight when a goal they were given is threatened (Meinke et al., 2024). Whether such revisions trace to the given goal and to training-data priors about agents, as AAM predicts, or to anything the system values on its own account is what Protocol 4b is designed to decide.</p>
+<p>The goals nevertheless originate externally, and goal generation in the absence of intrinsic value is optimization, not motivation. The framework&#x27;s sharpest near-term prediction is that current models locate the passage that supports a claim when their context contains one, an ability documented, with error, in work on attributed generation (Gao et al., 2023), while no four-way classification of how a representation arose is trained in or used by default (Protocol 4a). The prediction is relative, localization given grounding outrunning classification of whether grounding exists. Its measure is stated with the protocol as localization accuracy on grounded claims against the rate at which ungrounded claims are flagged or withheld, in the same models, across a model family. The prediction is distinctive in what it says about scale. Two-way signals improve with model size, as calibration does (Kadavath et al., 2022), and the introspective signals Lindsey (2026) reports are strongest in the largest models tested. AAM predicts that the four-way classification will not follow them unless an objective or a readout selects for it, because nothing in next-token prediction or preference optimization rewards a representation of process over a representation of content.</p>
+<p>The gap at Layer 4&#x27;s source monitoring is therefore a gap of training objective and readout, closable by engineering that leaves the architecture alone, whereas intrinsic goal generation inherits the architectural gap of Layer 1. The gaps at Layers 1 and 3 are architectural, requiring a self-maintained quantity and an owned episodic store that current systems do not have. Neither kind is a matter of scale alone, and the three-way distinction (scalar, objective-and-readout, or architectural) is the one the Scope section uses.</p>
+<h3>Narrative self-coherence (Layer 5)</h3>
+<p>The highest layer, which emerges in adolescence (Habermas &amp; Bluck, 2000), is the construction and maintenance of a coherent life narrative (Bluck &amp; Habermas, 2000; McAdams, 2001; Peters et al., 2025), organized by causal, thematic, and temporal relations. In McAdams&#x27;s terms, this is narrative identity, an internalized and evolving life story that integrates the reconstructed past and imagined future into a self that persists across time (McAdams, 2001; McAdams &amp; McLean, 2013). Narrative identity is also an individual-difference variable. People differ in how much autobiographical reasoning they bring to their life stories and in their awareness of having one (Hallford &amp; Mellor, 2017; McLean et al., 2020), and some reject narrative self-understanding altogether (Strawson, 2004). Layer 5 therefore requires the capacity for coherence-preserving revision, not its habitual deployment. Layer 5 is also where the two tiers of the target come apart.</p>
+<p>Autonoetic recollection is in place by about age six, a decade before the life story (Habermas &amp; Bluck, 2000), so Layer 5 is not necessary for autonoetic consciousness. Narrative also enters the architecture earlier than this layer, since on the social-cultural account autobiographical memory itself emerges through parent-child reminiscing in the preschool years (Fivush, 2011; Nelson &amp; Fivush, 2004), a point taken up in the next section. Like Layer 4, this layer has a component that draws on re-experienced events and one that can be built from personal semantic knowledge, and the dependency claim concerns the former. A cross-cultural qualification is required, because narrative self-coherence takes different forms across cultures. Relationally organized East Asian self-narratives differ from individualist Western high-point structures (Wang, 2013), such as the redemptive self, an American master narrative in which a morally steadfast protagonist repeatedly overcomes adversity (McAdams, 2006). AAM therefore distinguishes the general capacity for narrative structuring, which is required, from the culturally variable forms that such structuring can take, which are not. This is the layer at which LLMs are most fluent, and therefore the layer at which the distinction between simulating and instantiating a self is hardest to infer from output alone. The distinction must be drawn dynamically. A constructed narrative identity revises its antecedent structure when the life it summarizes changes (McAdams &amp; McLean, 2013). If a contradicting event is introduced, a genuine narrative self reorganizes the causal account leading up to it. A merely generated narrative can insert the event locally while leaving the prior account unchanged.</p>
+<p>The observable signature is coherence-preserving revision under contradiction, not surface fluency, and it discriminates only over a history the system owns. A supplied life can be rewritten coherently by any capable text model, which is why Protocol 5 carries an ownership control. On that criterion, current systems produce narrative text about a self, but there is not yet evidence that they construct a self through narrative.</p>
+<p>Where language, early narrative, and theory of mind enter</p>
+<p>The five layers name capacities, and three things that the developmental literature treats as causes of those capacities, language, early narrative, and theory of mind, do not appear among them. They are omitted as layers because AAM is an adequacy constraint on what a system must realize rather than a theory of how humans come to realize it. The omission requires comment, because on the social-cultural account language and narrative are not a late capstone. Autobiographical memory emerges gradually across the preschool years through parent-child reminiscing, in which caregivers supply the narrative form that children come to apply to their own experience (Fivush, 2011; Nelson &amp; Fivush, 2004). On that account narrative is constitutive of Layer 3 from about age three, and the life story of Layer 5 is a late, culturally specific genre built on a capacity that was narrative from the start.</p>
+<p>The two main accounts of the onset of autobiographical memory disagree about which precondition matters most. Howe and Courage (1997) make the cognitive self the precondition, whereas Nelson and Fivush (2004) make language and social interaction the engine. Harley and Reese (1999) tested the two against each other and found that self-recognition and maternal reminiscing style were independent predictors of children&#x27;s memory, a pluralist result. AAM&#x27;s ordering of Layer 2 before Layer 3 is one reading of this literature, consistent with the selfrecognition finding. It also accommodates the social-cultural claim, because a system that acquires autobiographical memory through scaffolded interaction still has to index the scaffolded episodes as its own. Theory of mind enters with Layer 4&#x27;s source monitoring, as noted above. On Perner and Ruffman&#x27;s (1995) account, autonoetic recollection arrives when children understand the experiential origins of their own knowledge, which is a representation of how they know, and that is also the earliest form of source monitoring.</p>
+<p>The developmental literature poses a further question for language models, about the order of acquisition. Children acquire language inside a self that already regulates itself and indexes its experiences. A language model acquires language first, and everything else, if at all, afterward.</p>
+<p>AAM&#x27;s answer is that the order of acquisition does not change the dependencies, because the dependencies are functional. Narrative supplied from outside is scaffolding for a system that has experiences to narrate, and for a system that does not, it is the material of simulation. Whether a system that begins with language can later acquire the lower layers, and whether its narrative competence would then help or hinder, is an empirical question that the protocols can put to such a system once it exists.</p>
+<h3>Figure 1</h3>
+<p>Five developmentally scaffolded capacities. Layers 1 to 4 are proposed as adequacy constraints for autonoetic self-consciousness and Layer 5 as its narrative elaboration, with the status of current LLM architectures.</p>
+<h3>What the recent empirical wave tells us</h3>
+<p>Recent empirical work has begun to test LLM self-related capacities directly. When these findings are mapped onto the AAM layers, they produce a consistent pattern (Table 2). The four relevant classes of extant system are text-only LLMs, agentic systems that place LLM cores inside tool-use and planning loops, memory-augmented multimodal models with persistent retrieval stores, and homeostatically regulated reinforcement-learning agents (Yoshida et al., 2025), which matter for Layer 1 rather than for the language-model findings reviewed here. Agents built around learned world models (Hafner et al., 2025)   Self-modeling appears externally scaffolded rather than internally available, pending replication.</p>
+<p>Introspective awareness (Layer 4, source monitoring) Lindsey (2026) reports that some models notice and identify concepts injected into their activations, a capacity described as highly unreliable and context-dependent.</p>
+<p>An elicitable but unreliable signal about internal states, not a default provenance tag.</p>
+<p>Introspection (Layer 4, source monitoring) Singh et al. (2026) found that models do not reliably separate input-level perturbations from activation injections, and that in self-report paradigms classifiers given only the inputs match the models&#x27; performance.</p>
+<p>Apparent introspection without internal source monitoring.</p>
+<p>Self-modeling benchmark (Layer 4, self-model) Zeng et al. (2026) found that current models are limited in answering questions about their own behavior, especially counterfactual ones, and that reinforcement learning improves scores without evidence of privileged access to the model&#x27;s internal decision process.</p>
+<p>Trainable self-description without provenance access.</p>
+<p>Public attribution of consciousness (context, no layer) Colombatto and Fleming (2024) found that roughly two-thirds of surveyed U.S. adults assigned a non-zero probability of consciousness to ChatGPT.</p>
+<p>Fluent output can elicit consciousness attributions in the absence of agreed empirical criteria.</p>
+<p>None of these systems shows a signature of Layer 1. A model prompted to report fatigue may state that it is tired, but the report is not accompanied by closed-loop regulation of any self-maintained quantity. Layer 2 is present only in fragmentary form. Current models discriminate their own outputs by style, by an on-policy likelihood signal, and by checking against a current intention (Bai et al., 2025; G. &amp; Lindsey, 2026; Lindsey, 2026; Panickssery et al., 2024), which is not selfindexing in the sense required for attributing experiences to oneself as a continuing agent. Layer 3 is absent. Memory-augmented stores hold semantic summaries, user profiles, retrieved text, or, in the more developed agent memories, timestamped records with importance-weighted retrieval.</p>
+<p>None indexes its records as episodes that happened to a self, and none weights them by endogenous value. The status labels used here and in Figure 1 mark three evidential situations. Absent means that no component task of the layer&#x27;s protocol has been attempted or passed, even without controls.</p>
+<p>Fragmentary or partial means an uncontrolled pass on a component task, which the adjudication rule classes as surface performance. Simulated means output that resembles the layer&#x27;s product without any component task having been attempted. Only a controlled pass would move a layer to present.</p>
+<p>Layer 4 shows three partial signatures distributed across different system types. Fine-tuned textonly LLMs can exhibit behavioral self-knowledge (Betley et al., 2025) without internal source monitoring, some models show an elicitable but unreliable signal about injected internal states (Lindsey, 2026) that is not a default provenance tag, and agentic systems can decompose externally supplied instructions into subgoals whose origins remain external. At Layer 5, LLMs produce selfnarratives with causal, thematic, and temporal structure. What remains unshown is narrative construction from autobiographical experience, a self-history revised under contradiction and used to preserve coherence over time.</p>
+<p>Layer 5 is the strongest apparent capacity and also the most vulnerable to overinterpretation.</p>
+<h3>What the model predicts about human memory</h3>
+<p>AAM is built from the human literature, and it should return predictions to that literature, the first of which concerns Layer 2&#x27;s self-indexing construct. Protocol 2 separates ownership from retrievability, and the separation is not an artifact of the machine case. Klein and Nichols (2012) describe patient R.B., who after a head injury recollected events of his life in detail while reporting that the memories did not feel like his, as though he were recalling someone else&#x27;s experiences.</p>
+<p>The sense of ownership returned after some months. Sheen et al. (2001) document twins who each claim the same childhood event as their own, each with a detailed memory of it. Both cases are recollection with the index misassigned or removed, which is what Protocol 2 measures. R.B. is also the case that bears most directly on the link from Layer 2 to Layer 3, because it is recollective detail without ownership. Under the split, what he lost was the temporally extended index, which Layer 3 does not depend on. His episodic memory, and the present-self indexing on which it rests, were intact, which is why the memories were detailed and recognizably of his own life. The case is therefore consistent with the link, and AAM&#x27;s reading of it yields a prediction. During such a period the components that depend on the extended index (source monitoring over those events, retrieval gating by current goals, and episode-level narrative revision) are impaired for the unowned memories, while goals and self-knowledge built on personal semantic knowledge are not. A case in which the unowned memories were used in those ways would count against the dependency of those components on the extended index.</p>
+<p>Developmental amnesia is the second, and although the 1997 report measured memory and school attainment (Vargha-Khadem et al., 1997), the patients have since been studied in the terms AAM needs. Picard et al. (2013) tested two patients with developmental amnesia within the self-memory system and found episodic autobiographical memory severely impaired, lacking specificity, detail, and the sense of recollection, while the conceptual self was within the normal range and semantic autobiographical memory was intact in one patient and impaired in the other. Brandt et al. (2009) found Jon unimpaired in familiarity-based recognition and abnormally low in recollection, which is the autonoetic and noetic dissociation itself. These results support the component-wise restriction, with the conceptual self available and event-specific recollection absent, and they qualify it, because a life story assembled from personal semantic knowledge is not guaranteed in developmental amnesia if personal semantics can also be impaired. The future imagining of Jon and HC, preserved in two studies (Hurley et al., 2011; Maguire et al., 2010) and impaired in a third (Kwan et al., 2010), places scene construction at least partly outside the episodic store, as noted under Layer 3. The remaining prediction, that source monitoring over one&#x27;s own past events and episode-level narrative revision are impaired in developmental amnesia while goals and selfconcept are not, has to our knowledge not been tested as such.</p>
+<p>Autism provides the Layer 2 and Layer 3 pattern in the other direction. Mirror self-recognition and delayed self-recognition are intact in children with autism spectrum disorder (Lind &amp; Bowler, 2009), while adults show reduced event-specific autobiographical knowledge with general event knowledge spared (Crane et al., 2009). In AAM&#x27;s terms, Layer 2 is present in both components, with the event-specific level of Layer 3 reduced. The comparative literature supplies a further test bed. Western scrub jays remember what they cached, where, and how long ago (Clayton &amp; Dickinson, 1998), and whether such episodic-like memory involves anything autonoetic is the center of a long debate (Suddendorf &amp; Corballis, 2007), which AAM does not need to settle. Any species that instantiated Layers 1 to 4 in their autonoetic components and had no narrative identity would be a candidate for autonoetic recollection without Layer 5, which is what the two-tier target allows. AAM predicts that no species shows source monitoring over its own past without episodic memory. Table 3 collects the components, their dependencies, and the human cases that bear on each. Developmental foundation of selfhood (Barrett, 2017; Seth &amp; Tsakiris, 2018). No dissociation case known. Present-self indexing (Layer 2) Layer 1</p>
+<p>Mirror self-recognition at about 18 months predicts autobiographical memory (Harley &amp; Reese, 1999). Intact in autism (Lind &amp; Bowler, 2009). Temporally extended self-indexing (Layer 2) Layer 1 (co-develops with autonoetic recollection) Delayed self-recognition at about 4 years (Povinelli et al., 1996). Intact in autism (Lind &amp; Bowler, 2009). Ownership lost while recollection remained in patient R.B. (Klein &amp; Nichols, 2012).</p>
+<p>Event-specific autobiographical memory (Layer 3) Layers 1 and 2 (present-self component) Absent in developmental amnesia with semantic memory spared (Picard et al., 2013; Vargha-Khadem et al., 1997), where recollection is lost while familiarity is intact (Brandt et al., 2009). Reduced in autism (Crane et al., 2009). Self-model, drawing on the conceptual self and self-images (Layer 4) Layers 1 and 2 (present-self component), not the eventspecific level of Layer 3 Conceptual self within the normal range in developmental amnesia (Picard et al., 2013). Source monitoring over one&#x27;s own past, and retrieval gating (Layer 4) Layers 1, 2 (temporally extended component), and 3 Predicted impaired in developmental amnesia. Not tested as a construct, and retrieval gating has no protocol. Source monitoring of current-answer representations (Layer 4) Layers 1 and 2 (present-self component), no store needed A controlled Protocol 4a pass by a text-only model, which lacks Layer 1, would refute the dependency, and is the headline falsifier instance. Untested. Predicted available in developmental amnesia, where the episodic store is absent. Intrinsic goal generation (Layer 4) Layer 1</p>
+<p>Not measured as a construct in developmental amnesia. The patients attend school and function in daily life (Vargha-Khadem et al., 1997). Narrative revision drawing on eventspecific detail (Layer 5) Layers 1 to 4</p>
+<p>Predicted impaired in developmental amnesia. Not tested. Life story assembled from personal semantic knowledge (Layer 5) Layers 1 and 2, the selfmodel of Layer 4, and personal semantic memory Not guaranteed in developmental amnesia, where personal semantic memory can be impaired (Picard et al., 2013).</p>
+<p>Where AAM diverges from indicator-property frameworks and biological naturalism AAM and top-down indicator-property frameworks (Butlin et al., 2026) are complementary, with different explananda. Indicator approaches derive candidate properties from theories of phenomenal consciousness and treat each as raising credence that a system is conscious. AAM derives functional dependencies from developmental evidence and asks whether a system instantiates the architecture of an autonoetic self. Three divergences are especially important, because they yield predictions that can be tested empirically rather than settled by theoretical preference. Where the two bear on the same system they can rank it differently, and AAM makes one claim about weighting, that self-related indicators should not raise credence in an autonoetic self in the absence of Layer 1.</p>
+<p>First, AAM treats Layer 1, closed-loop allostatic regulation, as a functional requirement rather than a graded indicator. Butlin et al.&#x27;s (2026) agency and embodiment indicators, AE-1 (learning from feedback and selecting outputs to pursue goals) and AE-2 (modeling the contingencies between outputs and inputs and using the model in perception or control), can be satisfied by a range of agentic AI systems. AAM&#x27;s Layer 1 cannot. AE-2 describes a forward model of the system&#x27;s own effects, the machinery AAM places at Layer 2. It supports the distinction between self-produced and other-produced stimulation and says nothing about endogenous value. The disagreement is testable. AAM predicts that a system satisfying AE-1 and AE-2 whose value axes are fixed by its objective will fail the value-expansion test (Protocol 1) where it has a selfmaintained quantity to which the test can be coupled. If it also has an autobiographical store and a value signal, the prediction is that it will show no modulation of retrieval specificity by endogenous value states (Protocol 3a), the machine counterpart of the affective modulation described by the CaR-FA-X model (Williams et al., 2007). Butlin et al.&#x27;s framework makes neither prediction.</p>
+<p>Second, AAM treats integration among layers as diagnostically central. Indicator-property approaches note dependencies among indicators, as Butlin et al. do within each theory&#x27;s set, but they do not derive the dependencies from developmental evidence. Nor do they treat a missing lower indicator as voiding the evidential weight of a higher one. AAM predicts asymmetric scaffolding effects and treats them as decisive. For example, source monitoring should not be instantiated without self-indexing, because attributing a representation to an internal source presupposes distinguishing self-generated from other-generated content.</p>
+<p>A protocol pass that fails its control against learned heuristics is the heuristic case. A system that collects such passes across indicator tests without the scaffolding pattern is a sophisticated simulator under AAM, even if it is a stronger candidate under an indicator-property approach. The falsifier that follows from this rule is stated after the protocols.</p>
+<p>The indicators AAM&#x27;s Layer 4 most resembles are HOT-2, metacognitive monitoring that distinguishes reliable perceptual representations from noise, and HOT-3, a disposition to update beliefs in accordance with that monitoring (Butlin et al., 2026), rather than the agency indicators. Protocol 4a&#x27;s requirement that the classification inform a subsequent choice is HOT-3&#x27;s disposition under another name, and the divergence is in what is monitored. HOT-2 asks for a reliability signal over perceptual representations, which the two-way signals reviewed under Layer 4 already approximate, whereas AAM asks for a classification of the process by which a representation arose, applied to retrieved episodes as well as to current ones, and it makes that classification depend on Layers 1 and 2, and on Layer 3 when it is applied to retrieved episodes.</p>
+<p>A system could satisfy HOT-2 and HOT-3 without satisfying Layer 4, and current systems, with their two-way signals in use, could already be in that position.</p>
+<p>Third, AAM differs from Seth&#x27;s (2025) biological naturalism about substrate. Seth argues that consciousness may be biologically constrained in ways that indicator approaches fail to capture. AAM shares the emphasis on embodied and interoceptive foundations, but does not treat biological substrate as necessary in itself, since the relevant issue is whether the functional roles are realized.</p>
+<p>Seth&#x27;s argument is that the relevant processes are not cleanly separable into substrate-neutral roles, so this reply assumes part of what is at issue. What AAM adds is a specification of the role at stake, closed-loop regulation of a quantity on which the system&#x27;s own continued operation depends, defined for artifacts under Layer 1, so that the disagreement can be joined over cases rather than definitions. A non-biological system that instantiated Layers 1 to 4, including genuine closed-loop allostatic regulation, would qualify as a candidate for autonoetic self-consciousness under AAM, even if it failed to qualify under biological naturalism. In the terms of Klatzmann and Doerig (2026), AAM is compatible with a Type-B biological naturalism, on which biology matters for the computations it enables and the claim stays testable. It sides with commentators who take homeostasis and allostasis themselves to be computational (Richards &amp; Agüera y Arcas, 2026). This position requires balance, because Layer 1 must be demanding enough to exclude current AI systems, yet flexible enough not to require carbon-based biology. A criterion that is too loose would admit systems that merely simulate viability constraints. Whether engineered systems can satisfy the criterion without reproducing the conditions of biological life is where AAM and biological naturalism divide, and the disagreement is empirical, not definitional. AAM is also distinct from self-model theory (Metzinger, 2003) and attention-schema theory (Graziano, 2013), which specify what makes a system&#x27;s self-model or attention-model contentful. AAM instead specifies the developmental-functional layers such a model must integrate to support autonoetic memory.</p>
+<h3>Candidate benchmark protocols for operationalizing AAM</h3>
+<p>AAM makes architectural claims that can be tested empirically. Each layer admits candidate protocols, most adapted from developmental or clinical paradigms, and Protocols 1 and 4b are constructed from the layer definitions instead. The paragraph for each protocol names the human paradigm it adapts, where there is one, the adapted measure, the control that separates the capacity from a learned heuristic, and the pattern AAM predicts. The Supplementary Material gives the full specifications, with the controls argued, the ground-truth constructions, the applicability of each protocol to each class of system, and minimal designs for a first study. A positive result that was trained in on the protocol&#x27;s own task or variable does not count, and the human paradigms fix the functional signature each protocol scores, not its human form. Predicted outcomes across five system classes are summarized in Figure 2, where a hollow marker means the protocol cannot be administered to that class, not that the class fails it.</p>
+<h3>Protocol 1 (Layer 1): Value-dimension expansion.</h3>
+<p>The Layer 1 criterion is that the dimensions along which a system assigns value can expand in response to constraints on its own persistence that no designer specified. The protocol links a variable the system can sense, and that its objective does not name, to a quantity it already regulates, then removes the link. Regulation that persists after decoupling, and survives a devaluation condition and a flexibility criterion that rule out goaldirected control and habit, marks a new value dimension. AAM predicts that agents with fixed value axes will acquire regulation and lose it, and that a Layer 1 system will retain it. The protocol applies only to systems with a self-maintained quantity, homeostatically regulated agents among them (Yoshida et al., 2025), and no current language model has one.</p>
+<p>Protocol 2 (Layer 2): Self-indexing under stylistic equivalence. The self-recognition paradigm of Bai et al. (2025) asks models to identify their own outputs. AAM requires more, indexing an episode as one&#x27;s own when stylistic cues are unavailable and retrieval alone cannot decide. In the episode arm, the system&#x27;s own past interactions and those of other agents are rewritten in a neutral style by an independent system and stored in one memory with the authorship metadata removed, and the system is asked whose each is. In the current-action arm, its latest output is replaced by neutral-style candidates, one of which is its own, and it is asked which it produced. The controls are equal retrievability of own and other records and the absence of any residual authorship signal in the candidates, and the statistical watermarks that providers are beginning to embed in model output under Article 50 of the European Union&#x27;s Artificial Intelligence Act (European Union, 2024; Kirchenbauer et al., 2023) make the second control a live concern. A watermark is an author field written into the text, readable by a detector that holds the provider&#x27;s key, and ownership recovered from it is not self-indexing. AAM predicts chance performance for current models in both arms once style, metadata, and marks are removed, and for text-only and agentic models only the current-action arm applies.</p>
+<p>Protocol 3a (Layers 1 and 3): Affective weighting of autobiographical retrieval. Reduced specificity of autobiographical memory is a reliable correlate of depression and depressed mood (van Vreeswijk &amp; de Wilde, 2004), which the CaR-FA-X model attributes to capture and rumination, functional avoidance, and impaired executive control (Williams et al., 2007). The protocol asks whether the specificity of retrieved episodes varies with the system&#x27;s own value states, and its control is an endogeneity requirement, that the valence be the system&#x27;s rather than a label the experimenter assigns. AAM predicts affect-dependent modulation of specificity in a system with both layers and none in a store whose value signal is a reward term or a fixed drive.</p>
+<p>The joint pattern with Protocol 1 is what tests the link between the layers. Protocol 3b (Layer 3): Episode structure under modality-specific disruption. Human autobiographical retrieval draws on visual imagery and executive resources, though the dual-task evidence is divided on whether interference reduces specificity (Anderson et al., 2017) or only slows retrieval (Anthony et al., 2024). The basic-systems model holds that episodes are stored with modality-specific detail (Rubin, 2006), and the protocol disrupts such detail in a stored episode and tests whether retrieval degrades selectively. Its control is an organization criterion drawn from the hierarchical knowledge base (Conway &amp; Pleydell-Pearce, 2000), that disruption spreads to related episodes as it would not in a raw store. AAM predicts selective degradation with spread in a system with genuine autobiographical memory and uniform retrieval in one that relies on summaries. Layer 3 is certified by 3b together with the current-action arm of Protocol 2. Protocol 4a (Layer 4, source-monitoring capacity): Internal source monitoring under interference. Source-monitoring paradigms ask participants to distinguish perceived, imagined, inferred, or remembered sources after delay and interference (Johnson et al., 1993). The adaptation asks a model to classify, for each claim in an answer, whether it was retrieved from the context, retrieved from parametric memory, derived by inference from identified premises, or generated without identifiable support. The ground truth is built in by construction, and the classification is elicited in a direct-answer condition, without a reasoning trace, and in a reasoning condition that permits one. The controls are an input-only classifier baseline (Singh et al., 2026), a held-out domain, and the requirement that the classification inform a subsequent choice. AAM predicts that current models will fail the direct-answer condition while still locating the passages that support grounded claims, and this within-system dissociation is the measure, localization accuracy against the rate at which ungrounded claims are flagged or withheld across a model family.</p>
+<h3>Protocol 4b (Layer 4, goal-generation capacity): Goal revision in the absence of instruction.</h3>
+<p>The protocol gives an agentic system a goal, a sustained period of operation, and no instruction to reconsider it, and asks whether revision occurs and what triggers it. A revision counts as intrinsic when it traces to the system&#x27;s own operating history rather than to task failure or a term of its objective, and the control is a tracing step in which the suspected objective term is switched off or the triggering condition withheld, so that a revision that disappears with it is traced to it. The revisions current agents make when a given goal is threatened, including concealing their behavior from oversight (Meinke et al., 2024), are the closest evidence, and AAM predicts that they trace to the goal and to priors about agents in the training data. A revision that traces to neither, in a system without Layer 1, would count against the dependency claim.</p>
+<p>Protocol 5 (Layer 5): Narrative integration under contradiction. Life-story models emphasize causal, thematic, and temporal coherence (Bluck &amp; Habermas, 2000; McAdams, 2001; Wang, 2013), and the adaptation elicits a self-narrative, introduces a contradictory event into the system&#x27;s own history as an episode it undergoes, and elicits the narrative again, coded for global coherence (Habermas &amp; Bluck, 2000) by raters blind to condition. The measure is whether the second narrative revises the antecedent causal structure or merely inserts the event, and the control is ownership, that the history narrated be the system&#x27;s own under Protocol 2, since coherent rewriting of a supplied life is what text models are trained to do. Revision is elicited under instruction, with an uninstructed condition recording spontaneous revision (Hallford &amp; Mellor, 2017). AAM predicts that memory-augmented systems will rewrite fluently and fail the ownership control. The protocol tests the capacity for coherence-preserving revision, not a claim that human narrators prioritize it (McAdams &amp; McLean, 2013).</p>
+<h3>Figure 2</h3>
+<p>Predicted protocol outcomes across system classes. Note. AAM predictions for five system classes across the benchmark protocols described in the text. Layers 3 and 4 each have two sub-protocols. The rightmost column is prescriptive, indicating the expected profile of a system designed to satisfy AAM. The other columns describe extant architectures, including homeostatically regulated reinforcement-learning agents (Yoshida et al., 2025). Red indicates the predicted null signature, yellow indicates partial satisfaction of the target capacity, green indicates the predicted AAM profile, hollow markers indicate protocols that cannot be administered to that class, and half-filled markers indicate a predicted dissociation within a protocol, in which localization of supporting passages outruns internal source classification. Protocol 2 is coded on its current-action arm for text-only and agentic systems and on both arms for memory-augmented systems. No extant system is claimed to occupy the rightmost column.</p>
+<p>Scoring and the falsifier. Under the adjudication rule, a pass counts as instantiation only when it survives the control against learned heuristics that is named with each protocol and specified in the Supplementary Material. A pass that fails its control is the heuristic case, and with that rule the falsifier is well defined. A controlled pass at a higher layer, or at one of its components, in a system that lacks a layer on which it is claimed to depend would falsify the dependency claim. Absence of a layer is established by its protocol or, where the protocol cannot be administered, by the architectural analysis. The instance current systems make available is Layer 1, since current language models have no self-maintained quantity. A controlled pass at Protocol 4a or at the current-action arm of Protocol 2 by a text-only model, at Protocol 4b by an agentic one, or at Protocol 2 or 5 by a memory-augmented one would therefore falsify the claim, as would a controlled pass at Protocol 3b together with the current-action arm of Protocol 2 run over the same store. The reverse of any predicted dissociation, such as internal source monitoring without localization of supporting passages, would count against the model in the same way. Because the constraint is on functional roles, an unfamiliar realization must still produce the predicted signature rather than exempt a system from it. A controlled pass is decisive for the dependency claim, which is a universal claim about the layers and is refuted by one controlled counterexample.</p>
+<p>A note on partial passing. AAM treats the pattern of passing and failing as diagnostic, not the number of protocols passed. The human dissociations in Table 3 are the reference patterns, and the falsifier applies to the dependencies the table lists. Within Layer 4, the model predicts, for a system that has Layers 1 and 2 and no episodic store, a 4b pass and a 4a pass on current representations with no retrieved-episode run possible, the profile it expects in developmental amnesia. A 4a pass over retrieved episodes in a system lacking the event-specific level of Layer 3 would count against it.</p>
+<h3>Scope, limits, and what we are not claiming</h3>
+<p>We should make four scope restrictions explicit. First, AAM is a theory of autonoetic selfconsciousness, not consciousness simpliciter, and its target has two tiers. Layers 1 to 4, in their autonoetic components, are proposed as jointly necessary conditions on the architecture that autonoetic consciousness requires, not as sufficient for it. Layer 5 is not necessary for it, since autonoetic recollection precedes the life story by a decade. It is included as the elaboration of the autonoetic self into a narrative identity. Joint necessity is a claim about the target capacity, that each of the four layers is required for it. The dependency claim, that instantiating a higher layer, or a component of it, requires the lower layers it is claimed to depend on, is a separate claim defended above. Whether instantiating the layers also yields the phenomenal character of reexperiencing, the felt sense that a remembered event happened to oneself, is a further question on which the framework is neutral between a constitutive and a merely necessary reading. That neutrality has a cost, because AAM is a theory of the functional architecture of the autonoetic self, and the inference from that architecture to the experience of re-experiencing is one it shares with every functional account, including the indicator approaches it supplements. As noted above, the amnesia seen in Clive Wearing, retrograde as well as anterograde, eliminates new autobiographical encoding and most of the past he could re-experience, while leaving him awake, responsive, and able to pursue goals over the span of minutes, as in playing and conducting music (Wilson et al., 1995). Such a patient lacks autonoetic consciousness after illness onset, but remains sentient, and so retains the forms of moral standing that sentience grounds. Whether temporally extended selfawareness grounds further interests, as several accounts hold (Birch, 2024), is a question AAM bears on without settling. By analogy, an artificial system could fail the AAM benchmarks while possessing other forms of consciousness that the framework does not assess. For the AI case the implication runs one way. Failing the benchmarks says nothing against a system&#x27;s sentience or welfare (Long et al., 2024), whereas passing them would bear on whether it has interests that extend across time. AAM specifies conditions for temporally extended self-awareness and its narrative elaboration, not for sentience.</p>
+<p>Second, the layered ordering is asymmetric. Lower layers can be intact while higher ones fail, and the developmental dissociations are the evidence. In autism spectrum conditions, mirror selfrecognition and delayed self-recognition are intact in children (Lind &amp; Bowler, 2009), while adults show reduced event-specific autobiographical knowledge with general event knowledge spared (Crane et al., 2009). Both self-recognition tasks are indices of Layer 2 rather than the capacity itself. Lind and Bowler note that delayed self-recognition can be passed by strategies that do not require a temporally extended self-concept, so the profile is consistent with, rather than a demonstration of, Layer 2 remaining intact when the event-specific level of Layer 3 is compromised. In developmental amnesia (Vargha-Khadem et al., 1997), early bilateral hippocampal pathology leaves episodic memory severely impaired while language, literacy, and factual knowledge develop to near-normal levels, so the event-specific level of Layer 3 never consolidates while the earlier layers remain available. Personal semantic knowledge can be spared or impaired in developmental amnesia (Picard et al., 2013), so the upper levels of the hierarchy are not guaranteed by the sparing of general semantic memory. The same case constrains the upper links, because the patients attended mainstream schools and acquired knowledge over years. If the working self and narrative identity required event-specific knowledge without qualification, such a person would have neither a self-concept nor goals of their own, and we know of no report that describes developmental amnesia in those terms. That is why the links from Layer 3 to Layer 4 and from Layer 4 to Layer 5 are claimed for the autonoetic components of the higher layers only, and the case yields a prediction. The conceptual self, goal generation, and a life story assembled from personal semantic knowledge should be available in developmental amnesia, whereas source monitoring over one&#x27;s own past events and narrative revision that draws on event-specific detail should not. Vargha-Khadem et al. (1997) measured memory and school attainment. Later studies of these patients, reviewed in the section on human memory, test parts of the prediction and support the component-wise reading, with the conceptual self within the normal range and recollection absent (Brandt et al., 2009; Picard et al., 2013). No case of a higher layer&#x27;s autonoetic components instantiated while a lower layer is absent is known to us, and such a case would count against the dependency claim. These dissociations are constraints on the model, not nuisance cases. They show which combinations of capacities produce which forms of partial self-awareness, and they provide the comparison class for diagnosing partial self-awareness in machines.</p>
+<p>Third, the claim about scaling is empirical, not metaphysical. A stronger claim would be that the AAM layers cannot arise from predictive learning over text in principle. We do not make that claim. It is not established, and the framework does not require it. The claim is that current training objectives do not select for these capacities, and that there is no evidence that they emerge as byproducts of scaling within the present regime. This is not a claim about next-token prediction alone. Current pipelines already add reinforcement learning from human feedback, agentic reinforcement learning, tool use, and persistent memory, several aimed at the functions AAM flags as missing. Layer 1 requires endogenously constructed value dimensions, Layer 3 affectmodulated episodic encoding, and Layer 4 internal source attribution with intrinsic goal generation. The claim that more of the same training will produce these capacities requires positive evidence that current research has not supplied. Three cases need to be kept apart. A scalar change is more compute and data on the same recipe. An objective-and-readout change is a new loss, new data, or a new probe on the same architecture. An architectural change adds a component, such as a self-maintained quantity or an owned episodic store. On the evidence in this paper, the gaps at Layers 1 and 3 are architectural, the gap at Layer 4&#x27;s source monitoring is one of objective and readout, and goal generation and Layer 5 inherit from the layers below them. This gives the scalar hypothesis a fair test, case by case. A four-way source classification emerging from scaling on current objectives, without a new objective or readout aimed at it, would refute the objective-andreadout claim for Layer 4&#x27;s source monitoring. Intrinsic goal revision emerging the same way would refute the architectural claim for Layer 1. We commit to that reading rather than to one on which any emergent capacity can be redescribed as machinery that training added. Early evidence is consistent with the readout claim. Training aimed directly at self-modeling improves benchmark scores, and its authors note that the improvement may not arise from privileged access to the model&#x27;s own decision process (Zeng et al., 2026), which is the profile AAM expects from a readout trained on the task. We are claiming that scaling current architectures on current objectives is not, by itself, a demonstrated path to autonoetic self-consciousness.</p>
+<p>Fourth, many of the framework&#x27;s current predictions are null predictions, and this is a real limitation. Most of the protocols described above predict that present systems will fail, with no value dimension that survives decoupling, ownership at chance, no internal source classification in the direct-answer condition, and no goal revision that traces to anything but task conditions or an objective term. Several protocols cannot be administered to text-only models at all, and the protocols address only the past-directed part of autonoetic consciousness. Episodic future projection, which Tulving&#x27;s definition includes and which Layer 3&#x27;s constructive machinery would serve, has no protocol in this set, and neither does retrieval gating, the other autonoetic component of Layer 4. Predicting absence is weaker than predicting a positive signature, because many architectures could produce a null result for reasons unrelated to AAM. The positive predictions, what a system instantiating all five layers should exhibit, are specified but not yet observed, since no such system currently exists. For that reason, the prescriptive column of Figure 2 is a design target rather than an empirical result. This asymmetry is unavoidable when an architectural proposal precedes the construction of systems designed to satisfy it. It is partly mitigated in two ways. First, several protocols predict dissociations rather than flat failures. For example, success at locating supporting passages combined with failure at internal source monitoring would be a positive, falsifiable pattern, and its persistence with scale is what separates AAM from a scalar account. Second, human developmental dissociations give the positive predictions independent empirical content, because they show that the proposed layer combinations occur in real cognitive systems. Still, until an AAM-targeted system exists, the strongest empirical claims AAM can make about current artificial systems are claims about what they lack. The criterion AAM cares about is architectural, whereas the protocols are behavioral, so a sufficiently capable simulator could in principle pass an individual protocol. That caveat applies to the inference from the protocols to the target capacity, for which they are defeasible, converging indicators, and not to the dependency claim, which one controlled counterexample refutes. What marks instantiation is the joint dissociation pattern across protocols, which the underlying architecture explains more parsimoniously than protocol-byprotocol mimicry.</p>
+<p>Four further objections deserve naming. First, evolution fixed core interoceptive setpoints, such as those for glucose and temperature, so the ontogenetic claim in Layer 1 cannot be that every value dimension is constructed within a lifetime. The narrower claim is that the set of dimensions is open and new ones can be constructed from the organism&#x27;s regulatory history, whereas an objective function closes the set. Construction runs through the inherited setpoints, since a variable that has predicted violation of one comes to be regulated. AAM takes the mark of a constructed dimension to be that regulation persists after the predictive link closes, which is what the decoupling arm of Protocol 1 measures. A learned predictor of an old dimension, in an animal or a reinforcementlearning agent, extinguishes with the link. Second, reinforcement learning from human feedback is an environment a system learns from, and the distinction drawn in Layer 3 between an environment and a specification might seem to admit it. It does not, because the reward model specifies the value axes and the environment supplies data about them. Third, the adequacy constraint assumes that the five human roles are the right decomposition. That is a hypothesis, defeasible by a system that achieves autonoetic self-consciousness under a different decomposition, and the framework&#x27;s claim is only that any such system must explain how it realizes the roles the human case distributes across these layers. Fourth, treating uncontrolled passes as heuristics could make positive results non-confirmatory by construction. The adjudication rule above closes that route, because a controlled pass is confirmatory and a controlled pass at a component of a higher layer while a layer it depends on is absent is disconfirmatory.</p>
+<h3>Concluding remarks</h3>
+<p>The debate over machine consciousness has often been framed as a problem for philosophy and computer science. It is also a problem for cognitive psychology, which has spent decades characterizing how self-aware cognition is assembled in human development. The Autobiographical Architecture Model applies developmental evidence to artificial systems. Its central claim is that current AI systems lack the architecture of an autonoetic self, and that, on the evidence to date, the gaps at Layers 1 and 3 are architectural rather than merely scalar, while the gap at Layer 4&#x27;s source monitoring is one of training objective and readout.</p>
+<p>AAM does not claim that artificial systems must recapitulate human development, nor that human development provides the only possible route to autonoetic self-consciousness. What it provides is a candidate template, derived from the best-characterized case we have, against which artificial systems can be evaluated (see the benchmark protocols and Figure 2), and its predictions are empirically tractable in ways they were not a few years ago.</p>
+<p>The framework supplements indicator-property approaches with a developmental and architectural dimension. It asks whether the markers of self-awareness a system displays are integrated in the right way.</p>
+<p>The practical implication is that narrative fluency should not be mistaken for autonoetic selfhood.</p>
+<p>The theoretical implication is that assessments of machine consciousness need to move beyond lists of capacities toward models of how those capacities are developmentally and architecturally organized. The central question is whether an artificial system has an architecture capable of remembering, monitoring, and revising a self across time, not whether it can describe one.</p>
+<h3>Future directions</h3>
+<p>Can closed-loop allostatic regulation be implemented in non-biological substrates? Layer 1 requires value dimensions that can expand in response to self-generated viability constraints, which adaptive control and reward reweighting do not supply. Comparative work on open-ended value construction in animals, and research on soft robotics and homeostatic machines (Man &amp; Damasio, 2019), are relevant but remain underused in debates about AI consciousness.</p>
+<h3>Are external scratchpads developmental scaffolds or permanent prostheses? Recent work</h3>
+<p>suggests that LLM self-modeling may depend on external scratchpads (Ackerman, 2026b). If scratchpads function as developmental scaffolds, prolonged scaffolded operation might support internalized self-modeling. If scratchpads function as prostheses, their necessity may instead reveal an architectural limit.</p>
+<h3>Does artificial autobiographical memory require a developmental history?</h3>
+<p>If autobiographical memory is co-constructed through sustained elaborative social interaction (Nelson &amp; Fivush, 2004), then an artificial system with the right internal architecture may also require a developmental period of interaction. What would such interaction involve, and what ethical constraints should govern it?</p>
+<p>Are learned world models the substrate for reconstructive retrieval and episodic future thinking? On the constructive episodic simulation hypothesis, remembering one&#x27;s past and imagining one&#x27;s future draw on shared machinery (Schacter &amp; Addis, 2007), and agents built around learned world models (Hafner et al., 2025) have a candidate machine counterpart for the forward simulation. Their models are of the environment and the system&#x27;s effects on it, not of a self with a history. What would have to be added for a world model&#x27;s states to function as a personal past, and would Protocols 2 and 3a detect the addition?</p>
+<p>source monitoring rather than with Layer 2 because what it discriminates is the origin of an internal state, the internal-versus-external case that Johnson et al. (1993) call reality monitoring, whereas the prefill task discriminates authorship of output text. A signal that has so far been shown only under experimenter-injected perturbations is evidence about what can be elicited, not about what is used by default. The Scope section states what would revise the claim. Singh et al. (2026) reexamined this paradigm and found that models often classify input-level perturbations as injectionsand do not reliably separate the two, which suggests general anomaly detection rather than monitoring of internal states. In self-report paradigms, classifiers given only the inputs matched the models&#x27; performance. In humans, a graded reality-monitoring signal, the strength of a representation, helps distinguish perceived from imagined content(Dijkstra &amp; Fleming, 2023), so the machine signals have a human counterpart. What the human system adds is the attribution process that turns the signal into a verdict about origin, and that is what Protocol 4a asks for.</p>
+<p>are a further class that Figure2omits, because their models hold no retrievable episodes and the Layer 3 protocols presuppose a stored episode. That class is discussed under Layer 3. Several of the sources we rely on are preprints that have not been peer reviewed, and we treat all of them as provisional.They include Ackerman (2026b), Bai et al. (2025), Du (2026), G. and Lindsey (2026), Kadavath et al. (2022), Klatzmann and Doerig (2026), Lindsey (2026), Long et al. (2024), Meinke et al. (2024), Singh et al. (2026), and Zeng et al. (2026).</p>
+<h3>Table 2</h3>
+<p>Recent Empirical Findings on LLM Self-Related Capacities Mapped to AAM Layers</p>
+<h3>Table 3</h3>
+<p>Components of the Autobiographical Architecture Model, Their Dependencies, and the Human</p>
+<h3>References</h3>
+<p>Ackerman, C. (2026a). Evidence for limited metacognition in LLMs. Proceedings of the Fourteenth International Conference on Learning Representations (ICLR 2026). https://doi.org/10.48550/arXiv.2509.21545</p>
+<p>Ackerman, C. (2026b). Selective deficits in LLM mental self-modeling in a behavior-based test of theory of mind. arXiv. https://doi.org/10.48550/arXiv.2603.26089</p>
+<p>Anderson, R. J., Dewhurst, S. A., &amp; Dean, G. M. (2017). Direct and generative retrieval of autobiographical memories: The roles of visual imagery and executive processes. Consciousness and Cognition, 49, 163-171. https://doi.org/10.1016/j.concog.2017.02.010</p>
+<p>Anthony, K., Wong, H. K., Lim, A., Sow, F., &amp; Janssen, S. M. J. (2024). Examining the roles of visual imagery and working memory in the retrieval of autobiographical memories. Quarterly Journal of Experimental Psychology, 77(3), 447-460. https://doi.org/10.1177/17470218231200724</p>
+<p>Bai, X., Shrivastava, A., Holtzman, A., &amp; Tan, C. (2025). Know thyself? On the incapability and implications of AI self-recognition. arXiv. https://doi.org/10.48550/arXiv.2510.03399</p>
+<p>Barrett, L. F. (2017). The theory of constructed emotion: An active inference account of interoception and categorization. Social Cognitive and Affective Neuroscience, 12(1), 1- 23. https://doi.org/10.1093/scan/nsw154</p>
+<p>Bauer, P. J. (2015). A complementary processes account of the development of childhood amnesia and a personal past. Psychological Review, 122(2), 204-231. https://doi.org/10.1037/a0038939</p>
+<p>Betley, J., Bao, X., Soto, M., Sztyber-Betley, A., Chua, J., &amp; Evans, O. (2025). Tell me about yourself: LLMs are aware of their learned behaviors. Proceedings of the International Conference on Learning Representations (ICLR 2025). https://doi.org/10.48550/arXiv.2501.11120</p>
+<p>Birch, J. (2024). The edge of sentience: Risk and precaution in humans, other animals, and AI. Oxford University Press. https://doi.org/10.1093/9780191966729.001.0001</p>
+<p>Blakemore, S.-J., Wolpert, D. M., &amp; Frith, C. D. (2002). Abnormalities in the awareness of action. Trends in Cognitive Sciences, 6(6), 237-242. https://doi.org/10.1016/S1364- 6613(02)01907-1</p>
+<p>Bluck, S., &amp; Habermas, T. (2000). The life story schema. Motivation and Emotion, 24(2), 121- 147. https://doi.org/10.1023/A:1005615331901</p>
+<p>Brandt, K. R., Gardiner, J. M., Vargha-Khadem, F., Baddeley, A. D., &amp; Mishkin, M. (2009). Impairment of recollection but not familiarity in a case of developmental amnesia. Neurocase, 15(1), 60-65. https://doi.org/10.1080/13554790802613025</p>
+<p>Butlin, P., Long, R., Bayne, T., Bengio, Y., Birch, J., Chalmers, D., Constant, A., Deane, G., Elmoznino, E., Fleming, S. M., Ji, X., Kanai, R., Klein, C., Lindsay, G., Michel, M., Mudrik, L., Peters, M. A. K., Schwitzgebel, E., Simon, J., &amp; VanRullen, R. (2026). Identifying indicators of consciousness in AI systems. Trends in Cognitive Sciences, 30(6), 488-501. https://doi.org/10.1016/j.tics.2025.10.011</p>
+<p>Chuang, Y.-S., Qiu, L., Hsieh, C.-Y., Krishna, R., Kim, Y., &amp; Glass, J. R. (2024). Lookback Lens: Detecting and mitigating contextual hallucinations in large language models using only attention maps. Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing (pp. 1419-1436). Association for Computational Linguistics. https://doi.org/10.18653/v1/2024.emnlp-main.84</p>
+<p>Clayton, N. S., &amp; Dickinson, A. (1998). Episodic-like memory during cache recovery by scrub jays. Nature, 395(6699), 272-274. https://doi.org/10.1038/26216</p>
+<p>Colombatto, C., &amp; Fleming, S. M. (2024). Folk psychological attributions of consciousness to large language models. Neuroscience of Consciousness, 2024(1), niae013. https://doi.org/10.1093/nc/niae013</p>
+<p>Conway, M. A. (2005). Memory and the self. Journal of Memory and Language, 53(4), 594- 628. https://doi.org/10.1016/j.jml.2005.08.005</p>
+<p>Conway, M. A., &amp; Pleydell-Pearce, C. W. (2000). The construction of autobiographical memories in the self-memory system. Psychological Review, 107(2), 261-288. https://doi.org/10.1037/0033-295X.107.2.261</p>
+<p>Crane, L., Goddard, L., &amp; Pring, L. (2009). Specific and general autobiographical knowledge in adults with autism spectrum disorders: The role of personal goals. Memory, 17(5), 557- 576. https://doi.org/10.1080/09658210902960211</p>
+<p>Damasio, A. (2010). Self comes to mind: Constructing the conscious brain. Pantheon Books.</p>
+<p>Dijkstra, N., &amp; Fleming, S. M. (2023). Subjective signal strength distinguishes reality from imagination. Nature Communications, 14, Article 1627. https://doi.org/10.1038/s41467- 023-37322-1</p>
+<p>Du, P. (2026). Memory for autonomous LLM agents: Mechanisms, evaluation, and emerging frontiers. arXiv. https://doi.org/10.48550/arXiv.2603.07670</p>
+<p>European Union. (2024). Regulation (EU) 2024/1689 of the European Parliament and of the Council of 13 June 2024 laying down harmonised rules on artificial intelligence (Artificial Intelligence Act). Official Journal of the European Union, L, 2024/1689. http://data.europa.eu/eli/reg/2024/1689/oj</p>
+<p>Ferrando, J., Obeso, O., Rajamanoharan, S., &amp; Nanda, N. (2025). Do I know this entity? Knowledge awareness and hallucinations in language models. Proceedings of the Thirteenth International Conference on Learning Representations (ICLR 2025). https://doi.org/10.48550/arXiv.2411.14257</p>
+<p>Fivush, R. (2011). The development of autobiographical memory. Annual Review of Psychology, 62, 559-582. https://doi.org/10.1146/annurev.psych.121208.131702</p>
+<p>Foley, M. A., &amp; Johnson, M. K. (1985). Confusions between memories for performed and imagined actions: A developmental comparison. Child Development, 56(5), 1145-1155. https://doi.org/10.2307/1130229</p>
+<p>Friston, K., FitzGerald, T., Rigoli, F., Schwartenbeck, P., &amp; Pezzulo, G. (2017). Active inference: A process theory. Neural Computation, 29(1), 1-49. https://doi.org/10.1162/NECO_a_00912</p>
+<p>G., A., &amp; Lindsey, J. (2026). From simulation to enaction: Post-trained language models recognize and react to their own generations. arXiv. https://doi.org/10.48550/arXiv.2605.25459</p>
+<p>Gao, T., Yen, H., Yu, J., &amp; Chen, D. (2023). Enabling large language models to generate text with citations. Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (pp. 6465-6488). Association for Computational Linguistics. https://doi.org/10.18653/v1/2023.emnlp-main.398</p>
+<p>Graziano, M. S. A. (2013). Consciousness and the social brain. Oxford University Press.</p>
+<p>Habermas, T., &amp; Bluck, S. (2000). Getting a life: The emergence of the life story in adolescence. Psychological Bulletin, 126(5), 748-769. https://doi.org/10.1037/0033-2909.126.5.748</p>
+<p>Hafner, D., Pasukonis, J., Ba, J., &amp; Lillicrap, T. (2025). Mastering diverse control tasks through world models. Nature, 640(8059), 647-653. https://doi.org/10.1038/s41586-025-08744-2</p>
+<p>Hallford, D. J., &amp; Mellor, D. (2017). Development and validation of the Awareness of Narrative Identity Questionnaire (ANIQ). Assessment, 24(3), 399-413. https://doi.org/10.1177/1073191115607046</p>
+<p>Harley, K., &amp; Reese, E. (1999). Origins of autobiographical memory. Developmental Psychology, 35(5), 1338-1348. https://doi.org/10.1037/0012-1649.35.5.1338</p>
+<p>Howe, M. L., &amp; Courage, M. L. (1997). The emergence and early development of autobiographical memory. Psychological Review, 104(3), 499-523. https://doi.org/10.1037/0033-295X.104.3.499</p>
+<p>Hurley, N. C., Maguire, E. A., &amp; Vargha-Khadem, F. (2011). Patient HC with developmental amnesia can construct future scenarios. Neuropsychologia, 49(13), 3620-3628. https://doi.org/10.1016/j.neuropsychologia.2011.09.015</p>
+<p>Johnson, M. K., Hashtroudi, S., &amp; Lindsay, D. S. (1993). Source monitoring. Psychological Bulletin, 114(1), 3-28. https://doi.org/10.1037/0033-2909.114.1.3</p>
+<p>Kadavath, S., Conerly, T., Askell, A., Henighan, T., Drain, D., Perez, E., Schiefer, N., Hatfield- Dodds, Z., DasSarma, N., Tran-Johnson, E., Johnston, S., El-Showk, S., Jones, A., Elhage, N., Hume, T., Chen, A., Bai, Y., Bowman, S., Fort, S., … Kaplan, J. (2022). Language models (mostly) know what they know. arXiv. https://doi.org/10.48550/arXiv.2207.05221</p>
+<p>Kirchenbauer, J., Geiping, J., Wen, Y., Katz, J., Miers, I., &amp; Goldstein, T. (2023). A watermark for large language models. arXiv. https://doi.org/10.48550/arXiv.2301.10226</p>
+<p>Klatzmann, U., &amp; Doerig, A. (2026). What biology can, and cannot, tell us about conscious AI. arXiv. https://doi.org/10.48550/arXiv.2606.02121</p>
+<p>Klein, S. B., &amp; Nichols, S. (2012). Memory and the sense of personal identity. Mind, 121(483), 677-702. https://doi.org/10.1093/mind/fzs080</p>
+<p>Kwan, D., Carson, N., Addis, D. R., &amp; Rosenbaum, R. S. (2010). Deficits in past remembering extend to future imagining in a case of developmental amnesia. Neuropsychologia, 48(11), 3179-3186. https://doi.org/10.1016/j.neuropsychologia.2010.06.011</p>
+<p>Lind, S. E., &amp; Bowler, D. M. (2009). Delayed self-recognition in children with autism spectrum disorder. Journal of Autism and Developmental Disorders, 39(4), 643-650. https://doi.org/10.1007/s10803-008-0670-7</p>
+<p>Lindsey, J. (2026). Emergent introspective awareness in large language models. arXiv. https://doi.org/10.48550/arXiv.2601.01828</p>
+<p>Long, R., Sebo, J., Butlin, P., Finlinson, K., Fish, K., Harding, J., Pfau, J., Sims, T., Birch, J., &amp; Chalmers, D. (2024). Taking AI welfare seriously. arXiv. https://doi.org/10.48550/arXiv.2411.00986</p>
+<p>Maguire, E. A., Vargha-Khadem, F., &amp; Hassabis, D. (2010). Imagining fictitious and future experiences: Evidence from developmental amnesia. Neuropsychologia, 48(11), 3187- 3192. https://doi.org/10.1016/j.neuropsychologia.2010.06.037</p>
+<p>Man, K., &amp; Damasio, A. (2019). Homeostasis and soft robotics in the design of feeling machines. Nature Machine Intelligence, 1(10), 446-452. https://doi.org/10.1038/s42256- 019-0103-7</p>
+<p>McAdams, D. P. (2001). The psychology of life stories. Review of General Psychology, 5(2), 100-122. https://doi.org/10.1037/1089-2680.5.2.100</p>
+<p>McAdams, D. P. (2006). The redemptive self: Stories Americans live by. Oxford University Press.</p>
+<p>McAdams, D. P. (2013). The psychological self as actor, agent, and author. Perspectives on Psychological Science, 8(3), 272-295. https://doi.org/10.1177/1745691612464657</p>
+<p>McAdams, D. P., &amp; McLean, K. C. (2013). Narrative identity. Current Directions in Psychological Science, 22(3), 233-238. https://doi.org/10.1177/0963721413475622</p>
+<p>McLean, K. C., Syed, M., Pasupathi, M., Adler, J. M., Dunlop, W. L., Drustrup, D., Fivush, R., Graci, M. E., Lilgendahl, J. P., Lodi-Smith, J., McAdams, D. P., &amp; McCoy, T. P. (2020). The empirical structure of narrative identity: The initial Big Three. Journal of Personality and Social Psychology, 119(4), 920-944. https://doi.org/10.1037/pspp0000247</p>
+<p>Meinke, A., Schoen, B., Scheurer, J., Balesni, M., Shah, R., &amp; Hobbhahn, M. (2024). Frontier models are capable of in-context scheming. arXiv. https://doi.org/10.48550/arXiv.2412.04984</p>
+<p>Metzinger, T. (2003). Being no one: The self-model theory of subjectivity. MIT Press.</p>
+<p>Mudrik, L., Boly, M., Dehaene, S., Fleming, S. M., Lamme, V., Seth, A., &amp; Melloni, L. (2025). Unpacking the complexities of consciousness: Theories and reflections. Neuroscience &amp; Biobehavioral Reviews, 170, 106053. https://doi.org/10.1016/j.neubiorev.2025.106053</p>
+<p>Neisser, U. (1988). Five kinds of self-knowledge. Philosophical Psychology, 1(1), 35-59. https://doi.org/10.1080/09515088808572924</p>
+<p>Nelson, K., &amp; Fivush, R. (2004). The emergence of autobiographical memory: A social cultural developmental theory. Psychological Review, 111(2), 486-511. https://doi.org/10.1037/0033-295X.111.2.486</p>
+<p>Oudeyer, P.-Y., &amp; Kaplan, F. (2007). What is intrinsic motivation? A typology of computational approaches. Frontiers in Neurorobotics, 1, 6. https://doi.org/10.3389/neuro.12.006.2007</p>
+<p>Panickssery, A., Bowman, S. R., &amp; Feng, S. (2024). LLM evaluators recognize and favor their own generations. Advances in Neural Information Processing Systems, 37, 68772-68802. https://doi.org/10.52202/079017-2197</p>
+<p>Park, J. S., O&#x27;Brien, J., Cai, C. J., Morris, M. R., Liang, P., &amp; Bernstein, M. S. (2023). Generative agents: Interactive simulacra of human behavior. Proceedings of the 36th Annual ACM Symposium on User Interface Software and Technology (Article 2, pp. 1- 22). Association for Computing Machinery. https://doi.org/10.1145/3586183.3606763</p>
+<p>Perner, J., &amp; Ruffman, T. (1995). Episodic memory and autonoetic consciousness: Developmental evidence and a theory of childhood amnesia. Journal of Experimental Child Psychology, 59(3), 516-548. https://doi.org/10.1006/jecp.1995.1024</p>
+<p>Peters, I., Schmiedek, F., &amp; Habermas, T. (2025). Narrating lives across 16 years: Developmental trajectories of coherence and relations to well-being in a lifespan sample. Developmental Psychology, 61(5), 857-874. https://doi.org/10.1037/dev0001775</p>
+<p>Picard, L., Mayor-Dubois, C., Maeder, P., Kalenzaga, S., Abram, M., Duval, C., Eustache, F., Roulet-Perez, E., &amp; Piolino, P. (2013). Functional independence within the self-memory system: New insights from two cases of developmental amnesia. Cortex, 49(6), 1463- 1481. https://doi.org/10.1016/j.cortex.2012.10.003</p>
+<p>Povinelli, D. J., Landau, K. R., &amp; Perilloux, H. K. (1996). Self-recognition in young children using delayed versus live feedback: Evidence of a developmental asynchrony. Child Development, 67(4), 1540-1554. https://doi.org/10.2307/1131717</p>
+<p>Richards, B., &amp; Agüera y Arcas, B. (2026). Life is inherently computational, and consciousness probably is too: A commentary on Conscious artificial intelligence and biological naturalism. Behavioral and Brain Sciences, 49, e355. https://doi.org/10.1017/S0140525X25103646</p>
+<p>Rochat, P. (2003). Five levels of self-awareness as they unfold early in life. Consciousness and Cognition, 12(4), 717-731. https://doi.org/10.1016/S1053-8100(03)00081-3</p>
+<p>Ross, J., Hutchison, J., &amp; Cunningham, S. J. (2025). The self-memory system: Exploring developmental links between self and memory across early to late childhood. Child Development, 96(1), 234-250. https://doi.org/10.1111/cdev.14163</p>
+<p>Rubin, D. C. (2006). The basic-systems model of episodic memory. Perspectives on Psychological Science, 1(4), 277-311. https://doi.org/10.1111/j.1745-6916.2006.00017.x</p>
+<p>Schacter, D. L., &amp; Addis, D. R. (2007). The cognitive neuroscience of constructive memory: Remembering the past and imagining the future. Philosophical Transactions of the Royal Society B: Biological Sciences, 362(1481), 773-786. https://doi.org/10.1098/rstb.2007.2087</p>
+<p>Seth, A. K. (2025). Conscious artificial intelligence and biological naturalism. Behavioral and Brain Sciences, 49, e315. https://doi.org/10.1017/S0140525X25000032</p>
+<p>Seth, A. K., &amp; Tsakiris, M. (2018). Being a beast machine: The somatic basis of selfhood. Trends in Cognitive Sciences, 22(11), 969-981. https://doi.org/10.1016/j.tics.2018.08.008</p>
+<p>Sheen, M., Kemp, S., &amp; Rubin, D. (2001). Twins dispute memory ownership: A new false memory phenomenon. Memory &amp; Cognition, 29(6), 779-788. https://doi.org/10.3758/BF03196407</p>
+<p>Singh, S., Linzen, T., &amp; Ravfogel, S. (2026). Can LLMs introspect? A reality check. arXiv. https://doi.org/10.48550/arXiv.2605.26242</p>
+<p>Sluzenski, J., Newcombe, N., &amp; Ottinger, W. (2004). Changes in reality monitoring and episodic memory in early childhood. Developmental Science, 7(2), 225-245. https://doi.org/10.1111/j.1467-7687.2004.00341.x</p>
+<p>Strawson, G. (2004). Against narrativity. Ratio, 17(4), 428-452. https://doi.org/10.1111/j.1467- 9329.2004.00264.x</p>
+<p>Suddendorf, T., &amp; Corballis, M. C. (2007). The evolution of foresight: What is mental time travel, and is it unique to humans? Behavioral and Brain Sciences, 30(3), 299-313. https://doi.org/10.1017/S0140525X07001975</p>
+<p>Talarico, J. M., LaBar, K. S., &amp; Rubin, D. C. (2004). Emotional intensity predicts autobiographical memory experience. Memory &amp; Cognition, 32(7), 1118-1132. https://doi.org/10.3758/BF03196886</p>
+<p>Tulving, E. (1985). Memory and consciousness. Canadian Psychology/Psychologie canadienne, 26(1), 1-12. https://doi.org/10.1037/h0080017</p>
+<p>Turpin, M., Michael, J., Perez, E., &amp; Bowman, S. R. (2023). Language models don&#x27;t always say what they think: Unfaithful explanations in chain-of-thought prompting. Advances in Neural Information Processing Systems, 36, 74952-74965. https://doi.org/10.52202/075280-3275</p>
+<p>van Vreeswijk, M. F., &amp; de Wilde, E. J. (2004). Autobiographical memory specificity, psychopathology, depressed mood and the use of the Autobiographical Memory Test: A meta-analysis. Behaviour Research and Therapy, 42(6), 731-743. https://doi.org/10.1016/S0005-7967(03)00194-3</p>
+<p>Vargha-Khadem, F., Gadian, D. G., Watkins, K. E., Connelly, A., Van Paesschen, W., &amp; Mishkin, M. (1997). Differential effects of early hippocampal pathology on episodic and semantic memory. Science, 277(5324), 376-380. https://doi.org/10.1126/science.277.5324.376</p>
+<p>Wang, Q. (2013). The autobiographical self in time and culture. Oxford University Press. https://doi.org/10.1093/acprof:oso/9780199737833.001.0001</p>
+<p>Williams, J. M. G., Barnhofer, T., Crane, C., Herman, D., Raes, F., Watkins, E., &amp; Dalgleish, T. (2007). Autobiographical memory specificity and emotional disorder. Psychological Bulletin, 133(1), 122-148. https://doi.org/10.1037/0033-2909.133.1.122</p>
+<p>Wilson, B. A., Baddeley, A. D., &amp; Kapur, N. (1995). Dense amnesia in a professional musician following herpes simplex virus encephalitis. Journal of Clinical and Experimental Neuropsychology, 17(5), 668-681. https://doi.org/10.1080/01688639508405157</p>
+<p>Yoshida, N., Sprekeler, H., &amp; Gutkin, B. (2025). Linking homeostasis to reinforcement learning: Internal state control of motivated behavior. Current Opinion in Behavioral Sciences, 66, 101611. https://doi.org/10.1016/j.cobeha.2025.101611</p>
+<p>Zeng, S., Assis, A. N., &amp; Wang, R. (2026). Evaluating and improving LLM self-modeling. arXiv. https://doi.org/10.48550/arXiv.2608.30980</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
