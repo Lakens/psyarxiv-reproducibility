@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Noun memory advantage drives sentence internal
+primacy and recency at clause boundaries</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Noun memory advantage drives sentence internal primacy and recency at
+clause boundaries
+</p>
+<p class="meta">
+2026-11-11 · Metacheck 0.4.3.27
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>14</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>We found 1 replication for 1 original you cited.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>All papers that appeared to involve live data collection contained an
+ethics approval statement.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(14)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, and it was present:</p>
+<blockquote>
+<p>Serial position effects within hypothesized chunks thus serve as a
+powerful metric that participants are going beyond a holistic list
+encoding and recoding the list into chunks.</p>
+</blockquote>
+<blockquote>
+<p>He found that when participants were asked to immediately recall the
+seven most recent words encountered in a story, their accuracy was
+nearly perfect when all of these words were from a single clause.</p>
+</blockquote>
+<blockquote>
+<p>In their second experiment, the authors find that a clause boundary
+effect could be detected even when participants were prompted to
+complete recall backwards.</p>
+</blockquote>
+<blockquote>
+<p>After encoding, participants were cued for recall at each retrieval
+with the entire pool of words from a category, in the order they were
+encoded.</p>
+</blockquote>
+<blockquote>
+<p>For example, if participants were recalling the grammatical sentence
+“Bob bought two big bags”, they would first see the closed list of eight
+names for selection, then they would see the closed list of eight verbs,
+and so on.</p>
+</blockquote>
+<blockquote>
+<p>Forty-one participants were recruited on Prolific and paid for their
+time, and the remaining eight were recruited from undergraduate
+linguistics courses at the University of Maryland, College Park and
+received course credit for their participation.</p>
+</blockquote>
+<blockquote>
+<p>All participants completed the immediate serial recall task online
+via a personal desktop or laptop computer on the PCIbex experiment
+platform (Zehr &amp; Schwarz, 2022).</p>
+</blockquote>
+<blockquote>
+<p>Following the maintenance period, participants were prompted to
+orally recall the list with the word RECORDING.</p>
+</blockquote>
+<blockquote>
+<p>Participants were instructed that they should attempt to recall
+stimuli word for word as accurately as possible, though imperfections
+were to be expected.</p>
+</blockquote>
+<blockquote>
+<p>To encourage the attempted retrieval of as much material as possible,
+participants were told that they were allowed to say the word “skip” to
+fill in words that they could not recall.</p>
+</blockquote>
+<blockquote>
+<p>Once practice trials were completed participants were reminded of
+their task and told to continue to the main trials.</p>
+</blockquote>
+<blockquote>
+<p>Participants were given 10 equally spaced self-paced breaks during
+the main trials.</p>
+</blockquote>
+<blockquote>
+<p>Participants were dropped if they had fewer than 80% scorable
+trials.</p>
+</blockquote>
+<blockquote>
+<p>These criteria led to the removal of five participants, meaning 49 of
+an original 54 participants had acceptable scorability.</p>
+</blockquote>
+<blockquote>
+<p>This would be a reasonable strategy, as participants were not asked
+to complete a simultaneous articulation suppression task.</p>
+</blockquote>
+<p>Ethics approval statement:</p>
+<blockquote>
+<p>Written consent was acquired from each subject, and the procedures
+were approved by the Institutional Review Board of the University of
+Maryland.</p>
+</blockquote>
+<blockquote>
+<p>This study was approved by the Internal Review Board of the
+University of Maryland, College Park with the approved study number
+00972.</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 95 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 95 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 95 references with DOIs. We found 1 replication for 1
+original you cited.</p>
+<p>Check if you are aware of the replication studies, and cite them
+where appropriate.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Replication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Farrell, S. (2008). Multiple roles for time in short-term memory:
+Evidence from serial recall of order and timing. Journal of Experimental
+Psychology: Learning, Memory, and Cognition, 34(1), 128-145. <a href="https://doi.org/10.1037/0278-7393.34.1.128" class="uri">https://doi.org/10.1037/0278-7393.34.1.128</a>
+</td>
+<td style="text-align:left;">
+(2015). Estimating the reproducibility of psychological science.
+Science, 349(6251). <a href="https://doi.org/10.1126/science.aac4716" class="uri">https://doi.org/10.1126/science.aac4716</a> Individual
+report available at
+<a href="https://doi.org/10.1126/science.aac4716" target="_blank">doi:10.1126/science.aac4716</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Classic research in psychology has shown that comprehenders in recall tasks &#x27;chunk&#x27; word lists in order to facilitate later retrieval. Here we ask how chunking mechanisms apply in grammatically structured sentence stimuli. How do comprehenders make use of this grammatical structure to guide chunking of a sentence&#x27;s component words in memory? In previous studies of multi-clause sentence recall, many researchers have argued that chunking is clause-based, as evidenced by scalloped serial accuracy curves in which primacy and recency effects are observed within each clause. Here we suggest that these previous findings may have been driven by the correlation of sentence boundaries with nouns, a lexical class known to demonstrate an independent accuracy advantage in recall. Using immediate serial recall of naturalistic biclausal English sentences and manipulating noun placement, we find evidence that nouns indeed confer a large accuracy boost at the internal clause boundary that can explain prior results. We discuss the difficulty of applying serial position logic to highly structured representations such as those that underlie sentence forms.</p>
+<h3>Introduction</h3>
+<p>From very early in the study of memory, it has been understood that grouping stimuli into unitized representations can serve to augment short term memory accuracy (Cowan, 2001; Madigan, 1980; G. A. Miller, 1956). This process, known as chunking, substantially increases memory capacity in tasks such as memorizing lists of words and visual images (Glanzer &amp; Razel, 1974). In psycholinguistics, a classic body of prior research has asked how chunking processes work within sentences, which are internally organized and contain numerous sequential redundancies driven by both grammar and statistical patterns. One influential prior hypothesis is that encoding processes align chunks with clause boundaries in short-term serial memory for sentences. Early work in sentence comprehension hypothesized that clause boundaries served as cues to specialized processing, such as perceptual segmentation (Fodor &amp; Bever, 1965), changes in depth of processing (Marslen-Wilson &amp; Tyler, 1976), or the clearing of working memory (Jarvella, 1971). Similarly, in the study of language production, there have been proposals that grammatical encoding proceeds in clause-sized units of planning (Bock &amp; Cutting, 1992; Ford &amp; Holmes, 1978). In this study, we critically examine the evidence for the hypothesis that clause boundaries determine chunking in short term serial memory for sentences, with particular attention paid to serial recall accuracy near clause boundaries and item-order correlations. A better understanding of how general mnemonic processes interact with specialized cognitive representations for sentences is crucial for developing more adequate theories of language comprehension (Lewis &amp; Vasishth, 2005) and production (Bock et al., 2007).</p>
+<h3>Chunking metrics in serial recall</h3>
+<p>We first describe some of the key metrics for chunking in serial recall tasks. Chunking refers to a general process of working memory whereby a list of input stimuli is recoded from a larger number of unitary elements into a smaller number of abstract groupings. Chunks may be based on familiar structures from long term memory, or an ad hoc grouping may be imposed at encoding. A famous example of chunking using long term memory structures is the imposition of &#x27;phone number&#x27; groupings onto digit strings. When presented with the following list of seven digits: 3-5-7-1-1-1-3, a subject familiar with phone numbers standardized by the North American Numbering Plan may choose to recode these seven disparate digits into a 3 + 4 pattern, such as 375-1113. Similarly, a more mathematically inclined subject may store this string programmatically as the first four prime numbers after the number two. Chunking based on ad hoc grouping can be observed by simply directing participants to group a list with a certain strategy (3-4, 2-3-2, etc.; Farrell, 2008; Farrell et al., 2011).</p>
+<p>Chunking of lists increases overall serial accuracy compared to unchunked lists, and the shape of the serial recall curve changes, where one may observe sharp changes in accuracy between chunks, though somewhat stable accuracy within chunks. Discontinuities in average accuracy between potentially grouped positions is not the only metric that memory scientists apply for evaluating chunking strategies in serial recall of lists. Another common metric is within-chunk serial position effects. Since the early days of modern psychology, it has been known that in memorizing lists, memory tends to be most accurate for items in first and final positions (Calkins, 1896 https://www.zotero.org/google-docs/?afwvQf  Madigan &amp; O&#x27;Hara, 1992 for a historical review of this work). These serial position effects, known as primacy and recency, are robust over a number of tasks and stimuli (Hurlstone et al., 2014https://www.zotero.org/google-docs/?k8Fq5i Kahana, 2012; Kahana et al., 2024 ; see Logan et al., 2026 for similar effects in some long term memory tasks). There is still no consensus on why primacy and recency effects occurhttps://www.zotero.org/google-docs/?4g9OOK though some well studied hypotheses include contextual distinctiveness (Farrellhttps://www.zotero.org/google-docs/?nQKRHT 2012; Henson, 1998 Henson, , 1999)) , differences in attention at encoding (Page &amp; Norris, 1998) , and aspects of rehearsal during encoding (Burgess &amp; Hitch, 1992; Tan &amp; Ward, 2000 , 2008).</p>
+<p>As chunks are in effect miniature lists-mnemonic domains that are hierarchically embedded in a larger list (Anderson &amp; Matessa, 1997)-chunks themselves appear to display primacy and recency effects in recall (Frick, 1989; Hitch et al., 1996; Ng &amp; Maybery, 2002). When a chunking strategy is applied to a list in a serial recall task, primacy and recency effects can be observed within each chunk, leading to the appearance of a &#x27;scalloped&#x27; serial recall curve across the list as a whole in which the beginning and final elements of each chunk are recalled with greater accuracy than the medial elements. Consider a list composed of grouped digits and grouped letters, for example 794FWP. Should a participant chunk this list into digits and lettershttps://www.zotero.org/google-docs/?ozQbbc a scalloped serial accuracy curve will be observed with primacy and recency effects for each chunk This means that accuracy for 7 and 4 would be higher than that for 9, since this digit is medial to the first chunk, and accuracy for F and P would be higher than for W. Note that serial position effects within chunks are expected to be overlaid on global primacy and recency effects for the full list (Anderson &amp; Matessa, 1997; Farrell, 2012) , such that in this example accuracy will also be heightened at the absolute beginning and ending elements, 7 and P.</p>
+<p>Serial position effects within hypothesized chunks thus serve as a powerful metric that participants are going beyond a holistic list encoding and recoding the list into chunks. Several computational models of serial recall demonstrate that these chunk-wise primacy and recency effects can be generated by the same mechanisms assumed to cause list-wise primacy and recency (see Farrell, 2012 for a review). This mini-list representation of chunks can also be observed in response dynamics, such that relatively longer reaction times are seen for group initial elements and fall drastically for subsequent elements, mirroring dynamics for entire unchunked lists (Farrell &amp; Lelièvre, 2012; Greene et al., 2026; Haberlandt et al., 2005; Hurlstone et al., 2014; Maybery et al., 2002).</p>
+<h3>Parallels between chunks and clauses</h3>
+<p>Serial recall accuracy for sentences is much greater than for word lists of the same length, a finding now known as the &quot;sentence superiority effect&quot;. The sentence superiority effect has been appreciated since at least the middle of the twentieth century (Brenerhttps://www.zotero.org/google-docs/?zbjxfE 1940) , and has motivated much psycholinguistics research since. Researchers hypothesized that the mnemonic superiority of sentences could be explained by greater chunkability, that comprehenders could use their knowledge of grammar to divide sentences into chunks of phrases and clauses (https://www.zotero.org/google-docs/?tqmriF. A. Miller &amp; Isard, 1964). This hypothesis motivated expectations for parallels in memory performance between chunks in word lists and chunks in sentences (Aaronson &amp; Scarborough, 1977; Bever et al., 1969; Fodor et al., 1974; Jarvella &amp; Herman, 1972 https://www.zotero.org/google-docs/?855UHC.</p>
+<p>An early observation drawing such a parallel comes from Jarvella (1970) https://www.zotero.org/google-docs/?LzO28V who reported that clause boundaries had a large effect on accuracy of running lexical span in listening. He found that when participants were asked to immediately recall the seven most recent words encountered in a story, their accuracy was nearly perfect when all of these words were from a single clause. However, when the first three words belonged to a penultimate clause and the last four to the most recent clause, accuracy on the three words of the previous clause was significantly lower than on the four words of the current clause. Despite the same string-wise load of seven words, crossing a group/chunk boundary at encoding led to a large modulation in accuracy. A parallel with non-sentential stimuli can be found in &quot;group integrity&quot; effects found during encoding of grouped letter strings (Postle, 2003; Postle et al., 2001). Similar findings are replicated in other running memory span experiments with sentential stimuli (Fallon et al., 2004; Norman et al., 1991; Wingfield &amp; Butterworth, 1984).</p>
+<p>If clauses serve as chunks in the recall of sentences, we might also expect multi-clause sentences to demonstrate within-clause primacy and recency effects in addition to global primacy and recency effects at the sentence level. Research in sentence recall in the 1970s did observe these effects, which manifested as scalloped recall curves by clause, similar to those seen for chunks in unstructured lists. Jarvella (1971) presented comprehenders with spoken passages of prose with periodic pauses, and instructed them that during these pauses they would be asked to write down the exact wording of the story they had heard just before the pause. When comprehenders recalled sections made up of three clauses, scalloped serial recall curves could be detected, most notable in the ultimate and penultimate clauses. Marslen-Wilson &amp; Tyler (1976) replicated this finding using a similar method, finding that immediate recall of biclausal sentences led to two scalloped curves, one over each clause.</p>
+<p>Subsequent research on sentence and discourse memory extended these effects to examine memory for prosody, recognition memory, and language development, as reviewed by Jarvella (1979). It should be noted that many of these results were found under narrative and discourse processing contexts, where the sentences tested are conceptually coherent at the clause and sentence level. Were there evidence of similar grouping effects in the recall of isolated sentences, without narrative and discursive context, this would serve to suggest that there are at least some core mnemonic mechanisms underlying recall performance in both settings. We now discuss a recent line of experimentation that discovers exactly this pattern.</p>
+<p>Using simple auditory multi-clausal sentences of English, Roverud et al. (https://www.zotero.org/google-docs/?jAl5KC) aimed to isolate the representational factors underlying sentence recall. As grouping could arise by syntax, prosody, or semantics, the authors attempted to isolate syntactic organization by testing auditory sentence recall in prosodically and semantically impoverished stimuli. To this end, the experiments their experiments use repetitive and semantically constrained stimuli, such as &quot;JOHN BOUGHT TWO BIG BAGS IF MARY SAW THREE RED PENS BUT …&quot;, presented with list-like intonation rather than naturalistic prosody. To further distinguish sentence-specific effects, the authors compare recall of syntactically well-formed strings with shuffled ungrammatical strings. An effect of grammaticality is found in practically all positions, but most notable are the large primacy and recency effects by clause, what they term the clause boundary effect. In their second experiment, the authors find that a clause boundary effect could be detected even when participants were prompted to complete recall backwards. This is interpreted as evidence that syntactic structure at encoding leads to clausal organization at retrieval, even under different retrieval demands. Roverud et al. (2023) and Roverud &amp; Kidd (2025) build on the clause boundary effect to investigate the interaction of clausal organization with various acoustic variables, using similar grammatical but constrained sentences, and again replicate the clause-by-clause recency and primacy effects.</p>
+<p>Up to now, from the evidence we&#x27;ve reviewed across decades of experimental work, there seems no reason to doubt the conclusion that the scalloped clausal recall curves observed in the literature are a measure of clausal organization in memory. However, the multiple, integrated levels of representation in natural language often result in strongly correlated factors across items and positions. If scalloped recall curves are intended to serve as good evidence for abstract clause boundary effects, then we would wish to have evidence that no other incidentally correlated linguistic features could plausibly drive this change in accuracy. In the next section we will argue that at least some of the previous claims of clause boundary effects are confounded in exactly this way, by consistently placing nouns at clause boundaries.</p>
+<h3>Noun memory in sentence recall</h3>
+<p>Serial position effects serve as strong evidence for clause-delimited chunking only if other factors affecting recall accuracy can be successfully dissociated from clause boundaries. However in practice this can be challenging, as syntactic, semantic, and pragmatic constraints on grammatical utterances can easily lead to accidental correlations between serial position and other properties which do not arise for recall of unstructured word lists. In this study we investigate whether the scalloped recall curves observed in the prior literature are a reflection of clausal memory units, or whether they may rather reflect a higher proportion of nouns at the beginning and ends of clauses.</p>
+<p>Many theories of working memory rely on results from studies of arbitrarily ordered lists of words, which often motivate theories and models in which item and order information are assumed to then be representationally dissociable (Henson, 1998; Majerus, 2013; Nairne &amp; Kelley, 2004; Oberauer et al., 2012). Natural languages, in contrast, include many constraints on element order, whether relative or absolute 1 . These relative ordering constraints may be thought to transduce unordered hierarchical grammatical representations into linearized strings of words and phrases (Idsardi &amp; Raimy, 2013; Kayne, 1994 Kayne, , 2022)). Consider a simple case of English articles (a, the, those) and the nouns they form noun phrases with: nouns must linearly follow (rather than precede) the articles dependent on them (the dog, not dog the), though material may intervene (the tiny cute dog). Here the serial position of an article in a grammatical utterance clearly limits the relative order of its head noun. In the recall of sentences, retrieval of any single word thus serves to constrain the serial positions surrounding it, providing a kind of redundant cueing. This even applies to some degree to linearly distant positions, as in the case of long distance dependencies.</p>
+<p>That is, given the grammatical factors that systematically constrain word order in sentences, it is plausible that previously observed clause boundary effects are simply effects of syntactic and semantic constraints on particular positions which modulate recall accuracy, which happen to coincide with first and last clause positions, rather than more general effects of primacy and recency.</p>
+<p>In this study we focus on the extent to which noun position correlates with clause edges in English. English transitive declarative clauses have a canonical order of subject -verb -object, as in &quot;Capybaras eat leafy plants and beavers eat tree bark&quot;. Due to the head-final phrase structure of English noun phrases, the clause-ending object phrase will usually end with a noun, even when the noun is modified (plants in leafy plants; roots in leafy plants with roots). This has the result that the last word of a transitive clause will often be a noun. On the other end, while in English the subject phrase often begins with an article or quantifier (the women, most books), there are also many subject phrases that do not require articles, such as proper names (&quot;Maryann went to the store&quot;) and bare plurals (&quot;Pikas often squeak&quot;). In these cases, the first word of the clause will also be a noun. Thus in a conjoined multi-clause sentence such as &quot;Kids like capybaras, but beavers are also growing in popularity&quot;, nouns begin and end each clause.</p>
+<p>This potential correlation matters because evidence from previous research suggests that nouns are in fact memorized more accurately relative to other words (https://www.zotero.org/google-docs/?broken=8S1bMg. Wearinghttps://www.zotero.org/google-docs/?broken=kQ23li 1970 Wearing, , 1973;; see Reynolds &amp; Flagg 1976 https://www.zotero.org/google-docs/?broken=WmFW9s), despite the often reported intuition that verbs contribute more to the meaning of an utterance (Healy &amp; Miller, 1970 , 1971; Wearing, 1974). Work on sentence recall in English and French demonstrated that memory for adjectives and adverbs tends to be much less accurate than memory for verbs, which is itself less accurate than memory for nouns (Holmes &amp; Forster, 1972; Mehler et al., 1978). Recent work from Earles &amp; Kersten (2017) comparing verbs and nouns has corroborated the finding of a noun superiority in memory using sentence recognition. Reynolds &amp; Flagg (1976) suggest that nouns and verbs are subject to different levels of semantic processing, and Earles &amp; Kersten (2017) note differences in the context sensitivity of verbs and the flexibility of their meanings (we examine these theories of noun superiority in more detail in the General Discussion).</p>
+<p>The nouns used in recall experiments may also tend to be more concrete than other items, in the sense of referring to entities in the world that have direct sensory correlates (groundhog vs thinking). Concrete words tend to demonstrate an independent recall boost in free (Romani et al., 2008) and serial recall (https://www.zotero.org/google-docs/?HvPDR2. Miller &amp; Roodenrys, 2009). Outside of tests for noun memory in typical adult populations, it is also a frequent finding in the field of language acquisition that nouns with concrete referents are learned quite early (Gleitman &amp; Trueswell, 2020). In the field of neuropsychology, speakers with aphasia demonstrate more typical concrete noun production abilities than verb production abilities (Goodglass et al., 1969). This holds across different kinds of aphasia, and across usage factors such as lemma frequency (Bastiaanse et al., 2016).</p>
+<p>Regardless of the explanation, if memory recall for nouns is better than for other items, this raises the possibility that previous findings of clause-by-clause primacy and recency effects were due to a greater likelihood of nouns occurring at clause edges than clause medially in the sentence materials used for recall. Since many older studies that embed their sentences in narratives do not report their stimulus sets (Jarvellahttps://www.zotero.org/google-docs/?Vq3QIW 1970 (Jarvella, , 1971 (Jarvella, , 1979;; Marslen-Wilson &amp; Tyler, 1976) , we cannot directly evaluate this. However, the exact stimuli used in the more recent studies of Roverud et al. (2020), Roverud et al. (2023), and Roverud &amp; Kidd (2025) are reported, and the simple declarative sentences used do place nouns exclusively at the beginnings and endings of clauses. Roverud et al. (2020) indeed conducted analyses to investigate the possible impact of lexical category in their second experiment. In their design, the unstructured word lists used as a baseline were created by scrambling the words of a well-formed sentence, such that they contained the same number of words per lexical class as their length-matched grammatical counterparts. Therefore, Roverud et al. examined the effect of lexical category on accuracy in these scrambled sentence trials. Their linear mixed model revealed no significant effect of lexical class on accuracy in these trials. However, we argue that this result must be interpreted with caution. The model fitted estimated a six-level category variable (names, verbs, numbers, adjectives, common nouns, conjunctions) with data from 10 participants, a sample size which may have been underpowered to detect significant differences in performance by lexical category. Second, the task used was quite different from typical recall tasks. The authors used closed lists of lexical items per category, such that each lexical category could be represented by one of only eight words. For instance, the verb of any clause could be one of: bought, found, gave, held, lost, saw, sold, took. After encoding, participants were cued for recall at each retrieval with the entire pool of words from a category, in the order they were encoded. For example, if participants were recalling the grammatical sentence &quot;Bob bought two big bags&quot;, they would first see the closed list of eight names for selection, then they would see the closed list of eight verbs, and so on. This procedure makes the task demands for the participant more akin to those in an alternate forced choice recognition task. The closed list sampling and lessened difficulty at retrieval may have encouraged quite different encoding and maintenance strategies when compared to previous studies of memory comparing nouns to other lexical categories. Thus, it is unclear how generally comparable these findings are with other studies of sentence recall.</p>
+<h3>Current study</h3>
+<p>In this paper we manipulate noun position in an immediate sentence recall task to determine whether previous within-clause primacy and recency effects were due to clause-based memory organization or to noun position. Clauses varied internally by syntactic structure, widening the combinatory possibilities for each sentence and allowing placement of more varied lexical categories in clause final and clause initial positions. We also controlled several other factors which may have influenced positional effects in prior multi-clause recall studies. Sentence presentation was done with isochronous rapid serial visual presentation (RSVP) to prevent use of explicit prosody and other timing cues that might encourage grouping. The critical sentences used were all 12 orthographic words long and biclausal. To prevent grouping by a simple counting metric, like number of words, clause lengths varied, with half of the sentences being composed of a five-word clause followed by a seven-word clause, and the other half composed of a seven-word clause followed by a five-word clause. Finally, the stimuli used here are conceptually coherent within and across clauses.</p>
+<h3>Experiment Method Participants</h3>
+<p>The data reported here come from 49 self-reported native English speakers. Forty-one participants were recruited on Prolific and paid for their time, and the remaining eight were recruited from undergraduate linguistics courses at the University of Maryland, College Park and received course credit for their participation. Demographic information beyond self-reported native language was not collected. Written consent was acquired from each subject, and the procedures were approved by the Institutional Review Board of the University of Maryland.</p>
+<h3>Materials</h3>
+<p>Eighty critical biclausal sentences were created, with varied lexical content and structures. The clauses were joined by simple conjunctions (and, so, but, though) with no punctuation 2 . All lists were presented in upper case, and no period appeared with the last word of the sentence. This was done to ensure that surface orthographic cues did not contribute to recall accuracy. Sentences were overall conceptually coherent and cohesive, in the sense that semantic relations between clauses were transparently marked with grammatical and lexical content, and the meaning of the entire sentence was plausible (Zacks &amp; Ferstl, 2016). In particular, clauses were linked by semantic and conceptual relations such as simple causation, expansion of an initial premise, and descriptions of simultaneous events. All sentences were 12 orthographic words long, surpassing typical estimates of simple articulatory loop maintenance (Allen et al., 2018) so as to encourage sentential encoding and chunking.</p>
+<p>Within the 80 critical sentences, the clause boundary could be placed in one of two positions. In half of the sentences (40 items) the clausal conjunction appeared in serial position six, and in the other half of the sentences the conjunction appeared in serial position eight. This factor is henceforth referred to as &#x27;clause length&#x27;. We chose to use unequal clause lengths to ensure that any clause-based effects found could not be credited to a simpler strategy of grouping into even groups of six words.</p>
+<p>The primary factor of interest manipulated in the sentence materials was the lexical category of the item before and after the clausal coordinator. Critical sentences were designed such that the item before and after the clausal coordinator was systematically varied, being either a noun or a non-noun. This resulted in four sentence types (before:N-after:N, before:N-after:¬N, before:¬N-after:N, before:¬N-after:¬N). 20 sentences of each type were created, distributed equally across the two levels of the clause length factor, for a total of 80 items.</p>
+<p>Critical nouns were common nouns. Pronouns and derived nouns (such as the gerunds of verbs) were excluded. Critical nouns were examined for concreteness using the large-scale rating norms from Brysbaert et al. (2014). Participants in that study rated word concreteness on a scale of 0 to 5, where 0 was for words that were fully abstract, and 5 was for words that were fully concrete. The critical nouns used here were mostly concrete with some variance, with a mean rating of 4.05 (SD = 0.85).</p>
+<p>Non-nouns were either verbs, prepositions, adverbs, or adjectives. Examples of the eight conditions of interest are given in Table 1. Twenty-six noun list stimuli were also included as fillers. These lists were made up of six nouns grouped into two semantic categories. Categories within a list were unrelated to each other, such as &quot;car truck train shoe shirt sock&quot;, with three vehicles and three articles of clothing. Fourteen such lists were adapted from the French noun lists used in Kowialiewski et al. (2024) https://www.zotero.org/google-docs/?tFjrQX who were testing whether semantic similarity between words could lead to temporal grouping effects in serial recall, and an additional 12 filler lists of the same form were composed by the first author. These noun list fillers were intended to obscure the exact aims of the experiment from participants by varying the kinds of stimuli they encountered. Summing over the critical (80) and filler items (26), over the course of the experiment participants saw 106 trials.</p>
+<h3>Design and procedure</h3>
+<p>All participants completed the immediate serial recall task online via a personal desktop or laptop computer on the PCIbex experiment platform (Zehr &amp; Schwarz, 2022).</p>
+<p>Stimuli were presented in capital letters with rapid serial visual presentation (RSVP) at a rate of 500ms/word, with a 100ms blank screen between words. Sentences began and ended with a string of hashmarks (###) to focus participants&#x27; attention. List presentation was followed by a 2000ms maintenance period with a blank screen. Following the maintenance period, participants were prompted to orally recall the list with the word RECORDING. The recall period was self-paced, and participants clicked a button labeled &#x27;Continue&#x27; to move on to the next trial. A 500ms blank screen appeared between trials.</p>
+<p>After giving their informed consent and testing their microphone&#x27;s audio collection quality, participants read a short description of the task and then completed four practice trials, consisting of two noun lists and two sentences. Participants were instructed that they should attempt to recall stimuli word for word as accurately as possible, though imperfections were to be expected. To encourage the attempted retrieval of as much material as possible, participants were told that they were allowed to say the word &quot;skip&quot; to fill in words that they could not recall. Once practice trials were completed participants were reminded of their task and told to continue to the main trials. Stimulus presentation was fully randomized per participant. Participants were given 10 equally spaced self-paced breaks during the main trials. The experiment took around 45 minutes on average to complete, ranging from 33 to 75 minutes.</p>
+<h3>Scoring</h3>
+<p>Participants&#x27; voice recordings were transcribed using the AssemblyAI API (accessed January through May, 2026), then transcription texts were normalized and scored. Normalization consisted of the removal of punctuation, conversion to lowercase, and the adjustment of some orthographic details (gray → grey, snow storm → snowstorm).</p>
+<p>Serial recall accuracy scores reported here use the &#x27;adjacency&#x27; scoring method from Baddeley et al. (2009) https://www.zotero.org/google-docs/?jc1GyS where an item is scored as correct if it is produced correctly relative to an item adjacent in the input list. This is essentially a bigram scoring method, where items are scored relative to the bigrams they participate in. Here, absolute serial order is only taken into account for scoring the beginning and final items in a sequence. Otherwise, an item is correct if and only if it was produced correctly relative to another correct item. For instance, with the input sequence ABCDE, a response such as CBADE would only be scored correct for positions D and E, since E was produced finally, and D was produced adjacent to E. The item A in the response is incorrect since it was not produced first, and none of the other items were produced correctly adjacent to another correct item. Note that simple intrusions at non-initial and non-final positions are not penalized under this scoring system, since intrusions only disrupt a single adjacency relation. For example, with the input sequence ABCDE, the response ABXCDE removes the adjacency relation between B -C but does not affect adjacency between C -D, meaning this position can be scored as correct. However, if another element intrudes between C -D, such as in ABXCYDE, then C will be marked incorrect, since it does not retain either of the adjacency relations seen in the input string. This may be considered a more stringent case of the relative order scoring methodhttps://www.zotero.org/google-docs/?8i3Wj8 as recommended for serial recall tasks by Addis &amp; Kahana (2004) , where the relative order relation is limited to direct adjacency.</p>
+<p>Responses were considered to be unscorable when they contained fewer than two words or more than 16, as these trials often represented cases where participants did not attempt to initiate recall, or where a number of false starts and repetitions were made. Participants were dropped if they had fewer than 80% scorable trials. These criteria led to the removal of five participants, meaning 49 of an original 54 participants had acceptable scorability. After removing these five participants the percentage of scorable trials remaining was 98.9%.</p>
+<p>Three sentences were excluded from analysis due to a stimulus formatting error, leaving 77 critical stimuli (20 before:N-after:N, 19 before:N-after:¬N, 18 before:¬N-after:N, 20 before:¬N-after:¬N).</p>
+<p>The clause boundary positions of interest were those positions immediately preceding or succeeding a clausal conjunction (and, so, but, therefore, etc.). Following analyses in Roverud et al. (2020), we chose a subset of clause medial positions for statistical comparison, those that immediately precede or succeed a boundary position. For example, if an item has the conjunction and at position six, then the items at positions five and seven are in boundary positions, and the items in positions four and eight are in non-boundary, clause medial positions. Recall performance of the conjunction between clauses is not analyzed in depth here, as it is unclear how these items will be chunked, where participants may treat them as belonging to one or the other clause.</p>
+<p>Part of speech tagging for stimuli was completed using the python package SpaCy ver. 3.8.14 (Honnibal et al.https://www.zotero.org/google-docs/?hShGF2 2020) , using the provided small pre-trained English pipeline (en_core_web_sm; ver 3.8.0). Tags were then verified for accuracy and corrected by hand by the first author in cases of misparsing. Simple part of speech tags were used rather than detailed tags that take into account factors such as morphology and thematic roles. The relevant tags for our analyses included &quot;VERB&quot;, &quot;NOUN&quot;, &quot;ADV&quot; and &quot;ADJ&quot;.</p>
+<h3>Data analysis</h3>
+<p>Cleaned and scored responses underwent statistical analysis in R (v. 4.5.0: https://www.zotero.org/google-docs/?lMXX3q). To test for effects of interest, by-trial accuracy data was submitted to Bayesian hierarchical logistic regression using the package brms (Bürkner, 2017). All models fitted assumed a Bernoulli distribution with a logit linking function, as the outcome variable of interest was binary accuracy. Following recommendations on mixed effects modeling from within contemporary psycholinguistics, model structures were maximized as justified by the data whenever possible (Barr et al., 2013; Bates et al., 2018). This led to the implementation of models with estimated random intercepts per participant and item. Random slopes could not be estimated for items, as all participants encountered the same items, and inclusion of random slopes for participants led to convergence failures.</p>
+<p>In all subsequent analyses a highest density interval (HDI) plus region of practical equivalence (ROPE) decision rule was used for inference to the presence/absence of an effect, implemented in the bayestestR package (Makowski et al., 2019). The ROPE is an interval in the space of parameter estimates where estimates that land within this interval may be considered to be of negligible magnitude. We can then compare the ROPE interval to the full interval of our estimated parameter posterior and quantify what percentage of these estimates are found in the ROPE. While it is statistically more appropriate to interpret posteriors over parameters as continuous measures of evidence for a hypothesis, we consider a simplified binary decision rule: if 2.5% or less of the estimated posterior interval overlaps with the ROPE, then we have strong evidence to reject the null hypothesis. If 97.5% or more of the posterior falls within the ROPE, then we have strong evidence for the null hypothesis (see Makowski et al. 2019 for more details on ROPE analyses). ROPE intervals used throughout this paper are bayestestR defaults for logistic regression.</p>
+<p>In all models examining sentence-internal primacy and recency, a predictor variable boundary is used to compare words at boundaries and words not at boundaries. Non-boundary words are those at positions ±2 from the conjunction, and boundary words are those at positions ±1 from the conjunction. For example, in the sentence &quot;The foreign negotiators in the office argued while journalists waited patiently nearby&quot;, the words office and waited are non-boundary words, and the word argued is a non-noun boundary, while journalists is a noun boundary. The boundary variable is a three-level treatment coded factor encoding comparisons between non-boundary elements, non-noun boundary elements, and noun boundary elements, with non-boundary elements as the baseline level. Treatment coding was completed using the hypr package (Rabe et al., 2020). See Figure 3 for more illustrations of these positions. For each of these models, the prior specifications were kept static. The prior over the intercept was a normal distribution centered at 0 with a standard deviation of 2. The priors over all fixed effects were normal distributions centered at 0 with a standard deviation of 1. The standard deviations of the random effects were assigned half-normal priors with a mean of 0, lower bound of 0, and standard deviation of 2 (following recommendations by https://www.zotero.org/google-docs/?Jdlnpw). These prior distributions are only very mildly informative, and thus serve primarily for regularization. Models used the following sampling parameters: 4 chains with 6000 iterations and a 2000 iteration warm-up, yielding 16000 posterior draws. For all models reported, Rhats were at or near 1, with no divergences observed.</p>
+<p>Three models were fitted to analyze the effect of proximity to the internal clause boundary on accuracy. A clause-internal recency model compares the accuracy of items at the end of the first clause to the item directly preceding it. A clause-internal primacy model compares the accuracy of items at the beginning of the final clause to the item directly following it. A third &#x27;clausal peak&#x27; model compares the difference between clause boundary positions and clause medial positions in general, collapsed across both clauses. This combined model included an estimate of how clause position itself (first, last) affected accuracy, as well as the interaction between clause position and boundary status. Here the clause factor is sum-coded, where the first clause is coded as -0.5 and the last clause as +0.5, allowing for a simple interpretation of the effect size with reference to the mean of both of these levels (Nicenboim et al. 2026 , Brehm &amp; Alday 2022).</p>
+<p>A fourth model was fitted to examine the effect of clause length (short-long vs. long-short) and clause position (first vs. second) on accuracy in general, as well as their interactions. Contrast coding of the clause factor here follows that of the peak model above, and the clause length factor codes long-short items as -0.5 and short-long items as +0.5.</p>
+<p>A fifth and final model was fitted to examine the effect of lexical category across all positions, in order to compare recall performance on nouns to other open class items. This model estimates the simple effect of category, a treatment coded variable with the level of noun used as a baseline. This baseline is then compared pairwise to the other levels, adj (adjective), adv (adverb), and verb, as coded in Table 3. An interaction with the clause factor is included as well, to examine whether these effects varied between initial and final clauses. The data collected here, as well as stimuli and scripts used for preprocessing, scoring, and statistical analysis are archived on Zenodo and available under &quot;Data availability&quot;.</p>
+<h3>Results</h3>
+<p>Figure 1 shows average serial recall for each clause length type prior to breaking out the effect of noun position. The accuracy profile appeared consistent with the prior work reviewed above. The first element and final elements of each sentence type demonstrate relatively high accuracy consistent with a global primacy and recency effect, and there is a subtle scallop to these curves consistent with clause-level primacy and recency, with minor deflections of high accuracy at the final position of the first clause and the beginning position of the second clause. There is also an apparent contrast in overall accuracy across clauses, with relatively high recall accuracy in the first clause, and a sharp decline in recall accuracy in the second clause, as illustrated in Figure 2. However, when mean recall accuracy at boundary positions is plotted separately for nominal and non-nominal boundaries as illustrated in Figures 3 and 4, the clause-boundary benefit does appear to be limited to nominal boundaries only. Means and 95% confidence intervals are by-participant. Note that the y-axis is scaled from 0.5 to 1.</p>
+<h3>Modeling results</h3>
+<p>First we examine the estimates of the recency model, which was intended to examine whether nominal and non-nominal elements at the end of initial clauses were recalled more accurately than penultimate elements. In Table 4, we see that the model discovered practically no evidence suggesting that non-noun boundary positions have higher recall accuracy than medial positions, given the 96% overlap between the estimated posterior for the non-nominal boundary and medial positions (bound_v_medial) with the ROPE. However, there is strong evidence that nouns in boundary positions were recalled more accurately than medial words, over and above the indeterminate abstract boundary effect. The full estimated posterior for this comparison (noun_v_medial) has 0% overlap with the ROPE. 38, 2.27] 100% [-0.18, 0.18] 0% bound_v_medial -0.13 [-0.46, 0.21] 95% [-0.18, 0.18] 73% noun_v_medial 0.61 [0.30, 1.01] 100% [-0.18, 0.18] 0%</p>
+<p>Our third model tests the hypothesis that nouns drive high accuracy in clause boundary positions by pooling over primacy and recency effects. Estimates from this peak model can be seen in Table 6. Examining the simple effects of boundary, we see the same pattern as in the independent recency and primacy models: no evidence of an effect of non-nominal boundaries compared to medial position accuracy, but clear evidence for the effect of being a nominal element at a boundary. Second, the estimate of the simple effect of clause demonstrates strong evidence that clause identity has a large effect on accuracy, with clause one positions being more accurate than clause two positions overall. Finally, the model detected practically no evidence for interactions between these two variables, indicating that the magnitude of relationship between medial, non-noun boundary, and noun boundary accuracy likely does not change according to the clause. To examine the effect of clause length (short-long vs. long-short) and clause position (first vs. second) on accuracy in general, another test was run to determine the simple and interactive effects of these factors. The results of this model are shown in Table 7. Overall, the model discovered strong evidence for an effect of clause position on accuracy, along with an indeterminate effect of clause length and no evidence for an interaction between the two. Finally, to test the hypothesis that nouns were overall more accurately recalled in our data, we may examine the category model, which estimates pair-wise contrasts between nouns and other open class lexical items (adjectives, adverbs, verbs). Inspecting Table 8, comparisons revealed strong evidence for better accuracy in the recall of nouns when compared to all other open class lexical categories, with no posterior overlap with the ROPE in any of these pairwise comparisons. Strong evidence was found for an effect of clause position on accuracy as well, aligning closely with estimates from other models. Evidence for interactions between lexical class and clause position was indeterminate, ranging from 59% to 73% overlap with the ROPE.</p>
+<h3>Discussion</h3>
+<p>In this experiment we examined the relative contributions of both abstract clause boundaries and lexical category to serial recall accuracy. We reported two main findings. First, we found no evidence for clause-internal primacy and recency when these positions were not occupied by nouns. Modeling confirmed that the scalloped shapes seen in the descriptive curves were driven by nominal boundary elements, which we expected to demonstrate an independent recall boost above non-nominal elements. The noun boost to recall was found to hold across all nouns presented within the stimulus sentences, when compared to other open class lexical categories. Second, additional modeling revealed that recall of items within initial clauses was more accurate than that of items within final clauses. Although this effect was in the opposite direction from the benefit for recent clauses that was observed in previous studies (Jarvellahttps://www.zotero.org/google-docs/?1IezOu 1971 (Jarvella, , 1979;; Jarvella &amp; Herman, 1972) , this overall effect of clause membership does suggest that clause boundaries delimit some aspects of retrieval accuracy. Taken together, these results suggest that while clauses may serve as chunks in memory, most observed serial position effects within sentences of natural language have been confounded with better recall performance for nouns in general.</p>
+<h3>General discussion</h3>
+<p>Parallels have been drawn between chunks and clauses in memory since the early days of psycholinguisticshttps://www.zotero.org/google-docs/?Ls25pJ inspiring work in perceptual segmentation (Bever et al.https://www.zotero.org/google-docs/?DREtjg 1969; Fodor &amp; Bever, 1965; Garrett et al., 1966) , sentence processing (Fodor et al., 1974) , and sentence recall (Jarvella, 1971 (Jarvella, , 1979;; Jarvella &amp; Herman, 1972). While this connection is intuitive, it is of practical and theoretical importance to clarify where these connections hold, and where they break down. One influential form of evidence for a relationship between clauses and memory units was observations of primacy and recency within clauses in the recall of multiclausal sentences, mirroring those observed in the recall of chunked word lists. Here, we have shown that these effects may have been confounded by simpler lexical category differences, the placement of nouns at the beginnings and endings of clauses. The results of our serial recall experiment showed that when nominal and non-nominal boundary positions were directly compared, apparent clause-internal recency and primacy peaks were driven by nominal element placement only. Our results do reveal some evidence that clause boundaries delimit aspects of retrieval, however, as we found a significant effect of clause placement on accuracy overall such that first clauses were recalled much more accurately than second clauses. The recall benefit we observe for nouns replicates some past findings and renews the question of the mechanisms behind superior noun memory.</p>
+<h3>Serial order effects and sentence segmentation</h3>
+<p>In this article we aimed to examine a particular interaction between chunking and sentence memory, whereby the first and final words of clauses within a sentence are recalled with greater accuracy than these non-boundary words. This metric has been used before in the study of sentence recall, where scalloped curves over clauses led to claims that clauses serve as chunks (Aaronson &amp; Scarborough, 1977; Jarvella, 1979; Marslen-Wilson &amp; Tyler, 1976; Roverud et al., 2020).</p>
+<p>We were unable to show clear evidence for clausal primacy and recency when the boundary positions did not contain nominal elements. However, we do not take this to indicate that clauses are not chunks in recall. Rather, we argue that serial position effects are poorly suited measurements for sentential material, given the representational affordances of grammatical dependencies. There is a mass of previous research implicating clauses as chunks that does not rely on serial accuracy measurements, suggesting again that measurements of chunking that do not rely on primacy and recency are better suited to characterizing sentence chunks. We also argue that it is plausible that a kind of dependency-based cueing granted by grammatical organization may have led to our null effects of sentence-medial primacy and recency, by flattening out the serial recall curves within clauses. These issues are covered in turn below.</p>
+<p>One alternative measure for evaluating chunking relies on the assumption that chunks are unitized groups of items such that recall accuracy for one item within the chunk predicts better recall for other items in that chunk. If clauses serve as chunks, then they should demonstrate unitized retrieval, where successful retrieval of any part of the clause indicates successful retrieval of its entirety. Testing this, Gilchrist et al. (2008) used the metric of chunk completion, examining how often participants could complete the entirety of a chunk, conditional on recall of just a single element. They gave older and younger adults multi-clausal spoken sentences for immediate recall and found that older adults on average recalled fewer clauses than younger adults. However, the completeness of the recalled clauses did not differ between groups, because if participants could retrieve a single word from a clause, it was highly probable that they would retrieve all words of that clause. This is suggestive of chunking since it points towards the retrieval of unitized encodings limited to clause boundaries. Similar findings held in development as well, where younger children can be shown to access fewer clauses than older children, but show an equal level of clause completion (Gilchrist et al., 2009). From these data it seems that short-term sentence capacity is defined over clauses, rather than words.</p>
+<p>A convergent finding to those above comes from comprehension accuracy of multi-clausal sentences. Roberts &amp; Gibson (2002) tested whether the number of clauses or the number of discourse referents in a sentence affected comprehenders&#x27; ability to accurately respond to simple questions. They compared different clause types containing varying numbers of noun phrases, and found that the number of clauses in a presented sentence strongly affected accuracy of a comprehension question asked immediately after, but that the number of noun phrases did not. Despite some clause types containing more discourse referents (noun phrases), it seemed again that this internal complexity did not matter, but rather the number of clauses itself did. More recent work has aimed to situate chunking-by-clause within the temporal context model of Howard &amp; Kahana (2002). Balachandran et al. (2025) find evidence in recall and recognition of multi-clausal sentences that clause boundaries serve to delimit temporal contexts, creating episodes that closely encode within-clause content while distancing whole-clause episodes from one another. None of the measurements used in these studies rely on changes of serial accuracy as a function of distance to a chunk boundary for their conclusions, an analytical choice that we believe is well suited to study chunks within sentences.</p>
+<p>To understand why non-serial measurements of chunking-by-clause have proven more appropriate, we must consider how linear order in sentences is different from linear order in lists. Consider as an example the placement of adjectives in English. The vast majority of adjectives are prenominal, placed linearly before their associated noun, such as &quot;wet capybara&quot; or &quot;cute hamster&quot;. This means that in the recall of a grammatical sentence, retrieval of an adjective will often serve to constrain the serial position following it to be a noun. The same is true for all lexical categories; retrieval of any word in a sentence will serve as a cue to the items that followed (and preceded) it, facilitating accurate recall. In fact, even languages with so-called free word orders demonstrate certain sequential constraints, which may be universal across languages (Cinque, 2005; Legate, 2001). In summary, words within a sentence demonstrate a kind of sequential redundancy that is not shared with word lists.</p>
+<p>What mechanism underlies these sequential redundancies? One possible explanation is that grammaticality augments short term memory by means of consistent intrasentential cueing from one word to another. Retrieval of an adjective cues the retrieval of the noun it holds a dependency with, and retrieval of a noun cues the need for a verb or preposition to introduce that noun. Note that this description is abstracted away from specific lexical items, which belong to the class of nouns, verbs, etc., but it is also the case that retrieving specific lexical items will often serve to constrain other surrounding items, at least with naturalistic sentences. In stimuli without semantic anomalies, successfully retrieving a noun like read will often serve to constrain a following object noun to be something that is readable, a magazine, a book, and so on. It may even be the case that comprehenders can retrieve single, specific words, which can then be used to infer the abstract structure around them. These constraints are not limited by position, meaning the effects of redundant cueing apply at every serial position.</p>
+<p>Both of these boosts, to order and item memory, are contributions from long term memory, and it is this support that distinguishes grammatical strings from randomly ordered strings. How much long term memory support comes at encoding (Bonhage et al.https://www.zotero.org/google-docs/?Wv8axk 2014) rather than retrieval, as in redintegration (Jones &amp; Farrell, 2018) , is a question beyond the current article. Regardless of the locus of this long term memory support, these serial redundancies have the effect of muting serial position effects in sentence chunks, since successful retrieval of first and final chunk elements is conditional on retrieval of other items within those chunks. This is unlike cases of retrieval from list chunks, where there are no within-chunk redundancies. We can conclude from this that detection of serial position effects as a chunking metric is much more appropriate when applied to word lists than when applied to sentences.</p>
+<h3>Memory for nouns in sentences</h3>
+<p>In this study we discovered evidence of augmented recall performance of nominal elements over non-nominal elements embedded within sentences. We show that the superiority of noun recall could explain previous findings of primacy and recency within clauses of multi-clausal sentences. Given this fact, the placement of nouns serves as a confound in the study of sentence memory position effects. We briefly consider future avenues for deconfounding noun memory and more general sentence memory.</p>
+<p>It is important to note that findings of noun superiority are not novel in recall and recognition, and similar effects have been noted for decades in psycholinguistics and cognitive psychology. Reynolds &amp; Flagg (1976) review much of this early literature, along with the results of five novel studies examining noun and verb memory specifically. The authors appeal to a complex interaction between levels-of-processing that differs between nouns and verbs, pointing towards differences at encoding and maintenance. Recent research into noun and verb recognition from Earles &amp; Kersten (2017) finds that nouns are recognized far more accurately than verbs embedded in short sentences. These authors hypothesize that it is the difference in specificity of meaning between verbs and nouns that leads to their different statuses in memory. Despite the long-standing open questions of noun memory, there is currently no dominant theoretical explanation for this noun accuracy boost.</p>
+<p>First, it is important to distinguish extrinsic and intrinsic features of particular nouns within sentences. While some research has emphasized a general, intrinsic, noun memory benefit, it is important to note that not all nouns within a sentence bear the same relation to that sentence. It may be the case that nouns bearing particular relations will demonstrate different levels of memory accuracy, an extrinsic factor having to do with the relation a noun participates in, rather than the noun itself. Chromý and Vojvodić (2024) presented participants with simple, unambiguous declarative sentences containing four nouns, such as &quot;An older retiree read the newspaper on Sunday in the library&quot;: one subject noun (retiree), one direct object noun (newspaper), one temporal noun (Sunday), and one locative noun (library). Sentences were immediately followed by simple comprehension questions targeting different nouns, e.g. &quot;What did the retiree read?&quot;, &quot;When did the retiree read the newspaper?&quot;, or &quot;Where did the retiree read the newspaper?&quot;. Here we focus on the results of unmarked word order sentences: when questions targeted direct objects of verbs, accuracy was significantly higher than when questions targeted adjunct nouns, such as in temporal or locative prepositional phrases. The authors argue that this arises from variable weighting of information over the course of sentence processing, such that higher degrees of attention are paid to words encoding &quot;core&quot; semantic information, such as arguments. We note, however, that Chromy and https://www.zotero.org/google-docs/?SK12PT (https://www.zotero.org/google-docs/?XdpHTO) task and scoring metric was somewhat different from those used in verbatim serial recall studies and therefore might emphasize gist-level over verbatim retrieval (Aaronson, 1976).</p>
+<p>Regarding intrinsic noun properties, it may be the case that nouns are memorized more accurately because they tend to be concrete, animate, imageable, or some combination of these. We note that the key nouns used in the experiment presented were quite concrete, matching the concrete nouns of Roverud et al. (2020). An explanation of noun superiority that appeals to these factors would need to carefully avoid conflating lexical class, a grammatical notion, with facts about concepts. Taking concreteness as an example, a simple discriminating illustration can be made with the nominalizations of verbs, whereby a verbal stem like destroy can be made into a noun like destruction. This nominalization is demonstrably a noun, as it can follow an article and by followed by an of phrase, as in &quot;the destruction of the city&quot;. The syntactic distributional facts verify its grammatical noun status, and yet the word destruction does not denote a concrete entity. Discrimination of these factors in the other direction could come from non-nominal but concrete and imageable words. Words like blue, loud, fuzzy, and stinky refer to concrete, sensory properties, but are adjectival. It is then, in principle, possible to separate the factors of concreteness and lexical category in memory. To our knowledge, experiments in this vein have not been conducted.</p>
+<p>As reviewed this far, no theory of noun memory superiority has considered all of the relevant data. Further research in this area will very likely need to disentangle many of the underlying factors discussed here, such as event reference (as in nominalizations), conceptual factors such as concreteness and animacy, specificity in meaning, and grammatical relations. While it is likely implausible to assume that these factors can be completely orthogonalized, efforts in large scale word norming studies may be leveraged to approach experimental separation of these variables (Brysbaert et al., 2019; Brysbaert &amp; New, 2009; VanArsdall &amp; Blunt, 2022). Such a separation could be used to better characterize the superiority of nouns in memory, which would allow chunking researchers to create better tests of the effects of grouping in natural language.</p>
+<h3>Laws of primacy and recency within clauses</h3>
+<p>If it is true, as we have claimed, that primacy and recency within clauses cannot be directly measured in general, this raises the question of whether they contribute to clause recall at all. We propose a nuanced synthesis of our results and the larger memory literature, and suggest that it may still be that primacy and recency are mnemonic factors at play during retrieval of grammatical utterances, but that their effects are obscured by the structure of the data. While primacy and recency may be laws that apply to any retrieved chunk, even those within sentences, their effects can be muted by other features of the chunk. As has been discussed here at length, any item in a particular serial position within an utterance of natural language is confounded by the grammatical, lexical, and semantic properties of that utterance, as well as statistical regularities within and across these properties. If memory researchers could generate stimuli that control for these factors in a way that allows direct measurement of primacy and recency, we predict that serial position effects would be measurable. This hypothesis is in line with theories suggesting that serial position effects are &quot;laws of memory&quot;, consequences of the human memory system in general (Kahana et al., 2024).</p>
+<p>An alternative explanation for our failure to observe clause-level primacy and recency effects for non-nominal elements is that chunk-level primacy and recency effects are not a domain-general memory phenomena, but are rather specific to relatively unstructured material, such as lists of words or digits. This may be dispreferred on theoretical grounds, if one pursues a theory in which serial position effects are simply reflexes of the architecture of encoding and retrieval, and cannot be deactivated for some stimuli and not others (Farrell, 2012). We acknowledge that a theory like this would be capable of explaining the data reported here, and that the data cannot currently adjudicate between these two options.</p>
+<h3>Alternatives to clauses in sentence chunking</h3>
+<p>The focus in this article has been on examining parallels between clauses and chunks, though it is plausible that other linguistic representations could be used as chunks in memory. It may be the case that comprehenders encode entire sentences as single chunks, forgoing the finer grained internal segments. The exact nature of this holistic sentence representation is unclear, though one consideration with some precedent is that it may be a semantic trace, spanning the entirety of the sentence and unitizing it into a single proposition (Riven &amp; de Almeida, 2021).</p>
+<p>The influential regeneration hypothesis from Potter &amp; Lombardi (Lombardi &amp; Potter, 1992; Potter &amp; Lombardi, 1990 , 1998) takes the stance that comprehenders have explicit access to only an abstract meaning trace; all lexical, structural, and otherwise formal traces are merely implicit and not consciously accessible during recall, though they still have bearing on recall via priming. While we believe this stance too strong, it is readily apparent that comprehenders rely on semantic encodings to complete sentence recall tasks, and we assume that this was the case in our study as well, as we took care to create coherent and naturalistic sentences that would avoid biasing participants away from whole sentence encoding.</p>
+<p>Sentence-spanning traces need not be characterized as semantic, and it may be the case that the encoding of representations of other qualities could lead to similar behavior. For instance, it is likely that comprehenders can and do use features of an utterance&#x27;s form in segmentation for memory as well, one of the most prominent of these features being prosodic boundaries (Simpson &amp; Martin, 2015). Using behavioral intuitions, Anurova et al. (2022) found that phonetic factors such as prosodic strength and pause length, as well as clause boundaries, jointly determined where comprehenders annotated chunks. Effects of these chunk boundaries during comprehension were also found in simultaneous magneto/electroencephalography data. Thus, the authors present behavioral and neural evidence that distinct cues to segmentation independently contribute to chunking behavior in on-line comprehension.</p>
+<h3>Clause recency</h3>
+<p>A final aspect of the results found in this study is the lack of a clause recency effect, the term applied to the finding that in some memory tasks with multiclausal stimuli, the most recently encountered clause demonstrates an accuracy benefit over all other clauses (Chang, 1980; Gernsbacher et al., 1989; Jarvella, 1979; Lee &amp; Kim, 2009; Marslen-Wilson &amp; Tyler, 1976). There was no evidence for clause recency in these data, and in fact the opposite held: there was strong evidence to suggest that initial clauses were recalled with greater accuracy than final clauses.</p>
+<p>One possibility is that the 2000ms maintenance period after encoding and before recall in the current design caused participants to shift from a representation that more strongly encoded the final clause, to one that more strongly encoded the first clause. In the discourse processing literature, Gernsbacher et al. (1989) reported a pattern of findings consistent with this possibility. The authors had participants read biclausal sentences and complete a lexical probe task, and found that the timing of the lexical probe task was crucial for determining whether probe responses would be facilitated for nouns in the initial or final clause. Probes from final clauses that were shown soon after sentence offset demonstrated reaction time facilitation, though probes from initial clauses showed facilitation only when presented 1400ms or more after sentence offset (though see https://www.zotero.org/google-docs/?tPEXZ4. Lee &amp; Kim 2009 for conflicting evidence from Korean). The authors argue that this shift in retrieval privilege was tied to a kind of integration that occurred across clauses, where a sentence-spanning holistic representation takes the place of disparate clause-spanning representations. Crucially, this integration takes time, and when probing early enough one can target the unintegrated representation. Ratcliff &amp; McKoon (1989) find a similar transformation in recognition judgments for simple active and passive sentences, discovering that from around 500-700ms, recognition judgments are made based on surface level similarity, but from 700-2000ms judgments are made based on abstract relational information.</p>
+<p>Extending these findings, it seems possible that the use of a longer maintenance period than previous studies altered the profile of recall in the current experiment. Within this period after encoding, the representation that participants would retrieve was one of an integrated representation of both clauses, with the first clause taking a privileged role in this integrated representation. Another possibility is that the first-clause accuracy advantage could reflect a rehearsal effect, where the first clause benefits from more rehearsal or elaboration over the course of parsing, leading to a more robust encoding. This would be a reasonable strategy, as participants were not asked to complete a simultaneous articulation suppression task.</p>
+<h3>Conclusion</h3>
+<p>In this study we investigated how accuracy in immediate sentence recall is affected by an item&#x27;s lexical category and its position within a sentence, building on previous findings that draw parallels between clauses in sentences and chunks in lists. We failed to replicate previous findings that accuracy at clause boundaries is higher relative to non-boundary positions when the clause boundary positions did not contain nouns, and our results were consistent with prior work in suggesting that serial recall accuracy for nouns is higher than other lexical categories. Together, these findings suggest that earlier observations of primacy and recency within clauses were confounded by the placement of nouns. We suggest that while primacy and recency may be at play during the retrieval of clauses, their influence on accuracy will frequently be difficult to detect due to the grammatical constraints of sentence structure which also contribute to retrieval success. These results motivate further research aimed at better evaluating the chunking strategies available for complex, structured stimuli such as sentences.</p>
+<p>End notes 1. It is an active point of research to discover how linguistic representations that impose order and cooccurrence restrictions fit into short-term memory models with strong divisions between item and order memory (Jones &amp; Farrell, 2018; Querella &amp; Majerus, 2024; Schweppe et al., 2022; Xiao et al., 2025). 2. Due to experimenter error participants encountered one critical sentence with a comma before the second clause, however inclusion of this item did not affect the results.</p>
+<h3>Acknowledgements</h3>
+<p>We thank Malhaar Shah and Elizabeth Swanson for comments on an early draft of this work, and Utku Türk for assistance with statistical analyses. We also thank Matt Wagers and Colin Phillips for discussion of the results, as well as the University of Maryland Psycholing Workshop group for comments on an early presentation of the results. We acknowledge the use of the artificial intelligence service Claude Code for the debugging of analysis scripts.</p>
+<h3>Funding statement</h3>
+<p>The author(s) disclosed receipt of the following financial support for the research, authorship, and/or publication of this article: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship Program under Grant No. DGE 2236417 to Sebastián Mancha, as well as the University of Maryland&#x27;s Language Science Center 2025 Student and Postdoc Mini Grant to Sebastián Mancha. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</p>
+<h3>Data availability</h3>
+<p>The dataset generated and analyzed during the current study, as well as the scripts used for analysis, are available on the Zenodo repository which may be found at the following link:</p>
+<h3>Declaration of conflicting interest</h3>
+<p>The author(s) declared no potential conflicts of interest with respect to the research, authorship, and/or publication of this article.</p>
+<h3>Author contributions</h3>
+<p>Sebastián Mancha contributed to the conceptualization, methodology, software, formal analysis, investigation, writing, visualization, and funding acquisition for this project. Ellen Lau contributed to the conceptualization, writing, supervision, administration, and funding acquisition for this project.</p>
+<h3>Ethical considerations</h3>
+<p>This study was approved by the Internal Review Board of the University of Maryland, College Park with the approved study number 00972.</p>
+<h3>Consent to participate</h3>
+<p>Participants consented to participate in the study reported here by reading the relevant form of consent and then stating in writing that they indeed consented to the conditions enclosed.</p>
+<h3>Consent for publication</h3>
+<p>Not applicable.</p>
+<h3>Fig 1 :</h3>
+<p>Fig 1:Serial accuracy curve for short-long and long-short multiclausal sentences, averaged across conditions. Sentence types are aligned by clause boundary, which is marked with a vertical dotted line. Means and 95% confidence intervals are by-participant. Note that the y-axis is scaled from 0.5 to 1.</p>
+<h3>Fig 2 :</h3>
+<p>Fig 2: Average proportion of correct recalls by clause and clause lengths, collapsed over serial position.Means and 95% confidence intervals are by-participant. Note that the y-axis is scaled from 0.5 to 1.</p>
+<h3>Fig 3 :</h3>
+<p>Fig 3: Serial accuracy curves for the four positions preceding and following the clause boundary, split by nominal status of clause boundary elements. Vertical facets encode nominal status of the last element of clause one, horizontal facets encode nominal status of the first element of clause two. Means and 95%confidence intervals are by-participant.</p>
+<h3>Fig 4 :</h3>
+<p>Fig 4: Average proportion of correct recalls by position type: either nominal elements at clause boundaries, non-nominal elements at clause boundaries, or non-boundary positions. Means and 95% confidence intervals are by-participant. Position types are color coded and overlaid on their corresponding serial position on an inset of Figure 1.</p>
+<h3>Table 1 :</h3>
+<p>Example sentences from each condition in the experiment. Double vertical bars mark clause boundaries, and bold face words mark positions where nouns and non-nouns are contrasted. ¬N represents non-noun items, as noted by the logical negation sign.</p>
+<h3>Table 2 :</h3>
+<p>Contrasts encoded in the &#x27;boundary&#x27; factor, with levels, comparison formula, and explanations for each comparison. Formulae are in the style of the hypr package.</p>
+<h3>Table 3 :</h3>
+<p>Contrasts encoded in the &#x27;category&#x27; factor, with levels, comparison formula, and explanations for each comparison. Formulae are in the style of the hypr package.</p>
+<h3>Table 4 :</h3>
+<p>Recency model fixed effect estimates, from the brms model: accuracy ~ boundary + (1 | participant) + (1 | item_id). pd = probability of direction, ROPE = Region of Practical Equivalence. Effects showing significant evidence against the null in bold.To determine whether primacy effects held within final clauses, we can examine the fit of the primacy model, which compares initial elements in final clauses to the immediately succeeding elements. As reported in Table5, there is negligible evidence that simply being in a boundary position over a non-boundary position (bound_v_medial) impacts recall accuracy, given the high posterior overlap with the ROPE. Again, there is strong evidence for a nominal boundary effect, with 0% overlap with the ROPE (noun_v_medial), and a higher estimated magnitude of effect in comparison to the recency model.</p>
+<h3>Table 5 :</h3>
+<p>Primacy model fixed effect estimates, from the brms model: accuracy ~ boundary + (1 | participant) + (1 | item_id). pd = probability of direction, ROPE = Region of Practical Equivalence. Effects showing significant evidence against the null in bold.</p>
+<h3>Table 6 :</h3>
+<p>Peak model fixed effect estimates, from the brms model: accuracy ~ boundary * clause + (1 | participant) + (1 | item_id). pd = probability of direction, ROPE = Region of Practical Equivalence. Effects showing significant evidence against the null in bold.</p>
+<h3>Table 7 :</h3>
+<p>Clause model fixed effect estimates, from the brms formula: accuracy ~ clause * clause_length + (1 | participant) + (1 | item_id). pd = probability of direction, ROPE = Region of Practical Equivalence.Effects showing significant evidence against the null in bold.</p>
+<h3>Table 8 :</h3>
+<p>Lexical category model fixed effect estimates, from the brms formula: accuracy ~ category * clause + (1 | participant) + (1 | item_id). pd = probability of direction, ROPE = Region of Practical Equivalence. Effects showing significant evidence against the null in bold.</p>
+<h3>References</h3>
+<p>M2U0OTBmZWJlMjFhMjY3YTdjM2ExYjYzZSJ9.YVMm_ScQv_HSNZwC4fzjbYZpwkKiYel1O eeRCBMSOhE8Q1NPho4V56pHfbw7aY7wAbM-nTRR6TM9uU85Vk5www</p>
+<p>Aaronson, D. (1976). Performance theories for sentence coding: Some qualitative observations. Journal of Experimental Psychology: Human Perception and Performance, 2(1), 42-55. https://doi.org/10.1037/0096-1523.2.1.42</p>
+<p>Aaronson, D., &amp; Scarborough, H. S. (1977). Performance theories for sentence coding: Some quantitative models. Journal of Verbal Learning and Verbal Behavior. https://doi.org/10.1016/s0022-5371(77)80052-2</p>
+<p>Addis, K. M., &amp; Kahana, M. J. (2004). Decomposing serial learning: What is missing from the learning curve? Psychonomic Bulletin &amp; Review, 11(1), 118-124. https://doi.org/10.3758/BF03206470</p>
+<p>Allen, R. J., Hitch, G. J., &amp; Baddeley, A. D. (2018). Exploring the sentence advantage in working memory: Insights from serial recall and recognition. Quarterly Journal of Experimental Psychology, 71(12), 2571-2585. https://doi.org/10.1177/1747021817746929</p>
+<p>Anderson, J. R., &amp; Matessa, M. (1997). A production system theory of serial memory. Psychological Review, 104(4), 728-748. https://doi.org/10.1037/0033-295X.104.4.728</p>
+<p>Anurova, I., Vetchinnikova, S., Dobrego, A., Williams, N., Mikusova, N., Suni, A., Mauranen, A., &amp; Palva, S. (2022). Event-related responses reflect chunk boundaries in natural speech. NeuroImage, 255, 119203. https://doi.org/10.1016/j.neuroimage.2022.119203</p>
+<p>Baddeley, A. D., Hitch, G. J., &amp; Allen, R. J. (2009). Working memory and binding in sentence recall. Journal of Memory and Language, 61(3), 438-456. https://doi.org/10.1016/j.jml.2009.05.004</p>
+<p>Balachandran, L., Rich, S., &amp; Wagers, M. (2025). How linguistic boundaries form encoding contexts in memory: Evidence from temporal order effects. Proceedings of the Annual Meeting of the Cognitive Science Society, 47(0). https://escholarship.org/uc/item/7bs5d4wz</p>
+<p>Barr, D. J., Levy, R., Scheepers, C., &amp; Tily, H. J. (2013). Random effects structure for confirmatory hypothesis testing: Keep it maximal. Journal of Memory and Language, 68(3), 255-278. https://doi.org/10.1016/j.jml.2012.11.001</p>
+<p>Bastiaanse, R., Wieling, M., &amp; Wolthuis, N. (2016). The role of frequency in the retrieval of nouns and verbs in aphasia. Aphasiology, 30(11), 1221-1239. https://doi.org/10.1080/02687038.2015.1100709</p>
+<p>Bates, D., Kliegl, R., Vasishth, S., &amp; Baayen, H. (2018). Parsimonious Mixed Models (arXiv:1506.04967). arXiv. https://doi.org/10.48550/arXiv.1506.04967</p>
+<p>Bever, T. G., Lackner, J. R., &amp; Kirk, R. (1969). The underlying structures of sentences are the primary units of immediate speech processing. Perception &amp; Psychophysics, 5(4), 225-234. https://doi.org/10.3758/BF03210545</p>
+<p>Bock, K., Dell, G. S., Chang, F., &amp; Onishi, K. H. (2007). Persistent structural priming from language comprehension to language production. Cognition, 104(3), 437-458. https://doi.org/10.1016/j.cognition.2006.07.003</p>
+<p>Bonhage, C. E., Fiebach, C. J., Bahlmann, J., &amp; Mueller, J. L. (2014). Brain Signature of Working Memory for Sentence Structure: Enriched Encoding and Facilitated Maintenance. Journal of Cognitive Neuroscience, 26(8), 1654-1671. https://doi.org/10.1162/jocn_a_00566</p>
+<p>Brener, R. (1940). An experimental investigation of memory span. Journal of Experimental Psychology, 26(5), 467.</p>
+<p>Brysbaert, M., Mandera, P., McCormick, S. F., &amp; Keuleers, E. (2019). Word prevalence norms for 62,000 English lemmas. Behavior Research Methods, 51(2), 467-479. https://doi.org/10.3758/s13428-018-1077-9</p>
+<p>Brysbaert, M., &amp; New, B. (2009). Moving beyond Kučera and Francis: A critical evaluation of current word frequency norms and the introduction of a new and improved word frequency measure for American English. Behavior Research Methods, 41(4), 977-990. https://doi.org/10.3758/BRM.41.4.977</p>
+<p>Brysbaert, M., Warriner, A. B., &amp; Kuperman, V. (2014). Concreteness ratings for 40 thousand generally known English word lemmas. Behavior Research Methods, 46(3), 904-911. https://doi.org/10.3758/s13428-013-0403-5</p>
+<p>Burgess, N., &amp; Hitch, G. J. (1992). Toward a network model of the articulatory loop. Journal of Memory and Language, 31(4), 429-460. https://doi.org/10.1016/0749-596X(92)90022-P</p>
+<p>Bürkner, P.-C. (2017). brms: An R Package for Bayesian Multilevel Models Using Stan. Journal of Statistical Software, 80(1), 1-28. https://doi.org/10.18637/jss.v080.i01</p>
+<p>Calkins, M. W. (1896). Association. An essay analytic and experimental. The Psychological Review: Monograph Supplements, 1(2), i-56. https://doi.org/10.1037/h0092984</p>
+<p>Chang, F. R. (1980). Active memory processes in visual sentence comprehension: Clause effects and pronominal reference. Memory &amp; Cognition, 8(1), 58-64. https://doi.org/10.3758/BF03197552</p>
+<p>Chromý, J., &amp; Vojvodić, S. (2024). When and where did it happen? Systematic differences in recall of core and optional sentence information. Quarterly Journal of Experimental Psychology, 77(1), 111-132. https://doi.org/10.1177/17470218231159190</p>
+<p>Cinque, G. (2005). Deriving Greenberg&#x27;s Universal 20 and Its Exceptions. Linguistic Inquiry, 36(3), 315-332. https://doi.org/10.1162/0024389054396917</p>
+<p>Cowan, N. (2001). The magical number 4 in short-term memory: A reconsideration of mental storage capacity. Behavioral and Brain Sciences, 24(1), 87-114. https://doi.org/10.1017/S0140525X01003922</p>
+<p>Earles, J. L., &amp; Kersten, A. W. (2017). Why Are Verbs So Hard to Remember? Effects of Semantic Context on Memory for Verbs and Nouns. Cognitive Science, 41(S4), 780-807. https://doi.org/10.1111/cogs.12374</p>
+<p>Fallon, M., Kuchinsky, S., &amp; Wingfield, A. (2004). The Salience of Linguistic Clauses in Young and Older Adults&#x27; Running Memory for Speech. Experimental Aging Research, 30(4), 359-371. https://doi.org/10.1080/03610730490484470</p>
+<p>Farrell, S. (2008). Multiple roles for time in short-term memory: Evidence from serial recall of order and timing. Journal of Experimental Psychology: Learning, Memory, and Cognition, 34(1), 128-145. https://doi.org/10.1037/0278-7393.34.1.128</p>
+<p>Farrell, S. (2012). Temporal clustering and sequencing in short-term memory and episodic memory. Psychological Review, 119(2), 223-271. https://doi.org/10.1037/a0027371</p>
+<p>Farrell, S., &amp; Lelièvre, A. (2012). The dynamics of access to groups in working memory. Journal of Experimental Psychology: Learning, Memory, and Cognition, 38(6), 1659-1674. https://doi.org/10.1037/a0028469</p>
+<p>Farrell, S., Wise, V., &amp; Lelièvre, A. (2011). Relations between timing, position, and grouping in short-term memory. Memory &amp; Cognition, 39(4), 573-587. https://doi.org/10.3758/s13421-010-0053-0</p>
+<p>Fodor, J. A., &amp; Bever, T. G. (1965). The psychological reality of linguistic segments. Journal of Verbal Learning and Verbal Behavior, 4(5), 414-420. https://doi.org/10.1016/S0022-5371(65)80081-0</p>
+<p>Fodor, J. A., Bever, T. G., &amp; Garrett, M. F. (1974). The psychology of language: An introduction to psycholinguistics and generative grammar. McGraw-Hill.</p>
+<p>Garrett, M., Bever, T., &amp; Fodor, J. (1966). The active use of grammar in speech perception. Perception &amp; Psychophysics, 1(1), 30-32. https://doi.org/10.3758/BF03207817</p>
+<p>Gernsbacher, M. A., Hargreaves, D. J., &amp; Beeman, M. (1989). Building and Accessing Clausal Representations: The Advantage of First Mention versus the Advantage of Clause Recency. Journal of Memory and Language, 28(6), 735-755. https://doi.org/10.1016/0749-596X(89)90006-5</p>
+<p>Gilchrist, A. L., Cowan, N., &amp; Naveh-Benjamin, M. (2008). Working memory capacity for spoken sentences decreases with adult ageing: Recall of fewer but not smaller chunks in older adults. Memory, 16(7), 773-787. https://doi.org/10.1080/09658210802261124</p>
+<p>Gilchrist, A. L., Cowan, N., &amp; Naveh-Benjamin, M. (2009). Investigating the Childhood Development of Working Memory Using Sentences: New Evidence for the Growth of Chunk Capacity. Journal of Experimental Child Psychology, 104(2), 252-265. https://doi.org/10.1016/j.jecp.2009.05.006</p>
+<p>Glanzer, M., &amp; Razel, M. (1974). The size of the unit in short-term storage. Journal of Verbal Learning and Verbal Behavior, 13(1), 114-131. https://doi.org/10.1016/S0022-5371(74)80036-8</p>
+<p>Gleitman, L. R., &amp; Trueswell, J. C. (2020). Easy Words: Reference Resolution in a Malevolent Referent World. Topics in Cognitive Science, 12(1), 22-47. https://doi.org/10.1111/tops.12352</p>
+<p>Goodglass, H., Hyde, M. R., &amp; Blumstein, S. (1969). Frequency, Picturability and Availability of Nouns in Aphasia. Cortex, 5(2), 104-119. https://doi.org/10.1016/S0010-9452(69)80022-5</p>
+<p>Greene, N. R., Goldman, S. T., &amp; Kahana, M. J. (2026). Interresponse times in free recall. Journal of Experimental Psychology: Learning, Memory, and Cognition, 52(3), 422-442. https://doi.org/10.1037/xlm0001498</p>
+<p>Haberlandt, K., Lawrence, H., Krohn, L., Bower, K., &amp; Thomas, J. G. (2005). Pauses and durations exhibit a serial position effect. Psychonomic Bulletin &amp; Review, 12(1), 152-158. https://doi.org/10.3758/BF03196361</p>
+<p>Healy, A. F., &amp; Miller, G. A. (1970). The verb as the main determinant of sentence meaning. Psychonomic Science, 20(6), 372-372. https://doi.org/10.3758/BF03335697</p>
+<p>Healy, A. F., &amp; Miller, G. A. (1971). The relative contribution of nouns and verbs to sentence acceptability and comprehensibility. Psychonomic Science, 24(2), 94-96. https://doi.org/10.3758/BF03337909</p>
+<p>Henson, R. N. A. (1998). Short-Term Memory for Serial Order: The Start-End Model. Cognitive Psychology, 36(2), 73-137. https://doi.org/10.1006/cogp.1998.0685</p>
+<p>Henson, R. N. A. (1999). Positional information in short-term memory: Relative or absolute? Memory &amp; Cognition, 27(5), 915-927. https://doi.org/10.3758/BF03198544</p>
+<p>Holmes, V. M., &amp; Forster, K. I. (1972). Perceptual complexity and underlying sentence structure. Journal of Verbal Learning and Verbal Behavior. https://doi.org/10.1016/S0022-5371(72)80071-9</p>
+<p>Honnibal, M., Montani, I., Van Landeghem, S., &amp; Boyd, A. (2020). spaCy: Industrial-strength natural language processing in python (Version 3.8.14) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.1212303</p>
+<p>Howard, M. W., &amp; Kahana, M. J. (2002). A Distributed Representation of Temporal Context. Journal of Mathematical Psychology, 46(3), 269-299. https://doi.org/10.1006/jmps.2001.1388</p>
+<p>Hurlstone, M. J., Hitch, G. J., &amp; Baddeley, A. D. (2014). Memory for serial order across domains: An overview of the literature and directions for future research. Psychological Bulletin, 140(2), 339-373. https://doi.org/10.1037/a0034221</p>
+<p>Jarvella, R. J. (1970). Effects of syntax on running memory span for connected discourse. Psychonomic Science, 19(4), 235-236. https://doi.org/10.3758/BF03328794</p>
+<p>Jarvella, R. J. (1971). Syntactic processing of connected speech. Journal of Verbal Learning and Verbal Behavior, 10(4), 409-416. https://doi.org/10.1016/S0022-5371(71)80040-3</p>
+<p>Jarvella, R. J. (1979). Immediate Memory and Discourse Processing. In Psychology of Learning and Motivation (Vol. 13, pp. 379-421). Elsevier. https://doi.org/10.1016/S0079-7421(08)60088-2</p>
+<p>Jarvella, R. J., &amp; Herman, S. J. (1972). Clause structure of sentences and speech processing. Perception &amp; Psychophysics, 11(5), 381-384. https://doi.org/10.3758/BF03206272</p>
+<p>Jones, T., &amp; Farrell, S. (2018). Does syntax bias serial order reconstruction of verbal short-term memory? Journal of Memory and Language, 100, 98-122. https://doi.org/10.1016/j.jml.2018.02.001</p>
+<p>Kahana, M. J. (2012). Foundations of human memory. Oxford university press.</p>
+<p>Kahana, M. J., Diamond, N. B., &amp; Aka, A. (2024). Laws of Human Memory. In M. J. Kahana &amp; A. D. Wagner (Eds.), The Oxford Handbook of Human Memory, Two Volume Pack (1st ed., pp. 29-63). Oxford University Press. https://doi.org/10.1093/oxfordhb/9780190917982.013.2</p>
+<p>Kowialiewski, B., Majerus, S., &amp; Oberauer, K. (2024). Does semantic similarity affect immediate memory for order? Usually not, but sometimes it does. Journal of Experimental Psychology: Learning, Memory, and Cognition, 50(1), 68-88. https://doi.org/10.1037/xlm0001279</p>
+<p>Lee, J.-H., &amp; Kim, S. (2009). Sentence processing and memory representation in Korean. In C. Lee, G. B. Simpson, &amp; Y. Kim (Eds.), The Handbook of East Asian Psycholinguistics: Volume 3: Korean (Vol. 3, pp. 442-453). Cambridge University Press. https://doi.org/10.1017/CBO9780511596865.037</p>
+<p>Legate, J. A. (2001). The configurational structure of a nonconfigurational language. Linguistic Variation Yearbook, 1, 61-104. https://doi.org/10.1075/livy.1.05leg</p>
+<p>Lewis, R. L., &amp; Vasishth, S. (2005). An Activation-Based Model of Sentence Processing as Skilled Memory Retrieval. Cognitive Science, 29(3), 375-419. https://doi.org/10.1207/s15516709cog0000_25</p>
+<p>Logan, G. D., Lilburn, S. D., Ulrich, J. E., Weeks, E. E., &amp; Koo, R. (2026). Spotlight on the past: Focusing attention on long-term memory. Memory &amp; Cognition, 54(6), 2031-2061. https://doi.org/10.3758/s13421-026-01854-w</p>
+<p>Lombardi, L., &amp; Potter, M. C. (1992). The regeneration of syntax in short term memory. Journal of Memory and Language, 31(6), 713-733. https://doi.org/10.1016/0749-596X(92)90036-W</p>
+<p>Madigan, S. (1980). The serial position curve in immediate serial recall. Bulletin of the Psychonomic Society, 15(5), 335-338. https://doi.org/10.3758/BF03334550</p>
+<p>Madigan, S., &amp; O&#x27;Hara, R. (1992). Short-term memory at the turn of the century: Mary Whiton Calkins&#x27;s memory research. American Psychologist, 47(2), 170-174. https://doi.org/10.1037/0003-066X.47.2.170</p>
+<p>Majerus, S. (2013). Language repetition and short-term memory: An integrative framework. Frontiers in Human Neuroscience, 7. https://doi.org/10.3389/fnhum.2013.00357</p>
+<p>Makowski, D., Ben-Shachar, M. S., Chen, S. H. A., &amp; Lüdecke, D. (2019). Indices of Effect Existence and Significance in the Bayesian Framework. Frontiers in Psychology, 10. https://doi.org/10.3389/fpsyg.2019.02767</p>
+<p>Marslen-Wilson, W., &amp; Tyler, L. K. (1976). Memory and levels of processing in a psycholinguistic context. Journal of Experimental Psychology: Human Learning and Memory, 2(2), 112-119. https://doi.org/10.1037/0278-7393.2.2.112</p>
+<p>Maybery, M. T., Parmentier, F. B. R., &amp; Jones, D. M. (2002). Grouping of list items reflected in the timing of recall: Implications for models of serial verbal memory. Journal of Memory and Language, 47(3), 360-385. https://doi.org/10.1016/S0749-596X(02)00014-1</p>
+<p>McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan (Second edition). CRC Press.</p>
+<p>Mehler, J., Segui, J., Pittet, M., &amp; Barrière, M. (1978). Strategies for sentence perception. Journal of Psycholinguistic Research, 7(1), 3-16. https://doi.org/10.1007/BF01068041</p>
+<p>Miller, G. A. (1956). The magical number seven, plus or minus two: Some limits on our capacity for processing information. Psychological Review, 63(2), 81-97. https://doi.org/10.1037/h0043158</p>
+<p>Miller, G. A., &amp; Isard, S. (1964). Free recall of self-embedded english sentences. Information and Control, 7(3), 292-303. https://doi.org/10.1016/S0019-9958(64)90310-9</p>
+<p>Miller, L. M., &amp; Roodenrys, S. (2009). The interaction of word frequency and concreteness in immediate serial recall. Memory &amp; Cognition, 37(6), 850-865. https://doi.org/10.3758/MC.37.6.850</p>
+<p>Nairne, J. S., &amp; Kelley, M. R. (2004). Separating item and order information through process dissociation. Journal of Memory and Language, 50(2), 113-133. https://doi.org/10.1016/j.jml.2003.09.005</p>
+<p>Norman, S., Kemper, S., Kynette, D., Cheung, H., &amp; Anagnopoulos, C. (1991). Syntactic Complexity and Adults&#x27; Running Memory Span. Journal of Gerontology, 46, P346-51. https://doi.org/10.1093/geronj/46.6.P346</p>
+<p>Oberauer, K., Lewandowsky, S., Farrell, S., Jarrold, C., &amp; Greaves, M. (2012). Modeling working memory: An interference model of complex span. Psychonomic Bulletin &amp; Review, 19(5), 779-819. https://doi.org/10.3758/s13423-012-0272-4</p>
+<p>Page, M. P. A., &amp; Norris, D. (1998). The primacy model: A new model of immediate serial recall. Psychological Review, 105(4), 761-781. https://doi.org/10.1037/0033-295X.105.4.761-781</p>
+<p>Postle, B. R. (2003). Context in verbal short-term memory. Memory &amp; Cognition, 31(8), 1198-1207. https://doi.org/10.3758/BF03195803</p>
+<p>Postle, B. R., Berger, J. S., Goldstein, J. H., Curtis, C. E., &amp; D&#x27;Esposito, M. (2001). Behavioral and neurophysiological correlates of episodic coding, proactive interference, and list length effects in a running span verbal working memory task. Cognitive, Affective, &amp; Behavioral Neuroscience, 1(1), 10-21. https://doi.org/10.3758/CABN.1.1.10</p>
+<p>Potter, M. C., &amp; Lombardi, L. (1990). Regeneration in the short-term recall of sentences. Journal of Memory and Language, 29(6), 633-654. https://doi.org/10.1016/0749-596X(90)90042-X</p>
+<p>Potter, M. C., &amp; Lombardi, L. (1998). Syntactic Priming in Immediate Recall of Sentences. Journal of Memory and Language, 38(3), 265-282. https://doi.org/10.1006/jmla.1997.2546</p>
+<p>Querella, P., &amp; Majerus, S. (2024). Sequential syntactic knowledge supports item but not order recall in verbal working memory. Memory &amp; Cognition, 52(8), 1737-1761. https://doi.org/10.3758/s13421-023-01476-6</p>
+<p>R Core Team. (2025). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing. https://www.R-project.org/</p>
+<p>Rabe, M., Vasishth, S., Hohenstein, S., Kliegl, R., &amp; Schad, D. (2020). hypr: An R package for hypothesis-driven contrast coding. Journal of Open Source Software, 5(48), 2134. https://doi.org/10.21105/joss.02134</p>
+<p>Ratcliff, R., &amp; McKoon, G. (1989). Similarity information versus relational information: Differences in the time course of retrieval. Cognitive Psychology, 21(2), 139-155. https://doi.org/10.1016/0010-0285(89)90005-4</p>
+<p>Riven, L., &amp; de Almeida, R. G. (2021). Context Breeds False Memories for Indeterminate Sentences. Frontiers in Psychology, 12. https://doi.org/10.3389/fpsyg.2021.616065</p>
+<p>Roberts, R., &amp; Gibson, E. (2002). Individual differences in sentence memory. Journal of Psycholinguistic Research, 31(6), 573-598. https://doi.org/10.1023/A:1021213004302</p>
+<p>Romani, C., Mcalpine, S., &amp; Martin, R. C. (2008). Concreteness Effects in Different Tasks: Implications for Models of Short-Term Memory. Quarterly Journal of Experimental Psychology, 61(2), 292-323. https://doi.org/10.1080/17470210601147747</p>
+<p>Roverud, E., Bradlow, A. R., &amp; Kidd, G. (2020). Examining the sentence superiority effect for sentences presented and reported in forwards or backwards order. Applied Psycholinguistics, 41(2), 381-400. https://doi.org/10.1017/S014271642000003X</p>
+<p>Roverud, E., &amp; Kidd, G., Jr. (2025). The influence of uncertainty about ear of presentation, gender, and linguistic structure in following streams of speech. The Journal of the Acoustical Society of America, 158(5), 4116-4134. https://doi.org/10.1121/10.0039888</p>
+<p>Roverud, E., Villard, S., &amp; Kidd, G., Jr. (2023). Strength of target source segregation cues affects the outcome of speech-on-speech masking experiments. The Journal of the Acoustical Society of America, 153(5), 2780. https://doi.org/10.1121/10.0019307</p>
+<p>Schweppe, J., Schütte, F., Machleb, F., &amp; Hellfritsch, M. (2022). Syntax, morphosyntax, and serial recall: How language supports short-term memory. Memory &amp; Cognition, 50(1), 174-191. https://doi.org/10.3758/s13421-021-01203-z</p>
+<p>Simpson, H. E., &amp; Martin, F. M. del P. (2015). Memory capacity limits in processing of natural connected speech: The psychological reality of intonation units. Proceedings of the Annual Meeting of the Cognitive Science Society, 37.</p>
+<p>Tan, L., &amp; Ward, G. (2000). A recency-based account of the primacy effect in free recall. Journal of Experimental Psychology: Learning, Memory, and Cognition, 26(6), 1589-1625. https://doi.org/10.1037/0278-7393.26.6.1589</p>
+<p>Tan, L., &amp; Ward, G. (2008). Rehearsal in immediate serial recall. Psychonomic Bulletin &amp; Review, 15(3), 535-542. https://doi.org/10.3758/PBR.15.3.535</p>
+<p>VanArsdall, J. E., &amp; Blunt, J. R. (2022). Analyzing the structure of animacy: Exploring relationships among six new animacy and 15 existing normative dimensions for 1,200 concrete nouns. Memory &amp; Cognition, 50(5), 997-1012. https://doi.org/10.3758/s13421-021-01266-y</p>
+<p>Wearing, A. J. (1974). Task differences and word class effects in sentence processing. Australian Journal of Psychology. https://doi.org/10.1080/00049537408255225</p>
+<p>Wingfield, A., &amp; Butterworth, B. (1984). Running memory for sentences and parts of sentences-syntactic parsing as a control function in working memory. Attention and Performance, 10, 351-363.</p>
+<p>Xiao, H., Schweppe, J., Querella, P., Attout, L., Contier, F., &amp; Majerus, S. (2025). Syntactic knowledge does support working memory for serial order: A comparison across French and German languages. Memory &amp; Cognition. https://doi.org/10.3758/s13421-025-01788-9</p>
+<p>Zacks, J. M., &amp; Ferstl, E. C. (2016). Discourse Comprehension. In G. Hickok &amp; S. L. Small (Eds.), Neurobiology of Language (pp. 661-673). Academic Press. https://doi.org/10.1016/B978-0-12-407794-2.00053-5</p>
+<p>Zehr, J., &amp; Schwarz, F. (2022). PennController for Internet Based Experiments (IBEX). https://doi.org/10.17605/OSF.IO/MD832</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
