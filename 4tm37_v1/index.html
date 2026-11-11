@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: Examining Individual Differences in
+Misinformation Engagement among Social Media Users in a Simulated
+Twitter Task</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+Examining Individual Differences in Misinformation Engagement among
+Social Media Users in a Simulated Twitter Task
+</p>
+<p class="meta">
+2026-11-11 · Metacheck 0.4.3.27
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>2</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>12</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(2)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>Methods US MTurk participants (N = 858; September 2021) engaged with
+real COVID-19 tweets in a simulated Twitter feed.</p>
+</blockquote>
+<blockquote>
+<p>Participants (N = 858) were recruited via Amazon Mechanical Turk
+(MTurk) during September 2021 and were compensated based on standard
+survey-taking rates.</p>
+</blockquote>
+<blockquote>
+<p>In the first section, participants were presented with a series of
+real tweets on controversial topics related to COVID-19, including the
+COVID-19 vaccine, mask usage, and hydroxychloroquine (Table 2).</p>
+</blockquote>
+<blockquote>
+<p>As shown in Figure 1, participants were instructed to interact with
+each tweet as if they were using Twitter by selecting one or more of the
+following options: “Like,” “Reply,” “Retweet,” or “Quote Tweet.”</p>
+</blockquote>
+<blockquote>
+<p>Following this simulated newsfeed exercise, participants completed a
+battery of questionnaires assessing individual traits and attitudes
+(Haupt et al., 2024).</p>
+</blockquote>
+<blockquote>
+<p>Participants were asked how much confidence they had in medical
+scientists to act in the best interests of the public.</p>
+</blockquote>
+<blockquote>
+<p>All models used participants with complete data on the independent
+variables (N = 851); 7 participants were excluded from the regression
+due to incomplete data.</p>
+</blockquote>
+<blockquote>
+<p>Another limitation is the demographic composition of the sample;
+being sourced from MTurk, it may not represent the broader population of
+Twitter users, especially considering cultural and geographical
+variations in social media (Buhrmester et al., 2011).</p>
+</blockquote>
+</div>
+</details>
+</div>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Exact
+P-Values</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 8 imprecise <em>p</em> values out of 27 detected <em>p</em>
+values.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Reporting <em>p</em> values imprecisely (e.g., <em>p</em> &lt; .05)
+reduces transparency, reproducibility, and re-use (e.g., in <em>p</em>
+value meta-analyses). Best practice is to report exact p-values with
+three decimal places (e.g., <em>p</em> = .032) unless <em>p</em> values
+are smaller than 0.001, in which case you can use <em>p</em> &lt;
+.001.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (e.g., “decreased at the <em>p</em>
+&lt; .05 significance threshold”).</p>
+<div style="max-height:8em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+P-Value
+</th>
+<th style="text-align:left;">
+Text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+However, grandiose narcissism was not associated with replying to
+misinformation and was a weaker predictor of replying (Misinformation:
+1.87%, p&gt;.05; Unaligned: 3.77%, p&gt;.05) and quoting
+(Misinformation: 2.85%, p&gt;.05; Unaligned: 1.45%, p&gt;.05) compared
+to retweeting.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &lt; .05
+</td>
+<td style="text-align:left;">
+Covert 𝛃 narcissism was also positively associated with liking Unaligned
+tweets ( = 0.21, SE = 0.09, 𝛃 p &lt; .05; 11.81%), but not with
+retweeting them ( = 0.04, SE = 0.09, p &gt; .05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &gt; .05
+</td>
+<td style="text-align:left;">
+Covert 𝛃 narcissism was also positively associated with liking Unaligned
+tweets ( = 0.21, SE = 0.09, 𝛃 p &lt; .05; 11.81%), but not with
+retweeting them ( = 0.04, SE = 0.09, p &gt; .05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &lt; .05
+</td>
+<td style="text-align:left;">
+In the 𝛃 supplementary models, covert narcissism was positively
+associated with all replies to misinformation (endorsive and
+non-endorsive; = 0.22, SE = 0.09, p &lt; .05) and with replies 𝛃 to all
+tweet types ( = 0.46, SE = 0.19, p &lt; .05), while grandiose narcissism
+was not 𝛃 associated with either (Supplementary Table A1).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Openness was not associated with replying positively to misinformation
+(8.49%, p&gt;.05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&lt;.05
+</td>
+<td style="text-align:left;">
+While trust in medical scientists was negatively associated with quoting
+Unaligned tweets (52.35%, p&lt;.05), the magnitude of this effect is
+marginal as seen in the model’s adjusted R² (0.00). <strong>p&lt;.001;
+</strong>p&lt;.01;*p&lt;.05; Shapley weights are standardized so that
+the sum of each variable adds up to 100%.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &lt;.02
+</td>
+<td style="text-align:left;">
+Religiosity was also positively associated with endorsive replies to
+misinformation ( = 0.06, SE = 0.01, p &lt;.02) and was the 𝛃 second
+largest contributor to that model (35.54%).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &lt;.05
+</td>
+<td style="text-align:left;">
+Political orientation was negatively associated with endorsive replies (
+= -0.04, SE = 0.01, p &lt;.001) and quotes ( = -0.01, SE = 𝛃 𝛃 0.01, p
+&lt;.05) to misinformation, meaning that more conservative participants
+endorsed misinformation more often; it was the largest contributor to
+both models (Reply: 37.63%; Quote: 40.15%).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>The APA manual states: Report exact <em>p</em> values (e.g.,
+<em>p</em> = .031) to two or three decimal places. However, report
+<em>p</em> values less than .001 as <em>p</em> &lt; .001. However, 2
+decimals is too imprecise for many use-cases (e.g., a <em>p</em> value
+meta-analysis), so report <em>p</em> values with three digits.</p>
+<p>American Psychological Association (2020). <em>Publication manual of
+the American Psychological Association</em>, 7 edition. American
+Psychological Association.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 7 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+However, grandiose narcissism was not associated with replying to
+misinformation and was a weaker predictor of replying (Misinformation:
+1.87%, p&gt;.05; Unaligned: 3.77%, p&gt;.05) and quoting
+(Misinformation: 2.85%, p&gt;.05; Unaligned: 1.45%, p&gt;.05) compared
+to retweeting.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+However, grandiose narcissism was not associated with replying to
+misinformation and was a weaker predictor of replying (Misinformation:
+1.87%, p&gt;.05; Unaligned: 3.77%, p&gt;.05) and quoting
+(Misinformation: 2.85%, p&gt;.05; Unaligned: 1.45%, p&gt;.05) compared
+to retweeting.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+However, grandiose narcissism was not associated with replying to
+misinformation and was a weaker predictor of replying (Misinformation:
+1.87%, p&gt;.05; Unaligned: 3.77%, p&gt;.05) and quoting
+(Misinformation: 2.85%, p&gt;.05; Unaligned: 1.45%, p&gt;.05) compared
+to retweeting.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+However, grandiose narcissism was not associated with replying to
+misinformation and was a weaker predictor of replying (Misinformation:
+1.87%, p&gt;.05; Unaligned: 3.77%, p&gt;.05) and quoting
+(Misinformation: 2.85%, p&gt;.05; Unaligned: 1.45%, p&gt;.05) compared
+to retweeting.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .08
+</td>
+<td style="text-align:left;">
+Covert narcissism was not significantly associated with replying
+positively to misinformation ( = 0.05, SE = 0.03, p = .08; 6.93%).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p &gt; .05
+</td>
+<td style="text-align:left;">
+Covert 𝛃 narcissism was also positively associated with liking Unaligned
+tweets ( = 0.21, SE = 0.09, 𝛃 p &lt; .05; 11.81%), but not with
+retweeting them ( = 0.04, SE = 0.09, p &gt; .05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p&gt;.05
+</td>
+<td style="text-align:left;">
+Openness was not associated with replying positively to misinformation
+(8.49%, p&gt;.05).
+</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 2 references with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(12)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, ResearchBox, DSpace, Zenodo, Dataverse, Figshare, Dryad,
+ReShare, 4TU.ResearchData, Mendeley Data, DataONE, or LDbase.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 65 references with DOIs. You cited 2 references with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Pennycook, G., &amp; Rand, D. G. (2021). The psychology of fake news.
+Trends in Cognitive Sciences, 25(5), 388-402. <a href="https://doi.org/10.1016/j.tics.2021.02.007" class="uri">https://doi.org/10.1016/j.tics.2021.02.007</a>
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/10B8DC01EF9758B4F3CA1778C1A98A" target="_blank">link</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vosoughi, S., Roy, D., &amp; Aral, S. (2018). The spread of true and
+false news online. Science (New York, N.Y.), 359(6380), 1146-1151. <a href="https://doi.org/10.1126/science.aap9559" class="uri">https://doi.org/10.1126/science.aap9559</a>
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/EDEE760A4BAACE8336C8C723B4531E" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 65 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 65 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Psychological traits and social identities have been linked to misinformation sharing, but most studies measure passive or low-effort engagement. Less is known about high-effort engagement that requires users to write a response. We examined whether cognitive reflection, motivated reasoning variables (political orientation, religiosity, trust in medical scientists) and personality traits are differentially associated with liking, retweeting, replying to, and quoting COVID-19 misinformation and public-health-unaligned tweets. Methods US MTurk participants (N = 858; September 2021) engaged with real COVID-19 tweets in a simulated Twitter feed. Replies and quotes were manually coded as endorsive or combative. We fit OLS regressions for each engagement type (N = 851) and estimated relative importance using Shapley (LMG) decomposition of R².</p>
+<p>Endorsive replies and quotes were rare (7.3% and 4.3% of participants for misinformation). Political conservatism and religiosity were associated with endorsive misinformation replies, and motivated reasoning variables were the largest contributors in all reply and quote models, though these models explained little variance (adjusted R² ≤ .03). Cognitive reflection was negatively associated only with liking, and grandiose narcissism was the largest contributor to retweeting. Conclusion Classical reasoning, personality and motivated reasoning explanations of misinformation propagation were each supported, depending on the type of engagement. Simulation tasks that measure multiple engagement behaviors can help clarify inconsistent findings in the misinformation literature.</p>
+<h3>Introduction</h3>
+<p>Circulation of misinformation on social media has become a critical concern, especially during public health crises like the COVID-19 pandemic. Misinformation is defined as unverified rumors and false claims that spread widely and deceive audiences (Kumar &amp; Geethakumari, 2014). In recent years, misinformation is largely spread through platforms like Twitter and Facebook (Houston et al., 2015; Simon et al., 2015) and the overabundance of misinformation can complicate public health responses, as seen with the COVID-19 pandemic (Romer &amp; Jamieson, 2021). Previous work reports that misinformation and fake news stories on Twitter propagate significantly farther, faster, and more broadly than true stories (Vosoughi et al., 2018). During crisis events, the volume of misinformation often exceeds the corrections (Haupt, Li, et al., 2021; Starbird et al., 2014). The prevalence and speed of misinformation propagation during global events highlights the need to understand the variety of ways people can engage with misinformation. Recent studies show that distinguishing types of online behaviors can provide nuanced insights into propagation dynamics. Fang et al. (2022) report that on Twitter, different engagement behaviors such as liking, retweeting, replying and quoting all differ in effort in both input and output mechanisms. For instance, liking and retweeting require no original content from the user, while replying and quoting both require additional original user input (Fang et al., 2022).</p>
+<p>Liking is also a more passive form of propagation since it does not produce new tweets on the user&#x27;s profile (Fang et al., 2022). Haupt et al. (2024) further show that user characteristics are associated with different types of engagement tendencies: users higher in cognitive reflective thinking (CRT) were less likely to like a misinformation post while those higher in grandiose narcissism and religiosity had a higher tendency to retweet misinformation. While Haupt et al. (2024) examine how factors related to classical reasoning, motivated reasoning and personality traits are associated with passive engagement (i.e., liking) and low-effort active engagement (i.e., retweeting), there is currently no work examining how these factors may be associated with high-effort active engagement types (i.e., replying and quoting). Therefore, the current study will build on the findings from Haupt et al. (2024) by identifying factors that are most predictive of high-effort engagement behaviors.</p>
+<p>In addition to misinformation, we also examine engagement with posts that express unsafe public health practices with regard to COVID-19, even if they do not make an explicit false claim. We classify these tweets as public health guideline &quot;Unaligned&quot; (hereby referred to as just &quot;Unaligned&quot;) if they did not contain misinformation but still expressed sentiment that was not aligned with public health guidelines. Unlike misinformation, which contains a discrete, verifiably false claim, unaligned tweets do not make falsifiable factual assertions; instead, they express skepticism, dismissiveness, or opinion-based rhetoric which promoted harmful practices during the pandemic. Examples of guideline unaligned tweets include expressing negative stances towards wearing a mask, toward vaccines, or a positive stance towards using hydroxychloroquine to treat COVID-19. This distinction follows broader work cautioning that not all content contributing to public misperception is straightforwardly false or fabricated but can still promote distrust in public health guidance through framing, selective emphasis, or misguided opinions (Jack, 2017). In this study, we include unaligned tweets alongside misinformation tweets because both may function similarly in shaping attitudes and engagement behavior on social media, even though only misinformation involves a verifiably false claim.</p>
+<h3>Classical Reasoning</h3>
+<p>The present study will extend findings from previous work (Haupt et al. 2024) to assess how factors related to classical reasoning, motivated reasoning, and personality traits are associated with high effort engagement behaviors (i.e., replying, quoting). One widely used explanation of misinformation spread is the classical reasoning, or &quot;inattention,&quot; account, which holds that people share false content unintentionally, due to insufficient careful thought and relevant knowledge (Pennycook et al., 2016; Pennycook &amp; Rand, 2019 , 2021).</p>
+<p>People simply lack time or mental energy to carefully evaluate the sheer volume of content on social media, thus relying on &#x27;heuristics&#x27; (or mental shortcuts) and &#x27;illusory truths&#x27; (encountering the same information repeatedly can be judged as true), which in turn contributes to misinformation propagation (van der Linden, 2022).</p>
+<p>The Cognitive Reflection Test (CRT) is a widely used measure to assess analytical thinking skills (Frederick, 2005). While previous research has shown negative associations with CRT and misinformation engagement (i.e.https://paperpile.com/c/yoECXc/HXFCX+zgDAB+oftmF liking, retweeting) (Haupt et al., 2024; Pennycook &amp; Rand, 2019 , 2021) , some studies determined that higher CRT mitigates misinformation only in liberal political identities, while not affecting conservative identities&#x27; tendency to spread misinformation (Bayrak et al., 2025). Similarly, another study found that political bias influenced how CRT affected misinformation engagement, but only with hard news (news that is factual and policy relevant), and not soft news (news that is more informal, and entertainment-oriented) (Lois et al., 2026). Thus, these studies suggest that misinformation spread may be due to an interplay between the classical reasoning and motivated reasoning (discussed below) frameworks. However, to our knowledge, there is currently no work that separately examines this effect for high effort engagement behaviors that require writing original responses. Considering that both high CRT and high-effort active engagements require deliberate reflection (Pennycook et al.https://paperpile.com/c/yoECXc/75Vxw 2016) , users engaging actively have more time to discern the veracity of the tweet. Thus, we propose the following hypotheses which extend findings reported in Haupt et al. (2024) by examining high effort engagement with misinformation (replying and quoting) and engagement with unaligned sentiment. We further distinguished whether a reply/quote endorsed the misinformation or was in opposition.</p>
+<p>H1: CRT is negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H2: CRT is negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<h3>Motivated Reasoning</h3>
+<p>Another explanation for how misinformation spreads is the motivated reasoning account.</p>
+<p>This view holds that people evaluate information according to pre-existing goals, choosing to endorse and share content that fits those goals (Kahan, 2015; van der Linden, 2022). Such goals might include protecting one&#x27;s self-image (Dunninghttps://paperpile.com/c/yoECXc/3rgBD 2003) https://paperpile.com/c/yoECXc/Xh6gV avoiding the discomfort of unwelcome news (Dawson et al., 2002) , or justifying self-serving behavior (Hsee, 1996).</p>
+<p>Further, social media users may be influenced by the filter bubble created by their engagement behaviours, they bring their political influences and beliefs to scientific information (Rhodes, 2022; Spohr, 2017). As a result, social media users may be inclined to share posts that are factually wrong but consistent with their beliefs and group identities, while disregarding posts that contradict them (Weeks, 2015).</p>
+<h3>Social factors like political orientation and identity-based motivations (religiosity)</h3>
+<p>further influence misinformation engagement and propagation. For politically motivated reasoning, the underlying goal is thought to be safeguarding one&#x27;s identity, since people adopt beliefs that preserve their ties to a social group whose values they share (Kahan, 2015). Supporting this, studies show that people&#x27;s political identities shape how readily they detect misinformation on divisive topics (Kahan et al., 2017), as well as how willing they are to share fake political news (Osmundsen et al., 2021). Studies confirm that individuals tend to accept information that aligns with their political beliefs and scrutinize or reject information that contradicts their already existing beliefs (Weeks, 2015). For misinformation, this means partisan users might share a false claim that confirms their side&#x27;s narrative while dismissing fact-based corrections from the opposing side. In the UShttps://paperpile.com/c/yoECXc/udFdY where the COVID-19 pandemic quickly became a polarizing political issue (Haupt, Jinich-Diamant, et al., 2021) , conservatives were more likely to oppose public health guidelines (Haupt et al., 2024; Lawson &amp; Kakkar, 2022; Pereira et al., 2018; Romer &amp; Jamieson, 2021; Van Bavel et al., 2021).</p>
+<p>According to the motivated reasoning account, conservatives may engage with COVIDrelated misinformation because the content resonates with their group identity. Bayrak et al. &#x27;s (2025), and Lois et al. &#x27;s (2026) accounts of how CRT varies with political ideology and type of news also align with how motivated reasoning affects misinformation propagation, through mediating classical reasoning framework. Thushttps://paperpile.com/c/yoECXc/d9e41+HXFCX+xxcVj based on how conservatism has been linked to misinformation propagation (Haupt et al., 2024; Lawson &amp; Kakkar, 2022; Romer &amp; Jamieson, 2021) , we hypothesize that politically motivated conservative individuals may readily and actively propagate misinformation.</p>
+<p>H3: Political conservatism is positively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H4: Political conservatism is positively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>In addition to political identity, other social factors could evoke motivated reasoning.</p>
+<p>Trust in information sources is one such factor: if people fundamentally distrust authorities or medical experts, they may be more inclined to believe fake news and misinformation or conspiracy theories. During the COVID-19 pandemic, for instance, individuals with low trust in medical scientists and public health institutions were observed to be more susceptible to conspiracy theories about the virus (Hunt et al., 2022). Conversely, higher trust in scientists and experts might protect people against health misinformation by making them more likely to seek confirmation from credible sources. We believe that this trust can influence active engagement with misinformation.</p>
+<p>H5: Trust in medical scientists is negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H6: Trust in medical scientists is negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>Religiosity can also influence misinformation engagement (Bronstein et al., 2019; Haupt et al., 2024; Lee Rogers &amp; Powe, 2022). Strong religious or moral worldviews might predispose individuals toward certain misinformed beliefs (for example, preferring faithbased explanations or distrust of secular authorities), although these relationships are complex and under-studied (Bronstein et al., 2019; Lee Rogers &amp; Powe, 2022). A study finds that strong religious beliefs were tied to COVID-19 misperceptions (Druckman et al., 2021).</p>
+<p>Moreoverhttps://paperpile.com/c/yoECXc/TkPui research in the US has shown that higher religious belief (specifically Christianity) is associated with greater skepticism toward science (Azevedo &amp; Jost, 2021) , and higher conspiracy thinking and belief in misinformation (Bronstein et al., 2019; Frenken et al., 2023). Thus, we posit that highly religious individuals may be more actively propagating misinformation, spreading their beliefs within their communities and on social media. H7: Religiosity is positively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H8: Religiosity is positively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<h3>Personality Traits</h3>
+<p>Recent research suggests that many psychological factors influence the likelihood of sharing misinformation. For example, factors like empathy -encompassing both cognitive perspective-taking and emotional concern -may act as a buffer against spreading misinformation on social media (Hangartner et al., 2021; Haupt et al., 2024; Moore-Berg et al., 2022). Individuals high in empathy may be less likely to like or share false content on platforms like Twitter since they are more likely to consider the potential harm misinformation could inflict on others. Similarly, interventions that evoke empathy, such as empathetic messaging, can correct mistaken beliefs and even curb harmful online content (Hangartner et al., 2021; Moore-Berg et al., 2022). These findings suggest that users with strong perspective-taking abilities and compassionate concern are less inclined to engage with misinformation (Haupt et al.https://paperpile.com/c/yoECXc/HXFCX 2024) , which can further extend to high effort engagement.</p>
+<p>H9: Empathy is negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H10: Empathy is negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes). Narcissism-both grandiose and covert (vulnerable) variants -have been linked to greater engagement with misinformation on social media. Both types share entitlement and self-focus, but differ mainly in neuroticism, extraversion and insecurity (https://paperpile.com/c/yoECXc/HS9I+4n2r. Kaufman et al., 2020; Miller et al., 2011). Grandiose narcissism is characterized by an inflated self-image, entitlement, and low regard for others, and it is associated with heavy social media activity and higher belief in conspiracy theories (Gnambs &amp; Appel, 2018; Sternisko et al., 2023). This could indicate an increased propensity to spread misinformation: for instance, Haupt et al.&#x27;s (2024) study found that users high in grandiose narcissism were significantly more likely to retweet false or misleading posts (Haupt et al., 2024). Grandiose narcissists may share misinformation to attract attention, bolster their ego, or reinforce narratives that flatter their worldview (Haupt et al., 2024; Sternisko et al., 2023). Covert (vulnerable) narcissism, marked by insecurity, hypersensitivity, and self-victimisation (Dickinson &amp; Pincus, 2003; Fegan &amp; Bland, 2021; Wink, 1991) also appears conducive to misinformation engagement (Cosgrove &amp; Murphy, 2023; Kay, 2021). Those higher in covert narcissism prefer online interactions over in-person interactions, and report more problematic social network use than those higher in grandiose narcissism (Casale et al., 2016; Musetti et al., 2022).</p>
+<p>Oversensitivity, a common experience in covert narcissism, is also associated with greater concerns about others&#x27; comments and reactions online (Fegan &amp; Bland, 2021). Research during the COVID-19 pandemic found that narcissistic individuals showed lower compliance with public health guidelines and a preference for conspiracy explanations and COVID-19 conspiracy theories (Sternisko et al., 2023). Thus, narcissistic traits tend to increase one&#x27;s likelihood of engaging with or amplifying misinformation on social networks, as these individuals are more driven by personal or ideological gratification (Haupt et al., 2024; Sternisko et al., 2023). To build on the findings from Haupt et al. (2024), we hypothesize: H11: Narcissism (Grandiose and Covert) is positively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H12: Narcissism (Grandiose and Covert) is positively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>In contrast, those higher in openness, a Big Five Inventory (BFI) personality trait, have been shown to be less likely to take information at &quot;face value&quot; and may be better at discerning false from true content (Lawson &amp; Kakkar, 2022; Sindermann et al., 2020). Other research indicates that actively open-minded thinking correlates with lower susceptibility to fake news (Munusamy et al., 2024). However, some studies find that low cognitive reflectiveness moderates higher openness into sharing more misinformation (Ahmed &amp; Tan, 2022). Conscientiousness, another BFI personality trait reflecting self-discipline, caution, and deliberation, has consistently been associated with lower engagement with misinformation online: highly conscientious social media users are more likely to verify information and consider consequences before acting, making them less prone to like or share false news (Lawson &amp; Kakkar, 2022; Sindermann et al., 2020). Empirical studies support this buffering effect: for example, people higher in conscientiousness were found to share significantly fewer fake news stories during the COVID-19 pandemic, especially when compared to their less conscientious counterparts (Lawson &amp; Kakkar, 2022). In Haupt et al.&#x27;s (2024) study, conscientious individuals showed a reduced tendency to passively endorse misinformation (e.g., by liking posts), though their rate of actively retweeting false content was not significantly lower, suggesting that conscientiousness mainly curbs passive engagement with misinformation (Haupt et al., 2024). Thus, based on previous research, we hypothesize that open individuals are more likely to communicate their beliefs through active engagement, and are less susceptible to misinformation, leading to less endorsive active engagement with misinformation. Similarly, conscientious individuals who are less susceptible to misinformation would show lower endorsive active engagement with misinformation.</p>
+<p>H13: BFI Conscientiousness and Openness are negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H14: BFI Conscientiousness and Openness are negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<h3>Present Study</h3>
+<p>Though prior work suggests various potential predictors of misinformation engagement and propagation, the relative contributions of these factors have not been studied together extensively. The present research aims to fill this gap by systematically investigating individual factors (e.g., classical reasoning, motivated reasoning, psychological traits) associated with different types of engagement behaviors on social media (e.g., reply). The present study is an extension of (Haupt et al.https://paperpile.com/c/yoECXc/HXFCX 2024) , which examines the influence of individual characteristics on liking and retweeting misinformation. Specifically, this study expands the analysis to examine influences on engagement of tweets expressing sentiment unaligned with public health guidelines, and on high-effort active engagement where participants generate text to &#x27;reply&#x27; or &#x27;quote&#x27; misinformation or unaligned tweets. By measuring different engagement behaviors in the same participants, we also assess whether the main explanations for misinformation propagation (classical reasoning, motivated reasoning and personality traits) apply to different types of engagement. Table 1 shows the theoretical accounts, tested variables, the hypotheses, and their findings. H1: CRT is negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H2: CRT is negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes). H5: Trust in medical scientists is negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H6: Trust in medical scientists is negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>H7: Religiosity is positively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H8: Religiosity is positively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>to and Quoting Misinformation) H5: Partially supported (passive engagement-liking) H6: Mixed (Quoting Unaligned Tweets: very small magnitude; Replying to Unaligned Tweets: opp. direction) H7: Supported H8: Partially supported (Replying to Misinformation and Unaligned Tweets) Psychological Traits • Grandiose narcissism • Covert narcissism • Empathy(Perspective-taking &amp; Emotional-concern) • BFI Conscientiousness • BFI Openness</p>
+<p>H9: Empathy is negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H10: Empathy is negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>H11: Narcissism (Grandiose and Covert) is positively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H12: Narcissism (Grandiose and Covert) is positively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>H13: BFI Conscientiousness and Openness are negatively associated with higher unaligned sentiment engagement (liking, retweeting).</p>
+<p>H14: BFI Conscientiousness and Openness are negatively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<p>H9: Not supported H10: Not supported H11: Partially supported (except CovNarc: retweet) H12: Not supported H13: Partially supported (both passive engagementliking) H14: Not Supported</p>
+<h3>Methodology</h3>
+<h3>Participants and Procedure</h3>
+<p>Data was collected in prior work, which tested how the factors examined in the present study were associated with low effort and passive engagement types (i.e., retweeting, liking) (Haupt et al., 2024). The present study expands on this work by examining more active forms of misinformation engagement (i.e., replying, quoting). Participants (N = 858) were recruited via Amazon Mechanical Turk (MTurk) during September 2021 and were compensated based on standard survey-taking rates. The survey was administered via Qualtrics and divided into two primary sections. In the first section, participants were presented with a series of real tweets on controversial topics related to COVID-19, including the COVID-19 vaccine, mask usage, and hydroxychloroquine (Table 2). The subset of tweets used for this study included Unaligned tweets (opinion-based negative attitudes to COVID-19 public health recommendations) or COVID-19 Misinformation tweets. As shown in Figure 1, participants were instructed to interact with each tweet as if they were using Twitter by selecting one or more of the following options: &quot;Like,&quot; &quot;Reply,&quot; &quot;Retweet,&quot; or &quot;Quote Tweet.&quot; Input text responses were required for &quot;Reply&quot; and &quot;Quote Tweet&quot; selections. This design aimed to simulate real-world engagement behavior with social media content. We further manually categorised replying and quoting as endorsive (positive sentiment/ agreeing with original tweet) vs non-endorsive (negative sentiment/disagreeing with original tweet) replies or quotes, with endorsive/affirmative interactions suggesting misinformation propagation, while non-endorsive interactions were actually corrective in nature, and minimized misinformation propagation (and are therefore not explored in this paper). Each reply and quote was coded separately for each tweet, and the endorsive reply and quote outcomes are the number of replies (or quotes) to misinformation or Unaligned tweets that were coded as endorsive. Following this simulated newsfeed exercise, participants completed a battery of questionnaires assessing individual traits and attitudes (Haupt et al., 2024). Only relevant measures included in this study are described below.</p>
+<h3>Measures</h3>
+<h3>Demographics</h3>
+<p>Participants reported basic demographic information, including age, gender, race/ethnicity, education level, employment status, and annual income.</p>
+<p>Category Public Health Topics Vaccine Hydroxychloroquine Mask agenda. #Covid19 (RT: 1200+) (Public Health Guideline) Unaligned 1. The black plague disappeared without a vaccine, just saying… 2. Flu vaccine has been around for about 70 years and is usually around 65-70% effective, and has well documented safety concerns for a small amount of people. Covid vaccine then obviously a miracle. 1. #Hydroxychloroqui ne is a safe drug. 2. Hydroxychloroquin e has side effects but death is not one of them. 1. &quot;No masks at #MetGala? No masks at #Emmys? Okay. It&#x27;s a dead issue. Schoolchildren don&#x27;t need them any more than Ben Affleck.&quot; 2. Wearing a mask when it is not medically necessary is grotesque and unhuman, an attack on society itself. It feeds paranoia and fear. You are treating air like it is toxic and other humans like they are nothing but vessels of disease. It is disgraceful, arrogant, and offensive.</p>
+<h3>Cognitive Reflection</h3>
+<p>Cognitive Reflective Thinking (a measure of classical reasoning) was assessed using the three-item Cognitive Reflection Test (CRT) (α = 0.79) (Blacksmith et al., 2019; Frederick, 2005). These word problems required participants to override common heuristics in thinking in favor of more deliberate, reflective answers (e.g., the classic &quot;bat and ball&quot; problem). This is scored on a scale of 0 to 3, with 0 being the minimum, where no questions are correctly answered, followed by 1, 2 and 3 for the number of questions correctly answered respectively.</p>
+<h3>Political Ideology</h3>
+<p>Participants self-reported their political orientation on a 6-point scale from1 = Very Conservative to6 = Very Liberal. For analysis, higher scores indicate more liberal ideologies.</p>
+<h3>Trust in Medical Services</h3>
+<p>Trust was assessed using a single-item measure (from a 4-item scale adapted from the 2019 Pew Research Center&#x27;s American Trends Panel survey (Funk et al., 2019)) embedded within a broader &quot;Trust in Institutions&quot; scale from the Pew survey. Participants were asked how much confidence they had in medical scientists to act in the best interests of the public.</p>
+<p>Responses were given on a 4-point Likert scale:1 = No confidence at all,2 = Not too much,3 = A fair amount, and4 = A great deal.</p>
+<h3>Religiosity</h3>
+<p>Religiosity was measured using the Centrality of Religiosity Scale (Huber &amp; Huber, 2012) which had 7 items that assessed participants&#x27; religious affiliation, frequency of religious practices (e.g., prayer, meditation), and experiences of spiritual connection (α = 0.87). Response formats varied by item type but generally used a Likert-type scale.</p>
+<h3>Empathy</h3>
+<p>Empathy was measured using a series of items adapted from the Interpersonal Reactivity Index. Perspective-taking (PT) empathy refers to the capacity to shift one&#x27;s perspective to others&#x27; intentions, goals, and motives (Frith &amp; Frith, 2005; Stietz et al., 2019).</p>
+<p>Emotional-concern (EC) refers to emotions that are elicited by the perceived emotional wellbeing of others (Batson, 2009). Participants responded to 14 items on a 5-point scale ranging from0 = &quot;Does not describe me well&quot; to4 = &quot;Describes me well.&quot; Both the PT (α=0.60) and EC (α = 0.71) subscales were taken directly from the Interpersonal Reactivity Index (Davis, 1983). For analysis, the two subscales were averaged into a single empathy score (range 0-4).</p>
+<h3>Narcissism</h3>
+<p>Two variants of narcissism were assessed:</p>
+<p>Grandiose Narcissism. was measured using the Narcissism Personality Inventory (NPI) (Ames et al., 2006) (α = 0.81), a forced-choice format in which participants selected one statement from each of 16 pairs that best described them (e.g., &quot;I am an extraordinary person&quot; vs. &quot;I am much like everybody else&quot;).</p>
+<h3>Covert Narcissism.</h3>
+<p>was assessed using the 10-item Hypersensitive Narcissism Scale (Hendin &amp; Cheek, 1997) (α = 0.89), where participants indicated how characteristic each statement was of their feelings and behavior on a 5-point scale (1 = Very uncharacteristic/strongly disagree to5 = Very characteristic/strongly agree).</p>
+<h3>Openness</h3>
+<p>Openness was measured using the Openness subscale from the Big Five Inventory (BFI) (α = 0.65) (John et al., 2008). The subscale assessed imagination, intellectual curiosity, and appreciation for art and abstract ideas (e.g., &quot;Loves to read challenging material&quot;).</p>
+<p>Participants rated each statement on a 5-point scale from1 = &quot;Disagree strongly&quot; to5 = &quot;Agree strongly.&quot;</p>
+<h3>Conscientiousness</h3>
+<p>Conscientiousness was also measured using the conscientiousness subscale from the Big Five Inventory (α = 0.72) (John et al., 2008). This subscale assessed self-discipline, organization, and goal-directed behaviors (e.g., &quot;Completes tasks successfully,&quot; &quot;Pays my bills on time&quot;).</p>
+<p>Participants rated each statement on a 5-point scale from1 = &quot;Disagree strongly&quot; to5 = &quot;Agree strongly.&quot;</p>
+<h3>Data Analysis</h3>
+<p>Six regression models were run with the dependent variables being engagements in the context of COVID-19 tweets: 1) Positively Replying to/Endorsing misinformation Tweets, 2) Positively Quoting/endorsing misinformation Tweets, 3) Liking Unaligned tweets (which included liking tweets that were against the vaccine or against masks, or liking tweets which supported hydroxychloroquine use), 4) Retweeting Unaligned Tweets, 5) Positively Replying to/Endorsing Unaligned Tweets, and 6) Positively Quoting/Endorsing Unaligned tweets. Two additional models (liking and retweeting misinformation tweets) from the previous study (Haupt et al., 2024) are reported in the results for comparison purposes.</p>
+<p>For each model, the independent variables (IV) listed in the measures section were used (all classical reasoning, motivated reasoning and personality trait variables). Shapley scores were used to identify relative importance of each independent variable in the regression models. This method accounts for multicollinearity between the IVs and gives the relative importance of an IV while controlling for the others. Relative importance was computed as the Shapley decomposition of R² (lmg; (Lindeman &amp; Merenda, 1980 https://paperpile.com/c/yoECXc/rUJa), consistent with Haupt et al. (2024), and normalised to sum to 100%; 95% confidence intervals were obtained from 1,000 bootstrap resamples (Supplementary Table A2). All models used participants with complete data on the independent variables (N = 851); 7 participants were excluded from the regression due to incomplete data. To compare endorsive replying with replying in general, the same predictors were also used to model all replies to misinformation (endorsive and non-endorsive), non-endorsive replies to misinformation (all misinformation replies minus endorsive replies), and replies to all tweet types (Supplementary Table A1).</p>
+<h3>Results</h3>
+<p>The average age of the participants was 37.26 (SD = 10.22) years old. Most of the participants identified as male (60.49%), and a large part of the overall sample considered themselves at least slightly liberal (65.73%).</p>
+<p>Descriptive statistics for the tested variables are given in Table 3. For the CRT measure, the average score was 1.14 (SD = 1.20), which indicates that on average, participants answered around one (out of three) questions correctly. All psychometric measures&#x27; averages were around the middle of their respective scales. Table 4 highlights the descriptive statistics of overall and specific engagement variables. On average, participants did interact with the tweets, with liking (M=19.74,SD=11.24) being the most common interaction, followed by retweeting (M=9.33,SD=9.35), replying (M=1.72,SD=3.54), and quoting (M=0.61,SD=1.63).</p>
+<p>Misinformation and Unaligned tweet interactions also followed a similar trend. Endorsive replies and quotes were rare: 7.34% of participants made at least one endorsive reply to a misinformation tweet and 4.31% made at least one endorsive quote (Supplementary Figure A2).</p>
+<h3>Regression Results</h3>
+<p>The results of the six regression models are given in</p>
+<p>Table 5 (Misinformation Tweets) and Table 6 (Unaligned Tweets). The standardized Shapley Weights for all IVs in each model are represented in Table 7. The Misinformation passive engagement Likes modelshttps://paperpile.com/c/yoECXc/HXFCX and the low-effort active engagement Retweets models were analysed and discussed in the previous paper which focused on passive engagement (Haupt et al., 2024) , and will only be used here for comparisons, and not interpretations (Haupt et al., 2024). Overall, the passive engagement models had the most variance explained by our tested predictors (Like Misinformation = 52%, Like Unaligned = 45%) compared to low-effort active engagement models (RT Misinformation= 15%, RT Unaligned = 12%). Among personality traits, Grandiose narcissism was also positively associated with liking Unaligned tweets ( = 1.27, 𝛃 SE = 0.29, p &lt;.001), and retweeting Unaligned tweets (𝛃 = 1.53, SE = 0.30, p &lt;.001). It was also the largest contributor to the retweeting Unaligned tweets model (41.24%, p&lt;.001). However, grandiose narcissism was not associated with replying to misinformation and was a weaker predictor of replying (Misinformation: 1.87%, p&gt;.05; Unaligned: 3.77%, p&gt;.05) and quoting (Misinformation: 2.85%, p&gt;.05; Unaligned: 1.45%, p&gt;.05) compared to retweeting.</p>
+<p>Covert narcissism was not significantly associated with replying positively to misinformation ( = 0.05, SE = 0.03, p = .08; 6.93%). Covert 𝛃 narcissism was also positively associated with liking Unaligned tweets ( = 0.21, SE = 0.09, 𝛃 p &lt; .05; 11.81%), but not with retweeting them ( = 0.04, SE = 0.09, p &gt; .05). In the 𝛃 supplementary models, covert narcissism was positively associated with all replies to misinformation (endorsive and non-endorsive; = 0.22, SE = 0.09, p &lt; .05) and with replies 𝛃 to all tweet types ( = 0.46, SE = 0.19, p &lt; .05), while grandiose narcissism was not 𝛃 associated with either (Supplementary Table A1). Openness was not associated with replying positively to misinformation (8.49%, p&gt;.05). Apart from political orientation, none of the tested predictors showed a statistically significant effect on quoting misinformation, and the model explained almost no variance (adjusted R² = 0.00). While trust in medical scientists was negatively associated with quoting Unaligned tweets (52.35%, p&lt;.05), the magnitude of this effect is marginal as seen in the model&#x27;s adjusted R² (0.00).   **p&lt;.001; **p&lt;.01;*p&lt;.05; Shapley weights are standardized so that the sum of each variable adds up to 100%. The passive and low-effort active engagement results for Misinformation are from Haupt et al. (2024), and is mentioned here for comparison purposes. Asterisks indicate the significance of the corresponding OLS coefficient (Tables 5 and 6); 95% bootstrap confidence intervals are reported in Supplementary Table A2 and Figure A3.</p>
+<h3>Discussion</h3>
+<p>The present study examined the role of psychological and social factors in predicting high effort forms of misinformation engagement. Taken together, the findings offer a nuanced picture of how individual differences shape the ways in which people interact with misinformation online, extending the work of Haupt et al. (2024) to high effort engagement behaviors. On average, participant replies and quotes counts for all tweets were lower than the like and retweet counts, suggesting that not many users are willing to exert the effort needed to write responses. Overall, the main explanations for misinformation propagation were each supported, depending on the type of engagement: classical reasoning (CRT) was an inhibitor of passive engagement (liking), personality (grandiose narcissism) was associated with low-effort active engagement (retweeting), and motivated reasoning variables were most associated with high-effort active engagement (replying and quoting).</p>
+<h3>Classical Reasoning</h3>
+<p>CRT was significantly negatively associated with liking Unaligned tweets, and was a large contributor to the model based on Shapley-weighted variance. This pattern suggests that lower reflective thinking is a meaningful driver of passive misinformation endorsement. This is in-line with previous literature that indicates that individuals who lean towards quickheuristic thinking are more susceptible to misleading content (Haupt et al., 2024; Munusamy et al., 2024). However, no other form of Unaligned engagement was significantly associated with CRT. Thus, H1 is only partially supported for liking Unaligned tweets (passive engagement).</p>
+<p>CRT was not associated with endorsive replies or quotes to misinformation or Unaligned tweets. Thus, H2 is not supported. This finding suggests that higher cognitive reflective thinking may not reduce high-effort active engagement with misinformation; individuals who choose to author a reply may already spend more time deliberating on the tweet, regardless of their reflective nature (Pennycook et al., 2016). Notably, CRT was negatively associated only with liking; it was not associated with retweeting, or with endorsive replying or quoting. In contrast, political orientation and religiosity were the largest contributors to endorsive replying to misinformation (see Motivated Reasoning). This suggests that the reflective-thinking account (Pennycook &amp; Rand, 2019 , 2021) may best explain quick, low-effort judgments such as liking, while endorsements that users write themselves may depend more on pre-existing beliefs and group identity (Kahan, 2015).</p>
+<p>However, because endorsive replies were rare, small effects of CRT on these behaviours cannot be ruled out.</p>
+<h3>Motivated Reasoning</h3>
+<p>Political orientation did not significantly predict liking or retweeting Unaligned tweets; thus, H3 is not supported. However, political conservatism was positively associated with endorsive replies and quotes to misinformation and was the largest contributor to both models, partially supporting H4. This is consistent with prior work suggesting that partisan identity alignment can increase susceptibility to misinformation consistent with one&#x27;s worldview (Bayrak et al., 2025; Lois et al., 2026; Rhodes, 2022; Spohr, 2017; Van Bavel &amp; Pereira, 2018; Weeks, 2015). Since political ideology was not associated with passive or low effort engagement once psychological and social covariates were controlled for, political identity may matter most when users author their own endorsement of a claim. Our results are somewhat consistent with Pennycook and Rand&#x27;s (2019) finding that reflective thinking was more predictive of misinformation discernment than political orientation, since CRT was negatively associated with liking unaligned tweets. However, in the present study, political conservatism, rather than CRT, was associated with positively replying to misinformation, which suggests that motivated reasoning may play a larger role when users write a reply to a post that aligns with their pre-existing beliefs.</p>
+<p>Trust in medical scientists was negatively associated with liking Unaligned tweets. This finding is consistent to previous research showing that institutional trust in scientists mitigates susceptibility to misinformation (https://paperpile.com/c/yoECXc/d8GBF. Kaufman et al., 2022) https://paperpile.com/c/yoECXc/d8GBF  (Haupt et al., 2024; Hunt et al., 2022). While we found higher trust in medical scientists to be positively associated with replying to Unaligned tweets and negatively associated with quoting them, engagement (e.g., liking or judging the accuracy of headlines), or did not separate passive and active engagement. However, the reply and quote models explained little variance, so these weights show which variables mattered most within these models, rather than strong effects.</p>
+<h3>Personality Traits</h3>
+<p>Among the personality variables, empathy was not significantly negatively associated with high-effort active engagement with misinformation or with any of the Unaligned tweets models. These results were not consistent with previous literature (Hangartner et al., 2021; Haupt et al., 2024; Moore-Berg et al., 2022). H9 and H10 are therefore not supported in the present study. The reduced significance in this study may be attributable to the reduction of empathy subscales into the overall scale, or due to the extended list of covariates includedespecially some of the other psychometrics which highly correlate with empathy (particularly Openness (r=0.57) and Conscientiousness (r= 0.54)) (Figure A1 in the supplementary material).</p>
+<p>Based on Haupt et al. (2024), grandiose narcissism was specifically a strong predictor in passive and low effort active engagement models. The analysis in the present study shows that Grandiose Narcissism is also significantly positively associated with liking and retweeting Unaligned tweets. Notably, grandiose narcissism was also the largest contributor to the retweeting Unaligned model, consistent with prior research linking grandiose narcissism to social media amplification behavior and conspiracy endorsement (Gnambs &amp; Appel, 2018; Haupt et al., 2024; Sternisko et al., 2023). However, in contrast, grandiose narcissism was not associated with positively replying to or quoting misinformation, further highlighting differences between low effort and high effort active engagements. Retweeting may better fit the approval-seeking need of grandiose narcissists (https://paperpile.com/c/yoECXc/HS9I. Kaufman et al.https://paperpile.com/c/yoECXc/HS9I 2020) , using third-person claims as evidence to bolster their ego, and promote their own worldview while avoiding refutation by not attaching their own words to the claim. Therefore, H11 is supported, but H12 is not supported.</p>
+<p>Covert narcissism was positively associated with liking Unaligned tweets, but was not significantly associated with endorsive replies or quotes to misinformation or Unaligned tweets. These results are broadly consistent with prior findings linking covert narcissism to heightened social media engagement (Fegan &amp; Bland, 2021; Haupt et al., 2024). However, H12 is not supported for covert narcissism. Notably, Haupt et al. (2024) found no significant effect of covert narcissism on liking or retweeting misinformation. Our findings also reveal meaningful differences in engagement behaviors between covert and grandiose variants of narcissism. As shown in Haupt et al., (2024), grandiose narcissism was the strongest predictor of retweeting across tweet types while the present study shows covert narcissism was associated with replying in general (Supplementary Table A1). There was no significant association between grandiose narcissism and high effort engagement. These findings suggest that those higher in covert tendencies may be more likely to write responses despite the higher efforts, whether or not they agree with the tweet, while those with grandiose tendencies may be more averse to high effort responses and prefer low effort propagation. This may be because those higher in covert narcissism prefer online interactions (Casale et al.https://paperpile.com/c/yoECXc/GjRO+8QvI 2016https://paperpile.com/c/yoECXc/MBOL Musetti et al., 2022) , and are sensitive to how others respond to them (Fegan &amp; Bland, 2021) ; replying would allow them to express themselves and draw responses from others. However, these effects were small, so replicating these findings in larger samples is crucial.</p>
+<p>Openness was negatively associated with liking Unaligned tweets, consistent with the expectation that intellectually curious individuals are better at evaluating information critically (Lawson &amp; Kakkar, 2022; Sindermann et al., 2020). Thus, this offers support to H13. However, openness was not associated with positive replies or quotes to misinformation or Unaligned tweets, unlike Haupt et al.&#x27;s (2024) finding that openness was negatively associated with passive misinformation engagement. Thus, H14 is not supported for openness. This may be due to the low number of repliers to tweets and may reflect heterogeneous effects of Openness on misinformation engagement. In an additional model, openness was positively associated with non-endorsive replies to misinformation (Supplementary Table A1), suggesting that open individuals do reply to misinformation, but mostly to disagree with it rather than endorse it. Highly open individuals tend to engage broadly across a range of content and explore multiple perspectives, rather than uncritically accepting claims (https://paperpile.com/c/yoECXc/xxcVj+PAEWx+nhQaD. Kaufman et al., 2025; Lawson &amp; Kakkar, 2022; Sindermann et al., 2020). Taken as a whole, openness appears to function as a protective factor against passive unaligned tweet acceptance.</p>
+<p>Conscientiousness was significantly negatively associated with liking Unaligned tweets. This supports H13. These results align with research demonstrating that conscientious individuals are more likely to verify information before acting and less prone to reflexive, passive endorsement of misinformation (Calvillo et al., 2021; Lawson &amp; Kakkar, 2022; Sindermann et al., 2020). However, Conscientiousness was not associated with high effort active engagement models suggesting that conscientiousness primarily curbs passive rather than active engagement. Instead, conscientiousness was positively associated with nonendorsive replies to misinformation (Supplementary Table A1), suggesting that conscientious individuals do reply to misinformation, but not to endorse it. H14 is therefore not supported for conscientiousness.</p>
+<h3>Strengths &amp; Limitations</h3>
+<p>A strength of our study was our distinction between passive engagement, low-effort active engagement, and high-effort active engagement metrics. As evidenced by many variables discussed, there were significant differences in how these engagement types differed across variables. For example, CRT was only associated with liking, while motivated reasoning variables contributed the most to replying and quoting, and grandiose narcissism to retweeting. Another strength of this study was the fact that we manually distinguished between positive replies (and quotes) (endorsive active engagement) and negative replies (and quotes) (non-endorsive active engagement) to misinformation and Unaligned tweets. A strength and limitation of this study is the use of a simulation exercise rather than using real interactions on Twitter/X. While a simulated newsfeed exercise allows for measurement of engagement behaviors aligned to true Twitter interface (which may be better than simple Likert-type questions), it still lacks ecological validity as participants&#x27; interactions with tweets might be altered as their engagement behaviours are not reflected on their actual public profile. Another limitation is the demographic composition of the sample; being sourced from MTurk, it may not represent the broader population of Twitter users, especially considering cultural and geographical variations in social media (Buhrmester et al., 2011).</p>
+<p>Endorsive replies and quotes were also rare, which limited statistical power for the higheffort models. Because these models explained little variance, the large Shapley weights of the motivated reasoning variables reflect their importance relative to the other predictors, not large effects. Future research should ensure sample sizes large enough to draw conclusions from differences in types of active engagement with tweets (i.e., endorsement vs combatant).</p>
+<p>New research could extend this study by incorporating real-world Twitter data to validate findings in naturalistic settings, enhancing external validity (Hargittai, 2020). In addition, examining platform-specific behaviors (e.g., Twitter vs. Facebook vs. TikTok) could shed light on how platform dynamics influence misinformation propagation.</p>
+<h3>Conclusion</h3>
+<p>This study extends prior work on misinformation propagation by moving beyond passive and low-effort active engagement to examine how classical reasoning, motivated reasoning, and psychological factors shape high-effort active engagement (replying and quoting) with both misinformation and public-health-unaligned content. The findings highlight that engagement type matters: classical reasoning, motivated reasoning, and personality traits did not operate uniformly across passive, low-effort active, and high-effort active behaviors, and in several cases (e.g., CRT, openness, grandiose narcissism, political orientation) their effects on higheffort engagement differed from their established effects on liking and retweeting, even from the previous paper linked to this study (Haupt et al., 2024). Motivated reasoning variables, rather than CRT, contributed the most to high-effort engagement, suggesting that findings based mainly on passive engagement may not extend to replying and quoting. By measuring multiple engagement behaviors, we found that classical reasoning, personality and motivated reasoning explanations of misinformation propagation were each supported depending on the type of engagement, suggesting that simulation exercises measuring multiple engagement types can help clarify disparities in the misinformation literature. Future work that can investigate different misinformation user types, examine social media data from naturalistic settings, and test differential responses to user-specific interventions will be necessary to translate these psychological and behavioral distinctions into practical tools for reducing misinformation propagation.</p>
+<p>these effects had a very weak magnitude. Trust in medical scientists was also positively associated with non-endorsive replies to misinformation (Supplementary Table A1), suggesting that those who trust medical scientists may reply to misinformation to disagree with it. These findings provide partial support for H5 and mixed support for H6, and encourage more research with this variable.</p>
+<p>Religiosity was a significant and consistent predictor across multiple engagement models, specifically with liking Unaligned tweets, retweeting Unaligned tweets, and positively replying to Unaligned and misinformation tweets. These results support H7 and H8, and are consistent with prior research linking religiosity with greater susceptibility to misinformation and conspiracy beliefs (Bronstein et al., 2019; Druckman et al., 2021; Lee Rogers &amp; Powe, 2022). The strong contribution of religiosity to the high effort active engagement (reply) models suggests that religiosity may motivate not only passive consumption and low effort active propagation of misinformation, but also its active endorsement. This may be partially explained by previous findings that higher religiosity was associated with greater science skepticism (Azevedo &amp; Josthttps://paperpile.com/c/yoECXc/TkPui 2021) , greater misinformation consumption and conspiracy thinking (Bronstein et al., 2019; Frenken et al., 2023; Munusamy et al., 2024; Wicks et al., 2023). Future research can explore social connectedness as a potential mediator of the relationship between religiosity and misinformation propagation.</p>
+<p>Taken together, motivated reasoning variables (political orientation, religiosity and trust in medical scientists) contributed the most to high-effort active engagement. In all four reply and quote models, the largest contributor was a motivated reasoning variable, and the three variables together accounted for more than half of the explained variance (Table 7). In contrast, CRT was only associated with liking. Thus, previous studies supporting the classical reasoning account (Pennycook &amp; Rand, 2019 , 2021) may have focused on passive • Religiosity • Trust in medical scientists H3: Political conservatism is positively associated with higher unaligned sentiment engagement (liking, retweeting). conservatism is positively associated with high effort endorsements of misinformation and unaligned sentiment engagement (replies, quotes).</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Example of Twitter Simulation Task classical reasoning, CRT was significantly negatively associated with liking Unaligned tweets ( = -0.27, 𝛃 SE = 0.05, p &lt;.001).</p>
+<h3>For</h3>
+<p>CRT was one of the largest contributors to the liking Unaligned model (12.69%, p&lt;.001), but was not associated with endorsive replying or quoting. For the motivated reasoning variables, religiosity significantly positively contributed to the liking Unaligned tweets model ( = 0.38, 𝛃 SE = 0.07, p &lt;.001), retweeting Unaligned tweets model ( = 0.25, 𝛃 SE = 0.07, p &lt;.001), and the replying to Unaligned tweets model ( = 0.05, 𝛃 SE = 0.01, p &lt;.001). Religiosity was one of the largest contributors to the liking Unaligned tweets model (16.01%, p&lt;.001), and was the largest contributor to the replying to Unaligned tweets model (43.60%, p&lt;.001). Religiosity was also positively associated with endorsive replies to misinformation ( = 0.06, SE = 0.01, p &lt;.02) and was the 𝛃 second largest contributor to that model (35.54%). Political orientation was negatively associated with endorsive replies ( = -0.04, SE = 0.01, p &lt;.001) and quotes ( = -0.01, SE = 𝛃 𝛃 0.01, p &lt;.05) to misinformation, meaning that more conservative participants endorsed misinformation more often; it was the largest contributor to both models (Reply: 37.63%; Quote: 40.15%).</p>
+<h3>Table 1.</h3>
+<p>Tested theoretical accounts, variables, and hypotheses for misinformation propagation.</p>
+<h3>Table 2.</h3>
+<p>Example Misinformation Tweets in Simulation Task</p>
+<h3>Table 3.</h3>
+<p>Descriptive analyses of Demographic and Independent Variables</p>
+<h3>Table 4.</h3>
+<p>Descriptive analyses of Tweet Engagement MetricsNote. The passive and low-effort active engagement results for Misinformation are fromHaupt et al. (2024), and is mentioned here for comparison purposes. Reply and Quote Misinformation rows count endorsive replies and quotes only.</p>
+<h3>Table 5.</h3>
+<p>OLS Regressions Predicting Misinformation EngagementNote. Signif. codes: &#x27;***&#x27; 0.001; &#x27;**&#x27; 0.01; &#x27;*&#x27; 0.05. The passive and low-effort active engagement results for Misinformation are fromHaupt et al. (2024), and is mentioned here for comparison purposes. N = 851 for all models.</p>
+<h3>Table 6.</h3>
+<p>OLS Regressions Predicting Unaligned Engagement</p>
+<h3>Table 7.</h3>
+<p>Standardized Shapley Weights for All Misinformation and Unaligned Engagement Models</p>
+<h3>References</h3>
+<p>Ahmed, S., &amp; Tan, H. W. (2022). Personality and perspicacity: Role of personality traits and cognitive ability in political misinformation discernment and sharing behavior. Personality and Individual Differences, 196(111747), 111747. https://doi.org/10.1016/j.paid.2022.111747</p>
+<p>Ames, D. R., Rose, P., &amp; Anderson, C. P. (2006). The NPI-16 as a short measure of narcissism. Journal of Research in Personality, 40(4), 440-450. https://www.sciencedirect.com/science/article/pii/S0092656605000504</p>
+<p>Azevedo, F., &amp; Jost, J. T. (2021). The ideological basis of antiscientific attitudes: Effects of authoritarianism, conservatism, religiosity, social dominance, and system justification. Group Processes &amp; Intergroup Relations, 24(4), 518-549. https://doi.org/10.1177/1368430221990104</p>
+<p>Batson, C. D. (2009). Two Forms of Perspective Taking: Imagining how another feels and imagining how you would feel. Handbook of Imagination and Mental Stimulation.</p>
+<p>Bayrak, F., Boyacioglu, I., &amp; Yilmaz, O. (2025). Does reflection increase accuracy rather than bias in the assessments of political fake news? Current Psychology (New Brunswick, N.J.), 44(7), 5778-5795. https://doi.org/10.1007/s12144-025-07578-5</p>
+<p>Blacksmith, N., Yang, Y., Behrend, T. S., &amp; Ruark, G. A. (2019). Assessing the validity of inferences from scores on the cognitive reflection test. Journal of Behavioral Decision Making, 32(5), 599-612. https://doi.org/10.1002/bdm.2133</p>
+<p>Bronstein, M. V., Pennycook, G., Bear, A., Rand, D. G., &amp; Cannon, T. D. (2019). Belief in fake news is associated with delusionality, dogmatism, religious fundamentalism, and reduced analytic thinking. Journal of Applied Research in Memory and Cognition, 8(1), 108-117. https://doi.org/10.1016/j.jarmac.2018.09.005</p>
+<p>Buhrmester, M., Kwang, T., &amp; Gosling, S. D. (2011). Amazon&#x27;s Mechanical Turk: A new source of inexpensive, yet high-quality, data?: A new source of inexpensive, yet high- quality, data? Perspectives on Psychological Science: A Journal of the Association for Psychological Science, 6(1), 3-5. https://doi.org/10.1177/1745691610393980</p>
+<p>Calvillo, D. P., Garcia, R. J. B., Bertrand, K., &amp; Mayers, T. A. (2021). Personality factors and self-reported political news consumption predict susceptibility to political fake news. Personality and Individual Differences, 174(110666), 110666. https://doi.org/10.1016/j.paid.2021.110666</p>
+<p>Casale, S., Fioravanti, G., &amp; Rugai, L. (2016). Grandiose and vulnerable narcissists: Who is at higher risk for social networking addiction? Cyberpsychology, Behavior and Social Networking, 19(8), 510-515. https://doi.org/10.1089/cyber.2016.0189</p>
+<p>Cosgrove, T. J., &amp; Murphy, C. P. (2023). Narcissistic susceptibility to conspiracy beliefs exaggerated by education, reduced by cognitive reflection. Frontiers in Psychology, 14, 1164725. https://doi.org/10.3389/fpsyg.2023.1164725</p>
+<p>Davis, M. H. (1983). Measuring individual differences in empathy: Evidence for a multidimensional approach. Journal of Personality and Social Psychology, 44(1), 113- 126. https://doi.org/10.1037/0022-3514.44.1.113</p>
+<p>Dawson, E., Gilovich, T., &amp; Regan, D. T. (2002). Motivated Reasoning and Performance on the was on Selection Task. Personality &amp; Social Psychology Bulletin, 28(10), 1379- 1387. https://doi.org/10.1177/014616702236869</p>
+<p>Dickinson, K. A., &amp; Pincus, A. L. (2003). Interpersonal analysis of grandiose and vulnerable narcissism. Journal of Personality Disorders, 17(3), 188-207. https://doi.org/10.1521/pedi.17.3.188.22146</p>
+<p>Druckman, J. N., Ognyanova, K., Baum, M. A., Lazer, D., Perlis, R. H., Volpe, J. D., Santillana, M., Chwe, H., Quintana, A., &amp; Simonson, M. (2021). The role of race, religion, and partisanship in misperceptions about COVID-19. Group Processes &amp; Intergroup Relations, 24(4), 638-657. https://doi.org/10.1177/1368430220985912</p>
+<p>Dunning, D. (2003). The zealous self-affirmer: How and why the self lurks so pervasively behind social judgment. In Motivated Social Perception (pp. 53-80). Psychology Press. https://doi.org/10.4324/9781410606679-8</p>
+<p>Fang, Z., Costas, R., &amp; Wouters, P. (2022). User engagement with scholarly tweets of scientific papers: a large-scale and cross-disciplinary analysis. Scientometrics, 127(8), 4523-4546. https://doi.org/10.1007/s11192-022-04468-6</p>
+<p>Fegan, R. B., &amp; Bland, A. R. (2021). Social media use and vulnerable narcissism: The differential roles of oversensitivity and egocentricity. International Journal of Environmental Research and Public Health, 18(17), 9172. https://doi.org/10.3390/ijerph18179172</p>
+<p>Frederick, S. (2005). Cognitive reflection and decision making. The Journal of Economic Perspectives: A Journal of the American Economic Association, 19(4), 25-42. https://doi.org/10.1257/089533005775196732</p>
+<p>Frenken, M., Bilewicz, M., &amp; Imhoff, R. (2023). On the relation between religiosity and the endorsement of conspiracy theories: The role of political orientation. Political Psychology, 44(1), 139-156. https://doi.org/10.1111/pops.12822</p>
+<p>Frith, C., &amp; Frith, U. (2005). Theory of mind. Current Biology, 15(17), R644-R646. https://doi.org/10.1016/j.cub.2005.08.041</p>
+<p>Funk, C., Hefferon, M., Kennedy, B., &amp; Johnson, C. (2019). Trust and mistrust in Americans&#x27; views of scientific experts. 24. https://www.newswise.com/pdf_docs/156460235934074_Embargoed%20REPORT%20 trust%20scientists%207-30-19.pdf</p>
+<p>Gnambs, T., &amp; Appel, M. (2018). Narcissism and social networking behavior: A meta- analysis. Journal of Personality, 86(2), 200-212. https://doi.org/10.1111/jopy.12305</p>
+<p>Hangartner, D., Gennaro, G., Alasiri, S., Bahrich, N., Bornhoft, A., Boucher, J., Demirci, B. B., Derksen, L., Hall, A., Jochum, M., Munoz, M. M., Richter, M., Vogel, F., Wittwer, S., Wüthrich, F., Gilardi, F., &amp; Donnay, K. (2021). Empathy-based counterspeech can reduce racist hate speech in a social media field experiment. Proceedings of the National Academy of Sciences of the United States of America, 118(50), e2116310118. https://doi.org/10.1073/pnas.2116310118</p>
+<p>Hargittai, E. (2020). Potential biases in big data: Omitted voices on social media: Omitted voices on social media. Social Science Computer Review, 38(1), 10-24. https://doi.org/10.1177/0894439318788322</p>
+<p>Haupt, M. R., Cuomo, R., Mackey, T. K., &amp; Coulson, S. (2024). The role of narcissism and motivated reasoning on misinformation propagation. Frontiers in Communication, 9, 1472631. https://doi.org/10.3389/fcomm.2024.1472631</p>
+<p>Haupt, M. R., Jinich-Diamant, A., Li, J., Nali, M., &amp; Mackey, T. K. (2021). Characterizing twitter user topics and communication network dynamics of the &quot;Liberate&quot; movement during COVID-19 using unsupervised machine learning and social network analysis. Online Social Networks and Media, 21(100114), 100114. https://doi.org/10.1016/j.osnem.2020.100114</p>
+<p>Haupt, M. R., Li, J., &amp; Mackey, T. K. (2021). Identifying and characterizing scientific authority-related misinformation discourse about hydroxychloroquine on twitter using unsupervised machine learning. Big Data &amp; Society, 8(1), 205395172110138. https://doi.org/10.1177/20539517211013843</p>
+<p>Hendin, H. M., &amp; Cheek, J. M. (1997). Assessing hypersensitive narcissism: A reexamination of Murray&#x27;s Narcism Scale. Journal of Research in Personality, 31(4), 588-599. https://www.sciencedirect.com/science/article/pii/S0092656697922042</p>
+<p>Houston, J. B., Hawthorne, J., Perreault, M. F., Park, E. H., Goldstein Hode, M., Halliwell, M. R., Turner McGowen, S. E., Davis, R., Vaid, S., McElderry, J. A., &amp; Griffith, S. A. (2015). Social media and disasters: a functional framework for social media use in disaster planning, response, and research. Disasters, 39(1), 1-22. https://doi.org/10.1111/disa.12092</p>
+<p>Hsee, C. K. (1996). Elastic justification: How unjustifiable factors influence judgments. Organizational Behavior and Human Decision Processes, 66(1), 122-129. https://doi.org/10.1006/obhd.1996.0043</p>
+<p>Huber, S., &amp; Huber, O. W. (2012). The centrality of religiosity scale (CRS). Religions, 3(3), 710-724. https://www.mdpi.com/2077-1444/3/3/710?ref=driverlayer.com</p>
+<p>Hunt, K., Agarwal, P., &amp; Zhuang, J. (2022). Monitoring misinformation on Twitter during crisis events: A machine learning approach. Risk Analysis: An Official Publication of the Society for Risk Analysis, 42(8), 1728-1748. https://doi.org/10.1111/risa.13634</p>
+<p>Jack, C. (2017). Lexicon of lies: Terms for problematic information (Vol. 3, pp. 1094-1096). Data &amp; Society Research Institute. https://doi.org/10.69985/kmpz3134</p>
+<p>John, O. P., Naumann, L. P., &amp; Soto, C. J. (2008). Paradigm shift to the integrative Big Five trait taxonomy: History, measurement, and conceptual issues In John OP, Robins RW, &amp; Pervin LA (Eds.) …. New York: Guilford.[Google Scholar].</p>
+<p>Kahan, D. M. (2015). The Politically Motivated Reasoning Paradigm. In Social Science Research Network. https://papers.ssrn.com/abstract=2703011</p>
+<p>Kaufman, R. A., Haupt, M. R., &amp; Dow, S. P. (2022). Who&#x27;s in the crowd matters: Cognitive factors and beliefs predict misinformation assessment accuracy. Proceedings of the ACM on Human-Computer Interaction, 6(CSCW2), 1-18. https://doi.org/10.1145/3555611</p>
+<p>Kaufman, R., Broukhim, A., &amp; Haupt, M. (2025). WARNING this contains misinformation: The effect of cognitive factors, beliefs, and personality on misinformation warning tag attitudes. Proceedings of the ACM on Human-Computer Interaction, 9(7), 1-32. https://doi.org/10.1145/3757521</p>
+<p>Kaufman, S. B., Weiss, B., Miller, J. D., &amp; Campbell, W. K. (2020). Clinical correlates of vulnerable and grandiose narcissism: A personality perspective. Journal of Personality Disorders, 34(1), 107-130. https://doi.org/10.1521/pedi_2018_32_384</p>
+<p>Kay, C. S. (2021). The targets of all treachery: Delusional ideation, paranoia, and the need for uniqueness as mediators between two forms of narcissism and conspiracy beliefs. Journal of Research in Personality, 93(104128), 104128. https://doi.org/10.1016/j.jrp.2021.104128</p>
+<p>Kumar, K. P. K., &amp; Geethakumari, G. (2014). Detecting misinformation in online social networks using cognitive psychology. Human-Centric Computing and Information Sciences, 4(1), 1-22. https://doi.org/10.1186/s13673-014-0014-x</p>
+<p>Lawson, M. A., &amp; Kakkar, H. (2022). Of pandemics, politics, and personality: The role of conscientiousness and political ideology in the sharing of fake news. Journal of Experimental Psychology. General, 151(5), 1154-1177. https://doi.org/10.1037/xge0001120</p>
+<p>Lee Rogers, R., &amp; Powe, N. (2022). COVID-19 information sources and misinformation by faith community. Inquiry: A Journal of Medical Care Organization, Provision and Financing, 59, 469580221081388. https://doi.org/10.1177/00469580221081388</p>
+<p>Lindeman, R., &amp; Merenda, P. F. (1980). Introduction to bivariate and multivariate analysis (P. F. Merenda &amp; R. Z. Gold (eds.)). Longman Higher Education. https://archive.org/details/introductiontobi0000lind</p>
+<p>Lois, G., Gardikiotis, A., Karaspyrou, Z., Tsakanikos, E., &amp; Sedikides, C. (2026). Rethinking the link between cognitive reflection and susceptibility to political misinformation: Distinguishing hard from soft news. Political Psychology, 47(2), e70109. https://doi.org/10.1111/pops.70109</p>
+<p>Miller, J. D., Hoffman, B. J., Gaughan, E. T., Gentile, B., Maples, J., &amp; Keith Campbell, W. (2011). Grandiose and vulnerable narcissism: a nomological network analysis: Variants of narcissism. Journal of Personality, 79(5), 1013-1042. https://doi.org/10.1111/j.1467- 6494.2010.00711.x</p>
+<p>Moore-Berg, S. L., Hameiri, B., &amp; Bruneau, E. G. (2022). Empathy, dehumanization, and misperceptions: A media intervention humanizes migrants and increases empathy for their plight but only if misinformation about migrants is also corrected. Social Psychological and Personality Science, 13(2), 645-655. https://doi.org/10.1177/19485506211012793</p>
+<p>Munusamy, S., Syasyila, K., Shaari, A. A. H., Pitchan, M. A., Kamaluddin, M. R., &amp; Jatnika, R. (2024). Psychological factors contributing to the creation and dissemination of fake news among social media users: a systematic review. BMC Psychology, 12(1), 673. https://doi.org/10.1186/s40359-024-02129-2</p>
+<p>Musetti, A., Grazia, V., Alessandra, A., Franceschini, C., Corsano, P., &amp; Marino, C. (2022). Vulnerable narcissism and Problematic Social Networking Sites Use: Focusing the lens on specific motivations for social networking sites use. Healthcare (Basel, Switzerland), 10(9), 1719. https://doi.org/10.3390/healthcare10091719</p>
+<p>Osmundsen, M., Bor, A., Vahlstrup, P. B., Bechmann, A., &amp; Petersen, M. B. (2021). Partisan polarization is the primary psychological motivation behind political fake news sharing on twitter. The American Political Science Review, 115(3), 999-1015. https://doi.org/10.1017/s0003055421000290</p>
+<p>Pennycook, G., Cheyne, J. A., Koehler, D. J., &amp; Fugelsang, J. A. (2016). Is the cognitive reflection test a measure of both reflection and intuition? Behavior Research Methods, 48(1), 341-348. https://doi.org/10.3758/s13428-015-0576-1</p>
+<p>Pennycook, G., &amp; Rand, D. G. (2019). Lazy, not biased: Susceptibility to partisan fake news is better explained by lack of reasoning than by motivated reasoning. Cognition, 188, 39-50. https://doi.org/10.1016/j.cognition.2018.06.011</p>
+<p>Pennycook, G., &amp; Rand, D. G. (2021). The psychology of fake news. Trends in Cognitive Sciences, 25(5), 388-402. https://doi.org/10.1016/j.tics.2021.02.007</p>
+<p>Pereira, A., Harris, E. A., &amp; Van Bavel, J. J. (2018). Identity concerns drive belief: The impact of partisan identity on the belief and dissemination of true and false news. In PsyArXiv. https://doi.org/10.31234/osf.io/7vc5d</p>
+<p>Rhodes, S. C. (2022). Filter bubbles, echo chambers, and fake news: How social media conditions individuals to be less critical of political misinformation. Political Communication, 39(1), 1-22. https://doi.org/10.1080/10584609.2021.1910887</p>
+<p>Romer, D., &amp; Jamieson, K. H. (2021). Patterns of media use, strength of belief in COVID-19 conspiracy theories, and the prevention of COVID-19 from March to July 2020 in the United States: Survey study. Journal of Medical Internet Research, 23(4), e25215. https://doi.org/10.2196/25215</p>
+<p>Simon, T., Goldberg, A., &amp; Adini, B. (2015). Socializing in emergencies-A review of the use of social media in emergency situations. International Journal of Information Management, 35(5), 609-619. https://doi.org/10.1016/j.ijinfomgt.2015.07.001</p>
+<p>Sindermann, C., Cooper, A., &amp; Montag, C. (2020). A short review on susceptibility to falling for fake political news. Current Opinion in Psychology, 36, 44-48. https://doi.org/10.1016/j.copsyc.2020.03.014</p>
+<p>Spohr, D. (2017). Fake news and ideological polarization: Filter bubbles and selective exposure on social media. Business Information Review, 34(3), 150-160. https://doi.org/10.1177/0266382117722446</p>
+<p>Starbird, K., Maddock, J., Orand, M., Achterman, P., &amp; Mason, R. M. (2014, March 1). Rumors, false flags, and digital vigilantes: Misinformation on twitter after the 2013 Boston marathon bombing. iConference 2014 Proceedings. iConference 2014 Proceedings: Breaking Down Walls. Culture -Context -Computing. https://doi.org/10.9776/14308</p>
+<p>Sternisko, A., Cichocka, A., Cislak, A., &amp; Van Bavel, J. J. (2023). National narcissism predicts the belief in and the dissemination of conspiracy theories during the COVID-19 pandemic: Evidence from 56 countries. Personality &amp; Social Psychology Bulletin, 49(1), 48-65. https://doi.org/10.1177/01461672211054947</p>
+<p>Stietz, J., Jauk, E., Krach, S., &amp; Kanske, P. (2019). Dissociating empathy from perspective- taking: Evidence from intra-and inter-individual differences research. Frontiers in Psychiatry, 10, 126. https://doi.org/10.3389/fpsyt.2019.00126</p>
+<p>Van Bavel, J. J., Harris, E. A., Pärnamets, P., Rathje, S., Doell, K. C., &amp; Tucker, J. A. (2021). Political psychology in the digital (mis)information age: A model of news belief and sharing. Social Issues and Policy Review, 15(1), 84-113. https://doi.org/10.1111/sipr.12077</p>
+<p>Van Bavel, J. J., &amp; Pereira, A. (2018). The partisan brain: An identity-based model of political belief. Trends in Cognitive Sciences, 22(3), 213-224. https://doi.org/10.1016/j.tics.2018.01.004</p>
+<p>van der Linden, S. (2022). Misinformation: susceptibility, spread, and interventions to immunize the public. Nature Medicine, 28(3), 460-467. https://doi.org/10.1038/s41591- 022-01713-6</p>
+<p>Vosoughi, S., Roy, D., &amp; Aral, S. (2018). The spread of true and false news online. Science (New York, N.Y.), 359(6380), 1146-1151. https://doi.org/10.1126/science.aap9559</p>
+<p>Weeks, B. E. (2015). Emotions, partisanship, and misperceptions: How anger and anxiety moderate the effect of partisan bias on susceptibility to political misinformation: Emotions and misperceptions. The Journal of Communication, 65(4), 699-719. https://doi.org/10.1111/jcom.12164</p>
+<p>Wicks, S. G., Hales, A. H., &amp; Hennes, E. P. (2023). Does disseminating (mis)information restore social connection during a global pandemic? Social and Personality Psychology Compass, 17(10), e12825. https://doi.org/10.1111/spc3.12825</p>
+<p>Wink, P. (1991). Two faces of narcissism. Journal of Personality and Social Psychology, 61(4), 590-597. https://doi.org/10.1037/0022-3514.61.4.590</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
