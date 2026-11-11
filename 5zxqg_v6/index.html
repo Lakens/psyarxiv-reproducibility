@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: TuneTwins: An Intrinsically Motivating Game
+Paradigm for Scalable Music Cognition Research</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+TuneTwins: An Intrinsically Motivating Game Paradigm for Scalable Music
+Cognition Research
+</p>
+<p class="meta">
+2026-11-11 · Metacheck 0.4.3.27 · DOI 10.1525/mp.2026.2882049
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>2</b><span>fine</span></a><a class="count na" href="#na"><b>10</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>Specifically, the extent to which participants are genuinely engaged
+in the task critically determines whether the collected data capture and
+reflect the underlying cognitive processes.</p>
+</blockquote>
+<blockquote>
+<p>As web-based experimentation has become increasingly prevalent in
+cognitive and psychological research-especially during the COVID-19
+pandemic-crowdsourcing platforms such as MTurk and Prolific, which
+provide access to large participant pools, have accordingly become
+primary vehicles for scaling up data collection (Stewart et al.,
+2017).</p>
+</blockquote>
+<blockquote>
+<p>Moreover, MTurk and similar platforms have experienced declining
+rates of population replenishment and increasing participant
+non-naïveté.</p>
+</blockquote>
+<blockquote>
+<p>The participant pools on these platforms are relatively small,
+demographically narrow, and highly experienced, with many individuals
+having completed hundreds of similar tasks (Chmielewski &amp; Kucker,
+2020; Stewart et al., 2017).</p>
+</blockquote>
+<blockquote>
+<p>A total of 367 participants completed 576 games, yielding 12,679
+judgments.</p>
+</blockquote>
+<blockquote>
+<p>To evaluate whether the game encourages sustained engagement, we
+examined how many times participants completed the game.</p>
+</blockquote>
+<blockquote>
+<p>Participants were informed that they were free to stop at any point,
+and two exercised this option by requesting to discontinue after only a
+few rounds.</p>
+</blockquote>
+<blockquote>
+<p>This pattern indicates not only that the task instructions were
+intuitive-participants were able to understand how to play the game
+solely through observationbut also that the game itself was genuinely
+engaging for this group.</p>
+</blockquote>
+<blockquote>
+<p>At the NEMO Science Museum, where a 15-minute time limit constrained
+participation, all 174 participants completed at least one game and 145
+(83%) completed three or more.</p>
+</blockquote>
+<blockquote>
+<p>In the global online deployment, condition assignment was
+counterbalanced such that each difficulty level was represented
+approximately evenly across the participant pool.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Repository Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<ul>
+<li>We could not check 1 repository: <a href="https://github.com/Amsterdam-" class="uri">https://github.com/Amsterdam-</a> (links to a GitHub
+account, not to a specific repository).</li>
+<li>We found 0 files in 1 repository.</li>
+<li>We found 0 README files and 0 repositories without READMEs.</li>
+</ul>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<h4 id="repositories-that-could-not-be-checked">Repositories that could
+not be checked</h4>
+<p>These repositories are linked in the paper, but their contents could
+not be retrieved, so nothing below describes them. When the reason is
+that the platform did not answer, running the check again later may
+work.</p>
+<ul>
+<li><a href="https://github.com/Amsterdam-" class="uri">https://github.com/Amsterdam-</a>: links to a GitHub
+account, not to a specific repository</li>
+</ul>
+<h4 id="repositories">Repositories</h4>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Repository
+</th>
+<th style="text-align:left;">
+Platform
+</th>
+<th style="text-align:left;">
+Error
+</th>
+<th style="text-align:right;">
+All Files
+</th>
+<th style="text-align:right;">
+Data Files
+</th>
+<th style="text-align:right;">
+Code Files
+</th>
+<th style="text-align:right;">
+READMEs
+</th>
+<th style="text-align:right;">
+Archives
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://github.com/Amsterdam-" target="_blank">github.com/Amsterdam-</a>
+</td>
+<td style="text-align:left;">
+github
+</td>
+<td style="text-align:left;">
+links to a GitHub account, not to a specific repository
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>README files were found in all repositories.</p>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 2 references with comments in PubPeer.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>We found 1 replication for 1 original you cited.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(2)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>We detected no errors in t-tests or F-tests.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We found no imprecise <em>p</em> values or <em>p</em>-values of
+exactly zero out of 4 detected.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(10)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 52 references with DOIs. You cited 2 references with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gilbert, D. T., King, G., Pettigrew, S., &amp; Wilson, T. D. (2016).
+Comment on “Estimating the reproducibility of psychological science.”
+Science, 351(6277), 1037. <a href="https://doi.org/10.1126/science.aad7243" class="uri">https://doi.org/10.1126/science.aad7243</a>
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/120FE2AC75B4C873787611246291A8" target="_blank">link</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Open Science Collaboration. (2015). Estimating the reproducibility of
+psychological science. Science, 349(6251), aac4716. <a href="https://doi.org/10.1126/science.aac4716" class="uri">https://doi.org/10.1126/science.aac4716</a>
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/0115DF644CBF969779F00829E78A83" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 52 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 52 references with DOIs. We found 1 replication for 1
+original you cited.</p>
+<p>Check if you are aware of the replication studies, and cite them
+where appropriate.</p>
+<table class="dt-static">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:left;">
+Replication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Levitin, D. J. (1994). Absolute memory for musical pitch: Evidence from
+the production of learned melodies. Perception &amp; Psychophysics,
+56(4), 414-423. <a href="https://doi.org/10.3758/bf03206733" class="uri">https://doi.org/10.3758/bf03206733</a>
+</td>
+<td style="text-align:left;">
+Frieler, K., Fischinger, T., Schlemmer, K., Lothwesen, K., Jakubowski,
+K., &amp; Müllensiefen, D. (2013). Absolute memory for pitch: A
+comparative replication of Levitin’s 1994 study in six European labs.
+Musicae Scientiae, 17(3), 334–349.
+<a href="https://doi.org/10.1177/1029864913493802" target="_blank">doi:10.1177/1029864913493802</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Researchers across the behavioral sciences are increasingly using games as a means of data collection. Intrinsically motivating digital games are especially promising for music cognition, where large, diverse, and engaged samples are needed. In this article, we focus on a specific class of game paradigms suited to cross-cultural contexts and applicable across the developmental lifespan: auditory matching-pairs (Memory) games. We present the conception, design, and initial evaluation of TuneTwins, a solitaire auditory matching-pairs paradigm developed to study musical memory and auditory cognition. Building on self-determination theory and prior game-based research, TuneTwins employs an 8-pair (4 × 4) board to balance playability with psychometric sensitivity. Our web-based auditory adaptation introduces clear visual-auditory mappings, a three-click turn structure, and a dual scoring system that distinguishes memorized matches from lucky guesses and memory errors.</p>
+<p>Large-scale simulations of chance and optimal strategies guided the choice of board size, demonstrating that this configuration yields meaningful separation between performance extremes while avoiding ceiling effects. We further report empirical evidence from four implementations: a proof-of-concept online study, a cross-cultural field study with Mbendjele BaYaka hunter-gatherers, a study with visitors to a science museum, and an online global deployment. In the proof-of-concept study, TuneTwins captured systematic performance differences between stimulus conditions; across all settings, it elicited high voluntary engagement, including repeated play and the completion of multiple difficulty levels. We argue that matching-pairs games such as TuneTwins provide an engaging, intuitive, and scalable paradigm for collecting behavioral data using primarily auditory stimuli-and that they can be used to probe the mental representation of music across cultures, across development, and potentially across species.</p>
+<h3>[div-01]</h3>
+<p>experiments, parfcularly the claim that limited control over factors such as environment, equipment, and fming necessarily compromises data quality (e.g., Bridges et al., 2020).</p>
+<p>For music cognition research, Honing (2021) notes that although web-based listening experiments inevitably lack control over factors such as playback volume, headphone type, and background noise, these uncontrolled elements reflect natural listening behavior and therefore enhance external validity. Collecting behavioral data under such conditions can thus provide valuable insights into the perceptual invariants to which listeners remain sensitive despite naturally occurring &quot;noise&quot; fluctuations (cf. Krantz, 2021, citing J. J. Gibson). Moreover, moving experiments beyond the lab means that time and location are no longer limiting factors, allowing anyone to participate at any time. This substantially facilitates the collection of large-scale datasets-a benefit already well demonstrated in previous work (cf. Li et al., 2024, n = 128,916; Müllensiefen et al., 2014, n = 148,037), as well as through large-participation platforms such as themusiclab.org and amsterdammusiclab.nl.</p>
+<h3>Engaging Play versus Reward-based Participation</h3>
+<p>Beyond standardization, the experimental procedure itself exerts a substantial influence on data quality. Specifically, the extent to which participants are genuinely engaged in the task critically determines whether the collected data capture and reflect the underlying cognitive processes. As web-based experimentation has become increasingly prevalent in cognitive and psychological research-especially during the COVID-19 pandemic-crowdsourcing platforms such as MTurk and Prolific, which provide access to large participant pools, have accordingly become primary vehicles for scaling up data collection (Stewart et al., 2017). However, although material incentives such as monetary rewards may increase the duration or frequency of participation, this form of extrinsic motivation typically frames the experiment as a means to an external reward rather than as an activity experienced as valuable in itself. This framing can readily result in superficial or random responses and ultimately compromise data quality (Hauser et al., 2019), particularly given that many cognitive experiments are experienced by participants as &quot;effortful, frustrating, and repetitive&quot; (Lumsden et al., 2016, para. 1). Moreover, MTurk and similar platforms have experienced declining rates of population replenishment and increasing participant non-naïveté. The participant pools on these platforms are relatively small, demographically narrow, and highly experienced, with many individuals having completed hundreds of similar tasks (Chmielewski &amp; Kucker, 2020; Stewart et al., 2017). Furthermore, non-naïveté can introduce new forms of bias and distort the effect sizes of experimental results. Therefore, although the number of participants may appear large, the underlying diversity is limited-restricting the generalizability of findings and potentially giving rise to what Stewart et al. (2017, p. 736) describe as, &quot;a possible tragedy of the commons.&quot; As more researchers draw repeatedly from the same pool of experienced participants, that pool becomes progressively less naïve and less representative, ultimately diminishing its value as a scientific resource.</p>
+<p>To address this persistent challenge of collecting high-quality data, one solution is to make participation intrinsically enjoyable and engaging. When players are immersed in a game and motivated by intrinsic satisfaction, the resulting gameplay traces are more likely to faithfully reflect their perceptual and cognitive processes. Over three decades of research have shown that the quality of experience and performance differs substantially depending on whether behavior is driven by intrinsic or extrinsic motivation (Deci &amp; Ryan, 1985; Lepper et al., 1973; Ryan &amp; Deci, 2000). In music cognition, several game-based paradigms have already demonstrated how well-designed gamification can attract large numbers of spontaneous, unpaid participants. For example, the Hooked on Music paradigm collected data from over 200,000 unpaid participants (Burgoyne et al., 2013), the Clapping Music app was downloaded more than 140,000 times within three years (Duffy &amp; Pearce, 2018), and comparable large-scale participation effects have been reported in other studies (Tiago et al., 2017).</p>
+<h3>Intuitiveness and Scalability</h3>
+<p>Better yet, the game is not only fun but also intuitive-an essential feature for collecting data across diverse cultural contexts. With the majority of music psychology research conducted on WEIRD participants (Henrich et al., 2010), often using Western music, we risk viewing the human mechanisms underlying music perception and production through a narrow lens. Repeatedly focusing on a narrow subset of the world&#x27;s musical and cultural diversity risks illuminating only one corner of a much larger phenomenon. As a result, key scientific questions concerning the origins of music and the balance between cultural variability and universality remain difficult to address. A necessary step toward a more comprehensive understanding is the development of cross-cultural studies supported by carefully designed experimental procedures that are intuitive, accessible, and applicable across diverse cultural settings.</p>
+<p>As Jacoby et al. (2020) remind us in their position paper, cross-cultural study faces challenges of &quot;potential lack of conceptual common ground between researcher and participants, a factor that might lead to mistranslations, misunderstanding, and the absence of explicit, formalized terms for core research concepts &quot; (p. 191). Imagine investing considerable time and effort into designing a perfect experiment-one that is both highly engaging and capable of measuring the target theoretical construct-only to find, upon implementing it in an entirely unfamiliar culture, that there is no reliable way to convey its rules and instructions.</p>
+<p>We argue that intuitiveness is a key factor in enhancing the cross-cultural scalability of experimental paradigms. Because language is deeply embedded in cultural practices, tasks that rely on verbal instructions risk introducing unintended cultural biases or differences in comprehension.</p>
+<p>Reducing linguistic demands is therefore advisable when designing paradigms intended for crosscultural use. Nonverbal forms of communication-such as demonstration-tend to be more universally understood. An intuitive paradigm that is self-explanatory or easy to demonstrate thus reduces the danger of misinterpretation inherent in verbal instructions alone.</p>
+<h3>Aim of the Current Study</h3>
+<p>Together, these considerations underscore a central challenge in music-cognition research: collecting data from diverse and meaningfully engaged participants while relying on experimental paradigms that are both robust and scalable. We propose that one solution to meet this goal is to foster intrinsic motivation through intuitive gamified experiments-in other words, science games. This paper presents the design, characteristics, and underlying logic structure of a novel music science game, TuneTwins (i.e., an auditory matching-pairs game), along with simulations designed to examine its capability to capture the distribution of participants&#x27; performance. We also report evidence bearing on participants&#x27; motivation to complete the game.</p>
+<p>We further argue that paradigm design is not merely a matter of translating a theoretical construct into a task; rather, the upstream process of conceptualization, game experience design, and formal evaluation-while distinct from empirical data collection-is essential for ensuring validity and scalability, yet is often overlooked in cognitive research. This neglect is compounded by a practical bottleneck: the infrastructural demands of developing and deploying game-like research platforms, including interface design, stimulus management, online deployment, and data recording pipelines. Although the scientific value of such approaches is increasingly recognized (Long et al., 2023), these demands continue to deter adoption. The design of TuneTwins was informed by both of these considerations. Built on the Amsterdam Music Lab&#x27;s open-source MUSCLE framework (Amsterdam Music Lab, 2026; Janssen et al., 2023), it offers an architecturally portable and scalable foundation that other researchers can adapt to their own stimuli, populations, and experimental questions-thereby lowering the infrastructural barrier to gamified behavioral research more broadly. The goal of this article is therefore not to contribute a new empirical finding to the music cognition literature, but to present a case study in paradigm development-one that addresses both scientific rigor and practical deployability, and that shifts the focus from controlling behavior to eliciting it in ecologically meaningful ways.</p>
+<h3>Conceptual Framework Motivation for Using the Memory Game</h3>
+<p>Music researchers have employed a variety of approaches that incorporate games in research (e.g., TagATune; Law et al., 2007; Major Miner; Mandel &amp; Ellis, 2008; Listen Game; Turnbull et al., 2007). Compared with inventing a new game, adopting and modifying an existing, well-known game represents an attractive option, particularly in cross-cultural and developmental contexts, as many participants might already be familiar with the mechanics of a pre-existing game. We have chosen the game Memory, a popular and accessible board game played by children and adults around the world (variants are often known as Concentration, Pelmanism, Lian-Lian-Kan, Hūsker Dū?, or Pexeso; Zwick &amp; Paterson, 1993).</p>
+<p>Musical memory is a particularly meaningful research subject for cross-cultural research as memory is a fundamental, biologically grounded cognitive capacity shared across human populations. Evidence suggests that memory performance for music does not strongly depend on formal music training-naïve listeners often perform comparably to trained musicians when the material is familiar (Bigand &amp; Poulin-Charronnat, 2006; Levitin, 1994; Levitin &amp; Cook, 1996).</p>
+<p>Moreover, individuals typically show enhanced memory for music that is culturally familiar to them (Demorest et al., 2008). By studying behavioral patterns that reveal musical memory, we can distinguish which aspects of musicality are shared-reflecting innate, biologically grounded capacities-and which vary across cultures, reflecting brain plasticity due to cultural exposure (Honing, 2023). In other words, such research provides insights into the interplay between universal cognitive mechanisms and culturally shaped processes.</p>
+<p>The appeal of the Memory game can be attributed to several psychological factors. First, the task directly challenges memory and reflects participants&#x27; cognitive processes through their card choices (e.g., when they have already listened to two cards that belong to a pair, do they remember to match them?). Second, because it is a children&#x27;s game played in cultures around the world, its rules of play are exceptionally simple and intuitive, allowing players of various age groups and cultural backgrounds to engage without extensive instruction needed. Third, the Memory game satisfies a basic cognitive drive for problem-solving and self-improvement (Ryan &amp; Deci, 2000) by challenging players to memorize and match pairs to win. The game also provides immediate feedback-each attempt yields either a successful match or an error-which sustains attention and fosters intrinsic motivation through trial-and-error learning (Malone, 1981). Finally, Memory offers both individual challenges and multiplayer competition, making it versatile as a solitary or interactive activity. These features not only explain its enduring popularity but also highlight its potential as a robust paradigm for experimental adaptation. According to Self-Determination Theory (Deci &amp; Ryan, 1985; Ryan &amp; Deci, 2000), these characteristics satisfy the basic psychological needs to trigger intrinsic motivation: autonomy (a sense of volition), competence (a sense of mastery), and relatedness (a sense of connection to others).</p>
+<p>Taking all these benefits together, it is not surprising that such a paradigm has been extensively discussed and widely applied across multiple fields. Several papers have examined variants of this game and the strategies that might be used under a range of rules and constraints (Chakrabarti &amp; Chen, 2018; Foerster &amp; Wattenhofer, 2013; Kellner, 2023; Velleman &amp; Warrington, 2013; Zwick &amp; Paterson, 1993), and its variants have also been used by psychologists with adults and children (e.g., Baker-Ward &amp; Ornstein, 1988; Gellatly et al., 1988; Schumann-Hengsteler, 1996; Tottenham et al., 2003) as well as with non-human primates (Martin &amp; Shumaker, 2022; Washburn &amp; Gulledge, 1995 , 2002; Washburn et al., 2007). Collectively, these studies provide strong evidence of the potential of the matching-pairs paradigm.</p>
+<h3>Introduction to the Matching-Pairs Game</h3>
+<p>In a typical Memory game, players are presented with a board with 𝑛 pairs of cards. Taking turns, players flip two cards at a time. If the two flipped cards are identical, they constitute a pair, and the pair is collected by the player (removed from the board) as a point. If the two flipped cards are different, the cards are flipped back and no point is awarded (or point deducted depending on the scoring rule). The game ends when the board is cleared, and the player who matched most pairs is the winner. Although it is typically played with two players, the game can also be played in solitaire. In a solitaire version, the goal of the game is to clear the board with as few turns as possible, with fewer turns indicating better performance.</p>
+<p>The optimal strategy for both the two-player version (Zwick &amp; Paterson, 1993) and the solitaire version (Foerster &amp; Wattenhofer, 2013) have been discussed and analyzed in detail.</p>
+<p>According to Zwick and Paterson, two-player gameplay involves the use of optimal strategies that increase a player&#x27;s chance of winning in competitive settings. However, certain strategies intended to hinder the opponent can distort the measurement of memory performance in experimental data.</p>
+<p>One such behavior is the idling strategy: when some cards on the board have already been revealed and the first card flipped does not match any previously inspected card, the player may intentionally choose an inconsequential second card to avoid disclosing additional information to the opponent.</p>
+<p>In this context, the player faces two potentially conflicting objectives-either to maximize the probability of winning the game or to maximize the expected point gain. These differing objectives can lead to distinct optimal strategies, thereby introducing variability and potential noise into data analysis and interpretation.</p>
+<p>On the other hand, the solitaire version of the matching-pairs game reduces the objective to a single optimal strategy: clearing the board with the minimum number of moves. This version is cleaner in that it relies more directly on the player&#x27;s ability to memorize the experimental stimuli and their positions with fewer interfering factors and therefore constitutes a more suitable tool for cognitive experimentation.</p>
+<h3>TuneTwins: The Auditory Matching-Pairs Game</h3>
+<p>In developing an auditory version of Memory, a pair refers to two audio stimuli that are defined as belonging together, constituting the ground-truth identity for scoring. Conceptually, three types of pairs are possible: (1) original-original, (2) original-manipulated, and (3) manipulatedmanipulated. The first type serves as the classic baseline, in which two identical, unmodified items form a pair. Experimental effects arise, in principle, from comparisons between this baseline and the latter two types. In the original-manipulated condition, participants must match an original item with a manipulated version of itself-a match based on perceptual similarity. Because the manipulated stimulus preserves only part of the information present in the original, successful matching requires listeners to rely on induced auditory representations to establish correspondence.</p>
+<p>By contrast, the manipulated-manipulated condition collapses back into identical matching: two items subjected to the same manipulation can be matched purely on acoustic features, without engaging the intended auditory-memory processes. For these reasons, the latter condition does not constitute a meaningful test of perceptual processing within the paradigm, and we therefore restricted the design to the first two pairing types (i.e., identical and similarity-based matching).</p>
+<p>The use of music as the experimental stimuli poses two primary challenges: (1) because music unfolds over time, the auditory cards cannot be played simultaneously; and (2) unlike the original Memory game-where the images themselves indicate which cards are being viewed-the auditory version requires additional visual cues to signal which card is currently active. To implement the audio-visual mapping, we incorporated a color change on the selected card along with an equalizer-style animation to indicate that audio is being played (see Figure 1). Furthermore, when the cursor hovers over a card, it exhibits a subtle rotation, suggesting that it is about to be turned over. These dynamic visual elements serve to reinforce the connection between auditory perception and spatial card identity, thereby preserving the playability of the original game while maintaining clarity in an auditory context. Additionally, we designed a three-click structure to promote interactional consistency, enhancing clarity and strengthening participants&#x27; sense of agency, thereby increasing engagement.</p>
+<h3>Three-click Turn Structure</h3>
+<p>The three-click system was developed to operate at the level of a turn-the basic unit of gameplay in which the player flips two cards and receives feedback.</p>
+<h3>First click:</h3>
+<p>The player clicks on a first card, triggering a flipping animation, a color change, and playback of the associated audio. An equalizer-style animation is displayed during sound playback.</p>
+<p>Second click: Upon selection of the second card, the audio playback and animation of the first card are interrupted, while its color state persists to indicate that it has been selected. The second card then undergoes the same visual sequence: flip animation, color change, and equalizer animation.</p>
+<p>Once the second click occurs, the outcome of this turn is determined, and the feedback animations differ depending on whether the two match. When the two cards do not match, both execute a lateral shake animation to signal the error. For correct matches, the cards display a pulsating scale animation (zooming in and out), providing positive reinforcement. The score is updated the moment the second card is clicked. As the second card plays, players can immediately hear whether it matches the first card, and the score update provides instant confirmation of their listening result. Third click: Playback of the second card is interrupted, and its animation stops. This serves as the settlement action, updating the game board based on the result of the turn. If the two selected cards form a matching auditory pair, they are removed from the board. If not, both cards show a shaking animation and are flipped back, and all visual indicators of these two cards are reset.</p>
+<p>The interaction structure is designed to always play the sound of the currently selected card, interrupting any ongoing playback of the previously selected card. Consequently, clicking the first card initiates its audio, clicking the second card stops the first and plays the second, and the third click at any position stops the second as the game proceeds to the next turn. This design allows participants to decide how long they would like to listen to each sound, supporting self-paced processing and enhancing their sense of agency during the task. By integrating animation indicators, animation feedback, score feedback, and a consistent three-click turn system, every piece of feedback triggered by the player&#x27;s interaction with the system aligns with their listening experience throughout the game, thereby ensuring an intuitive user experience in TuneTwins by linking feedback to action.</p>
+<h3>Intuitive Scoring Rule</h3>
+<p>To provide natural and intuitive feedback during gameplay, we implemented a surface scoring rule displayed to participants throughout the game. Under this rule, participants receive +20 points for a memorized match (i.e., a match in which the second card was previously observed), +10 points for a lucky match (i.e., a match made by chance, without prior observation of the second card), 0 points for a non-match between two newly revealed cards, and -10 points for a mismatch (i.e., an incorrect pairing of a previously observed second card). The rationale is that lucky matches, although they do not involve memory-related cognitive processing, remain technically successful matches. Presenting them as entirely unrewarded would likely confuse participants; assigning a positive but reduced reward (+10) relative to memorized matches (+20) preserves the intuitive logic of the game while implicitly incentivizing memory-based decisions. For performance evaluation and data analysis, the system permits a separate analytical scoring rule. For example, the current study applied the analytical rule of assigning +1 point for memorized matches, 0 points for both nonmatches and lucky matches, and -1 point for mismatches. Because lucky matches do not reflect memory-based cognitive processing, they receive 0 points under this scheme, equivalent to nonmatches. The analytical rule thus isolates genuine memory performance from chance-based successes, yielding a cleaner metric for evaluating the cognitive demands of the task. Beyond the specific configuration used in the present experiment, the dual-layer scoring framework provides methodological flexibility by allowing the surface scoring rule and the analytical rule to be adjusted independently of each other, depending on the research objectives.</p>
+<h3>Formalizing the Turn-Level Game State Transition Model</h3>
+<p>Foerster and Wattenhofer (2013) analyzed the optimal gameplay strategies for the solitaire version of the Memory game. First, if a matching pair of cards with the same label is already known, the player flips them and removes the pair. If no such pair is available, the player instead reveals an unknown card. If a card with the same label is already known, that card is then turned over as well, and the pair is collected. If no match is known, the player flips a second previously unseen card. In summary, collecting the pairs when possible and always flipping new cards constitutes a more efficient strategy for finishing the game.</p>
+<p>We formalize the Memory game simulation as a discrete time process evolving over turns 𝑡 = 1, 2, …, in which a player sequentially selects pairs of cards from a board of initially hidden items. The model operates on three hierarchical levels: the board state, the individual card states, and the action-level dynamics during each turn.</p>
+<p>To infer how memory is applied during gameplay, we need to disentangle different types of memory-related decisions-such as whether players exploit previously acquired memory to form a match, explore new information, or make errors despite having relevant memory. The first step is to determine how these decisions manifest in observable gameplay behavior. To this end, we modeled the game factors and player actions.</p>
+<h3>Definition 1 (Cards and Labels)</h3>
+<p>In the current version of TuneTwins, the positions of the stimuli are randomized for every board and remain fixed once a board is generated and the stimuli-location mapping is recorded, meaning that each stimulus stays in the same position throughout gameplay. Let the board consist of 𝑛 ! distinct pairs of cards, with the total set</p>
+<p>Each card 𝑐 % ∈ 𝒞 is associated with a label type from At turn 𝑡, the state of the game records the cards flipped and their observation status. For each card 𝑐 ∈ 𝒞, let 𝑣 ( (*) ∈ {0,1} denote its observation status, where 𝑣 ( (*) = 1 if card 𝑐 has ever been flipped in any turn up to and including 𝑡, and 𝑣 ( (*) = 0 otherwise. Once a card has been flipped, its status remains permanently observed in all subsequent turns.</p>
+<p>Building on these definitions, the gameplay can be formalized as a finite set of state transitions shown in Figure 2. The outcome of each turn depends on whether the chosen cards have been previously observed and whether they form a pair. To characterize the board states, we track three state variables (𝑛 ( , 𝑘 ( , 𝑝 ( ) to capture the Markov state of the game, i.e., the outcome distribution of any legal action in turn 𝑡 is independent of earlier history. At each turn 𝑡, we record the two cards selected at turn 𝑡 as #) , where: o 𝑐 ( &quot;) : the first card clicked in turn 𝑡; o 𝑐 ( (#) : the second card clicked in turn 𝑡.</p>
+<p>This allows us to track the following state variables: • 𝑛 ( ∈ {0, 1, . . . , 𝑛 !</p>
+<p>}: the number of pairs remaining on the board, i.e., board states, • 𝑘 ( ∈ {0, 1, . . . , 2𝑛 !</p>
+<p>}: the number of individual cards that have been flipped at least once, i.e., card states, • 𝑝 ( ∈ {0, 1, . . . , 𝑛 !</p>
+<p>}: the number of pairs for which both cards have been observed, i.e., the factor that determines the action-level dynamics.</p>
+<p>In addition, we denote the cumulative number of matched turns up to turn 𝑡 by MT ( , and the cumulative number of unmatched turns by UT ( . For example, with the first click, the player flips a card 𝑐 &quot; , which may either be previously unseen (i.e., 𝑣 ( (* &quot; ) = 0) or already known J𝑣 ( (* &quot; ) &gt; 0L. With the second click, the player flips a second card 𝑐 # , which may again either be unvisited (i.e., 𝑣 , (* # ) = 0) or visited J𝑣 ( (* # ) &gt; 0L. The feedback stage then removes the pair or flips the cards back depending on whether the two cards form a matching pair (i.e., 𝑙(𝑐 &quot; ) = 𝑙(𝑐 # )). If both the first and second card are unseen before and do not match, the number of observed cards increases by two: 𝑘 (-&quot; = 𝑘 ( + 2. If both cards were already known and they form a successful match, then a known pair is removed from the board. In this case, the number of remaining pairs decreases by one: 𝑛 (-&quot; = 𝑛 ( -1, and both cards are also removed from the pool of observed cards, resulting in 𝑘 (-&quot; = 𝑘 ( -2, 𝑝 (-&quot; = 𝑝 ( -1. All possibilities converge into thirteen closed and exhaustive paths; each mutually exclusive path makes explicit how observed behaviors map onto distinct state transitions and how the board is updated at the end of each turn. Each successive turn follows one of these thirteen paths, repeating the three-click structure until the game reaches termination, characterized by 𝑛 ! = MT ( , i.e., all pairs have been successfully matched and removed from the board. In principle, the maximum value of MT t equals the initial number of pairs, whereas UT ( can be unbounded, since players may revisit previously seen cards indefinitely (though they have no strategic reason to do so).</p>
+<h3>Simulation</h3>
+<p>Designing a game that is both engaging and suitable for collecting psychological data presents a distinct challenge: the gameplay must strike a balance between playability and methodological rigor (Li et al., 2023). In game design theory, the progress of a game relies on player interaction, where agency is exercised through their choices and actions. Although uncertainty is often viewed as limiting player agency by reducing a clear sense of control or choice, it is paradoxically this very unpredictability that makes decisions feel consequential. From an experiment design perspective, the game must also be sufficiently challenging to avoid ceiling effects and to capture meaningful individual differences in performance. At the same time, it should not be so difficult or frustrating that players are discouraged from completing it. Ultimately, calibrating the tension between too much and too little freedom-that is, creating constraints that provide enough challenge without overwhelming the player-remains a fundamental principle of game design (Salen Tekinbaş &amp; Zimmerman, 2003).</p>
+<p>In the current paradigm, beyond the stimuli attached to the cards (which can modulate task difficulty), this balance is primarily determined by the board size. With the same stimulus set, increasing the board size raises the difficulty level, as players must retain and recall more information about card locations and their associated stimuli. Conversely, a board that is too small risks producing ceiling effects and allowing chance performance to dominate, thereby obscuring meaningful individual differences (Li et al., 2023).</p>
+<p>To determine the ideal board size, we developed a computational simulation to model behavior in a classic card-matching Memory game (Burgoyne et al., 2023). We conducted two simulation studies representing extreme performance boundaries, generated from two contrasting gameplay strategies: a chance strategy and an optimal strategy. The chance strategy is characterized by random card selection throughout the game, representing performance in the absence of memory or strategic behavior. The optimal strategy is characterized by perfect memory retention, in which the player encodes each card&#x27;s position upon its first reveal and subsequently pairs all cards without error. Performance was quantified as the number of turns required to clear the board. We expected real-world participants&#x27; performance to fall within these theoretical bounds.</p>
+<p>We simulated approximately 7.2 million matching-pairs games, covering up to 6,000 participants, stimulus sets containing up to 800 item pairs, and boards of up to 20 cards per game, across 5,000 hyperparameter settings. The resulting datasets were analyzed using a Bayesian model estimated in Stan (Carpenter et al., 2017). With a stimulus set of 100 items, a small effect (Cohen&#x27;s d = 0.2) is already detectable with roughly 374 participants when using a 12-card board, and with only approximately 150 participants when using a 16-card board (Burgoyne et al., 2023).</p>
+<p>Our simulafons indicate that boards of 8 or 10 pairs are viable, but an 8-pair board represents the smallest size that sfll yields clear performance differences between strategies. It also offers a visually appealing and symmetrical 4×4 layout, which is preferable for display across devices.</p>
+<p>This configuration accommodates variations in screen aspect ratio, rendering appropriately on both mobile devices (vertical orientation) and computer screens (horizontal orientation) without card distortion. We implemented this configuration in TuneTwins as part of a broader effort to develop accessible, open-source, and aesthetically refined online data-collection platforms for music cognition research (Janssen et al., 2023).</p>
+<h3>Evidence for Measurement Capability and Engagement</h3>
+<p>As previously mentioned, the aim of this paper is not to address a specific music cognition research question, but rather to showcase the design of an intuitive game and to illustrate its potential. Below, we present empirical data from several case studies conducted with this focus in mind. Since the game&#x27;s development, three such studies have been carried out with different participant groups (Li et al., 2023 (Li et al., , 2025 (Li et al., , 2026)).</p>
+<p>In our first, proof-of-concept experiment, we examined whether pitch information is indispensable for music recognition. Because this study targeted a predominantly Western audience, we compiled a corpus of 48 instrumental theme tunes drawn from popular television programs. To ensure ecological validity and familiarity, tracks were selected from the most-watched and highestrated TV shows listed on IMDb and Rolling Stone, filtered to exclude vocals, and pre-screened for familiarity using the Hooked on Music paradigm (Burgoyne et al., 2013). Each excerpt was then trimmed to the first 10 seconds. Two noise-vocoded versions were produced with Praat (Boersma &amp; Weenink, 2023) using the algorithm of Winn et al. (2012). The two versions of each track represented two levels of degradation: in the first level, pitch cues remained partially perceptible (moderate degradation), whereas in the second level, pitch information was no longer perceivable (severe degradation). A pilot study (n = 10) confirmed the perceptual difference between the two degradation levels. We expected that reducing or eliminating perceivable pitch cues would impair participants&#x27; ability to memorize the music excerpts, leading to more errors in the game. A total of 367 participants completed 576 games, yielding 12,679 judgments. Participants reported their gender as women (n = 149), men (n = 187), and non-binary or undisclosed (n = 31). We received data from participants in 54 countries, with the largest groups coming from the United States (n = 86), the Netherlands (n = 56), Germany (n = 32), the United Kingdom (n = 32), and Spain (n = 29).</p>
+<h3>Capturing Behavioral Variability</h3>
+<p>Using the analytical scoring rule described above, each game yielded a final score-the sum of memorized matches (+1) and mismatches (-1), with lucky matches and non-matches contributing zero-which served as the dependent variable. Figure 3 presents the game score for each completed game in the proof-of-concept experiment. A linear mixed-effects model was fitted in R (R Core Team, 2026) to examine the effect of degradation condition on game performance, with condition (original, moderate degradation, severe degradation) as a fixed effect and participant as a random intercept.</p>
+<p>Game performance declined systematically with increasing levels of pitch degradation, F( 2, 535.91) = 132.81, p &lt; .001. Estimated marginal means were 2.81 [1.94, 3.69] for the original condition, -2.23 [-3.43, -1.03] for moderate degradation, and -10.16 [-11.54, -8.79] for severe degradation. Pairwise comparisons showed that all conditions differed significantly from one another: original versus moderate degradation, estimate = 5.04, SE = 0.73, p &lt; .001, d = 0.72, 95% CI [0.52, 0.93]; original versus severe degradation, estimate = 12.98, SE = 0.81, p &lt; .001, d = 1.86, 95% CI [1.63, 2.10]; and moderate versus severe degradation, estimate = 7.93, SE = 0.90, p &lt; .001, d = 1.14, 95% CI [0.88, 1.40]. Cohen&#x27;s d was calculated using the residual standard deviation (σ = 6.98) as the denominator. These results indicate that performance worsened as degradation increased, with a larger decline at higher levels of degradation. In addition, performance variability increased with degradation, suggesting greater individual differences in participants&#x27; ability to recognize degraded stimuli.</p>
+<p>Because the number of successful matches per game is fixed at eight, the total game score is closely tied to the number of errors committed: players who make more errors require additional turns and therefore obtain lower scores. Figure 4 presents the number of turns required to complete each game, providing a complementary and intuitive metric that reveals the same pattern of declining performance across the three conditions. The number of completed games was 304, 154, and 118 for the original, moderate, and severe degradation conditions, respectively. Residual diagnostics indicated left-skewness in the scaled residuals (minimum = -5.93), attributable to a subset of floor-level performances; however, given the large sample size and effect sizes, this deviation is unlikely to compromise the validity of the results. Taken together, these findings demonstrate that the TuneTwins paradigm is sensitive to graded differences in auditory degradation, confirming its capacity to capture meaningful variation in melodic memory performance.</p>
+<h3>Sustained Motivation and Engagement</h3>
+<p>After conducting the proof-of-concept study and confirming that the game could reveal behavioral differences in response to experimental manipulations, we brought the game to an indigenous hunter-gatherer group, the Mbendjele BaYaka, who live in the rainforest of the Republic of Congo (Li et al., 2025). Following this, we conducted the same experiment with visitors at the NEMO science museum in Amsterdam, the Netherlands. For these versions of the game, we applied a Joint Time-Frequency Scattering method (Andén et al., 2019) and introduced five levels of gameplay.</p>
+<p>Subsequently, to investigate the same research question at a larger scale and across a more culturally diverse population, we launched a web-based version of TuneTwins comprising eleven levels of game. We report the data collected thus far, as this study is ongoing.</p>
+<p>To evaluate whether the game encourages sustained engagement, we examined how many times participants completed the game. Specifically, we calculated the number and proportion of participants who finished at least once, as well as those who played at least two, at least three, and at least ten games. Table 1 summarizes participation patterns across the three study samples.</p>
+<p>In the Congo hunter-gatherer sample, we invited 48 BaYaka participants to play the game individually. Of those, 71% of participants continued playing after completing the first game, and 63% of participants played ten or more games. Participants were informed that they were free to stop at any point, and two exercised this option by requesting to discontinue after only a few rounds. In contrast, many individuals voluntarily approached the experimenter outside of scheduled testing sessions to request additional play, and some even requested to play TuneTwins in place of other planned experiments. This pattern indicates not only that the task instructions were intuitive-participants were able to understand how to play the game solely through observationbut also that the game itself was genuinely engaging for this group. A similar pattern was observed at the NEMO Science Museum. With a strict 15-minute time limit per participant, including the introduction, completing ten games was not feasible. Nevertheless, all invited participants finished at least one game, and the vast majority completed at least three games despite the time constraint.</p>
+<h3>Discussion</h3>
+<p>In this paper, we introduced the conceptualization and design process of TuneTwins-a matching-pairs gamified experimental paradigm for music cognition research and demonstrated its potential as a reliable, engaging, and scalable experimental tool. Using data collected from diverse populations-including a hunter-gatherer community in Congo, Dutch museum visitors, and online participants from 65 countries-we showed that the task elicits meaningful behavioral variation and that many participants voluntarily continue playing. These findings underscore the paradigm&#x27;s practical value for collecting data on musical memory performance.</p>
+<h3>The Paradigm Captures Systematic Variation in Auditory Processing</h3>
+<p>The proof-of-concept experiment indicated that the paradigm is sensitive to systematic differences in auditory processing demands introduced by pitch degradation, supporting its usefulness as a behavioral measure of auditory memory performance. Game scores showed a clear monotonic decline as degradation increased, with effect sizes ranging from moderate to very large.</p>
+<p>At the same time, performance in this paradigm is likely shaped by multiple sources of variance beyond auditory degradation alone. These may include individual differences in cognitive ability, variation in the perceptual difficulty of specific stimuli, positional biases on the game board, and learning effects across repeated play. Such factors may be particularly relevant for understanding the greater variability observed at higher levels of degradation. Future work should model these influences more explicitly across successive games in order to better isolate the contribution of auditory memory to performance.</p>
+<h3>Gamified Design Sustains Engagement Across Diverse Deployment Contexts</h3>
+<p>As Table 1 illustrates, engagement patterns varied markedly across data-collection contexts. In the Congo field study, where BaYaka participants played face-to-face with the experimenter, 34 of 48 individuals (71%) continued beyond the first game, and 30 (63%) completed ten games (two rounds of the five levels)-with several participants voluntarily requesting additional sessions. At the NEMO Science Museum, where a 15-minute time limit constrained participation, all 174 participants completed at least one game and 145 (83%) completed three or more. The global online deployment, by contrast, relied on fully unsupervised participation: of 2,623 registered players, 1,628 (62%) completed at least one game, 834 (32%) at least two, 582 (22%) at least three, and 149 (6%) persisted through all eleven levels despite encountering randomized difficulty ordering. This gradient from supervised to unsupervised settings mirrors a well-documented pattern in online research: participants in web-based studies face considerably less situational demand than those in laboratory settings (Hoerger, 2010), resulting in consistently higher attrition rates. As with any voluntary online study, participants who persevere to advanced levels may differ systematically from those who disengage earlier. This is a common challenge in unsupervised web-based data collection and should be taken into account when interpreting performance at advanced levels. Notably, in designs that compare a larger number of conditions or require finer-grained contrasts, greater amounts of data will naturally be needed. In the global online deployment, condition assignment was counterbalanced such that each difficulty level was represented approximately evenly across the participant pool. Under this design, the critical requirement is not that participants complete all levels, but that sufficient numbers of games are obtained. In addition, each completed game contributed multiple card-pairing trials as individual observations. As the proof-of-concept data illustrate (see Figure 4), each game often involved at least 16 trials, and typically more because mismatches generated additional turns before completion. The 576 games in the proof-of-concept study thus yielded 12,679 trial-level observations, indicating that the paradigm can generate substantial behavioral data even when individual completion rates vary. Future studies could also adopt turn-level observations as the unit of analysis, enabling more fine-grained modeling of individual trial outcomes, for instance through item response theory frameworks such as Rasch models (Burgoyne et al., 2023).</p>
+<h3>Flexible Design Enables Broad Research Applications</h3>
+<p>Beyond the parameters and scoring rules used in our specific studies (Li et al., 2025 (Li et al., , 2026)),</p>
+<p>TuneTwins is highly adaptable and can be configured to address a wide range of research questions in musical memory and auditory cognition. The board size is inherently scalable: although we used an 8-pair (4×4) configuration on the grounds that it offers an optimal balance between discriminability and cognitive load, simpler or more complex versions can be created by adjusting the number of cards. Scoring rules can likewise be modified depending on the construct of interestfor example, by assigning different weights to memory errors, response speed, or strategic choices.</p>
+<p>Stimulus assignment is fully flexible. While the proof-of-concept experiment used Western television theme tunes pre-screened for recognizability among a predominantly Western audience, researchers can substitute culturally appropriate material without altering the game mechanics.</p>
+<p>Boards may employ different types of musical materials (e.g., familiar melodies to probe long-term memory, or unfamiliar melodies to examine working memory) and can be tailored to test sensitivity to specific musical dimensions. Multiple manipulation levels may be mixed within a single board to estimate effect sizes, or isolated across separate boards to maintain tighter experimental control.</p>
+<p>The current implementation also records fine-grained behavioral data-including click timestamps, card locations, memory states, match types, and scoring dynamics-enabling detailed modeling of individual strategies and differences across conditions. Although the present study used a randomized order of difficulty levels, future designs may introduce structured progressions (e.g., easy-to-hard) to sustain motivation while controlling for learning effects. Moreover, our current version remains close to the traditional matching-pairs format to preserve intuitiveness. A consequence of the design choice is that the ground truth of each pair-whether two cards belong together as identical or similar items-is predetermined by the experimenter. Future versions could relax this constraint and explore designs in which pair relationships are determined by participants&#x27; behavior rather than being imposed in advance.</p>
+<h3>Conclusion</h3>
+<p>In sum, TuneTwins offers an engaging, intuitive, and reliable framework for studying musical memory and auditory cognition. Its flexible structure allows researchers to tailor task difficulty, stimulus type, scoring rules, and representational demands, making it suitable for investigating a wide range of cognitive processes-including memory, perception, learning, similarity judgments, and cross-cultural auditory cognition. The combination of adaptable stimulus design, precise behavioral logging, and principled computational modeling renders the paradigm a promising alternative to existing methods in music cognition research. As an open-source and extensible project within the Amsterdam Music Lab&#x27;s MUSCLE framework (https://github.com/Amsterdam-Music-Lab/MUSCLE; Janssen et al., 2023), it provides a robust foundation for developing new experimental manipulations and for advancing our understanding of how humans perceive, remember, and interact with music. Moreover, evidence from three distinct deployment contextsan indigenous hunter-gatherer community, a public science museum, and a large-scale online study-demonstrates that the game&#x27;s intuitive design and engaging gamified structure successfully sustain participant motivation across repeated play, time constraints, multiple difficulty levels, and culturally diverse populations. This makes TuneTwins well suited for citizen science research (Hilton, 2024; Honing, 2021), which offers an attractive means of addressing sampling bias while capturing the individual variability-ultimately contributing to a more nuanced and generalizable understanding of music cognition. Collectively, these features position TuneTwins as a versatile and forward-looking paradigm for future research in music psychology and cognitive science.</p>
+<h3>Author Note</h3>
+<p>This project was funded by the NWO Open Competition SSH (406.20. CW.002) grant.</p>
+<p>A large language model (LLM) was used to assist with language editing. All scientific content, analyses, and conclusions were conceived, verified, and approved by the authors.</p>
+<p>The authors would like to thank Caroline Kellner for her initial work on the formalization of the game play mechanics and work developing Figure 2.</p>
+<p>Correspondence concerning this article should be addressed to Jiaxin Li (lia.jiaxin.li@gmail.com).</p>
+<h3>Figure 1.</h3>
+<p>Figure 1. Panel A shows the initial state of the game board with only down-facing cards. The player is prompted to &quot;Pick a card&quot; to start with an initial score of 100 points as indicated on the top left corner of the screen. Panel B shows the board midway through a game, after the second click has occurred. The top left corner&#x27;s text as well as the +10 points indicate a &quot;lucky match,&quot; i.e., participant matched a pair by chance. Panel C shows that the previous matched pair has been removed from the board. And after some listening, the participant has found another pair to match, this time by memory-earning 20 points. Panel D shows an error trial, where the player loses 10 points. Next click will flip these cards back to orange. The progress bar at the bottom indicates how many games a participant has completed.</p>
+<p>card its label type. Two cards 𝑐 % , 𝑐 &amp; ∈ 𝒞 form a matching pair if 𝑙(𝑐 % ) = 𝑙8𝑐 &amp; 9. For any 𝑐 ∈ 𝒞, we denote its unique mate by mate(𝑐), where 𝑙8mate(𝑐)9 = 𝑙(𝑐) and mate(𝑐) ≠ 𝑐. Definition 2 (Slots and Board Mapping) Let 𝒮 = {1,2, … ,2𝑛 ! } denote the set of slots (board positions). A bijection 𝑚: 𝒮 → 𝒞 assigns each slot a unique card. The composite mapping 𝑙 ∘ 𝑚: 𝒮 → ℒ specifies the label associated with each slot. For any 𝑠 ∈ 𝒮, if 𝑚(𝑠) = 𝑐, then the mate of slot 𝑠 is the unique 𝑠 &#x27; ≠ 𝑠 such that 𝑙8𝑚(𝑠 &#x27; )9 = 𝑙(𝑐).</p>
+<h3>Figure 2.</h3>
+<p>Figure 2. Thirteen possible game states of a single turn. Decision tree illustrating the thirteen unique progression paths that can occur within a single turn of the Memory game, characterizing the card state and board state. Circular nodes (n, k, p) denote the board state at the start of a turn, summarized by three state variables: nt, the number of pairs remaining on the board; kt, the number of individual cards that have been observed at least once; and pt, the number of pairs for which both cards have been observed. Each turn consists of three stages-flipping the first card, flipping the second card, and receiving feedback-represented by successive levels of the tree. Solid ovals correspond to the player&#x27;s first two actions. The arrows between nodes are annotated with the legal prerequisites for each transition, and dashed diamonds indicate the underlying factors that influence the state transitions. The dashed rectangles represent the board state after the current turn is complete. Figure adapted from Kellner (2023).</p>
+<h3>Figure 3.</h3>
+<p>Figure 3. Game scores across three conditions. Game scores of the proof-of-concept experiment across games in three conditions: original corpus, moderate pitch degradation, and severe pitch degradation.</p>
+<h3>Figure 4.</h3>
+<p>Figure 4. Number of turns per game across three conditions. Number of turns required to finish each game in the proof-of-concept experiment across three conditions: original corpus, moderate pitch degradation, and severe pitch degradation.</p>
+<h3>Table 1.</h3>
+<p>Frequency of Game Completion and Sustained Engagement Across the Three Participant GroupsFor the online version of the matching-pairs game, we received data from participants in 65 countries across a wide range of age groups. Among these participants, 62% completed at least one game, 22% completed at least three games. It is worth noting that each board corresponds to a single difficulty level; that is, a board never mixes stimuli degradation tiers. Participants therefore experience one difficulty level per board, although the order of boards is randomized. As a result,</p>
+<h3>References</h3>
+<p>Amsterdam Music Lab. (2026). MUSCLE (Version 5.2.0) [Computer software]. https://github.com/Amsterdam-Music-Lab/MUSCLE</p>
+<p>Andén, J., Lostanlen, V., &amp; Mallat, S. (2019). Joint time-frequency scattering. IEEE Transactions on Signal Processing, 67(14), 3704-3718. https://doi.org/10.1109/TSP.2019.2918992</p>
+<p>Baker-Ward, L., &amp; Ornstein, P. A. (1988). Age differences in visual-spatial memory performance: Do children really out-perform adults when playing Concentration? Bulletin of the Psychonomic Society, 26(4), 331-332. https://doi.org/10.3758/BF03337672</p>
+<p>Bigand, E., &amp; Poulin-Charronnat, B. (2006). Are we &quot;experienced listeners&quot;? A review of the musical capacities that do not depend on formal musical training. Cognition, 100(1), 100-130. https://doi.org/10.1016/j.cognition.2005.11.007</p>
+<p>Boersma, P., &amp; Weenink, D. (2023). Praat: Doing phonetics by computer (Version 6.3.09) [Computer software]. University of Amsterdam. https://www.praat.org/</p>
+<p>Bridges, D., Pitiot, A., MacAskill, M. R., &amp; Peirce, J. W. (2020). The timing mega-study: Comparing a range of experiment generators, both lab-based and online. PeerJ, 8, e9414. https://doi.org/10.7717/peerj.9414</p>
+<p>Brown, H. R., Zeidman, P., Smittenaar, P., Adams, R. A., McNab, F., Rutledge, R. B., &amp; Dolan, R. J. (2014). Crowdsourcing for cognitive science -The utility of smartphones. PLOS One, 9(7), e100662. https://doi.org/10.1371/journal.pone.0100662</p>
+<p>Burgoyne, J. A., Baker, D. J., &amp; Honing, H. (2023). What a game can reveal about music perception: A psychometric analysis of the matching pairs game. In Proceedings of the 17th International Conference on Music Perception and Cognition.</p>
+<p>Burgoyne, J. A., Bountouridis, D., van Balen, J., &amp; Honing, H. (2013). Hooked: A game for discovering what makes music catchy. In Proceedings of the 14th International Society for Music Information Retrieval Conference (pp. 245-250). https://hdl.handle.net/11245/1.405121</p>
+<p>Carpenter, B., Gelman, A., Hoffman, M. D., Lee, D., Goodrich, B., Betancourt, M., Brubaker, M., Guo, J., Li, P., &amp; Riddell, A. (2017). Stan: A probabilistic programming language. Journal of Statistical Software, 76(1), 1-32. https://doi.org/10.18637/jss.v076.i01</p>
+<p>Chakrabarti, A., &amp; Chen, Y. (2018). Time-space tradeoffs for the memory game. arXiv. https://doi.org/10.48550/arXiv.1712.01330</p>
+<p>Chmielewski, M., &amp; Kucker, S. C. (2020). An MTurk crisis? Shifts in data quality and the impact on study results. Social Psychological and Personality Science, 11(4), 464-473. https://doi.org/10.1177/1948550619875149</p>
+<p>Deci, E. L., &amp; Ryan, R. M. (1985). Intrinsic motivation and self-determination in human behavior. Plenum. https://doi.org/10.1007/978-1-4899-2271-7</p>
+<p>Demorest, S. M., Morrison, S. J., Jungbluth, D., &amp; Beken, M. N. (2008). Lost in translation: An enculturation effect in music memory performance. Music Perception, 25(3), 213-223. https://doi.org/10.1525/mp.2008.25.3.213</p>
+<p>Duffy, S., &amp; Pearce, M. (2018). What makes rhythms hard to perform? An investigation using Steve Reich&#x27;s clapping music. PLOS One, 13(10), e0205847. https://doi.org/10.1371/journal.pone.0205847</p>
+<p>Foerster, K.-T., &amp; Wattenhofer, R. (2013). The solitaire memory game [Technical Report].</p>
+<p>ETH Zurich. http://eprints.cs.univie.ac.at/5522/</p>
+<p>Frieler, K., Müllensiefen, D., Fischinger, T., Schlemmer, K., Jakubowski, K., &amp; Lothwesen, K. (2013). Replication in music psychology. Musicae Scientiae, 17(3), 265-276. https://doi.org/10.1177/1029864913495404</p>
+<p>Gellatly, A., Jones, S., &amp; Best, A. (1988). The development of skill at concentration. Australian Journal of Psychology, 40(1), 1-10. https://doi.org/10.1080/00049538808259064</p>
+<p>Gilbert, D. T., King, G., Pettigrew, S., &amp; Wilson, T. D. (2016). Comment on &quot;Estimating the reproducibility of psychological science.&quot; Science, 351(6277), 1037. https://doi.org/10.1126/science.aad7243</p>
+<p>Hauser, D., Paolacci, G., &amp; Chandler, J. (2019). Common concerns with MTurk as a participant pool: Evidence and solutions. In F. Kardes, P. M. Herr, &amp; N. Schwarz (Eds.), Handbook of research methods in consumer psychology (pp. 319-337). Routledge/Taylor &amp; Francis Group. https://doi.org/10.4324/9781351137713-17</p>
+<p>Henrich, J., Heine, S. J., &amp; Norenzayan, A. (2010). The weirdest people in the world? Behavioral and Brain Sciences, 33(2-3), 61-83. https://doi.org/10.1017/s0140525x0999152x</p>
+<p>Hilton, C. B. (2024). Why music psychology needs larger and more diverse datasets and how citizen science can help. PsyArXiv. https://doi.org/10.31234/osf.io/zv6w8</p>
+<p>Hoerger, M. (2010). Participant dropout as a function of survey length in internet-mediated university studies: Implications for study design and voluntary participation in psychological research. Cyberpsychology, Behavior, and Social Networking, 13(6), 697-700. https://doi.org/10.1089/cyber.2009.0445</p>
+<p>Honing, H. (2021). Lured into listening: Engaging games as an alternative to reward-based crowdsourcing in music research. Zeitschrift für Psychologie, 229(4), 266-268. https://doi.org/10.1027/2151-2604/a000474</p>
+<p>Honing, H. (2023). Unravelling our capacity for music. OSF. https://osf.io/yxfv4</p>
+<p>Jacoby, N., Margulis, E. H., Clayton, M., Hannon, E., Honing, H., Iversen, J., Klein, T. R., Mehr, S. A., Pearson, L., Peretz, I., Perlman, M., Polak, R., Ravignani, A., Savage, P. E., Steingo, G., Stevens, C. J., Trainor, L., Trehub, S., Veal, M., &amp; Wald-Fuhrmann, M. (2020). Cross-cultural work in music cognition: Challenges, insights, and recommendations. Music Perception, 37(3), 185-195. https://doi.org/10.1525/mp.2020.37.3.185</p>
+<p>Janssen, B., Burgoyne, J. A., Janulevicius, A., Rot, E., &amp; Honing, H. (2023). An infrastructure for reusable online music experiments. In Proceedings of the 17th International Conference on Music Perception and Cognition. https://hdl.handle.net/11245.1/ca4805b6-ade1-48c8-9170-</p>
+<p>Kellner, C. (2023). Formalization and evaluation of memory-based listening experiments. [Internship report, University of Amsterdam]. figshare. https://doi.org/10.6084/m9.figshare.23720946.v2</p>
+<p>Krantz, J. H. (2021). Ebbinghaus illusion: Relative size as a possible invariant under technically varied conditions? Zeitschrift für Psychologie, 229(4), 230-235. https://doi.org/10.1027/2151- 2604/a000467</p>
+<p>Law, E. L. M., von Ahn, L., Dannenberg, R. B., &amp; Crawford, M. (2007). TagATune: A game for music and sound annotation. In Proceedings of the 8th International Conference on Music Information Retrieval (pp. 361-364). https://www.cs.cmu.edu/~elaw/papers/ISMIR2007.pdf</p>
+<p>Lepper, M. R., Greene, D., &amp; Nisbett, R. E. (1973). Undermining children&#x27;s intrinsic interest with extrinsic reward: A test of the &quot;overjustification&quot; hypothesis. Journal of Personality and Social Psychology, 28(1), 129-137. https://doi.org/10.1037/h0035519</p>
+<p>Levitin, D. J. (1994). Absolute memory for musical pitch: Evidence from the production of learned melodies. Perception &amp; Psychophysics, 56(4), 414-423. https://doi.org/10.3758/bf03206733</p>
+<p>Levitin, D. J., &amp; Cook, P. R. (1996). Memory for musical tempo: Additional evidence that auditory memory is absolute. Perception &amp; Psychophysics, 58(6), 927-935. https://doi.org/10.3758/BF03205494</p>
+<p>Li, J., Baker, D. J., Burgoyne, J. A., Han, H., Henry, N., Lostanlen, V., Sadakata, M., van der Vlist, M.M.C, van Schaik, F. T. M., Janmaat, K. R. L., &amp; Honing, H. (2025). Is pitch indispensable for music recognition? Robust music recognition under spectral and temporal degradations in BaYaka hunter-gatherers. In Proceedings of the 18th International Conference on Music Perception and Cognition. https://hdl.handle.net/11245.1/afbc1d24-3669-4786-a467- 6bd5e7058c28</p>
+<p>Li, J., Baker, D. J., Burgoyne, J. A., &amp; Honing, H. (2023). Is pitch information indispensable for music recognition? A pilot study based on a musical matching pairs game. In Proceedings of the 17th International Conference on Music Perception and Cognition. https://hdl.handle.net/11245.1/a765dc1c-8543-4909-8ebd-e0a28995b11e</p>
+<p>Li, J., Lin, H.-R., Wolf, A., &amp; Lothwesen, K. (2024). Measuring musical sophistication in the Chinese general population: Validation and replication of the Simplified Chinese Gold-MSI. Musicae Scientiae, 28(2), 197-221. https://doi.org/10.1177/10298649231183264</p>
+<p>Li, J., van Baalen, C. C., Baker, D. J., Burgoyne, J. A., Han, H., Henry, N., Lostanlen, V., Sadakata, M., van der Vlist, M. M. C., van Schaik, F. T. M., Janmaat, K. R. L., &amp; Honing, H. (2026). Auditory cue-weighting in BaYaka forest-foragers and Western listeners [Preprint]. PsyArXiv. https://doi.org/10.31234/osf.io/jr3cy_v1</p>
+<p>Long, B., Simson, J., Buxó-Lugo, A., Watson, D. G., &amp; Mehr, S. A. (2023). How games can make behavioural science better. Nature, 613(7944), 433-436. https://doi.org/10.1038/d41586- 023-00065-6</p>
+<p>Lumsden, J., Edwards, E. A., Lawrence, N. S., Coyle, D., &amp; Munafò, M. R. (2016). Gamification of cognitive assessment and cognitive training: A systematic review of applications and efficacy. JMIR Serious Games, 4(2), e11. https://doi.org/10.2196/games.5888</p>
+<p>Malone, T. W. (1981). Toward a theory of intrinsically motivating instruction. Cognitive Science, 5(4), 333-369. https://doi.org/10.1016/S0364-0213(81)80017-1</p>
+<p>Mandel, M. I., &amp; Ellis, D. P. W. (2008). A web-based game for collecting music metadata. Journal of New Music Research, 37(2), 151-165. https://doi.org/10.1080/09298210802479300</p>
+<p>Martin, C. F., &amp; Shumaker, R. W. (2022). Orangutan strategies for solving a visuospatial memory task. American Journal of Primatology, 84(10), e23367. https://doi.org/10.1002/ajp.23367</p>
+<p>Maxwell, S. E., Lau, M. Y., &amp; Howard, G. S. (2015). Is psychology suffering from a replication crisis? What does &quot;failure to replicate&quot; really mean? American Psychologist, 70(6), 487-498. https://doi.org/10.1037/a0039400</p>
+<p>Müllensiefen, D., Gingras, B., Musil, J., &amp; Stewart, L. (2014). The musicality of non-musicians: An index for assessing musical sophistication in the general population. PLOS One, 9(2), e89642. https://doi.org/10.1371/journal.pone.0089642</p>
+<p>Open Science Collaboration. (2015). Estimating the reproducibility of psychological science. Science, 349(6251), aac4716. https://doi.org/10.1126/science.aac4716</p>
+<p>Peer, E., Brandimarte, L., Samat, S., &amp; Acquisti, A. (2017). Beyond the Turk: Alternative platforms for crowdsourcing behavioral research. Journal of Experimental Social Psychology, 70, 153-163. https://doi.org/10.1016/j.jesp.2017.01.006</p>
+<p>R Core Team. (2026). R: A language and environment for statistical computing [Computer software].</p>
+<p>R Foundation for Statistical Computing. https://www.R-project.org/</p>
+<p>Richter, S. H., Garner, J. P., Auer, C., Kunert, J., &amp; Würbel, H. (2010). Systematic variation improves reproducibility of animal experiments. Nature Methods, 7(3), 167-168. https://doi.org/10.1038/nmeth0310-167</p>
+<p>Ryan, R. M., &amp; Deci, E. L. (2000). Intrinsic and extrinsic motivations: Classic definitions and new directions. Contemporary Educational Psychology, 25(1), 54-67. https://doi.org/10.1006/ceps.1999.1020</p>
+<p>Salen Tekinbaş, K., &amp; Zimmerman, E. (2003). Rules of play: Game design fundamentals. MIT Press.</p>
+<p>Schumann-Hengsteler, R. (1996). Children&#x27;s and adults&#x27; visuospatial memory: The game concentration. The Journal of Genetic Psychology, 157(1), 77-92. https://doi.org/10.1080/00221325.1996.9914847</p>
+<p>Stewart, N., Chandler, J., &amp; Paolacci, G. (2017). Crowdsourcing samples in cognitive science. Trends in Cognitive Sciences, 21(10), 736-748. https://doi.org/10.1016/j.tics.2017.06.007</p>
+<p>Tiago, P., Gouveia, M. J., Capinha, C., Santos-Reis, M., &amp; Pereira, H. M. (2017). The influence of motivational factors on the frequency of participation in citizen science activities. Nature Conservation, 18, 61-78. https://doi.org/10.3897/natureconservation.18.13429</p>
+<p>Tottenham, L. S., Saucier, D., Elias, L., &amp; Gutwin, C. (2003). Female advantage for spatial location memory in both static and dynamic environments. Brain and Cognition, 53(2), 381-383. https://doi.org/10.1016/S0278-2626(03)00149-0</p>
+<p>Turnbull, D., Liu, R., Barrington, L., &amp; Lanckriet, G. (2007). A game-based approach for collecting semantic annotations of music. In Proceedings of the 8th International Conference on Music Information Retrieval (pp. 535-538). https://ismir2007.ismir.net/proceedings/ISMIR2007_p535_turnbull.pdf</p>
+<p>Velleman, D. J., &amp; Warrington, G. S. (2013). What to expect in a game of memory. The American Mathematical Monthly, 120(9), 787-805. https://doi.org/10.4169/amer.math.monthly.120.09.787</p>
+<p>Washburn, D. A., &amp; Gulledge, J. P. (1995). Game-like tasks for comparative research: Leveling the playing field. Behavior Research Methods, Instruments, &amp; Computers, 27(2), 235-238. https://doi.org/10.3758/BF03204738</p>
+<p>Washburn, D. A., &amp; Gulledge, J. P. (2002). A species difference in visuospatial memory in adult humans and rhesus monkeys: The concentration game. International Journal of Comparative Psychology, 15(4), 288-302. https://doi.org/10.46867/C43W25</p>
+<p>Washburn, D. A., Gulledge, J. P., James, F., &amp; Rumbaugh, D. M. (2007). A species difference in visuospatial working memory: Does language link &quot;what&quot; with &quot;where&quot;? International Journal of Comparative Psychology, 20(1), 55-64. https://doi.org/10.46867/IJCP.2007.20.01.02</p>
+<p>Winn, M. B., Chatterjee, M., &amp; Idsardi, W. J. (2012). The use of acoustic cues for phonetic identification: Effects of spectral degradation and electric hearing. The Journal of the Acoustical Society of America, 131(2), 1465-1479. https://doi.org/10.1121/1.3672705</p>
+<p>Zwick, U., &amp; Paterson, M. S. (1993). The memory game. Theoretical Computer Science, 110(1), 169- 196. https://doi.org/10.1016/0304-3975(93)90355-W</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
