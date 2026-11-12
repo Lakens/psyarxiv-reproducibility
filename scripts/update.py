@@ -54,6 +54,13 @@ from test_surf_jobs import post_job, SERVER
 OSF = "https://api.osf.io/v2"
 LIST = OSF + "/preprints/?filter[provider]=psyarxiv&page[size]=100"
 UA = "psyarxiv_metacheck (github.com/Lakens/psyarxiv_metacheck)"
+# Two sites send preprints to the SURF server (this one and medrxiv_metacheck),
+# each only when the server is idle. After its own job ends, a run waits
+# REST_SECONDS before it sends the next one, and a waiting run asks the server
+# every POLL_SECONDS; so the other site, waiting, gets its turn, and the two
+# take turns. medrxiv_metacheck's update.py has the same two numbers.
+REST_SECONDS = 60
+POLL_SECONDS = 15
 # the checks the SURF server runs for its regular report; with run_code=true the
 # server adds reproducibility_check, which runs the paper's code in the sandbox
 MODULES = ("power,marginal,prereg_check,ethics_check,ref_pubpeer,ref_retraction,"
@@ -352,7 +359,13 @@ def run_job(name, data, ctype):
 CURRENT_JOB = os.path.join("data", "current_job.json")   # set in main()
 
 
+LAST_JOB_END = 0.0      # when this run's last job ended (time.time()); see REST_SECONDS
+
+
 def remember_job(job_id):
+    global LAST_JOB_END
+    if not job_id:
+        LAST_JOB_END = time.time()
     save(CURRENT_JOB, {"id": job_id, "sent": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
          if job_id else {})
 
@@ -360,7 +373,11 @@ def remember_job(job_id):
 def server_idle():
     # True when the server answers and has no job running or waiting (also
     # not one of ours left by an earlier run, whose record is cleared once it
-    # has finished); False otherwise, also when it cannot be reached
+    # has finished); False otherwise, also when it cannot be reached. False
+    # too in the REST_SECONDS after this run's own job ended, so that the
+    # other site's run gets its turn.
+    if time.time() - LAST_JOB_END < REST_SECONDS:
+        return False
     try:
         if previous_job_running():
             return False
@@ -560,7 +577,8 @@ def fail(state, osf_id, error):
 
 
 def check_one(item, state, index, papers_dir, site_dir):
-    # returns "done", "skipped", or "failed"
+    # returns "done", "skipped", "failed", or "busy" (the server became busy
+    # during the download; nothing changed)
     osf_id = item["id"]
     try:
         rec = get(f"{OSF}/preprints/{osf_id}/")["data"]
@@ -592,6 +610,10 @@ def check_one(item, state, index, papers_dir, site_dir):
         return "skipped"
     data = get(finfo["links"]["download"], raw=True)
 
+    # asked again just before sending, so the other site cannot have sent a job
+    # during the download; when it did, this preprint stays first in the queue
+    if not server_idle():
+        return "busy"
     print(f"{osf_id}: sending {name} ({len(data) // 1024} KB)", flush=True)
     result, error = run_job(name, data, FILE_TYPES[ext])
     if item["source"] == "older" and osf_id not in state["tries"]:
@@ -1135,6 +1157,7 @@ def main():
     global CURRENT_JOB
     CURRENT_JOB = os.path.join(args.data_dir, "current_job.json")
     sent = 0
+    listed_at = 0.0      # when the OSF's list was last read
     changed = False
     said = None          # the last waiting message printed, so it is printed once
     # --redo: these go first; their index lines are set aside so they count as
@@ -1150,7 +1173,11 @@ def main():
     try:
         while time.time() < stop_at and (args.max == 0 or sent < args.max):
             try:
-                list_new(state, index)
+                # the OSF's list at most every 2 minutes (the server is asked
+                # every POLL_SECONDS while it is busy)
+                if time.time() - listed_at >= 120 or not state["queue"]:
+                    list_new(state, index)
+                    listed_at = time.time()
                 older = (not state["queue"] and state["backfill_sent"] < BACKFILL_LIMIT
                          and list_older_day(state, index))
             except (urllib.error.URLError, TimeoutError, KeyError, ValueError) as e:
@@ -1180,7 +1207,7 @@ def main():
                 if said != "busy":
                     print("The server is busy or cannot be reached; waiting until it is idle.", flush=True)
                     said = "busy"
-                if not pause(stop_at, 60):
+                if not pause(stop_at, POLL_SECONDS):
                     break
                 continue
             said = None
@@ -1192,6 +1219,8 @@ def main():
             except (urllib.error.URLError, TimeoutError, KeyError, TypeError, ValueError) as e:
                 # an OSF answer that could not be read: tried again later
                 outcome = fail(state, item["id"], f"{type(e).__name__}: {e}")
+            if outcome == "busy":       # the server became busy during the download
+                continue
             state["queue"].pop(0)
             if outcome == "failed" and item["id"] in state["tries"]:
                 state["queue"].append(item)        # try again after the others

@@ -91,6 +91,9 @@ def main():
         update.CURRENT_JOB = os.path.join(tempfile.gettempdir(), "psyarxiv_redo_job.json")
         send = update.post_job
         update.post_job = lambda fields, file=None: send({**fields, **keys}, file=file)
+        # check_one asks the server once more just before sending: here with
+        # this script's rule (a free place), not the hourly run's (idle)
+        update.server_idle = free_place
         index = {p["id"]: p for p in load(os.path.join(args.data_dir, "index.json"), {"papers": []})["papers"]}
         state = {"skipped": {}, "tries": {}, "failed": {}, "backfill_sent": 0}
         for osf_id in args.ids:
@@ -101,8 +104,12 @@ def main():
                     said = True
                 time.sleep(30)
             try:
-                outcome = update.check_one({"id": osf_id, "source": "redo"}, state, index,
-                                           papers_dir, args.site_dir)
+                outcome = "busy"
+                while outcome == "busy":     # the place was taken during the download
+                    outcome = update.check_one({"id": osf_id, "source": "redo"}, state, index,
+                                               papers_dir, args.site_dir)
+                    if outcome == "busy":
+                        time.sleep(30)
             except update.ServerDown as e:
                 print(f"{osf_id}: the server could not be reached; stopping: {e}")
                 break
