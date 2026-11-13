@@ -42,12 +42,15 @@ import json
 import math
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 
 from test_surf_jobs import post_job, SERVER
 
@@ -322,15 +325,21 @@ def authors_of(osf_id):
 def run_job(name, data, ctype):
     # a check returns the JSON result; report=true adds the report page
     # (report_html), paper=true the paper as converted (`paper`: its full text,
-    # sections, references, tables, ..., as metacheck reads it)
+    # sections, references, tables, ..., as metacheck reads it). With pCloud
+    # (pcloud_on()), keep_files=true: the server also keeps what the checks
+    # downloaded and the folders the code ran in, as a .zip, fetched here.
+    # Returns the result, an error, and what the server said about the kept
+    # files (its `files`, with `zip`: where the .zip was saved, or `error`).
     fields = {"kind": "check", "report": "true", "paper": "true", "report_type": "checklist",
               "modules": MODULES, "run_code": "true", "crossref": "true"}
+    if pcloud_on():
+        fields["keep_files"] = "true"
     try:
         job = post_job(fields, file=(name, data, ctype))
     except urllib.error.HTTPError as e:
         if e.code >= 500:
             raise ServerDown(f"the server answered {e.code}")
-        return None, f"the server refused the file ({e.code}): {e.read().decode(errors='replace')[:300]}"
+        return None, f"the server refused the file ({e.code}): {e.read().decode(errors='replace')[:300]}", None
     except (urllib.error.URLError, TimeoutError) as e:
         raise ServerDown(str(e))
     remember_job(job["id"])
@@ -343,13 +352,116 @@ def run_job(name, data, ctype):
             raise ServerDown(str(e))
         if status.get("status") == "done":
             result = get(f"{SERVER}/jobs/{job['id']}/result")
+            kept = fetch_kept_files(job["id"], status) if pcloud_on() else None
             remember_job(None)
-            return result, None
+            return result, None, kept
         if status.get("status") == "failed":
             remember_job(None)
-            return None, status.get("error") or "the job failed"
+            return None, status.get("error") or "the job failed", None
     # still on the server: stop here rather than send a second job next to it
     raise ServerDown(f"job {job['id']} still running after {JOB_WAIT_MINUTES} minutes")
+
+
+def fetch_kept_files(job_id, status):
+    # the .zip of a job with keep_files, saved in a temporary file (deleted
+    # once it is on pCloud, store_on_pcloud()); the server keeps it one hour
+    kept = dict(status.get("files") or {"status": "not given"})
+    if not status.get("files_url"):
+        return kept
+    fd, path = tempfile.mkstemp(suffix=".zip")
+    try:
+        req = urllib.request.Request(f"{SERVER}/jobs/{job_id}/files", headers={"User-Agent": UA})
+        with os.fdopen(fd, "wb") as f, urllib.request.urlopen(req, timeout=900) as r:
+            shutil.copyfileobj(r, f, 1 << 20)
+        kept["zip"] = path
+    except (urllib.error.URLError, TimeoutError, OSError) as e:
+        os.remove(path)
+        kept["error"] = f"could not fetch the .zip from the server: {e}"
+    return kept
+
+
+# ── Storing the files on pCloud ───────────────────────────────────────────────
+# With the secrets PCLOUD_TOKEN and PCLOUD_HOST (set by scripts/pcloud_login.py
+# in medrxiv_metacheck, run once by hand), each checked preprint's file, and
+# the .zip of what the checks downloaded from its repositories and the folders
+# its code ran in (keep_files), are put in PCLOUD_FOLDER/<id>/ on Daniel's
+# pCloud (P:\metacheck_downloads). Without the secrets nothing is stored there.
+# A file pCloud already has is replaced (pCloud keeps the old one as a
+# revision). A failed upload does not stop the report; the preprint is listed
+# in state.json under `not_stored`.
+PCLOUD_FOLDER = "/metacheck_downloads/psyarxiv"
+
+
+class PcloudError(Exception):
+    pass
+
+
+def pcloud_on():
+    return bool(os.environ.get("PCLOUD_TOKEN") and os.environ.get("PCLOUD_HOST"))
+
+
+def pcloud_call(method, params, body=None, headers=None, timeout=120):
+    # the key goes in the address, which is never printed
+    url = (f"https://{os.environ['PCLOUD_HOST']}/{method}?"
+           + urllib.parse.urlencode(dict(params, access_token=os.environ["PCLOUD_TOKEN"])))
+    req = urllib.request.Request(url, data=body, headers=dict(headers or {}, **{"User-Agent": UA}),
+                                 method="POST")
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        res = json.load(r)
+    if res.get("result") != 0:
+        raise PcloudError(f"{method}: pCloud answered {res.get('result')} {res.get('error')}")
+    return res
+
+
+def pcloud_upload(folder, name, data=None, path=None):
+    # one file, sent in parts (a .zip can be 1 GB) as the form pCloud's
+    # uploadfile reads; nopartial: a file that did not arrive whole is not kept
+    boundary = uuid.uuid4().hex
+    safe = re.sub(r'["\r\n\\]', "_", name)
+    head = (f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{safe}"\r\n'
+            "Content-Type: application/octet-stream\r\n\r\n").encode()
+    tail = f"\r\n--{boundary}--\r\n".encode()
+    size = len(data) if data is not None else os.path.getsize(path)
+
+    def body():
+        yield head
+        if data is not None:
+            yield data
+        else:
+            with open(path, "rb") as f:
+                while chunk := f.read(1 << 20):
+                    yield chunk
+        yield tail
+
+    pcloud_call("uploadfile", {"path": folder, "nopartial": 1}, body(),
+                {"Content-Type": f"multipart/form-data; boundary={boundary}",
+                 "Content-Length": str(len(head) + size + len(tail))}, timeout=1800)
+
+
+def store_on_pcloud(osf_id, name, data, kept):
+    # the preprint's file and the kept .zip in PCLOUD_FOLDER/<osf_id>/; returns
+    # what is stored there (for the result file), or raises PcloudError. The
+    # .zip's temporary file is deleted either way.
+    folder = f"{PCLOUD_FOLDER}/{osf_id}"
+    kept = dict(kept or {})
+    zip_path = kept.pop("zip", None)
+    try:
+        for attempt in range(3):
+            try:
+                pcloud_call("createfolderifnotexists", {"path": folder})
+                pcloud_upload(folder, name, data=data)
+                if zip_path:
+                    pcloud_upload(folder, "files.zip", path=zip_path)
+                break
+            except (urllib.error.URLError, TimeoutError, OSError, ValueError, PcloudError) as e:
+                if attempt == 2:
+                    raise PcloudError(str(e)) from None
+                time.sleep(30)
+    finally:
+        if zip_path:
+            os.remove(zip_path)
+    return {"folder": folder, "preprint_file": name,
+            "files_zip": "files.zip" if zip_path else None, "kept_files": kept}
 
 
 # One preprint at a time on the server, so that one of its two places stays
@@ -615,11 +727,21 @@ def check_one(item, state, index, papers_dir, site_dir):
     if not server_idle():
         return "busy"
     print(f"{osf_id}: sending {name} ({len(data) // 1024} KB)", flush=True)
-    result, error = run_job(name, data, FILE_TYPES[ext])
+    result, error, kept = run_job(name, data, FILE_TYPES[ext])
     if item["source"] == "older" and osf_id not in state["tries"]:
         state["backfill_sent"] += 1
     if error:
         return fail(state, osf_id, error)
+    stored = None
+    if pcloud_on():
+        try:
+            stored = store_on_pcloud(osf_id, name, data, kept)
+            state.setdefault("not_stored", {}).pop(osf_id, None)
+            print(f"{osf_id}: stored on pCloud (files kept by the server: "
+                  f"{(kept or {}).get('status')})", flush=True)
+        except PcloudError as e:
+            state.setdefault("not_stored", {})[osf_id] = str(e)[:300]
+            print(f"{osf_id}: not stored on pCloud: {e}", flush=True)
     state["tries"].pop(osf_id, None)
     keys = {}
     result = remove_keys(result, keys)
@@ -650,6 +772,8 @@ def check_one(item, state, index, papers_dir, site_dir):
                    for k, m in modules.items() if m.get("traffic_light") == "fail"],
         "report_page": bool(html),
         "keys_removed": keys,      # keys found in the result and replaced, by type
+        # where the preprint's file and the kept files are on pCloud (None: not stored)
+        "pcloud": stored,
         "paper_info": result.get("paper_info"),
         "modules": modules,
     }
