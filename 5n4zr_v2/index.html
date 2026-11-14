@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: A Hierarchical Dynamical Model of Learning,
+Forgetting, and Relearning</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+A Hierarchical Dynamical Model of Learning, Forgetting, and Relearning
+</p>
+<p class="meta">
+2026-11-14 · Metacheck 0.4.4.1
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to fix</span></a><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Ethics
+Approval Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>1 of 1 paper appeared to involve live data collection and lacked an
+ethics approval statement.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, but it was not present:</p>
+<blockquote>
+<p>Only four participants took part in Perkins’ study, and not all
+served in all 16 conditions.</p>
+</blockquote>
+</div>
+</details>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, GitLab, ResearchBox, DSpace, EPrints (ReShare and others),
+Invenio (Zenodo and others), Dataverse, Figshare, Dryad,
+4TU.ResearchData, Mendeley Data, DataONE, LDbase, or CKAN data
+portals.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>No references with comments in PubPeer were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 6 references with DOIs. No references with comments in
+PubPeer were found.</p>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 6 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 6 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Version 2 -November 2026. Minor correction to the mathematical notation in Figure 9. No changes to the analysis or conclusions.</p>
+<h3>1. Introduction</h3>
+<p>The principles governing the learning, retention, and recall of verbal material have been a central concern of experimental psychology since the work of Hermann Ebbinghaus (1885/1964). This work has established a number of robust empirical phenomena, including the characteristic form of the forgetting curve, serial position effects, and effects of massed versus distributed learning. However, these findings are typically treated as separate effects, and there is no widely accepted quantitative framework that integrates them within a single model.</p>
+<p>The model described here provides such a framework. It accounts for the results of several well-known experiments involving both individual items (e.g., nonsense syllables) and lists of such items, across retention intervals ranging from seconds to weeks. Central to the model is the tracking of the probability of recall of individual items as they are learned, forgotten, and relearned over successive study and delay periods.</p>
+<p>The model is formulated as a hierarchical dynamical system in which the rate of forgetting evolves as a function of study and delay. It relies exclusively on objective, measurable variables that influence recall, including study duration, retention interval, and list structure (e.g., serial position and list length). A central feature of the model is that forgetting is governed by an exponent that itself changes over time, giving rise to interacting processes operating at multiple timescales.</p>
+<p>In outline, recall probability increases during study and declines exponentially during retention intervals, with the rate of decline determined by parameters that depend on prior study and list structure. These parameters are themselves subject to systematic change across study and delay periods, allowing the model to capture a range of empirical phenomena within a unified framework. A detailed specification of the model is provided in the following section.</p>
+<h3>2. Model overview</h3>
+<p>The model employs only objective, measurable factors that can influence recall. These include: • the probability with which an item could be guessed before being encountered; • the duration for which the item is available for study; • the duration of the delay between study and a subsequent attempt at recall or relearning; • the number of items that precede the item in a list; • the number of items that follow it; • the total length of the list; • the pattern and duration of study periods and delays prior to recall.</p>
+<p>The model is formulated as a hierarchical dynamical system in which the rate of forgetting evolves over time as a function of study and delay. In outline, it incorporates the following features: 1.</p>
+<p>The initial probability of recall of an item (e.g., a nonsense syllable) prior to presentation corresponds to its likelihood of being produced by chance. Following even a brief period of study, this probability typically rises to a value close to 1.00.2. After the completion of study, there is a short interval (approximately 2 seconds) during which little or no measurable forgetting occurs. Thereafter, recall probability declines exponentially during any delay preceding a recall attempt, governed by an operative forgetting exponent. 3. The rate of forgetting (i.e., the operative forgetting exponent) depends on the duration of study and on two underlying parameters described below. 4. In lists of items, the initial value of the forgetting exponent (prior to study) depends on serial position. Early and late items have lower initial values than items near the middle, forming an inverted-U pattern. 5. The extent to which the forgetting exponent is reduced during study depends on a reducing exponent, which also varies with serial position (in a U-shaped pattern), as well as on the duration of study. Together, these determine the operative forgetting exponent. 6. During delays, both the forgetting exponent and the reducing exponent tend to return toward their initial values. These changes do not affect the course of forgetting within the current delay, but determine the parameter values that apply in subsequent study and delay periods. As a result, the operative forgetting exponent governing each delay depends on the evolving underlying state established through prior study and delay periods. 7. The reducing exponent is itself subject to further modulation. It increases during study periods and may decrease during delays. The magnitude of this decrease becomes important when learning is distributed over extended periods. It depends on delay measured in &#x27;relative time&#x27;, defined as the ratio between: (a) the time from the beginning of the first study period to the end of the delay preceding recall, and (b) the time from the beginning of the first study period to the end of the most recent study period.</p>
+<h3>3. Empirical Foundations of the Model</h3>
+<p>The model developed here is grounded in a set of experimental findings that collectively constrain the form that any general account of memory must take. These studies were selected because they provide sufficiently detailed procedural descriptions and quantitative data, and because, taken together, they span a wide range of timescales and learning conditions.</p>
+<p>Specifically, they address: (i) the short-term retention of individual items over delays of a few seconds; (ii) the acquisition of lists over repeated trials and the emergence of serial position effects; (iii) long-term retention and relearning over intervals of days or weeks; and (iv) the effects of distributed as opposed to massed practice.</p>
+<p>The experiments of Hellyer (1962) and Robinson and Brown (1926) are central to the first two domains, while the work of Ebbinghaus (1885 Ebbinghaus ( /1964) ) and Perkins (1914) extends the analysis to longer timescales and more complex patterns of learning. Taken together, these findings provide a coherent empirical basis for the development of a unified quantitative model of learning and forgetting. Hellyer (1962) investigated the recall of consonant trigrams following delays ranging from 3 to 27 seconds. The stimuli were presented visually, allowing precise control over the duration of exposure. Each trigram was presented for 1 second either once or repeated consecutively 2, 4, or 8 times, with participants required to read it aloud on each presentation.</p>
+<h3>3.1 Short-term retention: Hellyer (1962)</h3>
+<p>During the retention interval, participants engaged in a distractor task, reading aloud numbers presented to them, thereby preventing rehearsal.</p>
+<p>The results are shown in Figure 1. They demonstrate that increasing the duration of study produces a systematic reduction in the rate of forgetting. This finding places a strong constraint on any quantitative model, requiring that the rate of decay depends directly on prior study. Figure 1. Recall probability as a function of delay in Hellyer (1962), for different durations of initial presentation (1, 2, 4, and 8 seconds). Longer study durations are associated with a slower rate of forgetting, constraining how the rate of decay must depend on prior study. Robinson and Brown (1926) investigated the learning of lists of nonsense syllables using an anticipation procedure. Lists contained 6, 9, 12, 15, or 18 items; however, because the first item served as a prompt, the number of items to be learned was effectively 5, 8, 11, 14, or 17. Their results were presented in a series of figures , from which the probability of recall for individual items across trials can be extracted.</p>
+<h3>3.2 List learning dynamics: Robinson &amp; Brown (1926)</h3>
+<p>Each list was first presented once in a continuous sequence on a memory drum, with each item shown for 2 seconds. Immediately thereafter, the anticipation phase began: the first item (the prompt) was presented again, and participants attempted to produce the second item; the second item was then presented, prompting recall of the third, and so on. This cycle continued without interruption until all items were recalled correctly.</p>
+<p>The results show that individual items are acquired at different rates across repetitions, and that recall varies systematically with serial position. Early and late items tend to be learned more rapidly than those in the middle of the list, producing a characteristic serial position curve that evolves over trials. Because correct recall of the entire list depends on the slowest item, these data place strong constraints on any model of learning.</p>
+<p>Specifically, a successful model must account simultaneously for (i) item-specific learning trajectories across trials and (ii) systematic variation in recall as a function of serial position. These constraints are illustrated in Figure 2.</p>
+<h3>3.3 Long-term retention: Ebbinghaus (1885/1964)</h3>
+<p>Ebbinghaus (1885/1964) conducted a series of experiments on his own learning using lists of nonsense syllables of varying length. He prepared many such lists, each composed of randomly selected syllables, and learned them using a procedure broadly similar to that employed by Robinson and Brown. Each list was read through repeatedly at a steady rate (approximately five syllables every 2 seconds, often paced by a metronome) until it could be reproduced correctly from memory. Learning was considered complete when the entire list could be recited without error, typically on one or, in some cases, two successive attempts. To assess retention, Ebbinghaus relearned the lists after delays of varying duration and measured the saving in time or repetitions required relative to the initial learning.</p>
+<p>Two of his most important findings are illustrated in Figure 3. First, the number of repetitions required to learn a list increases systematically with its length, placing constraints on how the accumulation of learning must scale with the amount of material. Second, the amount retained, as measured by savings during relearning, declines with increasing delay, producing a characteristic forgetting function with a rapid initial decline followed by a slower rate of loss over longer intervals.</p>
+<p>Together, these findings place essential constraints on any model of memory. A successful account must capture both the scaling of learning with list length and the retention of material over extended timescales, including the relationship between initial learning and subsequent relearning. Left-hand panel: the number of repetitions required to learn a list increases with list length, constraining how the accumulation of learning must scale with the amount of material. Right-hand panel: the percentage of time saved during relearning decreases as the delay increases, showing a characteristic forgetting function with a rapid initial decline followed by a slower rate of forgetting over longer intervals. Together, these findings require a model that can account for both the scaling of learning and the retention of material over extended timescales. Perkins (1914) conducted one of the earliest systematic investigations of massed versus distributed learning. In her experiment, a list of 14 nonsense syllables was studied in blocks of 1, 2, 4, or 8 repetitions, with these blocks spaced at intervals of 1, 2, 3, or 4 days, until a total of 16 repetitions had been completed. As a result, learning could occur over periods ranging from as little as two days (8 repetitions per session with a 1-day interval) to as many as 61 days (1 repetition per session with 4-day intervals). Recall was tested 14 days after the final study session.</p>
+<h3>3.4 Massed versus distributed learning: Perkins (1914)</h3>
+<p>Only four participants took part in Perkins&#x27; study, and not all served in all 16 conditions. Perkins presented the average recall in each condition of all the participants who had provided data for that condition. She did not herself calculate the average recall for the blocks of different sizes (i.e., the number of readings per day) or for the intervals of different lengths, but Woodworth (1947, p. 213) subsequently tabulated the means and Baddeley (1976) presented a figure displaying these mean values, which is reproduced here as Figure 4.</p>
+<p>Perkins&#x27; method complements that of Ebbinghaus in that it provides a direct measure of recall following a delay, rather than an indirect estimate based on savings during relearning.</p>
+<p>The results, shown in Figure 4, indicate that recall decreases as the size of study blocks increases, demonstrating that massed practice is less effective than distributing learning across multiple sessions. In contrast, variation in the interval between study sessions produces a less systematic effect within the range examined.</p>
+<p>These findings place important constraints on any model of memory. In particular, the model must account for the influence of the temporal distribution of study on both learning and longterm retention, and for the differential effects of block size and spacing across extended timescales.  Perkins (1914), as presented by Baddeley (1976), illustrating the effects of distributed learning. Recall decreases as the size of study blocks increases, indicating that massed practice is less effective than distributed learning. In contrast, the effect of the interval between study sessions is less systematic. These findings constrain the model to account for the influence of the temporal distribution of study on learning and retention over extended periods.</p>
+<h3>4. Development of the model</h3>
+<p>This section introduces the principal components of the model and the way in which they interact over time. The central feature is that the probability of recall of an individual item changes continuously as a function of study and delay. During study, recall probability increases, typically approaching a value close to 1.00 after even brief exposure. During subsequent delays, recall probability declines over time, and the form and rate of this decline are key features of the model.</p>
+<p>The rate at which recall declines during a delay is governed by a parameter referred to as the forgetting exponent. This parameter determines how rapidly recall probability decreases as a function of time. Its value is not fixed: it depends on prior study and varies across successive episodes of learning and forgetting. The operative forgetting exponent refers to the value governing recall during a particular delay period, typically determined at the end of the preceding study period.</p>
+<p>The forgetting exponent is modified by study. During study periods, its value is reduced, resulting in slower subsequent forgetting. The extent of this reduction is governed by a second parameter, the reducing exponent. During delay periods, parameters influencing the forgetting exponent continue to evolve, tending toward their initial values. These changes do not affect the course of forgetting within the current delay, but instead determine the values that will apply following subsequent study periods. The factors governing changes in the reducing exponent are described in later sections.</p>
+<p>The general form of this process -where repeated learning progressively reduces the rate of subsequent forgetting -was anticipated in qualitative form by Woodworth (1947), who proposed that successive cycles of learning and forgetting could be represented as a series of curves of decreasing steepness. An example of this is shown in Figure 5. The present model extends this idea by providing a quantitative formulation of the processes that give rise to this pattern and by specifying how the relevant parameters evolve across study and delay. The way in which recall probability changes for a single item is illustrated schematically in Figure 6. Prior to initial exposure, recall probability is effectively at chance level. Following brief presentation, it rises to a value close to 1.00. After a short interval of approximately two seconds during which little or no measurable forgetting occurs, recall probability declines over time. With repeated study, recall probability again approaches near-perfect levels, and subsequent forgetting proceeds more slowly, reflecting a reduction in the operative forgetting exponent. For illustration, it is shown that recall probability would eventually return toward its initial level if the delay were sufficiently prolonged.</p>
+<p>Figure 6. Schematic illustration of the change in recall probability for an individual item across successive episodes of study and delay. Recall probability rises during study (shaded) to near 1.00 and, after a brief interval, declines over time. With repeated study, the rate of decline becomes progressively slower, although recall probability returns toward its initial level over sufficiently long delays.</p>
+<h3>4.1 Reduction of forgetting rate</h3>
+<p>Analysis of recall at longer delays in Hellyer&#x27;s (1962) data shows that the fitted functions originate from a recall probability close to 1.00 approximately two seconds after presentation, after which recall declines exponentially. The rate of this decline depends on the duration of study: longer study leads to slower forgetting.</p>
+<p>More specifically, recall probability decreases as an exponential function of the square root of study time, relative to an inferred initial value at the onset of study. This relationship provides a quantitative basis for determining how study modifies the forgetting exponent.</p>
+<h3>4.2 Serial position effect</h3>
+<p>In list-learning situations such as those studied by Robinson and Brown (1926), it is possible to estimate the forgetting exponent operating during the first delay period-that is, the operative forgetting exponent following initial study-for each item in a list. This exponent varies systematically with serial position.</p>
+<p>Using the principles derived from Hellyer&#x27;s data as a starting point, it is possible to assign each item a unique initial value of the forgetting exponent and a corresponding reducing exponent governing its change during study. These initial forgetting exponent values follow an inverted Ushaped pattern across serial positions, with items in the middle of the list showing higher values than those at the beginning or end. In contrast, the reducing exponents follow a U-shaped pattern.</p>
+<p>The combined effect is that the operative forgetting exponents of items in the middle of the list are reduced more during study than those at either end, partially offsetting the initial serial position effect (see Figure 7). The better recall of items at the beginning and end of a list is commonly referred to as primacy and recency, although in the procedures used by Robinson and Brown and by Ebbinghaus, all items are tested after comparable delays; it is therefore more accurate to refer to primacy and ultimacy effects.</p>
+<p>The variation of the forgetting exponent across study and delay is central to understanding how lists are learned. Both the forgetting exponent and the parameters governing its change evolve over time. The forgetting exponent decreases during study, while during delay the parameters that determine it tend toward their initial values. These changes do not affect the current delay, but determine the values that will apply in subsequent study periods.</p>
+<p>The parameters governing these changes are themselves subject to modification: the reducing exponent increases during study and may decrease during delay, while the parameter responsible for restoring the forgetting exponent may decrease during study and increase during delay. This gives rise to a hierarchy of interacting processes, in which the evolution of each component depends on the state of others. At the start of each study period, parameter values correspond to those established at the end of the preceding delay.</p>
+<h3>5. The quantitative model</h3>
+<p>The central component of the model is the forgetting exponent and its evolution across successive study and delay periods. The remaining components of the model -including the acquisition function governing initial increases in recall probability and the postponement function affecting very short delays -are subsidiary mechanisms introduced to account for specific empirical features of the data.</p>
+<h3>5.1 Increase of recall probability during study</h3>
+<p>The probability of recall of an item such as a nonsense syllable made available for even a few tenths of a second is assumed to increase during study as a function of time, approaching an upper limit of 1.00. This increase is modelled as an exponential function of time, beginning at the initial probability 𝑝 0 and reaching a value 𝑝 1 at the end of the first study period (𝑆 1 ). This formulation is adopted as a modelling assumption. The precise form of the acquisition function is not central to the theory developed here. Its primary role is to provide a plausible approximation to the rapid increase in recall observed during brief periods of study. Although the precise form of the increase is not established definitively, an exponential rise is consistent with empirical observations of acquisition, and is sufficient to capture the rapid improvement in recall observed following brief periods of study.</p>
+<p>The rate of increase is governed by an exponent 𝑘. In the case of Robinson and Brown&#x27;s data, the precise value of 𝑘 is not critical provided that it allows recall to approach near-perfect levels after a short study period. However, for other datasets -particularly those of Ebbinghaus, where presentation times are relatively brief and list lengths are large -the value of 𝑘 plays a more significant role. In these cases, it was found that 𝑘 decreases systematically as a function of item position, reflecting slower acquisition for later items in longer lists.</p>
+<p>The value of 𝑘 that provided the best fit to the data overall was determined empirically and is given by: 𝐼 is the serial position of the item (excluding any prompt).</p>
+<p>The probability of recall (p1) at the end of the first study period (S1) is calculated as follows: p0 is the initial probability of the item before any study or forgetting has occurred; p1 is the probability of recall at the completion of the first study period; S1 is the duration of the first study period (sec.).</p>
+<h3>5.2 Postponement of forgetting</h3>
+<p>Forgetting is assumed to occur exponentially following a study period. However, several of the datasets considered earlier indicate that this decline does not begin immediately. Instead, there is a short initial interval -of the order of a few seconds -during which little or no measurable forgetting occurs.</p>
+<p>Evidence for this can be seen in Hellyer&#x27;s (1962) data, where fitted exponential functions originate from a recall probability close to 1.00 approximately two seconds after presentation. A similar effect is observable in Ebbinghaus&#x27; (1885/1964) finding that short lists can be recalled perfectly immediately after a single presentation. This initial period of minimal forgetting is also consistent with the short-lived retention typically attributed to working memory (e.g., the phonological buffer; Baddeley, Lewis &amp; Vallar, 1984).</p>
+<p>To capture this feature, the model incorporates a postponement function, denoted 𝛼, which modulates the operative forgetting exponent. Immediately following study, 𝛼 takes a value close to 0, and it increases smoothly toward 1 over a period of a few seconds. As a result, the effective rate of forgetting is initially reduced and gradually approaches its full value. This component is introduced primarily to account for empirical findings at very short delays and should be regarded as a local modification to the core forgetting function rather than as a separate mechanism of memory.</p>
+<p>This mechanism has a noticeable effect when delays are short, as in the studies of Hellyer and Peterson and Peterson, but has negligible influence at longer delays. In particular, it does not affect the results of Robinson and Brown (1926), as 𝛼 reaches a value close to 1 well before recall is required.</p>
+<p>The form of the function used for 𝛼 is given below, although other smooth transition functions would serve a similar purpose.</p>
+<p>𝐷: delay before recall 𝐷 𝝉 : value of 𝐷 for which 𝛼 = 0.5</p>
+<p>The optimal values of 𝑏 and 𝐷 𝜏 were found to be 2.25 and 3.2, respectively, for the data of Hellyer (1962) and Peterson and Peterson (1959). For Ebbinghaus&#x27; data, slightly different values (3 and 4.52) provided a better fit, corresponding to a slower transition to the full forgetting rate. The way this factor changes as the delay increases can be seen in Figure 8.</p>
+<h3>5.3 Recall following a single or first presentation of an item</h3>
+<p>As illustrated in Figure 8 (right-hand panel), during the first delay period (𝐷 1 ) the probability of recall of an item declines exponentially as a function of time, falling from 𝑝 1 to 𝑝 2 , where 𝑝 2 is the probability of recall at the time of the first recall attempt.</p>
+<p>The rate of this decline is governed by the forgetting exponent, denoted 𝑦. At the start of the first study period (𝑆 1 ), this exponent has an initial value 𝑦 0 . During study, its value is reduced, reaching 𝑦 1 (the operative forgetting exponent) by the end of the study period (Figure 8, left-hand panel).</p>
+<p>The reduction in the forgetting exponent during study is determined by a second parameter, 𝑞, referred to as the reducing exponent. At the start of the first study period, this parameter has a value 𝑞 0 . The value of 𝑦 1 is calculated as follows: where 𝑆 1 is the duration of the first study period.</p>
+<p>The values of 𝑦 0 and 𝑞 0 are defined in the following section.</p>
+<p>During the first delay period, the value 𝑦 1 remains constant and governs the decline in recall probability. This exponent is modulated by the postponement function 𝛼, which reduces the effective rate of forgetting at short delays. Together, these determine the decline of 𝑝 from 𝑝 1 to 𝑝 2 (Figure 9). of the forgetting exponent and its effect on recall. Left-hand panel: reduction of the forgetting exponent from its initial value 𝑦 0 to the operative value 𝑦 1 during the first study period (𝑆 1 ). Righthand panel: resulting change in recall probability, showing the increase during study and the subsequent exponential decline during the delay period (𝐷 1 ), modulated by the postponement function 𝛼.</p>
+<h3>5.4 Calculation of y0 and q0 (initial forgetting and reducing exponents)</h3>
+<p>The initial values of the forgetting exponent (𝑦 0 ) and the reducing exponent (𝑞 0 ) were determined from the data of Robinson and Brown (1926).</p>
+<p>Assuming that the probability of recall immediately after study (𝑝 1 ) is effectively 1.00, and using the observed values of recall (𝑝 2 ) following the first delay period (𝐷 1 ), the operative forgetting exponent (𝑦 1 ) for each item can be estimated from the data of Robinson and Brown. From these values, the initial forgetting exponent (𝑦 0 )-that is, the value prior to any study-can be inferred.</p>
+<p>0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 0 2 4 6 8 10 12 D1 S1 Time 0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0 0.5 1 1.5 2 2.5 S1 Time y 0 y 1 y p p 0 p 1 p 2</p>
+<p>These estimates show that 𝑦 0 depends systematically on the position of the item within the list. An empirical function that provides a good fit to these values is: where 𝐿 is the length of the list, 𝐼 is the serial position of the item from the beginning of the list (excluding any prompt), and 𝑅 is its position counted from the end of the list.</p>
+<p>The corresponding initial value of the reducing exponent (𝑞 0 ), which determines the extent to which the forgetting exponent is reduced during the first study period, was also estimated from the same data. A simple function that provides a good fit is:</p>
+<p>When only a single item is considered (𝐿 = 1, 𝐼 = 1, 𝑅 = 1), these expressions give 𝑦0 = 1 4.211 and 𝑞0 = 1.</p>
+<p>These expressions capture the inverted U-shaped variation in the forgetting exponent and the complementary U-shaped variation in the reducing exponent across serial positions.</p>
+<p>The model as specified thus far defines the probability of recall of an item following a single study period and the subsequent delay. During study, recall probability increases as an exponential function governed by the parameter 𝑘. During the delay, recall declines exponentially at a rate determined by the operative forgetting exponent 𝑦 1 , which is derived from its initial value 𝑦 0 and reduced during study according to the parameter 𝑞 0 . The initial values 𝑦 0 and 𝑞 0 depend on the position of the item within the list. At short delays, the effective rate of forgetting is modulated by the postponement function 𝛼.</p>
+<p>This formulation is sufficient to account for recall following a single study period. Its adequacy can be assessed by comparing its predictions with empirical data from studies in which recall is tested after a single exposure.</p>
+<h3>6. Application of the model to published data 6.1 Single item, single trial experiments</h3>
+<p>Using the parameter values specified above, the model provides an accurate account of the results of Hellyer&#x27;s (1962) experiment. As shown in Figure 10, it reproduces both the overall form of the forgetting curves and their systematic variation with study duration (1, 2, 4, and 8 seconds), yielding a close correspondence between predicted and observed recall probabilities (R² = 0.9872).</p>
+<p>Hellyer&#x27;s experiment can be viewed as an extension of the earlier and widely cited study by Peterson and Peterson (1959), in which a consonant trigram was presented auditorily and participants engaged in backward counting during the retention interval.</p>
+<p>Peterson and Peterson also recorded the latency of recall-that is, the interval between the recall cue and the response-and their data indicate that successful recall approaches an asymptotic level when this latency reaches approximately 10 seconds. Using this criterion, it is possible to estimate recall probabilities corresponding to responses occurring within this interval.</p>
+<p>Figure 10. Model predictions (dashed lines) and observed recall (points) for the short-term forgetting data reported by Hellyer (1962). Increasing study duration leads to a slower rate of decline, and the model captures both the form of the forgetting curves and their systematic dependence on study duration. Righthand panel: relationship between predicted and observed recall probabilities (R² = 0.987).</p>
+<p>The current model provides an accurate account of these data (R² = 0.9869), as shown in Figure 10. Importantly, the same parameter values (𝑘, 𝑦 0 , 𝑞 0 , and 𝛼) were used as in the modelling of Hellyer&#x27;s data, with an assumed effective study duration of 0.5 seconds based on the temporal sequence reported by Peterson and Peterson (1959). The model slightly overestimates recall at longer delays; however, a second experiment reported by Peterson and Peterson, including a comparable &#x27;silent, zero repetition&#x27; condition (shown as open circles in Figure 11), aligns more closely with the model predictions. These results show that the core formulation of the model is sufficient to account for shortterm forgetting following a single study period across different experimental paradigms. Notably, this fit is achieved without adjusting parameter values across datasets.</p>
+<h3>6.2 Learning of lists of items</h3>
+<p>When recall is required only once, as in the experiments of Hellyer (1962) and Peterson and Peterson (1959), the probability of recall following a delay is determined entirely by the operative forgetting exponent 𝑦 1 . However, when items are studied repeatedly across successive trials, the situation is fundamentally different.</p>
+<p>In this case, the probability of recall at the end of one trial becomes the starting point for the next. Thus, recall on the second trial begins at 𝑝 2 rather than 𝑝 0 , and on subsequent trials at 𝑝 4 , 𝑝 6 , and so on. During each study period, recall probability again increases toward an upper limit, and during each delay it declines. This process is illustrated schematically in Figure 12. Crucially, accurate prediction of performance across trials requires systematic changes in the operative forgetting exponent governing successive delays. If 𝑦 were to remain constant at its initial operative value 𝑦 1 , only a small increase in recall would occur across successive trials, which is insufficient to account for the empirical data. This demonstrates that learning cannot be explained solely by the accumulation of recall probability, but requires systematic changes in the rate of forgetting.</p>
+<p>The observed progressive improvement in recall is instead accounted for by a gradual reduction in the forgetting exponent across trials. This reduction is governed by the parameter 𝑞, which determines the extent to which 𝑦 decreases during each study period. The resulting evolution of 𝑦 across successive trials is illustrated in Figure 13.</p>
+<p>It would be unrealistic to assume that the forgetting exponent 𝑦 simply decreases from trial to trial without any opposing process. While 𝑦 is reduced during study periods, there must also be processes that act to restore it toward its initial value 𝑦 0 . These restorative processes do not affect the course of forgetting within a given delay-during which the operative value of 𝑦 remains constant-but instead determine the value of 𝑦 that applies at the onset of subsequent study periods. These processes are represented in the model by the parameter 𝑥, which governs the extent to which 𝑦 returns toward its initial value between successive trials. The role of 𝑥 becomes important only when learning extends over multiple study-delay cycles: it does not affect recall following a single delay, and is therefore not required to account for short-term forgetting in isolation. When delays between study periods are short, as in continuous list learning, restoration is limited; over longer intervals, it becomes increasingly influential.</p>
+<p>The initial value of 𝑥, denoted 𝑥 0 , depends on list structure and is given by: where 𝐿 is the length of the list, 𝐼 is the serial position of the item from the beginning of the list (excluding any prompt), and 𝑅 is its position counted from the end of the list.</p>
+<p>The parameter 𝑥 follows the same general structural pattern as the forgetting exponent 𝑦, decreasing during study and potentially recovering during delay. However, in most of the experiments modelled here the restorative exponent 𝑧 was either zero or extremely small, so changes in 𝑥 during delay contributed little to the observed behaviour of the model.</p>
+<p>The reduction of the forgetting exponent 𝑦 during study is governed by the parameter 𝑞, which determines the extent to which 𝑦 decreases within each study period (see Figure 13). The value of 𝑞 increases during study as an exponential function of the square root of time, governed by the exponent 𝑤, and may decrease during delay as an exponential function of time governed by the exponent 𝑢. The value of the forgetting exponent that governs each delay is determined at the onset of that delay, based on the cumulative effects of prior study and delay. This results in a discrete updating of parameter values across trials, rather than a continuous change within a delay period. Such updating should not be interpreted as a discontinuous process in the underlying system, but as a formal representation of how prior history shapes subsequent forgetting. The parameter 𝑥 decreases exponentially as a function of the square root of study time, with an exponent v, and potentially an exponential increase in x during the delay period with an exponent z. In experiments involving the cyclic learning of lists with only the rest of the list to cause a delay between readings z was 0 (i.e., no increase in x occurred during the delay periods).</p>
+<p>In the various experiments to which the model was applied v did not vary from item to item, or across trials, but it did depend on the length of the list and it varied from one experiment to another. The best estimate of v that could be calculated from Robinson and Brown&#x27;s data was as follows: where L is the length of the list</p>
+<p>The reduction of the forgetting exponent 𝑦 during study is governed by a further parameter, 𝑞, which determines the extent to which 𝑦 decreases within each study period (see Figure 14). The exponent 𝑞 increases exponentially with the square root of study time, governed by the exponent 𝑤, and decreases during delay periods as an exponential function of time governed by the exponent 𝑢.</p>
+<p>In modelling the learning of lists by Ebbinghaus and by Robinson and Brown, 𝑢 = 0, indicating that no decrease in 𝑞 occurred during delay periods. In experiments involving delays of only a few minutes, 𝑤 did not vary across trials; however, it is designated here as 𝑤 0 to allow for the possibility that it may vary under other conditions.</p>
+<p>The parameters 𝑦 and 𝑥 differ from 𝑞 (and, later, 𝑤) in that they directly determine the form of forgetting within a given delay period. For this reason, their operative values must remain constant throughout that delay. By contrast, 𝑞 does not directly influence the course of forgetting within the delay, but instead determines how the forgetting exponent is modified during study. It can therefore be modelled as varying continuously during delay periods without affecting the form of the current forgetting function.</p>
+<p>The best estimate of w0 that could be calculated from Robinson and Brown&#x27;s data was as follows: where 𝐿 is the length of the list, 𝐼 is the serial position of the item from the beginning of the list (excluding any prompt), and 𝑅 is its position counted from the end of the list.</p>
+<p>When recall follows a single presentation and delay, the forgetting rate is determined entirely by 𝑦 and 𝑞, as these alone govern the decline from 𝑝 1 to 𝑝 2 . In contrast, when lists of items are learned through successive readings without delay between presentations, additional parameters -𝑥, 𝑤, and 𝑣 -are required. Following a summary of the various model parameters the model specified above, incorporating these interacting parameters, will be applied to the data of Robinson and Brown (1926) and to the principal findings of Ebbinghaus (1885/1964).</p>
+<h3>6.3 Model parameters and their functional roles</h3>
+<p>At this stage it is useful to summarise the various model parameters and their roles. The model is expressed in terms of a set of interacting parameters that determine how recall probability evolves across successive periods of study and delay. For clarity, each parameter is described below in terms of both its symbol and its functional role within the model. Some of the higher-level parameters described below (particularly 𝑓and 𝑔) are introduced formally only in later sections dealing with learning and forgetting over extended intervals, but are included here for completeness.</p>
+<p>Core process 𝑝probability of recall: the likelihood that an item can be correctly recalled at a given point in time.</p>
+<h3>Forgetting dynamics</h3>
+<p>y -forgetting exponent: an underlying state variable governing the rate at which recall probability declines during delay periods. During study, 𝑦 decreases; during delay it tends to recover toward its initial level. The probability of recall within a given delay is determined by the operative forgetting exponent established at the end of the preceding study period, which remains fixed throughout that delay. Higher operative values of 𝑦 correspond to more rapid forgetting.</p>
+<p>Modification of forgetting during study 𝑞reducing exponent: governs the extent to which the forgetting exponent 𝑦 is reduced during a study period. Higher values of 𝑞produce a greater reduction in 𝑦, leading to slower subsequent forgetting.</p>
+<p>Higher-level modulation of learning 𝑤modulating exponent: determines how the reducing exponent 𝑞 changes across successive study and delay periods, and thus how the effects of learning accumulate over time.</p>
+<h3>Dynamics of the modulating exponent</h3>
+<p>fgrowth exponent of 𝑤: governs the increase of wduring study periods in experiments involving repeated learning over extended intervals. 𝑔decay exponent of 𝑤: governs the decrease of w during delay periods as a function of relative time in experiments involving extended retention intervals.</p>
+<h3>Restoration processes during delay</h3>
+<p>xrestorative exponent: governs the tendency of the underlying forgetting state variable y to recover toward its initial value during delay periods. zexponent governing changes in 𝑥: determines the extent to which the restorative exponent x varies across study and delay periods.</p>
+<p>Additional modulation of learning dynamics 𝑢decay exponent of 𝑞: governs the decrease of the reducing exponent 𝑞 during delay periods.</p>
+<h3>Study dynamics 𝑘acquisition exponent: governs the rate at which recall probability increases during study.</h3>
+<p>Initial values 𝑦 0 -initial forgetting exponent (before study) 𝑞 0 -initial reducing exponent 𝑥 0 -initial restorative exponent 𝑤 0 -initial modulating exponent governing 𝑞 Temporal scaling Relative time (𝐷 𝑟 ) -the ratio of total elapsed time from the start of initial learning to the end of a delay, to the elapsed time from the start of learning to the end of the most recent study period. This measure is used to model processes operating over extended intervals.</p>
+<p>Taken together, these parameters define a system of interacting processes in which changes in recall probability arise from the evolving values of the forgetting exponent, and in which the evolution of each parameter depends on the state of others over successive study and delay periods.</p>
+<h3>6.4 Data of Robinson and Brown (1926)</h3>
+<p>The model provides a close quantitative account of the learning of lists of nonsense syllables in Robinson and Brown&#x27;s (1926) study. This fit arises from the interaction of the parameters governing the reduction of the forgetting exponent during study and its evolution across successive trials. Figure 15 shows the model&#x27;s predictions for the progressive learning of items in the shortest (5 items) and longest (17 items) lists employed in the study. For the remaining list lengths (8, 11, and 14 items), the correspondence between predicted and observed recall probabilities is similarly strong, with linear fits yielding R² values exceeding 0.98.</p>
+<p>Figure 16 illustrates the model&#x27;s ability to capture the learning trajectories of individual items. The figure shows predictions for four items in the 17-syllable list for which Robinson and Brown provided the most complete data. Despite substantial variation in learning rates across items, the model closely reproduces the observed recall probabilities across trials. Comparable fits were obtained for the remaining items in this list (see Appendix 2) and for items in lists of other lengths.</p>
+<p>Figure 15. Upper panels: Model predictions (broken lines) and observed recall (points) for successive trials in the shortest (5 items; trials 1-5) and longest (17 items; trials 1, 5, 9, 13, and 17) lists reported by Robinson and Brown (1926). Each curve corresponds to a different trial, with later trials showing progressively higher recall and a less pronounced serial position effect. Lower panels: The linear relationship between predicted and observed recall probabilities for the two list lengths. Across the five list lengths reported by Robinson and Brown (1926), a total of 460 data points were available, representing the probability of recall of individual items at different stages of learning. Figure 17 shows the relationship between predicted and observed values across this entire dataset, demonstrating a high level of overall agreement (R² = 0.9679).</p>
+<p>Figure 17. Relationship between predicted and observed probabilities of recall across all items, trials, and list lengths in Robinson and Brown&#x27;s (1926) data (N = 460).</p>
+<p>In generating these predictions, the parameters 𝑘, 𝑦 0 , 𝑞 0 , 𝑥 0 , and 𝑤 0 were set as specified previously. The postponement factor 𝛼 was omitted (i.e., set effectively to 1), as the shortest delay before recall (10 seconds) substantially exceeds the interval over which postponement operates.</p>
+<p>Taken together, these results show that the model captures both the detailed learning trajectories of individual items and the overall structure of recall across lists and trials.</p>
+<h3>7. Modelling Ebbinghaus&#x27; results</h3>
+<p>The model&#x27;s ability to reproduce the data of Robinson and Brown reflects the fact that it was developed with reference to those data. A more stringent test is therefore provided by its ability to account for independent findings, such as those reported by Ebbinghaus.</p>
+<h3>7.1 Criterion of learning</h3>
+<p>Ebbinghaus did not report how individual items in his lists were acquired; instead, he recorded only the number of &#x27;readings&#x27; (or, in some cases, the time) required to learn each list as a whole.</p>
+<p>As noted earlier, a list can be considered to be fully learned only when the slowest item has reached a level at which it can be correctly recalled.</p>
+<p>To apply the model to these data, trial-by-trial predictions were generated for each item in a list, as in the case of Robinson and Brown. However, because Ebbinghaus reported only the point at which a list was learned to criterion, it was necessary to define a probability threshold corresponding to successful recall for each individual item. This threshold cannot be 1.00, as the exponential formulation of the model approaches but never reaches unity.</p>
+<p>An empirical estimate of this threshold was obtained from the data of Robinson and Brown. For each item, the predicted probability of recall was identified for the first trial on which that item was recalled correctly. An example is shown in Figure 18. Across all items and trials, the mean predicted probability at this point was 0.9825. This value was therefore adopted as the operational criterion for successful recall in modelling Ebbinghaus&#x27; data.</p>
+<p>Figure 18. Example of the predicted probability associated with the first trial on which an item was recalled correctly in Robinson and Brown&#x27;s (1926) data.</p>
+<p>A list was considered to be learned when the slowest item reached this criterion. The model therefore yields predictions in terms of the whole number of readings required to learn each list. Where Ebbinghaus reported his results in the same units, comparison between predicted and observed values is direct. In many cases, however, Ebbinghaus reported learning time rather than number of readings. To enable comparison, a conversion between time and readings was required.</p>
+<p>Ebbinghaus reported the average time required per syllable for lists of different lengths (Table 1). By multiplying this value by the number of syllables in a list, the duration of a single reading can be estimated. This allows reported times to be converted into equivalent numbers of readings, and predicted readings to be expressed in time units.</p>
+<p>Table 1. Average time per syllable for lists of different lengths (Ebbinghaus, 1964, p. 33).</p>
+<h3>7.2 Learning lists of different lengths</h3>
+<p>To predict the number of readings required for Ebbinghaus to learn lists of different lengths, the parameters 𝑘, 𝑦 0 , 𝑞 0 , 𝑥 0 , and 𝑤 0 were set as specified earlier. However, a different value of 𝑣was required to account for the effect of list length in this context:</p>
+<p>For the postponement factor 𝛼, the optimal values of 𝑏 and 𝐷 𝜏 were found to be 3 and 4.52, respectively. As shown in Figure 19, the model reproduces with near-perfect accuracy (𝑅2 = 0.9997) the relationship reported by Ebbinghaus between list length and the number of readings required for learning (see Figure 1). This result is notable because the model was not fitted to these data, but generates the observed relationship from parameters constrained by other experimental findings.</p>
+<h3>7.3 Ebbinghaus&#x27; experiments involving delays before relearning of 24 hours</h3>
+<p>A number of Ebbinghaus&#x27; experiments involved repeated learning with delays of 24 hours between successive sessions. Extending the model to account for these longer intervals requires the introduction of additional components-specifically the parameters 𝑓and 𝑔, which modify the evolution of 𝑤-while retaining the structure described above. These components are introduced in relation to the specific experimental findings they are required to explain.</p>
+<h3>7.3.1 Repeated relearning</h3>
+<p>This experiment examined whether relearning becomes progressively easier across repeated exposures. Ebbinghaus learned lists of nonsense syllables of different lengths (12, 24, and 36 items), relearned them after a delay of 24 hours, and repeated this procedure on four further occasions at the same interval.</p>
+<p>He reported the number of readings required to learn or relearn each list on each of six successive days. These data are shown in Figure 20, both in tabular form and graphically.</p>
+<p>Ebbinghaus observed that although the number of readings initially required varied substantially with list length, the number required for relearning became progressively more similar across conditions. However, he was unable to identify a simple quantitative relationship underlying this pattern, noting that &quot;a simple conformity to law cannot be discovered in this successively decreasing necessity for work&quot; (Ebbinghaus, 1964, p. 85).</p>
+<p>This convergence across list lengths provides a stringent test for the model, as it requires the interaction of learning and forgetting processes over extended intervals to produce a systematic reduction in differences between conditions. The data exhibit some irregularities. For example, on Day 1 the list of 36 syllables required 55 readings, whereas the list of 24 required 44; by Day 3, the corresponding values were 11 and 12.5, respectively. It is unlikely that the longer list genuinely became easier to learn than the shorter one; such reversals are more plausibly attributable to measurement variability in the data.</p>
+<p>In addition, the model generates predictions in terms of whole numbers of readings, whereas Ebbinghaus&#x27; reported values include fractional readings derived from averaging across trials. These factors limit the extent to which exact correspondence can be expected.</p>
+<p>Nevertheless, as shown in Figure 21, the model provides a close account of the data (R² = 0.9741). Importantly, it captures the overall convergence of learning across list lengths despite these irregularities. The progressive reduction in the number of readings required across successive relearning sessions cannot be accounted for by the previously defined parameters alone, as they do not produce sufficient acceleration of learning across trials. To reproduce these data, an additional exponent 𝑓 was introduced, which governs the increase of 𝑤 across successive study periods. In the present experiment, 𝑓 = 0.0405. This parameter allows the rate at which learning accumulates to increase across successive study periods.</p>
+<p>Parameters governing changes during delay (𝑔, 𝑧, and 𝑢) were set to zero, indicating that 𝑤, 𝑥, and 𝑞 remained unchanged during the 24-hour intervals between study sessions.</p>
+<h3>7.3.2 The amount of initial learning (&#x27;prelearning&#x27;) on relearning</h3>
+<p>Ebbinghaus investigated how the amount retained after a delay depends on the degree of initial learning. Although prior study reduces the effort required for relearning, an important question is whether this benefit exhibits diminishing returns as the amount of initial learning increases.</p>
+<p>To examine this, Ebbinghaus studied groups of six lists of nonsense syllables, each containing 16 items. He had previously established that learning such a group from scratch required approximately 1,270 seconds, corresponding to about 31-33 readings (based on an average rate of 0.427 seconds per syllable). In modelling these data, a value of 33 readings was used.</p>
+<p>In the experiment, the lists were read a specified number of times on Day 1 (8, 16, 24, 32, 42, 53, or 64 readings), and were then relearned to criterion after a delay of 24 hours. The time required for relearning on Day 2 was recorded. By comparing this with the baseline time required to learn a new set of lists (1,270 seconds), Ebbinghaus derived a measure of time saved due to prior learning.</p>
+<p>The relationship between initial study and subsequent savings is shown in Figure 22. The data reveal a highly systematic relationship between the number of initial readings and the benefit observed during relearning 24 hours later, both in terms of total relearning time and percentage savings. As shown in Figure 23, the model closely reproduces these results. In particular, it provides an accurate account of the percentage of time saved during relearning (R² = 0.9896).</p>
+<p>In these simulations, the parameter 𝑣 was set as in the previous Ebbinghaus analyses. The exponent 𝑓 was 0.02 and 𝑧was 0.00004, while 𝑔 and 𝑢 were set to zero.</p>
+<p>This result is notable because it captures the diminishing returns of additional study within a unified framework, without requiring a separate mechanism to account for savings.</p>
+<h3>7.3.3 &#x27;Massive overlearning&#x27; experiment</h3>
+<p>In a further study, Ebbinghaus examined the effects of what may be termed &#x27;massive overlearning&#x27;. A list of 12 nonsense syllables was read a total of four times longer than was required to achieve an accurate recitation during initial learning. This corresponded to 68 readings in total, given that initial learning required 17 readings (excluding the first correct recitation). The list was then relearned to the same criterion after a delay of 24 hours. Although this experiment does not introduce a qualitatively new pattern, it provides a stringent test of the model under conditions of extended study. As shown in Figure 24, the model accurately predicts both the point of initial mastery and the point of successful relearning after the delay.</p>
+<p>In this case, the parameters 𝑓, 𝑔, and 𝑧 were set to zero, while 𝑢 = 0.33 and 𝑣 = 0.192.</p>
+<h3>8. Studies that involved delays of more than 24 hours.</h3>
+<p>The final experiment of Ebbinghaus considered here is his well-known study of forgetting (see Figure 3), which includes a condition involving a delay of up to 30 days before relearning. In addition, the study by Perkins (1914), discussed below, also involves an extended delay (14 days) before recall. These experiments provide a test of the model under conditions in which learning and forgetting unfold over substantially longer timescales.</p>
+<p>It is well established that forgetting over extended intervals is often well described by power functions of time (e.g., Anderson, 1995; Wixted &amp; Ebbesen, 1991). However, such functions have an undesirable property when applied directly: they approach infinity as time approaches zero, implying unrealistically high values at the point of immediate recall.</p>
+<p>One way to address this issue is to recognise that, in many learning situations, the effective passage of time is not well captured by absolute units such as seconds or minutes. Instead, what is often critical is the relationship between the time of recall and the total duration over which learning has taken place. This suggests the use of a relative measure of time, in which the relevant interval is scaled by the total time from the beginning of the first study period to the end of the most recent one. When time is expressed in these units, the point of immediate recall corresponds to a value of 1 rather than 0, and functions that would otherwise be problematic at zero can be applied without difficulty.</p>
+<p>The present model is formulated primarily in terms of exponential functions and this relative measure of time proves necessary in one specific context. In particular, it is required to describe the processes that operate over extended periods of study and long intervals between study and relearning. These processes depend not simply on the absolute duration of the delay, but on its duration relative to the total prior history of learning. Within the model, this effect is captured by the exponent 𝑔, which governs the reduction of the exponent 𝑤 during delay periods. The parameter 𝑤determines how the exponent 𝑞 varies across study and delay intervals (see Figure 14). During study, 𝑤 increases as a function of the square root of time, governed by the exponent 𝑓. During delays, however, 𝑤 decreases as a function of relative time, with the rate of this decrease determined by 𝑔 (see Figure 25).</p>
+<p>The use of relative time in this context allows the model to capture the effects of extended spacing and long delays, while maintaining a consistent exponential framework.</p>
+<h3>8.1 Ebbinghaus&#x27; &#x27;forgetting&#x27; experiment</h3>
+<p>Ebbinghaus reported the results of his forgetting experiment (see Figure 3) in terms of time and the percentage of time saved during relearning. When these times are converted into whole numbers of readings, the model reproduces the form of the forgetting curve with very high accuracy (𝑅2 ≈ 1.00), as shown in Figure 26.</p>
+<p>To account for forgetting over such extended intervals, the model employs the exponent 𝑔, which governs the reduction of 𝑤 during delay periods as a function of relative time (defined in the preceding section). This allows the effects of delay to be scaled relative to the prior history of learning and enables the model to capture both the rapid initial decline and the slower long-term rate of forgetting observed in Ebbinghaus&#x27; data.</p>
+<p>In generating these predictions, the parameter values were 𝑓 = 0.128, 𝑔 = 0.00004, 𝑢 = 0.4, 𝑣 = 0.192, and 𝑧 = 0.000017. When the model&#x27;s predictions (expressed in whole numbers of readings) are converted back into time, the correspondence with Ebbinghaus&#x27; reported values remains close, although small discrepancies arise due to this conversion (see Figure 27).  Perkins (1914) was one of the first to investigate massed versus distributed learning in a systematic manner. As described earlier, she employed 16 conditions in which a list of 14 nonsense syllables was studied in blocks of 1, 2, 4, or 8 readings, spaced at intervals of 1, 2, 3, or 4 days, until a total of 16 readings had been completed. Thus, learning could take place over as few as two days (8 readings per session with a 1-day interval) or as many as 61 days (1 reading per session with 4-day intervals). Recall of the list was tested 14 days after the final reading.</p>
+<h3>8.2 Massed versus distributed practice; Perkins (1914)</h3>
+<p>An attempt was made to reproduce Perkins&#x27; results using the current model. This required some approximation, as participants learned the syllables in pairs separated by brief intervals. Each pair was presented for 3 seconds; this was treated as equivalent to 1.5 seconds per individual item. In addition, the number of participants varied across conditions, introducing some irregularity into the data. As shown in Figure 28, the model produces predictions that closely resemble the observed data (overall R² = 0.9616), particularly with respect to the effect of block size. Within the range of intervals employed by Perkins, the model predicts that smaller blocks of study lead to better subsequent recall than larger blocks, whereas variation in the spacing between blocks has a comparatively modest effect once intervals of at least one day are used.</p>
+<p>This pattern arises from the way relative time influences the evolution of 𝑤 during delay periods. Smaller blocks necessarily involve a greater number of study-delay cycles, which reduces the relative duration of each delay when expressed as a proportion of the total learning history. As a result, 𝑤 declines less during each delay.</p>
+<p>Because 𝑤 governs the rate at which 𝑞 decreases, this leads to higher values of 𝑞, which in turn produce a greater reduction in the forgetting exponent 𝑦 during subsequent study periods. The net effect is a slower rate of forgetting and improved recall for conditions involving smaller blocks of study. In particular, the advantage of distributed practice arises because shorter relative delays preserve higher values of 𝑤, thereby sustaining the capacity for further reduction in the forgetting exponent across study episodes.</p>
+<p>This provides a mechanistic account of the spacing effect in terms of the interaction between study structure and the scaling of delay by prior learning history. Importantly, this effect emerges from the structure of the model rather than from any parameter specific to spacing, indicating that the spacing effect arises naturally from the interaction between study scheduling and the dynamics of forgetting.</p>
+<p>In generating these predictions, 𝑢 and 𝑧 were set to zero, while 𝑓 = 0.199, 𝑔 = 0.02, and 𝑣 = 0.34.</p>
+<h3>9. Summary of model structure</h3>
+<p>The model is expressed in terms of a set of interacting exponents that determine how the probability of recall evolves across study and delay. At this point, it is useful to summarise its structure in terms of the hierarchy of processes involved.</p>
+<p>The model comprises four levels of interacting exponents. Each level determines how the processes at the level above it evolve over time, so that behaviour at the level of recall probability emerges from underlying dynamics operating across multiple timescales. Level 1. The probability of recall (𝑝) increases during study as a function of the acquisition exponent 𝑘and decreases during delay as a function of the forgetting exponent 𝑦. Level 2. The forgetting exponent (𝑦) is reduced during study by the reducing exponent 𝑞and tends to increase during delay under the influence of the restorative exponent 𝑥. Level 3. The reducing exponent (𝑞) increases during study as a function of 𝑤and may decrease during delay under the influence of 𝑢. The restorative exponent (𝑥) may decrease during study as a function of 𝑣and increase during delay under the influence of 𝑧. Level 4. The parameter 𝑤, which governs changes in 𝑞, increases during study under the influence of 𝑓and decreases during delay as a function of 𝑔, which operates over relative time. This hierarchical structure captures the way in which processes operating over shorter timescales are progressively shaped by processes operating over longer timescales. In this way, the observed behaviour of recall probability reflects the cumulative effects of interacting processes across successive levels of the model.</p>
+<p>Figures 13, 14 and 26 illustrate the evolution of these parameters across study and delay periods, a schematic representation of the hierarchical organisation of the model is shown in Figure 29 and Appendix 1 provides the parameter values used in each of the experiments modelled.</p>
+<h3>10. Conclusion</h3>
+<p>Relatively few studies have provided the level of quantitative detail required to support analyses of the kind undertaken here. The experiments considered are drawn largely from an earlier period in the development of psychology, when such detail was more commonly reported. Although previous work has modelled individual findings-for example, the forgetting curve described by Ebbinghaus-no single model has been proposed that accounts for such a range of results within a unified quantitative framework. The model presented here demonstrates that this is possible and provides a basis for a more integrated understanding of fundamental memory processes.</p>
+<p>A central implication of the model is that, for individual items and lists of unrelated items, forgetting proceeds in a smooth and continuous manner following a brief initial period during which little or no measurable forgetting occurs. Beyond this short interval, there is no clear need to posit two qualitatively distinct processes corresponding to &#x27;short-term&#x27; and &#x27;long-term&#x27; memory. In particular, the findings analysed here do not require the interpretation proposed by Atkinson and Shiffrin (1968), in which rapid decay over approximately 15 seconds reflects the operation of a short-term store and residual performance reflects transfer to a long-term store. Instead, these results can be understood in terms of a single, continuously evolving process.</p>
+<p>Findings such as those of Ebbinghaus (1885/1964), Peterson and Peterson (1959), and Perkins (1914) are frequently cited as demonstrations of basic memory phenomena, but are often presented without a detailed account of the quantitative principles that govern them or of the relationships between them. The model developed here provides such an account, situating these phenomena within a coherent and unified framework.</p>
+<p>The present analyses have been conducted under conditions in which recall can be expressed in terms of the probability of retrieving discrete items of known informational content. Such conditions are most readily achieved in controlled experimental settings using relatively simple materials. In many real-world contexts, however, what is retained and recalled is structured and meaningful material, the effective information content of which depends on its organisation and on the prior knowledge of the individual. Although this makes precise quantification more difficult, it does not imply that different principles are required. Rather, it suggests that the same underlying processes operate on representations whose effective informational structure is more complex.</p>
+<p>The challenge for future work is therefore to extend these principles to situations in which the organisation and informational content of material can be more fully characterised. In this way, the model offers a quantitative framework within which both controlled experimental findings and more complex forms of memory can be understood as expressions of the same underlying processes.</p>
+<h3>Figure 2.</h3>
+<p>Figure2. Data fromRobinson and Brown (1926) illustrating key constraints on list learning. Left-hand panel: individual items within a list are learned at different rates across successive repetitions. Right-hand panel: the serial position curve, showing superior recall for early and late items and poorer recall for items in the middle, with this pattern evolving across trials. These findings require any model of learning to account for both item-specific dynamics and systematic serial position effects.</p>
+<h3>Figure 3.</h3>
+<p>Figure 3. Data from Ebbinghaus (1885/1964) illustrating constraints on learning and long-term retention.Left-hand panel: the number of repetitions required to learn a list increases with list length, constraining how the accumulation of learning must scale with the amount of material. Right-hand panel: the percentage of time saved during relearning decreases as the delay increases, showing a characteristic forgetting function with a rapid initial decline followed by a slower rate of forgetting over longer intervals. Together, these findings require a model that can account for both the scaling of learning and the retention of material over extended timescales.</p>
+<h3>Figure 4.</h3>
+<p>Figure 4. Data fromPerkins (1914), as presented byBaddeley (1976), illustrating the effects of distributed learning. Recall decreases as the size of study blocks increases, indicating that massed practice is less effective than distributed learning. In contrast, the effect of the interval between study sessions is less systematic. These findings constrain the model to account for the influence of the temporal distribution of study on learning and retention over extended periods.</p>
+<h3>Figure 5.</h3>
+<p>Figure 5. Schematic representation, adapted from Woodworth (1947 Figure 15, p. 59), illustrating the progressive reduction in forgetting rate across repeated learning cycles. Each cycle of relearning increases the level of retention and reduces the rate of subsequent forgetting. The present model provides a quantitative account of this pattern.</p>
+<h3>Figure 7.</h3>
+<p>Figure7. Serial position variation in the forgetting exponent and its modification during study. Left-hand panel: the initial forgetting exponent (upper points) and operative forgetting exponent (lower points) for each item in a 17-item list, showing an inverted U-shaped pattern across serial positions. Right-hand panel: the reducing exponent determining the extent to which the forgetting exponent is lowered during study, showing a complementary U-shaped pattern. Together, these patterns account for observed serial position effects.</p>
+<h3>Figure 8.</h3>
+<p>Figure 8. Postponement function 𝛼, showing the gradual transition from negligible to full forgetting over the first few seconds following a study period. The function modulates the operative forgetting exponent, reducing the rate of forgetting at very short delays.</p>
+<h3>Figure</h3>
+<p>Figure9. Calculation of the forgetting exponent and its effect on recall. Left-hand panel: reduction of the forgetting exponent from its initial value 𝑦 0 to the operative value 𝑦 1 during the first study period (𝑆 1 ). Righthand panel: resulting change in recall probability, showing the increase during study and the subsequent exponential decline during the delay period (𝐷 1 ), modulated by the postponement function 𝛼.</p>
+<h3>Figure 11.</h3>
+<p>Figure11. Left-hand panel: recall probabilities (within 10 seconds) fromPeterson and Peterson (1959). Filled circles show results from the first experiment; open circles show a comparable &#x27;silent, zero repetition&#x27; condition from a second experiment. The dashed line shows model predictions using the same parameter values as in Figure10. Right-hand panel: relationship between predicted and observed recall probabilities for the first experiment.</p>
+<h3>Figure 12.</h3>
+<p>Figure12. Schematic illustration of the evolution of recall probability across successive study (𝑆 1 , 𝑆 2 , 𝑆 3 ) and delay (𝐷 1 , 𝐷 2 , 𝐷 3 ) periods. The probability of recall at the end of each delay becomes the starting point for the next study period, leading to a progressive increase in recall across trials.</p>
+<h3>Figure 13.</h3>
+<p>Figure 13. Schematic illustration of the evolution of the forgetting exponent 𝑦across successive study (𝑆 1 , 𝑆 2 , 𝑆 3 ) and delay (𝐷 1 , 𝐷 2 , 𝐷 3 ) periods. The continuous curve represents the underlying state variable 𝑦(𝑡), which decreases during study and recovers during delay. The dashed horizontal segments represent the operative forgetting exponent governing the probability of recall during each delay period. Each operative value is determined at the end of the preceding study period and remains fixed throughout the subsequent delay.</p>
+<h3>Figure 14.</h3>
+<p>Figure14. Evolution of the exponent q, which determines the extent to which the forgetting exponent yis reduced during study, across successive study and delay periods. The value of qincreases during study and decreases during delay as an exponential function of time.</p>
+<h3>Figure 16.</h3>
+<p>Figure 16. Model predictions (dashed lines) and observed recall (points) for the progressive learning of the four items in Robinson and Brown&#x27;s 17-syllable list for which they provided the most complete data. The figure illustrates the close correspondence between predicted and observed recall across all serial positions, despite substantial variation in learning rates between items. Similar fits were obtained for the other items in the 17-syllable list (see Appendix 2) and all the individual items in the list of other lengths</p>
+<h3>Figure 19.</h3>
+<p>Figure 19. Left-hand panel: Model predictions (dashed line and open symbols) and observed data (filled symbols) for the number of readings required to learn lists of different lengths, based on Ebbinghaus (1885/1964). Right-hand panel: Relationship between predicted and observed number of readings across conditions.</p>
+<h3>Figure 20.</h3>
+<p>Figure 20. Number of readings required to learn or relearn lists of 12, 24, and 36 items across six successive days (Ebbinghaus, 1885/1964). Left: tabulated values. Right: the same data shown graphically.</p>
+<h3>Figure 21.</h3>
+<p>Figure 21. Left-hand panels: number of readings required to learn lists of 12, 24, and 36 syllables across six successive days, as reported by Ebbinghaus (filled symbols), together with model predictions (dashed lines). Right-hand panel: relationship between predicted and observed number of readings across all conditions (3 list lengths × 6 days).</p>
+<h3>Figure 22.</h3>
+<p>Figure 22. Time saved during relearning (Day 2) as a function of the number of initial readings on Day 1 for six lists of 16 nonsense syllables (Ebbinghaus, 1885/1964).</p>
+<h3>Figure 23.</h3>
+<p>Figure 23. Left-hand panel: Relationship between predicted and observed number of relearning trials. Righthand panel: Relationship between predicted and observed percentage savings across conditions.</p>
+<h3>Figure 24.</h3>
+<p>Figure 24. Model prediction of learning and relearning in Ebbinghaus&#x27; &quot;massive overlearning&quot; experiment.Open circles indicate the readings at which the list was first mastered (Day 1) and subsequently relearned (Day 2); filled symbols show the corresponding model predictions.</p>
+<h3>Figure 25.</h3>
+<p>Figure 25. Evolution of the exponent 𝑤, which governs the increase of 𝑞𝑣 during study, across successive study and delay periods. During study periods, 𝑤 increases as a function of √𝑆 (with exponent 𝑓); during delays, it may decrease as a function of relative time 𝐷 𝑟 (with exponent 𝑔). Relative time (𝐷 𝑟 ) is the ratio of total elapsed time (from the start of initial learning to the end of the current delay) to the elapsed time from the start of initial learning up to the end of the most recent study period, thereby scaling delay as a proportion of prior learning history.</p>
+<h3>Figure 26.</h3>
+<p>Figure 26. Model reproduction of the savings curve reported by Ebbinghaus (1885/1964), showing both the rapid initial decline and the slower rate of forgetting over extended intervals. Empirical data are shown as points and a continuous line; model predictions are shown as open symbols. The agreement between predicted and observed values is high across the full range of retention intervals.</p>
+<h3>Figure 27.</h3>
+<p>Figure 27. Left-hand panel: comparison between Ebbinghaus&#x27; forgetting curve (solid symbols and line) and that generated by the current model (open symbols) after converting predicted readings into time. Righthand panel: relationship between predicted and observed values expressed in time units. Note: Ebbinghaus reported his results in terms of time, whereas the model generates predictions in terms of whole numbers of readings; conversion between these units introduces small discrepancies.</p>
+<h3>Figure 28.</h3>
+<p>Figure 28. Model predictions for Perkins&#x27; (1914) experiment. Top-left panel shows observed recall (symbols) and model predictions (dashed line). Bottom-left panel shows the relationship between predicted and observed values. Right-hand panels compare observed (solid lines) and predicted (dashed lines) recall across block sizes for each spacing interval.</p>
+<h3>Figure 29.</h3>
+<p>Figure 29. Hierarchical structure of the model. The probability of recall (𝑝) is determined by the forgetting exponent (𝑦); changes in 𝑦are governed by the reducing exponent (𝑞) and restorative exponent (𝑥); and changes in 𝑞 are modulated by the higher-level exponent (𝑤).</p>
+<h3>Appendix 2.</h3>
+<p>The predictions of the model (shown as dashed lines) for the progressive learning of each of the nonsense syllables inRobinson &amp; Brown&#x27;s (1926) list of 17 syllables. The actual data are shown as diamonds. The vertical axes represent the probability of recall and the horizontal axes the trials.</p>
+<p>Howard Smith is a retired psychologist and former Head of the School of Psychology at Trinity College Dublin. He is a former President of the Psychological Society of Ireland and former editor of the Irish Journal of Psychology.</p>
+<h3>References</h3>
+<p>Anderson, J. R. (1995). Learning and memory; An integrated approach. New York: John Wiley &amp; Sons, Inc.</p>
+<p>Atkinson, R.C. &amp; Shiffrin, R. M. (1968). Human memory: A proposed system and its control processes. In K. W. Spence &amp; J. T. Spence (Eds.), The psychology of learning and motivation: Vol. 2 (pp. 89-195). New York: Academic Press.</p>
+<p>Baddeley, A. D., Lewis, V., &amp; Vallar, G. (1984). Exploring the articulatory loop. Quarterly Journal of Experimental Psychology, 36 (Section A), 233-252.</p>
+<p>Baddeley, A. D. (1976). The psychology of memory. New York: Harper &amp; Row Ebbinghaus, H. (1964). Memory: A contribution to experimental psychology. (H. A. Ruger &amp; C. E. Bussenius, Trans.) New York: Dover Publications Inc. (original work published 1885).</p>
+<p>Hellyer, S. (1962). Supplementary report: Frequency of stimulus presentation and short-term decrement in recall. Journal of Experimental Psychology, 64 (6), 650.</p>
+<p>Perkins, N. L. (1914). The value of distributed repetitions in rote learning. British Journal of Psychology, 7, 253- 261.</p>
+<p>Peterson, L. R. &amp; Peterson, M. J. (1959). Short-term retention of individual verbal items. Journal of Experimental Psychology, 58 (3), 193-198.</p>
+<p>Robinson, E. S. &amp; Brown, M. A. (1926). Effect of serial position on memorization. American Journal of Psychology, 37, 538-552.</p>
+<p>Wixted, J. T. &amp; Ebbesen, E. B. (1991). On the form of forgetting. Psychological Science, 2 (6), 409-415.</p>
+<p>Woodworth, R. S. (1947). Experimental Psychology. New York: Henry Holt and Company. Appendices Appendix 1. The values of the exponents employed in reproducing the results of the various experiments dealt with here.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
