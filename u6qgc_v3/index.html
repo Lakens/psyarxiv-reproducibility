@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: BAYESIAN PREDICTIVE ENSEMBLES FOR RANDOM
+EFFECTS</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+BAYESIAN PREDICTIVE ENSEMBLES FOR RANDOM EFFECTS
+</p>
+<p class="meta">
+2026-11-14 · Metacheck 0.4.4.1
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<span class="count fix zero"><b>0</b><span>to fix</span></span><span class="count improve zero"><b>0</b><span>to check</span></span><span class="count decide zero"><b>0</b><span>to decide by
+hand</span></span><span class="count fine zero"><b>0</b><span>fine</span></span><a class="count na" href="#na"><b>15</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(15)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>No papers appeared to involve live data collection requiring an
+ethics approval statement.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No detectable t- or F-tests. StatCheck currently only detects
+statistics written in APA format.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Exact P-Values</p>
+</div>
+<div class="d">
+<p>We detected no <em>p</em> values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Non-Significant P Value Check</p>
+</div>
+<div class="d">
+<p>We detected no nonsignificant p values.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, GitLab, ResearchBox, DSpace, EPrints (ReShare and others),
+Invenio (Zenodo and others), Dataverse, Figshare, Dryad,
+4TU.ResearchData, Mendeley Data, DataONE, LDbase, or CKAN data
+portals.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>We did not detect an ethics approval statement, and this paper does
+not appear to involve live data collection from human or animal
+participants. Ethics approval is typically not required for theoretical
+work, simulations, reviews, meta-analyses, or secondary analyses of
+published data.</p>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 31 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Vehtari, A., Gelman, A., &amp; Gabry, J. (2017). Practical Bayesian
+model evaluation using leave-one-out cross-validation and WAIC.
+Statistics and Computing, 27 (5), 1413-1432. doi:
+10.1007/s11222-016-9696-4
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/7A547C33C337D7E0F921C0017BFB71" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 31 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 31 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Selecting random-effects specifications in multilevel models is challenging when several plausible alternatives exist. Bayesian model averaging (BMA), Bayesian stacking (BS), and Bayesian hierarchical stacking (BHS) combine candidate predictions using weights constrained to sum to one, limiting their ability to accommodate systematic patterns beyond the candidate set. We apply Varying Coefficient Bayesian Additive Regression Trees (VCBART; Deshpande, Bai, Balocchi, Starling, &amp; Weiss, 2026) with an adaptive intercept to address candidate-model inadequacy. VCBART estimates covariate-dependent ensemble weights without a sum-to-one constraint, allowing predictions to vary across student and school characteristics. We compare VCBART with conventional model averaging, model selection, and alternative prediction methods through simulations calibrated to PISA 2018 U.S. mathematics data and an empirical application. Under realistic outcome variability and moderate-to-high between-school heterogeneity, VCBART achieves the lowest out-of-sample RMSE among non-oracle methods, although its narrower prediction intervals exhibit modest undercoverage. In the PISA application, VCBART also achieves the highest predictive accuracy, while its identified adaptive intercept reveals systematic patterns not captured by the candidate models.</p>
+<h3>Bayesian Predictive Ensembles for Random Effects Specification Uncertainty: Capturing Individual Heterogeneity in Large-Scale Assessments Introduction Motivation</h3>
+<p>In educational research, the relationship between student socioeconomic status (SES) and mathematics achievement often varies across schools, as may the effects of teacher interest, learning adaptivity, or immigration background (Goldstein, 2011; Karakus, Courtney, &amp; Aydin, 2023; Raudenbush &amp; Bryk, 2002). Each of these varying relationships corresponds to a different random effects specification, and choosing among them is a recurring problem in multilevel modeling. With P predictors eligible for random slopes, there are 2 P possible random effects structures, since each predictor can either carry a random slope or not. Prior work suggests that theory alone may be insufficient for selecting among plausible combinations of random effects, especially when fitting all candidate specifications simultaneously is computationally costly (Barr, Levy, Scheepers, &amp; Tily, 2013). Current standard practice selects one &quot;best&quot; specification and proceeds as though it were the true model, discarding information in the alternatives and understating the uncertainty in subsequent inferences (Barr et al., 2013; Draper, 1995; Hoeting, Madigan, Raftery, &amp; Volinsky, 1999; Huang &amp; Anderson, 2021).</p>
+<p>How much this matters depends on the inferential target. When the goal is inference about fixed effects, valid standard errors can often be obtained from a fixed-effects or population-average model with cluster-robust standard errors, and the random-effects structure need not be specified at all (Raudenbush &amp; Bryk, 2002). The situation is different when the goal is to predict the outcome of an individual student together with its uncertainty. The random-effects structure then determines how a school&#x27;s information is pooled with the population and which student characteristics modify that pooling. A misspecified structure changes both point and interval predictions for that student. This paper is about the second goal. Individual-level prediction is a routine task in educational practice. Early-warning systems flag students whose predicted achievement falls below a proficiency threshold so that support can be targeted (Bowers, Sprott, &amp; Taff, 2013). Placement and tiered intervention decisions rely on expected scores given a student&#x27;s background and school. School accountability indicators compare observed with predicted achievement at the student level before aggregating to schools (Raudenbush &amp; Bryk, 2002). In each case the prediction is made for a known student in a known school, and both the point prediction and its interval matter. Current practice usually fits one multilevel specification, chosen by subject-matter theories or by statistical model comparisons, and treats its predictions as if that model specification were correct.</p>
+<p>The substantive implications extend beyond statistical inference. Different random-effects specifications can lead to different conclusions about between-school heterogeneity. For instance, a model with a random SES slope describes how much the SES-achievement relationship varies across schools, whereas a model with a random teacher-interest slope captures a different dimension of instructional variability. Each specification is theoretically motivated but provides only a partial representation of school-level processes. At the individual level, a student&#x27;s predicted outcome and its associated uncertainty depend on which specification is selected, and misspecification can affect both the prediction and the inference for that student. Combining information across competing specifications while accounting for model-selection uncertainty is therefore more appropriate than selecting one and setting the others aside, particularly when predictions need to adapt to each student&#x27;s own characteristics. Bayesian model averaging (BMA; Raftery, Madigan, &amp; Hoeting, 1997), Bayesian stacking (BS; Yao, Vehtari, Simpson, &amp; Gelman, 2018), and Bayesian hierarchical stacking (BHS; Yao, Pirš, Vehtari, &amp; Gelman, 2022) address model uncertainty through weighted combinations of candidate model predictions. A nonparametric extension using the bracket the residual variation observed in that data, anchoring the evaluation in conditions representative of large-scale educational assessments.</p>
+<p>Under this formulation, the weight assigned to each candidate model is estimated nonparametrically from student-and school-level characteristics, and the posterior distributions of these weights describe which specification contributes most to prediction for a given student and with what uncertainty. The adaptive intercept absorbs outcome variance not captured by any candidate, removing the sum-to-one constraint imposed by BMA, BS, and BHS and allowing the ensemble to correct for the collective shortfall of partially specified candidates. Among the methods compared, VCBART comes closest to the oracle in out-of-sample accuracy when within-school noise is comparable to real assessment data and between-school heterogeneity is moderate or high. Its prediction intervals are the narrowest, at a coverage slightly below the nominal level.</p>
+<p>The remainder of this paper is organized as follows. The Background section reviews the ensemble methods and the varying coefficient model that motivates the proposed approach. The Method section describes the ensemble formulation. The simulation and empirical studies present the evidence, and the Discussion section closes with implications for practice.</p>
+<h3>Background</h3>
+<p>The M-Closed, M-Complete, and M-Open Settings Bernardo and Smith (2000) described three settings that characterize the relationship between a candidate model set M = {M 1 , . . . , M K } and the true data-generating process M 0 . In the M-closed setting, M 0 ∈ M, meaning one candidate is the true model, the case for which BMA was designed. In the M-complete setting, M 0 / ∈ M but the true predictive distribution can be approximated by combining the candidates. In the M-open setting, M 0 / ∈ M and the exact form of the true process is unknown to the analyst (Yao et al., 2018). The random effects specification problem examined here falls in the M-open setting. For instance, when the true model requires five simultaneous random slopes and each candidate includes only one, the true data-generating process lies outside the candidate set. Each partial specification still carries some information about the between-cluster structure, but constrained ensemble methods have limited capacity to correct for structural components not fully represented by any candidate model. The adaptive intercept in VCBART is intended to address this gap.</p>
+<h3>Bayesian Ensemble Methods</h3>
+<p>BMA (Raftery et al., 1997) forms the posterior predictive distribution as a weighted average over the candidates, where ∆ is any quantity of interest (in this paper, the predicted outcome ŷij for student i in school j), y is the observed data, and the weights p(M k | y) are posterior model probabilities derived from marginal likelihoods.</p>
+<p>By treating model uncertainty probabilistically, BMA propagates that uncertainty into prediction interval widths, which is the reason why it achieves near-nominal coverage in the M-closed setting (Madigan &amp; Raftery, 1994). When no candidate is correct, however, marginal likelihoods lose their probabilistic interpretation, and prior sensitivity becomes a concern (Clyde &amp; George, 2004).</p>
+<p>Because BMA&#x27;s coherence depends on the M-closed assumption, an alternative approach is to treat model combination as an optimization problem rather than a probabilistic one. BS (Yao et al., 2018) selects weights on the unit simplex , where w = (w 1 , . . . , w K ) ⊤ is the weight vector, by maximizing the leave-one-out log predictive density summed over the n j students in each of the J clusters, ŵstack = argmax is the predictive density of student i in cluster j under model k when that student is left out of the fit.</p>
+<p>The objective rewards the combination that predicts best on average over students, and the predictive distribution it defines is the same mixture of the candidates as in BMA, with different weights. The limitation is that ŵstack is a single vector for all observations, so it cannot express individual-or cluster-level variation in which candidate is relevant.</p>
+<p>BHS (Yao et al., 2022) addresses this limitation by replacing fixed weights with covariate-dependent functions. For each model k and observation (i, j), the weights are obtained through a softmax transformation, where is the log-odds for model k, α 0k is the model-specific intercept, and α ℓk scales the contribution of basis function f ℓ (x ij ).</p>
+<p>Hierarchical priors on α = {α ℓk } pool information across models. The softmax enforces positivity and the sum-to-one constraint, and the linear predictor inside it restricts which weight surfaces BHS can represent. For example, BHS may not detect that a random slope specification becomes relevant only above a threshold of school SES composition, or that two predictors jointly determine which specification fits best. Both constraints carry over as limitations when the candidate set is collectively incomplete. Related work has used BART directly to estimate input-dependent mixing weights for computer simulators (Yannotty, Santner, Furnstahl, &amp; Pratola, 2024).</p>
+<p>The varying coefficient model, reviewed next, provides the theoretical basis for individual-specific weights in the ensemble setting and a nonparametric estimator that overcomes these restrictions.</p>
+<h3>Varying Coefficient Models (VCM) and BART</h3>
+<p>The varying coefficient model (Hastie &amp; Tibshirani, 1993) generalizes the conventional linear regression model by allowing coefficients to be functions of moderating variables: where β k (z i ) is the coefficient for predictor k as a function of the moderating variable z i , x ki is the value of predictor k for observation i, and ε i is a zero-mean error term.</p>
+<p>Each β k varies with z i rather than being fixed across observations. This model applies in settings where predictor effects differ across subpopulations (Fan &amp; Zhang, 2008). In the model ensemble context, the weight w k (x ij ) plays this role. It is the coefficient on model k&#x27;s prediction in the ensemble regression, and it varies with individual-and cluster-level characteristics. What BHS attempts through its linear parametric weights is a restricted version of this idea. The restriction to linear forms and the softmax constraint arise from the parametric specification, not from the inferential goal.</p>
+<p>Benchmark estimators for varying coefficient models, such as local polynomial regression (Fan &amp; Zhang, 2008) and smoothing splines (Hastie &amp; Tibshirani, 1993), require specifying a single scalar moderating variable and a smoothing bandwidth, making them difficult to apply when multiple student and school characteristics jointly determine model relevance. BART (Chipman, George, &amp; McCulloch, 2010) circumvents both by representing an unknown function f (x) as a sum of H shallow regression trees, where each tree T h partitions the covariate space through binary splits, each leaf is assigned a scalar parameter in µ h , and g(x; T h , µ h ) returns the leaf value associated with x.</p>
+<p>Shrinkage priors on the leaf parameters and a preference for shallow trees regularize the fit while allowing the posterior to capture nonlinear patterns across the full predictor vector. Deshpande et al. (2026) extended this to the varying coefficient setting by estimating each β k (z) as a separate BART via Bayesian backfitting, a strategy that scales to high-dimensional moderators without bandwidth selection. This extension makes VCBART applicable to the random effects specification problem, where moderating variables are individual-and cluster-level covariates and the weight functions need to adapt to their joint effects without requiring the analyst to prespecify which combinations matter. BART has also been used to estimate heterogeneous learning trajectories in large-scale assessment data (Huang, 2024), further supporting its suitability here.</p>
+<h3>Proposed Method for Incorporating VCBART into Model Ensemble</h3>
+<h3>General Picture</h3>
+<p>As discussed in the Background section, the ensemble weight w k (x ij ) can be viewed as a varying coefficient. It is the coefficient on the prediction from model k in the ensemble regression, and it varies with individual-level and cluster-level characteristics. We use VCBART (Deshpande et al., 2026) to estimate these weights, following the ensemble approach introduced by Huang and Lyu (2025). The problem formulation here differs from prior ensemble work. The candidate models share the same fixed effects and differ only in which predictors carry random slopes. As a result, the weight functions indicate which random-effects specifications are relevant for which students, while the adaptive intercept helps correct the shared prediction error that remains across the candidate models.</p>
+<h3>Beyond Convex Combinations</h3>
+<p>The main difference from existing ensemble methods is the adaptive intercept, which avoids imposing a sum-to-one constraint. We write the ensemble prediction for where ŷijk is the point prediction from candidate model k, w k (x ij ) is the weight assigned to model k for covariate profile x ij , and w 0 (x ij ) is the adaptive intercept.</p>
+<p>The weights w 1 (x ij ), . . . , w K (x ij ) are not required to sum to one.</p>
+<p>The intercept w 0 (x ij ) plays two roles. When the candidate models collectively underrepresent the true random effects structure, their predictions carry a systematic bias.</p>
+<p>The intercept reduces that bias by shifting ensemble predictions away from the span of candidate outputs. When w 0 (x ij ) ≈ 0 and k w k (x ij ) ≈ 1, the ensemble closely resembles BHS, signaling that the candidate set is adequate for individuals in that region of covariate space. The raw intercept is not by itself the best diagnostic, however, because in this setting the candidates predict similar values. Suppose every candidate predicts a score of 480 for a given student and let S = k w k (x ij ) denote the weight sum. The ensemble prediction is then w 0 + 480 S. If the ensemble predicts 495, every pair with w0 = 495 -480 S fits the data equally well: w0 = 15 with S = 1, w0 = 255 with S = 0.5, or w0 = 435 with S = 0.125. The data cannot tell these pairs apart, so the posterior of w 0 settles on whichever the prior happens to favour, and a large w 0 does not by itself mean that the candidates are inadequate. What the data do determine is the 15 points by which the ensemble departs from the candidates. The quantity recovers this departure, where m(x ij ) is a reference prediction that lies among the candidate predictions.</p>
+<p>In the example, a = (495 -480 S) + (S -1) ×480 = 15 for every pair, so a is invariant to the split between w 0 and the weights.</p>
+<p>The second term in (2) removes from w 0 the part that only compensates for a weight sum different from one. We call a(x ij ) the identified adaptive intercept. Any combination of the candidates whose weights sum to one can serve as the reference, such as a single candidate, BS, or BHS; the weights need not be nonnegative, but a combination whose weights sum to c ̸ = 1 predicts c times the candidates&#x27; common value, which no candidate predicts, and would shift a by (S -1)(c -1) m. Changing the reference from one admissible m to another m ′ changes a by (S -1)(m -m ′ ), which is small when the candidates agree. We use the BMA prediction because it is the constant-weight baseline against which the ensemble is compared throughout. The true data-generating model is not a valid reference, since its prediction lies outside the candidate span and a would then mix the candidates&#x27; shortfall with the ensemble&#x27;s own error. When the candidates predict nearly the same value, a(x ij ) is simply the ensemble prediction minus the candidates&#x27; prediction, in score points. Values near zero across covariate space mean that the candidates are adequate there. Consistently positive values indicate that the ensemble predicts higher outcomes than the candidates for students with that profile, whereas consistently negative values indicate the opposite.</p>
+<p>Either pattern marks a region where no candidate adequately captures the data and the candidate model set may need to be reconsidered. The posterior weight w k (x ij ) describes how much model specification k contributes to the prediction for an individual with profile x ij , and the posterior uncertainty around that weight reflects how confidently that assessment can be made.</p>
+<p>Heterogeneity therefore enters the ensemble through two different objects. The school random effects enter only through the candidates: each candidate carries between-school heterogeneity in the form of its random slopes, and the candidates differ in which predictor is allowed to vary across schools. The weights enter through the weight functions, which depend on the student&#x27;s own characteristics, the characteristics of the student&#x27;s school, and the school identifier, which is included among the inputs to the weight functions. Within a school, the weights can differ between students whose own characteristics differ, so two students in the same school can be predicted by different mixtures of specifications. Across schools, the weights can differ through school characteristics and identity even for students whose own characteristics are alike. A convex combination with constant weights cannot represent either kind of variation, and BHS represents them only through the parametric form chosen for the weights. The identified intercept adds a third layer by capturing how the candidate set as a whole falls short for each profile.</p>
+<h3>Nonparametric Weight Function Estimation</h3>
+<p>With the ensemble structure defined, it remains to specify how each weight function is estimated. Each of the K + 1 weight components is modeled as a separate BART.</p>
+<p>Following Deshpande et al. (2026), the weight for component k under covariate profile x is where k = 0 indexes the intercept, k = 1, . . . , K index the candidate models, T kh is the hth tree for weight function k, and µ kh is the vector of its leaf parameters.</p>
+<p>The input x includes all individual-and cluster-level covariates, and the tree ensemble learns from data how variables and their interactions moderate model relevance without requiring prespecified functional forms. In educational settings, VCBART can detect that a random slope for SES matters more in high-poverty schools, or that immigration-related heterogeneity concentrates in particular school contexts, without any prespecification.</p>
+<p>Following Chipman et al. (2010), each tree is kept shallow through a splitting probability of 0.95(1 + d) -2 at depth d, which prevents any single tree from dominating the ensemble. Terminal node parameters µ kh receive independent N (0, σ 2 µ /H) priors, where σ 2 µ controls the overall scale of the weight functions and dividing by H stabilizes their total variance as the number of trees grows. We use H = 200 trees per weight function throughout, the default recommended by Chipman et al. (2010). The error variance σ 2 receives an inverse-gamma prior with shape parameter ν/2 and scale parameter νλ/2, where ν = 5 and λ is set so that the prior places 95% of its mass below the residual standard deviation of a linear model of the outcome on the candidate predictions and the covariates, fitted to the training data. Together these choices regularize the ensemble against overfitting while keeping the weight functions flexible enough to capture heterogeneous patterns of model relevance.</p>
+<h3>Bayesian Backfitting</h3>
+<p>All K + 1 weight functions are estimated jointly through Bayesian backfitting (Hastie, Tibshirani, &amp; Friedman, 2009), a Gibbs-like procedure in which each component is updated in turn while all others are held fixed. Joint estimation is essential because the intercept and the model weights both depend on the outcome y ij , and estimating them separately would confound the mean correction captured by w 0 with the relative contributions of the candidate models. The partial residuals R ijk used to update w k disentangle these effects, where 1(•) denotes the indicator function.</p>
+<p>For the intercept update (k = 0), all candidate model contributions are removed so that w 0 captures only what the candidates miss collectively. For model weight updates (k ≥ 1), both the intercept and all other model contributions are removed, isolating each specification&#x27;s marginal contribution from the outcome. Within each MCMC iteration, tree structures are updated via Metropolis-Hastings, leaf parameters via Gibbs sampling, and σ 2 from its conjugate inverse-gamma posterior after all weight functions are updated. We run V = 2,000 iterations with a burn-in of V burn = 1,000 iterations, and retain all post-burn-in samples for inference.</p>
+<h3>Posterior Inference</h3>
+<p>The posterior mean weight for model k under profile with credible intervals constructed from the empirical distribution of the retained draws .</p>
+<p>These posterior distributions are the primary inferential output. They describe, for each individual and cluster profile, which random effects specification contributes most to prediction and with what degree of uncertainty. Predictions for new observations are obtained by evaluating Equation (1) at the posterior mean weight functions, and prediction intervals are obtained from the posterior predictive draws, that is, the draws of the ensemble mean plus Gaussian noise with the corresponding draw of σ.</p>
+<p>VCBART is implemented in R using custom code built on the flexBART package (Deshpande, 2025). Reproducible code is available in the supplementary GitHub repository.</p>
+<h3>Simulation Study</h3>
+<h3>Data-Generating Process</h3>
+<p>The true data-generating model (DGM) is a multilevel model with nine predictors and five random slopes, calibrated to PISA 2018 U.S. mathematics data. The nine predictors are drawn from the same data. Their definitions and the variable selection procedure that identified them are described in the Empirical Study section. The outcome for student i in school j is where γ 0 is the intercept and γ p (p = 1, . . . , 9) are fixed effect coefficients for each predictor, u 0j is the school-level random intercept, u pj is the school-level random slope for predictor p, and ε ij ∼ N (0, σ 2 ) is the individual-level error with variance σ 2 .</p>
+<p>The indices on u pj match the predictor positions in the fixed-effects vector. For example, u 5j is the school-level random slope on TEACHINT, the fifth predictor. Fixed effects are derived from a single-level lasso regression fitted to the PISA 2018 U.S. mathematics data, with all ten values listed in Table A1 in the Appendix. School random effects (u 0j , u 1j , u 5j , u 6j , u 7j , u 9j ) ⊤ are drawn from a zero-mean multivariate normal distribution with covariance matrix T = τ 00 DRD, where τ 00 is the variance of the random intercept, D is a diagonal matrix of standard deviation ratios relative to ω = √ τ 00 , and R is the correlation matrix among random effects. The DRD factorization separates the scale of each random slope from its correlation with other effects, which is standard in multilevel modeling (Raudenbush &amp; Bryk, 2002). The diagonal entries of D are set so that the variance ratios match empirically observed patterns. The ESCS ratio aligns with cross-national analyses of socioeconomic slope variation (Raudenbush &amp; Bryk, 2002), and the ICC levels for ω correspond to the low, moderate, and high between-school variability ranges documented for large-scale educational assessments (Hedges &amp; Hedberg, 2007).</p>
+<p>Numerical values are provided in Table A2 in the Appendix. We refer to this DGM as model 7 (M7), which serves as the oracle benchmark throughout. The simulation uses the observed PISA 2018 U.S. predictor values of the 3,647 students in 134 schools described in the Empirical Study section. Only the outcome is generated. School random effects are drawn from N (0, T ) and student-level errors from N (0, σ 2 ).</p>
+<h3>Candidate Models and Simulation Design</h3>
+<p>The candidate set in both studies consists of six multilevel models, M1 to M6, which share identical fixed effects but differ in random effects structure. &quot;Candidate&quot; refers to these six models throughout, and M7 is a reference model outside the set. M1 includes only a random intercept. M2 through M6 each add one random slope for ESCS, TEACHINT, ADAPTIVITY, BEINGBULLIED, and IMMIG respectively. Each candidate is misspecified relative to M7, which requires five simultaneous random slopes, so no convex combination of M1-M6 can fully reproduce M7&#x27;s between-cluster structure. The design differs from Huang and Lyu (2025), which uses 15 candidate models varying in fixed effects across two specification scenarios with no oracle benchmark. Here, all candidates share the same fixed effects and differ only in random slopes, parameters are calibrated to PISA data, and M7 serves as a correctly specified reference.</p>
+<p>Two factors are varied. Between-cluster variability ω (the standard deviation of u 0j ) takes three levels corresponding to low, moderate, and high between-school heterogeneity, with design ICCs of 0.10, 0.20, and 0.30 respectively. These span the range of between-school variation documented for large-scale educational assessments (Hedges &amp; Hedberg, 2007). Within-cluster variability σ (the standard deviation of ε ij ) takes four values, 0.1, 10, 50, and 100. The random intercept variance τ00 = ω 2 is set from the design where ρ ICC is the targeted between-school proportion of variance under an intercept-only specification.</p>
+<p>Because τ 00 scales with σ 2 , the ratio of random-effect variance to error variance is the same at every σ for a given ICC.</p>
+<p>Each simulated outcome has three parts: a fixed-effect part, a random-effect part, and an error. The fixed-effect part is the same in all twelve conditions. For each of the 3,647 students we compute the linear predictor γ 0 + p γ p x ijp from the nine predictor values observed in PISA and the coefficients in Table A1. The 3,647 linear predictors do not depend on σ or on the ICC, and their variance across students is 1,111 points squared, corresonding to a standard deviation of 33.3 points. The random effects u 0j , u pj and the errors ε ij are drawn anew in each condition with the variances set above. Raising σ therefore adds random-effect and error variance on top of a fixed-effect variance that stays at 1,111, and the shares in Table 1 shift   Held-out students belong to schools that are also present in the training set, so each method predicts them with the posterior school effects estimated from the training students of the same school, which is the standard multilevel prediction for an observed cluster (Raudenbush &amp; Bryk, 2002). Treating held-out students as members of new schools would instead draw their school random effects from the zero-mean population distribution, so that every multilevel-based method predicts from its fixed effects alone.</p>
+<p>The candidates share the same fixed-effect specification and differ in their estimates only through the shrinkage induced by their random-effect structures, so under that protocol their predictions are nearly the same, and differences among the ensembles become too small to study; in our runs the six candidates, their three averages, and M7 had out-of-sample RMSEs that agreed to the second decimal.</p>
+<h3>Methods and Evaluation</h3>
+<p>Eight methods are evaluated. Four ensemble methods (VCBART, BHS, BS, BMA) combine predictions from the six candidate models M1-M6. The fifth method, Selected, uses the single candidate with the highest leave-one-out expected log predictive density (ELPD-LOO), which is often how a model specification is chosen in current practice. In the simulation Selected becomes M3, the TEACHINT random-slope model, in 118 of the An analyst who suspected such variation would have to add interactions between the school indicators and student-level predictors and would then face the same question as the candidate set, namely which predictors to interact. We include FE in its common form, without interactions. SoloBART is a single BART fit with the nine predictors and school identity as a categorical variable. M7 is the multilevel model with all five random slopes.</p>
+<p>In the simulation it has the same structure as the true DGM and serves as an oracle; in the empirical study it is the most elaborate specification considered. It is not a candidate model for any ensemble and provides a reference in both studies. All multilevel models are fitted using rstan (Stan Development Team, 2024). BMA weights are pseudo-BMA weights obtained by applying softmax normalization to the summed ELPD-LOO scores across candidate models, computed via the loo package (Vehtari, Gelman, &amp; Gabry, 2017).</p>
+<p>BS weights are obtained using loo_model_weights() from the same package with method = &quot;stacking&quot;. VCBART uses flexBART (Deshpande, 2025) and soloBART uses BART (Sparapani, Spanbauer, &amp; McCulloch, 2021). Full implementation details are provided in the Appendix, and reproducible code is available in the supplementary GitHub repository.</p>
+<p>Two criteria are used to evaluate the methods. Predictive accuracy is measured by the root mean square error (RMSE) for both in-sample (training) and out-of-sample (held-out test) observations, where N = j n j is the total number of observations.</p>
+<p>Uncertainty calibration is measured by the empirical coverage of 95% prediction intervals, defined as the proportion of observations whose true values fall within [L ij , U ij ], the 2.5th and 97.5th percentiles of the posterior predictive distribution. For every method the interval is a posterior predictive interval, so that intervals are comparable across methods. A method whose intervals miss the 95% target may not support valid inference regardless of its point prediction accuracy.</p>
+<p>Differences between VCBART and M7 are tested with a paired-samples t test and a Wilcoxon signed-rank test across the ten shared folds. For the PISA data, the t interval and p value are computed from the fold means and standard deviations. Computational cost is reported in minutes of wall-clock time per fold. All fits ran as separate jobs in a Docker container on the high-throughput computing pool, with four CPU cores for each method.</p>
+<h3>Results</h3>
+<h3>Predictive Performance</h3>
+<p>Tables 2 and 3 present in-sample and out-of-sample RMSEs. When σ = 0.1, the outcome is nearly a deterministic function of the predictors and every candidate predicts it almost exactly, so BMA, BS, BHS, Selected, and M7 are indistinguishable both in-sample and out-of-sample. VCBART has no shortfall to correct in this regime and pays for its flexibility with an out-of-sample RMSE almost four times that of the candidates, although still a small fraction of the outcome standard deviation of 33. Its in-sample RMSE is close to the candidates&#x27;, so the loss is out of sample: the weight functions fit the training  students and do not transfer, which is the usual cost of a nonparametric fit when there is nothing left to learn. SoloBART is far behind at both ends (0.50 in-sample, 0.73 out-of-sample), because a sum of trees approximates a nearly linear function poorly. The picture changes once the error is no longer negligible. For in-sample prediction, VCBART has the lowest RMSE among non-oracle methods in every condition with σ ≥ 10 and is below M7 in eight of those nine conditions, which shows that the adaptive intercept and the covariate-dependent weights recover much of the between-school structure the candidates miss individually. For out-of-sample prediction, VCBART is the non-oracle method closest to M7 in every condition with ICC 0.30 and σ ≥ 10 and in the ICC 0.20 conditions with σ ≥ 50, and its margin over BMA widens as between-school heterogeneity grows, from 2% at σ = 10 to about 4% at σ = 50 or 100 with ICC 0.30. At ICC 0.10 with σ ≥ 10 the candidates differ little from one another, and BMA, BS, and Selected are ahead of VCBART by 1-2%. The paired tests in Table 4 confirm that M7 remains better than VCBART out of sample in every simulation condition, by 2-4% at σ ≥ 10, so the ensemble narrows but does not close the gap relative to the correctly specified model. FE, which keeps the school means but no school-specific slopes, and soloBART are the weakest methods once the ICC rises, because neither represents the slope heterogeneity in the DGM. Note. Differences are computed within each of the ten shared cross-validation folds. Positive values favor M7. The PISA row refers to the empirical study, where M7 is the specification with all five random slopes. The mean difference in the PISA row equals the difference between the mean RMSEs in Table 10. Its interval and t test p value are computed from the fold means and standard deviations in that table and treat the folds of the two methods as independent, which gives a wider interval than the paired test. The Wilcoxon p value in the PISA row uses the fold-level differences.</p>
+<h3>Uncertainty Calibration</h3>
+<p>Tables 5 and 6 report coverage of 95% prediction intervals. Every method except VCBART achieves near-nominal out-of-sample coverage (94-95%) in every condition. For BMA, BS, and BHS this holds because their predictive distributions are mixtures of the candidates&#x27; posterior predictive distributions, and each candidate is itself well calibrated for this outcome. The mixture must be sampled as such: averaging the candidates&#x27; posterior draws with the same weights gives the same point prediction but shrinks the predictive variance whenever the weights are spread over several candidates, and the resulting intervals undercover.</p>
+<p>With mixture sampling the three model-averaging methods are indistinguishable in calibration. VCBART overcovers at σ = 0.1, where its intervals are far wider than the tiny residual noise, and undercovers mildly at σ ≥ 10, with out-of-sample coverage of 91-93% that declines slowly as the ICC rises. Its in-sample coverage is within 1.5 points of nominal in those conditions, so the shortfall out of sample reflects an ensemble mean fitted closely to the training students rather than a residual variance that is too small. The intervals VCBART produces are also the narrowest, by 4-9% at ICC 0.10 and by 15-18% at ICC 0.30, which is relevant when a decision depends on the interval and not only on the point prediction, a point we return to in the empirical study.</p>
+<h3>Weight Functions and the Adaptive Intercept</h3>
+<p>Table 7 summarizes the posterior mean weight functions on the held-out students, and Figure 1 plots the raw adaptive intercept w 0 (x ij ) and its identified part a(x ij ) of Equation ( 2</p>
+<h3>Computational Cost</h3>
+<p>Table 8 summarizes computation times per fold.</p>
+<h3>Figure 1</h3>
+<p>Raw and identified adaptive intercept on held-out students at design ICC 0.10 (fold 1). Colors distinguish the four within-cluster standard deviations σ ∈ {0.1, 10, 50, 100}. Top: the raw intercept w 0 (x ij ) of Equation (1) against student ESCS. Its level cannot be interpreted on its own because w 0 and the weight sum are not separately identified: at σ = 0.1 it is near the outcome mean with weights summing to 0.16, and at σ = 100 it is near -230 with weights summing to 1.5. Middle: distribution of the posterior mean of the identified intercept a(x ij ) of Equation (2), with the BMA prediction as the reference m(x ij ), across students. Bottom: a(x ij ) against student ESCS with a LOESS smooth.</p>
+<p>-750 -500 -250 0 250 500 -3 -2 -1 0 1 2 ESCS w ^0(x) σ 0.1 10 50 100 0 1 2 3 -80 -40 0 40 80 a ^(x) Density σ 0.1 10 50 100 -80 -40 0 40 80 -3 -2 -1 0 1 2 ESCS a ^(x) σ 0.1 10 50 100</p>
+<h3>Empirical Study on PISA 2018 Mathematics A Prediction Problem from Educational Practice</h3>
+<p>The PISA 2018 mathematics scale places students on proficiency levels, and Level 2 (a score of 420.07 or above) is the OECD&#x27;s baseline for the skills needed to participate in society (OECD, 2019). To target support to students at risk of falling below this baseline, a school system needs each student&#x27;s predicted score and probability of falling below the cutoff, based on their background and the school they attend. The prediction is made for a known student in a known school, so the school&#x27;s estimated effect is part of the forecast.</p>
+<p>Which random-effects specification is used changes how the school effect is pooled with the population, which student characteristics modify that pooling, and therefore which students are flagged. We use this scenario to compare the methods on the PISA data. The quantities of interest are the predicted score, its 95% prediction interval, and the posterior probability that the student scores below Level 2, all evaluated on held-out students.</p>
+<h3>Data, Candidate Models, and Design</h3>
+<p>We apply all eight methods to the U.S. mathematics data from PISA 2018 (OECD, 2019). PISA is a triennial international assessment of 15-year-old students coordinated by the OECD and provides one of the few large-scale datasets with sufficient within-school sample sizes to support multilevel analyses with random slopes. The U.S. sample contains 4,838 students in 164 schools. Variable selection using lasso, random forest, and XGBoost consistently identified the same nine important predictors. These are individual socioeconomic status (ESCS), school-level socioeconomic composition (SCHOOLESCS), school bullying climate (SCHOOLBULLYING), school immigration composition (SCHOOLIMMIG), teacher interest (TEACHINT), learning adaptivity (ADAPTIVITY), experience of being bullied (BEINGBULLIED), staff shortage (STAFFSHORT), and immigration status (IMMIG). These span individual, family, classroom, and institutional influences on mathematics achievement (Karakus et al., 2023), and overlap with predictors examined in prior Bayesian ensemble analyses of PISA data (Huang &amp; Kaplan, 2025; Huang &amp; Lyu, 2025). Listwise deletion on these nine predictors, driven mainly by missing responses on the bullying and immigration items, leaves 3,647 students in 134 schools, the sample used in both studies. The outcome is the first plausible value of the mathematics scale.</p>
+<p>The six candidate models have identical fixed effects (all nine predictors) but differ in random effects structure, mirroring the simulation design. The six candidates are close in leave-one-out predictive density on these data, with mean ELPD-LOO ranging from -3,750 (M5) to -3,747 (M2 and M3), and their out-of-sample RMSEs lie between 77.1 (M2) and 77.3 (M4 and M5). The specification with the highest ELPD-LOO, which the Selected method uses, changes across folds: M2 in five folds, M4 in three, and M1 and M3 in one each. No single random-slope specification is clearly preferred by the data, which is the situation in which averaging over specifications is meant to help. Table 9 presents parameter estimates for M1-M7 from fits to the full sample. Fixed effects are stable across models while the random slope&#x27;s standard deviation ranges from 4.5 (M5, BEINGBULLIED) to 9.2 (M2, ESCS) and the random intercept-slope correlation ranges from -0.48 to 0.27. In M7 the five slope standard deviations are of the same order (4.0 to 9.6), and the residual standard deviation falls from 76.4 in M1 to 75.2, so the slopes together explain only a small part of the within-school variance. The between-school share of variance in these data depends on what is conditioned on. An intercept-only model gives an ICC of 0.18, within the range reported for U.S. achievement data (Hedges &amp; Hedberg, 2007). The nine predictors include two school composition measures, and after conditioning on them the residual ICC implied by M1, ω 2 0 /(ω 2 0 + σ 2 ), is 0.06, below the lowest design ICC of the simulation. The design ICC is likewise defined net of the fixed effects, so the comparison is like for like, but the five random slopes in M7 add between-school variation that an intercept-only ICC does not count. Both quantities vary across PISA countries, subjects, and predictor sets, so we treat the PISA data as one point in the space of between-school variability rather than as a fixed level. This variation confirms that each predictor generates a qualitatively different pattern of between-school heterogeneity, so each candidate carries different information that the ensemble can use to go beyond what any single specification provides. M7 (all five random slopes simultaneously) serves as the fully specified benchmark. We evaluate all methods using 10-fold cross-validation with students split 80%/20% within each school, ensuring all schools appear in both training and test sets, and held-out students are predicted with the posterior random effects of their own school as in the simulation.</p>
+<p>.08 24.90 19.31 3.91 7.20 10.55 2.08 -3.39 0.32 6.79 18.54 --76.40 M2 478.59 25.07 19.20 3.73 6.86 10.47 2.17 -3.41 -0.04 6.84 18.18 9.15 0.27 75.96 M3 479.02 24.87 19.63 3.95 7.45 10.51 2.03 -3.48 0.51 6.68 18.69 7.11 -0.48 76.07 M4 479.09 24.80 19.30 3.84 7.62 10.69 1.87 -3.50 0.25 6.67 18.54 5.08 -0.38 76.21 M5 479.14 24.88 19.42 3.90 7.15 10.59 2.07 -3.22 0.23 6.84 18.53 4.49 0.08 76.25 M6 479.08 24.90 19.87 4.07 7.53 10.58 2.08 -3.36 0.47 6.70 18.34 5.16 0.23 76.29 M7 478.53 25.01 20.02 3.92 7.37 10.52 2.05 -3.39 0.32 6.74 17.94 see note see note 75.16</p>
+<p>Note. Posterior means from fits to all 3,647 students. Predictors are standardized, so each γ p is the change in score per SD of predictor p. ω 0 is the SD of the school random intercept u 0j , ω p is the SD of the random slope on the predictor added in that model, ρ 0p is the correlation between random intercept and slope, and σ is the residual SD. All nine fixed-effect predictors appear in every model. For M7 the random slope SDs are ESCS 9.57, TEACHINT 6.65, ADAPTIVITY 3.96, BEINGBULLIED 5.06, IMMIG 6.09, and the intercept-slope correlations are ESCS 0.24, TEACHINT -0.36, ADAPTIVITY -0.15, BEINGBULLIED 0.00, IMMIG 0.14. The unconditional ICC from an intercept-only model is 0.18 and the residual ICC from M1 is 0.06.</p>
+<h3>Results</h3>
+<p>Table 10 reports prediction accuracy, coverage, interval width, and computation time across the 10 cross-validation folds. VCBART achieves the lowest in-sample RMSE (68.02), 5.27 points below M7, and the lowest out-of-sample RMSE (75.59), outperforming M7 by 1.44 points and soloBART by 1.14 points. The fold-level difference from M7 has a 95% interval that excludes zero (Table 4), although the interval is wide relative to the size of the difference. SoloBART has the second-lowest out-of-sample RMSE (76.73), although it exhibits the largest fold-to-fold variability (SD = 1.47). Among the remaining methods, M7 achieves an out-of-sample RMSE of 77.03, while BMA, BS, BHS, and Selected perform similarly (77.16-77.25). FE has the highest out-of-sample RMSE (77.67). The relatively small differences among the candidate-based methods suggest that selecting or combining the available candidates yields limited improvements in predictive accuracy, whereas VCBART provides additional flexibility beyond these specifications. Turning to uncertainty quantification, all methods except VCBART achieve near-nominal out-of-sample coverage (94.6-95.4%), with interval widths ranging from 294 to 307 points. VCBART produces the narrowest intervals (283 points), approximately 6.3% narrower than M7, but its out-of-sample coverage is lower at 93.3%. Its in-sample coverage of 96.3% is comparable to the other methods. Thus, VCBART&#x27;s improved predictive accuracy and narrower intervals come with a modest reduction in out-of-sample coverage.</p>
+<p>This pattern is consistent with the simulation findings at σ = 50 and 100, where the candidate set is collectively incomplete and the adaptive intercept provides additional flexibility.</p>
+<p>Table 7 and Figure 2 further illustrate this flexibility. On the PISA data, the weight sum is 1.37, and the identified adaptive intercept has a mean absolute value of approximately 15 points, larger than in any simulation condition and about 0.15 of the outcome standard deviation. Its relationship with ESCS is relatively flat over most of the range but becomes negative above an ESCS of approximately 2, where the candidates overpredict the few highest-SES students by about 20-30 points. Such nonlinear SES-achievement relationships have been documented in the school effectiveness literature (Willms, 2010). Because this pattern is not represented by the candidate specifications, the adaptive intercept provides a correction.</p>
+<p>The weight functions also reveal heterogeneity across student groups. Figure 3 displays the posterior mean weights ŵ1 to ŵ6 for the 728 held-out students in fold 1, grouped by immigration status. The weights are nearly constant within each group but differ substantially between groups. For students without an immigrant background, the ADAPTIVITY and BEINGBULLIED random slope models receive relatively large positive weights ( ŵ4 = 2.2, ŵ5 = 1.8), while the IMMIG slope model receives a negative weight ( ŵ6 = -0.7). For immigrant students, the IMMIG slope model receives the largest weight ( ŵ6 = 2.8), while the ADAPTIVITY and BEINGBULLIED models receive weights of 0.8 and 0.6, respectively. The absolute correlations between these weights and immigration status range from 0.99 to 1.00, while the weights on M1 and M3 have correlations of approximately 0.55. No other predictor has a correlation exceeding 0.6 with any weight, and most correlations are below 0.3. These results suggest that immigration status is an important covariate along which the relative contributions of the candidate models vary.</p>
+<p>However, because the weights are not constrained to sum to one and are not separately identified from w 0 when candidate predictions are similar, they should not be interpreted as model shares. The weight sums also differ between immigrant and non-immigrant students (1.12 and 1.27, respectively). The identified adaptive intercept a(x ij ) provides a more interpretable summary of the resulting correction. Its mean differs little by immigration status (0.4 and 0.3 points), but varies with ESCS. Across tertiles of student ESCS, its means are -1.7, -3.9, and 6.7 points; across tertiles of school mean ESCS, they are -2.6, -1.0, and 4.6 points (Figure 4). As shown in Figure 2, the intercept becomes negative again for the few students with ESCS above 2. Overall, the ensemble tends to increase predictions for students in more advantaged schools and decrease them for students in less advantaged schools, capturing a between-school pattern not represented by the individual candidate specifications. In fold 1, the correction ranges from -68 to 52 points across students, exceeding the fixed effect associated with a one-unit change in ESCS.</p>
+<h3>Figure 2</h3>
+<p>Identified adaptive intercept a(x ij ) against student ESCS on held-out PISA students, all folds, with a loess smooth and its 95% band. Values near zero indicate that the candidate models are adequate for students with that profile.</p>
+<p>-50 0 50 -2 0 2 ESCS a ^(x)</p>
+<h3>Figure 3</h3>
+<p>Posterior mean weight ŵk (x ij ) on each candidate model for the 728 held-out PISA students of fold 1, by immigration status. Most weights are nearly constant within each group, so their boxes collapse to lines. Weights are not constrained to the unit interval or to sum to one.</p>
+<p>-4</p>
+<p>Identified adaptive intercept a(x ij ) of Equation (2), with the BMA prediction as the reference m(x ij ), against school mean ESCS for the held-out PISA students of fold 1, with a loess smooth and its 95% band. Positive values mean that the ensemble predicts above the candidate models for students in that school. Figure 5 Predicted mathematics score and 95% prediction interval for five held-out students (fold 1) under each method. Panels are student profiles defined by ESCS, school ESCS, and immigration status. The dashed line is the student&#x27;s observed score and the dotted line is the PISA Level 2 cut at 420.07. Immigrant, low ESCS Non-immigrant, low ESCS Low ESCS, low-ESCS school High ESCS, low-ESCS school High ESCS, high-ESCS school V C B A R T B H S B S B M A S e le c te d F E s o lo B A R T M 7 V C B A R T B H S B S B M A S e le c te d F E s o lo B A R T M 7 V C B A R T B H S B S B M A S e le c te d F E s o lo B A R T M 7 200 400 600 200 400 600 Predicted mathematics score, 95% interval low-ESCS immigrant student with an observed score of 610, all methods predict substantially lower scores (413-441), and none of the intervals contains the observed value, highlighting the limited predictive information available for some individual students. For a high-ESCS student in a low-ESCS school whose observed score is 396, below the PISA Level 2 threshold of 420.07, the multilevel-based methods predict scores of 482-487 and assign probabilities of 0.17-0.22 to falling below the threshold. In contrast, VCBART predicts 459 and soloBART predicts 464, both assigning a probability of 0.28. A similar pattern appears for a low-ESCS student in a low-ESCS school, for whom VCBART predicts 364 compared with 386-390 for the multilevel-based methods. For another  11). Thus, when students are flagged for additional support based on a posterior probability exceeding 0.5 of scoring below Level 2, the choice of method changes the classification for approximately one in twelve students relative to the multilevel-based methods. Note. A student is flagged when the posterior probability of a score below 420.07 exceeds 0.5. Percentages are over 7,280 held-out predictions across the ten folds.</p>
+<p>Finally, computation times vary considerably across methods. FE and soloBART are the fastest, requiring less than one minute, followed by M7 at 7.3 minutes. BMA, BS, and Selected each require 27.5 minutes, including candidate fitting. VCBART requires 35.0 minutes, approximately 7.5 minutes longer, while BHS is the most computationally intensive at 38.1 minutes.</p>
+<h3>Discussion</h3>
+<h3>Findings and Summary</h3>
+<p>The simulation results illustrate how the relative performance of the methods depends on the completeness of the candidate model set. When the outcome noise is negligible, the candidates approximate the data-generating process closely, corresponding to a practically M-closed setting. In this regime, BMA, BS, BHS, and model selection perform comparably to the oracle, while VCBART introduces unnecessary flexibility and estimation variability. As within-school noise and between-school heterogeneity increase, the candidate set becomes increasingly inadequate, approaching an M-open setting. Under these conditions, VCBART generally achieves the best out-of-sample predictive accuracy among the non-oracle methods, with improvements that become more pronounced as the ICC and residual variability increase. Its adaptive intercept allows the ensemble to capture systematic patterns not represented by the candidates. However, these improvements come with somewhat narrower prediction intervals and lower coverage. In contrast, BMA, BS, and BHS maintain near-nominal coverage when their predictive distributions are constructed as mixtures of candidate predictions. These findings suggest that VCBART is most beneficial when the available specifications are collectively incomplete, whereas conventional model averaging and selection remain competitive when the candidate models adequately represent the outcome structure.</p>
+<p>The empirical analysis of PISA 2018 mathematics achievement supports these findings. VCBART achieves the lowest in-sample and out-of-sample RMSE, outperforming both the candidate-based methods and soloBART. It also produces the narrowest prediction intervals, although its out-of-sample coverage is slightly below the nominal level.</p>
+<p>In contrast, BMA, BS, BHS, and model selection exhibit similar predictive performance and near-nominal coverage. This similarity reflects the substantial overlap among the candidate specifications, which share the same fixed effects and random intercept and differ primarily in their random slopes. When the candidates generate similar predictions, selecting or averaging among them offers limited improvements. VCBART provides additional flexibility by capturing systematic variation beyond the candidate specifications, including nonlinear relationships with socioeconomic status and differences across student and school characteristics.</p>
+<p>An important contribution of VCBART is its ability to accommodate individual-level heterogeneity through covariate-dependent weights and an adaptive intercept.</p>
+<p>Unlike conventional model averaging, which assigns a common set of weights to all observations, VCBART allows the contributions of candidate models to vary across student profiles. In the empirical application, immigration status is strongly associated with the estimated weight functions, indicating that the ensemble combines the candidate specifications differently across student groups. Meanwhile, the identified adaptive intercept reveals systematic discrepancies between the candidate predictions and observed outcome patterns, particularly along student and school socioeconomic dimensions. These findings illustrate how VCBART can capture subgroup-specific patterns and nonlinear relationships that are not explicitly represented in the candidate models. However, because individual weights are not separately identified when candidate predictions are similar, they should be interpreted jointly with the identified adaptive intercept rather than as independent measures of model importance. Together, the simulation and empirical findings highlight a trade-off between predictive flexibility and uncertainty calibration. VCBART offers improved predictive accuracy when the candidate set is incomplete, but its narrower prediction intervals may result in modest undercoverage. Conventional model averaging and selection provide more stable uncertainty quantification when the candidates perform similarly. Importantly, these differences can affect substantive decisions. In the PISA application, VCBART and the multilevel-based methods disagree on approximately 8% of student classifications relative to the proficiency threshold. Thus, even modest improvements in predictive accuracy can lead to meaningful differences in individual-level decisions.</p>
+<h3>Applications and Implications</h3>
+<p>The proposed framework is particularly relevant to educational and psychological research, where heterogeneous relationships are common and the appropriate model specification is often uncertain. In school effectiveness research, for example, the association between student characteristics and achievement may vary across schools (Raudenbush &amp; Bryk, 2002; Willms, 2010). Conventional approaches typically select a particular random-effects structure or average predictions using fixed model weights.</p>
+<p>VCBART instead allows the relative contributions of candidate specifications to vary with student and school characteristics, while the adaptive intercept accounts for systematic patterns not captured by the candidates. This flexibility is useful when researchers cannot confidently identify a single specification that adequately represents the underlying heterogeneity.</p>
+<p>The empirical application illustrates this potential through socioeconomic status and immigration background. The estimated weight functions vary substantially by immigration status, while the adaptive intercept captures nonlinear socioeconomic patterns and differences associated with school composition. These findings suggest that the relevance of candidate specifications and the inadequacy of their combined predictions may arise along different dimensions of the covariate space. Importantly, the weights are not constrained to be positive or sum to one, and their individual magnitudes may not be identifiable when candidate predictions are highly correlated. Consequently, interpretation should focus on the overall ensemble predictions, the identified adaptive intercept, and systematic patterns in the weight functions rather than treating individual weights as model probabilities.</p>
+<p>The broader methodological contribution extends beyond educational assessment.</p>
+<p>Similar challenges arise in precision medicine, psychology, and other fields where heterogeneous populations are represented by competing models or latent subgroups. Hard model selection or subgroup assignment may overlook uncertainty about which specification is appropriate for a particular individual, while conventional model averaging assumes that the relative contributions of candidate models remain constant across observations. VCBART provides a flexible alternative by combining covariate-dependent weighting with an adaptive correction for shared model inadequacy. This approach builds on the varying coefficient framework (Hastie &amp; Tibshirani, 1993) and offers opportunities for extending Bayesian nonparametric methods to more complex educational and psychological measurement settings (Huang &amp; Ghosh, 2025).</p>
+<h3>Limitations and Future Directions</h3>
+<p>Several limitations warrant further investigation. First, VCBART may introduce unnecessary estimation variability when the candidate models already provide an adequate approximation to the data-generating process. In such settings, conventional model averaging or selection can achieve better predictive accuracy and calibration with lower computational cost. More adaptive regularization, such as shrinkage priors on the weight functions and adaptive intercept, could help VCBART reduce its complexity when the data provide little evidence of candidate-model inadequacy.</p>
+<p>Second, improvements in predictive accuracy are accompanied by some loss of uncertainty calibration. Both the simulations and empirical application show that VCBART tends to produce narrower prediction intervals with below-nominal out-of-sample coverage. Stronger regularization of the tree ensemble or alternative procedures for calibrating predictive uncertainty may help address this trade-off. In addition, the weight functions and the raw adaptive intercept are not separately identified when candidate predictions are highly correlated. Although the identified adaptive intercept provides an interpretable summary of the correction, alternative parameterizations that explicitly separate baseline predictions from candidate-specific deviations may improve identifiability and interpretation.</p>
+<p>Third, the simulation design considers a limited range of within-school and between-school variability under Gaussian errors and a two-level hierarchical structure.</p>
+<p>Future research should examine more complex data-generating processes, including nonlinear covariate effects, cross-level interactions, non-Gaussian random effects, and higher levels of between-school heterogeneity. Extensions to binary, ordinal, and count outcomes would also broaden the applicability of VCBART to educational and psychological research.</p>
+<p>Finally, the empirical application has limitations related to the PISA data and the prediction setting. PISA plausible values reflect measurement uncertainty arising from the assessment design and scaling model (OECD, 2019; Rutkowski, Gonzalez, Joncas, &amp; von Davier, 2010; von Davier, Gonzalez, &amp; Mislevy, 2009). The present analysis uses a single plausible value rather than combining results across all ten, so the reported uncertainty does not fully account for this measurement component. Moreover, the cross-validation procedure evaluates predictions for held-out students within schools represented in the training data, rather than generalization to entirely new schools. Future studies should incorporate multiple plausible values, complex sampling features, and school-level cross-validation to assess the robustness and generalizability of the proposed approach.</p>
+<p>Further investigation of the adaptive intercept as a formal diagnostic of candidate-model inadequacy, in connection with existing Bayesian model-checking approaches (Vehtari et al., 2017), would also strengthen its inferential utility.</p>
+<p>set only and then applied to transform both the training and test data, preventing leaking information from the test set into the training procedure.</p>
+<p>each with a half-normal prior), 2,000 iterations, 4 chains, and adapt_delta = 0.99.</p>
+<p>Held-out weights are computed from the posterior modifier coefficients through the same softmax. For all three model-averaging methods the posterior predictive draws are formed as a mixture: each retained draw is taken from one candidate selected with probability equal to its weight, which for BHS is the student-specific posterior mean weight. FE is an ordinary least squares regression of the outcome on the nine predictors and 133 school indicators, with normal-theory prediction intervals.</p>
+<h3>VCBART</h3>
+<p>VCBART uses flexBART (Deshpande, 2025) with the outcome regressed on a BART term for the adaptive intercept plus six interaction terms, one per candidate model,</p>
+<p>School ID is passed as a single unordered categorical predictor, and flexBART splits on subsets of school IDs natively. MCMC uses 1,000 burn-in and 1,000 post-burn-in iterations with 200 trees per term (nd = 1000, burn = 1000, M_vec = 200, nest_v_option = 3).</p>
+<p>The error-variance prior uses ν = 5 and sigquant = 0.95, with σ initialized at the residual standard deviation of a linear model of the outcome on the six candidate predictions and the nine predictors. Prediction intervals are formed from the retained draws of the ensemble mean plus Gaussian noise with the corresponding draw of σ.</p>
+<h3>SoloBART</h3>
+<p>SoloBART uses wbart (Sparapani et al., 2021) with all nine predictors plus school ID as a factor, ntree = 200, ndpost = 1000, and nskip = 1000, with prediction intervals formed in the same way as for VCBART.</p>
+<h3>Acknowledgments</h3>
+<p>The authors thank David Kaplan and Sameer Deshpande for their guidance during the development of the methods presented here. Computational work was conducted using the Center for High Throughput Computing (CHTC) at the University of Wisconsin-Madison (Center for High Throughput Computing, 2006). PISA 2018 data are publicly available from the OECD. Full implementation code, simulation scripts, and reproducible datasets are</p>
+<h3>Appendix A DGP Numerical Specification</h3>
+<p>The fixed effects (γ 0 to γ 9 ) used in the simulation DGM are listed in Table A1, alongside the variance ratios d p and the full correlation matrix R in Table A2. All values were calibrated to PISA 2018 U.S. data as described in the Simulation Study section.</p>
+<p>Table A1. Simulation DGP Fixed Effects Parameter Predictor Value γ 0 Intercept 479.79 γ 1 ESCS 24.96 γ 2 SCHOOLESCS 19.30 γ 3 SCHOOLBULLYING 4.69 γ 4 SCHOOLIMMIG 6.36 γ 5 TEACHINT 9.25 γ 6 ADAPTIVITY 2.58 γ 7 BEINGBULLIED -1.29 γ 8 STAFFSHORT 0.65 γ 9 IMMIG -2.10 Note. Values are estimated from a single-level lasso regression fitted to the PISA 2018 U.S. mathematics data.</p>
+<p>Table A2. Simulation DGP: Variance Ratios d p and Correlation Matrix R u 0j u 1j u 5j u 6j u 7j u 9j d p u 0j (Intercept) 1.00 1.00 u 1j (ESCS) -0.15 1.00 0.12 u 5j (TEACHINT) -0.10 0.18 1.00 0.45 u 6j (ADAPTIVITY) 0.05 -0.20 -0.15 1.00 0.30 u 7j (BEINGBULLIED) -0.12 -0.08 -0.10 0.40 1.00 0.20 u 9j (IMMIG) -0.08 0.10 0.05 -0.10 -0.05 1.00 0.90 Note. d p is the variance ratio of random slope p to the random intercept variance τ 00 , with D containing d p on its diagonal. Correlation values are calibrated from Raudenbush and Bryk (2002), Willms (2010), and Hedges and Hedberg (2007). The within-school 80/20 student split handles small schools as follows. A school with one student contributes that student to training only. A school with two students contributes one to each set. Schools with three or more students apply the 80/20 split with at least one student guaranteed per set. This ensures all 134 schools appear in both sets.</p>
+<p>Fold seeds follow set.seed(233 + fold), and every model fit uses seed 233.</p>
+<h3>Candidate Model Fitting</h3>
+<p>All six candidate multilevel models are fitted using rstan (Stan Development Team, 2024) with 3,000 MCMC iterations (2,000 warmup), 4 chains, adapt_delta = 0.85, and max_treedepth = 11. M1 uses a random intercept only, and M2-M6 each add one random slope (for x 1 , x 5 , x 6 , x 7 , and x 9 respectively) with an LKJ(1) correlation prior. The outcome is standardized with training-set moments inside the Stan program and predictions are returned on the original scale. Held-out students are predicted with the posterior random effects of their own school. Pointwise leave-one-out log predictive densities are computed from the training-set log-likelihood of each candidate with the loo package (Vehtari et al., 2017). Convergence is assessed by R &lt; 1.01 and effective sample size. M7 uses the same settings with adapt_delta = 0.90 and max_treedepth = 12, and includes all five random slopes simultaneously with a 6 × 6 LKJ(1) correlation prior.</p>
+<h3>BMA, BS, BHS, Selected, and FE</h3>
+<p>BMA weights are pseudo-BMA weights from the summed ELPD-LOO scores via softmax normalization. BS weights use loo_model_weights(method = &quot;stacking&quot;).</p>
+<p>Selected is the candidate with the highest summed ELPD-LOO. BHS is fitted in Stan with the nine standardized predictors as modifiers and hierarchical shrinkage priors on the modifier coefficients (a global scale, a model-specific scale, and a predictor-specific scale, accordingly.</p>
+<p>At σ = 0.1 the outcome is almost entirely the fixed-effect part, and its standard deviation is 33.3. At σ = 10 the error accounts for about 8% of outcome variance. At σ = 50 and σ = 100 the outcome standard deviation is 64 to 137, the fixed-effect part is 6 to 27% of outcome variance, and the error share is 46 to 77%, which brackets the PISA mathematics data, where a residual standard deviation of about 76 against an outcome standard deviation of about 90 implies a share near 70%. The three ICC levels and four σ values yield twelve conditions. Each condition uses 10-fold cross-validation with students split 80%/20% within each school, so all J = 134 schools appear in both training and test sets. Within each fold, standardization parameters (means and standard deviations) are computed from the training set only and then applied to both the training and test data, which prevents information from the test set leaking into the training procedure.</p>
+<p>120 condition-by-fold cells, since TEACHINT carries the largest random-slope variance among the continuous predictors in the DGM; the two exceptions, at ICC 0.10 and σ = 0.1, choose M4 for Selected. The sixth and seventh methods do not use the candidate set. FE is a fixed-effects regression of the outcome on the nine predictors and school indicators, with normal-theory prediction intervals. The school indicators absorb between-school differences in level, so FE is the fixed-effects counterpart of the random-intercept model M1 and makes no allowance for slopes that vary across schools.</p>
+<p>) at ICC 0.10 for all four σ values. The raw intercept w 0 and the weight sum are not separately identified when the candidates agree, and the table and the top panel of the figure show this directly. At σ = 0.1 the weights sum to 0.12-0.16 and w 0 is 410-430, close to the outcome mean of about 480. The top panel shows w 0 rising with ESCS from about 330 to 440 at this σ, not because the candidates fall short for high-ESCS students but because w 0 is carrying most of the candidates&#x27; own prediction, which rises with ESCS. At σ = 10 the weight sum is close to one and w 0 sits near zero across the ESCS range. At σ = 50 and 100 the weight sum exceeds one (1.35 and 1.48 at ICC 0.10) and w 0 moves to -170 and -230 to compensate. The level of w 0 therefore reflects the weight sum, not candidate adequacy, and the same ensemble would show a different level under a different split. The middle panel shows the distribution of the identified intercept after that split is removed. At σ = 0.1 and 10 it is a spike at zero, with standard deviations of 0.4 and 2, and at σ = 50 and 100 it spreads to roughly ±40 points. The mean absolute value of a(x ij ) is about 1 point at σ = 10, 5-6 points at σ = 50, and 9-13 points at σ = 100, on outcomes whose standard deviation is 33-137. The bottom panel plots a(x ij ) against ESCS. The LOESS smooth stays near zero at every σ, so the shortfall of the candidates is not a function of ESCS, and what grows with σ is the spread of individual values around thatsmooth. The diagnostic therefore behaves as intended once the identified quantity, rather than the raw intercept, is examined: it is zero when the candidates are adequate, grows as they become less so, and does so student by student rather than along a single covariate.The weights and the identified intercept vary both across students within schools and between schools, which separates the two kinds of heterogeneity the Method section distinguishes. Splitting the variance of each quantity on the held-out students of fold 1 into a between-school part (the variance of school means) and a within-school part, 30-56% of the variance of each weight lies between schools and the remainder within at ICC 0.30 and σ = 100. The between-school part reflects the school-level covariates and the school random effects that the candidates represent differently, and the within-school part reflects student characteristics. The weight on M6, the IMMIG random-slope model, is the clearest case: it correlates 0.92 to 1.00 with the student&#x27;s immigration indicator in every condition, so students with and without an immigrant background in the same school are predicted by different mixtures of specifications. The identified intercept behaves differently. Its between-school share is 20-22% at σ = 10 and 36-49% at σ = 100, and it is uncorrelated with every covariate (all correlations below 0.07 in absolute value). The part of the outcome that the candidates miss is therefore spread over students and schools rather than concentrated in a subgroup, which is what one expects when every candidate omits four of the five random slopes that the data-generating model contains.</p>
+<h3>Figure 5 Figure 5</h3>
+<p>Figure5illustrates how these differences translate into predictions for individual students. For a high-ESCS student in a high-ESCS school, predictions range from 548 (FE) to 593 (VCBART), and all prediction intervals contain the observed score of 590. For a</p>
+<h3>Table 1.</h3>
+<p>Simulation Design and Variance Decomposition of the Generated Outcome</p>
+<h3>Table 2.</h3>
+<p>In-Sample RMSE by Method, Mean (SD)Note. Rows are labeled by within-cluster standard deviation (σ) and design ICC. Bold indicates the lowest RMSE among the non-oracle methods. M7 is the correctly specified oracle and is shown for reference only.</p>
+<h3>Table 3.</h3>
+<p>Out-of-Sample RMSE by Method, Mean (SD)</p>
+<h3>Table 4.</h3>
+<p>Paired Fold-Level Difference in Out-of-Sample RMSE, VCBART Minus M7</p>
+<h3>Table 5.</h3>
+<p>In-Sample Coverage by Method, Mean (SD) in %Note. Bold indicates the non-oracle method with coverage closest to the nominal 95% target in each row.</p>
+<h3>Table 6.</h3>
+<p>Out-of-Sample Coverage by Method, Mean (SD) in %</p>
+<h3>Table 7.</h3>
+<p>Posterior Mean Weight Functions on Held-Out Students</p>
+<h3>Table 8.</h3>
+<p>Computation Time by Method, Mean in MinutesNote. Computation Times for BMA, BS, BHS, VCBART, and Selected include fitting the six candidate models with four parallel chains. FE runs in under one second.Sampling the candidate models is slowest at σ = 0.1, where the near-deterministic outcome makes the posterior geometry difficult. SoloBART completes in under one minute because it bypasses candidate model fitting.</p>
+<h3>Table 9.</h3>
+<p>Parameter Estimates for the Candidate Models M1-M6 and the Reference Model M7 on the PISA Data</p>
+<h3>Table 10.</h3>
+<p>PISA 2018 Mathematics: Accuracy, Coverage, Interval Width, and Computation Time Across 10 FoldsNote. RMSE is mean (SD) across folds. Coverage is for 95% prediction intervals on the training (In) and held-out (Out) students. Width is the mean out-of-sample interval width in score points. Minutes include candidate model fitting for the five candidate-based methods. Bold marks the best value in each column among the non-oracle methods: lowest RMSE, coverage closest to 95%, narrowest interval, shortest computation time. M7 is the specification with all five random slopes.</p>
+<h3>Table 11.</h3>
+<p>Disagreement with VCBART in Flagging Held-Out Students Below PISA Level 2 each simulation condition, predictors are taken from the observed PISA 2018 U.S. data and held fixed.</p>
+<h3>For</h3>
+<p>Only the outcome is generated. School random effects are drawn from N (0, T ). Within each cross-validation fold, standardization parameters (means and standard deviations) for the predictors and the outcome are computed from the training</p>
+<h3>References</h3>
+<p>Barr, D. J., Levy, R., Scheepers, C., &amp; Tily, H. J. (2013). Random effects structure for confirmatory hypothesis testing: Keep it maximal. Journal of Memory and Language, 68 (3), 255-278. doi: 10.1016/j.jml.2012.11.001</p>
+<p>Bernardo, J. M., &amp; Smith, A. F. M. (2000). Bayesian theory. Chichester: Wiley. doi: 10.1002/9780470316870</p>
+<p>Bowers, A. J., Sprott, R., &amp; Taff, S. A. (2013). Do we know who will drop out? A review of the predictors of dropping out of high school: Precision, sensitivity, and specificity. The High School Journal, 96 (2), 77-100. doi: 10.1353/hsj.2013.0000</p>
+<p>Center for High Throughput Computing. (2006). Center for high throughput computing. University of Wisconsin-Madison. doi: 10.21231/GNT1-HW21</p>
+<p>Chipman, H. A., George, E. I., &amp; McCulloch, R. E. (2010). BART: Bayesian additive regression trees. The Annals of Applied Statistics, 4 (1), 266-298. doi: 10.1214/09-AOAS285</p>
+<p>Clyde, M., &amp; George, E. I. (2004). Model uncertainty. Statistical Science, 19 (1), 81-94. doi: 10.1214/088342304000000035</p>
+<p>Deshpande, S. K. (2025). flexBART: Flexible Bayesian regression trees with categorical predictors. Journal of Computational and Graphical Statistics, 34 (3), 1117-1126. doi: 10.1080/10618600.2024.2431072</p>
+<p>Deshpande, S. K., Bai, R., Balocchi, C., Starling, J. E., &amp; Weiss, J. (2026). VCBART: Bayesian trees for varying coefficients. Bayesian Analysis, 21 (1), 281-308. doi: 10.1214/24-BA1470</p>
+<p>Draper, D. (1995). Assessment and propagation of model uncertainty. Journal of the Royal Statistical Society Series B: Statistical Methodology, 57 (1), 45-70. doi: 10.1111/j.2517-6161.1995.tb02015.x</p>
+<p>Fan, J., &amp; Zhang, W. (2008). Statistical methods with varying coefficient models. Statistics and Its Interface, 1 (1), 179-195. doi: 10.4310/SII.2008.v1.n1.a15</p>
+<p>Goldstein, H. (2011). Multilevel statistical models (4th ed.). Chichester: Wiley. doi: 10.1002/9780470973394</p>
+<p>Hastie, T., &amp; Tibshirani, R. (1993). Varying-coefficient models. Journal of the Royal Statistical Society Series B (Methodological), 55 (4), 757-779. doi: 10.1111/j.2517-6161.1993.tb01939.x</p>
+<p>Hastie, T., Tibshirani, R., &amp; Friedman, J. H. (2009). The elements of statistical learning: Data mining, inference, and prediction (2nd ed.). New York, NY: Springer. Retrieved from https://hastie.su.domains/ElemStatLearn/ doi: 10.1007/978-0-387-84858-7</p>
+<p>Hedges, L. V., &amp; Hedberg, E. C. (2007). Intraclass correlation values for planning group-randomized trials in education. Educational Evaluation and Policy Analysis, 29 (1), 60-87. doi: 10.3102/0162373707299706</p>
+<p>Hoeting, J. A., Madigan, D., Raftery, A. E., &amp; Volinsky, C. T. (1999). Bayesian model averaging: A tutorial. Statistical Science, 14 (4), 382-417. doi: 10.1214/ss/1009212519</p>
+<p>Huang, M. (2024). Bayesian treed regressions for estimating heterogeneous trajectories of test scores in large-scale educational assessment. Retrieved from https://osf.io/preprints/psyarxiv/s6cb3 (PsyArXiv preprint) doi: 10.31234/osf.io/s6cb3</p>
+<p>Huang, M., &amp; Anderson, C. (2021). A Bayesian solution to non-convergence of crossed random effects models. In M. Wiberg, D. Molenaar, J. González, U. Böckenholt, &amp; J.-S. Kim (Eds.), Quantitative psychology (Vol. 353, pp. 297-307). Cham: Springer. doi: 10.1007/978-3-030-74772-5_27</p>
+<p>Huang, M., &amp; Ghosh, S. (2025). Spatial dependencies in item response theory: Gaussian process priors for geographic and cognitive measurement. Retrieved from https://arxiv.org/abs/2507.09824 (arXiv preprint) doi: 10.48550/arXiv.2507.09824</p>
+<p>Huang, M., &amp; Kaplan, D. (2025). Predictive performance of Bayesian stacking in multilevel education data. Journal of Educational and Behavioral Statistics, 50 (2), 214-238. doi: 10.3102/10769986241255969</p>
+<p>Huang, M., &amp; Lyu, W. (2025). Personalized predictive modeling with input-dependent weighting under incomplete information: A Bayesian treed regression approach. Retrieved from https://osf.io/preprints/psyarxiv/vzmce (PsyArXiv preprint) doi: 10.31234/osf.io/vzmce</p>
+<p>Karakus, M., Courtney, M., &amp; Aydin, H. (2023). Understanding the academic achievement of the first-and second-generation immigrant students: A multi-level analysis of PISA 2018 data. Educational Assessment, Evaluation and Accountability, 35 (2), 233-278. doi: 10.1007/s11092-022-09395-x</p>
+<p>Madigan, D., &amp; Raftery, A. E. (1994). Model selection and accounting for model uncertainty in graphical models using Occam&#x27;s window. Journal of the American Statistical Association, 89 (428), 1535-1546. doi: 10.1080/01621459.1994.10476894</p>
+<p>OECD. (2019). PISA 2018 results (volume I): What students know and can do. Paris: OECD Publishing. doi: 10.1787/5f07c754-en</p>
+<p>Raftery, A. E., Madigan, D., &amp; Hoeting, J. A. (1997). Bayesian model averaging for linear regression models. Journal of the American Statistical Association, 92 (437), 179-191. doi: 10.1080/01621459.1997.10473615</p>
+<p>Raudenbush, S. W., &amp; Bryk, A. S. (2002). Hierarchical linear models: Applications and data analysis methods (2nd ed.). Thousand Oaks, CA: Sage Publications.</p>
+<p>Rutkowski, L., Gonzalez, E., Joncas, M., &amp; von Davier, M. (2010). International large-scale assessment data: Issues in secondary analysis and reporting. Educational Researcher, 39 (2), 142-151. doi: 10.3102/0013189X10363170</p>
+<p>Sparapani, R., Spanbauer, C., &amp; McCulloch, R. (2021). Nonparametric machine learning and efficient computation with Bayesian additive regression trees: The BART R package. Journal of Statistical Software, 97 (1), 1-66. doi: 10.18637/jss.v097.i01</p>
+<p>Stan Development Team. (2024). RStan: The R interface to Stan [Computer software manual]. Retrieved from https://mc-stan.org/ (R package version 2.32.7)</p>
+<p>Vehtari, A., Gelman, A., &amp; Gabry, J. (2017). Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing, 27 (5), 1413-1432. doi: 10.1007/s11222-016-9696-4</p>
+<p>von Davier, M., Gonzalez, E., &amp; Mislevy, R. J. (2009). What are plausible values and why are they useful? IERI Monograph Series: Issues and Methodologies in Large-Scale Assessments, 2 , 9-36.</p>
+<p>Willms, J. D. (2010). School composition and contextual effects on student outcomes. Teachers College Record, 112 (4), 1008-1037. doi: 10.1177/016146811011200408</p>
+<p>Yannotty, J. C., Santner, T. J., Furnstahl, R. J., &amp; Pratola, M. T. (2024). Model mixing using Bayesian additive regression trees. Technometrics, 66 (2), 196-207. doi: 10.1080/00401706.2023.2257765</p>
+<p>Yao, Y., Pirš, G., Vehtari, A., &amp; Gelman, A. (2022). Bayesian hierarchical stacking: Some models are (somewhere) useful. Bayesian Analysis, 17 (4), 1043-1071. doi: 10.1214/21-BA1287</p>
+<p>Yao, Y., Vehtari, A., Simpson, D., &amp; Gelman, A. (2018). Using stacking to average Bayesian predictive distributions (with discussion). Bayesian Analysis, 13 (3), 917-1007. doi: 10.1214/17-BA1091</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
