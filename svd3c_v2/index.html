@@ -1,0 +1,2343 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MetaCheck Report: KEEP IT IN SIGHT: REWARD FUNCTION COMPRESSION
+THROUGH GOAL VISIBILITY</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<style>.back-to-main{display:inline-block;padding:4px 12px;border:1px solid var(--green,#2F6F1C);border-radius:3px;background:#fff;color:var(--green,#2F6F1C);font-size:0.9rem;font-weight:600;text-decoration:none}.back-to-main:hover{background:var(--green,#2F6F1C);color:#fff}.back-bar{max-width:900px;margin:14px auto 0;padding:0 16px}@media print{.back-bar{display:none}}</style></head>
+
+<body><p class="back-bar"><a class="back-to-main" id="back-to-main" href="../">← Back to the main page</a></p>
+
+
+
+
+
+
+
+<style>
+
+@font-face {
+font-family: "Cabin";
+src: url("../fonts/Cabin.ttf") format("truetype");
+font-weight: 400 700;
+font-stretch: 75% 100%;
+font-style: normal;
+}
+:root {
+color-scheme: light;
+--green: #2F6F1C;
+--green-dark: #1E4A10;
+--green-tint: #E3ECDF;
+--bg: #E9E8E5;
+--card: #F4F3F1;
+--line: #CFCDC8;
+--text: #262624;
+--muted: #5E5C58;
+--fix: #9B2C1F;
+--fix-tint: #F6E3DF;
+--improve: #7A4F00;
+--improve-tint: #F4E7C9;
+--improve-line: #C08A1E;
+--decide: #2C5577;
+--decide-tint: #DFE8EF;
+--na-tint: #E4E2DE;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+margin: 0;
+color: var(--text);
+font-family: "Cabin", "Segoe UI", sans-serif;
+font-size: 17px;
+line-height: 1.55;
+-webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 2px; }
+a:hover { color: var(--green-dark); }
+code, pre { font-family: "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace; font-size: 0.84em; }
+code { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+
+.masthead { text-align: center; max-width: 900px; margin: 0 auto; padding: 32px 16px 0; }
+.logos { display: flex; justify-content: center; align-items: center; gap: 28px; margin-bottom: 8px; }
+.logos img { height: 64px; width: auto; }
+.masthead h1 { margin: 0; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.masthead .subtitle { margin: 2px 0 0; font-size: 1.15rem; color: var(--muted); overflow-wrap: anywhere; }
+.masthead .meta { margin: 6px 0 0; padding-bottom: 16px; font-size: 0.88rem; color: var(--muted);
+border-bottom: 1px solid var(--green); }
+.mc-main { max-width: 900px; margin: 0 auto; padding: 0 16px 48px; }
+.mc-intro { margin: 22px 0 18px; }
+
+.counts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 22px 0 32px; }
+.count { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--line);
+border-radius: 4px; padding: 10px 12px; text-decoration: none; color: var(--text); }
+a.count:hover { color: var(--text); background: #fff; }
+.count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+.count span { font-size: 0.92rem; color: var(--muted); }
+.count.fix { border-top-color: var(--fix); } .count.fix b { color: var(--fix); }
+.count.improve { border-top-color: var(--improve-line); } .count.improve b { color: var(--improve); }
+.count.decide { border-top-color: var(--decide); } .count.decide b { color: var(--decide); }
+.count.fine { border-top-color: var(--green); } .count.fine b { color: var(--green); }
+.count.zero { opacity: 0.55; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+h2 { font-size: 1.35rem; margin: 36px 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+h2 .n { color: var(--muted); font-weight: 400; }
+
+.check { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--line);
+border-radius: 4px; padding: 14px 18px 12px; margin: 0 0 14px; }
+.check.fix { border-left-color: var(--fix); }
+.check.improve { border-left-color: var(--improve-line); }
+.check.decide { border-left-color: var(--decide); }
+.check-head p { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0 0 10px; }
+.check-title { font-weight: 700; font-size: 1.12rem; }
+.where { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.tag { display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.6;
+text-transform: uppercase; padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.tag.fix { color: var(--fix); background: var(--fix-tint); }
+.tag.improve { color: var(--improve); background: var(--improve-tint); }
+.tag.decide { color: var(--decide); background: var(--decide-tint); }
+.tag.fine { color: var(--green); background: var(--green-tint); }
+.tag.info, .tag.na { color: var(--muted); background: var(--na-tint); }
+.rows { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 6px 14px; }
+.rows > .label { font-weight: 700; font-size: 0.92rem; color: var(--muted); padding-top: 1px; }
+.rows > .text { min-width: 0; }
+.rows > .text.todo { font-weight: 600; }
+.rows p { margin: 0 0 4px; }
+.rows ul, .rows ol { margin: 0 0 4px; padding-left: 1.1em; }
+@media (max-width: 640px) {
+.rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.rows > .label { padding-top: 6px; }
+}
+details { margin-top: 10px; }
+details > summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 0.95rem; }
+details > summary:hover { color: var(--green-dark); }
+details[open] > summary { margin-bottom: 8px; }
+.fold { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; overflow-x: auto; }
+.fold > p:first-child { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th { text-align: left; background: var(--green-tint); color: var(--text); font-weight: 700; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table strong { color: var(--fix); }
+
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 4px; }
+.done-row { display: grid; grid-template-columns: 7.5em 15em minmax(0, 1fr); gap: 4px 12px;
+padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.done-row:last-child { border-bottom: 0; }
+.done-row > div { min-width: 0; }
+.done-row .tag { justify-self: start; align-self: start; margin-top: 2px; }
+.done-row .t { font-weight: 600; }
+.done-row .d { color: var(--muted); }
+.done-row p { margin: 0 0 4px; }
+@media (max-width: 720px) { .done-row { grid-template-columns: minmax(0, 1fr); } }
+.more > details { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 0 0 10px; }
+.more > details > summary { font-size: 1rem; }
+footer { max-width: 900px; margin: 0 auto; padding: 16px 16px 40px; border-top: 1px solid var(--green);
+text-align: center; font-size: 0.88rem; color: var(--muted); }
+@media print {
+html, body { background: #fff; }
+.check, .done-row, .count { break-inside: avoid; }
+}
+</style>
+<header class="masthead">
+<div class="logos">
+<a class="logo-home" href="../" aria-label="Back to the main page"><img role="img" aria-label="logo" src="../images/logo.png" alt="logo"></a>
+</div>
+<h1>
+MetaCheck Report
+</h1>
+<p class="subtitle">
+KEEP IT IN SIGHT: REWARD FUNCTION COMPRESSION THROUGH GOAL VISIBILITY
+</p>
+<p class="meta">
+2026-11-14 · Metacheck 0.4.4.1
+</p>
+</header>
+<div class="mc-main">
+<nav class="counts" aria-label="Results">
+<a class="count fix" href="#fix"><b>1</b><span>to
+fix</span></a><a class="count improve" href="#improve"><b>1</b><span>to
+check</span></a><span class="count decide zero"><b>0</b><span>to decide
+by
+hand</span></span><a class="count fine" href="#fine"><b>1</b><span>fine</span></a><a class="count na" href="#na"><b>12</b><span>not
+applicable</span></a>
+</nav>
+<h2 id="fix">To fix <span class="n">(1)</span></h2>
+<div class="check fix">
+<div class="check-head">
+<p><span class="tag fix">To fix</span> <span class="check-title">Exact
+P-Values</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 23 imprecise <em>p</em> values out of 115 detected
+<em>p</em> values.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Reporting <em>p</em> values imprecisely (e.g., <em>p</em> &lt; .05)
+reduces transparency, reproducibility, and re-use (e.g., in <em>p</em>
+value meta-analyses). Best practice is to report exact p-values with
+three decimal places (e.g., <em>p</em> = .032) unless <em>p</em> values
+are smaller than 0.001, in which case you can use <em>p</em> &lt;
+.001.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (e.g., “decreased at the <em>p</em>
+&lt; .05 significance threshold”).</p>
+<div style="max-height:8em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+P-Value
+</th>
+<th style="text-align:left;">
+Text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0055
+</td>
+<td style="text-align:left;">
+Observed learning accuracy was highest for Points (76.4%; all ps &lt;
+.0001), followed by VG (67.7%) and VNG (62.9%), which did no differ
+significantly (p = .197), and lowest for Goal (56.8%; all ps ≤ .0055).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &lt; .05
+</td>
+<td style="text-align:left;">
+Except for Goal, all learning conditions showed steeper learning slopes
+in Phase 2 than in Phase 1 (all ps &lt; .05; Goal: p = .116).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .037
+</td>
+<td style="text-align:left;">
+In Phase 1 (Figure 3B), Points showed the steepest learning slopes (β =
+0.464, SE = 0.040), significantly exceeding all other conditions (all ps
+≤ .037).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .358
+</td>
+<td style="text-align:left;">
+Nevertheless, the goal-based conditions, Goal (β = 0.244, SE = 0.037, VG
+(β = 0.335, SE = 0.038), and VNG (β = 0.333, SE = 0.038) did not differ
+significantly from one another (all ps ≥ .358).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .015
+</td>
+<td style="text-align:left;">
+In Phase 2 (Figure 3C), both visible conditions (VG and VNG) showed
+steeper learning slopes than Goal (all ps ≤ .015), with VG showing the
+largest gain.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &lt; .01
+</td>
+<td style="text-align:left;">
+By contrast, both VG and Points had steeper slopes than Goal (β = 0.329,
+SE = 0.039) and VNG (β = 0.474, SE = 0.041; all ps &lt; .01).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .085
+</td>
+<td style="text-align:left;">
+The decline was greater for Points than Goal (beta = -0.614, SE = 0.178,
+p = .0034); no other pairwise difference was significant (all ps ≥
+.085).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .00016
+</td>
+<td style="text-align:left;">
+Reward collection sensitivity 345 (d ′ ) differed by condition, χ 2 (3)
+= 114.02, p &lt; .0001), with VG condition highest (all ps ≤ .00016),
+Goal lowest 346 (all ps &lt; .0001), and no difference between Points
+and VNG conditions (p = .723; Figure 4A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .05
+</td>
+<td style="text-align:left;">
+Specifically, reward collection response time (RCRT) also systematically
+differed across condition 351 (χ 2 (3) = 376.28, p &lt; .0001), and
+phase (χ 2 (1) = 7.80, p = .0052), with a significant condition × phase
+interaction (p = .0212), whereas VNG did not differ significantly from
+either VG or Goal(all ps &gt; .05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .10
+</td>
+<td style="text-align:left;">
+To further examine the relationship between RCRT and learning
+performance, we correlated the condition-specific (all ps &gt; .10;
+Figure 4F-H), suggesting that this relationship was specific to outcome
+evaluation rather than overall 370 response speed, and obviating an
+interpretation in terms of relative difficulty or engagement between
+conditions.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0069
+</td>
+<td style="text-align:left;">
+The difference was significant for the baseline and models modulating η,
+ζ, τ, or lapse (all ps ≤ .0069), but not for models modulating α, κ, or
+ϕ, alone or in combination (all ps ≥ .222).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .222
+</td>
+<td style="text-align:left;">
+The difference was significant for the baseline and models modulating η,
+ζ, τ, or lapse (all ps ≤ .0069), but not for models modulating α, κ, or
+ϕ, alone or in combination (all ps ≥ .222).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0015
+</td>
+<td style="text-align:left;">
+Single-parameter modulation revealed that incorporating RCRT improved
+model fit for most parameters relative to baseline (all ∆AIC &lt; 0; all
+ps ≤ .0015), except stickiness (η) (∆AIC = -0.10, p = .285).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0491
+</td>
+<td style="text-align:left;">
+Each of these three models fit better than the other five
+single-parameter models (all ps ≤ .0491).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0106
+</td>
+<td style="text-align:left;">
+Specifically, α + κ and κ + ϕ each outperformed both κ and ϕ (all ps ≤
+.0106), whereas neither outperformed α (p = .134 and p = .852,
+respectively).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .142
+</td>
+<td style="text-align:left;">
+Neither phase, stimulus iteration, block number, nor the condition ×
+phase interaction was significant (all ps ≥ .142).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .10
+</td>
+<td style="text-align:left;">
+For accuracy, we observed a significant Condition × Phase interaction (χ
+2 (3) = 8.45, p = .04), but no significant main effects of condition or
+phase (all ps &gt; .10).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .160
+</td>
+<td style="text-align:left;">
+When RCRT was computed from hit trials only, 808 model AIC values did
+not differ from those obtained using the original RCRT measure (all ps ≥
+.160; three-parameter 809 model: mean ∆AIC hit-overall = -0.99, p =
+.797).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0002
+</td>
+<td style="text-align:left;">
+In contrast, when RCRT was computed from correct-rejection 810 trials
+only, nearly all models showed significantly higher AIC values than the
+original RCRT models (all ps ≤ .0002; 811 three-parameter model: mean
+∆AIC CR-overall = 9.79, p &lt; .0001), including the single-, two-, and
+three-parameter 812 modulation models, with the η model as the only
+exception (p = .940).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0008
+</td>
+<td style="text-align:left;">
+Direct comparisons likewise favored hit-only 813 over
+correct-rejection-only RCRT models (all ps ≤ .0008).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0142
+</td>
+<td style="text-align:left;">
+Choice-RT models had numerically 823 higher AIC than their RCRT
+counterparts across all seven α, κ, and ϕ-related variants, although the
+α or ϕ-only 824 comparisons were significant (ps ≤ .0142; Figure S13A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0007
+</td>
+<td style="text-align:left;">
+In the three-parameter α + κ + ϕ 836 model, all parameters showed strong
+recovery and all were positively associated with their generating values
+(all 837 ps ≤ .0007).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≤ .0175
+</td>
+<td style="text-align:left;">
+The proportional decrease in Goal was smallest among these four
+conditions (all ps ≤ .0175).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>The APA manual states: Report exact <em>p</em> values (e.g.,
+<em>p</em> = .031) to two or three decimal places. However, report
+<em>p</em> values less than .001 as <em>p</em> &lt; .001. However, 2
+decimals is too imprecise for many use-cases (e.g., a <em>p</em> value
+meta-analysis), so report <em>p</em> values with three digits.</p>
+<p>American Psychological Association (2020). <em>Publication manual of
+the American Psychological Association</em>, 7 edition. American
+Psychological Association.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="improve">To check <span class="n">(1)</span></h2>
+<div class="check improve">
+<div class="check-head">
+<p><span class="tag improve">To check</span> <span class="check-title">Non-Significant P Value Check</span></p>
+</div>
+<div class="rows">
+<div class="label">
+<p>What we found</p>
+</div>
+<div class="text">
+<p>We found 35 non-significant p values that should be checked for
+appropriate interpretation.</p>
+</div>
+</div>
+<details>
+<summary>
+Show details
+</summary>
+<div class="fold">
+<p>Meta-scientific research has shown nonsignificant p values are
+commonly misinterpreted. It is incorrect to infer that there is ‘no
+effect’, ‘no difference’, or that groups are ‘the same’ after p &gt;
+0.05.</p>
+<p>It is possible that there is a true non-zero effect, but that the
+study did not detect it. Make sure your inference acknowledges that it
+is possible that there is a non-zero effect. It is correct to include
+the effect is ‘not significantly’ different, although this just restates
+that p &gt; 0.05.</p>
+<p>Metacheck does not yet analyze automatically whether sentences which
+include non-significant p-values are correct, but we recommend manually
+checking the sentences below for possible misinterpreted non-significant
+p values.</p>
+<div style="max-height:28em;overflow:auto;">
+<table class="dt-static">
+<colgroup>
+<col style="width:10%" />
+<col style="width:90%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align:left;">
+Text
+</th>
+<th style="text-align:left;">
+Sentence
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+p = .197
+</td>
+<td style="text-align:left;">
+Observed learning accuracy was highest for Points (76.4%; all ps &lt;
+.0001), followed by VG (67.7%) and VNG (62.9%), which did no differ
+significantly (p = .197), and lowest for Goal (56.8%; all ps ≤ .0055).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .116
+</td>
+<td style="text-align:left;">
+Except for Goal, all learning conditions showed steeper learning slopes
+in Phase 2 than in Phase 1 (all ps &lt; .05; Goal: p = .116).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .358
+</td>
+<td style="text-align:left;">
+Nevertheless, the goal-based conditions, Goal (β = 0.244, SE = 0.037, VG
+(β = 0.335, SE = 0.038), and VNG (β = 0.333, SE = 0.038) did not differ
+significantly from one another (all ps ≥ .358).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .551
+</td>
+<td style="text-align:left;">
+Most notably, VG perfomance (β = 0.642, SE = 0.044) no longer differed
+from Points ((β = -0.037, SE = 0.061; p = .551).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .1932
+</td>
+<td style="text-align:left;">
+VG also exceeded VNG (p = .0016) and Goal (p &lt; .0001), whereas VNG
+and Goal did not differ significantly (p = .1932).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .395
+</td>
+<td style="text-align:left;">
+These condition differences did not vary detectably with the phase in
+which items were learned (χ 2 (3) = 2.98, p = .395).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .061
+</td>
+<td style="text-align:left;">
+Items learned in Phase 2 showed higher observed testing accuracy (79.8%)
+than those learned in Phase 1 (62.7%), although the phase effect did not
+reach significance after controlling for original block number (χ 2 (1)
+= 3.51, p = .061).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .085
+</td>
+<td style="text-align:left;">
+The decline was greater for Points than Goal (beta = -0.614, SE = 0.178,
+p = .0034); no other pairwise difference was significant (all ps ≥
+.085).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .177
+</td>
+<td style="text-align:left;">
+However, this phase difference in decline did not vary detectably across
+conditions (χ 2 (3) = 4.94,p = .177).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .723
+</td>
+<td style="text-align:left;">
+Reward collection sensitivity 345 (d ′ ) differed by condition, χ 2 (3)
+= 114.02, p &lt; .0001), with VG condition highest (all ps ≤ .00016),
+Goal lowest 346 (all ps &lt; .0001), and no difference between Points
+and VNG conditions (p = .723; Figure 4A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .118
+</td>
+<td style="text-align:left;">
+Reward collection 347 sensitivity (d ′ ) was higher overall in Phase 2
+than Phase 1 (χ 2 (1) = 8.01, p = .0047), but the phase-related change
+did 348 not differ reliably across conditions (χ 2 (3) = 5.87, p = .118;
+Figure 4A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .05
+</td>
+<td style="text-align:left;">
+Specifically, reward collection response time (RCRT) also systematically
+differed across condition 351 (χ 2 (3) = 376.28, p &lt; .0001), and
+phase (χ 2 (1) = 7.80, p = .0052), with a significant condition × phase
+interaction (p = .0212), whereas VNG did not differ significantly from
+either VG or Goal(all ps &gt; .05).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .10
+</td>
+<td style="text-align:left;">
+To further examine the relationship between RCRT and learning
+performance, we correlated the condition-specific (all ps &gt; .10;
+Figure 4F-H), suggesting that this relationship was specific to outcome
+evaluation rather than overall 370 response speed, and obviating an
+interpretation in terms of relative difficulty or engagement between
+conditions.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .222
+</td>
+<td style="text-align:left;">
+The difference was significant for the baseline and models modulating η,
+ζ, τ, or lapse (all ps ≤ .0069), but not for models modulating α, κ, or
+ϕ, alone or in combination (all ps ≥ .222).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .285
+</td>
+<td style="text-align:left;">
+Single-parameter modulation revealed that incorporating RCRT improved
+model fit for most parameters relative to baseline (all ∆AIC &lt; 0; all
+ps ≤ .0015), except stickiness (η) (∆AIC = -0.10, p = .285).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .198
+</td>
+<td style="text-align:left;">
+In direct AIC comparisons, the α model fit better than the κ model (mean
+∆AIC α-κ = -0.86, p = .0129) and the ϕ model (∆AIC α-ϕ = -3.51, p &lt;
+.0001); the κ and ϕ models did not differ significantly (p = .198;
+Figure 5B).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .134
+</td>
+<td style="text-align:left;">
+Specifically, α + κ and κ + ϕ each outperformed both κ and ϕ (all ps ≤
+.0106), whereas neither outperformed α (p = .134 and p = .852,
+respectively).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .852
+</td>
+<td style="text-align:left;">
+Specifically, α + κ and κ + ϕ each outperformed both κ and ϕ (all ps ≤
+.0106), whereas neither outperformed α (p = .134 and p = .852,
+respectively).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .748
+</td>
+<td style="text-align:left;">
+Extending modulation to all three parameters did not punish the model
+fit too much relative to two-parameter modulation models: its AIC 429
+was slightly higher than that of α + κ (∆AIC = 0.54, p = .0020), did not
+differ reliably from κ + ϕ (∆AIC = -0.80, 430 p = .748), and was lower
+than that of α + ϕ (∆AIC = -3.24, p = .0397; Figure 5A).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .142
+</td>
+<td style="text-align:left;">
+Neither phase, stimulus iteration, block number, nor the condition ×
+phase interaction was significant (all ps ≥ .142).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .827
+</td>
+<td style="text-align:left;">
+Choice RT did not differ detectably by condition (p = .827), learning
+phase (p = .226), or their interaction (p = .502;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .226
+</td>
+<td style="text-align:left;">
+Choice RT did not differ detectably by condition (p = .827), learning
+phase (p = .226), or their interaction (p = .502;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .502
+</td>
+<td style="text-align:left;">
+Choice RT did not differ detectably by condition (p = .827), learning
+phase (p = .226), or their interaction (p = .502;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .229
+</td>
+<td style="text-align:left;">
+Original learning block number was also not significant (p = .229).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .149
+</td>
+<td style="text-align:left;">
+Across all non-Points conditions, there were no significant correlation
+between choice response time and learning performance: Goal (ρ = 0.187,
+p = .149, 95%CI = [-0.07, 0.42]); VG (ρ = -0.048, p = .715, 95%CI =
+[-0.30, 0.21]); and VNG (ρ = 0.205, p = .114, 95%CI = [-0.05, 0.43];
+Figure 4F-H).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .715
+</td>
+<td style="text-align:left;">
+Across all non-Points conditions, there were no significant correlation
+between choice response time and learning performance: Goal (ρ = 0.187,
+p = .149, 95%CI = [-0.07, 0.42]); VG (ρ = -0.048, p = .715, 95%CI =
+[-0.30, 0.21]); and VNG (ρ = 0.205, p = .114, 95%CI = [-0.05, 0.43];
+Figure 4F-H).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .114
+</td>
+<td style="text-align:left;">
+Across all non-Points conditions, there were no significant correlation
+between choice response time and learning performance: Goal (ρ = 0.187,
+p = .149, 95%CI = [-0.07, 0.42]); VG (ρ = -0.048, p = .715, 95%CI =
+[-0.30, 0.21]); and VNG (ρ = 0.205, p = .114, 95%CI = [-0.05, 0.43];
+Figure 4F-H).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .10
+</td>
+<td style="text-align:left;">
+For accuracy, we observed a significant main effect of condition (χ 2
+(3) = 25.03, p &lt; .0001) and a significant Condition × Phase
+interaction (χ 2 (3) = 21.09, p = .0001), but no main effect of phase (p
+= .10).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps &gt; .10
+</td>
+<td style="text-align:left;">
+For accuracy, we observed a significant Condition × Phase interaction (χ
+2 (3) = 8.45, p = .04), but no significant main effects of condition or
+phase (all ps &gt; .10).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .97
+</td>
+<td style="text-align:left;">
+In Phase 1, VNG showed lower correct-rejection accuracy than VG (p =
+.028), but this difference was no longer present in Phase 2 (p = .97).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .12
+</td>
+<td style="text-align:left;">
+Collapsing across phases, VNG was as good as VG (p = .12; Figure S8B).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .67
+</td>
+<td style="text-align:left;">
+VG and VNG did not differ reliably in Phase 1 (p = .67), whereas in
+Phase 2, VNG became faster than VG (p &lt; .0001).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ps ≥ .160
+</td>
+<td style="text-align:left;">
+When RCRT was computed from hit trials only, 808 model AIC values did
+not differ from those obtained using the original RCRT measure (all ps ≥
+.160; three-parameter 809 model: mean ∆AIC hit-overall = -0.99, p =
+.797).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .797
+</td>
+<td style="text-align:left;">
+When RCRT was computed from hit trials only, 808 model AIC values did
+not differ from those obtained using the original RCRT measure (all ps ≥
+.160; three-parameter 809 model: mean ∆AIC hit-overall = -0.99, p =
+.797).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p = .940
+</td>
+<td style="text-align:left;">
+In contrast, when RCRT was computed from correct-rejection 810 trials
+only, nearly all models showed significantly higher AIC values than the
+original RCRT models (all ps ≤ .0002; 811 three-parameter model: mean
+∆AIC CR-overall = 9.79, p &lt; .0001), including the single-, two-, and
+three-parameter 812 modulation models, with the η model as the only
+exception (p = .940).
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>For metascientific articles demonstrating the rate of
+misinterpretations of non-significant results is high, see:</p>
+<p>Aczel B, Palfi B, Szollosi A, Kovacs M, Szaszi B, Szecsi P, Zrubka M,
+Gronau Q, van den Bergh D, Wagenmakers E (2018). “Quantifying Support
+for the Null Hypothesis in Psychology: An Empirical Investigation.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>1</b>(3), 357–366.
+<a href="https://doi.org/10.1177/2515245918773742">doi:10.1177/2515245918773742</a>.</p>
+<p>Murphy S, Merz R, Reimann L, Fernández A (2025). “Nonsignificance
+misinterpreted as an effect’s absence in psychology: Prevalence and
+temporal analyses.” <em>Royal Society Open Science</em>, <b>12</b>(3),
+242167.
+<a href="https://doi.org/10.1098/rsos.242167">doi:10.1098/rsos.242167</a>.</p>
+<p>For educational material on preventing the misinterpretation of p
+values, see <a href="https://lakens.github.io/statistical_inferences/01-pvalue.html#sec-misconception1">Improving
+Your Statistical Inferences</a>.</p>
+</div>
+</div>
+</details>
+</div>
+<h2 id="info">For information <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag info">Info</span></p>
+</div>
+<div class="t">
+<p>PubPeer Comments</p>
+</div>
+<div class="d">
+<p>You cited 1 reference with comments in PubPeer.</p>
+</div>
+</div>
+</div>
+<h2 id="fine">Fine <span class="n">(1)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag fine">Fine</span></p>
+</div>
+<div class="t">
+<p>Ethics Approval Check</p>
+</div>
+<div class="d">
+<p>All papers that appeared to involve live data collection contained an
+ethics approval statement.</p>
+</div>
+</div>
+</div>
+<h2 id="na">Not applicable <span class="n">(12)</span></h2>
+<div class="done">
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Power Analysis Check</p>
+</div>
+<div class="d">
+<p>No power analyses were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Preregistration Check</p>
+</div>
+<div class="d">
+<p>No preregistration links were found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Marginal Significance</p>
+</div>
+<div class="d">
+<p>No effects were described with terms related to ‘marginally
+significant’.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>StatCheck</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests detected</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Effect Sizes in t-tests and F-tests</p>
+</div>
+<div class="d">
+<p>No t-tests or F-tests were detected.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Codebook Check</p>
+</div>
+<div class="d">
+<p>We found no extracted data columns to check against a codebook.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Repository Check</p>
+</div>
+<div class="d">
+<p>We found no links to repositories on the Open Science Framework,
+Github, GitLab, ResearchBox, DSpace, EPrints (ReShare and others),
+Invenio (Zenodo and others), Dataverse, Figshare, Dryad,
+4TU.ResearchData, Mendeley Data, DataONE, LDbase, or CKAN data
+portals.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Code Check</p>
+</div>
+<div class="d">
+<p>We found 0 R, 0 Python, 0 SAS, 0 SPSS, 0 Stata, 0 Mplus, 0 MATLAB,
+and 0 JASP code files.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Data Check</p>
+</div>
+<div class="d">
+<p>We found no files to analyse.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Reproducibility Check</p>
+</div>
+<div class="d">
+<ul>
+<li>We found no R or Python code files to assess for
+reproducibility.</li>
+</ul>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>RetractionWatch</p>
+</div>
+<div class="d">
+<p>No citations to articles in the RetractionWatch database were
+found.</p>
+</div>
+</div>
+<div class="done-row">
+<div class="tagcell">
+<p><span class="tag na">N/A</span></p>
+</div>
+<div class="t">
+<p>Replication Check</p>
+</div>
+<div class="d">
+<p>No citations to articles in the FLoRA database were found.</p>
+</div>
+</div>
+</div>
+<h2 id="more-detail">More detail</h2>
+<div class="more">
+<details>
+<summary>
+Ethics Approval Check
+</summary>
+<div class="fold">
+<p>Based on the following text, we would expect an ethics approval
+statement, and it was present:</p>
+<blockquote>
+<p>In the VG and VNG conditions, participants were instructed that a
+goal-relevant fractal (either the Goal or Non-Goal 144 image,
+respectively) would remain visible on the screen throughout the
+trial.</p>
+</blockquote>
+<blockquote>
+<p>Following the learning stage, participants completed a single testing
+block designed to assess retention of the learned 152 image-response
+associations.</p>
+</blockquote>
+<blockquote>
+<p>The criteria for this evaluation can change with our subjective goals
+or the context [Molinaro and Collins, 2023a, Castegnetti et al., 2021,
+Frömer et al., 2019].</p>
+</blockquote>
+<blockquote>
+<p>Sixty-six participants were recruited via Prolific (<a href="http://www.prolific.com" class="uri">http://www.prolific.com</a>),
+provided informed consent, completed the experiment online on their own
+devices, and received monetary compensation ($12 for approximately an
+hour of their time).</p>
+</blockquote>
+<blockquote>
+<p>To ensure task engagement and reliable learning, five participants
+were excluded for poor data quality: more than 25 missed trials across
+the experiment; more than 25 consecutive identical choices; or
+reward-collection sensitivity (d ′ ) less than or equal to 0, following
+elbow points in the ordered distribution of group-level performance
+[Molinaro and Collins, 2023b, 2026].</p>
+</blockquote>
+<blockquote>
+<p>During each trial’s feedback period, participants had to either
+“collect” or “reject” the outcome by pressing D or F 141 (response
+mapping was randomized across participants).</p>
+</blockquote>
+<blockquote>
+<p>Participants were instructed to collect “+1” or Goal outcomes WIN +1
+LOSE +0 Collect Reject +0 GOAL NONGOAL Collect Reject Collect Reject
+Collect Reject +0 GOAL NONGOAL Collect Reject Collect Reject GOAL
+NONGOAL Collect Reject Collect Reject GOAL NONGOAL trial t+1 GOAL
+NONGOAL trial t+1 1.8s 1.5s 1.5s Trials n=66 … … … … Block Phase 1 Phase
+2 Goal Points VG VNG Goal Points VG VNG J K L D F trial t trial t trial
+t trial t NONGOAL trial t+1 GOAL WIN LOSE trial t+1 +1 +0 VG: visible
+goal VNG: visible nongoal Figure 2: Task Design.</p>
+</blockquote>
+<blockquote>
+<p>Three single-parameter learning-related modulation models (α, κ, ϕ)
+showed similar ∆AIC values, although slightly more participants were
+best fit by the α model.</p>
+</blockquote>
+<p>Ethics approval statement:</p>
+<blockquote>
+<p>The study protocol was approved by the [anonymous University’s]
+Institutional Review Board.</p>
+</blockquote>
+</div>
+</details>
+<details>
+<summary>
+Power Analysis Check
+</summary>
+<div class="fold">
+<p>No power analyses were detected.</p>
+<div class="callout-tip" title="Learn More" collapse="true">
+<p>Power analyses need to contain the following information to be
+interpretable: the type of power analysis, the statistical test, the
+software used, sample size, critical alpha criterion, power level,
+effect size, and an effect size metric. In addition, it is recommended
+to make sure the power analysis is reproducible (by sharing the code, or
+a screenshot, of the power analysis), and to provide good arguments for
+why the study was designed to detect an effect of this size.</p>
+<p>For an a-priori power analysis, where the sample size is determined,
+reporting all information would look like:</p>
+<blockquote>
+<p>An a priori power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that for a Cohen’s d = 0.5, an alpha level of 0.05, and a
+desired power level of 80% required at least 64 participants in each
+group.</p>
+</blockquote>
+<p>For a sensitivity power analysis, this sentence would look like:</p>
+<blockquote>
+<p>A sensitivity power analysis for an independent samples t-test,
+conducted using the pwr.t.test function from pwr (Champely, 2020),
+indicated that with 64 participants in each group, and an alpha level of
+0.05, a desired power level of 80% was reached for an effect size of d =
+0.5.</p>
+</blockquote>
+</div>
+</div>
+</details>
+<details>
+<summary>
+StatCheck
+</summary>
+<div class="fold">
+<p>No t-tests or F-tests detected.</p>
+<p>The accuracy of StatCheck has only been validated for
+<em>t</em>-tests and <em>F</em>-tests.</p>
+</div>
+</details>
+<details>
+<summary>
+PubPeer Comments
+</summary>
+<div class="fold">
+<p>We checked 38 references with DOIs. You cited 1 reference with
+comments in PubPeer.</p>
+<p>Pubpeer is a platform for post-publication peer review. We have
+filtered out Pubpeer comments by ‘Statcheck’. You can check out the
+comments by visiting the URLs below:</p>
+<table class="dt-static">
+<thead>
+<tr>
+<th style="text-align:left;">
+Reference
+</th>
+<th style="text-align:right;">
+Comments
+</th>
+<th style="text-align:left;">
+PubPeer Link
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Anne G. E. Collins, Brittany Ciullo, Michael J. Frank, and David Badre.
+Working Memory Load Strengthens Reward Prediction Errors. Journal of
+Neuroscience, 37(16):4332-4342, April 2017. ISSN 0270-6474, 1529-2401.
+doi: 10.1523/JNEUROSCI.2700-16.2017.
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+<a href="https://pubpeer.com/publications/A0F380936EF935D75CDB42D7CA644A" target="_blank">link</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>
+RetractionWatch
+</summary>
+<div class="fold">
+<p>We checked 38 references with DOIs. No citations to articles in the
+RetractionWatch database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+Replication Check
+</summary>
+<div class="fold">
+<p>We checked 38 references with DOIs. No citations to articles in the
+FLoRA database were found.</p>
+</div>
+</details>
+<details>
+<summary>
+How Ethics Approval Check works
+</summary>
+<div class="fold">
+<p>This module searches for statements of ethics approval, IRB approval,
+institutional review board approval, and related terms.</p>
+<p>Patterns are designed to capture:</p>
+<p><strong>Human research committee names</strong> -
+<code>Institutional Review Board</code> / IRB (US standard) -
+<code>Independent Ethics Committee</code> / IEC (ICH-GCP international
+clinical trial term) - <code>Ethical/Ethics Review Board</code>
+(generic) -
+<code>Ethics (Advisory/Review) Committee/Board/Panel/Sub-committee</code>
+- <code>Research Ethics Committee/Board/Panel</code>
+(UK/Canada/Australia) - <code>Medical Ethics Committee</code> -
+<code>Human Subjects/Research Committee</code> /
+<code>Human Research Ethics (Advisory) Panel</code> -
+<code>Committee for/on the Protection of Human Subjects</code> -
+<code>Committee on (Health) Research Ethics</code> -
+<code>Office of Research Ethics</code> - Abbreviations: IEC, REC, REB,
+ERB, METC, DEC. REC/REB/ERB/DEC are short enough to collide with
+unrelated jargon (e.g. <code>REC</code> as a recognition-heuristic model
+abbreviation, <code>DEC</code> as a decision-task label,
+<code>Reb</code> as an author surname), so these four require an
+ethics/approval/committee/board/panel/institutional/ protocol word
+within ~30 characters in the same sentence. IRB and IEC are kept
+unconstrained as they are not observed to collide in practice. - Dutch:
+<code>Medisch-ethische toetsingscommissie</code> (METC) - French:
+<code>Comité d&#39;éthique</code> / <code>Comité d&#39;Ethique</code></p>
+<p><strong>Animal research committee names</strong> -
+<code>Institutional Animal Care and Use Committee</code> / IACUC (US
+standard) - Any sentence containing <code>animal(s)</code> and
+<code>committee</code> (or <code>board</code>/<code>panel</code>) within
+~5 words of each other — catches
+<code>Experimental Animal Care and Use Committee</code>,
+<code>Animal Ethics Committee</code>, <code>Animal Welfare Board</code>,
+<code>Animal Welfare Ethical Review Body</code>, etc. - UK:
+<code>Animal Welfare Ethical Review Body</code> / AWERB - Dutch:
+<code>Dierexperimentencommissie</code> / DEC (see DEC constraint above);
+<code>Instantie voor Dierenwelzijn</code> / IvD - German:
+<code>Tierversuchskommission</code> / TvK (advisory committee under §15
+Tierschutzgesetz) - French:
+<code>Comité d&#39;éthique en expérimentation animale</code> / CEEA;
+<code>Comité d&#39;éthique animale</code> - Spanish:
+<code>Comité de ética en experimentación animal</code> / CEEA</p>
+<p><strong>Approval phrasing</strong> -
+<code>Ethics/Ethical (approval|clearance) [was] (granted|obtained|received|given|secured)</code>
+- <code>Ethically approved</code> -
+<code>Approved by the (ethics|irb|institutional|independent|local|review|research) ...</code>
+-
+<code>This/The study/protocol/experiment/procedures/methods/research [was] (approved|reviewed) by</code>
+- <code>Study was ethically approved</code> -
+<code>(Followed|met|follow) the ethical (guidelines|standards|requirements)</code>
+- <code>In accordance with ... ethical (guidelines|standards)</code> -
+<code>Ethics protocol</code> -
+<code>Approved under (protocol|reference|number)</code></p>
+<p><strong>Waiver / exemption</strong> -
+<code>Ethics/Ethical (waiver|exemption)</code> -
+<code>IRB (waiver|exemption|exempt)</code> -
+<code>Exempted from (ethics|irb|institutional review)</code> -
+<code>Waived by the (ethics|irb|institutional|review) (committee|board)</code>
+- <code>Deemed exempt</code></p>
+<p><strong>Declaration of Helsinki</strong> -
+<code>Declaration of Helsinki</code> /
+<code>Helsinki Declaration</code></p>
+<p>Patterns are NOT designed to capture: - General ethical
+considerations or ethical dilemmas in study content - Mentions of
+“ethics” in theoretical or philosophical contexts - Author approval of a
+manuscript (e.g. “all authors approved the final version”) - Ethical
+behaviour as a measured variable (e.g. “ethical decision-making”) - URLs
+containing “ethics” in path components</p>
+<p>Live data collection is detected by the internal helper
+<code>.detect_live_data()</code>, which searches for sentences
+indicating that data were collected directly from human or animal
+participants. Papers without any live-data signal are not flagged as
+missing ethics approval. The helper uses conservative patterns to avoid
+flagging secondary data analyses, computational experiments, or
+economics papers that analyse existing survey data. See
+<code>.detect_live_data()</code> for the full list of patterns and
+intentional exclusions.</p>
+<p>A paper that states that no human or animal subjects took part (“no
+human subjects were involved”, “did not involve human participants”, or
+people taking part “not as subjects”) is not expected to have an ethics
+statement, whatever participant phrase it also has (see
+<code>.detect_no_participants()</code>). A negation near a participant
+phrase alone (“No participants were excluded”) does not count: it
+reports a study with participants.</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ethics-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Power Analysis Check works
+</summary>
+<div class="fold">
+<p>This module uses regular expressions to identify sentences that
+contain a statistical power analysis. If specified by the user, it also
+uses a large language model (LLM) to extract information reported in
+power analyses, including the statistical test, sample size, alpha
+level, desired level of power, and magnitude and type of effect
+size.</p>
+<p>The Power Analysis Check module uses regular expressions to identify
+sentences that contain a statistical power analysis. Without the use of
+an LLM, the module uses regular expressions to classify the power
+analysis as a-priori, sensitivity or post-hoc. With the use of an LLM,
+it checks if the power analysis is reported with all required
+information.</p>
+<p>The regular expressions can miss power analyses, or fail to classify
+them correctly. The type of power analysis is often difficult to
+classify, which can easily be solved by explicitly specifying the type
+of power analysis as ‘a-priori’, ‘sensitivity’, or ‘post-hoc’. Note that
+‘post-hoc’ or ‘observed’ power is rarely useful. The LLM can fail to
+identify information in the paper, and will not have access to
+information in paragraphs in the paper other than those that contain the
+word ‘power’. This package was validated by the Metacheck team on
+articles in Psychological Science.</p>
+<p>This module was developed by Lisa DeBruine, Daniel Lakens and
+Cristian Mesquida</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-power.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 128 papers with 246 instances of power
+statements, 203 were correctly detected (true positives), 22 were missed
+(false negatives) and 21 were incorrectly detected (false positives).
+Overall, among all instances flagged as power statements, 90.6% were
+correct (positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Preregistration Check works
+</summary>
+<div class="fold">
+<p>Retrieve information from preregistrations in a standardised way, and
+make them easier to check.</p>
+<p>The Preregistration Check module identifies preregistrations on the
+OSF and AsPredicted based on links in the manuscript, retrieves the
+preregistration text, and organizes the information into a template. The
+module retrieves text from the OSF with its API, and from AsPredicted
+with ResearchBox’s API when a ResearchBox key is set (see
+<code>rbox_token()</code>), or else from the preregistration’s web page.
+The information in the preregistration is returned. An AsPredicted link
+that could not be read is named in the report, with the reason.</p>
+<p>The module can’t extract information from non-structured
+preregistration templates (i.e., where the preregistration is uploaded
+in a single text field) and it can’t retrieve information in
+preregistrations that are stored as text documents on the OSF.</p>
+<p>If you want to extend the package to be able to download information
+from other preregistration sites, reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-prereg-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Marginal Significance works
+</summary>
+<div class="fold">
+<p>List all sentences that describe an effect as ‘marginally
+significant’.</p>
+<p>The marginal module searches for regular expressions that match a
+predefined pattern. The list of terms is a subset of those listed in a
+<a href="https://web.archive.org/web/20251001114321/https://mchankins.wordpress.com/2013/04/21/still-not-significant-2/">blog
+post by Matthew Hankins</a>. The module returns all sentences that match
+terms describing ‘marginally significant’ results.</p>
+<p>Some of the terms identified might not be problematic in some
+contexts, and there are ways to describe ‘marginal significance’ that
+are not detected by the module.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-marginal.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 51 papers with 87 statements, this module
+correctly identified 38 statements (true positives) and incorrectly
+flagged 22 statements (false positives). It failed to detect 27
+statements. Thus, among all statements flagged by the module, 63% were
+genuine cases (positive predictive value). However, the module missed
+42% of all true statements (false negative rate).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How StatCheck works
+</summary>
+<div class="fold">
+<p>Check consistency of p-values and test statistics</p>
+<p>The Statcheck module runs Statcheck. Statcheck searches for regular
+expressions that match a predefined pattern, and identifies APA reported
+statistical tests. More information on the package can be found at <a href="https://github.com/cran/statcheck" class="uri">https://github.com/cran/statcheck</a>. The module only
+returns Statcheck results for t-tests and F-tests, as these are the only
+tests which have been validated, see <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a>.</p>
+<p>Statcheck was developed by Michèle Nuijten and Sascha Epskamp.</p>
+<p>Statcheck considers p = 0.000 an error, as you should report p &lt;
+0.001. Furthermore, p &lt; 0.03 is an error if the p-value was 0.031,
+and one should simply report exact p-values (p = 0.031). Statcheck might
+miss one-sided tests, and falsely assume the p-value is incorrect. For
+more information, see <a href="https://statcheck.io/">StatCheck</a>.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 685 tests with 34 instances of
+inconsistent reporting, Statcheck correctly detected 34 of them, and
+incorrectly identified 26. Therefore 0% of true instances were missed,
+and 43% of detections were false positives. See <a href="https://osf.io/preprints/psyarxiv/tcxaj_v1/" class="uri">https://osf.io/preprints/psyarxiv/tcxaj_v1/</a> for more
+details of the validation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Exact P-Values works
+</summary>
+<div class="fold">
+<p>List any p-values reported with insufficient precision (e.g., p &lt;
+.05 or p = n.s.) or reported as exactly zero (e.g., p = .000).</p>
+<p>This module uses regular expressions to identify p-values. It will
+flag any values reported as p &gt; ? or p &lt; numbers greater than
+.001. It will also flag p-values reported as exactly zero (e.g., p =
+.000, p = 0.00), which are mathematically impossible — p-values are
+never exactly zero and should instead be reported as p &lt; .001.</p>
+<p>A p-value that is not the result of a test is not flagged: a table
+note (“* p &lt; .05, ** p &lt; .01”), a figure legend (“Asterisks
+indicate significant differences (p &lt; .05)”, “Values in bold are
+significant at p &lt; .05”) or a stated threshold (“p &lt; .05 was
+considered significant”, “thresholded at p &lt; .001”). GROBID often
+puts such notes into the running text, so each p-value is judged by the
+words in its own clause (the text up to a “;” or a full stop), and never
+left out when a test statistic belongs to it (“F(1, 7) = 8.03, # p &lt;
+.05”). The column <code>not_a_test</code> of the table says why a
+p-value was left out (“marker”, “threshold” or “legend”). Notes in other
+forms, such as a marker after the p-value (“p &lt; .05 (*)“), are still
+flagged.</p>
+<p>This module sometimes flags false positives when sentences discuss
+how p-value thresholds were set. It can also miss an imprecise p-value
+that is reported against a threshold (“decreased at the p &lt; .05
+significance threshold”).</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in tables (as
+opposed to a table’s footnote text, which the module does see and tries
+to exclude — see above).</p>
+<p>This module was developed by Lisa DeBruine and Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-exact.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 225 papers containing 405 instances of
+non-exact p-values, the module correctly detected 269 cases (true
+positives) and incorrectly identified 78 (false positives). It missed
+136 instances of imprecisely reported p-values (false negatives) and
+correctly identified 4557 cases of precisely reported p-values (true
+negative). Additionally, 78% of positive detections were correct
+(positive predictive value).</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Non-Significant P Value Check works
+</summary>
+<div class="fold">
+<p>This module checks for imprecisely reported p values. If p &gt; .05
+is detected, it warns for misinterpretations.</p>
+<p>The nonsignificant p-value check searches for regular expressions
+that match a predefined pattern. The module identifies all p-values in a
+manuscript and selects those that are not reported to be smaller than or
+equal to 0.05. It returns all sentences containing non-significant
+p-values.</p>
+<p>In the future, the Metacheck team aims to incorporate a machine
+learning classifier to only return sentences likely to contain
+misinterpretations. If you want to help to improve the module, reach out
+to the Metacheck development team.</p>
+<p>This module only checks p-values reported in the running text of the
+manuscript. It cannot (yet) process p-values reported only in
+tables.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-p-nonsig.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 194 papers with 1602 instances of
+non-significant p-values, this module correctly detected 1486 of them,
+and incorrectly identified 153. Additionally, 91% of detections were
+true instances (positive predictive value). That is, when this module
+flags non-significant p-values in a paper, it correctly identifies an
+issue 91% of the time.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Effect Sizes in t-tests and F-tests works
+</summary>
+<div class="fold">
+<p>The Effect Size module checks if effect sizes are correctly reported
+in t-tests and F-tests.</p>
+<p>The Effect Size check searches for regular expressions that match
+typical ways in which effect sizes are reported. It subsequently checks
+different ways in which Cohen’s d, g, ηp2, and ωp2 can be computed
+against the reported value. If effects are missing, or might be
+incorrect, you the module provides a warning. The module was validated
+on APA reported statistical tests, and might miss effect sizes that were
+reported in other reporting styles. It was validated by the Metacheck
+team on papers published in Psychological Science.</p>
+<p>This module only checks statistical results reported in the running
+text of the manuscript. It cannot (yet) process statistics reported only
+in tables.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-stat-effect-size.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: In a sample of 161 papers with 1469 tests, this module
+correctly detected 1106 reported effect sizes (true positives) and
+correctly identified 295 cases where no effect size was present (true
+negatives). However, it missed 23 that were reported (false negatives),
+and incorrectly identified 45 effect sizes when none were reported
+(false positives). Among all instances detected by the module, 96% were
+true cases (positive predictive value). In a validation against 221
+reported Cohen’s d effect sizes, it correctly indicated coherence in 218
+cases (99%). In a validation against 485 partial eta-squared effect
+sizes, it correctly indicated coherence in 480 (99%)</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Codebook Check works
+</summary>
+<div class="fold">
+<p>This module checks whether the data columns in a repository are
+documented in a codebook or README. It locates codebook/readme files,
+extracts the variable definitions they contain, matches those
+definitions against the data columns extracted by
+<code>data_check</code>, and reports documentation coverage: how many
+data columns are documented, and which documented variables are never
+used.</p>
+<p>The Codebook Check module consumes the columns and file
+classification produced by <code>data_check</code> (and, transitively,
+<code>repo_check</code>). Files classified as <code>codebook</code> or
+<code>readme</code> are parsed with <code>parse_codebook()</code>, which
+reads structured tables (CSV/TSV/Excel with a variable-name column and a
+label column), embedded labels in haven files (SPSS/Stata/SAS), and
+plain text from rich-text formats (docx/pdf/rtf/odt). Embedded haven
+labels from data files are also harvested directly.</p>
+<p>Each data column is then matched against the parsed variable
+definitions with <code>match_column_labels()</code>, using
+normalised-name matching with experiment-group scoping, haven-label
+priority, and rule-based label-equivalence merging.</p>
+<p>Beyond the variable label, the module harvests the DDI-style
+per-variable properties a source supplies: the <strong>value labels /
+code list</strong> (the 1=“Strongly disagree”…5=“Strongly agree” mapping
+— from SPSS/Stata value labels and from a codebook “values”/“coding”
+column), the <strong>missing-value scheme</strong> (which codes denote
+missingness, from haven declared missings and labels that read as
+“refused”/“n/a”), and <strong>question text</strong> and columns when
+present. These are carried onto the matched data columns and exported
+into the Psych-DS <code>variableMeasured</code> (as a schema.org code
+list plus namespaced <code>metacheck:</code> fields).</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>. When <code>llm_use(TRUE)</code>, three
+optional LLM tiers run: parsing unstructured codebook text that the
+rules could not handle, fuzzy-matching still-unlabelled columns to
+still-unmatched codebook variables, and merging conflicting label
+definitions into a single canonical label.</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-codebook-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+codebook_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Repository Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories.</p>
+<p>The Repository Check module lists files on the OSF, GitHub,
+ResearchBox, DSpace (PsychArchives and other legacy- and DSpace 7-based
+installations), Zenodo, Dataverse, Figshare, Dryad, ReShare,
+4TU.ResearchData, Mendeley Data, DataONE (Arctic Data Center, KNB, and
+other member nodes), and LDbase based on links in the manuscript.</p>
+<p>Listing a repository’s files never requires an API key, but some
+hosts answer faster or more completely with one: OSF allows 100
+requests/hour unauthenticated versus 10,000/day with a token (see
+[osf_pat()]), and Dryad enforces a strict per-IP daily quota on repeated
+listing (see <code>cache</code> below). Dryad is a special case beyond
+rate limits: listing a Dryad dataset’s files works without a key, but
+actually downloading file CONTENTS from Dryad fails with HTTP 401 unless
+a key is set, even for a fully public dataset (see [dryad_pat()] or
+[dryad_auth()]). Since this module only lists files and never downloads
+their contents itself, that limitation applies to
+<code>data_check</code> and <code>code_check</code> (which do download
+content), not here – see their own documentation.</p>
+<p>When a linked OSF page is a registration, its
+<code>registered_from</code> project (the one it was registered from,
+which the manuscript itself may never link directly) is also checked: if
+that project is public its files are listed under its own URL, and if it
+is closed or otherwise inaccessible the report flags it explicitly,
+since some registrations only describe their content rather than
+mirroring it.</p>
+<p>If you want to extend the package to be able to download files from
+additional data repositories reach out to the Metacheck development
+team.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-repo-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+repo_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Code Check works
+</summary>
+<div class="fold">
+<p>This module retrieves information from repositories checked by
+repo_check about code files (R, Python, SAS, SPSS, Stata, Mplus,
+MATLAB).</p>
+<p>The Code Check module checks R (also R Markdown and Quarto), Python
+(also Jupyter notebooks), SAS, SPSS, Stata, Mplus, and MATLAB files,
+using regular expressions to check the code; JASP files are listed but
+not read. The language of a Quarto document or a notebook is read from
+the file itself (its engine or kernel), not from its extension. The
+regular expression search will detect the number of comments, the lines
+at which libraries/imports are loaded, attempts to detect absolute paths
+to files, <code>setwd()</code> and <code>install.packages()</code>
+calls, and lists files that are loaded, and checks if these files are in
+the repository; R code is also parsed. The module will return
+suggestions to improve the code if there are no comments, if
+libraries/imports are loaded in lines further than 4 lines apart, if
+files that are loaded are not in the repository, if absolute file paths,
+<code>setwd()</code> or <code>install.packages()</code> are found, and
+if R code cannot be parsed.</p>
+<p>The regular expressions can miss information in code files, or
+falsely detect parts of the code as a fixed file path. Libraries/imports
+might be loaded in one block, even if there are more than 3 intermittent
+lines. The module was tried out internally on papers published in
+Psychological Science, but has not been formally validated. There might
+be valid reasons why some loaded files can’t be shared, but the module
+can’t evaluate these reasons, and always gives a warning.</p>
+<p>The module also checks whether the repository pins the R/package
+versions the analysis actually depended on: an <code>renv.lock</code>
+file (parsed for the R version and every locked package + its
+version/source), a
+<code>sessionInfo()</code>/<code>sessioninfo::session_info()</code> text
+dump (matched by filename —
+<code>sessionInfo.txt</code>/<code>session_info.txt</code> and similar,
+or embedded in a README), or a
+<code>groundhog::groundhog.library()</code>/<code>checkpoint::checkpoint()</code>
+date-pin call in the code (a bare
+<code>library(groundhog)</code>/<code>library(checkpoint)</code> does
+not count — the pinning call itself must be present). When none of these
+is found, the report flags it as a reproducibility gap: package versions
+may drift between when the analysis was run and any later reproduction
+attempt.</p>
+<p>If you want to extend the package to perform additional checks on
+code files, or make the checks work on other types of code files, reach
+out to the Metacheck development team.</p>
+<p>Checking code requires downloading its file contents. For a paper
+whose repository is on Dryad, this never succeeds unless a Dryad API key
+is set: Dryad requires one to download file bytes, even from a fully
+public dataset (listing the repository’s files does not need one).
+Without a key, every Dryad-hosted code file is listed but unchecked, and
+a warning naming Dryad and
+<code>?dryad_pat</code>/<code>?dryad_auth</code> is included among the
+download failures recorded in the manifest.</p>
+<p>This module was developed by Daniel Lakens and Raphael Merz</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-code-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+code_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Data Check works
+</summary>
+<div class="fold">
+<p>This module classifies the files in a repository into semantic types
+(data, codebook, code, software, output, supplemental, readme, asset,
+other) and, for tabular data files, extracts each column’s type and
+summary statistics.</p>
+<p>The Data Check module consumes the file list produced by
+<code>repo_check</code> (or any files added via
+<code>local_path</code>). Each file is classified with rule-based
+heuristics layered over metacheck’s <code>file_category()</code> and
+<code>file_types</code>: file names matching README / codebook patterns
+win first, then an extension crosswalk, then format-locked extension
+overrides. For every file classified as tabular <code>data</code> that
+is available locally, the module reads the file head, describes each
+column with <code>data_col_facets()</code> and computes summary
+statistics for numeric columns. Every sheet of a spreadsheet that holds
+a table is read: a file with several such sheets has its columns under
+<code>source_file = &quot;file.xlsx [sheet]&quot;</code>, and the
+<code>sheet</code> column names the sheet of any spreadsheet with
+several sheets; a sheet of notes or a codebook is treated as
+documentation when the file has another table. Following DDI, a column
+is described by orthogonal facets rather than a single type:
+<code>representation</code> (numeric/text/datetime/code — how it is
+stored), <code>measurement_level</code> (Stevens:
+nominal/ordinal/interval/ratio), <code>concept</code> (what it measures:
+reaction_time/age/gender/likert/id/…), <code>role</code>
+(identifier/measure/condition/timestamp), <code>unit</code>, and a
+<code>quality</code> state (ok/empty/constant). Concepts are detected by
+name+value rules (the demographic concepts via
+<code>data_check_demographic()</code>); when <code>llm_use(TRUE)</code>
+the model fills concepts and measurement levels the rules left blank.
+Qualtrics survey exports are recognised
+(<code>data_check_is_qualtrics()</code>): their extra header rows are
+stripped so columns type correctly, and the reserved response-metadata
+columns (StartDate, Duration, Finished, …) are tagged.</p>
+<p>The module defaults to <strong>rules-only</strong> when
+<code>llm_use(FALSE)</code>: columns the rules cannot resolve (ambiguous
+3–20-unique integers, ambiguous character columns) fall back to
+<code>continuous</code> / <code>text</code> respectively. When
+<code>llm_use(TRUE)</code>, ambiguous columns and unresolved file types
+(<code>other</code>) are sent to <code>llm()</code> for optional
+refinement, and every file is assigned a study group (<code>ex1</code>,
+<code>pilot2</code>, <code>shared</code>, …) so that multi-study
+repositories can be recognised (used by <code>psychds_check</code>).
+Without an LLM the study <code>group</code> is left <code>NA</code>
+(unknown).</p>
+<p>Column extraction requires files to be readable from disk. Files
+fetched by <code>repo_check</code> from OSF/GitHub/etc. without a local
+copy (<code>file_location</code> is <code>NA</code>) are classified but
+not column-extracted; pass <code>local_path</code> to point at a
+downloaded copy of the repository.</p>
+<p>For a paper whose repository is on Dryad, this means column
+extraction never happens unless a Dryad API key is set: Dryad requires
+one to download file bytes, even from a fully public dataset (dataset
+listing and metadata do not need one). Without a key, every Dryad file
+stays classified but un-downloaded, column_n is 0, and a warning naming
+Dryad and <code>?dryad_pat</code>/<code>?dryad_auth</code> is included
+among the download failures. A one-time session message is also shown
+(see repo_check) the first time a Dryad dataset is encountered with no
+key set.</p>
+<p>Every downloaded text file the authors wrote (code, settings, survey
+definitions such as Qualtrics <code>.qsf</code> files, documentation,
+outputs) is searched for keys: API keys, access tokens and private keys,
+which let anyone who downloads the file use a paid service at the
+authors’ cost. Of a tabular data file only the column names and first 3
+rows of the table as read are searched: its values come from
+participants, but a key the authors set for a whole survey (as embedded
+data in a Qualtrics survey flow) is exported in every response. The
+search uses the rules of the secret scanner betterleaks (<a href="https://github.com/betterleaks/betterleaks" class="uri">https://github.com/betterleaks/betterleaks</a>, MIT licence)
+of high and medium confidence. A key found turns the traffic light red;
+the report and the <code>keys</code> table give its file, line and type,
+and only its beginning. Other files over 25 MB and binary files are not
+searched. A key is never tested with its provider. Every module’s result
+has any whole key replaced by “<span class="math display"><em>k</em><em>e</em><em>y</em><em>r</em><em>e</em><em>m</em><em>o</em><em>v</em><em>e</em><em>d</em></span>”
+(see <code>module_run()</code>).</p>
+<p>This module was developed by Daniel Lakens and Levi Baruch</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-data-check.html">metacheck
+manual</a>.</p>
+<div class="validation">
+<p>Validation: This module has not been validated. All checks in the
+data_check module have unknown error rates. Carefully evaluate the
+output of this module. You can help improve this module by reporting an
+issue on GitHub.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
+How Reproducibility Check works
+</summary>
+<div class="fold">
+<p>This module assesses whether a paper’s R and Python code can be run
+on its data. It works in two phases. The <strong>static</strong> phase
+(always run) collects the package dependencies the code declares,
+rewrites the data-file paths that do not work in the repository as the
+authors organised it, works out the order the scripts must run in, and
+diagnoses why any referenced input file is unavailable — reporting what
+a reproduction attempt would involve and where it is likely to break.
+The <strong>execution</strong> phase (opt-in,
+<code>execute = TRUE</code>) then actually runs the code: it copies the
+repository into a throwaway directory, optionally installs the declared
+dependencies into a throwaway library, runs each script in order in an
+isolated subprocess with a per-script timeout, and captures the outcome
+and full output of each run.</p>
+<p>By default (<code>execute = FALSE</code>) the module does <strong>not
+run any code</strong> — it performs only static analysis: reading
+dependencies with the same extractors as <code>code_check</code>,
+finding the files the code references in the repository, and building a
+run-order dependency graph. It reports what <em>would</em> be installed
+and run rather than doing it.</p>
+<p>When <code>execute = TRUE</code>, the module additionally
+<strong>runs the downloaded code on your machine</strong> — a
+deliberate, opt-in action gated behind that argument (<code>callr</code>
+is required for R code). Each script runs in an isolated subprocess so a
+crash cannot take down the R session; note this isolates crashes,
+<strong>not</strong> the filesystem or network. Installs (when
+<code>install_missing = TRUE</code>) and the throwaway run library never
+touch your main R library. Each script’s outcome is one of
+<code>ran_ok</code>, <code>errored</code>, <code>timed_out</code>,
+<code>dependency_unavailable</code>, <code>not_parsed</code>,
+<code>run_by_source</code> (an R script another script runs with
+<code>source()</code>, which is run only inside that script, since on
+its own it lacks the packages and objects the sourcing script sets up
+first), <code>run_by_import</code> (a Python file other files import, a
+module rather than a script, unless it has an
+<code>if __name__ == &quot;__main__&quot;:</code> block), <code>jags_model</code>
+(a JAGS or BUGS model saved with an R extension, which another script
+reads) or <code>not_r_content</code> (a file that is not R at all, such
+as a JSON or HTML dump); these last two are not run and are not
+failures. <code>python2</code> marks Python 2 code that was not run.
+With <code>sandbox = &quot;docker&quot;</code> such code runs with Python 2.7
+(option <code>metacheck.docker_image_py2</code>; FALSE turns this off),
+which <code>modifications</code> records; it is never converted, since
+that can change results. <code>defines_functions</code> is a file that
+only defines functions, which is used, not run
+(<code>table$used_by</code> names the scripts that use it), and
+<code>not_analysis</code> is a file of software rather than of the
+analysis: a package’s code, tests, documentation or
+<code>setup.py</code>, a copy of a tool, a web application, a script a
+program wrote (<code>table$not_analysis_why</code> says which); neither
+is run or counted as a script. <code>docker_failed</code> means the
+container never started, which says nothing about the script, so it
+keeps the light from being green but does not make it red.
+<code>needs_a_person</code> is a script that stopped because it asks a
+person to choose a file or answer a question, or that starts an app, and
+<code>needs_internet</code> one that stopped because the network is off
+in a Docker run, or, with <code>internet = TRUE</code>, could not reach
+what it asked for; <code>download_too_large</code> is a script stopped
+for downloading more than the limits allow (see <code>internet</code>),
+and <code>out_of_memory</code> one that, or a program it started (such
+as a compiler), ran out of the memory each script may use. All four are
+treated the same way. <code>not_downloaded</code> is a script that
+stopped on a file the repository lists but that was not downloaded, such
+as one over <code>max_file_size</code>: it could not be tried, so it is
+not counted as a script that did not reproduce
+(<code>summary_table$repro_not_downloaded_n</code> counts them apart).
+<code>not_read</code> is a file metacheck could not read, so it was not
+run; the light is then not green, as the file may read and run on
+another computer, and <code>table$error_message</code> says why, naming
+a package that is installed but cannot be loaded on the computer that
+ran the check. <code>empty</code> is a file with nothing in it, which is
+not run or counted as a script. For a script that did not run through,
+<code>table$error_message</code> is its error, short (at most 300
+characters): the error line of its output, which names a package that is
+not there, with the address it asked for when it needed the internet, or
+the time limit it reached; <code>table$reason</code> sorts it into a
+kind. A timeout means “still running at the cutoff”, not a failure, so
+raise <code>timeout</code> for legitimately long-running (e.g. Bayesian)
+scripts. <code>dependency_unavailable</code> means the script’s own
+package could not be installed from live CRAN, the CRAN Archive, or a
+named GitHub/URL source — an infrastructure limitation, not a defect in
+the paper’s code, so unlike <code>errored</code>/<code>timed_out</code>
+it does <strong>not</strong> force the traffic light red. The full
+stdout/stderr of every run is kept in the result’s
+<code>run_results</code> (the report shows it in per-script dropdowns,
+capped for readability). The traffic light reflects the STATIC readiness
+signals by default, but an execution error
+(<code>errored</code>/<code>timed_out</code>) does recolour it to red —
+a script that crashes on its own analysis is a genuine reproduction
+failure. A script that fails with <code>could not find function</code>
+is run once more with the <code>library()</code> calls the project’s
+other scripts make added at its top (or the one package that exports the
+function, or magrittr for <code>%&gt;%</code>), and a script that then
+runs is reported as reproducible only after that repair.</p>
+<p>Dependencies are reported name-only, with the source (CRAN, GitHub,
+or a base package already shipped with R) — static analysis of the code
+cannot know which <em>version</em> was used, and running against current
+package versions is itself informative: a break argues the authors
+should have pinned versions. When the repository does record versions, a
+run with <code>recorded_versions = TRUE</code> installs the packages the
+scripts load at those versions, but it does not change the R version,
+which remains a limitation of the check.</p>
+<p>Run order is derived from read-after-write data dependencies (a
+script writing a file another reads must run first),
+<code>source()</code> edges, and numeric filename prefixes as a weak
+tie-breaker. Ambiguous orderings, dependency cycles, and inputs a script
+reads but that no earlier script produces (and that are not in the
+repository) are surfaced as warnings, since these are the situations
+most likely to make an otherwise-correct reproduction fail.</p>
+<p>Python code (<code>.py</code> files, and notebooks and Quarto
+documents whose code is Python, from which the code is extracted first)
+goes through the same two phases, reported in its own “Python code”
+section. Each file is checked for syntax errors with Python’s own parser
+when a Python interpreter (<code>python</code>, or else
+<code>python3</code>) is available; dependencies are read from the
+<code>import</code> statements, with versions from a
+<code>requirements.txt</code> or <code>pyproject.toml</code> when there
+is one, and installed with <code>pip</code>; each script runs as its own
+<code>python</code> process (<code>processx</code> is required), so
+unlike R scripts, a name one script defines is not available to another.
+When no Python interpreter is available, the Python files are reported
+as not run and the R results are still returned. Statistics the Python
+scripts print are compared with the paper together with the R output and
+any self-reproducible output (JASP/jamovi, SPSS-Viewer, notebook
+outputs).</p>
+<p>This module was developed by Daniel Lakens</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-reproducibility-check.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How PubPeer Comments works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations that have
+comments on pubpeer (excluding Statcheck comments).</p>
+<p>The PubPeer module uses the PubPeer API to check for each reference
+that has a DOI whether there are comments on the post-publication peer
+review platform. If comments are found, a link to the comments is
+provided. Comments by ‘Statcheck’ on PubPeer are ignored, see <a href="https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/" class="uri">https://retractionwatch.com/2016/09/02/heres-why-more-than-50000-psychology-studies-are-about-to-have-pubpeer-entries/</a>.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>For more information, see <a href="https://www.pubpeer.com/static/about">PubPeer</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-pubpeer.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How RetractionWatch works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations in the
+RetractionWatch Database.</p>
+<p>The RetractionWatch Check module compares the reference list against
+studies in the RetractionWatch database based on the DOI. If a study in
+the database is found, a reminder is provided that the study was
+retracted, has an expression of concern, or a correction.</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the authors are already aware that a study was
+retracted, but the module can’t evaluate this.</p>
+<p>The database can be manually updated with the rw_update function. For
+more information, see <a href="https://gitlab.com/crossref/retraction-watch-data" class="uri">https://gitlab.com/crossref/retraction-watch-data</a>.</p>
+<p>This module was developed by Daniel Lakens and Lisa DeBruine</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-retraction.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details>
+<summary>
+How Replication Check works
+</summary>
+<div class="fold">
+<p>This module checks references and warns for citations of original
+studies for which replication or reproduction studies exist in the FLoRA
+database.</p>
+<p>The Replication Check module compares the reference list against
+studies in the FLoRA (FORRT Library of Replication Attempts) database
+based on the DOI. If a study in the database is found, a reminder is
+provided that a replication or reproduction of the original study
+exists, and should be cited. No reminder is given when the paper already
+cites that replication or reproduction (matched by its DOI).</p>
+<p>The module requires that the reference has a DOI: the DOI in the
+paper’s reference list, or one looked up with
+<code>add_bib_match()</code> before the module runs (see
+<code>ref_table()</code>). References without a DOI are not checked.</p>
+<p>It is possible the original study was cited for other reasons than
+the empirical claim tested, or that the replication/reproduction in the
+FLoRA database is for only one of the studies in the paper, and not the
+study the authors discuss.</p>
+<p>The database can be manually updated with the
+<code>FLoRA_update()</code> function. For more information, see <a href="https://forrt.org/FLoRA/" class="uri">https://forrt.org/FLoRA/</a>.</p>
+<p>This module was developed by Daniel Lakens, Lisa DeBruine and Lukas
+Wallrich</p>
+<p>Read more in the <a href="https://www.scienceverse.org/metacheck_book/chapters/mod-ref-replication.html">metacheck
+manual</a>.</p>
+</div>
+</details>
+<details id="full-text">
+<summary>
+Full text
+</summary>
+<div class="fold">
+<h3>Abstract</h3>
+<p>Humans often learn from outcomes defined by abstract goals rather than explicit rewards. This flexibility supports real-world behavior but typically causes slower and less efficient learning compared to directly observable rewards. We asked where the cognitive bottleneck arises as abstract goals are transformed into learning signals. The reward function compression hypothesis proposes that this inefficiency arises because evaluating abstract goal outcomes burdens limited cognitive resources otherwise directed toward learning, and that this cognitive cost can decrease over iterations when a specialized, efficient goal-dependent outcome evaluation function is learned. Alternatively, this cost could simply arise from an immediate dual-task effect, where goal maintenance imposes a cost on decisions. To distinguish these two hypotheses, we manipulated the visibility of goal and non-goal information throughout learning and feedback. While the memory-offloading account predicts that this manipulation should immediately rescue goal-based learning, the reward function compression hypothesis predicts a gradually acquired benefit proportional to the compressibility of the match/mismatch rule. Our results (N = 61) supported the reward compression hypothesis. Visible goals gradually reduced learning efficiency costs, eventually approaching the point-based learning performance. An equivalent decrease in memory load (visible non-goals) did not boost learning as much, highlighting the role of outcome evaluation in goal-directed learning. Computational modeling revealed that outcome evaluation efficiency, proxied by participants&#x27; &quot;reward collection&quot; response time, specifically influenced participants&#x27; learning processes, rather than decision noise. These results show that learning from goals depends on our ability to train efficient estimators of outcome values, which is facilitated by keeping goals in sight.</p>
+<p>Keywords goal-dependent learning • reinforcement learning • reward function • goal representation and to reject &quot;+0&quot; or Non-Goal outcomes.</p>
+<p>In the VG and VNG conditions, participants were instructed that a goal-relevant fractal (either the Goal or Non-Goal 144 image, respectively) would remain visible on the screen throughout the trial. Therefore, in the VG and VNG conditions, 145 participants did not need to store fractal images in working memory to interpret their outcomes, decreasing memory 146 demand to the same degree. In comparison to the goal condition, this manipulation allowed us to test the effect of 147 demands on executive functions on learning. The two visible conditions differed in the way participants could use the 148 on-screen information: in VG, a match between the outcome and the visual goal cue signaled a correct outcome; while 149 in VNG, a match signaled an incorrect outcome, and a mismatch a correct one. This manipulation allowed us to test for 150 the effects of different outcome processing when goal memory load is equated.</p>
+<p>Following the learning stage, participants completed a single testing block designed to assess retention of the learned 152 image-response associations. The 8 ×6 = 48 images from the learning stage were presented three times, with their 153 order randomized for each repetition. Each trial began with a 500-ms fixation cross, followed by a centrally presented 154 image that remained visible until participants pressed J, K, or L to indicate the learned association, or until 1.5 s had</p>
+<h3>1 Introduction</h3>
+<p>In daily life, much of human learning is guided by abstract goals we pursue -such as mastering Chinese calligraphy, finding a favorite hiking route or perfecting a baking recipe -that go beyond obtaining tangible rewards like food or money. Goals define what we want to achieve and give value to the outcomes of our actions, providing signals that guide learning. For example, when learning a master calligrapher&#x27;s style, we compare our brushstrokes with their work to evaluate each attempt and track our progress. The criteria for this evaluation can change with our subjective goals or the context [Molinaro and Collins, 2023a , Castegnetti et al., 2021 , Frömer et al., 2019]. We may focus on the shape of individual strokes when reproducing a particular model, but place greater weight on the overall flow when aiming for a more expressive style. Learning guided by goals is therefore highly flexible, but this flexibility requires learners to continually translate outcomes into reinforcement signals that can guide learning, based on their current goals.</p>
+<p>The flexibility of goal-dependent learning comes at cognitive cost. When the value of an outcome must be derived from an abstract goal rather than provided directly by familiar rewards, such as numeric points, learning is slower and SIGHT -NOVEMBER 12, 2026 less accurate [McDougle et al., 2022, Molinaro and Collins, 2023b]. Despite these behavioral costs, goal-derived and explicit rewards appear to rely on overlapping reward-learning circuitry. Goal-congruent outcomes evoke reward-like signals in corticostriatal circuits, including shared value representations and reward-prediction-error signals [McDougle et al., 2022]; similarly, cognitive feedback (e.g., a green circle for correct and a red circle for incorrect) and monetary rewards recruit largely overlapping dopaminergic and striatal regions during learning [Daniel and Pollmann, 2010].</p>
+<p>The critical difference may therefore lie not in the downstream learning system itself, but in the additional executive processes required to derive the value of an outcome from the current goal. Indeed, learning from novel goal-defined outcomes is associated with increased interactions between prefrontal control regions and subcortical reward circuits [McDougle et al., 2022]. This raises a central question: which cognitive operations make the transformation from a goal and an observed outcome into a learning signal costly? Identifying these operations is essential for understanding the cognitive bottleneck of goal-dependent learning.</p>
+<p>One possibile cause of this additional cost is the working-memory demand of maintaining the current goal. In typical goal-dependent learning tasks, learners must actively maintain the goal information until feedback is received [McDougle et al., 2022]. Maintaining goal-relevant information is itself a core function of working memory and cognitive control [Kane and Engle, 2003, Braver, 2012]. Working-memory contributions to learning are capacity limited, with learning performance declining as memory load increases [Collins and Frank, 2012], and imposing an additional working-memory load concurrently with instrumental learning can further impair learning performance [Huang et al., 2025]. Maintaining the current goal may therefore consume limited working-memory resources, imposing a relatively general cognitive cost throughout the learning process (Figure 1A).</p>
+<p>A second possibility is that the additional cost arises more specifically during outcome evaluation. Whereas explicit numeric rewards such as (+1) or (+0) directly specify the value of an outcome, abstract feedback must be evaluated relative to the learner&#x27;s current goal before it can provide a learning signal. This computation can be described by a reward function evaluation, which assigns value to an outcome according to the current goal. Recent behavioral work suggests that this goal-dependent outcome evaluation may itself constitute an important bottleneck. Faster goaldependent reward processing was associated with better learning, and learning improved when the goal space contained structure that allowed goal information to be simplified [Molinaro and Collins, 2026]. This work proposes that, when the goal space contains shared structure, learners can reduce this cost through reward-function compression, extracting regularities across goals and transforming complex goal information into a simpler rule that can be applied more efficiently when evaluating subsequent outcomes. Under this account, the additional cognitive demand is concentrated around feedback, when an observed outcome must be converted into a value that can update learning (Figure 1B).</p>
+<p>To distinguish these possible mechanisms, one strategy is to externalize goal information by keeping it visible throughout learning, including when feedback is received. Externalizing goal-relevant information is common in everyday learning, such as reminders, checklists, and reference materials, which can reduce the need to maintain information internally [Risko and Gilbert, 2016 , Stein et al., 2016 , Gilbert et al., 2020]. By shifting part of the representational burden from internal memory to the environment, these external cues can preserve access to goal information while freeing limited working-memory resources for other computations involved in learning.</p>
+<p>Goal visibility, however, may do more than simply reduce memory load: it may also change how feedback is processed.</p>
+<p>If the primary cost arises from goal maintenance, keeping the goal visible should reduce the general working-memory demand of maintaining and retrieving it throughout learning. If the cost instead arises during outcome evaluation, having the goal visible may allow learners to directly compare an observed outcome with the desired outcome, rather than first retrieving the goal from memory. Returning to Chinese calligraphy, during línmó practice, learners can keep a master calligrapher&#x27;s copybook visible while practicing and directly compare each produced stroke with the desired form. Repeated access to such a reference may also allow learners to develop a simpler, reusable comparison-to-value rule for evaluating subsequent outcomes. This possibility connects goal visibility to reward-function compression: whereas compression may emerge by extracting structure from internally represented goals, externally available goal information may provide another source of structure that simplifies the computation of outcome value.</p>
+<p>A visible non-goal provides an important comparison. Like a visible goal, it externalizes task-relevant outcome information and may therefore provide similar memory support. Critically, however, it changes how the external reference must be mapped onto value: a match with a visible goal signals a desirable outcome, whereas a match with a visible non-goal signals an undesirable outcome. Previous reinforcement-learning studies suggest that positive and negative outcomes can sometimes be weighted differently during learning, although such asymmetries are not universal and may partly reflect other choice processes [Palminteri et al., 2017 , Katahira, 2018 , Sugawara and Katahira, 2021 , Lefebvre et al., 2017 , Frank et al., 2007]. More broadly, valuation can flexibly reverse with the learner&#x27;s current goal, such that the same option is processed differently when the goal is to identify the best versus the worst outcome [Frömer et al., 2019]. Comparing visible goal and visible non-goal conditions can therefore help distinguish a general benefit of externalizing information from a more specific benefit of making the desired outcome directly available during outcome evaluation.</p>
+<p>The current study asks how abstract goals are transformed into learning signals and which cognitive operations create the cost of this transformation. We use goal visibility to probe this process, asking how making goal information externally available facilitates goal-dependent learning and which cognitive operation best explains this benefit. Specifically, we characterize the visibility benefit along two dimensions: its dynamics over experience and its magnitude across visibility conditions (Figure 1C).</p>
+<p>First, the time course of the benefit can distinguish a general goal-memory offloading account from an experiencedependent change in outcome evaluation. If visibility primarily reduces the need to maintain goal information in working memory (Figure 1A), its benefit should be available as soon as the goal is externally accessible, producing an immediate advantage that is already present in Phase 1 and remains in Phase 2 (Figure 1D&amp;E). In contrast, if visibility facilitates the development of a more efficient comparison-to-value rule during outcome evaluation (Figure 1B), the benefit may emerge gradually with experience and become larger in Phase 2 (Figure 1F&amp;G).</p>
+<p>Second, the relative magnitude of the VG and VNG benefits can reveal whether the mechanism supported by visibility operates similarly across different external references. A symmetric benefit would suggest that VG and VNG provide comparable support, either by offloading similar memory demands or by enabling similarly efficient mappings from feedback to value (Figure 1D&amp;F). In contrast, an asymmetric benefit would indicate that the identity of the external reference matters: the two conditions may differ in how much memory demand they alleviate or in how readily the visible reference can be used to evaluate feedback (Figure 1E&amp;G).</p>
+<p>Together, the temporal dynamics and relative magnitude of the visibility benefit can reveal whether goal visibility primarily relieves a general memory burden or changes how goal information is used to evaluate outcomes, helping identify where the cognitive bottleneck arises as abstract goals are transformed into learning signals.</p>
+<h3>2 Methods</h3>
+<h3>2.1 Participants</h3>
+<p>Sixty-six participants were recruited via Prolific (http://www.prolific.com), provided informed consent, completed the experiment online on their own devices, and received monetary compensation ($12 for approximately an hour of their time). The study protocol was approved by the [anonymous University&#x27;s] Institutional Review Board. To ensure task engagement and reliable learning, five participants were excluded for poor data quality: more than 25 missed trials across the experiment; more than 25 consecutive identical choices; or reward-collection sensitivity (d ′ ) less than or equal to 0, following elbow points in the ordered distribution of group-level performance [Molinaro and Collins, 2023b, 2026]. The final analyses included 61 participants (25 female; M age = 28.97 ± 5.97 years).</p>
+<h3>2.2 Experiment</h3>
+<p>The experimental design was adapted from prior work on goal-dependent reinforcement learning [McDougle et al., 2022, Molinaro and Collins, 2026]. Participants learned stimulus-action associations by selecting one of three response keys based on trial-by-trial feedback, which was presented as either numerical point outcomes or novel fractal images, depending on the condition (Figure 2). The experiment began with 16 practice trials using the same procedure as the Points and Goal conditions (eight trials each) in the learning stage, followed by 528 learning trials divided into eight 66-trial blocks with a short resting period between blocks, and a final 144-trial testing stage.</p>
+<p>The learning stage comprised four conditions: Points, Goals, Visible Goals (VG), and Visible Non-Goals (VNG). Each condition was presented for two independent blocks in pseudo-randomized order; we defined the first presentation of each condition as Phase 1 and the second as Phase 2. Each block introduced six new stimulus-action associations, with 11 iterations per stimulus. Stimuli within a block were highly discriminable and nameable images that belonged to the same semantic categories (e.g., six vegetable images). Trial sequences were pseudo-randomized to produce an approximately uniform distribution of repetition lags, ranging from 1 to 11 trials between successive presentations of the same stimulus.</p>
+<p>On each trial, participants first viewed either a pair of numerical outcomes (Points) or fractal images (Goals, VG, and VNG conditions) for 1.8 s. Novel fractal images were presented on every trial, forcing participants to evaluate goal outcomes one-shot. Each pair of goal and non-goal fractals was selected for visual dissimilarity using CLIP [Radford et al., 2021], to ensure that they were perceptually easy to discriminate. Participants then saw a stimulus and responded by pressing one of the three keys (J, K, or L) within a response window of up to 1.5 s. The stimulus remained on the screen until a response was made or the response window elapsed. Following the response, feedback was displayed for</p>
+<p>Maintain goal in memory Maintain goal in memory Goal cue Cue Choice Choice Outcome Outcome Goal VG/VNG A Goal memory offloading Complex goal space + -+ compress Simplified comparison rule VG: match = good VNG: mismatch = good B Outcome compression Gain magnitude When? Symmetric gain Asymmetric gain Immediate Gradual D E F G Memory offloading Memory offloading Reward function compression Reward function compression Equal memory savings Larger memory savings for VG Equal match/mismatch efficiency Match more efficient than mismatch C Predicted gain patterns Phase 1 Phase 2 1 11 1 11 P(correct) D Immediate, symmetric Phase 1 Phase 2 1 11 1 11 P(correct) E Immediate, asymmetric Phase 1 Phase 2 1 11 1 11 Stimulus iteration P(correct) F Gradual, symmetric Phase 1 Phase 2 1 11 1 11 Stimulus iteration P(correct) G Gradual, asymmetric Goal VG VNG Figure 1: Predicted effects of visible outcome information on goal-dependent learning. (A) Goal memory offloading: visible information substantially reduces the need to maintain the goal internally. (B) Reward function compression: experience supports a simplified comparison rule for evaluating outcomes. (C) Predictions vary along two dimensions: when the learning benefit emerges (immediately or gradually) and whether visible goal (VG) and visible nongoal (VNG) yield equal gains or a larger gain for VG. (D-G) Schematic learning curves illustrate the four combinations: immediate and symmetric (D), immediate and asymmetric (E), gradual and symmetric (F), and gradual and asymmetric (G). Curves are conceptual predictions, not observed data or model fits. 1.5 s: the trial&#x27;s goal image (or +1) if the correct key for the stimulus was selected, otherwise the non-goal image (or 140 +0). During each trial&#x27;s feedback period, participants had to either &quot;collect&quot; or &quot;reject&quot; the outcome by pressing D or F 141 (response mapping was randomized across participants). Participants were instructed to collect &quot;+1&quot; or Goal outcomes WIN +1 LOSE +0 Collect Reject +0 GOAL NONGOAL Collect Reject Collect Reject Collect Reject +0 GOAL NONGOAL Collect Reject Collect Reject GOAL NONGOAL Collect Reject Collect Reject GOAL NONGOAL trial t+1 GOAL NONGOAL trial t+1 1.8s 1.5s 1.5s Trials n=66 … … … … Block Phase 1 Phase 2 Goal Points VG VNG Goal Points VG VNG J K L D F trial t trial t trial t trial t NONGOAL trial t+1 GOAL WIN LOSE trial t+1 +1 +0 VG: visible goal VNG: visible nongoal Figure 2: Task Design. Participants learned stimulus-response associations across four learning conditions in 8 independent blocks. On each trial, outcome cues (numeric points or fractal goals) were displayed. Participants selected one of three response keys (J, K, L) in response to a stimulus, then collected or rejected the outcome by pressing D or F. elapsed. Participants received no feedback and did not need to collect points or goals during testing. Choice accuracy 156 and response time were recorded. 157 2.3 Linear Mixed-effects Models 158</p>
+<p>We analyzed behavioral results using generalized linear mixed-effects models (GLMMs) fitted in R with the lme4 159 [Bates et al., 2015]. For each analysis, we selected the random-effects structure separately following the data-supported 160 model-selection procedure of Matuschek et al. [2017], while holding the corresponding fixed-effects structure constant.</p>
+<p>161 Post hoc Type I errors were adjusted using the Benjamini-Hochberg false discovery rate (FDR) procedure; all pairwise-162 comparison p values reported in the Results are FDR-adjusted. 163 2.3.1 Learning Stage. 164 Learning curves were analyzed using a logistic GLMM, with trial-wise accuracy as the dependent variable. Fixed 165 effects included condition (Points, Goal, VG, and VNG), phase (Phase 1 vs. Phase 2), stimulus iteration (1-11), block 166 number (1-8) as a control covariate, and the full condition × phase × iteration interaction. The selected random-effects 167 structure included correlated intercepts and block slopes by participant, and correlated intercepts and iteration slopes by 168 participant × condition × phase and participant × block × stimulus. 169 Reward-collection sensitivity was analyzed on non-omission learning trials using a binomial probit GLMM of collect 170 versus reject responses. Fixed effects included signal status (reward-present vs. reward-absent outcome), condition, 171 phase, their full interaction, and block number (1-8) as a control covariate. Random effects included participant 172 intercepts and slopes for signal status, signal status × phase, and block number; participant-by-condition intercepts and 173 slopes for signal status, phase, and their interaction; and participant-specific item intercepts.</p>
+<h3>174</h3>
+<p>Reward-collection response times (RCRTs) were analyzed at the trial level using a Gamma GLMM with a log link.</p>
+<h3>175</h3>
+<p>Fixed effects included condition, phase, their interaction, and block number (1-8, centered at 4.5) as a control covariate.</p>
+<p>Trial-wise testing-phase accuracy was analyzed using a logistic GLMM with fixed effects including learning condition, the phase in which each item was learned (Phase 1 or Phase 2), their interaction, testing repetition (1-3), and the item&#x27;s original learning block number (1-8). Testing repetition and block number were entered as numeric covariates. The selected random-effects structure included intercepts for participants, participant-by-condition-by-learning-phase cells, and participant-specific items.</p>
+<p>To assess retention, late-learning trials (stimulus iterations 9-11) were combined with the corresponding testing trials.</p>
+<p>Trial-wise accuracy was analyzed using a logistic GLMM with condition, learning phase (the phase in which each item was learned), stage (late learning vs. testing), their full factorial interaction, and the item&#x27;s original learning block number (1-8) as a numeric control covariate. The selected random-effects structure included correlated participant intercepts and slopes for stage and block number, as well as correlated intercepts and stage slopes for participant-bycondition-by-learning-phase cells and participant-specific items.</p>
+<h3>2.4 Correlation Analysis</h3>
+<p>Associations between behavioral measures were assessed using two-sided Spearman rank correlations. For condition comparisons, we correlated within-participant differences, so each participant contributed one observation to each test.</p>
+<p>Correlations used participants with complete data for both measures; sample sizes were reported for each analysis.</p>
+<h3>2.5 Computational Modeling</h3>
+<p>Participant behavior was modeled using a reinforcement learning (RL) model augmented with habit formation [Molinaro and Collins, 2026, Collins, 2025] and dynamic choice noise [Li et al., 2024]. Action selection was assumed to depend on a weighted mixture of an outcome-sensitive reinforcement learning system and an outcome-insensitive habit system, with trial-by-trial fluctuations in engagement captured by a latent noise process.</p>
+<p>The model maintained two stimulus-action association matrices: an outcome-sensitive value matrix Q t , interpreted as jointly representing RL processes and working memory contributions to learning, and an outcome-insensitive stimulus-action association matrix C t , interpreted as representing a habit-like process. Each matrix contained one entry for every stimulus s ∈ {1, . . . , N s } and action a ∈ {1, . . . , N a }. In each learning block, N s = 6 and N a = 3.</p>
+<p>Together, these components defined the engaged-state policy governing choice behavior.</p>
+<p>At the beginning of each block, action values were initialized to a uniform baseline representing naive reward outcome expectations Q0 = 1/N a . Before choice on each trial, all RL values decayed toward this uninformed baseline according to forgetting parameter ϕ ∈ [0, 1]: where Q F t denotes the values after forgetting.</p>
+<p>After receiving feedback r t ∈ {0, 1} (set to 1 for win/goal outcomes, 0 otherwise) for choice a t given stimulus s t (set to 1 for win/goal outcomes, 0 otherwise), the chosen stimulus-action association was updated using a delta rule: where the outcome-dependent learning rate was (4) Thus, α ∈ [0, 1] governed learning following positive outcomes, whereas ζ ∈ [0, 1] scaled learning following nonpositive outcomes to allow asymmetric learning from positive versus non-positive outcomes, as observed in previous versions of this protocol [Molinaro and Collins, 2026 , Collins, 2025 , Master et al., 2020].</p>
+<p>In previous related work, separate positive and negative learning rates consistently revealed stronger learning from positive feedback, motivating a bias multiplier as a more efficient representation of this asymmetry.</p>
+<p>In parallel, the model tracked outcome-insensitive stimulus-action repetition using the habit matrix C t , initialized to zero at the beginning of each block C 0 (s, a) = 0. After each choice, the habit strength of the chosen stimulus-action pair was updated using a delta rule with habit learning rate τ ∈ [0, 1], independent of outcome:</p>
+<p>To capture stimulus-independent response perseveration, the model included a stickiness parameter η ∈ [-1, 1] that biased choice toward (or away from) the action selected on the previous trial (a t-1 ), independent of stimulus or outcome. Stickiness was reset at the beginning of each block because no previous action was then defined. The same stickiness term was added to the action values of both the RL and habit systems:</p>
+<p>The RL and habit (H) systems were transformed into separate action policies through a standard softmax:</p>
+<p>The engaged-state policy was then obtained by mixing the policies of the RL and H agents: where κ ∈ [0, 1] controlled the relative contribution of the two systems.</p>
+<p>Accordingly, κ = 0 produced a purely outcome-sensitive RL policy, whereas κ = 1 produced a purely outcome-insensitive habit policy.</p>
+<p>The inverse-temperature parameter was fixed at β = 25 in all models, as is typical to improve identifiability and interpretability for this model family [Collins, 2025 , Senta et al., 2025]; the next section explains how choice lapses are captured in the absence of a free noise β parameter.</p>
+<h3>2.5.1 Dynamic Noise Estimation</h3>
+<p>To capture trial-by-trial fluctuations in task engagement and improve identification, we included the dynamic noise estimation strategy developed in Li et al. [2024]. Here, behavior was assumed to arise from a mixture of two latent states: an Engaged state (E), in which actions are generated according to the policy π t described above, and a Random state (R), in which actions are chosen uniformly at random 1 Na . On each trial t, the full policy p(a t |s t ) was given by: where pt (E) and pt (R) are the state probabilities before observing the choice.</p>
+<p>Transitions between latent states followed a first-order Markov process, including the probability of transitioning from the Engaged state to the Random state p ER ; and the probability of transitioning from the Random state to the Engaged state p RE . Accordingly, the prior belief over latent states before observing the action on trial t was computed as:</p>
+<p>After observing the action a t , beliefs were updated using Bayes&#x27; rule. The posterior probability of being in the Engaged state was:</p>
+<p>At the beginning of each block, latent-state beliefs were initialized as p 0 (E) = 1 -p ER and p 0 (R) = p ER . We note that the standard approach modeling lapses through static noise (typically modeled with ϵ-greedy mixture policy [Nassar and Frank, 2016, Collins, 2025]) is nested in this model if p E + p R = 1; we verified that the dynamic noise version fit better (see Figure S9C in Supplementary Material).</p>
+<h3>2.5.2 RCRT Modulation of Model Parameters</h3>
+<p>To test whether learning policy parameters varied across block conditions (Points, Goals, VG, and VNG), we fit a family of models in which selected parameters were allowed to vary as a function of block-level characteristics.</p>
+<h3>KEEP IT IN SIGHT -NOVEMBER 12, 2026</h3>
+<p>Specifically, modulation parameters ω ∈ [-10, 10] scaled the baseline parameter values as a function of the median log reward-collection response time (RCRT) for the corresponding block.</p>
+<p>This approach allows us to test whether a parameter changes in different blocks in a way that is systematically captured by differences in reward collection efficiency. We also compared this to models that used stimulus-action choice reaction times instead of RCRT to ensure the specificity of the findings to outcome evaluation (see S2.3 in Supplementary Materials).</p>
+<h3>2.5.3 Model Estimation and Evaluation</h3>
+<p>Model estimation and evaluation followed established best-practice recommendations for computational modeling [Wilson and Collins, 2019].</p>
+<p>Model fitting. Models were fitted separately to each participant by minimizing the negative log-likelihood using the L-BFGS-B optimization algorithm implemented in scipy.optimize.minimize with bound constraints on all free parameters and multiple initializations. The optimization was repeated from 40 starting points, including one default initialization and multiple random initializations, and the best-fitting solution was retained.</p>
+<p>Model comparison. Models were compared using the Akaike information criterion (AIC): where k is the number of free parameters.</p>
+<p>Model evidence was summarized using participant-level ∆AIC, group mean ∆AIC with standard errors, and the proportion of participants best fitted by each model. Subject-level ∆AIC values were tested against zero using Wilcoxon signed-rank tests.</p>
+<h3>Model space exploration.</h3>
+<p>Model comparison proceeded in stages. First, simpler models with fixed parameter values ablating specific mechanisms (e.g. decay, learning asymmetry, mixture) were compared with the full model to assess the contribution of individual model components. Second, static-and dynamic-noise models were compared. Third, we compared models in which RCRT separately modulated each parameter to identify which parameter yielded the greatest improvement in model fit. Fourth, we compared RCRT with choice RT, hit RCRT, and correct-rejection RCRT to test whether block RCRT provided a better account of choice behavior than the alternative reaction-time measures.</p>
+<h3>Model validation.</h3>
+<p>To validate the winning model against competing models, 40 agents were simulated for each participant and model using the participant-specific fitted parameters and observed task structure. Behavioral measures were first averaged across simulated agents within each participant and then summarized across participants. Model validation assessed how well each model reproduced the observed learning curves and participant-level accuracy.</p>
+<h3>Model recovery.</h3>
+<p>We sought to verify model identifiability within groups of models we relied on to arbitrate between competing accounts of our findings. Specifically, we separately assessed identifiability of the best three single-parameter modulation models (α, κ, and ϕ); and identifiability of the full three-parameter modulation model, the p ER -modulated, and a baseline model. For each participant and generating model, we simulated 10 datasets using participant-specific fitted parameters. We refitted all three models in the corresponding comparison set to each dataset and identified the recovered model by the lowest AIC among converged fits. Results were summarized in row-normalized confusion matrices.</p>
+<p>Parameter recovery. To ensure interpretability of fit parameters within the winning models, we assessed parameter recovery for the representative three-parameter RCRT-modulated model (Figure S14) and the two-parameter model preferred by group-level AIC (Figure S15). For each participant and model, we used the original best-fitting estimates to generate 10 simulated datasets, then refitted the generating model to each dataset using 40 optimization starts.</p>
+<p>Recovered estimates were averaged across simulations within each participant and compared with the generating values using generating-versus-recovered plots and Spearman correlations.</p>
+<p>3.1 Learning performance differs across conditions and phases.</p>
+<h3>3.1.1 Learning Stage</h3>
+<p>Participants learned stimulus-action associations across all conditions: accuracy increased with stimulus iteration (χ 2 (1) = 914.67, p &lt; .0001), and learning slopes were positive in every condition and phase (all ps &lt; .001). Learning accuracy also differed by condition (χ 2 (3) = 85.00, p &lt; .0001; Figure 3A). Observed learning accuracy was highest for Points (76.4%; all ps &lt; .0001), followed by VG (67.7%) and VNG (62.9%), which did no differ significantly (p = .197), and lowest for Goal (56.8%; all ps ≤ .0055). Accuracy was higher in Phase 2 than Phase 1 (χ 2 (1) = 31.51, p &lt; .0001; Figure 3A).</p>
+<p>Crucially, learning trajectories differed systematically by condition and evolved over time in each condition, reflected in a significant condition × phase × stimulus iteration interaction (χ 2 (3) = 8.63, p = .035; Figure 3B&amp;C).</p>
+<p>Except for Goal, all learning conditions showed steeper learning slopes in Phase 2 than in Phase 1 (all ps &lt; .05; Goal: p = .116). In Phase 1 (Figure 3B), Points showed the steepest learning slopes (β = 0.464, SE = 0.040), significantly exceeding all other conditions (all ps ≤ .037). Nevertheless, the goal-based conditions, Goal (β = 0.244, SE = 0.037, VG (β = 0.335, SE = 0.038), and VNG (β = 0.333, SE = 0.038) did not differ significantly from one another (all ps ≥ .358).</p>
+<p>In Phase 2 (Figure 3C), both visible conditions (VG and VNG) showed steeper learning slopes than Goal (all ps ≤ .015), with VG showing the largest gain.</p>
+<p>Most notably, VG perfomance (β = 0.642, SE = 0.044) no longer differed from Points ((β = -0.037, SE = 0.061; p = .551). By contrast, both VG and Points had steeper slopes than Goal (β = 0.329, SE = 0.039) and VNG (β = 0.474, SE = 0.041; all ps &lt; .01). VNG also showed a significantly steeper learning slope than Goal (p = .015).</p>
+<p>Overall, phase-related changes were driven primarily by the visible conditions: Goal remained relatively stable, VNG improved modestly, and VG increased enough to converge with Points. Given the asymmetric learning benefits of VG and VNG, we took a closer look at potential causes in the Supplementary Materials (see S1.2).</p>
+<p>Importantly, if visibility merely reduced maintenance or recall demands, its benefits should have emerged immediately in Phase 1 and remained stable. Instead, the delayed and asymmetric advantage shows that visibility may affect not only how goal information is maintained, but also how outcomes are evaluated.</p>
+<h3>3.1.2 Testing Stage</h3>
+<p>During testing, participants received no feedback, so accuracy indexed the persistence of learned stimulus-action associations. Testing accuracy differed by condition (χ 2 (3) = 69.35, p &lt; .0001; Figure 3D). Observed accuracy was highest for Points (79.6%), which exceeded VG (75.1%; p = .0308), VNG (67.0%; p &lt; .0001), and Goal (63.4%; p &lt; .0001). VG also exceeded VNG (p = .0016) and Goal (p &lt; .0001), whereas VNG and Goal did not differ significantly (p = .1932). These condition differences did not vary detectably with the phase in which items were learned (χ 2 (3) = 2.98, p = .395). Items learned in Phase 2 showed higher observed testing accuracy (79.8%) than those learned in Phase 1 (62.7%), although the phase effect did not reach significance after controlling for original block number (χ 2 (1) = 3.51, p = .061). The ordering across conditions thus broadly mirrored the learning-phase pattern.</p>
+<p>We further assessed retention by comparing accuracy for the same stimuli during late learning (iterations 9-11) and testing. Condition interacted with stage (χ 2 (3) = 12.56,p = .0057; Figure 3E), indicating that the retention-related decline, the accuracy change from late learning to testing stage, varied across conditions. Descriptively, accuracy declined by 9.8 percentage points in Points, 7.8 in VNG, 5.9 in VG, and 4.6 in Goal. The decline was greater for Points than Goal (beta = -0.614, SE = 0.178, p = .0034); no other pairwise difference was significant (all ps ≥ .085).</p>
+<p>Additionally, the decline was larger for items learned in Phase 1 than in Phase 2 (χ 2 (1) = 13.18, p = .00028). However, this phase difference in decline did not vary detectably across conditions (χ 2 (3) = 4.94,p = .177). As suggested by previous work Collins [2018], a greater retention decline may reflect stronger reliance on WM for maintaining stimulus-action associations during learning. The larger decline in Points relative to Goal may therefore suggest that fewer WM resources were needed for other learning processes, such as goal maintenance and outcome evaluation, leaving more resources available for maintaining stimulus-action associations.</p>
+<p>Together, the learning and testing results suggest that feedback conditions may differ in how working memory resources are allocated across learning processes, such as maintaining stimulus-action associations, maintaining goals, and evaluating outcomes. In particular, the delayed and asymmetric learning benefits of goal visibility, alongside differences in retention decline, raise the possibility that goal visibility influences outcome evaluation in addition to reducing goal-</p>
+<p>Phase 1 Phase 2 0.00 0.25 0.50 0.75 1.00 Points VG VNG Goal P(correct) Overall learning accuracy A 0.00 0.25 0.50 0.75 1.00 1 3 5 7 9 11 Stimulus iteration P(correct) Phase 1 B Points VG VNG Goal Model 0.00 0.25 0.50 0.75 1.00 1 3 5 7 9 11 Stimulus iteration P(correct) Phase 2 C 0.00 0.25 0.50 0.75 1.00 Points VG VNG Goal P(correct) Testing accuracy D -40 -20 0 20 35 Points VG VNG Goal Testing -late learning (percentage points) Retention change E Figure 3: Learning, testing, and retention across conditions. (A) Overall learning accuracy for Phase 1 and Phase 2. (B-C) Observed learning curves in Phase 1 (B) and Phase 2 (C). Lines show mean accuracy, shaded bands show 95% confidence intervals, and triangles show accuracy simulated by the three-parameter RCRT-modulated model. (D) Testing accuracy by condition and by the phase in which each item was learned. (E) Retention change, calculated as testing accuracy minus late-learning accuracy (stimulus iterations 9-11); negative values indicate a decline. In A, D, and E, gray dots show participant values, and colored markers and error bars show condition means and 95% confidence intervals. Dark circles represent Phase 1 and light diamonds represent Phase 2. The y-axis in E is limited to -45 to 35 percentage points for readability; nine participant-level points fall outside this range but remain included in the summaries and analyses. maintenance demands. To examine this, we analyzed reward-collection response time (RCRT), which has previously 341 been used as a proxy of outcome-processing efficiency [Molinaro and Collins, 2026]. 342 3.2 RCRT reflects outcome processing efficiency and tracks learning 343 Reward-collection accuracy was high across all conditions (d ′ ; Points: 3.60 ± 0.54, VG: 3.97 ± 0.59, VNG: 3.59 ± 344 0.77, Goal: 2.99 ±0.82), indicating that participants could reliably evaluate outcomes. Reward collection sensitivity 345 (d ′ ) differed by condition, χ 2 (3) = 114.02, p &lt; .0001), with VG condition highest (all ps ≤ .00016), Goal lowest 346 (all ps &lt; .0001), and no difference between Points and VNG conditions (p = .723; Figure 4A).</p>
+<p>Reward collection 347 sensitivity (d ′ ) was higher overall in Phase 2 than Phase 1 (χ 2 (1) = 8.01, p = .0047), but the phase-related change did 348 not differ reliably across conditions (χ 2 (3) = 5.87, p = .118; Figure 4A).</p>
+<h3>349</h3>
+<p>We found that reward collection pattern largely paralleled the condition-and phase-dependent differences observed in 350 learning trajectories. Specifically, reward collection response time (RCRT) also systematically differed across condition 351 (χ 2 (3) = 376.28, p &lt; .0001), and phase (χ 2 (1) = 7.80, p = .0052), with a significant condition × phase interaction  (p = .0212), whereas VNG did not differ significantly from either VG or Goal(all ps &gt; .05). In Phase 2, RCRT was 356 fastest in Points, followed by VG, then VNG, with Goal remaining slowest (all ps &lt; .0001).</p>
+<h3>357</h3>
+<p>Additionally, RCRT was numerically much more strongly correlated with hit RCRT than with correct rejection RCRT 358 (hit: ρ = 0.91, p &lt; .0001; correct rejection: ρ = 0.22, p = .0006), suggesting that the overall RCRT effect was 359 driven primarily by the efficiency of evaluating rewarding outcomes. This pattern is consistent with the interpretation that RCRT reflects the efficiency of outcome evaluation [Molinaro and Collins, 2026]. Thus, these results suggest 361 that visibility improved the efficiency of outcome evaluation relative to the Goal condition, with the strongest benefit 362 emerging in VG.</p>
+<h3>363</h3>
+<p>To further examine the relationship between RCRT and learning performance, we correlated the condition-specific (all ps &gt; .10; Figure 4F-H), suggesting that this relationship was specific to outcome evaluation rather than overall 370 response speed, and obviating an interpretation in terms of relative difficulty or engagement between conditions.</p>
+<h3>371</h3>
+<p>Together, these results suggest that visibility did not simply reduce memory demand but more specifically improved the 372 efficiency of outcome evaluation, which is not consistent with a generic dual-task account. However, these analyses do 373 not specify how differences in outcome-processing efficiency influence the underlying learning and decision processes.</p>
+<p>We first sought to establish a baseline process description of learning in this task while accounting for participants&#x27; inattention. To this end, we implemented two alternative noise formulations. Dynamic noise models trial-by-trial fluctuations between a task-engaged state and a random state using lapse (p ER ) and recovery (p RE ) probabilities [Li et al., 2024]. Static noise is a nested special case in which these probabilities are constrained to sum to one, consistent with the standard ϵ-greedy assumption of stable lapse behavior [Nassar and Frank, 2016].</p>
+<p>Within each noise estimation, we started from the RL-habit model architecture that was found to best capture behavior in a similar experiment focusing on points and goal conditions [Molinaro and Collins, 2026]. This includes a learning rate (α), a learning rate modulator for negative outcomes (ζ) and a forgetting rate (ϕ), which impact a standard, descriptive delta rule algorithm which we assume captures multiple processes (including working memory and RL); a habit learning rate (τ ); a mixture weight (κ) governing the contribution of RL versus habit learning; choice stickiness (η); and noise parameters lapse probability (p ER ), recovery probability (p RE ). As an initial check, to assess whether including the full set of parameters improved model fit across model families, we compared the full-parameter model with variants in which one parameter was fixed, separately for static and dynamic noise. Consistent with prior work [Molinaro and Collins, 2026], models including the full parameter set showed lower AIC than reduced variants for both static and dynamic noise formulations (∆AIC = -1.38, all ∆AIC &gt; 0; all ps &lt; .001; the exception was static-noise lapse ∆AIC = -1.38, p &lt; .001; Figure S9A&amp;B in Supplementary Materials).</p>
+<p>We then tested whether allowing noise to vary dynamically improved model fit by comparing matched static and dynamic formulations. Despite the additional complexity, dynamic noise models consistently yielded significantly lower AIC values (better fit) than their static counterparts (mean ∆AIC dynamic-static = -1.19 to -9.38; Figure S3C in Supplementary Materials). The difference was significant for the baseline and models modulating η, ζ, τ , or lapse (all ps ≤ .0069), but not for models modulating α, κ, or ϕ, alone or in combination (all ps ≥ .222). Additionally, the choice of noise structure did not influence the overall pattern ranking of best model (Figure S10A in Supplementary Materials and Figure 5A). Given the fit advantage using dynamic noise estimation, we focused subsequent computational analyses on full-parameter models with dynamic noise.</p>
+<h3>3.4 RCRT modulates learning process</h3>
+<p>Building on our behavioral results above and prior work linking RCRT to outcome-processing efficiency [Molinaro and Collins, 2026], we used computational modeling to test whether block-level median log RCRT modulates specific components of learning and decision-making. We constructed a family of dynamic-noise RL-habit models in which RCRT directly modulated one or more model parameters, with modulation strength governed by a parameter (ω). Model performance was evaluated using ∆AIC relative to a baseline model without RCRT modulation.</p>
+<p>Single-parameter modulation revealed that incorporating RCRT improved model fit for most parameters relative to baseline (all ∆AIC &lt; 0; all ps ≤ .0015), except stickiness (η) (∆AIC = -0.10, p = .285). Among these, modulation of the learning rate (α; ∆AIC = -11.52), the mixture weight (κ; ∆AIC = -10.66) and forgetting rate (ϕ; ∆AIC = -8.01) produced the largest reduction in AIC (Figure 5A). Each of these three models fit better than the other five single-parameter models (all ps ≤ .0491).</p>
+<p>Model recovery analysis indicated that these learning-related models are identifiable (Figure 5C). In direct AIC comparisons, the α model fit better than the κ model (mean ∆AIC α-κ = -0.86, p = .0129) and the ϕ model (∆AIC α-ϕ = -3.51, p &lt; .0001); the κ and ϕ models did not differ significantly (p = .198; Figure 5B). Among these three models, the α model best fit a slightly larger proportion of participants (Figure 5B). Thus, support was strongest for α, with κ and ϕ plausible.</p>
+<p>These three models produced qualitatively similar behavioral predictions. Although the α model had the best AIC, this similarity limits conclusions about which learning mechanism RCRT influences. By contrast, models in which RCRT modulated decision noise or processes unrelated to outcome valuation received weaker support: although several improved fit relative to baseline, each of the three learning-related models fit better than these alternatives (allps ≤ .0491; Figure 5E).</p>
+<p>Together, these results suggest that goal visibility benefits primarily act on outcome-based learning mechanisms directly rather than decision noise or unrelated processes.</p>
+<p>To further examine this interpretation, we fit models in which RCRT simultaneously (but independently) modulated pairs of parameters drawn from α⊣,ϕ,⊢κ. Relative to single-parameter models, joint modulation generally improved fit over κ or ϕ modulation alone, but showed no consistent advantage over α alone (Figure 5A)). Specifically, α + κ and κ + ϕ each outperformed both κ and ϕ (all ps ≤ .0106), whereas neither outperformed α (p = .134 and p = .852, respectively). The α + ϕ model outperformed ϕ (p = .0019) but fit worse than α (p &lt; .0001). Extending modulation  to all three parameters did not punish the model fit too much relative to two-parameter modulation models: its AIC 429 was slightly higher than that of α + κ (∆AIC = 0.54, p = .0020), did not differ reliably from κ + ϕ (∆AIC = -0.80, 430 p = .748), and was lower than that of α + ϕ (∆AIC = -3.24, p = .0397; Figure 5A).</p>
+<h3>431</h3>
+<p>Together, these comparisons provide the strongest support for RCRT modulation of the learning rate (α), with more 432 tentative support for additional modulation of the mixture weight (κ). Allowing RCRT to modulate forgetting (ϕ) 433 improved fit in some reduced models, but not when added to the α + κ model. Although α + κ had the lowest mean AIC, 434 participant-level AIC rankings varied across the reduced models (Figure 5A), and the three-parameter model performed 435 well in model validation (Figure 3A-C). We therefore used the three-parameter model as a common, encompassing 436 specification to estimate participant-specific RCRT effects onα, κ, and ϕ, without selecting a different reduced model 437 for each participant. The AIC comparison nevertheless favored α + κ.</p>
+<h3>438</h3>
+<p>We replicated these analyses using hit RCRT and correct-rejection RCRT separately to determine which type of outcome  parameter within the learning process, or through influence on the decision noise and other policy modulators (e.g., stickiness, habits). Therefore, we present simulations from the three-parameter RCRT model as a representative learning-related model, illustrating learning-curve dynamics across conditions and phases (Figure 3A-C). For contrast, we also present the baseline model without RCRT modulation and the RCRT-modulated static noise model (Figure 6).</p>
+<p>These models failed to capture the learning dynamic as accurately as the learning-modulating RCRT model, suggesting that condition effects cannot be explained by differences in decision noise, but instead reflect structured changes in the learning process. Note that model recovery results (Figure 5D) showed that the learning-related model family representative was distinguishable from the noise and baseline model families. Importantly, simulations generated from the noise and baseline models were rarely misclassified as the multi-parameter learning model.</p>
+<p>Phase 1 0% 20% 40% 60% 80% 100% 1 2 3 4 5 6 7 8 9 10 11 P(correct) α + κ + φ model Phase 1 0% 20% 40% 60% 80% 100% 1 2 3 4 5 6 7 8 9 10 11 pER model Phase 1 0% 20% 40% 60% 80% 100% 1 2 3 4 5 6 7 8 9 10 11 baseline model Phase 2 0% 20% 40% 60% 80% 100% 1 2 3 4 5 6 7 8 9 10 11 Stimulus iteration P(correct) Phase 2 0% 20% 40% 60% 80% 100% 1 2 3 4 5 6 7 8 9 10 11 Stimulus iteration Phase 2 Condition Points VG VNG Goal Model 0% 20% 40% 60% 80% 100% 1 2 3 4 5 6 7 8 9 10 11 Stimulus iteration  (right). Models with value-related modulation better reproduced the observed learning dynamics, whereas the noise and baseline models did not.</p>
+<h3>3.5 RCRT-associated changes in learning and decision mechanisms</h3>
+<p>We next examined how RCRT modulates learning and decision mechanisms by visualizing the model-implied relationship between RCRT and the effective values of key parameters in the three-parameter {α, ϕ, κ} RCRT model (Figure 5F-H).</p>
+<p>Learning rate (α) showed a negative relationship with RCRT (Figure 5F). With slower reward collection, the effective learning rate decreased, indicating less efficient updating of stimulus-action associations when outcome processing was less efficient. This pattern suggests that reduced reward processing efficiency primarily manifests as attenuated integration of outcome information.</p>
+<p>The mixture weight (κ), which governs the balance between outcome-sensitive and habit-based choice, remained relatively low at faster RCRT and increased gradually as RCRT slowed (Figure 5G), indicating a transition toward habit-dominated behavior under reduced reward processing efficiency.</p>
+<p>Finally, the forgetting rate (ϕ) showed a modest increase with RCRT (Figure 5H). With faster RCRT, ϕ remained low, indicating minimal forgetting of learned associations. Slower RCRT showed a graded increase in ϕ, implying that inefficient reward processing was associated with increased decay of previously acquired values.</p>
+<p>Together, these model-implied patterns link slower reward collection primarily to weaker value updating and a shift in habit policy weighting, with a smaller change in forgetting. Alongside the model-comparison results, reward function efficiency influences various learning processes, consistent with a process account in which reward function compression broadly reshapes learning efficiency and access to outcome-based policies rather than simply modulating choice difficulty and stochasticity.</p>
+<h3>4 Discussion</h3>
+<p>In this study, we investigated which cognitive processes contribute to the cost of transforming abstract goals into learning signals by manipulating the visibility of goal information during learning and feedback. Consistent with prior work, learning from goal-dependent outcomes impose a learning cost relative to explicit point feedback [McDougle et al., 2022, Molinaro and Collins, 2026]. Making goal information externally available substantially reduced this cost, but critically, the benefit of visibility was not static: performance in the visible conditions (VG and VNG) improved across learning phases, with the largest gain in VG, which ultimately converged to the numeric point-based performance.</p>
+<p>This temporal pattern is difficult to explain by a purely static memory-offloading account, under which the benefit of externalizing goal information should be available as soon as that information becomes visible. Instead, the gradual increase in the visibility benefit is more consistent with an experience-dependent change in outcome evaluation. In line with the reward-function compression account [Molinaro and Collins, 2026], repeated access to external goal information may support the development of a simpler and more efficient mapping from observed outcomes to value.</p>
+<p>Together, these findings suggest that the central cognitive bottleneck in goal-dependent learning arises from outcome evaluation, when goal information must be used to transform observed feedback into a value that can guide learning.</p>
+<p>Our findings build on prior work [McDougle et al., 2022 , Molinaro and Collins, 2023b , 2026] to extend the idea of reward function compression to a new setting. In earlier work, reward function compression was primarily described as arising from the structure of the goal space itself: simpler goal spaces, and more commonalities across concurrently pursued goals allow for faster learning of an efficient outcome evaluation function [Molinaro and Collins, 2026]. In the present study, the underlying goal space remained large and unstructured across conditions; instead, visibility provided a stable external reference for evaluating the outcome from a single match or non match feature. With experience, repeated access to this reference may allow learners to develop a simpler and more reusable mapping from outcome comparison to value. Our findings therefore suggest that efficient reward-function learning may flexibly exploit structure that enables a more direct mapping from outcomes to value, including structure provided externally through goal visibility at the time of outcome evaluation. This possibility raises important questions about the scope and generalizability of learned reward functions, as well as how such efficient reward functions are constructed in the first place.</p>
+<p>The asymmetric benefit of goal visibility provides further insight into how external information supports outcome evaluation. Although VG and VNG were designed to provide comparable external memory support, VG showed a substantially larger improvement, suggesting that outcome evaluation remained more costly in VNG even when the relevant information was externally available. At least two explanations could account for these additional demands.</p>
+<p>One possibility is that the two conditions differ in the computation required to map perceptual comparison onto value.</p>
+<p>In VG, a match between feedback and the visible reference directly signals a desirable outcome, whereas in VNG, a match signals an undesirable outcome and value must instead be inferred from a mismatch. Match-and mismatch-based comparisons can differ in processing demands [Farell, 1985 , Egeth, 1966], potentially making the VNG mapping less efficient. A second possibility is that VNG may be disadvantaged by a more general Pavlovian-instrumental transfer (PIT)-like process. Because the visible non-goal represents an outcome that should be avoided, the cue itself may acquire negative or avoidance-related valence. This cue-driven response could compete with the task-defined evaluation of the feedback, biasing outcome processing away from the value specified by the current goal and toward the valence carried by the visible cue itself [Huys et al., 2011]. Under this account, the additional cost in VNG arises from resolving a conflict between an automatically evoked avoidance tendency and the instrumental value that should guide learning. Our follow-up analyses suggest these accounts may be intertwined, with their relative influence shifting across the course of learning: in early learning, a general PIT-like approach-avoidance bias may have limited VNG performance, as VNG showed no immedate match-based advantage and was less accurate than VG; later in learning, match-/mismatch-based reward evaluation may have become more influential, as VNG reached comparable accuracy and showed clearer performance gains, potentially offsetting the earlier PIT-like disadvantage (Figure S8 in the Supplementary Materials).</p>
+<p>The behavioral and computational relationship between reward-collection response time (RCRT) and learning provides converging evidence that the efficiency of outcome evaluation shapes subsequent learning. Behaviorally, RCRT, used here as a readout of outcome-valuation efficiency, tracked individual differences in learning performance. Computationally, RCRT was associated with multiple learning-and decision-related mechanisms, including learning rate, forgetting, and the balance between value-based and habitual policies, suggesting that its influence was not restricted to a single component of learning. Specifically, faster RCRT was associated with more effective value updating, consistent with prior work linking reward-processing efficiency to learning rate [Molinaro and Collins, 2026]. Slower RCRT predicted faster decay of learned values, suggesting that inefficient outcome evaluation made value representations more vulnerable to forgetting or interference from previous trials [Collins, 2025 , Collins et al., 2017 , Collins and Frank, 2012]. As learned values become less stable, behavior may consequently rely less on value-based control and relatively more on habitual or repetition-based policies [Collins, 2025].</p>
+<p>Several additional analyses suggest that these relationships were specific to outcome evaluation rather than reflecting general differences in response speed or task engagement. The qualitative pattern of RCRT modulation was consistent across dynamic-and static-noise models, indicating that the effects were robust to how engagement dynamics were modeled. Moreover, the effects were specific to RCRT, driven primarily by hit-trial RCRT (Figure ?? in the Supplementary Materials), rather than choice RT (Figure ?? in the Supplementary Materials). RCRT also showed little association with parameters related to non-learning or non-policy processes such as choice noise, choice stickiness, and the habit process itself. Together, these converging results suggest that RCRT reflects variation in outcome-evaluation efficiency that is specifically linked to how stimulus-action values are acquired, maintained, and expressed in choice, rather than general motor speed, response variability, or task engagement.</p>
+<p>The retention results further suggest that working-memory resources may have been allocated differently across learning conditions. Although Points showed the highest accuracy at test, its decline from late learning to testing was greater than that observed in Goal. One possible explanation is that explicit point feedback required fewer working-memory resources for goal maintenance and outcome evaluation, leaving more capacity available to temporarily support stimulusaction associations during learning . This temporary support may have boosted learning performance but blocked more sustained learning, as revealed once working memory was no longer available at test [Collins, 2018 , Collins et al., 2017 , Collins and Frank, 2018]. Goal-dependent learning may instead have recruited more working-memory resources for maintaining goal information and evaluating outcomes, leaving less temporary support for stimulus-action associations.</p>
+<p>The model-implied relationship between RCRT and ϕ is compatible with differences in the stability of learned values during learning, but ϕ does not directly measure how working memory was allocated across goal maintenance, outcome evaluation, and stimulus-action learning. We therefore view this account as a possible explanation of the Points-Goal retention difference, rather than a mechanism established by the present analyses.</p>
+<p>More broadly, our findings contribute to a growing view emphasizing that reward is not a fixed property of outcome, but is constructed relative to the learner&#x27;s current goal during learning and decision making [Juechems and Summerfield, 2019]. In particular, prior work has shown that goal congruency can exert a stronger influence on behavior and neural value signals than reward value alone [Frömer et al., 2019], illustrating how the same outcome can take on different behavioral significance depending on what the learner is trying to achieve. Beyond valuation, goals also organize decision making by prioritizing goal-relevant information and supporting commitment to ongoing objectives [Holton et al., 2024 [Holton et al., , 2025]]. Goals, thereby, shape the representations that support flexible decisions, such that different features of the same object become relevant depending on their usefulness for the current objective [Castegnetti et al., 2021].</p>
+<p>This flexibility is typically considered in terms of changes in the goal itself: pursuing a different goal changes which features of an outcome are relevant and how that outcome is valued. Our findings highlight a complementary source of flexibility. Even when the goal itself remains unchanged, changing how goal information is represented and made available can alter the efficiency with which outcomes are evaluated. Goal-dependent learning may therefore depend not only on what goal is pursued, but also on how that goal is represented and accessed during learning.</p>
+<p>This perspective also connects goal-dependent learning to broader accounts of distributed cognition and external representation. People routinely use the environment to offload information that would otherwise need to be maintained or manipulated internally, reducing reliance on limited cognitive resources [Intons-Peterson and Fournier, 1986 , Schönpflug, 1986 , Risko and Gilbert, 2016]. Importantly, however, external representations can do more than support memory: by making task-relevant relations directly available to perception, they can also change the computations required to perform a task [Larkin and Simon, 1987 , Zhang and Norman, 1994 , Kirsh, 2010]. Keeping goal information visible may similarly reduce the need to maintain it internally, but more importantly, it provides an external reference that can simplify the computation of outcome value. This principle aligns with work on external representations in education and interface design, which emphasizes that representations are most useful when they make task-relevant relations easier to perceive or compute, rather than simply providing additional information [Ainsworth, 2006, Scaife and Rogers, 1996]. Our findings suggest a corresponding design principle for goal-dependent learning: an effective goal representation should not only remind learners what they are trying to achieve, but also make it easier to evaluate their current performance relative to that desired state. Reference examples, progress displays, and other goal representations may therefore be particularly useful when they support a direct comparison between the learner&#x27;s current outcome and the goal they are trying to reach, much as a visible copybook supports direct comparison during Chinese calligraphy línmó practice.</p>
+<h3>5 Conclusion</h3>
+<p>In sum, our findings suggest that a key cognitive bottleneck in goal-dependent learning lies in outcome evaluation: how efficiently observed outcomes can be translated into value to guide learning. Making goal information visible facilitated this process and, with experience, substantially improved learning. The present work extends the reward-function compression account beyond the internal structure of the goal space by raising the possibility that efficient valuation can also be supported by structure available during outcome evaluation. More broadly, these findings suggest that how goals are represented and made available can be leveraged to facilitate learning.</p>
+<h3>S1.1 Choice Response Time Analysis</h3>
+<p>Learning-stage choice RT. To test whether choice response time (choice RT) varied across conditions or learning phases, we analyzed log-transformed choice RTs from all valid trials using a linear mixed-effects model. Fixed effects were condition, learning phase, their interaction, stimulus iteration (1-11), and block number (1-8). The selected random-effects structure included participant intercepts and block-number slopes, intercepts and iteration slopes for participant-by-condition-by-phase cells, and intercepts and iteration slopes for participant-specific items.</p>
+<p>The only significant fixed effect was condition (χ 2 (3) = 11.91, p = .0077; Figure S7A). Averaged across phases, choice RT was 7.4% slower in Points than Goal (p = .0074); no other condition pair differed significantly after correction. Neither phase, stimulus iteration, block number, nor the condition × phase interaction was significant (all ps ≥ .142). Thus, choice RT did not show the phase-dependent pattern observed in learning accuracy.</p>
+<h3>Testing-stage choice RT.</h3>
+<p>To test whether choice RT varied by condition or by the phase in which an item was learned, we analyzed log-transformed choice RTs from all valid testing trials using a linear mixed-effects model. Fixed effects were condition, learning phase, their interaction, testing repetition (1-3), and the item&#x27;s original learning block number (1-8). The selected random-effects structure included participant intercepts and slopes for block number and testing repetition, plus intercepts for participant-by-condition-by-learning-phase cells and participant-specific items.</p>
+<p>Choice RT did not differ detectably by condition (p = .827), learning phase (p = .226), or their interaction (p = .502;</p>
+<p>Figure S7B). Original learning block number was also not significant (p = .229). However, responses became approximately 8.5% faster with each testing repetition (χ 2 (1) = 53.24, p &lt; .0001). Thus, testing choice RT did not mirror the condition differences observed in testing accuracy.</p>
+<h3>S1.1.1 Choice RT Correlation Analysis</h3>
+<p>To show that our findings are specific to outcome evaluation and not due to a broader difficulty or engagement factor, we perform the same analyses done on reward collection reaction time (RCRT) using choice reaction time instead. Specifically, we examine the relationship between choice response time and learning performance: we correlated the condition-specific differences in accuracy (relative to Points) with corresponding differences in choice response time. Across all non-Points conditions, there were no significant correlation between choice response time and learning performance: Goal (ρ = 0.187, p = .149, 95%CI = [-0.07, 0.42]); VG (ρ = -0.048, p = .715, 95%CI = [-0.30, 0.21]); and VNG (ρ = 0.205, p = .114, 95%CI = [-0.05, 0.43]; Figure 4F-H). This finding should be contrasted to the same analysis with reward collection response time (RCRT; Figure 4C-E). To better understand the asymmetry between VG and VNG, we analyzed reward-collection performance and reward collection response time (RCRT) separately for hit (when a goal was obtained) and correct-rejection trials (when a non-goal was obtained). This analysis was intended to inform the potential explanations of the VG-VNG asymmetry: increased mismatch-based comparison effort or general Pavlovian-instrumental transfer (PIT)-like.</p>
+<p>Under the mismatchbased comparison effort account, performance depends on the demands of outcome evaluation itself. Specifically, the outcome must be compared against the goal representation to determine whether it signals reward, and mismatch-based comparisons are hypothesized to be more effortful and slower than match-based comparisons. Under the PIT-like account, VNG is expected to be generally disadvantaged because non-goal images carry a less favorable valence, promoting avoidance, but are present on the screen when a goal outcome is obtained, whereas goal outcomes in VG carry a more favorable valence, further promoting approach in correct trials.</p>
+<p>Trial-wise accuracy (hits vs. misses; correct rejections vs. false alarms) was analyzed using generalized linear mixedeffects models (GLMMs) with condition, phase, block (included as a control covariate), and the condition × phase interaction as fixed effects, along with a random intercept for subjects. Trial-wise RCRT was analyzed using Gamma GLMMs with a log link and the same fixed-and random-effects structure. Pairwise comparisons were Holm-corrected.</p>
+<p>Because our theoretical question centered on the asymmetry between the two visible-goal conditions, we focused primarily on the VG-VNG comparison. We also considered phase-specific effects, because changes across phases were informative for distinguishing between the two accounts. Accordingly, we report the phase-specific comparisons for Phase 1 and Phase 2 separately, as well as the overall effect across Phase 1&amp;2</p>
+<p>In hit trials, participants received rewarding goal feedback, a context in which VG should benefit from both a direct match between the outcome and the visible goal and a general approach bias, whereas VNG should be disadvantaged because reward evaluation requires confirming a mismatch with the visible non-goal and may also be influenced by an avoidance-like bias. For accuracy, we observed a significant main effect of condition (χ 2 (3) = 25.03, p &lt; .0001) and a significant Condition × Phase interaction (χ 2 (3) = 21.09, p = .0001), but no main effect of phase (p = .10). Across both phases, VG showed a higher hit rate than VNG (Phase 1: p &lt; .0001; Phase 2: p = .0005; combined across Phases 1&amp;2: p &lt; .0001; Figure S8A). For RCRT, we found significant main effects of condition (χ 2 (3) = 153.58, p &lt; .0001) and phase (χ 2 (1) = 31.50, p &lt; .001), as well as a significant Condition × Phase interaction (χ 2 (3) = 45.69, p &lt; .0001).</p>
+<p>VG also showed faster RCRT than VNG in both phases (Phase 1: p = .0067; Phase 2: p &lt; .0001; combined across Phases 1 and 2: p &lt; .0001; Figure S8C).</p>
+<p>Together, these results showed that when reward evaluation can rely on a direct match, VG is both more accurate and faster than VNG, and this advantage remained consistent across the whole learning trajectory.</p>
+<p>In correct-rejection trials, VNG should benefit from a direct match to the visible non-goal but may be disadvantaged by a PIT-like bias, whereas VG does not afford the same match-based advantage but may instead benefit from a PIT-like bias toward the visible goal. For accuracy, we observed a significant Condition × Phase interaction (χ 2 (3) = 8.45, p = .04), but no significant main effects of condition or phase (all ps &gt; .10). In Phase 1, VNG showed lower correct-rejection accuracy than VG (p = .028), but this difference was no longer present in Phase 2 (p = .97). Collapsing across phases, VNG was as good as VG (p = .12; Figure S8B). For RCRT, we found significant main effects of condition (χ 2 (3) = 80.12, p &lt; .0001) and phase (χ 2 (1) = 17.34, p &lt; .0001), as well as a significant Condition × Phase interaction (χ 2 (3) = 71.12, p &lt; .0001). VG and VNG did not differ reliably in Phase 1 (p = .67), whereas in Phase 2, VNG became faster than VG (p &lt; .0001). Collapsing across phases, VNG was overall faster than VG (p &lt; .0001;</p>
+<p>Figure S8D). These results showed that the VNG advantage in correct-rejection trials emerged gradually across learning.</p>
+<p>Early in learning, VNG did not show a response-time benefit and even showed lower accuracy than VG, but by Phase 2, it achieved similarly high accuracy while showing faster RCRT than VG. Notably, this Phase 2 effect was strong enough that the across-phase average largely reflected the later-emerging VNG advantage.</p>
+<p>Taken together, these results raise the possibility that the PIT-like account and the mismatch-cost account may be intertwined, with their relative influence shifting over the course of learning. Early in learning, PIT-like effects may be more dominant, as VNG did not immediately show the expected benefit of a match-based comparison. By Phase 2, however, match-based comparison benefits appeared to become more dominant, as VNG showed clearer performance gains, potentially offsetting the earlier PIT-like disadvantage. We treat this interpretation as exploratory, and further experiments will be needed to test it directly.</p>
+<p>&quot;Full&quot; denotes that all parameters were freely estimated. Fixing parameters decreased fit for both Dynamic and Static 794 noise models. The y-axis is truncated at 70 for visualization (two subjects exceeded this range). In Figure S10A, the static-noise models showed a broadly similar ranking of fit to the dynamic-noise models.</p>
+<h3>799</h3>
+<p>In Figure S10B&amp;C, the top Figure S10B shows individual (dots) and group mean ∆AIC (± standard error), relative to 800 the group mean best model; the bottom Figure S10C shows the proportion of participants best fit by each model. Our behavioral results has shown that the block-level RCRT effect was driven primarily by hit-trial RCRT (hit: ρ = 0.91, 803 p &lt; .0001; correct rejection: ρ = 0.22, p = .0006). To examine whether the model-based RCRT modulation reflected 804 the same pattern, we compared the original RCRT-modulated models with variants using block-level median RCRT 805 computed from hit trials only (Figure S11A), as well as variants using block-level median RCRT computed from 806 correct-rejection trials only (Figure S11B). The model results were consistent with the behavioral analyses, indicating 807 that RCRT-based modulation was driven primarily by hit-trial effects. When RCRT was computed from hit trials only, 808 model AIC values did not differ from those obtained using the original RCRT measure (all ps ≥ .160; three-parameter 809 model: mean ∆AIC hit-overall = -0.99, p = .797). In contrast, when RCRT was computed from correct-rejection 810 trials only, nearly all models showed significantly higher AIC values than the original RCRT models (all ps ≤ .0002; 811 three-parameter model: mean ∆AIC CR-overall = 9.79, p &lt; .0001), including the single-, two-, and three-parameter 812 modulation models, with the η model as the only exception (p = .940). Direct comparisons likewise favored hit-only 813 over correct-rejection-only RCRT models (all ps ≤ .0008).</p>
+<h3>814</h3>
+<p>Additionally, the simulated learning-curve results showed that hit-RCRT modulated model captured both overall 815 learning performances and also the phase-dependent learning dynamic as well as the original RCRT-modulated models 816 (Figure S12A). In contrast, correct-rejection RCRT-modulated model failed to capture either the overall learning pattern 817 or the learning dynamics across phases (Figure S12B).</p>
+<h3>6 Acknowledgments</h3>
+<p>This work was supported by the National Science Foundation (NSF) through Grant No. 2336466 awarded to Anne G. E.</p>
+<p>Collins.</p>
+<h3>Declaration of generative AI use</h3>
+<p>During the preparation of this work the authors used OpenAI and Anthropic AI tools for coding assistance during the development and implementation of the analysis methods. All AI-assisted code and analyses were reviewed and verified by the authors, who take full responsibility for the content of the published article.</p>
+<p>0.00 0.25 0.50 0.75 1.00 Points VG VNG Goal Hit rate Hit rate A 0.00 0.25 0.50 0.75 1.00 Points VG VNG Goal Correct rejection rate Correct rejection rate B Phase 1 Phase 1&amp;2 Phase 2 0 300 600 900 1200 Points VG VNG Goal RCRT (ms) Hit RCRT C 0 300 600 900 1200 Points VG VNG Goal RCRT (ms) Correct rejection RCRT D Figure S8: Behavioral results for hit and correct-rejection trials. (A) Hit rate: VG was higher than VNG in both phases. (B) Hit RCRT: VG was faster than VNG in both phases. (C) Correct-rejection accuracy: VNG was lower than VG in Phase 1, but reached a comparable level in Phase 2. When averaged across phases, VG and VNG did not differ. (D) Correct-rejection RCRT: VNG was comparable to VG in Phase 1, but became faster in Phase 2. When averaged across phases, VNG was faster than VG. S2.1 Comparison of Dynamic and Static Noise Models 791</p>
+<p>In Figure S9A, parameter labels indicate the parameter fixed in each model variant; fixed values were selected to lesion To examine the specificity of RCRT modulation on learning, we conducted a control analysis using choice RT, defined 822 as the participants&#x27; response time for pressing (J, K, or L) after seeing a stimulus. Choice-RT models had numerically 823 higher AIC than their RCRT counterparts across all seven α, κ, and ϕ-related variants, although the α or ϕ-only 824 comparisons were significant (ps ≤ .0142; Figure S13A). Despite this flexibility, RCRT models generally achieved 825 lower AIC. Choice-RT modulation of α and κ showed no consistent group-level direction, whereas RCRT modulation 826 showed a negative direction for α and a positive direction for κ (Table S1; ϕ did not show the same contrast). Together, 827 these findings suggest that RCRT provides a more systematic account of these learning-related effects than choice RT.</p>
+<h3>828</h3>
+<p>Furthermore, choice RT-modulated models failed to capture phase-dependent learning dynamics, e.g., underestimating 829</p>
+<p>Points and VG performance in Phase 2 (Figure S13B). These results suggest that the information carried by RCRTs 830 is specifically tied to the learning process and its dynamic changes over time, rather than merely reflecting general 831 mechanisms such as choice confidence, motor biases, or inattention.</p>
+<h3>832</h3>
+<p>-20 Table S1: Choice-RT and RCRT modulation coefficients and model fit. Mean ∆AIC is choice-RT model AIC minus the corresponding RCRT-model AIC; positive values favor RCRT. Model Mean ∆AIC Parameter Choice RT mean ω Choice RT vs. 0, p RCRT mean ω RCRT vs. 0, p Paired comparison, p α + κ + ϕ +2.01 α +0.663 .506 -0.364 &lt; .0001 &lt; .0001 κ -0.159 .332 +1.329 .0002 .088 ϕ +0.467 .0075 +0.520 .071 .710 α only +4.15 α +0.847 .821 -0.631 &lt; .0001 &lt; .0001 κ only +1.51 κ -0.296 .889 +2.543 &lt; .0001 &lt; .0001 ϕ only +2.08 ϕ +0.691 .037 +3.055 &lt; .0001 .0002</p>
+<p>We assessed parameter recovery for both the representative three-parameter RCRT-modulated model (Figure S14) and 834 the two-parameter model preferred by group-level AIC (Figure S15). Across 61 participants, we compared generating 835 parameter values with estimates averaged over 10 simulated refits per participant. In the three-parameter α + κ + ϕ 836 model, all parameters showed strong recovery and all were positively associated with their generating values (all 837 ps ≤ .0007). In the α + κ model, recovery was also strong (all ps &lt; .0001). Thus, both models recovered participants&#x27; 838 relative parameter values.</p>
+<p>839 ρ = 0.85 p &lt; .0001 n = 61 0.00 0.25 0.50 0.75 1.00 0.00 0.25 0.50 0.75 1.00 Generating value Recovered mean α ρ = 0.90 p &lt; .0001 n = 61 0.00 0.25 0.50 0.75 1.00 0.00 0.25 0.50 0.75 1.00 Generating value Recovered mean κ ρ = 0.75 p &lt; .0001 n = 61 0.00 0.25 0.50 0.75 1.00 0.00 0.25 0.50 0.75 1.00 Generating value Recovered mean φ ρ = 0.60 p &lt; .0001 n = 61 (3) = 21.65, p &lt; .0001 on RCRT; Figure4B).</p>
+<h3>352(χ 2</h3>
+<p>All conditions showed faster RCRT in Phase 2 than in Phase 1 (all 353 ps &lt; .0001). The proportional decrease in Goal was smallest among these four conditions (all ps ≤ .0175). In Phase 354 1, Points elicited faster reward collection than Goal, VG, and VNG (all ps &lt; .0001). VG was also faster than Goal 355</p>
+<h3>Figure 4 :</h3>
+<p>Figure 4: Outcome evaluation. (A) Reward sensitivity (d ′ ) was high across all conditions and phases. (B) Reward collection response time (RCRT) by condition and phase. In A and B, gray dots show participant values; colored markers or bars show condition means, with error bars indicating 95% confidence intervals. Dark colors represent Phase 1 and light colors represent Phase 2. (C-E) Across participants, differences in RCRT relative to Points correlated with corresponding differences in learning accuracy for VG (D), VNG (E), and Goal (F). (F-H) The same comparisons using choice RT for VG (F), VNG (G), and Goal (H). In C-H, dots represent participants, lines show linear fits with 95% confidence bands, and annotations report Spearman&#x27;s ρ and p values.</p>
+<h3>364</h3>
+<p>Figure4C-E). In contrast, analogous correlation analyses using stimulus-action choice response time were not significant 369</p>
+<h3>Figure 5 :</h3>
+<p>Figure5: Computational modeling results. (A) Block-median RCRT modulation models compared to the baseline model under dynamic noise estimation. x-axis labels denote the parameter modulated by RCRT. The parameters with the strongest modulation were primarily value-learning related. (B) Comparison of the three single-parameter learning models. Top: individual (dots) and group mean ∆AIC (± standard error), relative to the group mean best model. Bottom: proportion of participants best fit by each of these three models. Three single-parameter learning-related modulation models (α, κ, ϕ) showed similar ∆AIC values, although slightly more participants were best fit by the α model. (C-D) Confusion matrix for model recovery. Each cell shows the proportion of simulations by a data-generating model (row) best fit by each model (columns); rows sum to 1. (C) α, κ and ϕ modulation models were identifiable. (D)α + κ + ϕ learning-related modulation models were distinguishable from noise-only (p ER ) and baseline model families, showing that AIC appropriately penalizes complexity in this setting. (E) Mean absolute error (MAE) between observed learning accuracy and model-simulated performance. Value-learning modulation models produced the lowest simulation error. (F-H) As mean block RCRT increased, the model-implied effective learning rate (α; F) decreased, the RL-habit mixture weight (κ; G) shifted moderately toward habit, and the forgetting rate (ϕ; H) increased slightly, consistent with decrease efficiency of outcome sensitive learning processes. Purple lines show the mean of the 61 participant-specific effective-parameter curves. Each dot represents one learning block, giving eight dots per participant; colors indicate condition (orange: Points; green: VG; red: VNG; blue: Goal).</p>
+<h3>439</h3>
+<p>processing primarily drove the RCRT modulation effect. Hit RCRT is particularly relevant because hit trials correspond 440 to rewarding outcomes, for which efficient evaluation directly determines the positive learning signal used to update 441 stimulus-action values. Consistent with this interpretation, RCRT modulation was more strongly reflected by hit RCRT 442 than by correct-rejection RCRT (see S2.2 in Supplementary Materials). Importantly, these results were specific to 443 RCRT, as models using choice RT instead fit significantly worse (see S2.3 in Supplementary Materials).</p>
+<h3>444</h3>
+<p>We further assessed how well the fitted models reproduced observed learning curves across stimulus iterations and 445 conditions. Models in which RCRT modulated α, κ, or ϕ, alone or in combination, showed low learning-curve error 446 (MAE = 0.0189˘0.0250), with the lowest error for α + κ (MAE = 0.0189; Figure5E). These errors were lower than 447 those of the baseline and other tested modulation models (MAE = 0.0291˘0.0395). A learning-related model also had 448 the lowest participant-level AIC for 49 of 61 participants (80.3%; FigureS10Cin Supplementary Materials), reinforcing 449 the conclusion that RCRT modulation operates at the level of the learning process rather than through a single dominant 450 13 KEEP IT INSIGHT -NOVEMBER 12, 2026</p>
+<h3>Figure 6 :</h3>
+<p>Figure6: Simulated learning curves by RCRT-modulated value (left), RCRT-modulated noise (middle) and baseline (right). Models with value-related modulation better reproduced the observed learning dynamics, whereas the noise and baseline models did not.</p>
+<h3>Figure S7 :</h3>
+<p>Figure S7: Choice response time during learning and testing. (A) Learning-phase choice RT by condition and phase. (B) Testing-phase choice RT by condition and the phase in which each item was learned. In A and B, bars show condition means, gray dots show participant means, and error bars indicate 95% confidence intervals; lighter bars represent Phase 2.</p>
+<h3>795Figure S9 :</h3>
+<p>Figure S9: Parameter fixing and noise-model comparisons. (A) AIC difference between each fixed-parameter variant and the full dynamic-noise model. (B) The corresponding comparisons under static noise. Positive ∆AIC in (A) and (B) indicates that fixing the parameter worsened fit; fixing p ER under static noise was an exception. (C) AIC difference between matched dynamic-and static-noise models. Negative values favor dynamic noise. Gray points and connecting lines show paired participant values; bars show group means ± SEM (N = 61). Colors indicate model family.</p>
+<h3>Figure S10 :</h3>
+<p>Figure S10: Model fit under static and dynamic noise. (A) Static-noise RCRT-modulated models compared with the static-noise baseline. Negative ∆AIC indicates better fit than baseline. Static models showed similar RCRT modulation patterns to the Dynamic model. (B) Dynamic-noise models compared with the α + κ model, which had the lowest group mean AIC and is therefore set to zero. Positive ∆AIC indicates worse fit. (C) Proportion of participants best fit by each dynamic-noise model. In (A) and (B), gray points show individual participants, bars show group means, and error bars show SEM (N = 61). Colors indicate model family.</p>
+<h3>818Figure S11 :</h3>
+<p>FigureS11: Comparison of RCRT-modulated models with hit RCRT-modulated models and correct-rejection RCRTmodulated models. (A) Hit RCRT-modulated models fit as well as the RCRT-modulated models. (B) Correct-rejection RCRT-modulated models fit significantly worse than RCRT-modulated models.</p>
+<h3>Figure S12 :</h3>
+<p>792additional &quot;optional&quot; mechanisms (e.g., ϕ = 0), or to a default operational value for core mechanisms (e.g., α = 1);Hit RCRT α + κ + φ model (dynamic)Simulated learning curves by hit RCRT-modulated models and correct-rejection RCRT-modulated models. (A) Hit RCRT-modulated models captured learning performance well. (B) Correct-rejection RCRT-modulated models failed to capture learning performance.</p>
+<h3>Figure S13 :</h3>
+<p>Choice RT model comparison and validation. (A) Choice RT modulation worsened fit for learning-related models relative to the corresponding RCRT-modulated models, whereas noise-and habit-related models did not differ significantly. (B) Choice RT modulated models failed to capture the dynamic of learning trajectories across phases.</p>
+<h3>Figure S14 :Figure S15 :</h3>
+<p>Parameter recovery for the three-parameter RCRT-modulated model. Generating values are plotted against recovered estimates for learning rate (α), mixture weight (κ), and forgetting rate (ϕ; top row), and their RCRT modulation coefficients (bottom row). Each point represents one participant; recovered estimates were averaged across 10 simulated refits. Dashed lines indicate exact recovery. Annotations report Spearman&#x27;s ρ, p, and the number of participants (n = 61). Parameter recovery for the two-parameter RCRT-modulated model. Generating values are plotted against recovered estimates for learning rate (α) and mixture weight (κ; top row), and their RCRT modulation coefficients (bottom row). Each point represents one participant; recovered estimates were averaged across 10 simulated refits. Dashed lines indicate exact recovery. Annotations report Spearman&#x27;s ρ, p, and the number of participants (n = 61).</p>
+<h3>References</h3>
+<p>Shaaron Ainsworth. DeFT: A conceptual framework for considering learning with multiple representations. Learning and Instruction, 16(3):183-198, 2006. doi: 10.1016/j.learninstruc.2006.03.001.</p>
+<p>Douglas Bates, Martin Mächler, Ben Bolker, and Steve Walker. Fitting linear mixed-effects models using lme4. Journal of Statistical Software, 67(1):1-48, 2015. doi: 10.18637/jss.v067.i01.</p>
+<p>Todd S. Braver. The variable nature of cognitive control: A dual mechanisms framework. Trends in Cognitive Sciences, 16(2):106-113, 2012. doi: 10.1016/j.tics.2011.12.010.</p>
+<p>G. Castegnetti, M. Zurita, and B. De Martino. How usefulness shapes neural representations during goal-directed behavior. Science Advances, 7(15):eabd5363, April 2021. doi: 10.1126/sciadv.abd5363.</p>
+<p>Anne G. E. Collins. The tortoise and the hare: Interactions between reinforcement learning and working memory. Journal of Cognitive Neuroscience, 30(10):1422-1432, 2018. doi: 10.1162/jocn_a_01238.</p>
+<p>Anne G. E. Collins. A habit and working memory model as an alternative account of human reward-based learning. Nature Human Behaviour, pages 1-13, November 2025. ISSN 2397-3374. doi: 10.1038/s41562-025-02340-0.</p>
+<p>Anne G. E. Collins and Michael J. Frank. How much of reinforcement learning is working memory, not reinforcement learning? A behavioral, computational, and neurogenetic analysis. European Journal of Neuroscience, 35(7): 1024-1035, April 2012. ISSN 0953-816X, 1460-9568. doi: 10.1111/j.1460-9568.2011.07980.x.</p>
+<p>Anne G. E. Collins and Michael J. Frank. Within-and across-trial dynamics of human EEG reveal cooperative interplay between reinforcement learning and working memory. Proceedings of the National Academy of Sciences, 115(10): 2502-2507, 2018. doi: 10.1073/pnas.1720963115. URL https://doi.org/10.1073/pnas.1720963115.</p>
+<p>Anne G. E. Collins, Brittany Ciullo, Michael J. Frank, and David Badre. Working Memory Load Strengthens Reward Prediction Errors. Journal of Neuroscience, 37(16):4332-4342, April 2017. ISSN 0270-6474, 1529-2401. doi: 10.1523/JNEUROSCI.2700-16.2017.</p>
+<p>Reka Daniel and Stefan Pollmann. Comparing the neural basis of monetary reward and cognitive feedback during information-integration category learning. Journal of Neuroscience, 30(1):47-55, 2010. doi: 10.1523/JNEUROSCI. 2205-09.2010.</p>
+<p>Howard E. Egeth. Parallel versus serial processes in multidimensional stimulus discrimination. Perception &amp; Psy- chophysics, 1(4):245-252, July 1966. ISSN 1532-5962. doi: 10.3758/BF03207389.</p>
+<p>Bart Farell. &#x27;Same&#x27;-&#x27;different&#x27; judgments: A review of current controversies in perceptual comparisons. Psychological Bulletin, 98(3):419-456, November 1985. ISSN 1939-1455. doi: 10.1037/0033-2909.98.3.419.</p>
+<p>Michael J. Frank, Ahmed A. Moustafa, Heather M. Haughey, Tim Curran, and Kent E. Hutchison. Genetic triple dissociation reveals multiple roles for dopamine in reinforcement learning. Proceedings of the National Academy of Sciences, 104(41):16311-16316, 2007. doi: 10.1073/pnas.0706111104.</p>
+<p>Romy Frömer, Carolyn K. Dean Wolf, and Amitai Shenhav. Goal congruency dominates reward value in accounting for behavioral and neural correlates of value-based decision-making. Nature Communications, 10(1):4926, October 2019. ISSN 2041-1723. doi: 10.1038/s41467-019-12931-x.</p>
+<p>Sam J. Gilbert, Arabella Bird, Jason M. Carpenter, Stephen M. Fleming, Chhavi Sachdeva, and Pei-Chun Tsai. Optimal use of reminders: Metacognition, effort, and cognitive offloading. Journal of Experimental Psychology: General, 149(3):501-517, March 2020. ISSN 1939-2222. doi: 10.1037/xge0000652.</p>
+<p>Eleanor Holton, Jan Grohn, Harry Ward, Sanjay G. Manohar, Jill X. O&#x27;Reilly, and Nils Kolling. Goal commitment is supported by vmPFC through selective attention. Nature Human Behaviour, 8(7):1351-1365, July 2024. ISSN 2397-3374. doi: 10.1038/s41562-024-01844-5.</p>
+<p>October 2025. ISSN 1364-6613, 1879-307X. doi: 10.1016/j.tics.2025.10.003.</p>
+<p>Ham Huang, Samuel D. McDougle, and Anne G. E. Collins. Dual effects of dual-tasking on instrumental learning. Cognition, 264:106228, 2025. doi: 10.1016/j.cognition.2025.106228.</p>
+<p>Quentin J. M. Huys, Roshan Cools, Martin Gölzer, Eva Friedel, Andreas Heinz, Raymond J. Dolan, and Peter Dayan. Disentangling the Roles of Approach, Activation and Valence in Instrumental and Pavlovian Responding. PLOS Computational Biology, 7(4):e1002028, April 2011. ISSN 1553-7358. doi: 10.1371/journal.pcbi.1002028. Margaret Jean Intons-Peterson and JoAnne Fournier. External and internal memory aids: When and how often do we use them? Journal of Experimental Psychology: General, 115(3):267-280, 1986. doi: 10.1037/0096-3445.115.3.267. Keno Juechems and Christopher Summerfield. Where Does Value Come From? Trends in Cognitive Sciences, 23(10): 836-850, October 2019. ISSN 1364-6613. doi: 10.1016/j.tics.2019.07.012.</p>
+<p>Michael J. Kane and Randall W. Engle. Working-memory capacity and the control of attention: The contributions of goal neglect, response competition, and task set to stroop interference. Journal of Experimental Psychology: General, 132(1):47-70, 2003. doi: 10.1037/0096-3445.132.1.47. Kentaro Katahira. The statistical structures of reinforcement learning with asymmetric value updates. Journal of Mathematical Psychology, 87:31-45, December 2018. ISSN 0022-2496. doi: 10.1016/j.jmp.2018.09.002.</p>
+<p>David Kirsh. Thinking with external representations. AI &amp; Society, 25:441-454, 2010. doi: 10.1007/s00146-010-0272-8.</p>
+<p>Jill H. Larkin and Herbert A. Simon. Why a diagram is (sometimes) worth ten thousand words. Cognitive Science, 11 (1):65-100, 1987. doi: 10.1111/j.1551-6708.1987.tb00863.x.</p>
+<p>Germain Lefebvre, Maël Lebreton, Florent Meyniel, Sacha Bourgeois-Gironde, and Stefano Palminteri. Behavioural and neural characterization of optimistic reinforcement learning. Nature Human Behaviour, 1(4):0067, 2017. doi: 10.1038/s41562-017-0067.</p>
+<p>Jing-Jing Li, Chengchun Shi, Lexin Li, and Anne G. E. Collins. Dynamic noise estimation: A generalized method for modeling noise fluctuations in decision-making. Journal of Mathematical Psychology, 119:102842, April 2024. ISSN 0022-2496. doi: 10.1016/j.jmp.2024.102842.</p>
+<p>Sarah L. Master, Maria K. Eckstein, Neta Gotlieb, Ronald E. Dahl, Linda Wilbrecht, and Anne G. E. Collins. Disentangling the systems contributing to changes in learning during adolescence. Developmental Cognitive Neuroscience, 41:100732, 2020. doi: 10.1016/j.dcn.2019.100732.</p>
+<p>Hannes Matuschek, Reinhold Kliegl, Shravan Vasishth, R. Harald Baayen, and Douglas Bates. Balancing type i error and power in linear mixed models. Journal of Memory and Language, 94:305-315, 2017. doi: 10.1016/j.jml.2017.01.001.</p>
+<p>Samuel D McDougle, Ian C Ballard, Beth Baribault, Sonia J Bishop, and Anne G E Collins. Executive Function Assigns Value to Novel Goal-Congruent Outcomes. Cerebral Cortex, 32(1):231-247, January 2022. ISSN 1047-3211. doi: 10.1093/cercor/bhab205.</p>
+<p>Gaia Molinaro and Anne G. E. Collins. Intrinsic rewards explain context-sensitive valuation in reinforcement learning. PLOS Biology, 21(7):e3002201, 2023a. doi: 10.1371/journal.pbio.3002201. URL https://doi.org/10.1371/ journal.pbio.3002201.</p>
+<p>Gaia Molinaro and Anne G. E. Collins. Reward function compression facilitates goal-dependent reinforcement learning. Nature Communications, October 2026. doi: 10.1038/s41467-026-78295-1. URL https://doi.org/10.1038/ s41467-026-78295-1.</p>
+<p>Gaia Molinaro and Anne GE Collins. Human hacks and bugs in the recruitment of reward systems for goal achievement. Proceedings of the Annual Meeting of the Cognitive Science Society, 45(45), 2023b.</p>
+<p>Matthew R Nassar and Michael J Frank. Taming the beast: Extracting generalizable knowledge from computational models of cognition. Current Opinion in Behavioral Sciences, 11:49-54, October 2016. ISSN 2352-1546. doi: 10.1016/j.cobeha.2016.04.003.</p>
+<p>Stefano Palminteri, Germain Lefebvre, Emma J. Kilford, and Sarah-Jayne Blakemore. Confirmation bias in human reinforcement learning: Evidence from counterfactual feedback processing. PLOS Computational Biology, 13(8): e1005684, 2017. doi: 10.1371/journal.pcbi.1005684.</p>
+<p>Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, Gretchen Krueger, and Ilya Sutskever. Learning transferable visual models from natural language supervision. In Proceedings of the 38th International Conference on Machine Learning, volume 139 of Proceedings of Machine Learning Research, pages 8748-8763. PMLR, 2021. URL https://proceedings.mlr.press/v139/radford21a.html. KEEP IT IN SIGHT -NOVEMBER 12, 2026</p>
+<p>Evan F. Risko and Sam J. Gilbert. Cognitive offloading. Trends in Cognitive Sciences, 20(9):676-688, 2016. doi: 10.1016/j.tics.2016.07.002.</p>
+<p>Mike Scaife and Yvonne Rogers. External cognition: How do graphical representations work? International Journal of Human-Computer Studies, 45(2):185-213, 1996. doi: 10.1006/ijhc.1996.0048. Wolfgang Schönpflug. The trade-off between internal and external information storage. Journal of Memory and Language, 25(6):657-675, 1986. doi: 10.1016/0749-596X(86)90042-2.</p>
+<p>Jennifer D. Senta, Sonia J. Bishop, and Anne G. E. Collins. Dual process impairments in reinforcement learning and working memory systems underlie learning deficits in physiological anxiety. PLOS Computational Biology, 21(9): e1012872, September 2025. ISSN 1553-7358. doi: 10.1371/journal.pcbi.1012872.</p>
+<p>Aliza T. Stein, Lee J. Greathouse, and Michael W. Otto. Eating in response to exercise cues: Role of self-control fatigue, exercise habits, and eating restraint. Appetite, 96:56-61, January 2016. ISSN 01956663. doi: 10.1016/j.appet.2015.09.007. Michiyo Sugawara and Kentaro Katahira. Dissociation between asymmetric value updating and perseverance in human reinforcement learning. Scientific Reports, 11:3574, 2021. doi: 10.1038/s41598-020-80593-7.</p>
+<p>Robert C Wilson and Anne GE Collins. Ten simple rules for the computational modeling of behavioral data. eLife, 8: e49547, November 2019. ISSN 2050-084X. doi: 10.7554/eLife.49547.</p>
+<p>Jiajie Zhang and Donald A. Norman. Representations in distributed cognitive tasks. Cognitive Science, 18(1):87-122, 1994. doi: 10.1207/s15516709cog1801_3.</p>
+</div>
+</details>
+</div>
+</div>
+<footer>
+<p>
+If there are things we can improve, please email us at
+<a href="mailto:metacheck@scienceverse.org">metacheck@scienceverse.org</a>
+or leave an issue at
+<a href="https://github.com/scienceverse/metacheck/issues">github.com/scienceverse/metacheck/issues</a>.
+</p>
+</footer>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
